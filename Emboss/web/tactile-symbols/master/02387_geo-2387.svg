@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mountain cliff rock base -->
+  <polygon points="18,34 82,34 84,80 16,80" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- 4 Carved presidential face profiles -->
+  <circle cx="28" cy="48" r="6" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="42" cy="48" r="6" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="58" cy="48" r="6" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="72" cy="48" r="6" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- FM Source (left), FM Drain (right), 2DEG channel (bottom), Gate (top) with bold 4.5px strokes -->
+  <rect x="18" y="44" width="16" height="32" rx="2" fill="#0284c7"/>
+  <rect x="66" y="44" width="16" height="32" rx="2" fill="#0284c7"/>
+  <rect x="38" y="20" width="24" height="16" rx="2" fill="#ef4444"/>
+  <!-- Precessing spin wave in channel -->
+  <path d="M 34 60 Q 42 46 50 60 Q 58 74 66 60" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

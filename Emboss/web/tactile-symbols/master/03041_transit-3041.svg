@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Boxy electric delivery van profile with bold 4.5px stroke -->
+  <polygon points="18,66 24,66 24,46 36,36 82,36 82,66 18,66" fill="#22c55e" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Road wheels with bold 4.0px strokes -->
+  <circle cx="34" cy="68" r="7" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="70" cy="68" r="7" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+</svg>

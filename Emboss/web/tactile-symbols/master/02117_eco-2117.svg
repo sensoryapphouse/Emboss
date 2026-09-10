@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central slender thorax body -->
+  <line x1="50" y1="26" x2="50" y2="76" stroke="#1e293b" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Left forewing and hindwing -->
+  <ellipse cx="32" cy="38" rx="14" ry="18" fill="#facc15" stroke="#ef4444" stroke-width="4.5"/>
+  <ellipse cx="36" cy="62" rx="10" ry="12" fill="#facc15" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- Right forewing and hindwing -->
+  <ellipse cx="68" cy="38" rx="14" ry="18" fill="#facc15" stroke="#ef4444" stroke-width="4.5"/>
+  <ellipse cx="64" cy="62" rx="10" ry="12" fill="#facc15" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

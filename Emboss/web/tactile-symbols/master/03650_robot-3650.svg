@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rounded smooth cobot arm profile with bold 4.5px stroke -->
+  <polyline points="30,76 30,50 66,34 76,52" fill="none" stroke="#22c55e" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Green circular safety status ring at base with bold 4.0px stroke -->
+  <circle cx="30" cy="76" r="8" fill="none" stroke="#22c55e" stroke-width="4.0"/>
+  <!-- Base pedestal -->
+  <rect x="22" y="78" width="16" height="8" fill="#64748b"/>
+</svg>

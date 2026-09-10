@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Primary coil left -->
+  <path d="M 36 24 A 6 6 0 0 0 36 36 A 6 6 0 0 0 36 48 A 6 6 0 0 0 36 60 A 6 6 0 0 0 36 72" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <!-- Central double core iron bars -->
+  <line x1="46" y1="18" x2="46" y2="82" stroke="#000000" stroke-width="3.5"/>
+  <line x1="54" y1="18" x2="54" y2="82" stroke="#000000" stroke-width="3.5"/>
+  <!-- Secondary coil right -->
+  <path d="M 64 24 A 6 6 0 0 1 64 36 A 6 6 0 0 1 64 48 A 6 6 0 0 1 64 60 A 6 6 0 0 1 64 72" fill="none" stroke="#000000" stroke-width="4.0"/>
+</svg>

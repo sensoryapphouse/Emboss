@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two scissor handles -->
+  <line x1="42" y1="44" x2="24" y2="84" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="58" y1="44" x2="76" y2="84" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Cutting head body with turn key knob -->
+  <circle cx="50" cy="34" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <rect x="36" y="30" width="28" height="8" rx="2" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+</svg>

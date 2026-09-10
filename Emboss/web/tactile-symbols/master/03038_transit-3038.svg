@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Elevated boat hull above water with bold 4.5px stroke -->
+  <polygon points="22,42 28,54 74,54 80,42" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Submerged underwater V-shaped lifting foils beneath with bold 4.5px strokes -->
+  <polyline points="28,54 36,74 44,54" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <polyline points="58,54 66,74 74,54" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Aromatic benzene rings along molecular chain with bold 4.5px strokes -->
+  <polygon points="34,36 46,28 58,36 58,52 46,60 34,52" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Connecting amide hydrogen-bonding linkages with bold 4.5px strokes -->
+  <line x1="18" y1="44" x2="34" y2="44" stroke="#000000" stroke-width="5.0"/>
+  <line x1="58" y1="44" x2="82" y2="44" stroke="#000000" stroke-width="5.0"/>
+</svg>

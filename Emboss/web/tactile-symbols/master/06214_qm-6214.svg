@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shadow projection cylinder mapping quantum state to classical bitstring snapshots with bold 4.5px strokes -->
+  <ellipse cx="36" cy="50" rx="14" ry="22" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="36" y1="28" x2="72" y2="40" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="36" y1="72" x2="72" y2="60" stroke="#ef4444" stroke-width="4.5"/>
+  <rect x="72" y="38" width="10" height="24" rx="2" fill="#ca8a04"/>
+</svg>

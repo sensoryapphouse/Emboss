@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Arsenic ion entering bacterial sensor cell triggering glowing fluorescent output beam with bold 4.5px strokes -->
+  <rect x="22" y="32" width="56" height="36" rx="18" fill="#0284c7" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="34" cy="50" r="5" fill="#ef4444"/>
+  <polygon points="62,42 74,50 62,58" fill="#22c55e"/>
+</svg>

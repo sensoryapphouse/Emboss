@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Chain of 4 connected cocci beads -->
+  <circle cx="20" cy="50" r="8" fill="#9333ea" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="40" cy="50" r="8" fill="#9333ea" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="60" cy="50" r="8" fill="#9333ea" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="80" cy="50" r="8" fill="#9333ea" stroke="#000000" stroke-width="4.0"/>
+</svg>

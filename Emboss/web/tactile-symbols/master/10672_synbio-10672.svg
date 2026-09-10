@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 50C reaction using exonuclease, polymerase, and ligase to join overlapping DNA ends with bold 4.5px strokes -->
+  <path d="M 20 42 L 54 42 M 46 58 L 80 58" stroke="#000000" stroke-width="5.0"/>
+  <rect x="46" y="36" width="8" height="28" fill="#10b981" opacity="0.4" stroke="#000000" stroke-width="3.5"/>
+</svg>

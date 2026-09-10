@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Airfoil cross-section undergoing coupled vertical bending and torsional pitching with bold 4.5px strokes -->
+  <path d="M 20 50 Q 40 34 78 48 Q 50 60 20 50 Z" fill="#0284c7" opacity="0.3" stroke="#000000" stroke-width="4.5"/>
+  <line x1="44" y1="20" x2="44" y2="80" stroke="#ef4444" stroke-width="5.0"/>
+  <path d="M 64 36 Q 74 50 64 64" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

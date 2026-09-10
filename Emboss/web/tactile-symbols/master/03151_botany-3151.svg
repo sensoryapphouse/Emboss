@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Soil surface horizontal line with bold 5.0px stroke -->
+  <line x1="18" y1="52" x2="82" y2="52" stroke="#8a5a2b" stroke-width="5.5"/>
+  <!-- Hypocotyl arch curving up above soil with bold 4.5px stroke -->
+  <path d="M 46 52 C 46 26 62 26 62 44" fill="none" stroke="#22c55e" stroke-width="6.0"/>
+  <!-- Two green cotyledon seed leaves top with bold 4.0px stroke -->
+  <ellipse cx="62" cy="44" rx="7" ry="10" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <!-- Radicle taproot descending into soil with bold 4.5px stroke -->
+  <path d="M 46 52 L 44 78" stroke="#8a5a2b" stroke-width="5.5"/>
+</svg>

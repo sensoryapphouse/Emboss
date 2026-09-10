@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stator outer housing ring with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#000000" stroke-width="5.0"/>
+  <!-- Permanent magnet rotor ring in middle with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="20" fill="#1e293b" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- Central main bearing hollow shaft bore -->
+  <circle cx="50" cy="50" r="8" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+</svg>

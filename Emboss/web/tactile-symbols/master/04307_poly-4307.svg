@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- PET bottle contour outline with bold 4.5px stroke -->
+  <path d="M 44 20 L 56 20 L 56 30 L 68 44 L 68 76 L 32 76 L 32 44 L 44 30 Z" fill="#ffffff" stroke="#0284c7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Axial stainless stretch rod descending through center with bold 5.0px stroke -->
+  <line x1="50" y1="14" x2="50" y2="72" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Green, White, Red stripes -->
+  <rect x="18" y="24" width="64" height="17" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <rect x="18" y="41" width="64" height="17" fill="#ffffff"/>
+  <rect x="18" y="58" width="64" height="18" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- Black hoist trapezoid left -->
+  <polygon points="18,24 38,41 38,58 18,76" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

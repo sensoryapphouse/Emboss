@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Short pulse stretched in time, amplified safely, and re-compressed to petawatt peak power with bold 4.5px strokes -->
+  <line x1="16" y1="50" x2="26" y2="50" stroke="#ef4444" stroke-width="6.0"/>
+  <path d="M 28 50 Q 38 34 48 50 Q 58 66 68 50" stroke="#ca8a04" stroke-width="4.5" fill="none"/>
+  <line x1="72" y1="50" x2="84" y2="50" stroke="#ef4444" stroke-width="8.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Giant circular Rydberg electron orbit with r proportional to n^2 with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#0284c7" stroke-width="4.5" stroke-dasharray="6,3"/>
+  <circle cx="50" cy="50" r="8" fill="#ca8a04"/>
+  <circle cx="80" cy="50" r="5" fill="#ef4444"/>
+</svg>

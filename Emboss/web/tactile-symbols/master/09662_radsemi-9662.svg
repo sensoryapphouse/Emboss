@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Polycrystalline diamond spreader dissipating 1000 W/cm2 heat fluxes from GaN radar amplifiers with bold 4.5px strokes -->
+  <rect x="20" y="52" width="60" height="24" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <rect x="36" y="32" width="28" height="20" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 50 52 L 32 76 M 50 52 L 68 76" stroke="#ca8a04" stroke-width="4.0"/>
+</svg>

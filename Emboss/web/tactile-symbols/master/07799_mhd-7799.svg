@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved magnetic field lines generating inward tension and perpendicular outward pressure with bold 4.5px strokes -->
+  <path d="M 22 28 Q 66 50 22 72" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="44" y1="50" x2="22" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <polygon points="22,50 30,44 30,56" fill="#ef4444"/>
+</svg>

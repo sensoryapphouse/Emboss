@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Toe phalanx bone block left with bold 4.5px stroke -->
+  <rect x="20" y="44" width="30" height="22" rx="4" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Curved sharp sickle claw rotating out right with bold 5.0px stroke -->
+  <path d="M 50 46 C 70 46 80 62 80 76 C 72 70 60 62 48 64 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

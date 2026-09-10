@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stepped waterfall knickpoint profile migrating upstream into bedrock with bold 4.5px strokes -->
+  <path d="M 20 28 L 44 28 L 44 68 L 80 68" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="44" cy="48" r="7" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Basketball sports chair seat bucket -->
+  <rect x="36" y="32" width="28" height="26" rx="4" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Heavy cambered angled drive wheels left & right -->
+  <line x1="26" y1="28" x2="38" y2="76" stroke="#0284c7" stroke-width="6.5" stroke-linecap="round"/>
+  <line x1="74" y1="28" x2="62" y2="76" stroke="#0284c7" stroke-width="6.5" stroke-linecap="round"/>
+</svg>

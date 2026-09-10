@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Current vehicle state pose at origin with bold 4.5px stroke -->
+  <circle cx="24" cy="64" r="6" fill="#1e293b"/>
+  <!-- Planned reference trajectory with bold 4.0px stroke -->
+  <path d="M 24 64 Q 50 30 82 30" fill="none" stroke="#cbd5e1" stroke-width="4.5"/>
+  <!-- MPC predicted optimal control horizon trajectory points with bold 4.5px strokes -->
+  <path d="M 24 64 Q 48 40 78 34" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="44" cy="48" r="4" fill="#0284c7"/>
+  <circle cx="62" cy="38" r="4" fill="#0284c7"/>
+  <circle cx="78" cy="34" r="4" fill="#0284c7"/>
+</svg>

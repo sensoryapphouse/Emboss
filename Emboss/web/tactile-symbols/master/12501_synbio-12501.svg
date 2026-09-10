@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Overlapping DNA fragments joined seamlessly via exonuclease, polymerase and ligase with bold 4.5px strokes -->
+  <line x1="20" y1="44" x2="55" y2="44" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="45" y1="56" x2="80" y2="56" stroke="#ca8a04" stroke-width="5.5"/>
+  <line x1="45" y1="44" x2="55" y2="56" stroke="#ef4444" stroke-width="4.0" stroke-dasharray="3,3"/>
+</svg>

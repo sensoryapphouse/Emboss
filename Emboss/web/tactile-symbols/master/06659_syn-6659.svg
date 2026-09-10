@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cloverleaf tRNA delivering non-canonical amino acid to ribosome with bold 4.5px strokes -->
+  <path d="M 50 36 L 50 64 M 32 50 L 68 50" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+  <circle cx="50" cy="24" r="8" fill="#ef4444"/>
+  <line x1="20" y1="76" x2="80" y2="76" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

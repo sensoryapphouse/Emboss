@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-stage dilution refrigerator cooling mixing chamber plate to 10 mK with bold 4.5px strokes -->
+  <line x1="20" y1="26" x2="80" y2="26" stroke="#000000" stroke-width="5.0"/>
+  <line x1="26" y1="46" x2="74" y2="46" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="34" y1="66" x2="66" y2="66" stroke="#ef4444" stroke-width="5.5"/>
+  <line x1="50" y1="26" x2="50" y2="66" stroke="#000000" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large heavy rotating machine stator casing with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="30" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Massive physical rotational inertia rotor flywheel core with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="16" fill="#1e293b"/>
+  <!-- Rotational inertia circular momentum arrows with bold 4.0px stroke -->
+  <path d="M 50 28 C 62 28 68 36 68 46" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

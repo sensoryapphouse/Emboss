@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="34" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Internal citrus segments radiating from center -->
+  <circle cx="50" cy="50" r="24" fill="#ffffff" stroke="#000000" stroke-width="3.0"/>
+  <line x1="50" y1="26" x2="50" y2="74" stroke="#facc15" stroke-width="3.5"/>
+  <line x1="26" y1="50" x2="74" y2="50" stroke="#facc15" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 4x4 tensor matrix partitioned into energy density, momentum flux, and shear stresses with bold 4.5px strokes -->
+  <rect x="22" y="22" width="56" height="56" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <rect x="26" y="26" width="14" height="14" fill="#ef4444"/>
+  <rect x="44" y="26" width="30" height="14" fill="#0284c7" opacity="0.4"/>
+  <rect x="44" y="44" width="30" height="30" fill="#ca8a04" opacity="0.4"/>
+</svg>

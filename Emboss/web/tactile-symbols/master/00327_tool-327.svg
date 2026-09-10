@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large flywheel on left -->
+  <circle cx="40" cy="46" r="26" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="40" cy="46" r="6" fill="#8a5a2b" stroke="#000000" stroke-width="2.5"/>
+  <!-- Spindle flyer on right -->
+  <line x1="40" y1="46" x2="82" y2="46" stroke="#000000" stroke-width="3.5"/>
+  <line x1="82" y1="36" x2="82" y2="78" stroke="#000000" stroke-width="4.0"/>
+  <line x1="22" y1="78" x2="86" y2="78" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

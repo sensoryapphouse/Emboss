@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circuit register input lines with bold 4.5px strokes -->
+  <line x1="14" y1="38" x2="86" y2="38" stroke="#000000" stroke-width="4.5"/>
+  <line x1="14" y1="62" x2="86" y2="62" stroke="#000000" stroke-width="4.5"/>
+  <!-- Inversion-about-the-mean diffusion operator box with bold 4.5px stroke -->
+  <rect x="28" y="24" width="44" height="52" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Grover 2|s><s|-I symbol in center with bold 4.0px stroke -->
+  <polygon points="50,34 60,66 40,66" fill="#ef4444"/>
+</svg>

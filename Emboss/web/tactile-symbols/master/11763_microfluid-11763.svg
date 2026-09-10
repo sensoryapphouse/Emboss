@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Applied electric field driving flat plug velocity profile along electrical double layer with bold 4.5px strokes -->
+  <line x1="20" y1="30" x2="80" y2="30" stroke="#000000" stroke-width="5.0"/>
+  <line x1="20" y1="70" x2="80" y2="70" stroke="#000000" stroke-width="5.0"/>
+  <line x1="40" y1="34" x2="40" y2="66" stroke="#10b981" stroke-width="5.5"/>
+  <line x1="40" y1="50" x2="70" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

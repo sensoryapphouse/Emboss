@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper female recessed matrix die with bold 4.5px stroke -->
+  <polygon points="20,22 80,22 80,38 60,38 50,48 40,38 20,38" fill="#cbd5e1" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Lower matching male protruding patrix counter die with bold 4.5px stroke -->
+  <polygon points="20,78 80,78 80,62 60,62 50,52 40,62 20,62" fill="#cbd5e1" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

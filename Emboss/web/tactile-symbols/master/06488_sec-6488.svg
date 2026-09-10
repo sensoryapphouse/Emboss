@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Constant flat-line execution time independent of input data with bold 5.0px stroke -->
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+  <line x1="18" y1="76" x2="82" y2="76" stroke="#000000" stroke-width="4.5"/>
+</svg>

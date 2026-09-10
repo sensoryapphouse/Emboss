@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Crosswalk sign post with solar panel top with bold 4.5px stroke -->
+  <line x1="50" y1="20" x2="50" y2="82" stroke="#000000" stroke-width="5.0"/>
+  <rect x="36" y="14" width="28" height="8" rx="2" fill="#0284c7"/>
+  <!-- Pedestrian crossing silhouette sign plaque in middle with bold 4.0px stroke -->
+  <polygon points="50,26 68,44 50,62 32,44" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <!-- Dual rectangular rapid flashing beacon LED light bars with bold 4.0px strokes -->
+  <rect x="34" y="64" width="32" height="8" rx="2" fill="#1e293b" stroke="#ef4444" stroke-width="3.5"/>
+</svg>

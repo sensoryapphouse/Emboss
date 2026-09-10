@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy walrus head and muzzle -->
+  <polygon points="34,34 66,34 62,64 38,64" fill="#8a5a2b" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Long downward white ivory tusks -->
+  <line x1="42" y1="64" x2="42" y2="84" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round"/>
+  <line x1="58" y1="64" x2="58" y2="84" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round"/>
+</svg>

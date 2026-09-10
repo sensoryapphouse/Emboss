@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Arteriole input vessel left (Red) with bold 4.5px stroke -->
+  <line x1="20" y1="50" x2="36" y2="50" stroke="#ef4444" stroke-width="6.5"/>
+  <!-- Venule exit vessel right (Blue) with bold 4.5px stroke -->
+  <line x1="64" y1="50" x2="80" y2="50" stroke="#0284c7" stroke-width="6.5"/>
+  <!-- Branching capillary network loop mesh with bold 4.0px strokes -->
+  <path d="M 36 50 C 44 32 56 32 64 50" fill="none" stroke="#a855f7" stroke-width="4.5"/>
+  <path d="M 36 50 C 44 68 56 68 64 50" fill="none" stroke="#a855f7" stroke-width="4.5"/>
+</svg>

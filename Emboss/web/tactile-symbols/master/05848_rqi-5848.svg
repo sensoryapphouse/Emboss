@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Black hole event horizon arc left with bold 5.0px stroke -->
+  <path d="M 40 18 Q 46 50 40 82" fill="none" stroke="#000000" stroke-width="6.0"/>
+  <!-- Infalling negative energy virtual partner (left, blue) and radiated positive photon (right, red) with bold 5.0px strokes -->
+  <line x1="43" y1="50" x2="18" y2="50" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="43" y1="50" x2="82" y2="50" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Pair creation vertex at horizon -->
+  <circle cx="43" cy="50" r="5" fill="#ca8a04"/>
+</svg>

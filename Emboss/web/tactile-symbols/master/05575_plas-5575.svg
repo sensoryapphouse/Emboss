@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Deforming plasma fluid parcel dragging magnetic field line with bold 5.0px strokes -->
+  <path d="M 30 20 Q 70 50 30 80" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Plasma fluid element locked onto field line in center with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="14" ry="10" fill="#ffffff" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

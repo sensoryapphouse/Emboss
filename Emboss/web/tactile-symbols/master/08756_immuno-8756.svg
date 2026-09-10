@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dual alpha and beta transmembrane chains forming open-ended peptide binding groove with bold 4.5px strokes -->
+  <path d="M 32 68 L 32 38 Q 42 26 50 38 L 50 68" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 68 68 L 68 38 Q 58 26 50 38 L 50 68" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <circle cx="50" cy="32" r="5" fill="#ef4444"/>
+</svg>

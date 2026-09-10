@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Phosphatidylinositol lipid tail anchoring glycan bridge to cell-surface protein with bold 4.5px strokes -->
+  <line x1="18" y1="76" x2="82" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="50" cy="56" r="8" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="38" r="8" fill="#10b981" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="20" r="8" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

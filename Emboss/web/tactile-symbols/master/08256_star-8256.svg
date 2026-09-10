@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Zigzag staircase along valley of nuclear stability via slow neutron capture and beta decay with bold 4.5px strokes -->
+  <path d="M 24 74 L 40 74 L 40 54 L 58 54 L 58 34 L 76 34" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="24" cy="74" r="4" fill="#ef4444"/>
+  <circle cx="76" cy="34" r="4" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Horizontal manifold mounting bar with bold 4.5px stroke -->
+  <rect x="18" y="30" width="64" height="14" rx="2" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <!-- 3 Rubber suction cups descending with bold 4.0px strokes -->
+  <polygon points="26,44 38,44 42,66 22,66" fill="#1e293b" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <polygon points="44,44 56,44 60,66 40,66" fill="#1e293b" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <polygon points="62,44 74,44 78,66 58,66" fill="#1e293b" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Suction flow arrows up with bold 3.5px strokes -->
+  <line x1="32" y1="78" x2="32" y2="68" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="50" y1="78" x2="50" y2="68" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="68" y1="78" x2="68" y2="68" stroke="#38bdf8" stroke-width="4.0"/>
+</svg>

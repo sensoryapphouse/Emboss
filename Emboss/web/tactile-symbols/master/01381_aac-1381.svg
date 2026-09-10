@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central heart figure wrapped in embracing arms -->
+  <path d="M 50 36 C 50 20 28 20 28 36 C 28 54 50 68 50 68 C 50 68 72 54 72 36 C 72 20 50 20 50 36 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- Supporting wrap hug bands -->
+  <path d="M 16 54 C 30 78 70 78 84 54" fill="none" stroke="#0284c7" stroke-width="6.0" stroke-linecap="round"/>
+</svg>

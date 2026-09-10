@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Network of metastable conformational macrostates connected by transition rates with bold 4.5px strokes -->
+  <circle cx="30" cy="34" r="10" fill="#0284c7"/>
+  <circle cx="70" cy="34" r="10" fill="#ef4444"/>
+  <circle cx="50" cy="70" r="10" fill="#ca8a04"/>
+  <line x1="40" y1="34" x2="60" y2="34" stroke="#000000" stroke-width="4.0"/>
+  <line x1="36" y1="42" x2="44" y2="62" stroke="#000000" stroke-width="4.0"/>
+  <line x1="64" y1="42" x2="56" y2="62" stroke="#000000" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stratospheric sulfate aerosol reflective veil reflecting incoming solar radiation with bold 4.5px strokes -->
+  <line x1="16" y1="40" x2="84" y2="40" stroke="#ca8a04" stroke-width="6.0" stroke-dasharray="6,3"/>
+  <line x1="30" y1="18" x2="44" y2="40" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="44" y1="40" x2="30" y2="62" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="16" y1="78" x2="84" y2="78" stroke="#22c55e" stroke-width="5.0"/>
+</svg>

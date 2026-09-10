@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dealer node distributing tripartite GHZ state to 3 participants with bold 4.5px strokes -->
+  <circle cx="50" cy="24" r="8" fill="#ef4444"/>
+  <line x1="50" y1="32" x2="26" y2="70" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="32" x2="50" y2="70" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="32" x2="74" y2="70" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="26" cy="72" r="6" fill="#0284c7"/>
+  <circle cx="50" cy="72" r="6" fill="#0284c7"/>
+  <circle cx="74" cy="72" r="6" fill="#0284c7"/>
+</svg>

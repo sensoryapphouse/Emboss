@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hermetic titanium pacemaker can pulse generator with bold 4.5px stroke -->
+  <path d="M 22 40 C 22 24 48 24 54 24 C 60 24 64 36 64 54 C 64 72 44 76 34 76 C 24 76 22 56 22 40 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Transvenous pacing lead wire extending right with bold 5.0px stroke -->
+  <path d="M 52 26 C 68 26 78 44 78 78" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

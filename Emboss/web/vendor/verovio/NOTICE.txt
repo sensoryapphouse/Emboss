@@ -1,0 +1,6 @@
+Verovio 6.2.0 — music notation engraving library
+https://github.com/rism-digital/verovio
+License: LGPL-3.0-or-later (see https://www.gnu.org/licenses/lgpl-3.0.html)
+Files: verovio-module.mjs (wasm build, unmodified), verovio.mjs (toolkit
+wrapper, unmodified), from the npm package "verovio".
+Verovio is loaded lazily as a separate, replaceable module.

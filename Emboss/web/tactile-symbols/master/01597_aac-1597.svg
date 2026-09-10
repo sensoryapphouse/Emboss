@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Partner marker circle right -->
+  <circle cx="68" cy="50" r="18" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <!-- Forward pointing arrow passing turn -->
+  <line x1="18" y1="50" x2="48" y2="50" stroke="#0284c7" stroke-width="6.0" stroke-linecap="round"/>
+  <polygon points="42,40 54,50 42,60" fill="#0284c7"/>
+</svg>

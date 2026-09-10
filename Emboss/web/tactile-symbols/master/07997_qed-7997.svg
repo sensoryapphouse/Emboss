@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- s-channel annihilation into virtual photon decaying into muon-antimuon pair with bold 4.5px strokes -->
+  <line x1="20" y1="26" x2="42" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="20" y1="74" x2="42" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 42 50 Q 49 42 58 50" fill="none" stroke="#ca8a04" stroke-width="5.0"/>
+  <line x1="58" y1="50" x2="80" y2="26" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="58" y1="50" x2="80" y2="74" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

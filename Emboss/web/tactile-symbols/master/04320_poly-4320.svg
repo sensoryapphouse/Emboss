@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- UHF Microwave resonance tunnel chamber with bold 4.5px stroke -->
+  <rect x="18" y="30" width="64" height="40" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Extruded EPDM weatherstrip profile passing through with bold 4.5px stroke -->
+  <line x1="14" y1="50" x2="86" y2="50" stroke="#1e293b" stroke-width="6.0"/>
+  <!-- Microwave radiation wave oscillations with bold 4.0px strokes -->
+  <path d="M 28 40 Q 36 34 44 40 Q 52 46 60 40 Q 68 34 76 40" fill="none" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

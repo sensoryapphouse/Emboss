@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- White stalk stem -->
+  <rect x="42" y="48" width="16" height="34" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Red spotted umbrella dome cap -->
+  <path d="M 18 52 C 18 24 82 24 82 52 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- White spots -->
+  <circle cx="34" cy="38" r="4" fill="#ffffff"/>
+  <circle cx="50" cy="32" r="5" fill="#ffffff"/>
+  <circle cx="66" cy="38" r="4" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Free propagation region feeding curved waveguide array separating distinct wavelength outputs with bold 4.5px strokes -->
+  <path d="M 22 50 L 40 50" stroke="#000000" stroke-width="5.5"/>
+  <path d="M 40 32 Q 54 22 68 32 M 40 50 Q 54 50 68 50 M 40 68 Q 54 78 68 68" stroke="#0284c7" stroke-width="4.5" fill="none"/>
+  <line x1="68" y1="32" x2="82" y2="24" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="68" y1="50" x2="82" y2="50" stroke="#22c55e" stroke-width="4.5"/>
+  <line x1="68" y1="68" x2="82" y2="76" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

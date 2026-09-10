@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Linear chain of trapped ion glowing spheres levitated between quadrupole blade electrodes with bold 4.5px strokes -->
+  <line x1="18" y1="30" x2="82" y2="30" stroke="#64748b" stroke-width="5.0"/>
+  <line x1="18" y1="70" x2="82" y2="70" stroke="#64748b" stroke-width="5.0"/>
+  <circle cx="34" cy="50" r="5" fill="#ef4444"/>
+  <circle cx="50" cy="50" r="5" fill="#ef4444"/>
+  <circle cx="66" cy="50" r="5" fill="#ef4444"/>
+</svg>

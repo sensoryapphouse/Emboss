@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circular plasmid double strand -->
+  <circle cx="50" cy="50" r="34" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Origin of Replication (ori) sector -->
+  <path d="M 50 16 A 34 34 0 0 1 84 50" fill="none" stroke="#0284c7" stroke-width="8.0"/>
+  <!-- Antibiotic Resistance gene (AmpR) -->
+  <path d="M 84 50 A 34 34 0 0 1 50 84" fill="none" stroke="#22c55e" stroke-width="8.0"/>
+  <!-- Multiple Cloning Site (MCS polylinker) insertion spot -->
+  <circle cx="26" cy="26" r="6" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+</svg>

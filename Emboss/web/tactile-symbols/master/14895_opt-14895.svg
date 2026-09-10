@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stretched low-intensity chirped wave passing through amplifier to recompress into giant spike with bold 4.5px strokes -->
+  <path d="M 18 50 Q 26 40 34 50 Q 40 34 46 50" stroke="#0284c7" stroke-width="4.5" fill="none"/>
+  <rect x="46" y="32" width="16" height="36" rx="3" fill="#ca8a04" opacity="0.3" stroke="#000000" stroke-width="3.5"/>
+  <line x1="72" y1="50" x2="72" y2="20" stroke="#ef4444" stroke-width="6.5"/>
+  <line x1="62" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="4.5"/>
+</svg>

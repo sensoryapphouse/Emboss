@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Lateral cell intercalation narrowing tissue width while elongating anterior-posterior length with bold 4.5px strokes -->
+  <rect x="36" y="22" width="28" height="56" rx="6" fill="#ca8a04" opacity="0.3" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 22 50 L 32 50 M 78 50 L 68 50" stroke="#ef4444" stroke-width="5.0"/>
+  <path d="M 50 14 L 50 20 M 50 86 L 50 80" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

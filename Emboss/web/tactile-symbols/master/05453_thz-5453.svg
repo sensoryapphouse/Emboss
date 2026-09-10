@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Inner hidden object core circle with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="14" fill="#1e293b"/>
+  <!-- Metamaterial cloaking shell outer ring with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Light rays bending smoothly around hidden core with bold 4.5px strokes -->
+  <path d="M 18 36 Q 50 22 82 36" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 18 64 Q 50 78 82 64" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

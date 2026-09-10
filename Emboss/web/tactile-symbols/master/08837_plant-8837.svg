@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Icosahedral cyanobacterial carboxysome shell concentrating CO2 around RuBisCO with bold 4.5px strokes -->
+  <polygon points="50,22 76,38 76,68 50,84 24,68 24,38" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="53" r="8" fill="#ef4444"/>
+</svg>

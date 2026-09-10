@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two stacked horizontal network planes with vertical inter-layer coupling links with bold 4.5px strokes -->
+  <ellipse cx="50" cy="34" rx="28" ry="12" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <ellipse cx="50" cy="66" rx="28" ry="12" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+  <line x1="36" y1="34" x2="36" y2="66" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="64" y1="34" x2="64" y2="66" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nose contour profile -->
+  <path d="M 50 20 L 50 60 C 50 74 34 74 34 60" fill="none" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Red congestion plug in nostril -->
+  <circle cx="44" cy="62" r="8" fill="#ef4444"/>
+</svg>

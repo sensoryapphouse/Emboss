@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cylindrical Rod cell left (night vision) with bold 4.0px stroke -->
+  <rect x="30" y="24" width="12" height="52" rx="4" fill="#94a3b8" stroke="#000000" stroke-width="4.0"/>
+  <!-- Tapered conical Cone cell right (color vision) with bold 4.0px stroke -->
+  <polygon points="56,76 68,76 64,24 60,24" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

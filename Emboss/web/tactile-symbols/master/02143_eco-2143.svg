@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long brown segmented body -->
+  <rect x="44" y="22" width="12" height="42" rx="4" fill="#8a5a2b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Curved tail pincers bottom -->
+  <path d="M 44 64 C 36 78 48 84 48 80 M 56 64 C 64 78 52 84 52 80" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

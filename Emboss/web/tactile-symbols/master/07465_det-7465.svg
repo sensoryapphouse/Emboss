@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-layer foil radiator emitting soft X-rays for ultra-relativistic electron ID with bold 4.5px strokes -->
+  <line x1="28" y1="24" x2="28" y2="76" stroke="#ca8a04" stroke-width="4.0"/>
+  <line x1="38" y1="24" x2="38" y2="76" stroke="#ca8a04" stroke-width="4.0"/>
+  <line x1="48" y1="24" x2="48" y2="76" stroke="#ca8a04" stroke-width="4.0"/>
+  <rect x="58" y="24" width="22" height="52" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="50" x2="68" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

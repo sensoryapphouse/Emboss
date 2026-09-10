@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Donor-derived T lymphocytes attacking recipient epithelial tissue targets with bold 4.5px strokes -->
+  <circle cx="34" cy="40" r="12" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="52" y="56" width="30" height="18" fill="#ef4444" opacity="0.4" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 44 48 L 56 60" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

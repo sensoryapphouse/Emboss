@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Synagogue building body -->
+  <rect x="24" y="42" width="52" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Star of David emblem top center -->
+  <polygon points="50,20 57,32 43,32" fill="none" stroke="#0284c7" stroke-width="3.5"/>
+  <polygon points="50,36 57,24 43,24" fill="none" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

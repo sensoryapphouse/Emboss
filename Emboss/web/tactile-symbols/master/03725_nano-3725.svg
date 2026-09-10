@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer split ring square with bold 4.5px stroke -->
+  <path d="M 44 22 L 22 22 L 22 78 L 78 78 L 78 22 L 56 22" fill="none" stroke="#ca8a04" stroke-width="5.5"/>
+  <!-- Inner split ring with split at bottom with bold 4.0px stroke -->
+  <path d="M 44 70 L 32 70 L 32 34 L 68 34 L 68 70 L 56 70" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

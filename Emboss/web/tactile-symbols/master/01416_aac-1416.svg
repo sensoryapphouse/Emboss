@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Deep plastic storage tub -->
+  <polygon points="18,44 82,44 74,78 26,78" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Sensory filler beads & scoop handle -->
+  <circle cx="36" cy="58" r="4" fill="#ef4444"/>
+  <circle cx="48" cy="64" r="4" fill="#facc15"/>
+  <circle cx="60" cy="56" r="4" fill="#22c55e"/>
+  <path d="M 62 30 L 52 50" stroke="#000000" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

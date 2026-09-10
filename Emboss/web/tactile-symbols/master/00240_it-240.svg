@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <ellipse cx="50" cy="26" rx="34" ry="12" fill="#38bdf8" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 16 26 L 16 74 C 16 86 84 86 84 74 L 84 26" fill="none" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 16 48 C 16 60 84 60 84 48" fill="none" stroke="#000000" stroke-width="3.5"/>
+</svg>

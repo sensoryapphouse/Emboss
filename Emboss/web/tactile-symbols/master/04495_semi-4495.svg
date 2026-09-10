@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nanofocus X-ray tube source left with bold 4.5px stroke -->
+  <polygon points="16,38 28,38 28,62 16,62" fill="#1e293b"/>
+  <!-- Rotating microchip test specimen in 360-degree beam center with bold 4.5px stroke -->
+  <rect x="44" y="42" width="12" height="16" rx="2" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <!-- Flat panel digital X-ray detector array right with bold 4.5px stroke -->
+  <rect x="74" y="24" width="10" height="52" rx="2" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <!-- X-ray cone beam projection with bold 4.0px strokes -->
+  <line x1="28" y1="50" x2="74" y2="28" stroke="#ef4444" stroke-width="4.0" stroke-dasharray="5,3"/>
+  <line x1="28" y1="50" x2="74" y2="72" stroke="#ef4444" stroke-width="4.0" stroke-dasharray="5,3"/>
+</svg>

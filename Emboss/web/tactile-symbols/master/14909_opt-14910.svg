@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flat substrate carrying graduated nanopillars focusing incoming parallel beam to sharp point with bold 4.5px strokes -->
+  <line x1="18" y1="68" x2="82" y2="68" stroke="#000000" stroke-width="5.0"/>
+  <rect x="26" y="52" width="6" height="16" fill="#0284c7"/>
+  <rect x="38" y="44" width="8" height="24" fill="#0284c7"/>
+  <rect x="48" y="38" width="10" height="30" fill="#0284c7"/>
+  <rect x="60" y="44" width="8" height="24" fill="#0284c7"/>
+  <rect x="72" y="52" width="6" height="16" fill="#0284c7"/>
+</svg>

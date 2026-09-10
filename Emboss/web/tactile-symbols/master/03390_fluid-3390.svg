@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tapered transparent vertical glass tube (narrower bottom, wider top) with bold 4.5px stroke -->
+  <polygon points="34,22 66,22 58,78 42,78" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Free-floating bob indicator buoyed by upward flow with bold 4.0px stroke -->
+  <polygon points="44,54 56,54 50,44" fill="#ef4444" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

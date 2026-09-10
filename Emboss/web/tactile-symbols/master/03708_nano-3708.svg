@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer silicon die substrate with bold 4.5px stroke -->
+  <rect x="18" y="18" width="64" height="64" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Resonating silicon ring in center with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="20" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- 4 Orthogonal drive/sense support spoke beams with bold 3.5px strokes -->
+  <line x1="50" y1="18" x2="50" y2="30" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="70" x2="50" y2="82" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="50" x2="30" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <line x1="70" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="4.0"/>
+</svg>

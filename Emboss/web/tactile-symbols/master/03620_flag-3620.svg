@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer boundary rectangle with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Orange, white, blue horizontal tricolor stripes -->
+  <rect x="18" y="24" width="64" height="17" fill="#f97316"/>
+  <rect x="18" y="41" width="64" height="18" fill="#ffffff"/>
+  <rect x="18" y="59" width="64" height="17" fill="#0284c7"/>
+  <!-- Central miniature flag trio box with bold 3.5px stroke -->
+  <rect x="40" y="45" width="20" height="10" fill="#cbd5e1" stroke="#000000" stroke-width="3.0"/>
+</svg>

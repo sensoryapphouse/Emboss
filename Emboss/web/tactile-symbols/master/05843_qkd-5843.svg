@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Concentric dual-layer defense shield with bold 4.5px strokes -->
+  <path d="M 50 18 L 78 30 L 78 58 Q 50 82 50 82 Q 22 58 22 30 Z" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Inner QKD physical shield layer -->
+  <path d="M 50 30 L 68 38 L 68 56 Q 50 72 50 72 Q 32 56 32 38 Z" fill="#ef4444"/>
+</svg>

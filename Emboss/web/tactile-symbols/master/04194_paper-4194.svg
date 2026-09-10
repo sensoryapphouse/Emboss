@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Horizontal wrapped pillow pack envelope with bold 4.5px stroke -->
+  <rect x="26" y="36" width="48" height="28" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Rotary heated end-crimp seal jaws left and right with bold 4.5px strokes -->
+  <rect x="18" y="34" width="8" height="32" rx="1" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <rect x="74" y="34" width="8" height="32" rx="1" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+</svg>

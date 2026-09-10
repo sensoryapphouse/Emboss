@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Overhead thick haulage cable diagonal with bold 5.0px stroke -->
+  <line x1="18" y1="24" x2="82" y2="24" stroke="#000000" stroke-width="6.0"/>
+  <!-- Hanger grip arm extending down to cabin with bold 4.5px stroke -->
+  <polyline points="50,24 50,44 42,44" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <!-- Enclosed passenger cabin box with bold 4.5px stroke -->
+  <rect x="30" y="44" width="40" height="34" rx="6" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- Panoramic cabin window with bold 3.5px stroke -->
+  <rect x="36" y="50" width="28" height="12" rx="2" fill="#38bdf8" stroke="#000000" stroke-width="3.5"/>
+</svg>

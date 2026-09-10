@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Microfluidic chip channel framework with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Main horizontal channel and vertical oil inlet T-junction with bold 4.0px strokes -->
+  <line x1="18" y1="50" x2="82" y2="50" stroke="#0284c7" stroke-width="6.0"/>
+  <line x1="42" y1="24" x2="42" y2="50" stroke="#ca8a04" stroke-width="6.0"/>
+  <!-- Sheared discrete micro-droplets flowing right with bold 3.5px strokes -->
+  <circle cx="56" cy="50" r="4" fill="#ef4444"/>
+  <circle cx="70" cy="50" r="4" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Packed bed of high-heat-capacity magnetic Er3Ni spheres inside cylindrical tube with bold 4.5px strokes -->
+  <rect x="26" y="24" width="48" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="38" cy="38" r="5" fill="#ca8a04"/>
+  <circle cx="62" cy="38" r="5" fill="#ca8a04"/>
+  <circle cx="50" cy="50" r="5" fill="#ca8a04"/>
+  <circle cx="38" cy="62" r="5" fill="#ca8a04"/>
+  <circle cx="62" cy="62" r="5" fill="#ca8a04"/>
+</svg>

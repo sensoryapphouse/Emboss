@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Twin vertical water leg columns with steam dome top with bold 4.5px stroke -->
+  <polygon points="26,80 26,24 74,24 74,80 60,80 60,38 40,38 40,80" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Central steam sterilization chamber dome top with bold 4.0px stroke -->
+  <rect x="40" y="24" width="20" height="14" fill="#ef4444"/>
+</svg>

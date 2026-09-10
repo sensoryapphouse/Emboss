@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Slow high amplitude Delta wave top with bold 4.5px stroke -->
+  <path d="M 20 32 Q 35 18 50 32 T 80 32" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Faster rhythmic Alpha wave bottom with bold 4.0px stroke -->
+  <path d="M 20 66 Q 28 56 35 66 T 50 66 T 65 66 T 80 66" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

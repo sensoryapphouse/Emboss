@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Lower classical column portico with pediment with bold 4.5px stroke -->
+  <polygon points="26,50 50,38 74,50" fill="#f97316" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <rect x="30" y="50" width="40" height="30" fill="#fed7aa" stroke="#000000" stroke-width="4.0"/>
+  <!-- Upper tholos rotunda and urn with bold 4.0px stroke -->
+  <circle cx="50" cy="28" r="7" fill="#f97316" stroke="#000000" stroke-width="4.0"/>
+</svg>

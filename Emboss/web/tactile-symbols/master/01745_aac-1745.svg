@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Suction pump unit box -->
+  <rect x="22" y="36" width="34" height="44" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Fluid collection canister jar right -->
+  <rect x="60" y="44" width="18" height="36" rx="4" fill="#38bdf8" stroke="#000000" stroke-width="3.5"/>
+  <!-- Tubing line -->
+  <path d="M 38 36 C 38 20 68 20 68 44" fill="none" stroke="#000000" stroke-width="4.0"/>
+</svg>

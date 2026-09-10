@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15,001 Master Tactile & AAC Symbol Archive</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151d30;
+      --card-border: #24324f;
+      --text-main: #f1f5f9;
+      --text-muted: #8da2c0;
+      --accent: #38bdf8;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font);
+      padding: 1.5rem;
+    }
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 1.5rem auto;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    .controls {
+      max-width: 1400px;
+      margin: 0 auto 1.5rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .search {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .search:focus { border-color: var(--accent); }
+    .cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      max-height: 120px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .cat-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.4rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .cat-btn.active {
+      background: var(--accent);
+      color: #0b0f19;
+      font-weight: 700;
+    }
+    .grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+    .thumb-frame {
+      width: 100px;
+      height: 100px;
+      background: #ffffff;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+    }
+    .thumb-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .card-id {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--text-main);
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pagination {
+      max-width: 1400px;
+      margin: 2rem auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+    .page-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>15,001 Master Tactile & AAC Archive</h1>
+    <p>Complete Universal Vector Diagram Repository</p>
+    <div class="stats">
+      <div class="stat">Total Symbols: 15,001</div>
+      <div class="stat">Active Categories: 234</div>
+      <div class="stat">Filtered: <span id="filtered-count">15001</span></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" class="search" placeholder="🔍 Search across all 15,001 diagrams by topic, keyword, or number...">
+    <div class="cats" id="cats">
+      <button class="cat-btn active" data-cat="ALL">All (15,001)</button>
+      
+        <button class="cat-btn" data-cat="sci">sci (25)</button>
+      
+        <button class="cat-btn" data-cat="phy">phy (25)</button>
+      
+        <button class="cat-btn" data-cat="bio">bio (200)</button>
+      
+        <button class="cat-btn" data-cat="mat">mat (31)</button>
+      
+        <button class="cat-btn" data-cat="sch">sch (19)</button>
+      
+        <button class="cat-btn" data-cat="geo">geo (506)</button>
+      
+        <button class="cat-btn" data-cat="ani">ani (25)</button>
+      
+        <button class="cat-btn" data-cat="bot">bot (41)</button>
+      
+        <button class="cat-btn" data-cat="eco">eco (79)</button>
+      
+        <button class="cat-btn" data-cat="mus">mus (130)</button>
+      
+        <button class="cat-btn" data-cat="trn">trn (10)</button>
+      
+        <button class="cat-btn" data-cat="civ">civ (5)</button>
+      
+        <button class="cat-btn" data-cat="it">it (25)</button>
+      
+        <button class="cat-btn" data-cat="chm">chm (25)</button>
+      
+        <button class="cat-btn" data-cat="hlf">hlf (20)</button>
+      
+        <button class="cat-btn" data-cat="his">his (9)</button>
+      
+        <button class="cat-btn" data-cat="tool">tool (20)</button>
+      
+        <button class="cat-btn" data-cat="hom">hom (75)</button>
+      
+        <button class="cat-btn" data-cat="spc">spc (75)</button>
+      
+        <button class="cat-btn" data-cat="eng">eng (25)</button>
+      
+        <button class="cat-btn" data-cat="met">met (105)</button>
+      
+        <button class="cat-btn" data-cat="lnd">lnd (25)</button>
+      
+        <button class="cat-btn" data-cat="opt">opt (90)</button>
+      
+        <button class="cat-btn" data-cat="mic">mic (15)</button>
+      
+        <button class="cat-btn" data-cat="org">org (74)</button>
+      
+        <button class="cat-btn" data-cat="cel">cel (25)</button>
+      
+        <button class="cat-btn" data-cat="gen">gen (70)</button>
+      
+        <button class="cat-btn" data-cat="elc">elc (20)</button>
+      
+        <button class="cat-btn" data-cat="sem">sem (15)</button>
+      
+        <button class="cat-btn" data-cat="tst">tst (35)</button>
+      
+        <button class="cat-btn" data-cat="mec">mec (10)</button>
+      
+        <button class="cat-btn" data-cat="flu">flu (10)</button>
+      
+        <button class="cat-btn" data-cat="thm">thm (20)</button>
+      
+        <button class="cat-btn" data-cat="str">str (80)</button>
+      
+        <button class="cat-btn" data-cat="arc">arc (70)</button>
+      
+        <button class="cat-btn" data-cat="ast">ast (120)</button>
+      
+        <button class="cat-btn" data-cat="ocn">ocn (30)</button>
+      
+        <button class="cat-btn" data-cat="fld">fld (50)</button>
+      
+        <button class="cat-btn" data-cat="aac">aac (600)</button>
+      
+        <button class="cat-btn" data-cat="ukus">ukus (150)</button>
+      
+        <button class="cat-btn" data-cat="farm">farm (50)</button>
+      
+        <button class="cat-btn" data-cat="marine">marine (220)</button>
+      
+        <button class="cat-btn" data-cat="hist">hist (100)</button>
+      
+        <button class="cat-btn" data-cat="space">space (240)</button>
+      
+        <button class="cat-btn" data-cat="green">green (50)</button>
+      
+        <button class="cat-btn" data-cat="cs">cs (50)</button>
+      
+        <button class="cat-btn" data-cat="flag">flag (200)</button>
+      
+        <button class="cat-btn" data-cat="map">map (50)</button>
+      
+        <button class="cat-btn" data-cat="trade">trade (50)</button>
+      
+        <button class="cat-btn" data-cat="sport">sport (50)</button>
+      
+        <button class="cat-btn" data-cat="stem">stem (50)</button>
+      
+        <button class="cat-btn" data-cat="landmark">landmark (50)</button>
+      
+        <button class="cat-btn" data-cat="transit">transit (50)</button>
+      
+        <button class="cat-btn" data-cat="botany">botany (50)</button>
+      
+        <button class="cat-btn" data-cat="chem">chem (100)</button>
+      
+        <button class="cat-btn" data-cat="history">history (50)</button>
+      
+        <button class="cat-btn" data-cat="fluid">fluid (50)</button>
+      
+        <button class="cat-btn" data-cat="optics">optics (120)</button>
+      
+        <button class="cat-btn" data-cat="vet">vet (50)</button>
+      
+        <button class="cat-btn" data-cat="astro">astro (100)</button>
+      
+        <button class="cat-btn" data-cat="struct">struct (170)</button>
+      
+        <button class="cat-btn" data-cat="robot">robot (50)</button>
+      
+        <button class="cat-btn" data-cat="nano">nano (190)</button>
+      
+        <button class="cat-btn" data-cat="nuclear">nuclear (50)</button>
+      
+        <button class="cat-btn" data-cat="mine">mine (50)</button>
+      
+        <button class="cat-btn" data-cat="tree">tree (50)</button>
+      
+        <button class="cat-btn" data-cat="biomed">biomed (50)</button>
+      
+        <button class="cat-btn" data-cat="textile">textile (50)</button>
+      
+        <button class="cat-btn" data-cat="glass">glass (50)</button>
+      
+        <button class="cat-btn" data-cat="paper">paper (50)</button>
+      
+        <button class="cat-btn" data-cat="food">food (50)</button>
+      
+        <button class="cat-btn" data-cat="pharma">pharma (50)</button>
+      
+        <button class="cat-btn" data-cat="poly">poly (120)</button>
+      
+        <button class="cat-btn" data-cat="civil">civil (50)</button>
+      
+        <button class="cat-btn" data-cat="tunnel">tunnel (50)</button>
+      
+        <button class="cat-btn" data-cat="semi">semi (100)</button>
+      
+        <button class="cat-btn" data-cat="nucmed">nucmed (50)</button>
+      
+        <button class="cat-btn" data-cat="highway">highway (50)</button>
+      
+        <button class="cat-btn" data-cat="rail">rail (50)</button>
+      
+        <button class="cat-btn" data-cat="aero">aero (100)</button>
+      
+        <button class="cat-btn" data-cat="med">med (50)</button>
+      
+        <button class="cat-btn" data-cat="quant">quant (50)</button>
+      
+        <button class="cat-btn" data-cat="auto">auto (50)</button>
+      
+        <button class="cat-btn" data-cat="grid">grid (50)</button>
+      
+        <button class="cat-btn" data-cat="ocean">ocean (100)</button>
+      
+        <button class="cat-btn" data-cat="fusion">fusion (100)</button>
+      
+        <button class="cat-btn" data-cat="prop">prop (50)</button>
+      
+        <button class="cat-btn" data-cat="hyper">hyper (50)</button>
+      
+        <button class="cat-btn" data-cat="lunar">lunar (50)</button>
+      
+        <button class="cat-btn" data-cat="serv">serv (50)</button>
+      
+        <button class="cat-btn" data-cat="edl">edl (50)</button>
+      
+        <button class="cat-btn" data-cat="qsens">qsens (50)</button>
+      
+        <button class="cat-btn" data-cat="thz">thz (100)</button>
+      
+        <button class="cat-btn" data-cat="microg">microg (50)</button>
+      
+        <button class="cat-btn" data-cat="plas">plas (50)</button>
+      
+        <button class="cat-btn" data-cat="qthermo">qthermo (100)</button>
+      
+        <button class="cat-btn" data-cat="meta">meta (100)</button>
+      
+        <button class="cat-btn" data-cat="dynamo">dynamo (50)</button>
+      
+        <button class="cat-btn" data-cat="hlep">hlep (50)</button>
+      
+        <button class="cat-btn" data-cat="qkd">qkd (50)</button>
+      
+        <button class="cat-btn" data-cat="rqi">rqi (50)</button>
+      
+        <button class="cat-btn" data-cat="tqc">tqc (50)</button>
+      
+        <button class="cat-btn" data-cat="cqed">cqed (50)</button>
+      
+        <button class="cat-btn" data-cat="clk">clk (50)</button>
+      
+        <button class="cat-btn" data-cat="ti">ti (50)</button>
+      
+        <button class="cat-btn" data-cat="sq">sq (50)</button>
+      
+        <button class="cat-btn" data-cat="cv">cv (50)</button>
+      
+        <button class="cat-btn" data-cat="qm">qm (50)</button>
+      
+        <button class="cat-btn" data-cat="hpc">hpc (100)</button>
+      
+        <button class="cat-btn" data-cat="cmp">cmp (100)</button>
+      
+        <button class="cat-btn" data-cat="dcs">dcs (50)</button>
+      
+        <button class="cat-btn" data-cat="qnet">qnet (50)</button>
+      
+        <button class="cat-btn" data-cat="sec">sec (51)</button>
+      
+        <button class="cat-btn" data-cat="rob">rob (50)</button>
+      
+        <button class="cat-btn" data-cat="cfd">cfd (50)</button>
+      
+        <button class="cat-btn" data-cat="syn">syn (50)</button>
+      
+        <button class="cat-btn" data-cat="tel">tel (50)</button>
+      
+        <button class="cat-btn" data-cat="nuc">nuc (50)</button>
+      
+        <button class="cat-btn" data-cat="cch">cch (50)</button>
+      
+        <button class="cat-btn" data-cat="nph">nph (50)</button>
+      
+        <button class="cat-btn" data-cat="ind">ind (50)</button>
+      
+        <button class="cat-btn" data-cat="cry">cry (100)</button>
+      
+        <button class="cat-btn" data-cat="atm">atm (50)</button>
+      
+        <button class="cat-btn" data-cat="aco">aco (50)</button>
+      
+        <button class="cat-btn" data-cat="pho">pho (50)</button>
+      
+        <button class="cat-btn" data-cat="mfl">mfl (50)</button>
+      
+        <button class="cat-btn" data-cat="det">det (50)</button>
+      
+        <button class="cat-btn" data-cat="sup">sup (50)</button>
+      
+        <button class="cat-btn" data-cat="acc">acc (50)</button>
+      
+        <button class="cat-btn" data-cat="grw">grw (50)</button>
+      
+        <button class="cat-btn" data-cat="qch">qch (50)</button>
+      
+        <button class="cat-btn" data-cat="nlo">nlo (50)</button>
+      
+        <button class="cat-btn" data-cat="mhd">mhd (50)</button>
+      
+        <button class="cat-btn" data-cat="rel">rel (50)</button>
+      
+        <button class="cat-btn" data-cat="meso">meso (50)</button>
+      
+        <button class="cat-btn" data-cat="amo">amo (50)</button>
+      
+        <button class="cat-btn" data-cat="qed">qed (50)</button>
+      
+        <button class="cat-btn" data-cat="qinfo">qinfo (150)</button>
+      
+        <button class="cat-btn" data-cat="gr">gr (50)</button>
+      
+        <button class="cat-btn" data-cat="cosmo">cosmo (100)</button>
+      
+        <button class="cat-btn" data-cat="star">star (50)</button>
+      
+        <button class="cat-btn" data-cat="gal">gal (50)</button>
+      
+        <button class="cat-btn" data-cat="topo">topo (50)</button>
+      
+        <button class="cat-btn" data-cat="stat">stat (51)</button>
+      
+        <button class="cat-btn" data-cat="epigen">epigen (100)</button>
+      
+        <button class="cat-btn" data-cat="qft">qft (120)</button>
+      
+        <button class="cat-btn" data-cat="immuno">immuno (120)</button>
+      
+        <button class="cat-btn" data-cat="plant">plant (50)</button>
+      
+        <button class="cat-btn" data-cat="manybody">manybody (50)</button>
+      
+        <button class="cat-btn" data-cat="neuro">neuro (120)</button>
+      
+        <button class="cat-btn" data-cat="virol">virol (50)</button>
+      
+        <button class="cat-btn" data-cat="evodevo">evodevo (50)</button>
+      
+        <button class="cat-btn" data-cat="microb">microb (50)</button>
+      
+        <button class="cat-btn" data-cat="glyco">glyco (50)</button>
+      
+        <button class="cat-btn" data-cat="proteo">proteo (50)</button>
+      
+        <button class="cat-btn" data-cat="synbio">synbio (205)</button>
+      
+        <button class="cat-btn" data-cat="neurotech">neurotech (50)</button>
+      
+        <button class="cat-btn" data-cat="battery">battery (50)</button>
+      
+        <button class="cat-btn" data-cat="pic">pic (50)</button>
+      
+        <button class="cat-btn" data-cat="spacebio">spacebio (50)</button>
+      
+        <button class="cat-btn" data-cat="starprop">starprop (50)</button>
+      
+        <button class="cat-btn" data-cat="radsemi">radsemi (50)</button>
+      
+        <button class="cat-btn" data-cat="carbon">carbon (50)</button>
+      
+        <button class="cat-btn" data-cat="hts">hts (50)</button>
+      
+        <button class="cat-btn" data-cat="bioprint">bioprint (50)</button>
+      
+        <button class="cat-btn" data-cat="hadal">hadal (50)</button>
+      
+        <button class="cat-btn" data-cat="singlebio">singlebio (50)</button>
+      
+        <button class="cat-btn" data-cat="planetdef">planetdef (50)</button>
+      
+        <button class="cat-btn" data-cat="lasplas">lasplas (50)</button>
+      
+        <button class="cat-btn" data-cat="mesomet">mesomet (50)</button>
+      
+        <button class="cat-btn" data-cat="astrobiol">astrobiol (50)</button>
+      
+        <button class="cat-btn" data-cat="geophys">geophys (50)</button>
+      
+        <button class="cat-btn" data-cat="acoust">acoust (120)</button>
+      
+        <button class="cat-btn" data-cat="supercon">supercon (50)</button>
+      
+        <button class="cat-btn" data-cat="nanorob">nanorob (50)</button>
+      
+        <button class="cat-btn" data-cat="spacerob">spacerob (50)</button>
+      
+        <button class="cat-btn" data-cat="metaant">metaant (50)</button>
+      
+        <button class="cat-btn" data-cat="paleoclim">paleoclim (50)</button>
+      
+        <button class="cat-btn" data-cat="nucfor">nucfor (50)</button>
+      
+        <button class="cat-btn" data-cat="quantnet">quantnet (50)</button>
+      
+        <button class="cat-btn" data-cat="geomorph">geomorph (50)</button>
+      
+        <button class="cat-btn" data-cat="neuromorph">neuromorph (50)</button>
+      
+        <button class="cat-btn" data-cat="quantchem">quantchem (50)</button>
+      
+        <button class="cat-btn" data-cat="nanomed">nanomed (50)</button>
+      
+        <button class="cat-btn" data-cat="cryo">cryo (50)</button>
+      
+        <button class="cat-btn" data-cat="detector">detector (50)</button>
+      
+        <button class="cat-btn" data-cat="spintron">spintron (50)</button>
+      
+        <button class="cat-btn" data-cat="hvdc">hvdc (50)</button>
+      
+        <button class="cat-btn" data-cat="radio">radio (50)</button>
+      
+        <button class="cat-btn" data-cat="biomotor">biomotor (50)</button>
+      
+        <button class="cat-btn" data-cat="pv">pv (50)</button>
+      
+        <button class="cat-btn" data-cat="hydro">hydro (50)</button>
+      
+        <button class="cat-btn" data-cat="shm">shm (50)</button>
+      
+        <button class="cat-btn" data-cat="nmr">nmr (50)</button>
+      
+        <button class="cat-btn" data-cat="sar">sar (50)</button>
+      
+        <button class="cat-btn" data-cat="microfluid">microfluid (50)</button>
+      
+        <button class="cat-btn" data-cat="accel">accel (50)</button>
+      
+        <button class="cat-btn" data-cat="biophys">biophys (50)</button>
+      
+        <button class="cat-btn" data-cat="geotherm">geotherm (50)</button>
+      
+        <button class="cat-btn" data-cat="nanophoton">nanophoton (50)</button>
+      
+        <button class="cat-btn" data-cat="qmetrol">qmetrol (50)</button>
+      
+        <button class="cat-btn" data-cat="actmatt">actmatt (50)</button>
+      
+        <button class="cat-btn" data-cat="astrochem">astrochem (50)</button>
+      
+        <button class="cat-btn" data-cat="healloy">healloy (50)</button>
+      
+        <button class="cat-btn" data-cat="qcomput">qcomput (50)</button>
+      
+        <button class="cat-btn" data-cat="volcano">volcano (50)</button>
+      
+        <button class="cat-btn" data-cat="softrob">softrob (50)</button>
+      
+        <button class="cat-btn" data-cat="gwaves">gwaves (50)</button>
+      
+        <button class="cat-btn" data-cat="soilmech">soilmech (50)</button>
+      
+        <button class="cat-btn" data-cat="thzphot">thzphot (50)</button>
+      
+        <button class="cat-btn" data-cat="combphys">combphys (50)</button>
+      
+        <button class="cat-btn" data-cat="memsnems">memsnems (50)</button>
+      
+        <button class="cat-btn" data-cat="chaosdyn">chaosdyn (50)</button>
+      
+        <button class="cat-btn" data-cat="spaceprop">spaceprop (50)</button>
+      
+        <button class="cat-btn" data-cat="structgeol">structgeol (50)</button>
+      
+        <button class="cat-btn" data-cat="atmosmet">atmosmet (50)</button>
+      
+        <button class="cat-btn" data-cat="cfdturb">cfdturb (50)</button>
+      
+        <button class="cat-btn" data-cat="supercond">supercond (50)</button>
+      
+        <button class="cat-btn" data-cat="statmech">statmech (50)</button>
+      
+        <button class="cat-btn" data-cat="partphys">partphys (50)</button>
+      
+        <button class="cat-btn" data-cat="oceanphys">oceanphys (50)</button>
+      
+        <button class="cat-btn" data-cat="solidstate">solidstate (50)</button>
+      
+        <button class="cat-btn" data-cat="relativity">relativity (50)</button>
+      
+        <button class="cat-btn" data-cat="cellsignal">cellsignal (50)</button>
+      
+        <button class="cat-btn" data-cat="fsi">fsi (50)</button>
+      
+        <button class="cat-btn" data-cat="planetsci">planetsci (50)</button>
+      
+        <button class="cat-btn" data-cat="nuke">nuke (50)</button>
+      
+        <button class="cat-btn" data-cat="biomat">biomat (50)</button>
+      
+        <button class="cat-btn" data-cat="complex">complex (70)</button>
+      
+        <button class="cat-btn" data-cat="renew">renew (70)</button>
+      
+        <button class="cat-btn" data-cat="av">av (70)</button>
+      
+        <button class="cat-btn" data-cat="fus">fus (70)</button>
+      
+        <button class="cat-btn" data-cat="qcomp">qcomp (70)</button>
+      
+        <button class="cat-btn" data-cat="robo">robo (70)</button>
+      
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="pagination">
+    <button class="page-btn" id="prev-btn">◀ Previous Page</button>
+    <span id="page-info" style="font-size:0.9rem; color:var(--text-muted);">Page 1 of 151</span>
+    <button class="page-btn" id="next-btn">Next Page ▶</button>
+  </div>
+
+  <script>
+    let symbols = [];
+    let filtered = [];
+    let currentPage = 1;
+    const PAGE_SIZE = 100;
+    let activeCat = "ALL";
+
+    fetch("master-catalog.json")
+      .then(r => r.json())
+      .then(data => {
+        symbols = data.symbols;
+        filtered = symbols;
+        render();
+      });
+
+    const searchInput = document.getElementById("search");
+    const catBtns = document.querySelectorAll(".cat-btn");
+    const grid = document.getElementById("grid");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const pageInfo = document.getElementById("page-info");
+    const filteredCount = document.getElementById("filtered-count");
+
+    function applyFilter() {
+      const q = searchInput.value.toLowerCase().trim();
+      filtered = symbols.filter(s => {
+        const matchesCat = activeCat === "ALL" || s.category === activeCat;
+        const matchesQuery = !q || s.file.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || String(s.id).includes(q);
+        return matchesCat && matchesQuery;
+      });
+      currentPage = 1;
+      filteredCount.textContent = filtered.length;
+      render();
+    }
+
+    searchInput.addEventListener("input", applyFilter);
+
+    catBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        catBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCat = btn.getAttribute("data-cat");
+        applyFilter();
+      });
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        render();
+        window.scrollTo({ top: 200, behavior: "smooth" });
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const maxPage = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+      if (currentPage < maxPage) {
+        currentPage++;
+        render();
+        window.scrollTo({ top: 200, behavior: "smooth" });
+      }
+    });
+
+    function render() {
+      const maxPage = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+      pageInfo.textContent = `Page ${currentPage} of ${maxPage}`;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === maxPage;
+
+      grid.innerHTML = pageItems.map(item => `
+        <div class="card">
+          <div class="thumb-frame">
+            <img src="master/${item.file}" loading="lazy" alt="${item.file}">
+          </div>
+          <div class="card-id">#${item.id} • ${item.category.toUpperCase()}</div>
+          <div class="card-desc" title="${item.desc}">${item.desc}</div>
+        </div>
+      `).join("");
+    }
+  </script>
+</body>
+</html>

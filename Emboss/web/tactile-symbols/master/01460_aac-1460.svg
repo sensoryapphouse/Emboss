@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Round heart apple body -->
+  <path d="M 50 36 C 42 22 20 26 20 52 C 20 74 38 84 50 84 C 62 84 80 74 80 52 C 80 26 58 22 50 36 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Stem and green leaf -->
+  <path d="M 50 36 C 50 20 56 16 62 16" fill="none" stroke="#000000" stroke-width="4.0" stroke-linecap="round"/>
+  <ellipse cx="64" cy="22" rx="6" ry="3" transform="rotate(-30 64 22)" fill="#22c55e"/>
+</svg>

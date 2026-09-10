@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fuselage waist pinched inward where wings attach to maintain smooth cross section with bold 4.5px strokes -->
+  <path d="M 20 36 Q 50 44 80 36 M 20 64 Q 50 56 80 64" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <ellipse cx="50" cy="50" rx="6" ry="16" fill="#0284c7" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

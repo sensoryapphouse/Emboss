@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Micro-patterned wedge pads grasping smooth space debris via directional Van der Waals adhesion with bold 4.5px strokes -->
+  <rect x="26" y="26" width="48" height="22" rx="4" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <line x1="36" y1="48" x2="36" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="50" y1="48" x2="50" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="64" y1="48" x2="64" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

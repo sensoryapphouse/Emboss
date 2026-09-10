@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rack top and bottom shelves -->
+  <rect x="14" y="44" width="72" height="8" rx="2" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <rect x="14" y="78" width="72" height="10" rx="2" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Side support pillars -->
+  <line x1="18" y1="44" x2="18" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <line x1="82" y1="44" x2="82" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <!-- 3 Test tubes in slots: 20px (8mm) center-to-center spacing -->
+  <path d="M 26 22 L 36 22 L 36 68 C 36 74 26 74 26 68 Z" fill="#ffffff" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M 45 22 L 55 22 L 55 68 C 55 74 45 74 45 68 Z" fill="#ffffff" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M 64 22 L 74 22 L 74 68 C 74 74 64 74 64 68 Z" fill="#ffffff" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

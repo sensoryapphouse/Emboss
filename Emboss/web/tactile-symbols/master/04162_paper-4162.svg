@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cylindrical pressure vessel housing with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="52" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Internal slotted screen cylinder basket with bold 4.0px strokes -->
+  <line x1="36" y1="28" x2="36" y2="72" stroke="#0284c7" stroke-width="4.5" stroke-dasharray="4,3"/>
+  <line x1="64" y1="28" x2="64" y2="72" stroke="#0284c7" stroke-width="4.5" stroke-dasharray="4,3"/>
+  <!-- Central rotating hydrofoil rotor in center with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="7" fill="#ef4444"/>
+</svg>

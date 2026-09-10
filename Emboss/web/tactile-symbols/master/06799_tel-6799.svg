@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High frequency sinewave attenuating rapidly through atmospheric barrier with bold 4.5px strokes -->
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#64748b" stroke-width="5.0" stroke-dasharray="6,4"/>
+  <path d="M 18 50 Q 24 30 30 50 T 42 50 T 50 50" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 50 50 Q 56 44 62 50 T 74 50 T 82 50" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

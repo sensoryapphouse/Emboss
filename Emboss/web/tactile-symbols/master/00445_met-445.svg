@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mountain barrier ridge -->
+  <polygon points="14,84 46,26 86,84" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Rain cloud on windward left -->
+  <ellipse cx="26" cy="32" rx="12" ry="8" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <!-- Dry arid sun on leeward right -->
+  <circle cx="76" cy="34" r="8" fill="#facc15" stroke="#000000" stroke-width="2.5"/>
+</svg>

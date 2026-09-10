@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved multi-element transducer focusing 1000 W/cm2 acoustic power for non-invasive thermal ablation with bold 4.5px strokes -->
+  <path d="M 22 24 A 40 40 0 0 0 22 76" fill="none" stroke="#000000" stroke-width="5.5"/>
+  <line x1="22" y1="24" x2="70" y2="50" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="22" y1="76" x2="70" y2="50" stroke="#0284c7" stroke-width="4.5"/>
+  <circle cx="70" cy="50" r="7" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Glass bulb profile -->
+  <path d="M 32 44 C 32 24 68 24 68 44 C 68 54 60 62 60 70 L 40 70 C 40 62 32 54 32 44 Z" fill="#facc15" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Internal filament loop -->
+  <path d="M 44 70 L 44 46 L 50 38 L 56 46 L 56 70" fill="none" stroke="#ef4444" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Base screw thread lines -->
+  <line x1="42" y1="76" x2="58" y2="76" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="44" y1="84" x2="56" y2="84" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

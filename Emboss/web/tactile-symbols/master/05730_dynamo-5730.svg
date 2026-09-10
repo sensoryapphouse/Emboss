@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 1 MeV negative ion accelerator grid stack left with bold 4.5px stroke -->
+  <rect x="18" y="32" width="16" height="36" rx="2" fill="#1e293b"/>
+  <!-- Neutralizer gas cell and fast neutral deuterium beam entering core right with bold 5.5px stroke -->
+  <line x1="34" y1="50" x2="84" y2="50" stroke="#ef4444" stroke-width="6.0" stroke-linecap="round"/>
+</svg>

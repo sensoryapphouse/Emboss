@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rail web section profile with bold 4.5px stroke -->
+  <rect x="44" y="20" width="12" height="60" rx="2" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Double inductive sensor heads clamped to rail web left and right with bold 4.0px strokes -->
+  <circle cx="34" cy="44" r="6" fill="#ef4444"/>
+  <circle cx="66" cy="44" r="6" fill="#ef4444"/>
+  <!-- Clamping bracket bar underneath with bold 4.5px stroke -->
+  <path d="M 28 58 L 72 58" stroke="#1e293b" stroke-width="5.0"/>
+</svg>

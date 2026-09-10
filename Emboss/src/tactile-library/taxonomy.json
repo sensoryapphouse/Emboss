@@ -1,0 +1,168 @@
+{
+  "version": "1.0.0",
+  "target_capacity": 10000,
+  "standards": {
+    "organization": "Braille Authority of North America (BANA)",
+    "viewBox": "0 0 100 100",
+    "safe_margin_px": 10.0,
+    "safe_margin_mm": 4.0,
+    "primary_stroke_px": 4.5,
+    "primary_stroke_mm": 1.8,
+    "detail_stroke_min_px": 2.5,
+    "detail_stroke_max_px": 3.5,
+    "min_clearance_px": 7.5,
+    "min_clearance_mm": 3.0,
+    "swell_fill": "#ffffff",
+    "swell_stroke": "#000000"
+  },
+  "domains": [
+    {
+      "id": "stem-physics-space",
+      "name": "Physics, Waves, Mechanics & Space Exploration",
+      "target_symbols": 1200,
+      "categories": [
+        "classical-mechanics-forces",
+        "electricity-circuits-magnetism",
+        "wave-optics-sound-em-spectrum",
+        "thermodynamics-heat-engines",
+        "quantum-nuclear-particle-physics",
+        "solar-system-planetary-science",
+        "astrophysics-cosmology-relativity",
+        "space-exploration-rocketry-satellites"
+      ]
+    },
+    {
+      "id": "stem-chemistry-materials",
+      "name": "Chemistry, Molecules & Materials Science",
+      "target_symbols": 1200,
+      "categories": [
+        "lab-apparatus-glassware",
+        "states-of-matter-particle-models",
+        "periodic-table-atomic-structure",
+        "chemical-bonding-lewis-structures",
+        "inorganic-reactions-solutions-ph",
+        "organic-chemistry-functional-groups",
+        "biomolecules-polymers-macromolecules",
+        "materials-allotropes-nanotech-hazards"
+      ]
+    },
+    {
+      "id": "stem-biology-medicine",
+      "name": "Biology, Genetics, Anatomy & Health",
+      "target_symbols": 1200,
+      "categories": [
+        "cell-biology-organelles-division",
+        "genetics-dna-rna-heredity",
+        "human-anatomy-organs-systems",
+        "skeletal-muscular-circulatory",
+        "microbiology-viruses-bacteria",
+        "plant-biology-botany-histology",
+        "zoology-invertebrates-vertebrates",
+        "ecology-ecosystems-biomes"
+      ]
+    },
+    {
+      "id": "stem-maths-geometry",
+      "name": "Mathematics, Geometry, Graphs & Statistics",
+      "target_symbols": 1200,
+      "categories": [
+        "2d-geometric-polygons-angles",
+        "3d-geometric-polyhedra-solids",
+        "coordinate-geometry-transformations",
+        "functions-trigonometry-calculus",
+        "fractions-sets-venn-diagrams",
+        "statistics-charts-data-distributions",
+        "school-stationery-measuring-tools",
+        "topology-graph-theory-fractals"
+      ]
+    },
+    {
+      "id": "stem-computing-ai",
+      "name": "Computer Science, Robotics, Logic & AI",
+      "target_symbols": 1000,
+      "categories": [
+        "hardware-peripherals-storage",
+        "networking-telecoms-protocols",
+        "boolean-logic-logic-gates",
+        "algorithms-flowcharts-data-structures",
+        "ai-deep-learning-neural-networks",
+        "robotics-automation-sensors",
+        "cloud-computing-cybersecurity-databases",
+        "programming-languages-ide-concepts"
+      ]
+    },
+    {
+      "id": "geo-world-maps",
+      "name": "Geography, Cartography, Continents & Climate",
+      "target_symbols": 1200,
+      "categories": [
+        "world-continents-polar-regions",
+        "sovereign-nations-195-outlines",
+        "regional-states-provinces-counties",
+        "physical-landforms-mountains-rivers",
+        "oceanography-marine-bathymetry",
+        "meteorology-synoptic-weather-charts",
+        "geology-strata-tectonics-volcanoes",
+        "climate-change-biomes-conservation"
+      ]
+    },
+    {
+      "id": "history-civilizations",
+      "name": "History, Archaeology, Inventions & Architecture",
+      "target_symbols": 1000,
+      "categories": [
+        "prehistory-stone-age-early-tools",
+        "ancient-egypt-mesopotamia-greece-rome",
+        "medieval-feudal-castles-heraldry",
+        "renaissance-age-of-discovery-maritime",
+        "industrial-revolution-early-engines",
+        "world-architectural-orders-landmarks",
+        "historical-weapons-armor-fortifications",
+        "history-of-writing-print-media"
+      ]
+    },
+    {
+      "id": "arts-music-linguistics",
+      "name": "Music, Arts, Linguistics & Phonetics",
+      "target_symbols": 600,
+      "categories": [
+        "braille-music-code-western-notation",
+        "musical-instruments-orchestral-global",
+        "acoustics-rhythm-clefs-signatures",
+        "ipa-phonetics-vocal-tract-profiles",
+        "typography-calligraphy-scripts",
+        "visual-arts-color-theory-perspective"
+      ]
+    },
+    {
+      "id": "vocational-trades-eng",
+      "name": "Vocational Trades, Construction & Applied Engineering",
+      "target_symbols": 800,
+      "categories": [
+        "woodworking-carpentry-hand-tools",
+        "metalworking-machining-welding",
+        "electrical-wiring-schematic-symbols",
+        "plumbing-pipefitting-hydraulics",
+        "automotive-combustion-engines",
+        "construction-equipment-civil-works",
+        "architectural-drafting-floor-plans",
+        "manufacturing-quality-safety-ppe"
+      ]
+    },
+    {
+      "id": "accessibility-wayfinding-adl",
+      "name": "Accessibility, Wayfinding, Nutrition & Daily Living",
+      "target_symbols": 600,
+      "categories": [
+        "iso-7001-public-information-symbols",
+        "tactile-wayfinding-egress-transit",
+        "assistive-tech-mobility-braille-aids",
+        "daily-living-dining-kitchen-science",
+        "personal-hygiene-health-first-aid",
+        "nutrition-food-groups-balanced-diet",
+        "home-appliances-utilities-fixtures",
+        "sports-athletics-olympics-recreation"
+      ]
+    }
+  ]
+}

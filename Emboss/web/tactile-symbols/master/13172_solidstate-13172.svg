@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Thermoelectric couple generating voltage from hot to cold side with bold 4.5px strokes -->
+  <line x1="20" y1="24" x2="80" y2="24" stroke="#ef4444" stroke-width="6.0"/>
+  <rect x="30" y="30" width="16" height="40" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="54" y="30" width="16" height="40" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <line x1="20" y1="76" x2="80" y2="76" stroke="#0284c7" stroke-width="6.0"/>
+</svg>

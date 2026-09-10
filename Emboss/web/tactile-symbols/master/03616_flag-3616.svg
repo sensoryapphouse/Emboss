@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Triangular white banner with rounded semicircular fly with bold 4.5px stroke -->
+  <path d="M 18 24 L 76 50 L 18 76 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Black flying Odin raven silhouette center with bold 4.5px stroke -->
+  <path d="M 30 50 C 44 38 52 46 56 50 C 52 54 44 62 30 50 Z" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

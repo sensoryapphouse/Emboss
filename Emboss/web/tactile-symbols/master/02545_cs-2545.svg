@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Barcode white boundary frame -->
+  <rect x="18" y="26" width="64" height="48" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Vertical parallel barcode stripes -->
+  <line x1="28" y1="34" x2="28" y2="66" stroke="#000000" stroke-width="6.0"/>
+  <line x1="38" y1="34" x2="38" y2="66" stroke="#000000" stroke-width="3.0"/>
+  <line x1="46" y1="34" x2="46" y2="66" stroke="#000000" stroke-width="5.0"/>
+  <line x1="56" y1="34" x2="56" y2="66" stroke="#000000" stroke-width="3.0"/>
+  <line x1="64" y1="34" x2="64" y2="66" stroke="#000000" stroke-width="6.0"/>
+  <line x1="72" y1="34" x2="72" y2="66" stroke="#000000" stroke-width="3.0"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two upright sarsen stone pillars -->
+  <rect x="26" y="34" width="16" height="46" rx="2" fill="#94a3b8" stroke="#000000" stroke-width="4.5"/>
+  <rect x="58" y="34" width="16" height="46" rx="2" fill="#94a3b8" stroke="#000000" stroke-width="4.5"/>
+  <!-- Horizontal lintel capstone top with bold 4.5px stroke -->
+  <rect x="18" y="22" width="64" height="14" rx="2" fill="#94a3b8" stroke="#000000" stroke-width="4.5"/>
+</svg>

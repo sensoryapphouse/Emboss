@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flexible articulating insertion tube bent upward with bold 5.0px stroke -->
+  <path d="M 18 70 C 44 70 54 44 54 26" fill="none" stroke="#000000" stroke-width="6.5" stroke-linecap="round"/>
+  <!-- Distal tip camera and LED illumination ring top-right with bold 4.5px stroke -->
+  <ellipse cx="54" cy="24" rx="8" ry="5" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <!-- Biopsy forceps tool extending from working channel with bold 4.0px stroke -->
+  <line x1="54" y1="20" x2="66" y2="14" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

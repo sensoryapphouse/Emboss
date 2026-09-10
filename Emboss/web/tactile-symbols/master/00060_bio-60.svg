@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Irregular amoeboid cell membrane -->
+  <path d="M 24 38 C 20 20 44 16 60 20 C 76 24 86 36 84 56 C 82 74 68 84 48 84 C 30 84 18 72 20 54 C 20 44 26 44 24 38 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Multi-lobed nucleus (3 connected lobes) -->
+  <circle cx="42" cy="42" r="7" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="58" cy="42" r="8" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="50" cy="58" r="7" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <!-- Connecting chromatin bridges -->
+  <line x1="42" y1="42" x2="58" y2="42" stroke="#000000" stroke-width="3.0"/>
+  <line x1="58" y1="42" x2="50" y2="58" stroke="#000000" stroke-width="3.0"/>
+</svg>

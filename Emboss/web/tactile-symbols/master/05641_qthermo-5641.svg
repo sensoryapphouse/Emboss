@@ -1,0 +1,13 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fredkin 3-line conservative bus with bold 4.5px strokes -->
+  <line x1="16" y1="28" x2="84" y2="28" stroke="#000000" stroke-width="4.5"/>
+  <line x1="16" y1="50" x2="84" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <line x1="16" y1="72" x2="84" y2="72" stroke="#000000" stroke-width="4.5"/>
+  <!-- Control dot top line and controlled swap cross in center with bold 4.5px strokes -->
+  <circle cx="50" cy="28" r="5" fill="#ef4444"/>
+  <line x1="50" y1="28" x2="50" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="44" y1="44" x2="56" y2="56" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="44" y1="56" x2="56" y2="44" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="44" y1="66" x2="56" y2="78" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="44" y1="78" x2="56" y2="66" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

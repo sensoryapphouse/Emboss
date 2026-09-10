@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Electrolyte beaker vessel with bold 4.5px stroke -->
+  <rect x="20" y="34" width="60" height="44" rx="4" fill="#38bdf8" stroke="#000000" stroke-width="4.0"/>
+  <!-- Sacrificial Zinc Anode plate left with bold 4.0px stroke -->
+  <rect x="28" y="24" width="10" height="42" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <!-- Steel Cathode plate right with bold 4.0px stroke -->
+  <rect x="62" y="24" width="10" height="42" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- External wire connecting electrodes top with bold 3.5px stroke -->
+  <path d="M 33 24 L 33 18 L 67 18 L 67 24" fill="none" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

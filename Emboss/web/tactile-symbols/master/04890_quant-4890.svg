@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 50:50 optical beam splitter cube in center with bold 4.5px stroke -->
+  <rect x="36" y="36" width="28" height="28" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <line x1="36" y1="64" x2="64" y2="36" stroke="#ca8a04" stroke-width="4.0"/>
+  <!-- Single-photon source left with bold 4.5px stroke -->
+  <line x1="14" y1="50" x2="36" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Detector 0 (top) and Detector 1 (right) with bold 4.5px strokes -->
+  <rect x="44" y="16" width="12" height="12" rx="2" fill="#ef4444"/>
+  <rect x="72" y="44" width="12" height="12" rx="2" fill="#ef4444"/>
+</svg>

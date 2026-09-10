@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- White field boundary -->
+  <rect x="18" y="24" width="64" height="52" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Red/Blue Yin-Yang Taegeuk circle center -->
+  <circle cx="50" cy="50" r="12" fill="#0284c7" stroke="#000000" stroke-width="2.5"/>
+  <path d="M 50 38 C 56 38 56 50 50 50 C 44 50 44 62 50 62 C 56 62 62 56 62 50 C 62 44 56 38 50 38 Z" fill="#ef4444"/>
+  <!-- Trigrams in 4 corners -->
+  <line x1="26" y1="32" x2="32" y2="36" stroke="#1e293b" stroke-width="2.5"/>
+  <line x1="68" y1="32" x2="74" y2="36" stroke="#1e293b" stroke-width="2.5"/>
+  <line x1="26" y1="68" x2="32" y2="64" stroke="#1e293b" stroke-width="2.5"/>
+  <line x1="68" y1="68" x2="74" y2="64" stroke="#1e293b" stroke-width="2.5"/>
+</svg>

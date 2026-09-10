@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- A-line flared skirt -->
+  <polygon points="36,26 64,26 78,78 22,78" fill="#22c55e" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <line x1="36" y1="32" x2="64" y2="32" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Superconducting loop circle with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="28" fill="none" stroke="#0284c7" stroke-width="6.0"/>
+  <!-- Two Josephson junction breaks left and right with bold 4.0px strokes -->
+  <line x1="18" y1="46" x2="26" y2="54" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="26" y1="46" x2="18" y2="54" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="74" y1="46" x2="82" y2="54" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="82" y1="46" x2="74" y2="54" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

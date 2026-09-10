@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Metallic gold nanoparticle with polarized electron cloud dipole and surrounding electric field lobes with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="16" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 22 50 Q 32 30 50 30 Q 68 30 78 50" stroke="#ef4444" stroke-width="5.0" fill="none"/>
+  <path d="M 22 50 Q 32 70 50 70 Q 68 70 78 50" stroke="#0284c7" stroke-width="5.0" fill="none"/>
+</svg>

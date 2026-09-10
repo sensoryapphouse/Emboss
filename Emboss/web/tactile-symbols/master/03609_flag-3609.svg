@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Red field banner with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" rx="3" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- 3 Golden horizontal stacked lions passant guardant with bold 4.0px strokes -->
+  <line x1="32" y1="36" x2="68" y2="36" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="32" y1="50" x2="68" y2="50" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="32" y1="64" x2="68" y2="64" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

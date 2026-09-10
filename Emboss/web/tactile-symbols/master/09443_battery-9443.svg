@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nyquist plot showing high-frequency semicircle and Warburg 45-degree diffusion tail with bold 4.5px strokes -->
+  <line x1="20" y1="76" x2="80" y2="76" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="76" x2="20" y2="20" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 28 76 C 28 50 54 50 54 76 L 76 54" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

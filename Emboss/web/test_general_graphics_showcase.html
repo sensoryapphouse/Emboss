@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Tactile Graphics & Multi-Device Showcase</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      line-height: 1.5;
+    }
+    header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    h1 { font-size: 1.75rem; color: #fff; margin-bottom: 6px; }
+    p.subtitle { color: var(--muted); font-size: 0.95rem; }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    
+    .devices-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .device-view {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .device-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      color: var(--muted);
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+    }
+    .device-label span.badge {
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    
+    canvas.tactile-dot-canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .print-svg-preview {
+      width: 100%;
+      height: 180px;
+      background: #fff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+    .print-svg-preview svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>General Tactile Graphics & Multi-Device Showcase</h1>
+    <p class="subtitle">Comparing high-resolution print vectors, DotPad 320 discrete 60x40 pin grids (with 1-pin skeleton contours and Line 0 UEB captions), and ViewPlus Tiger 8-Height 3D Topography.</p>
+  </header>
+
+  <div class="grid" id="showcaseGrid">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <script type="module">
+    import { renderTactileDotCanvas, transpileTactileSvgForDevice, transpileTactileSvg } from '/format/tactile-svg.mjs';
+    import { plotTactileFunction } from '/format/math-plotter.mjs';
+
+    const SAMPLES = [
+      {
+        id: 'beaker',
+        title: 'Science: Laboratory Beaker',
+        desc: 'Graduated laboratory beaker with 5.6mm spaced tick marks, fluid level, and crisp 1-pin contours.',
+        svg: `<svg viewBox="0 0 100 100" width="100" height="100">
+          <title>Laboratory Beaker</title>
+          <path d="M 26 18 L 20 18 L 20 24 L 28 24 L 28 76 C 28 82 34 86 42 86 L 68 86 C 76 86 82 82 82 76 L 82 24 L 88 24 L 88 18 L 26 18 Z" fill="none" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+          <line x1="36" y1="38" x2="54" y2="38" stroke="#0284c7" stroke-width="3.0" stroke-linecap="round"/>
+          <line x1="36" y1="52" x2="48" y2="52" stroke="#0284c7" stroke-width="3.0" stroke-linecap="round"/>
+          <line x1="36" y1="66" x2="54" y2="66" stroke="#0284c7" stroke-width="3.0" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'triangle',
+        title: 'Geometry: Isosceles Triangle',
+        desc: 'Isosceles triangle with side equality ticks, altitude divider, and base angle indicators.',
+        svg: `<svg viewBox="0 0 100 100" width="100" height="100">
+          <title>Isosceles Triangle</title>
+          <polygon points="50,15 18,85 82,85" fill="none" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+          <line x1="50" y1="15" x2="50" y2="85" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4,4"/>
+          <line x1="31" y1="48" x2="37" y2="52" stroke="#000000" stroke-width="3.0"/>
+          <line x1="69" y1="48" x2="63" y2="52" stroke="#000000" stroke-width="3.0"/>
+        </svg>`
+      },
+      {
+        id: 'circuit',
+        title: 'Physics: Electrical Resistor & Battery',
+        desc: 'Electrical circuit loop featuring standard schematic battery cells and zigzag resistor path.',
+        svg: `<svg viewBox="0 0 120 80" width="120" height="80">
+          <title>Electrical Circuit</title>
+          <path d="M 15 40 L 40 40 L 45 25 L 55 55 L 65 25 L 75 55 L 80 40 L 105 40" fill="none" stroke="#000000" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="15" y1="15" x2="15" y2="65" stroke="#000000" stroke-width="4.0"/>
+          <line x1="105" y1="25" x2="105" y2="55" stroke="#000000" stroke-width="4.0"/>
+        </svg>`
+      },
+      {
+        id: 'plant-cell',
+        title: 'Biology: Plant Cell & Nucleus',
+        desc: 'Plant cell with thick cell wall border, inner nucleus circle, and BANA pointer lead line.',
+        svg: `<svg viewBox="0 0 100 100" width="100" height="100">
+          <title>Plant Cell</title>
+          <rect x="15" y="15" width="70" height="70" rx="12" fill="none" stroke="#000000" stroke-width="4.5"/>
+          <rect x="22" y="22" width="56" height="56" rx="8" fill="none" stroke="#16a34a" stroke-width="2.8"/>
+          <circle cx="50" cy="50" r="14" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+        </svg>`
+      },
+      {
+        id: 'parabola',
+        title: 'Mathematics: Coordinate Parabola (y = x² - 4)',
+        desc: 'Single-pin crisp axes, 1-pin ticks, 1-pin continuous Bresenham curve, roots, and UEB Math caption.',
+        svg: plotTactileFunction('x^2 - 4', { targetDevice: 'dotpad' }).svg
+      },
+      {
+        id: 'compass',
+        title: 'Geography: 4-Point Compass Rose',
+        desc: 'Cardinal direction compass rose with 4 distinct pointer facets and directional axes.',
+        svg: `<svg viewBox="0 0 100 100" width="100" height="100">
+          <title>Compass Rose</title>
+          <polygon points="50,10 58,42 50,50 42,42" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+          <polygon points="50,90 58,58 50,50 42,58" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+          <polygon points="90,50 58,58 50,50 58,42" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+          <polygon points="10,50 42,58 50,50 42,42" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+          <circle cx="50" cy="50" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.0"/>
+        </svg>`
+      }
+    ];
+
+    async function initShowcase() {
+      const grid = document.getElementById('showcaseGrid');
+
+      for (const sample of SAMPLES) {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-title">${sample.title}</div>
+          </div>
+          <div class="card-desc">${sample.desc}</div>
+          <div class="devices-row">
+            <div class="device-view">
+              <div class="device-label">
+                <span>📱 DotPad 320 Dynamic Display</span>
+                <span class="badge">60×40 Pins + Line 0</span>
+              </div>
+              <canvas class="tactile-dot-canvas" id="canvas-dotpad-${sample.id}"></canvas>
+            </div>
+            <div class="device-view">
+              <div class="device-label">
+                <span>🖨 ViewPlus Tiger / PixBlaster</span>
+                <span class="badge">8-Height 3D Relief</span>
+              </div>
+              <canvas class="tactile-dot-canvas" id="canvas-tiger-${sample.id}"></canvas>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+
+        const canvasDotpad = card.querySelector(`#canvas-dotpad-${sample.id}`);
+        const canvasTiger = card.querySelector(`#canvas-tiger-${sample.id}`);
+
+        await renderTactileDotCanvas(canvasDotpad, sample.svg, { targetDevice: 'dotpad' });
+        await renderTactileDotCanvas(canvasTiger, sample.svg, { targetDevice: 'viewplus' });
+      }
+    }
+
+    initShowcase();
+  </script>
+</body>
+</html>

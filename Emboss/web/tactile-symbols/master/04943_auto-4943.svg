@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Front axle connecting beam bar with bold 5.0px stroke -->
+  <line x1="36" y1="38" x2="74" y2="38" stroke="#000000" stroke-width="5.0"/>
+  <!-- Common turning center point bottom-left with bold 4.5px stroke -->
+  <circle cx="20" cy="80" r="5" fill="#1e293b"/>
+  <!-- Inner wheel turning sharper radius and outer wheel flatter radius with bold 4.5px strokes -->
+  <rect x="36" y="24" width="8" height="28" rx="2" fill="#ef4444" stroke="#000000" stroke-width="4.0" transform="rotate(-35 40 38)"/>
+  <rect x="74" y="24" width="8" height="28" rx="2" fill="#0284c7" stroke="#000000" stroke-width="4.0" transform="rotate(-20 78 38)"/>
+  <!-- Turning radius projection lines converging at instant center with bold 3.5px strokes -->
+  <line x1="40" y1="38" x2="20" y2="80" stroke="#cbd5e1" stroke-width="3.5" stroke-dasharray="4,2"/>
+  <line x1="78" y1="38" x2="20" y2="80" stroke="#cbd5e1" stroke-width="3.5" stroke-dasharray="4,2"/>
+</svg>

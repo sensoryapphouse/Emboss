@@ -1,0 +1,10 @@
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/wasm32-unknown-unknown/release/deps/libc-904ee5f5a434e40b.d: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/macros.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/mod.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/common/mod.rs
+
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/wasm32-unknown-unknown/release/deps/liblibc-904ee5f5a434e40b.rlib: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/macros.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/mod.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/common/mod.rs
+
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/wasm32-unknown-unknown/release/deps/liblibc-904ee5f5a434e40b.rmeta: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/macros.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/mod.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/common/mod.rs
+
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/lib.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/macros.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/mod.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/src/new/common/mod.rs:

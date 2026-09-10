@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circular bow head top left -->
+  <circle cx="36" cy="36" r="16" fill="none" stroke="#facc15" stroke-width="6.0"/>
+  <!-- Key shaft extending diagonal bottom right -->
+  <line x1="48" y1="48" x2="80" y2="80" stroke="#facc15" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Bit teeth -->
+  <line x1="70" y1="70" x2="78" y2="62" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="80" y1="80" x2="86" y2="74" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

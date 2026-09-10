@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Energy balance scale showing fusion output power dramatically outweighing input heating with bold 4.5px strokes -->
+  <line x1="22" y1="64" x2="78" y2="36" stroke="#000000" stroke-width="5.5"/>
+  <polygon points="50,75 42,85 58,85" fill="#000000"/>
+  <circle cx="22" cy="64" r="8" fill="#0284c7"/>
+  <circle cx="76" cy="38" r="12" fill="#ef4444"/>
+</svg>

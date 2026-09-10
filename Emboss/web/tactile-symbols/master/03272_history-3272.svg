@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rearing lion rampant silhouette with bold 4.5px stroke -->
+  <path d="M 44 24 C 54 20 62 26 58 34 C 66 32 74 40 68 46 L 56 46 L 66 58 L 54 58 L 48 76 L 38 76 L 42 62 C 34 66 28 54 36 46 L 44 46 Z" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Curved tail raised with bold 4.0px stroke -->
+  <path d="M 38 60 C 26 50 24 30 36 24" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

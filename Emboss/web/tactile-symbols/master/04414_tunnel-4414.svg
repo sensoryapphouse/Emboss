@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Steel waler beams on trench sides with bold 4.5px strokes -->
+  <rect x="18" y="28" width="12" height="44" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <rect x="70" y="28" width="12" height="44" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Telescoping hydraulic steel cross-strut tube in center with bold 4.5px stroke -->
+  <rect x="30" y="44" width="40" height="12" rx="2" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

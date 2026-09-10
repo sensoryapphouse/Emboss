@@ -1,0 +1,13 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Calculator body -->
+  <rect x="26" y="18" width="48" height="66" rx="6" fill="#1e293b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Display window -->
+  <rect x="32" y="26" width="36" height="14" rx="2" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <!-- Keypad buttons -->
+  <circle cx="38" cy="50" r="3.5" fill="#ffffff"/>
+  <circle cx="50" cy="50" r="3.5" fill="#ffffff"/>
+  <circle cx="62" cy="50" r="3.5" fill="#ffffff"/>
+  <circle cx="38" cy="64" r="3.5" fill="#ffffff"/>
+  <circle cx="50" cy="64" r="3.5" fill="#ffffff"/>
+  <circle cx="62" cy="64" r="3.5" fill="#ef4444"/>
+</svg>

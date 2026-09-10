@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circular blade safety ring cage with bold 4.5px stroke -->
+  <circle cx="50" cy="60" r="24" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Four rotating finishing steel blades in spider with bold 4.5px strokes -->
+  <line x1="50" y1="36" x2="50" y2="84" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="26" y1="60" x2="74" y2="60" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Operating handle arm extending top-left with bold 4.5px stroke -->
+  <line x1="50" y1="60" x2="26" y2="18" stroke="#1e293b" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- PLC mounting rack chassis with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Power Supply, CPU, and 2 I/O cards vertical slot blocks with bold 4.0px strokes -->
+  <rect x="22" y="28" width="12" height="44" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <rect x="36" y="28" width="14" height="44" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="52" y="28" width="12" height="44" fill="#cbd5e1" stroke="#000000" stroke-width="3.5"/>
+  <rect x="66" y="28" width="12" height="44" fill="#cbd5e1" stroke="#000000" stroke-width="3.5"/>
+</svg>

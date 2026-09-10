@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Donor Cy3 non-radiatively transferring energy to acceptor Cy5 as nanometer ruler with bold 4.5px strokes -->
+  <circle cx="34" cy="50" r="10" fill="#10b981" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="66" cy="50" r="10" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 44 50 L 56 50" stroke="#ca8a04" stroke-width="5.5" stroke-dasharray="3,3"/>
+</svg>

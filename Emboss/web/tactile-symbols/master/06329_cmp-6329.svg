@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Local active footprint (center) framed by untouched ambient heap R (outer box) with bold 4.5px strokes -->
+  <rect x="18" y="18" width="64" height="64" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="14" fill="#ef4444"/>
+</svg>

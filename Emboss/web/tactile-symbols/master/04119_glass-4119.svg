@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Injection barrel and screw left with bold 4.5px stroke -->
+  <rect x="18" y="36" width="34" height="28" rx="2" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Cooled two-part tool steel mold right with bold 4.5px stroke -->
+  <rect x="56" y="24" width="26" height="52" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Injected complex green part cavity inside mold with bold 4.0px stroke -->
+  <polygon points="64,36 74,36 74,64 64,64" fill="#ef4444"/>
+</svg>

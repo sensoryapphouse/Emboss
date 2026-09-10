@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Surface phytoplankton fixing CO2 into organic marine snow sinking into deep abyss with bold 4.5px strokes -->
+  <circle cx="50" cy="24" r="8" fill="#10b981"/>
+  <line x1="50" y1="34" x2="50" y2="76" stroke="#0284c7" stroke-width="5.0" stroke-dasharray="5,4"/>
+  <circle cx="50" cy="76" r="6" fill="#ca8a04"/>
+</svg>

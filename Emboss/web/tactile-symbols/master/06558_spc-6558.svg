@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Constant argument of periapsis orbit balancing J2/J3 with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="14" fill="#0284c7"/>
+  <ellipse cx="50" cy="48" rx="20" ry="28" fill="none" stroke="#22c55e" stroke-width="4.5"/>
+</svg>

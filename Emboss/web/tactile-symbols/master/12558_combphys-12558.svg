@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Swirling jet creating central toroidal recirculation bubble anchoring turbulent flame with bold 4.5px strokes -->
+  <ellipse cx="50" cy="50" rx="14" ry="24" fill="#64748b" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 28 74 Q 50 36 72 74" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

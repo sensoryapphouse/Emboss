@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stereo camera baseline casing bar with bold 4.5px stroke -->
+  <rect x="18" y="36" width="64" height="28" rx="5" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Left and right optical camera lens eyes with bold 4.5px strokes -->
+  <circle cx="32" cy="50" r="8" fill="#1e293b" stroke="#0284c7" stroke-width="3.5"/>
+  <circle cx="68" cy="50" r="8" fill="#1e293b" stroke="#0284c7" stroke-width="3.5"/>
+  <!-- Center processing chip in middle -->
+  <rect x="46" y="44" width="8" height="12" fill="#ef4444"/>
+</svg>

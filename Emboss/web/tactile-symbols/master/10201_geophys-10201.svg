@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper-to-lower mantle transition zone between 410km and 660km phase discontinuities with bold 4.5px strokes -->
+  <line x1="20" y1="36" x2="80" y2="36" stroke="#0284c7" stroke-width="5.0"/>
+  <rect x="20" y="36" width="60" height="28" fill="#0284c7" opacity="0.3"/>
+  <line x1="20" y1="64" x2="80" y2="64" stroke="#ca8a04" stroke-width="5.0"/>
+</svg>

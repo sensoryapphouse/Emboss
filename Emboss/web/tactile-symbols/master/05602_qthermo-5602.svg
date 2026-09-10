@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Forward work distribution P_F(W) with bold 4.5px stroke -->
+  <path d="M 18 78 Q 36 24 58 78" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Reverse work distribution P_R(-W) crossing at Delta F with bold 4.5px stroke -->
+  <path d="M 42 78 Q 64 24 82 78" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Crossing intersection point at Delta F in center -->
+  <circle cx="50" cy="54" r="5" fill="#ca8a04"/>
+</svg>

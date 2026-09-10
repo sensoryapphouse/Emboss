@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cylindrical pressure capsule vessel with domed ends with bold 4.5px stroke -->
+  <rect x="20" y="32" width="60" height="36" rx="18" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Circular viewing portholes with bold 3.5px strokes -->
+  <circle cx="36" cy="50" r="6" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="50" cy="50" r="6" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="64" cy="50" r="6" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+</svg>

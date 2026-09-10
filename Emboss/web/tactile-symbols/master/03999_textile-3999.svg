@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Overhead Jacquard head controller top with bold 4.5px stroke -->
+  <rect x="24" y="18" width="52" height="16" rx="2" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Individual vertical harness cords descending to warp healds with bold 4.0px strokes -->
+  <line x1="32" y1="34" x2="32" y2="78" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="44" y1="34" x2="44" y2="64" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="56" y1="34" x2="56" y2="78" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="68" y1="34" x2="68" y2="64" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

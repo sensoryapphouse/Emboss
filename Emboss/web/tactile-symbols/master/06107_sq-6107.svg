@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Triple quantum dot linear array with bold 4.5px strokes -->
+  <circle cx="28" cy="50" r="7" fill="#ef4444"/>
+  <circle cx="50" cy="50" r="7" fill="#0284c7"/>
+  <circle cx="72" cy="50" r="7" fill="#ef4444"/>
+  <!-- Exchange coupling links J12 and J23 -->
+  <line x1="35" y1="50" x2="43" y2="50" stroke="#ca8a04" stroke-width="4.5"/>
+  <line x1="57" y1="50" x2="65" y2="50" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

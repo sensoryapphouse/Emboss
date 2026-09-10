@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Steel rail profile bottom with bold 4.5px stroke -->
+  <line x1="16" y1="74" x2="84" y2="74" stroke="#000000" stroke-width="5.5"/>
+  <!-- Electromagnetic skid shoe body lowering onto rail with bold 4.5px stroke -->
+  <rect x="24" y="44" width="52" height="24" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Magnetic excitation coils inside shoe with bold 4.0px strokes -->
+  <rect x="30" y="50" width="12" height="12" fill="#ef4444"/>
+  <rect x="58" y="50" width="12" height="12" fill="#ef4444"/>
+</svg>

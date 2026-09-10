@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer split ring with gap on right with bold 5.0px stroke -->
+  <path d="M 60 22 A 28 28 0 1 0 60 78" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Inner concentric split ring with gap on left with bold 4.5px stroke -->
+  <path d="M 40 66 A 16 16 0 1 0 40 34" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

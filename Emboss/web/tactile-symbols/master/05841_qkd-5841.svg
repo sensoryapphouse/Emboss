@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Authenticated digital document parchment with bold 4.5px stroke -->
+  <rect x="22" y="18" width="56" height="64" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Quantum signature cryptographic wax seal stamp bottom-right with bold 4.5px stroke -->
+  <circle cx="60" cy="62" r="10" fill="#ef4444"/>
+</svg>

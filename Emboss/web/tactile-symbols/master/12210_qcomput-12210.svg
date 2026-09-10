@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 2D square lattice of data qubits and syndrome ancillas executing continuous stabilizer checks with bold 4.5px strokes -->
+  <rect x="24" y="24" width="52" height="52" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <polygon points="50,24 76,50 50,76 24,50" fill="#0284c7" opacity="0.3" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Common shaft compressor and expansion turbine housing with bold 4.5px stroke -->
+  <rect x="22" y="32" width="56" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Hot engine bleed air inlet left and sub-zero refrigerated cabin air outlet right -->
+  <line x1="12" y1="50" x2="22" y2="50" stroke="#ef4444" stroke-width="5.5"/>
+  <line x1="78" y1="50" x2="88" y2="50" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

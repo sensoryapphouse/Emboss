@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stepped stair-step bench profile terraces with bold 4.5px stroke -->
+  <polyline points="18,24 30,24 30,40 46,40 46,58 64,58 64,76 82,76" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <!-- Haul truck silhouette climbing terrace ramp with bold 4.0px stroke -->
+  <rect x="34" y="32" width="10" height="8" rx="2" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+</svg>

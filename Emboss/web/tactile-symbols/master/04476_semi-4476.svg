@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Jetting valve dispenser nozzle side with bold 4.5px stroke -->
+  <polygon points="18,22 34,22 30,42 22,42" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Flip-chip die and substrate with bold 4.5px strokes -->
+  <rect x="36" y="32" width="46" height="16" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <rect x="24" y="60" width="62" height="16" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Epoxy underfill flowing under die by capillary action with bold 4.0px stroke -->
+  <rect x="36" y="50" width="46" height="8" fill="#ca8a04"/>
+</svg>

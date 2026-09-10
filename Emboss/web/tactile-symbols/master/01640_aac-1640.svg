@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- White piano key octave deck -->
+  <rect x="18" y="24" width="64" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Vertical dividing key lines -->
+  <line x1="34" y1="24" x2="34" y2="76" stroke="#000000" stroke-width="3.5"/>
+  <line x1="50" y1="24" x2="50" y2="76" stroke="#000000" stroke-width="3.5"/>
+  <line x1="66" y1="24" x2="66" y2="76" stroke="#000000" stroke-width="3.5"/>
+  <!-- Black accidental keys -->
+  <rect x="28" y="24" width="10" height="30" fill="#1e293b"/>
+  <rect x="60" y="24" width="10" height="30" fill="#1e293b"/>
+</svg>

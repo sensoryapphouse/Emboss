@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Twin coaxial counter-rotating blades spinning at 2400 RPM generating lift in 1% atmosphere with bold 4.5px strokes -->
+  <rect x="42" y="44" width="16" height="20" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <line x1="20" y1="32" x2="80" y2="32" stroke="#000000" stroke-width="5.0"/>
+  <line x1="20" y1="40" x2="80" y2="40" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 38 64 L 28 82 M 62 64 L 72 82" stroke="#000000" stroke-width="4.0"/>
+</svg>

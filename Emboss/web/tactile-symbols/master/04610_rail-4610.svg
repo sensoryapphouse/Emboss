@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Machine chassis frame with bold 4.5px stroke -->
+  <rect x="22" y="28" width="56" height="28" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Center X-plow and articulated shoulder profiling blades bottom with bold 4.5px strokes -->
+  <polygon points="36,56 50,78 64,56" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <line x1="16" y1="74" x2="32" y2="56" stroke="#ca8a04" stroke-width="5.0"/>
+  <line x1="84" y1="74" x2="68" y2="56" stroke="#ca8a04" stroke-width="5.0"/>
+</svg>

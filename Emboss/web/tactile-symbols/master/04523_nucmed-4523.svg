@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Perforated mesh thermoplastic head mask profile with bold 5.0px stroke -->
+  <path d="M 26 76 C 26 30 74 30 74 76" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- Baseplate lock pins clamping mask to couch bottom with bold 4.5px strokes -->
+  <rect x="18" y="74" width="16" height="8" rx="2" fill="#1e293b"/>
+  <rect x="66" y="74" width="16" height="8" rx="2" fill="#1e293b"/>
+</svg>

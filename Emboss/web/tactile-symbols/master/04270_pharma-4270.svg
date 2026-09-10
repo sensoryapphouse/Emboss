@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pass-through chamber double-wall body with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Interlocked left and right cleanroom doors with bold 4.5px strokes -->
+  <line x1="22" y1="24" x2="22" y2="76" stroke="#ef4444" stroke-width="5.5"/>
+  <line x1="78" y1="24" x2="78" y2="76" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Internal germicidal UV-C lamp top -->
+  <line x1="36" y1="32" x2="64" y2="32" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

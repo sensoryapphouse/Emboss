@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Underground carrier vehicle with elevated basket boom with bold 4.5px stroke -->
+  <rect x="18" y="56" width="40" height="20" rx="3" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Articulated charging basket arm with bold 4.5px stroke -->
+  <polyline points="36,56 54,28 72,28" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <rect x="70" y="22" width="12" height="14" rx="2" fill="#ef4444"/>
+</svg>

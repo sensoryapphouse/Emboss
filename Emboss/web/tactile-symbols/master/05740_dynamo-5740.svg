@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cored-apple tight aspect ratio plasma boundary (A < 1.5) with bold 5.0px stroke -->
+  <path d="M 44 20 C 18 20 18 80 44 80 C 78 80 82 50 82 50 C 82 50 78 20 44 20 Z" fill="#ffffff" stroke="#ef4444" stroke-width="5.0" stroke-linejoin="round"/>
+  <!-- Ultra-slim central column center-left -->
+  <line x1="38" y1="14" x2="38" y2="86" stroke="#000000" stroke-width="6.0"/>
+</svg>

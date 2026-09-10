@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rubidium vapor cell cube in center with bold 4.5px stroke -->
+  <rect x="32" y="32" width="36" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Circularly polarized optical pumping laser beam entering left with bold 4.5px stroke -->
+  <line x1="14" y1="50" x2="32" y2="50" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Orthogonal probe laser beam traversing cell bottom-to-top with bold 4.5px stroke -->
+  <line x1="50" y1="86" x2="50" y2="68" stroke="#0284c7" stroke-width="5.5" stroke-linecap="round"/>
+  <line x1="50" y1="32" x2="50" y2="14" stroke="#0284c7" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

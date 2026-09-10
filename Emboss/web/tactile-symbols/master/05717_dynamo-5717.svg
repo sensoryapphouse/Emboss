@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fast electromagnetic gas valve nozzle top with bold 5.0px stroke -->
+  <rect x="36" y="16" width="28" height="20" rx="3" fill="#1e293b"/>
+  <!-- Dense radiative gas jet expanding into plasma core with bold 4.5px strokes -->
+  <polygon points="42,36 58,36 78,82 22,82" fill="#ffffff" stroke="#ef4444" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Radiative thermal quench particles -->
+  <circle cx="50" cy="60" r="5" fill="#0284c7"/>
+</svg>

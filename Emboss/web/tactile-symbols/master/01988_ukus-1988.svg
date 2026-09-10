@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tapered plastic wheelie bin container -->
+  <polygon points="26,30 74,30 68,76 32,76" fill="#22c55e" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Top handle and lid -->
+  <rect x="22" y="24" width="56" height="8" rx="3" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Wheels bottom -->
+  <circle cx="34" cy="78" r="6" fill="#1e293b"/>
+  <circle cx="66" cy="78" r="6" fill="#1e293b"/>
+</svg>

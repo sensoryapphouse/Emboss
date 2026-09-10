@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Workstation enclosure cabinet with bold 4.5px stroke -->
+  <rect x="20" y="20" width="60" height="60" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Overhead HEPA filter ceiling with bold 4.0px stroke -->
+  <rect x="20" y="20" width="60" height="12" fill="#cbd5e1" stroke="#000000" stroke-width="3.5"/>
+  <!-- Unidirectional vertical laminar airflow lines with bold 4.0px strokes -->
+  <line x1="36" y1="34" x2="36" y2="70" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="50" y1="34" x2="50" y2="70" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="64" y1="34" x2="64" y2="70" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer white enamel crown and twin root canals with bold 4.5px stroke -->
+  <path d="M 26 36 C 26 24 74 24 74 36 L 70 78 L 56 78 L 50 54 L 44 78 L 30 78 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Central vascular red dental pulp cavity inside with bold 4.0px stroke -->
+  <path d="M 40 40 C 40 34 60 34 60 40 L 56 62 L 44 62 Z" fill="#ef4444" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

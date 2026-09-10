@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Open book emblem -->
+  <path d="M 50 68 C 34 58 20 60 20 40 C 34 40 46 46 50 50 C 54 46 66 40 80 40 C 80 60 66 58 50 68 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <line x1="50" y1="50" x2="50" y2="78" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

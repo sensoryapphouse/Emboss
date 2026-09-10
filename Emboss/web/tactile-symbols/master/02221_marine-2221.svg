@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Small central button disk -->
+  <circle cx="50" cy="50" r="10" fill="#8a5a2b" stroke="#000000" stroke-width="4.0"/>
+  <!-- 5 Sinuous whip-like serpentine arms -->
+  <path d="M 50 40 Q 40 20 50 16 M 58 46 Q 80 34 84 44 M 56 56 Q 74 76 68 84 M 44 56 Q 26 76 32 84 M 42 46 Q 20 34 16 44" fill="none" stroke="#8a5a2b" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

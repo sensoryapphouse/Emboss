@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved road reference line s with bold 5.0px stroke -->
+  <path d="M 18 74 Q 50 74 78 30" fill="none" stroke="#000000" stroke-width="5.5"/>
+  <!-- Lateral displacement vector d perpendicular to reference curve with bold 4.5px stroke -->
+  <line x1="48" y1="74" x2="48" y2="40" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Vehicle position point at (s, d) with bold 4.5px stroke -->
+  <circle cx="48" cy="40" r="6" fill="#0284c7"/>
+</svg>

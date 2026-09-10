@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rectilinear cross (+) with bold 4.5px stroke -->
+  <line x1="20" y1="50" x2="50" y2="50" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="35" y1="35" x2="35" y2="65" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Diagonal cross (x) with bold 4.5px stroke -->
+  <line x1="58" y1="38" x2="82" y2="62" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="82" y1="38" x2="58" y2="62" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

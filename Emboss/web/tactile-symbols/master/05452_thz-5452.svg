@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Interface boundary horizontal line with bold 5.0px stroke -->
+  <line x1="16" y1="50" x2="84" y2="50" stroke="#000000" stroke-width="5.5"/>
+  <!-- Surface normal dashed vertical line with bold 3.5px stroke -->
+  <line x1="50" y1="18" x2="50" y2="82" stroke="#64748b" stroke-width="4.0" stroke-dasharray="5,3"/>
+  <!-- Incident light ray in normal medium top-left with bold 4.5px stroke -->
+  <line x1="22" y1="22" x2="50" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Negatively refracted ray bending backwards across normal bottom-left with bold 5.0px stroke -->
+  <line x1="50" y1="50" x2="22" y2="78" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

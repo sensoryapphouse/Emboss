@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Particle splitting inside ergosphere with escaping piece gaining excess energy with bold 4.5px strokes -->
+  <ellipse cx="50" cy="50" rx="30" ry="20" fill="none" stroke="#ca8a04" stroke-width="4.0"/>
+  <circle cx="50" cy="50" r="12" fill="#000000"/>
+  <line x1="20" y1="36" x2="44" y2="44" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="44" y1="44" x2="50" y2="50" stroke="#64748b" stroke-width="4.0"/>
+  <line x1="44" y1="44" x2="80" y2="30" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

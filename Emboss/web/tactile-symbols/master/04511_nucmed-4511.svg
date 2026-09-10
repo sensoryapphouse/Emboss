@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Target tumor isocenter in center with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="12" fill="#ef4444"/>
+  <!-- Continuous 360-degree rotational arc delivery path with bold 4.5px stroke -->
+  <path d="M 22 50 A 28 28 0 1 1 78 50" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-dasharray="6,3"/>
+  <!-- Rotating treatment head position top with bold 4.0px stroke -->
+  <polygon points="50,16 56,26 44,26" fill="#1e293b"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Eukaryotic chromosome with engineered loxPsym recombination tags flanking synthetic arms with bold 4.5px strokes -->
+  <line x1="22" y1="50" x2="78" y2="50" stroke="#000000" stroke-width="6.0"/>
+  <circle cx="50" cy="50" r="7" fill="#ca8a04"/>
+  <polygon points="34,42 40,50 34,58" fill="#ef4444"/>
+  <polygon points="66,42 60,50 66,58" fill="#ef4444"/>
+</svg>

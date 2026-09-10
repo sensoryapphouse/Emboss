@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circular clear polycarbonate revenue meter glass cover with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Digital LCD kilowatt-hour energy readout screen with bold 4.0px stroke -->
+  <rect x="30" y="36" width="40" height="18" rx="2" fill="#1e293b"/>
+  <!-- Pulse LED flasher and optical communication port bottom -->
+  <circle cx="42" cy="64" r="3.5" fill="#ef4444"/>
+  <circle cx="58" cy="64" r="3.5" fill="#0284c7"/>
+</svg>

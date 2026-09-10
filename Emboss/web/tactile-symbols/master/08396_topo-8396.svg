@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Insulating bulk block surrounded by perimeter metallic conducting surface state with bold 4.5px strokes -->
+  <rect x="24" y="24" width="52" height="52" fill="#ca8a04" opacity="0.3" stroke="#0284c7" stroke-width="6.0"/>
+  <circle cx="50" cy="50" r="10" fill="#64748b"/>
+  <line x1="24" y1="24" x2="76" y2="24" stroke="#ef4444" stroke-width="6.0"/>
+</svg>

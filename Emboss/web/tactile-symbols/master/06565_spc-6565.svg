@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ferromagnetic rod wrapped in copper coil generating magnetic dipole with bold 4.5px strokes -->
+  <rect x="20" y="42" width="60" height="16" rx="3" fill="#64748b"/>
+  <polyline points="28,34 36,66 44,34 52,66 60,34 68,66 76,34" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

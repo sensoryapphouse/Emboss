@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Left vertical line dropping low -->
+  <line x1="40" y1="24" x2="40" y2="68" stroke="#000000" stroke-width="5.5"/>
+  <!-- Right vertical line rising high -->
+  <line x1="60" y1="32" x2="60" y2="76" stroke="#000000" stroke-width="5.5"/>
+  <!-- Connecting horizontal bars -->
+  <line x1="40" y1="36" x2="60" y2="32" stroke="#22c55e" stroke-width="6.0"/>
+  <line x1="40" y1="64" x2="60" y2="60" stroke="#22c55e" stroke-width="6.0"/>
+</svg>

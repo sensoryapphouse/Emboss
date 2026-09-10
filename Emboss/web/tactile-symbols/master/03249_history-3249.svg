@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Left semicircular D-shaped drum tower with bold 4.5px stroke -->
+  <path d="M 22 78 L 22 34 L 38 34 L 38 78 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Right semicircular drum tower with bold 4.5px stroke -->
+  <path d="M 62 78 L 62 34 L 78 34 L 78 78 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Central arched gate portal center with bold 4.5px stroke -->
+  <path d="M 38 78 L 38 46 C 38 40 62 40 62 46 L 62 78 Z" fill="#1e293b" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

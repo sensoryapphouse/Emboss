@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pectoral IPG pulse generator box bottom with bold 4.5px stroke -->
+  <rect x="22" y="58" width="34" height="24" rx="4" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Subcutaneous lead wire ascending into cranial brain area with bold 4.5px stroke -->
+  <path d="M 38 58 L 38 34 C 38 20 66 20 66 38 L 66 48" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Quadripolar electrode contacts at tip with bold 4.0px stroke -->
+  <circle cx="66" cy="48" r="4" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <line x1="30" y1="12" x2="70" y2="12" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Top fixed wheel -->
+  <circle cx="50" cy="28" r="12" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Bottom movable wheel with 24px vertical separation -->
+  <circle cx="50" cy="58" r="12" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Continuous rope loop -->
+  <line x1="38" y1="28" x2="38" y2="86" stroke="#ef4444" stroke-width="3.0"/>
+  <line x1="62" y1="28" x2="62" y2="58" stroke="#000000" stroke-width="3.0"/>
+  <!-- Suspended weight hook and box -->
+  <line x1="50" y1="70" x2="50" y2="74" stroke="#000000" stroke-width="3.5"/>
+  <rect x="40" y="74" width="20" height="14" rx="2" fill="#38bdf8" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nanoparticle ligand docking precisely onto cell-surface transmembrane receptor with bold 4.5px strokes -->
+  <circle cx="38" cy="50" r="14" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 60 36 L 76 36 L 76 64 L 60 64" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="52" y1="50" x2="66" y2="50" stroke="#ca8a04" stroke-width="5.5"/>
+</svg>

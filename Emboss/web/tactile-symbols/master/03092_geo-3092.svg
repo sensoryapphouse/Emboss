@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Horizontal rock strata with bold 4.0px strokes -->
+  <rect x="18" y="24" width="64" height="52" rx="2" fill="#fed7aa" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <!-- Cross-cutting fault line diagonal cutting through strata with bold 5.0px stroke -->
+  <line x1="30" y1="76" x2="70" y2="24" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

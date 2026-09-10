@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hilltop rocky outcrop base -->
+  <polygon points="16,80 84,80 78,64 22,64" fill="#8a5a2b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Parthenon temple atop hill with bold 4.5px outline -->
+  <polygon points="50,24 76,38 24,38" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <line x1="30" y1="38" x2="30" y2="64" stroke="#000000" stroke-width="3.5"/>
+  <line x1="44" y1="38" x2="44" y2="64" stroke="#000000" stroke-width="3.5"/>
+  <line x1="56" y1="38" x2="56" y2="64" stroke="#000000" stroke-width="3.5"/>
+  <line x1="70" y1="38" x2="70" y2="64" stroke="#000000" stroke-width="3.5"/>
+</svg>

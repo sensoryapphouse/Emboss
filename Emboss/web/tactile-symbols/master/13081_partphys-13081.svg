@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Incident photon scattering off electron with wavelength shift and recoil with bold 4.5px strokes -->
+  <path d="M 20 50 Q 30 36 40 50 Q 50 64 54 50" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+  <circle cx="54" cy="50" r="6" fill="#000000"/>
+  <path d="M 54 50 Q 64 30 78 30" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+  <line x1="54" y1="50" x2="78" y2="70" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

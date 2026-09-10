@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shrugging puzzled figure with raised hands -->
+  <circle cx="50" cy="32" r="10" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 20 48 L 34 60 L 50 60 L 66 60 L 80 48" fill="none" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Question marks overhead -->
+  <circle cx="50" cy="78" r="3" fill="#000000"/>
+</svg>

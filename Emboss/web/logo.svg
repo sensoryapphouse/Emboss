@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Emboss">
+  <rect width="192" height="192" rx="40" fill="#1f2a44"/>
+  <g fill="#ffffff">
+    <!-- Braille 'm': dots 1 (top-left), 3 (bottom-left), 4 (top-right) -->
+    <circle cx="66" cy="60" r="14"/>
+    <circle cx="66" cy="132" r="14"/>
+    <circle cx="118" cy="60" r="14"/>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Quantum state Hilbert space geodesic arc from |psi(0)> to orthogonal state with bold 5.0px stroke -->
+  <path d="M 22 74 C 22 24 78 24 78 74" fill="none" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Initial and final orthogonal state dots with bold 4.5px strokes -->
+  <circle cx="22" cy="74" r="6" fill="#0284c7"/>
+  <circle cx="78" cy="74" r="6" fill="#0284c7"/>
+</svg>

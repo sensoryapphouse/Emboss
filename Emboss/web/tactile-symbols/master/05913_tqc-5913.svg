@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dirac cone topological surface with magnetic vortex circulation with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Trapped Majorana zero mode inside vortex core center with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="7" fill="#ef4444"/>
+</svg>

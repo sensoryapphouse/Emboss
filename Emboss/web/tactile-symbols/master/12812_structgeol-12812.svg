@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rigid rotated mineral core with asymmetric recrystallized tail wings with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="10" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 22 42 Q 40 42 46 46 M 78 58 Q 60 58 54 54" stroke="#ef4444" stroke-width="5.0" fill="none"/>
+</svg>

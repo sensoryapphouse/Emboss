@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Wooden tool handle with bold 4.5px stroke -->
+  <line x1="50" y1="78" x2="50" y2="28" stroke="#ca8a04" stroke-width="5.5"/>
+  <!-- Front axe cutting blade left and rear digging grub mattock right with bold 4.5px stroke -->
+  <polygon points="22,28 78,28 74,38 26,38" fill="#1e293b" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

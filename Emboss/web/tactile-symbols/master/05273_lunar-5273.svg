@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 200-meter carbon nanotube spinning tether line with bold 5.0px stroke -->
+  <line x1="18" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="5.0"/>
+  <!-- Pressurized crew habitat modules at both tether ends with bold 4.5px strokes -->
+  <rect x="14" y="36" width="16" height="28" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="4.0"/>
+  <rect x="70" y="36" width="16" height="28" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Central rotation pivot hub -->
+  <circle cx="50" cy="50" r="5" fill="#ef4444"/>
+</svg>

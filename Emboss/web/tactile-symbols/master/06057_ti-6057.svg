@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Disordered input vs assembled compact target cluster with bold 4.5px strokes -->
+  <circle cx="28" cy="28" r="5" fill="#ef4444"/>
+  <line x1="34" y1="34" x2="58" y2="58" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Target assembled cluster bottom right -->
+  <circle cx="64" cy="64" r="6" fill="#22c55e"/>
+  <circle cx="76" cy="64" r="6" fill="#22c55e"/>
+  <circle cx="64" cy="76" r="6" fill="#22c55e"/>
+  <circle cx="76" cy="76" r="6" fill="#22c55e"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continuous spatial field fluctuations subject to phi^4 potential and gradient penalty with bold 4.5px strokes -->
+  <path d="M 20 60 Q 32 30 46 54 Q 60 78 80 40" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.0" stroke-dasharray="3,3"/>
+</svg>

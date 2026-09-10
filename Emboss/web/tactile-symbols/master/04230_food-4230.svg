@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continuous wire mesh conveyor belt with bold 4.5px stroke -->
+  <line x1="18" y1="64" x2="82" y2="64" stroke="#000000" stroke-width="5.0"/>
+  <!-- Flowing liquid chocolate waterfall curtain from overhead weir with bold 4.5px stroke -->
+  <line x1="50" y1="20" x2="50" y2="64" stroke="#ca8a04" stroke-width="6.0"/>
+  <!-- Coated candy bar piece emerging right with bold 4.0px stroke -->
+  <rect x="62" y="54" width="14" height="10" rx="2" fill="#ca8a04" stroke="#1e293b" stroke-width="3.5"/>
+</svg>

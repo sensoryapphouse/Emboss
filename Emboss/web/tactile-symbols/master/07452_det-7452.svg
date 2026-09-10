@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Conversion drift gap separated by metallic micro-mesh from thin amplification gap with bold 4.5px strokes -->
+  <line x1="18" y1="24" x2="82" y2="24" stroke="#000000" stroke-width="5.0"/>
+  <line x1="18" y1="62" x2="82" y2="62" stroke="#ca8a04" stroke-width="4.5" stroke-dasharray="4,2"/>
+  <line x1="18" y1="76" x2="82" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="50" cy="69" r="3" fill="#ef4444"/>
+</svg>

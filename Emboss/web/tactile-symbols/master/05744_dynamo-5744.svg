@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Radial 1/R tokamak magnetic field gradient curve with bold 4.5px stroke -->
+  <path d="M 20 24 Q 36 70 82 76" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Localized second-harmonic ECE emission resonance spot with bold 5.0px stroke -->
+  <circle cx="44" cy="54" r="7" fill="#ef4444"/>
+  <!-- Emitted microwave horn receiver vector right -->
+  <line x1="44" y1="54" x2="80" y2="54" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-quantum-well cascade staircase emitting mid-infrared photons as electron cascades down with bold 4.5px strokes -->
+  <rect x="22" y="32" width="56" height="36" fill="#0284c7" opacity="0.3" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 28 42 L 40 42 L 40 50 L 52 50 L 52 58 L 64 58" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+  <line x1="64" y1="58" x2="78" y2="46" stroke="#ca8a04" stroke-width="5.0"/>
+</svg>

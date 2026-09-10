@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Quantum dot envelope with random nuclear spin background arrows with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central electron surrounded by fluctuating nuclear spins -->
+  <circle cx="50" cy="50" r="7" fill="#ef4444"/>
+  <circle cx="34" cy="38" r="3" fill="#64748b"/>
+  <circle cx="66" cy="38" r="3" fill="#64748b"/>
+  <circle cx="38" cy="64" r="3" fill="#64748b"/>
+  <circle cx="62" cy="64" r="3" fill="#64748b"/>
+</svg>

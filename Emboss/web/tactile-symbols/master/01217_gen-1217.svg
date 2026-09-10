@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- DNA duplex backbone -->
+  <line x1="14" y1="56" x2="86" y2="56" stroke="#000000" stroke-width="4.5"/>
+  <!-- Cytosine base ring -->
+  <polygon points="50,30 64,40 64,56 36,56 36,40" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Attached Methyl group (CH3) sphere on carbon-5 -->
+  <circle cx="50" cy="20" r="7" fill="#ef4444" stroke="#000000" stroke-width="3.0"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- All nodes mutually entangled across all possible bipartition cuts with bold 4.5px strokes -->
+  <polygon points="50,22 78,44 68,76 32,76 22,44" fill="none" stroke="#10b981" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="6" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Five-tier cyclical biological ecosystem loop recycling organic waste back into human food with bold 4.5px strokes -->
+  <polygon points="50,20 78,40 68,76 32,76 22,40" fill="none" stroke="#10b981" stroke-width="5.0"/>
+  <circle cx="50" cy="20" r="5" fill="#ca8a04"/>
+  <circle cx="78" cy="40" r="5" fill="#0284c7"/>
+  <circle cx="68" cy="76" r="5" fill="#10b981"/>
+  <circle cx="32" cy="76" r="5" fill="#ef4444"/>
+  <circle cx="22" cy="40" r="5" fill="#64748b"/>
+</svg>

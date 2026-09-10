@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Triatomic molecule with vibrational displacement arrows with bold 4.5px strokes -->
+  <circle cx="50" cy="38" r="10" fill="#ef4444"/>
+  <circle cx="32" cy="64" r="6" fill="#0284c7"/>
+  <circle cx="68" cy="64" r="6" fill="#0284c7"/>
+  <line x1="44" y1="46" x2="36" y2="58" stroke="#000000" stroke-width="4.5"/>
+  <line x1="56" y1="46" x2="64" y2="58" stroke="#000000" stroke-width="4.5"/>
+  <line x1="28" y1="64" x2="20" y2="70" stroke="#ca8a04" stroke-width="4.5"/>
+  <line x1="72" y1="64" x2="80" y2="70" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

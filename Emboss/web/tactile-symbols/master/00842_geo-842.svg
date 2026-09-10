@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Queensland coastline left -->
+  <path d="M 26 18 C 26 44 38 68 54 84" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Parallel dotted ribbon of coral cays right -->
+  <path d="M 44 18 C 44 44 56 68 72 84" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="4 4"/>
+</svg>

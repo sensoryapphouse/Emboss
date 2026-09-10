@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Elliptical yield surface in p prime vs q stress space with CSL line with bold 4.5px strokes -->
+  <line x1="20" y1="78" x2="80" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="78" x2="20" y2="20" stroke="#000000" stroke-width="4.5"/>
+  <ellipse cx="46" cy="56" rx="20" ry="20" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="20" y1="78" x2="72" y2="26" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

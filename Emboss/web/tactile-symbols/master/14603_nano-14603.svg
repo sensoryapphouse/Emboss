@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Layered exfoliated accordion sheet stack representing chemical etching of MAX phase with bold 4.5px strokes -->
+  <path d="M 22 28 L 78 28 M 22 42 L 78 42 M 22 56 L 78 56 M 22 70 L 78 70" stroke="#22c55e" stroke-width="5.0"/>
+  <line x1="50" y1="20" x2="50" y2="78" stroke="#000000" stroke-width="4.5" stroke-dasharray="3,3"/>
+</svg>

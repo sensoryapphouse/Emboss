@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Seabed mudmat foundation structure plate with bold 4.5px stroke -->
+  <line x1="16" y1="78" x2="84" y2="78" stroke="#1e293b" stroke-width="6.0"/>
+  <!-- Skid frame housing piping manifold header and valves with bold 4.5px stroke -->
+  <rect x="26" y="38" width="48" height="40" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- ROV tie-in hub connection point right with bold 4.5px stroke -->
+  <polygon points="74,48 86,42 86,66 74,60" fill="#ef4444"/>
+</svg>

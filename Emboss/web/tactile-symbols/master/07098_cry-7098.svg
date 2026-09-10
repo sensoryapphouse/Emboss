@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Beaker showing macroscopic zero-viscosity film creeping up and dripping over rim with bold 4.5px strokes -->
+  <path d="M 32 28 L 32 72 L 68 72 L 68 28" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 32 50 L 32 26 Q 32 20 26 20 L 26 50" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <circle cx="26" cy="56" r="4" fill="#0284c7"/>
+</svg>

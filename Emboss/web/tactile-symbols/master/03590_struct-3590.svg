@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Carbon fiber panel block with bold 4.5px stroke -->
+  <rect x="20" y="20" width="60" height="60" rx="4" fill="#1e293b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Woven twill fiber pattern lines with bold 3.5px strokes -->
+  <line x1="35" y1="20" x2="35" y2="80" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="65" y1="20" x2="65" y2="80" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="20" y1="35" x2="80" y2="35" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="20" y1="65" x2="80" y2="65" stroke="#ffffff" stroke-width="3.5"/>
+</svg>

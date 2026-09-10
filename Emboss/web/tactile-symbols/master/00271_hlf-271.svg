@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="26" cy="68" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="74" cy="68" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Racing frame and cyclist -->
+  <polygon points="26,68 50,68 64,50 40,50" fill="none" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <circle cx="56" cy="28" r="6" fill="#000000"/>
+  <path d="M 54 34 L 46 48 L 62 48 L 70 42" fill="none" stroke="#000000" stroke-width="4.0" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Local position-dependent phase rotation tied to gauge connection photon field with bold 4.5px strokes -->
+  <path d="M 22 50 Q 36 28 50 50 Q 64 72 78 50" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 22 62 Q 36 78 50 62 Q 64 46 78 62" fill="none" stroke="#ca8a04" stroke-width="4.5" stroke-dasharray="4,2"/>
+</svg>

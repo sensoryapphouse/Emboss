@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Portable high-visibility AED case body with bold 4.5px stroke -->
+  <rect x="20" y="24" width="60" height="56" rx="8" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Red heart and shock lightning bolt symbol in center with bold 4.0px stroke -->
+  <polygon points="50,34 56,48 48,48 52,66 42,52 48,52" fill="#ef4444"/>
+  <!-- Flashing status indicator light top right -->
+  <circle cx="68" cy="34" r="3.5" fill="#22c55e"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Resonant island chains overlapping when K > 0.9716 destroying bounding KAM curves with bold 4.5px strokes -->
+  <ellipse cx="36" cy="50" rx="12" ry="8" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <ellipse cx="64" cy="50" rx="12" ry="8" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 44 50 L 56 50" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

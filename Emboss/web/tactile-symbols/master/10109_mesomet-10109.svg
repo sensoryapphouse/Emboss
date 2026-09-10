@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Intense sinking column spreading radially in divergent 70 m/s wind bursts with bold 4.5px strokes -->
+  <line x1="50" y1="18" x2="50" y2="64" stroke="#0284c7" stroke-width="6.0"/>
+  <path d="M 50 64 Q 30 64 20 78 M 50 64 Q 70 64 80 78" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

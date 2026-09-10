@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cerebrum convoluted hemisphere profile with bold 4.5px stroke -->
+  <path d="M 22 52 C 20 34 36 20 54 20 C 74 20 84 34 82 52 C 82 66 70 70 54 70 C 38 70 24 66 22 52 Z" fill="#fed7aa" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Cerebellum hindbrain cauliflower pouch bottom right with bold 4.0px stroke -->
+  <path d="M 62 66 C 66 64 78 64 80 74 C 80 82 68 84 62 76 Z" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Brainstem stalk bottom center with bold 4.0px stroke -->
+  <rect x="46" y="68" width="12" height="14" fill="#94a3b8" stroke="#000000" stroke-width="4.0"/>
+</svg>

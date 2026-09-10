@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Earth surface below -->
+  <path d="M 12 84 C 36 78 64 78 88 84" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Atmosphere greenhouse gas dome -->
+  <path d="M 16 46 C 36 32 64 32 84 46" fill="none" stroke="#22c55e" stroke-width="4.0" stroke-dasharray="4 4"/>
+  <!-- Trapped infrared ray bouncing -->
+  <path d="M 28 22 L 42 78 L 56 46 L 70 78" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

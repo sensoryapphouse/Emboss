@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Measurement wires heat-sunk around gold-plated copper bobbin to thermalize signal lines with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="22" fill="#ca8a04" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 20 28 Q 50 40 80 28" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 20 72 Q 50 60 80 72" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Oscillating CTF Thon rings with phase reversals with bold 4.5px strokes -->
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 22 50 Q 28 26 34 50 Q 40 74 46 50 Q 50 32 54 50 Q 58 68 62 50 Q 66 36 70 50 Q 74 64 78 50" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

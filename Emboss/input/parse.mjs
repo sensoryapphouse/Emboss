@@ -1,0 +1,1930 @@
+// Input parsers: various document formats -> the structured document model.
+// Model: { title: string|null, blocks: [{type, ...}] }
+//   types: title | heading{level} | para{text|segments} | list{items:[{text,level,marker}]}
+//        | note{text} | math{mathml|latex}
+// A `para` block carries EITHER a plain `text` string (the original,
+// unchanged path) OR a `segments` array of
+//   { type: 'text', text } | { type: 'math', mathml } | { type: 'math', latex }
+// for a paragraph with inline maths mixed into running text.
+import { ommlElementToMathML, MATH_NS } from './omml.mjs';
+import { SCRIPT_MARKS } from '../format/text-style.mjs';
+
+// ---------- $-delimited LaTeX (shared by parseText / parseMarkdown) ----------
+//
+// $$...$$ -> a standalone display-math block ({type:'math', latex}), splitting
+// the surrounding text (if any) into separate paragraph block(s) before/after.
+// Inline $...$ -> split the paragraph into segments (text and {type:'math',
+// latex}), keeping the maths in the flow of the running text. To avoid
+// misreading a currency amount ("$5 and $10") as inline math, a $ pair only
+// counts as a delimiter when the content between the two $ is non-empty and
+// does NOT start or end with whitespace or a digit (a real LaTeX span like
+// $x^2$ or $\pi$ starts with a letter/backslash, never a digit the way "$5"
+// does) — this also stops a run like "$5 and $10" from ever matching, since
+// every candidate span there starts or ends on a digit. A single, unmatched
+// "$" (or one with no valid partner) is left as plain text untouched.
+const DISPLAY_MATH_RE = /\$\$([\s\S]+?)\$\$/g;
+const INLINE_MATH_RE = /\$([^\s$](?:[^$]*[^\s$])?)\$/g;
+
+// Split `chunk` on $$...$$ into a flat list of { text } / { latex, display:true }
+// pieces, in order. Returns the original chunk as a single { text } piece if no
+// $$ pair is found.
+function splitDisplayMath(chunk) {
+  const pieces = [];
+  let i = 0, m;
+  DISPLAY_MATH_RE.lastIndex = 0;
+  while ((m = DISPLAY_MATH_RE.exec(chunk))) {
+    if (m.index > i) pieces.push({ text: chunk.slice(i, m.index) });
+    if (m[1].trim()) pieces.push({ latex: m[1].trim(), display: true });
+    i = m.index + m[0].length;
+  }
+  if (i < chunk.length) pieces.push({ text: chunk.slice(i) });
+  return pieces.length ? pieces : [{ text: chunk }];
+}
+
+// Reduce $...$ false positives on ordinary prose: a pure number is currency
+// ("$100$"), and a multi-word span with no maths operator is prose ("$Profit rose$").
+// Single tokens ($x$, $variable$) and anything with a maths operator/brace are kept.
+function looksLikeMath(s) {
+  if (!s) return false;
+  if (/^\d+(?:[.,]\d+)?$/.test(s)) return false;                        // pure number -> currency
+  if (/\s/.test(s) && !/[\\^_{}=+*/<>|~×·±≤≥∑∫√-]/.test(s)) return false; // multi-word, no maths token -> prose
+  return true;
+}
+
+// Split a piece of plain text on inline $...$ into segments (text / math).
+// Returns null if there's no valid inline-math delimiter pair in it.
+function splitInlineMath(text) {
+  if (!text.includes('$')) return null;
+  const segments = [];
+  let i = 0, any = false;
+  INLINE_MATH_RE.lastIndex = 0;
+  let m;
+  while ((m = INLINE_MATH_RE.exec(text))) {
+    const content = m[1].trim();
+    if (!looksLikeMath(content)) continue;   // currency/prose false positive: leave the $...$ as literal text
+    any = true;
+    // Keep the raw between-text (incl. its boundary spaces) so the formatter can
+    // reproduce the source spacing faithfully — trimming here is what wrongly
+    // detached a trailing "." from the preceding equation. formatSegmentedPara
+    // collapses internal runs and trims the paragraph edges.
+    if (m.index > i) {
+      const t = text.slice(i, m.index);
+      if (t) segments.push({ type: 'text', text: t });
+    }
+    segments.push({ type: 'math', latex: content });
+    i = m.index + m[0].length;
+  }
+  if (!any) return null;
+  if (i < text.length) {
+    const t = text.slice(i);
+    if (t) segments.push({ type: 'text', text: t });
+  }
+  return segments;
+}
+
+// Turn a chunk of text into one or more blocks, extracting $$ display math
+// (as standalone math blocks) and $ inline math (as segments within a
+// paragraph). Falls back to a plain `{type:'para', text}` block wherever
+// there's no (valid) math delimiter, so ordinary text (incl. a lone "$" or
+// an apostrophe) is completely unaffected — same output as before this
+// feature existed.
+function textChunkToBlocks(chunk) {
+  if (!chunk.includes('$')) return [{ type: 'para', text: chunk }];
+  const blocks = [];
+  for (const piece of splitDisplayMath(chunk)) {
+    if (piece.display) { blocks.push({ type: 'math', latex: piece.latex }); continue; }
+    const t = piece.text;
+    if (!t.trim()) continue;
+    const segments = splitInlineMath(t);
+    if (segments && segments.length) blocks.push({ type: 'para', segments });
+    else blocks.push({ type: 'para', text: t.replace(/\s+/g, ' ').trim() });
+  }
+  return blocks.length ? blocks : [{ type: 'para', text: chunk }];
+}
+
+// ---------- plain text ----------
+// Blank-line-separated chunks become paragraphs. A lone first line followed by a
+// blank line is treated as the title.
+export function parseText(str) {
+  const chunks = (str ?? '').replace(/\r\n?/g, '\n').split(/\n\s*\n/).map((c) => c.trim()).filter(Boolean);
+  const blocks = [];
+  let title = null;
+  chunks.forEach((chunk, i) => {
+    const oneLine = !chunk.includes('\n');
+    if (i === 0 && oneLine && chunks.length > 1) { title = chunk; blocks.push({ type: 'title', text: chunk }); }
+    else blocks.push(...textChunkToBlocks(chunk.replace(/\n/g, ' ')));
+  });
+  return { title, blocks };
+}
+
+// ---------- HTML (browser) ----------
+// Serialize a <math> element back to a MathML string. Prefers XMLSerializer
+// (available in both browsers and @xmldom/xmldom) over outerHTML, since
+// outerHTML on an HTML-parsed <math> island may not be well-formed XML.
+function mathOuterXml(el) {
+  if (typeof XMLSerializer !== 'undefined') {
+    try { return new XMLSerializer().serializeToString(el); } catch { /* fall through */ }
+  }
+  return el.outerHTML || '';
+}
+
+function hasInlineElements(node) {
+  if (!node) return false;
+  if (node.getElementsByTagName) {
+    return node.getElementsByTagName('math').length > 0
+      || node.getElementsByTagName('sub').length > 0
+      || node.getElementsByTagName('sup').length > 0
+      || node.getElementsByTagName('br').length > 0;
+  }
+  if (node.querySelector) {
+    return !!(node.querySelector('math') || node.querySelector('sub') || node.querySelector('sup') || node.querySelector('br'));
+  }
+  return false;
+}
+
+// Walk a <p>'s child nodes (text + elements) in document order, building a
+// segments array: text -> {type:'text'}, a <math> element -> {type:'math',
+// mathml}, <sub>/<sup> -> UEB sub/sup script marks in text, <br> -> space.
+function htmlParagraphSegments(p) {
+  const { subOpen, supOpen, end } = SCRIPT_MARKS;
+  const segments = [];
+  let text = '';
+  let curScript = null;
+  const flushText = () => {
+    if (curScript) { text += end; curScript = null; }
+    if (text) segments.push({ type: 'text', text });
+    text = '';
+  };
+  const walk = (node) => {
+    for (const child of node.childNodes || []) {
+      if (child.nodeType === 3) {                      // text node
+        text += child.textContent;
+      } else if (child.nodeType === 1) {
+        const tag = (child.tagName || child.localName || '').toLowerCase();
+        if (tag === 'math') {
+          flushText();
+          segments.push({ type: 'math', mathml: mathOuterXml(child) });
+        } else if (tag === 'br') {
+          text += ' ';
+        } else if (tag === 'sub' || tag === 'sup') {
+          const prevScript = curScript;
+          if (curScript) { text += end; curScript = null; }
+          text += (tag === 'sub' ? subOpen : supOpen);
+          curScript = tag;
+          walk(child);
+          if (curScript) { text += end; curScript = null; }
+          curScript = prevScript;
+          if (curScript) {
+            text += (curScript === 'sub' ? subOpen : supOpen);
+          }
+        } else if (hasInlineElements(child)) {
+          walk(child);                                  // descend to find the <math>/<sub>/<sup>/<br> in place
+        } else {
+          text += child.textContent;
+        }
+      }
+    }
+  };
+  walk(p);
+  flushText();
+  return segments;
+}
+
+export function parseHtml(str) {
+  const raw = str ?? '';
+  const htmlToParse = (raw.includes('<html') || raw.includes('<body')) ? raw : `<body>${raw}</body>`;
+  const doc = new DOMParser().parseFromString(htmlToParse, 'text/html');
+  const titleEl = (doc.querySelector ? doc.querySelector('title') : doc.getElementsByTagName('title')[0])
+    || (doc.querySelector ? doc.querySelector('h1') : doc.getElementsByTagName('h1')[0]);
+  const title = (titleEl?.textContent || '').trim() || null;
+  const blocks = [];
+  const root = doc.body || (doc.getElementsByTagName ? doc.getElementsByTagName('body')[0] : null) || doc.documentElement;
+  const walk = (el) => {
+    for (const node of el.childNodes || []) {
+      if (node.nodeType === 3) {           // text node sitting directly in a container
+        const t = node.textContent.replace(/\s+/g, ' ').trim();
+        if (t) blocks.push({ type: 'para', text: t });
+        continue;
+      }
+      if (node.nodeType !== 1) continue;   // skip comments / processing instructions
+      const tag = (node.tagName || node.localName || '').toLowerCase();
+      if (tag === 'head' || tag === 'title' || tag === 'script' || tag === 'style' || tag === 'meta' || tag === 'link' || tag === 'template') continue;
+      const text = node.textContent.replace(/\s+/g, ' ').trim();
+      if (tag === 'math') {                // block-level <math> (not inside a <p>/etc)
+        blocks.push({ type: 'math', mathml: mathOuterXml(node) });
+      } else if (/^h[1-6]$/.test(tag)) {
+        if (!text) continue;
+        if (hasInlineElements(node)) {
+          const segments = htmlParagraphSegments(node);
+          const hasEmphOrMath = segments.some((s) => s.type === 'math' || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
+          if (hasEmphOrMath) blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), segments, text });
+          else {
+            const flat = segments.map((s) => s.text || '').join('').replace(/\s+/g, ' ').trim();
+            blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), text: flat || text });
+          }
+        } else {
+          blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), text });
+        }
+      } else if (tag === 'p') {
+        const img = node.getElementsByTagName ? node.getElementsByTagName('img')[0] : null;
+        if (img) {
+          const alt = (img.getAttribute ? img.getAttribute('alt') : '') || '';
+          blocks.push({ type: 'note', kind: 'image', text: 'Image: ' + alt });
+        }
+        const clsList = (node.getAttribute ? (node.getAttribute('class') || '') : '').split(/\s+/);
+        const isG1 = clsList.includes('g1');
+        if (hasInlineElements(node)) {
+          const segments = htmlParagraphSegments(node);
+          if (isG1) {
+            segments.forEach(s => s.uncontracted = true);
+          }
+          const hasEmphOrMath = segments.some((s) => s.type === 'math' || s.uncontracted || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
+          if (hasEmphOrMath) blocks.push({ type: 'para', segments });
+          else {
+            const flat = segments.map((s) => s.text || '').join('').replace(/\s+/g, ' ').trim();
+            if (flat) blocks.push({ type: 'para', text: flat });
+          }
+        } else if (text) {
+          if (isG1) blocks.push({ type: 'para', segments: [{ type: 'text', text, uncontracted: true }] });
+          else blocks.push({ type: 'para', text });
+        }
+      } else if (tag === 'img') {
+        const alt = (node.getAttribute ? node.getAttribute('alt') : '') || '';
+        blocks.push({ type: 'note', kind: 'image', text: 'Image: ' + alt });
+      } else if (tag === 'figure') {
+        const caption = node.getElementsByTagName ? node.getElementsByTagName('figcaption')[0] : null;
+        const capText = caption ? caption.textContent.replace(/\s+/g, ' ').trim() : '';
+        blocks.push({ type: 'note', kind: 'image', text: 'Image: ' + capText });
+      } else if (tag === 'pre' || tag === 'code') {
+        if (text) blocks.push({ type: 'code', text });
+      } else if (tag === 'ul' || tag === 'ol') {
+        const parseList = (listEl, lvl = 0) => {
+          const isOl = (listEl.tagName || listEl.localName || '').toLowerCase() === 'ol';
+          const startVal = isOl ? (parseInt(listEl.getAttribute ? (listEl.getAttribute('start') || '1') : '1', 10) || 1) : 1;
+          let counter = startVal;
+          const items = [];
+          for (const li of listEl.childNodes || []) {
+            if (li.nodeType !== 1 || (li.tagName || li.localName || '').toLowerCase() !== 'li') continue;
+            const nestedLists = [];
+            let itemText = '';
+            for (const c of li.childNodes || []) {
+              if (c.nodeType === 3) itemText += c.textContent;
+              else if (c.nodeType === 1) {
+                const cTag = (c.tagName || c.localName || '').toLowerCase();
+                if (cTag === 'ul' || cTag === 'ol') nestedLists.push(c);
+                else if (cTag === 'br') itemText += ' ';
+                else itemText += c.textContent;
+              }
+            }
+            itemText = itemText.replace(/\s+/g, ' ').trim();
+            if (itemText) {
+              let item;
+              if (hasInlineElements(li)) {
+                const segments = htmlParagraphSegments(li);
+                const hasEmphOrMath = segments.some((s) => s.type === 'math' || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
+                item = hasEmphOrMath ? { segments, text: itemText } : { text: itemText };
+              } else {
+                item = { text: itemText };
+              }
+              if (isOl) {
+                item.marker = `${counter}.`;
+                counter++;
+              }
+              if (lvl > 0) item.level = lvl;
+              items.push(item);
+            }
+            for (const nl of nestedLists) {
+              items.push(...parseList(nl, lvl + 1));
+            }
+          }
+          return items;
+        };
+        const items = parseList(node, 0);
+        if (items.length) blocks.push({ type: 'list', items });
+      } else if (tag === 'dl') {
+        const items = [];
+        for (const child of node.childNodes || []) {
+          if (child.nodeType !== 1) continue;
+          const cTag = (child.tagName || child.localName || '').toLowerCase();
+          if (cTag !== 'dt' && cTag !== 'dd') continue;
+          let itemText = '';
+          for (const c of child.childNodes || []) {
+            if (c.nodeType === 3) itemText += c.textContent;
+            else if (c.nodeType === 1) {
+              const cTagInner = (c.tagName || c.localName || '').toLowerCase();
+              if (cTagInner === 'br') itemText += ' ';
+              else itemText += c.textContent;
+            }
+          }
+          itemText = itemText.replace(/\s+/g, ' ').trim();
+          if (!itemText) continue;
+          let item;
+          if (hasInlineElements(child)) {
+            const segments = htmlParagraphSegments(child);
+            const hasEmphOrMath = segments.some((s) => s.type === 'math' || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
+            item = hasEmphOrMath ? { segments, text: itemText } : { text: itemText };
+          } else {
+            item = { text: itemText };
+          }
+          item.level = cTag === 'dt' ? 0 : 1;
+          items.push(item);
+        }
+        if (items.length) blocks.push({ type: 'list', items });
+      } else if (tag === 'table') {
+        const rows = node.querySelectorAll ? [...node.querySelectorAll('tr')]
+          : [...(node.getElementsByTagName ? node.getElementsByTagName('tr') : [])];
+        const headers = [];
+        const tableRows = [];
+        let headerRowFound = false;
+        const thead = node.getElementsByTagName ? node.getElementsByTagName('thead')[0] : null;
+        if (thead) {
+          const theadTrs = [...thead.getElementsByTagName('tr')];
+          if (theadTrs.length) {
+            const cells = [...theadTrs[0].getElementsByTagName('th'), ...theadTrs[0].getElementsByTagName('td')];
+            headers.push(...cells.map(c => c.textContent.replace(/\s+/g, ' ').trim()).filter(Boolean));
+            headerRowFound = true;
+          }
+        }
+        for (let i = 0; i < rows.length; i++) {
+          const tr = rows[i];
+          if (thead && tr.parentNode === thead) continue;
+          const ths = [...(tr.getElementsByTagName ? tr.getElementsByTagName('th') : [])];
+          const tds = [...(tr.getElementsByTagName ? tr.getElementsByTagName('td') : [])];
+          if (!headerRowFound && ths.length && !tds.length) {
+            headers.push(...ths.map(c => c.textContent.replace(/\s+/g, ' ').trim()));
+            headerRowFound = true;
+          } else {
+            const rowCells = [];
+            for (const cell of [...ths, ...tds]) {
+              const cellText = cell.textContent.replace(/\s+/g, ' ').trim();
+              const colspan = parseInt(cell.getAttribute ? (cell.getAttribute('colspan') || '1') : '1', 10) || 1;
+              rowCells.push(cellText);
+              for (let k = 1; k < colspan; k++) rowCells.push('');
+            }
+            if (rowCells.some(Boolean)) tableRows.push(rowCells);
+          }
+        }
+        if (headers.length || tableRows.length) {
+          blocks.push({ type: 'table', headers, rows: tableRows });
+        }
+      } else if (tag === 'tbody' || tag === 'thead' || tag === 'tfoot') {
+        walk(node);
+      } else if (tag === 'tr') {
+        walk(node);
+      } else if (tag === 'blockquote') {
+        if (text) blocks.push({ type: 'note', text });
+      } else if (tag === 'pagenum' || (node.dataset && node.dataset.pagenum) || (node.getAttribute && node.getAttribute('role') === 'doc-pagebreak')) {
+        const pVal = text || node.dataset?.pagenum || (node.getAttribute ? (node.getAttribute('aria-label') || node.getAttribute('title')) : '') || '';
+        if (pVal) blocks.push({ type: 'pagenum', page: pVal, text: pVal });
+      } else if (node.children?.length || node.childNodes?.length) {
+        walk(node);                       // descend into wrappers (div, section, article...)
+      } else if (text) {
+        blocks.push({ type: 'para', text });
+      }
+    }
+  };
+  walk(root);
+  return { title, blocks };
+}
+
+// ---------- docx ----------
+async function inflateRaw(bytes) {
+  const ds = new DecompressionStream('deflate-raw');
+  const stream = new Blob([bytes]).stream().pipeThrough(ds);
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+// Minimal ZIP: read the central directory to locate & extract one entry.
+async function unzipEntry(buf, wanted) {
+  const dv = new DataView(buf);
+  const u8 = new Uint8Array(buf);
+  // find End Of Central Directory (sig 0x06054b50), scanning back
+  let eocd = -1;
+  for (let i = u8.length - 22; i >= 0; i--) {
+    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error('not a zip (no EOCD)');
+  const count = dv.getUint16(eocd + 10, true);
+  let off = dv.getUint32(eocd + 16, true);
+  const dec = new TextDecoder();
+  for (let n = 0; n < count; n++) {
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    const method = dv.getUint16(off + 10, true);
+    const compSize = dv.getUint32(off + 20, true);
+    const nameLen = dv.getUint16(off + 28, true);
+    const extraLen = dv.getUint16(off + 30, true);
+    const commentLen = dv.getUint16(off + 32, true);
+    const localOff = dv.getUint32(off + 42, true);
+    const name = dec.decode(u8.subarray(off + 46, off + 46 + nameLen));
+    if (name === wanted) {
+      const lNameLen = dv.getUint16(localOff + 26, true);
+      const lExtraLen = dv.getUint16(localOff + 28, true);
+      const dataStart = localOff + 30 + lNameLen + lExtraLen;
+      const data = u8.subarray(dataStart, dataStart + compSize);
+      return method === 0 ? data : inflateRaw(data);
+    }
+    off += 46 + nameLen + extraLen + commentLen;
+  }
+  throw new Error(`entry not found in zip: ${wanted}`);
+}
+
+// Direct child element by namespace + local name. Uses childNodes (not
+// .children) so it works in both the browser DOM and @xmldom/xmldom (Node).
+function firstChildNS(el, ns, ln) {
+  for (const c of el.childNodes || []) {
+    if (c.nodeType === 1 && c.localName === ln && c.namespaceURI === ns) return c;
+  }
+  return null;
+}
+
+// A run's vertical alignment from w:rPr/w:vertAlign/@w:val: 'sub' | 'sup' | null.
+function runScript(r, W) {
+  const rPr = firstChildNS(r, W, 'rPr');
+  const va = rPr && firstChildNS(rPr, W, 'vertAlign');
+  const val = va && (va.getAttributeNS(W, 'val') || '').toLowerCase();
+  return val === 'subscript' ? 'sub' : val === 'superscript' ? 'sup' : null;
+}
+
+// liblouis typeform bits (match louis.TYPEFORM used by the editor): italic=1, underline=2, bold=4.
+const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4;
+// A run's emphasis (bold/italic/underline) from w:rPr → liblouis typeform bits, so the
+// formatter emits real UEB emphasis indicators. A toggle element with no val (or val
+// "true"/"1") is on; val "false"/"0"/"none" is off.
+function runEmphasis(r, W) {
+  const rPr = firstChildNS(r, W, 'rPr');
+  if (!rPr) return 0;
+  const on = (ln) => { const e = firstChildNS(rPr, W, ln); if (!e) return false; const v = e.getAttributeNS(W, 'val'); return v == null || (v !== 'false' && v !== '0' && v !== 'none'); };
+  let tf = 0;
+  if (on('b')) tf |= TF_BOLD;
+  if (on('i')) tf |= TF_ITALIC;
+  if (on('u')) tf |= TF_UNDERLINE;
+  return tf;
+}
+
+function getRunText(r, W) {
+  let text = '';
+  for (const child of r.childNodes || []) {
+    if (child.nodeType === 1 && child.namespaceURI === W) {
+      if (child.localName === 't') text += child.textContent;
+      else if (child.localName === 'tab' || child.localName === 'br' || child.localName === 'cr') text += ' ';
+      else if (child.localName === 'noBreakHyphen') text += '-';
+    }
+  }
+  return text;
+}
+
+// Concatenate a paragraph's run text, bracketing subscript/superscript runs with
+// the script markers the formatter's translate step turns into UEB level
+// indicators (so e.g. the "2" of CO2 gets the ";5" subscript sign). Adjacent
+// runs of the same alignment share one marker pair.
+function paragraphRunText(p, W) {
+  const { subOpen, supOpen, end } = SCRIPT_MARKS;
+  let text = '';
+  let cur = null;                                         // baseline | 'sub' | 'sup'
+  for (const r of p.getElementsByTagNameNS(W, 'r')) {
+    const runText = getRunText(r, W);
+    if (!runText) continue;
+    const script = runScript(r, W);
+    if (script !== cur) {
+      if (cur) text += end;
+      if (script) text += script === 'sub' ? subOpen : supOpen;
+      cur = script;
+    }
+    text += runText;
+  }
+  if (cur) text += end;
+  return text;
+}
+
+// Walk a paragraph's direct children in document order, building a segments
+// array that interleaves run text (w:r, with sub/superscript markers exactly
+// as paragraphRunText) and inline equations (m:oMath, a sibling of w:r inside
+// w:p). Text is accumulated and flushed as one 'text' segment whenever a math
+// element is hit (or at the end), so adjacent runs still collapse into a
+// single segment the same way paragraphRunText collapses them into one string.
+function paragraphSegments(p, W) {
+  const { subOpen, supOpen, end } = SCRIPT_MARKS;
+  const segments = [];
+  let text = '';
+  let cur = null;                                          // baseline | 'sub' | 'sup'
+  let curTf = 0;                                           // emphasis of the accumulating run (bold/italic/underline)
+  const flushText = () => {
+    if (cur) { text += end; cur = null; }
+    if (text) segments.push(curTf ? { type: 'text', text, tf: curTf } : { type: 'text', text });
+    text = '';
+  };
+  const processRun = (r) => {
+    const runText = getRunText(r, W);
+    if (!runText) return;
+    const tf = runEmphasis(r, W);
+    if (tf !== curTf) { flushText(); curTf = tf; }
+    const script = runScript(r, W);
+    if (script !== cur) {
+      if (cur) text += end;
+      if (script) text += script === 'sub' ? subOpen : supOpen;
+      cur = script;
+    }
+    text += runText;
+  };
+  for (const node of p.childNodes || []) {
+    if (node.nodeType !== 1) continue;
+    if (node.namespaceURI === MATH_NS && node.localName === 'oMath') {
+      flushText(); curTf = 0;
+      segments.push({ type: 'math', mathml: ommlElementToMathML(node) });
+      continue;
+    }
+    if (node.localName === 'hyperlink') {
+      for (const r of node.getElementsByTagNameNS ? node.getElementsByTagNameNS(W, 'r') : (node.getElementsByTagName ? node.getElementsByTagName('w:r') : [])) {
+        processRun(r);
+      }
+      continue;
+    }
+    if (node.namespaceURI === W && node.localName === 'r') {
+      processRun(node);
+    }
+  }
+  flushText();
+  return segments;
+}
+
+// The browser's native DOMParser does NOT throw on malformed XML — it returns a
+// document whose root (or a child) is a <parsererror>. Left unchecked, the callers
+// below would fall back to that error node and silently produce an empty/garbage
+// document with no error shown to the user. Detect it and throw so the caller's
+// try/catch surfaces a real "could not read that file". (@xmldom, used in the Node
+// tests, throws directly — so this path is browser-only.)
+const COMMON_HTML_ENTITIES = {
+  nbsp: '&#160;', mdash: '&#8212;', ndash: '&#8211;', hellip: '&#8230;',
+  lsquo: '&#8216;', rsquo: '&#8217;', ldquo: '&#8220;', rdquo: '&#8221;',
+  copy: '&#169;', reg: '&#174;', trade: '&#8482;', bull: '&#8226;',
+  deg: '&#176;', plusmn: '&#177;', times: '&#215;', divide: '&#247;',
+  micro: '&#181;', para: '&#182;', middot: '&#183;', frac12: '&#189;',
+  frac14: '&#188;', frac34: '&#190;', euro: '&#8364;', pound: '&#163;',
+  yen: '&#165;', cent: '&#162;', sect: '&#167;', laquo: '&#171;', raquo: '&#187;',
+  aacute: '&#225;', eacute: '&#233;', iacute: '&#237;', oacute: '&#243;', uacute: '&#250;',
+  agrave: '&#224;', egrave: '&#232;', igrave: '&#236;', ograve: '&#242;', ugrave: '&#249;',
+  auml: '&#228;', euml: '&#235;', iuml: '&#239;', ouml: '&#246;', uuml: '&#252;',
+  ntilde: '&#241;', ccedil: '&#231;',
+};
+
+export const LEADING_BULLET_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7]+\s+/;
+export function stripLeadingBullet(str) {
+  if (!str) return str;
+  return String(str).replace(LEADING_BULLET_RE, '').trim();
+}
+
+function sanitizeXmlEntities(xml) {
+  let s = xml || '';
+  const dtdEntities = {};
+  const entityDeclRe = /<!ENTITY\s+(?:%\s+)?([a-zA-Z0-9_\-\.:]+)\s+["']([^"']*)["']\s*>/g;
+  let em;
+  while ((em = entityDeclRe.exec(s)) !== null) {
+    dtdEntities[em[1]] = em[2];
+  }
+  s = s.replace(/&([a-zA-Z0-9_\-\.:]+);/g, (match, name) => {
+    if (name === 'amp' || name === 'lt' || name === 'gt' || name === 'quot' || name === 'apos') return match;
+    if (dtdEntities[name] !== undefined) return dtdEntities[name];
+    if (COMMON_HTML_ENTITIES[name] !== undefined) return COMMON_HTML_ENTITIES[name];
+    return `&amp;${name};`;
+  });
+  return s;
+}
+
+function parseXml(xml) {
+  const Parser = typeof DOMParser !== 'undefined' ? DOMParser : globalThis.DOMParser;
+  if (!Parser) throw new Error('No DOMParser available');
+  let cleanXml = sanitizeXmlEntities(xml ?? '');
+  let doc = new Parser().parseFromString(cleanXml, 'application/xml');
+  let err = doc.getElementsByTagName('parsererror')[0]
+    || (doc.documentElement && doc.documentElement.nodeName === 'parsererror' ? doc.documentElement : null);
+  
+  if (err) {
+    cleanXml = sanitizeXmlEntities(cleanXml);
+    doc = new Parser().parseFromString(cleanXml, 'application/xml');
+    err = doc.getElementsByTagName('parsererror')[0]
+      || (doc.documentElement && doc.documentElement.nodeName === 'parsererror' ? doc.documentElement : null);
+  }
+
+  if (err && typeof document !== 'undefined') {
+    try {
+      const htmlDoc = new Parser().parseFromString(cleanXml, 'text/html');
+      if (htmlDoc && (htmlDoc.body || htmlDoc.documentElement)) return htmlDoc;
+    } catch { /* ignore and throw XML error */ }
+  }
+
+  if (err) throw new Error('malformed XML: ' + (err.textContent || 'parse error').replace(/\s+/g, ' ').trim().slice(0, 200));
+  return doc;
+}
+
+// ---- Word list numbering (word/numbering.xml) → running list markers ----
+// Word stores only that a paragraph belongs to list numId at level ilvl; the actual
+// "1." / "a)" / "iii." text has to be computed from numbering.xml (numFmt + lvlText +
+// start) plus a running counter. Without the numbering part we can't tell an ordered
+// list from a bullet one, so we emit NO marker (unchanged behaviour) rather than guess.
+const _ROMAN = [[1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'], [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']];
+function toRoman(n) { if (n < 1 || n > 3999) return String(n); let s = ''; for (const [v, g] of _ROMAN) while (n >= v) { s += g; n -= v; } return s; }
+function toAlpha(n) { let s = ''; while (n > 0) { n--; s = String.fromCharCode(97 + (n % 26)) + s; n = Math.floor(n / 26); } return s || 'a'; }
+function formatCounter(n, numFmt) {
+  switch (numFmt) {
+    case 'decimal': return String(n);
+    case 'decimalzero': return n < 10 ? '0' + n : String(n);
+    case 'lowerletter': return toAlpha(n);
+    case 'upperletter': return toAlpha(n).toUpperCase();
+    case 'lowerroman': return toRoman(n);
+    case 'upperroman': return toRoman(n).toUpperCase();
+    default: return null;                              // bullet / none / unsupported → not ordered
+  }
+}
+
+async function parseDocxNumbering(arrayBuffer, W) {
+  let xml;
+  try { xml = new TextDecoder().decode(await unzipEntry(arrayBuffer, 'word/numbering.xml')); }
+  catch { return null; }                               // no numbering part
+  let doc; try { doc = parseXml(xml); } catch { return null; }
+  const abstract = new Map();                          // abstractNumId → Map(ilvl → {numFmt,lvlText,start})
+  for (const an of doc.getElementsByTagNameNS(W, 'abstractNum')) {
+    const levels = new Map();
+    for (const lvl of an.getElementsByTagNameNS(W, 'lvl')) {
+      const numFmt = (lvl.getElementsByTagNameNS(W, 'numFmt')[0]?.getAttributeNS(W, 'val') || '').toLowerCase();
+      const lvlText = lvl.getElementsByTagNameNS(W, 'lvlText')[0]?.getAttributeNS(W, 'val') || '';
+      const start = Number(lvl.getElementsByTagNameNS(W, 'start')[0]?.getAttributeNS(W, 'val') || '1') || 1;
+      levels.set(String(lvl.getAttributeNS(W, 'ilvl')), { numFmt, lvlText, start });
+    }
+    abstract.set(String(an.getAttributeNS(W, 'abstractNumId')), levels);
+  }
+  const numToAbstract = new Map();                     // numId → {aId, startOverrides:Map(ilvl→start)}
+  for (const num of doc.getElementsByTagNameNS(W, 'num')) {
+    const aId = String(num.getElementsByTagNameNS(W, 'abstractNumId')[0]?.getAttributeNS(W, 'val'));
+    const startOverrides = new Map();
+    for (const ov of num.getElementsByTagNameNS(W, 'lvlOverride')) {
+      const so = ov.getElementsByTagNameNS(W, 'startOverride')[0]?.getAttributeNS(W, 'val');
+      if (so != null) startOverrides.set(String(ov.getAttributeNS(W, 'ilvl')), Number(so) || 1);
+    }
+    numToAbstract.set(String(num.getAttributeNS(W, 'numId')), { aId, startOverrides });
+  }
+  return function level(numId, ilvl) {
+    const rec = numToAbstract.get(String(numId)); if (!rec) return null;
+    const levels = abstract.get(rec.aId); if (!levels) return null;
+    const lv = levels.get(String(ilvl)); if (!lv) return null;
+    const so = rec.startOverrides.get(String(ilvl));
+    return so != null ? { ...lv, start: so } : lv;
+  };
+}
+
+// Compute the marker for a list item at (numId, ilvl), advancing `counters` (a Map
+// keyed "numId:ilvl") and resetting deeper levels so nested lists restart. Returns
+// null for bullets / unresolved numbering (caller then omits the marker).
+function listMarker(level, counters, numId, ilvl) {
+  if (!level || numId == null) return null;
+  const lv = level(numId, ilvl);
+  if (!lv || formatCounter(1, lv.numFmt) == null) return null;   // not an ordered format
+  const key = (i) => `${numId}:${i}`;
+  counters.set(key(ilvl), counters.has(key(ilvl)) ? counters.get(key(ilvl)) + 1 : lv.start);
+  for (let j = ilvl + 1; j <= 8; j++) counters.delete(key(j));
+  return (lv.lvlText || `%${ilvl + 1}.`).replace(/%([1-9])/g, (_, d) => {
+    const li = Number(d) - 1;
+    const llv = level(numId, li) || lv;
+    const val = counters.has(key(li)) ? counters.get(key(li)) : (llv.start ?? 1);
+    return formatCounter(val, llv.numFmt) ?? String(val);
+  });
+}
+
+export async function parseDocx(arrayBuffer) {
+  const xmlBytes = await unzipEntry(arrayBuffer, 'word/document.xml');
+  const xml = new TextDecoder().decode(xmlBytes);
+  const doc = parseXml(xml);
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  const numbering = await parseDocxNumbering(arrayBuffer, W);      // null if no numbering.xml
+  let listCounters = new Map();
+  const body = doc.getElementsByTagNameNS(W, 'body')[0] || doc.documentElement;
+  const blocks = [];
+  let title = null;
+  let pendingList = null;
+  const flushList = () => { if (pendingList) { blocks.push(pendingList); pendingList = null; } };
+  const pushMath = (omEl) => blocks.push({ type: 'math', mathml: ommlElementToMathML(omEl) });
+
+  // Walk the body's children in document order so equations land in place.
+  for (const el of body.children) {
+    const ln = el.localName;
+
+    // display equations: m:oMathPara (block) or a bare m:oMath at body level
+    if (ln === 'oMathPara' || ln === 'oMath') {
+      flushList();
+      const maths = ln === 'oMath' ? [el] : [...el.getElementsByTagNameNS(MATH_NS, 'oMath')];
+      maths.forEach(pushMath);
+      continue;
+    }
+    // tables: w:tbl -> table block
+    if (ln === 'tbl') {
+      flushList();
+      const trs = [...el.getElementsByTagNameNS(W, 'tr')];
+      if (trs.length) {
+        const headers = [];
+        const tableRows = [];
+        const firstTr = trs[0];
+        for (const tc of firstTr.getElementsByTagNameNS(W, 'tc')) {
+          const t = paragraphRunText(tc, W).replace(/\s+/g, ' ').trim();
+          const gridSpan = parseInt(tc.getElementsByTagNameNS(W, 'gridSpan')[0]?.getAttributeNS(W, 'val') || '1', 10) || 1;
+          headers.push(t);
+          for (let k = 1; k < gridSpan; k++) headers.push('');
+        }
+        for (let i = 1; i < trs.length; i++) {
+          const rowCells = [];
+          for (const tc of trs[i].getElementsByTagNameNS(W, 'tc')) {
+            const t = paragraphRunText(tc, W).replace(/\s+/g, ' ').trim();
+            const gridSpan = parseInt(tc.getElementsByTagNameNS(W, 'gridSpan')[0]?.getAttributeNS(W, 'val') || '1', 10) || 1;
+            rowCells.push(t);
+            for (let k = 1; k < gridSpan; k++) rowCells.push('');
+          }
+          if (rowCells.some(Boolean)) tableRows.push(rowCells);
+        }
+        blocks.push({ type: 'table', headers, rows: tableRows });
+      }
+      continue;
+    }
+    if (ln !== 'p') continue;
+
+    const p = el;
+    const hasMath = p.getElementsByTagNameNS(MATH_NS, 'oMath').length > 0;
+    const segments = paragraphSegments(p, W);                     // run order: text <-> math, with emphasis tf
+    // Use the segment path when there's inline maths OR any emphasis run, so bold/italic/
+    // underline survive as typeform. Plain text stays on the unchanged plain path (byte-exact).
+    const hasSeg = !!(segments.length && (hasMath || segments.some((s) => s.tf)));
+    let text = paragraphRunText(p, W);                    // w:t only, with sub/superscript markers
+    text = text.replace(/\s+/g, ' ').trim();
+    const styleEl = p.getElementsByTagNameNS(W, 'pStyle')[0];
+    const style = (styleEl?.getAttributeNS(W, 'val') || '').toLowerCase();
+    const isList = p.getElementsByTagNameNS(W, 'numPr').length > 0 || style.includes('listparagraph');
+
+    // Classify by STYLE first, then attach inline-maths segments — so a heading or
+    // list item with an equation keeps its heading level / list membership (a
+    // heading stays in the TOC; a list isn't split apart) instead of collapsing to
+    // a plain paragraph.
+    if (!text && !hasSeg) { flushList(); continue; }
+    if (isList) {
+      if (!pendingList) { pendingList = { type: 'list', items: [] }; listCounters = new Map(); }  // fresh list → restart numbering
+      const numPr = p.getElementsByTagNameNS(W, 'numPr')[0];
+      const ilvl = numPr ? Number(numPr.getElementsByTagNameNS(W, 'ilvl')[0]?.getAttributeNS(W, 'val') || 0) || 0 : 0;
+      const numId = numPr ? numPr.getElementsByTagNameNS(W, 'numId')[0]?.getAttributeNS(W, 'val') : null;
+      const marker = listMarker(numbering, listCounters, numId, ilvl);
+      const item = hasSeg ? { segments } : { text };
+      if (marker) item.marker = marker;               // ordered list → "1." / "a)" / "iii." etc.
+      if (ilvl) item.level = ilvl;                     // nested lists indent per level
+      pendingList.items.push(item);
+      continue;
+    }
+    flushList();
+    if (style === 'title') { title = title || text; blocks.push({ type: 'title', text }); }  // title: text only
+    else if (/^heading([1-9])/.test(style)) {
+      const level = Math.min(3, Number(style.match(/^heading([1-9])/)[1]));
+      blocks.push(hasSeg ? { type: 'heading', level, segments, text } : { type: 'heading', level, text });
+    } else {
+      blocks.push(hasSeg ? { type: 'para', segments } : { type: 'para', text });
+    }
+  }
+  flushList();
+  return { title, blocks };
+}
+
+// ---------- Markdown ----------
+// Protect $...$ / $$...$$ spans from markdown emphasis-stripping (inline(),
+// below) by pulling them out to placeholders before inline() runs and
+// splicing the literal span back in afterwards. Without this, LaTeX like
+// $x_1$ or $a*b$ would have its underscores/asterisks stripped as markdown
+// emphasis before textChunkToBlocks ever sees the paragraph.
+const MATH_PLACEHOLDER_RE = /\x00(\d+)\x00/g;
+function protectMathSpans(line) {
+  let text = line
+    .replace(/\\\\\$/g, '\x00BS\x00\x00DOLLAR\x00')
+    .replace(/\\\$/g, '\x00DOLLAR\x00')
+    .replace(/\\\*/g, '\x00ASTERISK\x00')
+    .replace(/\\_/g, '\x00UNDERSCORE\x00')
+    .replace(/\\`/g, '\x00BACKTICK\x00')
+    .replace(/\\\[/g, '\x00OBRACKET\x00')
+    .replace(/\\\]/g, '\x00CBRACKET\x00');
+
+  const spans = [];
+  const masked = text.replace(/\$\$[\s\S]+?\$\$|\$[^\s$](?:[^$]*[^\s$])?\$/g, (m) => {
+    spans.push(m);
+    return `\x00${spans.length - 1}\x00`;
+  });
+  // Fall back to the literal placeholder if the index doesn't resolve (e.g. raw NUL
+  // bytes in the source coincidentally match the placeholder pattern) → never inject "undefined".
+  return {
+    masked,
+    restore: (s) => s.replace(MATH_PLACEHOLDER_RE, (m, i) => spans[Number(i)] ?? m)
+      .replace(/\x00DOLLAR\x00/g, '$')
+      .replace(/\x00ASTERISK\x00/g, '*')
+      .replace(/\x00UNDERSCORE\x00/g, '_')
+      .replace(/\x00BACKTICK\x00/g, '`')
+      .replace(/\x00OBRACKET\x00/g, '[')
+      .replace(/\x00CBRACKET\x00/g, ']')
+      .replace(/\x00BS\x00/g, '\\')
+  };
+}
+
+export function parseMarkdown(str) {
+  let s = str ?? '';
+  let title = null;
+  // Strip YAML frontmatter at start of file if present (e.g. ---\ntitle: ...\n---)
+  const fmMatch = s.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+  if (fmMatch) {
+    const yaml = fmMatch[1];
+    const titleMatch = yaml.match(/^title:\s*(.+)$/m);
+    if (titleMatch) {
+      title = titleMatch[1].replace(/^["']|["']$/g, '').trim();
+    }
+    s = s.slice(fmMatch[0].length);
+  }
+
+  const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4;
+  const markdownToSegments = (str) => {
+    if (!str) return [];
+    const hasFormatting = /[*_`$\[]/.test(str);
+    if (!hasFormatting) return [{ type: 'text', text: str }];
+
+    const segments = [];
+    const regex = /(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$|\*\*[^*]+?\*\*|__(?:[A-Za-z0-9 _]+?)__|\*[^*\n]+?\*|(?<=\s|^)_(?:[^\s_]+?)_(?=\s|$|[.,;:!?])|`[^`\n]+?`|\[([^\]]+)\]\([^)]+\))/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(str)) !== null) {
+      if (match.index > lastIndex) {
+        const plain = str.slice(lastIndex, match.index);
+        if (plain) segments.push({ type: 'text', text: plain });
+      }
+      const token = match[0];
+      if (token.startsWith('$$') && token.endsWith('$$')) {
+        segments.push({ type: 'math', latex: token.slice(2, -2).trim() });
+      } else if (token.startsWith('$') && token.endsWith('$')) {
+        segments.push({ type: 'math', latex: token.slice(1, -1).trim() });
+      } else if (token.startsWith('**') && token.endsWith('**')) {
+        segments.push({ type: 'text', text: token.slice(2, -2), tf: TF_BOLD });
+      } else if (token.startsWith('__') && token.endsWith('__')) {
+        segments.push({ type: 'text', text: token.slice(2, -2), tf: TF_BOLD });
+      } else if (token.startsWith('*') && token.endsWith('*')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), tf: TF_ITALIC });
+      } else if (token.startsWith('_') && token.endsWith('_')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), tf: TF_ITALIC });
+      } else if (token.startsWith('`') && token.endsWith('`')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), uncontracted: true });
+      } else if (match[2] !== undefined) {
+        segments.push({ type: 'text', text: match[2] });
+      }
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < str.length) {
+      const plain = str.slice(lastIndex);
+      if (plain) segments.push({ type: 'text', text: plain });
+    }
+    const merged = [];
+    for (const seg of segments) {
+      const prev = merged[merged.length - 1];
+      if (prev && prev.type === 'text' && seg.type === 'text' && !prev.tf && !seg.tf && !prev.uncontracted && !seg.uncontracted) {
+        prev.text += seg.text;
+      } else {
+        merged.push(seg);
+      }
+    }
+    return merged;
+  };
+
+  const inline = (t) => {
+    const { masked, restore } = protectMathSpans(t);
+    const stripped = masked
+      .replace(/\*\*(.+?)\*\*/g, '$1').replace(/__(.+?)__/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1').replace(/_(.+?)_/g, '$1')
+      .replace(/`(.+?)`/g, '$1').replace(/\[(.+?)\]\((?:.+?)\)/g, '$1').trim();
+    return restore(stripped);
+  };
+  const blocks = [];
+  let para = [], list = null, quote = [];
+  let inCodeBlock = false, codeBlockLines = [];
+  const flushPara = () => {
+    if (para.length) {
+      const rawChunk = para.join(' ');
+      const segs = markdownToSegments(rawChunk);
+      const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math');
+      if (hasEmphOrMath) {
+        blocks.push({ type: 'para', segments: segs });
+      } else {
+        blocks.push(...textChunkToBlocks(inline(rawChunk)));
+      }
+    }
+    para = [];
+  };
+  const flushList = () => { if (list) { blocks.push(list); list = null; } };
+  const flushQuote = () => {
+    if (quote.length) {
+      blocks.push({ type: 'note', text: quote.join(' ') });
+      quote = [];
+    }
+  };
+  const flushCode = () => {
+    if (codeBlockLines.length) {
+      blocks.push({ type: 'code', text: codeBlockLines.join('\n') });
+      codeBlockLines = [];
+    }
+  };
+  const flush = () => { flushPara(); flushList(); flushQuote(); flushCode(); };
+  for (const raw of s.replace(/\r\n?/g, '\n').split('\n')) {
+    const line = raw.replace(/\s+$/, '');
+    if (line.trim().startsWith('```')) {
+      if (inCodeBlock) {
+        inCodeBlock = false;
+        flushCode();
+      } else {
+        flush();
+        inCodeBlock = true;
+        codeBlockLines = [];
+      }
+      continue;
+    }
+    if (inCodeBlock) {
+      codeBlockLines.push(raw);
+      continue;
+    }
+    if (!line.trim()) { flush(); continue; }
+    let m;
+    if ((m = line.match(/^(#{1,6})\s+(.*)$/))) {
+      flush();
+      const level = m[1].length, text = inline(m[2]);
+      const segs = markdownToSegments(m[2]);
+      const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math');
+      if (level === 1 && !title) {
+        title = text;
+        blocks.push(hasEmphOrMath && segs.length ? { type: 'title', segments: segs, text } : { type: 'title', text });
+      } else {
+        blocks.push(hasEmphOrMath && segs.length ? { type: 'heading', level: Math.min(3, level), segments: segs, text } : { type: 'heading', level: Math.min(3, level), text });
+      }
+    } else if (/^\s*\|?\s*[: -]+(?:\s*\|\s*[: -]+)+\s*\|?\s*$/.test(line)) {
+      flush(); // skip table separator | --- | --- |
+    } else if (/^\s*\|(.+)\|\s*$/.test(line)) {
+      const rowMatch = line.match(/^\s*\|(.+)\|\s*$/);
+      const inner = rowMatch[1];
+      const { masked, restore } = protectMathSpans(inner.replace(/\\\|/g, '\x00PIPE\x00'));
+      const cells = masked.split('|').map((c) => {
+        const restored = restore(c).replace(/\x00PIPE\x00/g, '|');
+        return inline(restored).trim();
+      });
+      if (cells.length && cells.some(Boolean)) {
+        flush();
+        blocks.push({ type: 'para', text: cells.join(' | ') });
+      }
+    } else if ((m = line.match(/^(\s*)(?:([-*+])|(\d+[.)]))\s+(.*)$/))) {
+      flushPara(); flushQuote();
+      const indent = m[1].length;
+      const lvl = Math.min(3, Math.floor(indent / 2));
+      const marker = m[3] || null;
+      const itText = inline(m[4]);
+      const segs = markdownToSegments(m[4]);
+      const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math');
+      const item = (hasEmphOrMath && segs.length) ? { segments: segs, text: itText } : { text: itText };
+      if (marker) item.marker = marker;
+      if (lvl > 0) item.level = lvl;
+      (list ||= { type: 'list', items: [] }).items.push(item);
+    } else if (/^\s*>/.test(line)) {
+      flushPara(); flushList();
+      quote.push(inline(line.replace(/^\s*>\s?/, '')));
+    } else if (para.length > 0 && /^\s*(=+|-+)\s*$/.test(line)) {
+      const hRaw = para.pop();
+      flushPara();
+      const level = line.trim().startsWith('=') ? 1 : 2;
+      const text = inline(hRaw);
+      const segs = splitInlineMath(text);
+      if (level === 1 && !title) {
+        title = text;
+        blocks.push(segs && segs.length ? { type: 'title', segments: segs, text } : { type: 'title', text });
+      } else {
+        blocks.push(segs && segs.length ? { type: 'heading', level, segments: segs, text } : { type: 'heading', level, text });
+      }
+    } else {
+      flushList(); flushQuote();
+      para.push(line);
+    }
+  }
+  flush();
+  return { title, blocks };
+}
+
+// ---------- RTF (best-effort: strip control words/groups, \par -> paragraph) ----------
+// Remove balanced {...} groups whose opening matches `startRe`. A real RTF font/
+// colour table nests per-item subgroups ({\fonttbl{\f0 Arial;}{\f1 ...}}), which a
+// simple [^{}] regex can't span — leaving font names as visible body text.
+function stripRtfGroups(s, startRe) {
+  let m;
+  while ((m = startRe.exec(s))) {
+    let depth = 0, end = s.length;
+    for (let i = m.index; i < s.length; i++) {
+      if (s[i] === '{') depth++;
+      else if (s[i] === '}' && --depth === 0) { end = i + 1; break; }
+    }
+    s = s.slice(0, m.index) + s.slice(end);
+  }
+  return s;
+}
+
+export function parseRtf(str) {
+  let s = str ?? '';
+  s = stripRtfGroups(s, /\{\\\*/);                               // ignorable \* destinations (nested-safe)
+  s = stripRtfGroups(s, /\{\\(?:fonttbl|colortbl|stylesheet|info|generator|pict|header|footer|listtable|listoverridetable)\b/i);
+
+  const CP1252_MAP = {
+    0x80: '\u20AC', 0x82: '\u201A', 0x83: '\u0192', 0x84: '\u201E', 0x85: '\u2026', 0x86: '\u2020', 0x87: '\u2021',
+    0x88: '\u02C6', 0x89: '\u2030', 0x8A: '\u0160', 0x8B: '\u2039', 0x8C: '\u0152', 0x8E: '\u017D',
+    0x91: '\u2018', 0x92: '\u2019', 0x93: '\u201C', 0x94: '\u201D', 0x95: '\u2022', 0x96: '\u2013', 0x97: '\u2014',
+    0x98: '\u02DC', 0x99: '\u2122', 0x9A: '\u0161', 0x9B: '\u203A', 0x9C: '\u0153', 0x9E: '\u017E', 0x9F: '\u0178'
+  };
+  const decodeByte = (b) => (b >= 0x80 && b <= 0x9F) ? (CP1252_MAP[b] || String.fromCharCode(b)) : String.fromCharCode(b);
+
+  let out = '';
+  let uc = 1;
+  let i = 0;
+  while (i < s.length) {
+    if (s[i] === '{' || s[i] === '}') {
+      i++;
+      continue;
+    }
+    if (s[i] === '\\') {
+      i++;
+      if (i >= s.length) break;
+      const nextChar = s[i];
+      if (nextChar === '\\' || nextChar === '{' || nextChar === '}') {
+        out += nextChar;
+        i++;
+      } else if (nextChar === '~') {
+        out += ' ';
+        i++;
+      } else if (nextChar === '_') {
+        out += '-';
+        i++;
+      } else if (nextChar === '\'') {
+        i++;
+        const hex = s.slice(i, i + 2);
+        if (/^[0-9a-fA-F]{2}$/.test(hex)) {
+          out += decodeByte(parseInt(hex, 16));
+          i += 2;
+        }
+      } else if (/[a-zA-Z]/.test(nextChar)) {
+        let word = '';
+        while (i < s.length && /[a-zA-Z]/.test(s[i])) {
+          word += s[i];
+          i++;
+        }
+        let param = '';
+        if (i < s.length && (s[i] === '-' || /[0-9]/.test(s[i]))) {
+          if (s[i] === '-') { param += '-'; i++; }
+          while (i < s.length && /[0-9]/.test(s[i])) {
+            param += s[i];
+            i++;
+          }
+        }
+        if (i < s.length && s[i] === ' ') {
+          i++;
+        }
+
+        if (word === 'uc') {
+          uc = parseInt(param || '1', 10);
+        } else if (word === 'u') {
+          const code = parseInt(param || '0', 10);
+          out += String.fromCodePoint(((code % 65536) + 65536) % 65536);
+          for (let k = 0; k < uc && i < s.length; k++) {
+            if (s[i] === '\\' && s[i + 1] === '\'') {
+              i += 4;
+            } else if (s[i] === '{' || s[i] === '}') {
+              break;
+            } else {
+              i++;
+            }
+          }
+        } else if (word === 'par' || word === 'pard' || word === 'line') {
+          out += '\n';
+        } else if (word === 'tab') {
+          out += ' ';
+        } else if (word === 'ldblquote') {
+          out += '“';
+        } else if (word === 'rdblquote') {
+          out += '”';
+        } else if (word === 'lquote') {
+          out += '‘';
+        } else if (word === 'rquote') {
+          out += '’';
+        } else if (word === 'emdash') {
+          out += '—';
+        } else if (word === 'endash') {
+          out += '–';
+        } else if (word === 'bullet') {
+          out += '• ';
+        } else if (word === 'cell' || word === 'nestcell') {
+          out += ' | ';
+        } else if (word === 'row' || word === 'nestrow') {
+          out += '\n';
+        }
+      } else {
+        i++;
+      }
+    } else {
+      out += s[i];
+      i++;
+    }
+  }
+
+  const paras = out.split('\n').map((t) => t.replace(/[ \t]+/g, ' ').trim()).filter(Boolean);
+  const blocks = [];
+  let title = null;
+  paras.forEach((p, i) => {
+    if (i === 0 && p.length <= 60 && paras.length > 1) { title = p; blocks.push({ type: 'title', text: p }); }
+    else blocks.push(...textChunkToBlocks(p));
+  });
+  return { title, blocks };
+}
+
+// ---------- ODT (OpenDocument text) ----------
+function getOdtText(el) {
+  let res = '';
+  for (const child of el.childNodes || []) {
+    if (child.nodeType === 3) {
+      res += child.nodeValue;
+    } else if (child.nodeType === 1) {
+      const ln = child.localName;
+      if (ln === 's') {
+        const c = parseInt(child.getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'c') || child.getAttribute('text:c') || '1', 10) || 1;
+        res += ' '.repeat(c);
+      } else if (ln === 'tab' || ln === 'line-break') {
+        res += ' ';
+      } else {
+        res += getOdtText(child);
+      }
+    }
+  }
+  return res;
+}
+
+export async function parseOdt(arrayBuffer) {
+  const xml = new TextDecoder().decode(await unzipEntry(arrayBuffer, 'content.xml'));
+  const doc = parseXml(xml);
+  const TEXT = 'urn:oasis:names:tc:opendocument:xmlns:text:1.0';
+  const body = doc.getElementsByTagNameNS('*', 'text')[0] || doc.documentElement;
+  const blocks = [];
+  let title = null;
+
+  function parseOdtList(listEl, lvl = 0) {
+    const items = [];
+    for (const child of listEl.childNodes || []) {
+      if (child.nodeType !== 1 || (child.localName !== 'list-item' && child.tagName !== 'text:list-item')) continue;
+      let directText = '';
+      const nestedLists = [];
+      for (const c of child.childNodes || []) {
+        if (c.nodeType === 3) {
+          directText += c.nodeValue;
+        } else if (c.nodeType === 1) {
+          const cLn = c.localName;
+          if (cLn === 'list') {
+            nestedLists.push(c);
+          } else {
+            directText += getOdtText(c) + ' ';
+          }
+        }
+      }
+      directText = directText.replace(/\s+/g, ' ').trim();
+      if (directText) {
+        const it = { text: directText };
+        if (lvl > 0) it.level = lvl;
+        items.push(it);
+      }
+      for (const nl of nestedLists) {
+        items.push(...parseOdtList(nl, lvl + 1));
+      }
+    }
+    return items;
+  }
+
+  const walk = (el) => {
+    for (const node of el.childNodes || []) {
+      if (node.nodeType !== 1) continue;
+      const ln = node.localName;
+      const text = getOdtText(node).replace(/\s+/g, ' ').trim();
+      if (ln === 'h') {
+        if (!text) continue;
+        const lvl = Number(node.getAttributeNS(TEXT, 'outline-level') || 1);
+        blocks.push({ type: 'heading', level: Math.min(3, lvl || 1), text });
+      } else if (ln === 'p') {
+        if (!text) continue;
+        const style = (node.getAttributeNS(TEXT, 'style-name') || '').toLowerCase();
+        if (/title/.test(style) && !title) { title = text; blocks.push({ type: 'title', text }); }
+        else blocks.push({ type: 'para', text });
+      } else if (ln === 'list') {
+        const items = parseOdtList(node, 0);
+        if (items.length) blocks.push({ type: 'list', items });
+      } else if (ln === 'table') {
+        const headers = [];
+        const rows = [];
+        for (const child of node.childNodes || []) {
+          if (child.nodeType !== 1) continue;
+          if (child.localName === 'table-header-rows') {
+            for (const tr of child.childNodes || []) {
+              if (tr.nodeType !== 1 || tr.localName !== 'table-row') continue;
+              const cells = [];
+              for (const tc of tr.childNodes || []) {
+                if (tc.nodeType !== 1 || tc.localName !== 'table-cell') continue;
+                cells.push(getOdtText(tc).replace(/\s+/g, ' ').trim());
+              }
+              if (cells.length) headers.push(...cells);
+            }
+          } else if (child.localName === 'table-row') {
+            const cells = [];
+            for (const tc of child.childNodes || []) {
+              if (tc.nodeType !== 1 || tc.localName !== 'table-cell') continue;
+              cells.push(getOdtText(tc).replace(/\s+/g, ' ').trim());
+            }
+            if (cells.length) rows.push(cells);
+          }
+        }
+        if (headers.length || rows.length) {
+          blocks.push({ type: 'table', headers, rows });
+        }
+      } else if (node.childNodes?.length) {
+        walk(node);
+      }
+    }
+  };
+  walk(body);
+  return { title, blocks };
+}
+
+// ---------- EPUB (spine of XHTML) ----------
+export async function parseEpub(arrayBuffer) {
+  const dec = new TextDecoder();
+  const container = dec.decode(await unzipEntry(arrayBuffer, 'META-INF/container.xml'));
+  const cdoc = parseXml(container);
+  const opfPath = cdoc.getElementsByTagNameNS('*', 'rootfile')[0]?.getAttribute('full-path');
+  if (!opfPath) throw new Error('epub: container has no rootfile');
+  const opf = dec.decode(await unzipEntry(arrayBuffer, opfPath));
+  const odoc = parseXml(opf);
+  const base = opfPath.includes('/') ? opfPath.slice(0, opfPath.lastIndexOf('/') + 1) : '';
+  const manifest = {};
+  for (const it of odoc.getElementsByTagNameNS('*', 'item')) {
+    manifest[it.getAttribute('id')] = {
+      href: it.getAttribute('href'),
+      props: (it.getAttribute('properties') || '').toLowerCase(),
+      mediaType: (it.getAttribute('media-type') || '').toLowerCase()
+    };
+  }
+  const title = odoc.getElementsByTagNameNS('*', 'title')[0]?.textContent?.trim() || null;
+  const blocks = [];
+  for (const ref of odoc.getElementsByTagNameNS('*', 'itemref')) {
+    const linear = ref.getAttribute('linear');
+    if (linear === 'no') continue;
+    const item = manifest[ref.getAttribute('idref')];
+    if (!item || !item.href) continue;
+    if (item.props.includes('nav')) continue;
+    const targetPath = base + item.href.split('#')[0];
+    let entryBytes = null;
+    try {
+      entryBytes = await unzipEntry(arrayBuffer, targetPath);
+    } catch {
+      try {
+        entryBytes = await unzipEntry(arrayBuffer, decodeURIComponent(targetPath));
+      } catch { /* skip missing part */ }
+    }
+    if (entryBytes) {
+      const html = dec.decode(entryBytes);
+      blocks.push(...parseHtml(html).blocks);
+    }
+  }
+  return { title, blocks };
+}
+
+// ---------- DAISY 3 / NIMAS DTBook XML ----------
+export function parseDtbook(xmlStr) {
+  const doc = parseXml(xmlStr);
+  const root = doc.documentElement;
+  const rootTag = (root?.localName || root?.tagName || '').toLowerCase();
+  const metadata = {};
+  if (root?.getAttribute) {
+    const lang = root.getAttribute('xml:lang') || root.getAttribute('lang');
+    if (lang) metadata.lang = lang;
+  }
+  const doctitle = doc.getElementsByTagName ? (doc.getElementsByTagName('doctitle')[0] || doc.getElementsByTagName('title')[0]) : null;
+  let title = doctitle?.textContent?.replace(/\s+/g, ' ').trim() || null;
+  if (doc.getElementsByTagName) {
+    const metaTags = [...doc.getElementsByTagName('meta')];
+    for (const m of metaTags) {
+      const name = m.getAttribute ? m.getAttribute('name') : null;
+      const content = m.getAttribute ? (m.getAttribute('content') || '').trim() : '';
+      if (!name || !content) continue;
+      if (name === 'dtb:uid') metadata.uid = content;
+      else if (name === 'dc:Title') {
+        metadata.title = content;
+        if (!title) title = content;
+      } else if (name === 'dc:Publisher') metadata.publisher = content;
+      else if (name === 'dc:Date') metadata.date = content;
+    }
+  }
+  const blocks = [];
+
+  if (rootTag === 'math' || rootTag.endsWith(':math')) {
+    blocks.push({ type: 'math', mathml: mathOuterXml(root) });
+    return { title: null, blocks };
+  }
+
+  const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4;
+
+  const BLOCK_TAGS = new Set(['p', 'div', 'li', 'lic', 'tr', 'td', 'th', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'sidebar', 'note', 'caption', 'prodnote']);
+  function getCleanText(el) {
+    if (!el) return '';
+    let text = '';
+    function collect(node) {
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType === 3) {
+          text += child.nodeValue || '';
+        } else if (child.nodeType === 1) {
+          const tag = (child.localName || child.tagName || '').toLowerCase();
+          const isBlock = BLOCK_TAGS.has(tag);
+          if (isBlock) text += ' ';
+          collect(child);
+          if (isBlock) text += ' ';
+        }
+      }
+    }
+    collect(el);
+    return text.replace(/\s+/g, ' ').trim();
+  }
+
+  function inlineSegments(el) {
+    const segments = [];
+    let text = '';
+    let curTf = 0;
+    let curUnc = false;
+
+    function flush() {
+      if (text) {
+        const seg = { type: 'text', text };
+        if (curTf) seg.tf = curTf;
+        if (curUnc) seg.uncontracted = true;
+        segments.push(seg);
+        text = '';
+      }
+    }
+
+    function walkInline(node, parentTf, parentUnc) {
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType === 3) {
+          let val = child.nodeValue;
+          if (val) {
+            if (parentTf !== curTf || parentUnc !== curUnc) {
+              flush();
+              curTf = parentTf;
+              curUnc = parentUnc;
+            }
+            text += val;
+          }
+        } else if (child.nodeType === 1) {
+          const tag = (child.localName || child.tagName || '').toLowerCase();
+          const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+          if (tag === 'list' || tag === 'ul' || tag === 'ol' || tag === 'table' || tag === 'sidebar') continue;
+          let nextTf = parentTf;
+          let nextUnc = parentUnc;
+
+          if (tag === 'lic' && text && !text.endsWith(' ')) {
+            flush();
+            text += ' ';
+          }
+
+          if (tag === 'b' || tag === 'strong') nextTf |= TF_BOLD;
+          else if (tag === 'i' || tag === 'em') nextTf |= TF_ITALIC;
+          else if (tag === 'u' || cls.includes('underline')) nextTf |= TF_UNDERLINE;
+          else if (tag === 'code' || cls.includes('uncontracted') || cls.includes('bai-trans4')) nextUnc = true;
+          else if (tag === 'br') {
+            flush();
+            text += '\n';
+            continue;
+          } else if (tag === 'math' || tag.endsWith(':math')) {
+            flush();
+            const mathml = mathOuterXml(child);
+            const alttext = child.getAttribute ? child.getAttribute('alttext') : null;
+            let latex = alttext || null;
+            const ann = child.getElementsByTagName ? [...child.getElementsByTagName('annotation'), ...child.getElementsByTagName('m:annotation')] : [];
+            const texAnn = ann.find(a => (a.getAttribute ? (a.getAttribute('encoding') || '') : '').includes('tex'));
+            if (texAnn && texAnn.textContent) latex = texAnn.textContent.trim();
+            const mathSeg = { type: 'math', mathml };
+            if (latex) mathSeg.latex = latex;
+            segments.push(mathSeg);
+            continue;
+          }
+          walkInline(child, nextTf, nextUnc);
+        }
+      }
+    }
+
+    walkInline(el, 0, false);
+    flush();
+    return segments;
+  }
+
+  function parseSingleList(child, listLvl = 0, targetBlocks = blocks) {
+    const listClass = (child.getAttribute ? child.getAttribute('class') : '') || '';
+    const listTypeAttr = (child.getAttribute ? child.getAttribute('type') : '') || '';
+    const isOl = listTypeAttr.toLowerCase() === 'ordered' || listTypeAttr.toLowerCase() === 'ol' || (child.getAttribute && child.getAttribute('enum') != null);
+    
+    const isToc = listClass.toLowerCase().includes('toc');
+    const items = [];
+    let counter = 1;
+    let detectedKind = isToc ? 'toc' : null;
+    let lastTopItem = null;
+
+    for (let li = child.firstChild; li; li = li.nextSibling) {
+      if (li.nodeType !== 1) continue;
+      const liTag = (li.localName || li.tagName || '').toLowerCase();
+      if (liTag !== 'li' && liTag !== 'item') continue;
+
+      const liClass = (li.getAttribute ? li.getAttribute('class') : '') || '';
+      const liLevelAttr = li.getAttribute ? li.getAttribute('level') : null;
+      const liLevel = liLevelAttr != null ? parseInt(liLevelAttr, 10) || 0 : 0;
+      const effLevel = liLevel || listLvl;
+
+      if (liClass.includes('bai-toc-center')) {
+        const t = getCleanText(li);
+        if (t) targetBlocks.push({ type: 'heading', level: 1, text: t });
+        continue;
+      }
+
+      if (liClass.includes('toc-page') || liClass.includes('bai-toc-page')) {
+        detectedKind = 'toc';
+        const pVal = getCleanText(li);
+        if (pVal) {
+          if (lastTopItem) {
+            lastTopItem.page = pVal;
+          } else if (items.length > 0) {
+            items[items.length - 1].page = pVal;
+          }
+        }
+        continue;
+      }
+
+      const childLists = [];
+      for (let c = li.firstChild; c; c = c.nextSibling) {
+        if (c.nodeType === 1 && (c.localName || c.tagName || '').toLowerCase() === 'list') {
+          childLists.push(c);
+        }
+      }
+
+      if (liClass.includes('toc-entry') || liClass.includes('bai-toc-entry') || isToc) {
+        detectedKind = 'toc';
+        let itemText = '';
+        let pageVal = null;
+        let textTargetNode = li;
+        let textEl = null;
+        
+        if (li.getElementsByTagName) {
+          const lics = [...li.getElementsByTagName('lic')];
+          textEl = lics.find(l => ((l.getAttribute && l.getAttribute('class')) || '').includes('toc-text') || ((l.getAttribute && l.getAttribute('class')) || '').includes('bai-toc-text'));
+          const pageEl = lics.find(l => ((l.getAttribute && l.getAttribute('class')) || '').includes('toc-page') || ((l.getAttribute && l.getAttribute('class')) || '').includes('bai-toc-page'));
+          if (textEl) {
+            itemText = getCleanText(textEl);
+            textTargetNode = textEl;
+          }
+          if (pageEl) pageVal = getCleanText(pageEl);
+        }
+
+        const segs = inlineSegments(textTargetNode);
+        
+        if (!itemText) {
+          const directText = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim();
+          const pageMatch = directText.match(/\s+(\d+|[ivxlcdm]+)$/i);
+          if (pageMatch) {
+            itemText = directText.slice(0, pageMatch.index).trim();
+            pageVal = pageMatch[1];
+          } else {
+            itemText = directText || getCleanText(li);
+          }
+        }
+
+        if (!textEl && pageVal && segs.length > 0) {
+          const lastSeg = segs[segs.length - 1];
+          if (lastSeg.type === 'text' && lastSeg.text) {
+            const re = new RegExp(`\\s*${pageVal}\\s*$`);
+            lastSeg.text = lastSeg.text.replace(re, '');
+            if (!lastSeg.text) {
+              segs.pop();
+            }
+          }
+        }
+        const item = { text: itemText };
+        if (pageVal) item.page = pageVal;
+        if (effLevel > 0) item.level = effLevel;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        items.push(item);
+        lastTopItem = item;
+
+        for (const cl of childLists) {
+          const subItems = parseSingleList(cl, effLevel + 1, null);
+          items.push(...subItems);
+        }
+        continue;
+      }
+
+      if (liClass.includes('bai-exercise')) {
+        detectedKind = 'exercise';
+        const segs = inlineSegments(li);
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li);
+        const item = { text: t };
+        if (effLevel > 0) item.level = effLevel;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        items.push(item);
+        lastTopItem = item;
+
+        for (const cl of childLists) {
+          const subItems = parseSingleList(cl, effLevel + 1, null);
+          items.push(...subItems);
+        }
+        continue;
+      }
+
+      if (liClass.includes('bai-index')) {
+        detectedKind = 'index';
+        const segs = inlineSegments(li);
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li);
+        const item = { text: t };
+        if (effLevel > 0) item.level = effLevel;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        items.push(item);
+        lastTopItem = item;
+
+        for (const cl of childLists) {
+          const subItems = parseSingleList(cl, effLevel + 1, null);
+          items.push(...subItems);
+        }
+        continue;
+      }
+
+      const segs = inlineSegments(li);
+      let directText = segs.map(s => s.text || (s.latex ? s.latex : (s.mathml ? s.mathml.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : ''))).join('').replace(/\s+/g, ' ').trim();
+      if (!directText) directText = getCleanText(li);
+
+      const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+      if (directText) {
+        const item = (hasEmphOrMath && segs.length > 0 && childLists.length === 0) ? { segments: segs, text: directText } : { text: directText };
+        if (isOl) {
+          item.marker = `${counter}.`;
+          counter++;
+        }
+        if (effLevel > 0) item.level = effLevel;
+        items.push(item);
+        lastTopItem = item;
+      }
+
+      for (const cl of childLists) {
+        const subItems = parseSingleList(cl, effLevel + 1, null);
+        items.push(...subItems);
+      }
+    }
+
+    if (items.length && targetBlocks) {
+      const listBlock = { type: 'list', items };
+      if (detectedKind) listBlock.kind = detectedKind;
+      targetBlocks.push(listBlock);
+    }
+    return items;
+  }
+
+  function parseSidebar(sidebarEl, targetBlocks = blocks) {
+    let boxTitle = null;
+    const innerBlocks = [];
+
+    for (let c = sidebarEl.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType !== 1) continue;
+      const cTag = (c.localName || c.tagName || '').toLowerCase();
+      if (cTag === 'hd' || /^h[1-6]$/.test(cTag)) {
+        const hdText = getCleanText(c);
+        if (!boxTitle) {
+          boxTitle = hdText;
+        }
+        const segs = inlineSegments(c);
+        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        innerBlocks.push(hasEmph && segs.length ? { type: 'heading', level: 2, text: hdText, segments: segs } : { type: 'heading', level: 2, text: hdText });
+      } else if (cTag === 'p' || cTag === 'line') {
+        const segs = inlineSegments(c);
+        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (t) {
+          innerBlocks.push(hasEmph && segs.length ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t });
+        }
+      } else if (cTag === 'list') {
+        parseSingleList(c, 0, innerBlocks);
+      } else if (cTag === 'table') {
+        parseTable(c, innerBlocks);
+      } else if (cTag === 'note' || cTag === 'blockquote') {
+        const t = getCleanText(c);
+        if (t) innerBlocks.push({ type: 'note', text: t });
+      }
+    }
+
+    const box = { type: 'box' };
+    if (boxTitle) box.title = boxTitle;
+    if (innerBlocks.length) box.blocks = innerBlocks;
+    else {
+      const fullText = getCleanText(sidebarEl);
+      if (fullText) box.blocks = [{ type: 'para', text: fullText }];
+    }
+    targetBlocks.push(box);
+  }
+
+  function parseTable(tableEl, targetBlocks = blocks) {
+    let tabletnText = null;
+    let captionText = null;
+
+    for (let c = tableEl.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType !== 1) continue;
+      const cTag = (c.localName || c.tagName || '').toLowerCase();
+      if (cTag === 'tabletn' || cTag.includes('tabletn')) {
+        tabletnText = getCleanText(c);
+      } else if (cTag === 'caption' || cTag === 'figcaption') {
+        captionText = getCleanText(c);
+      }
+    }
+
+    if (tabletnText) {
+      targetBlocks.push({ type: 'note', kind: 'tabletn', text: tabletnText });
+    }
+    if (captionText) {
+      targetBlocks.push({ type: 'caption', text: captionText });
+    }
+
+    const cls = tableEl.getAttribute ? (tableEl.getAttribute('class') || '') : '';
+    let format = null;
+    if (cls.includes('bana-listed') || cls.includes('listed')) format = 'listed';
+    else if (cls.includes('bana-spatial') || cls.includes('spatial')) format = 'spatial';
+
+    const trs = tableEl.getElementsByTagName ? [...tableEl.getElementsByTagName('tr')] : [];
+    const headers = [];
+    const rows = [];
+
+    const thead = tableEl.getElementsByTagName ? tableEl.getElementsByTagName('thead')[0] : null;
+    let headerRowFound = false;
+
+    if (thead) {
+      const theadTrs = [...thead.getElementsByTagName('tr')];
+      if (theadTrs.length) {
+        for (let c = theadTrs[0].firstChild; c; c = c.nextSibling) {
+          if (c.nodeType !== 1) continue;
+          const tag = (c.localName || c.tagName || '').toLowerCase();
+          if (tag === 'th' || tag === 'td') {
+            headers.push(getCleanText(c));
+          }
+        }
+        headerRowFound = true;
+      }
+    }
+
+    for (let i = 0; i < trs.length; i++) {
+      const tr = trs[i];
+      if (thead && tr.parentNode === thead) continue;
+      const cells = [];
+      for (let c = tr.firstChild; c; c = c.nextSibling) {
+        if (c.nodeType !== 1) continue;
+        const tag = (c.localName || c.tagName || '').toLowerCase();
+        if (tag === 'th' || tag === 'td') {
+          cells.push(c);
+        }
+      }
+
+      if (!headerRowFound && cells.length && cells.every(c => (c.localName || c.tagName || '').toLowerCase() === 'th')) {
+        headers.push(...cells.map(getCleanText));
+        headerRowFound = true;
+      } else {
+        const rowCells = [];
+        for (const cell of cells) {
+          const cellText = getCleanText(cell);
+          const colspan = parseInt(cell.getAttribute ? (cell.getAttribute('colspan') || '1') : '1', 10) || 1;
+          rowCells.push(cellText);
+          for (let k = 1; k < colspan; k++) rowCells.push('');
+        }
+        if (rowCells.some(Boolean)) rows.push(rowCells);
+      }
+    }
+
+    if (headers.length || rows.length) {
+      const tblBlock = { type: 'table', headers, rows };
+      if (format) {
+        tblBlock.format = format;
+        tblBlock.style = `table-${format}`;
+      }
+      targetBlocks.push(tblBlock);
+    }
+  }
+
+  function walk(node) {
+    for (let child = node.firstChild; child; child = child.nextSibling) {
+      if (child.nodeType !== 1) continue;
+      const tag = (child.localName || child.tagName || '').toLowerCase();
+      if (tag === 'doctitle' || tag === 'docauthor' || tag === 'head') continue;
+      
+      if (/^h[1-6]$/.test(tag) || tag === 'hd' || tag === 'bridgehead') {
+        const lvl = tag === 'bridgehead' ? 2 : (tag === 'hd' ? 2 : Math.min(3, parseInt(tag.slice(1), 10) || 1));
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(child);
+        if (t) {
+          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'heading', level: lvl, segments: segs, text: t });
+          else blocks.push({ type: 'heading', level: lvl, text: t });
+        }
+      } else if (tag === 'byline') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'attribution', text: t });
+      } else if (tag === 'caption' || tag === 'figcaption') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'caption', text: t });
+      } else if (tag === 'tabletn' || tag === 'bai-tabletn') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'note', kind: 'tabletn', text: t });
+      } else if (tag === 'sidebar') {
+        parseSidebar(child);
+      } else if (tag === 'table') {
+        parseTable(child);
+      } else if (tag === 'math' || tag.endsWith(':math')) {
+        const mathml = mathOuterXml(child);
+        const alttext = child.getAttribute ? child.getAttribute('alttext') : null;
+        let latex = alttext || null;
+        const ann = child.getElementsByTagName ? [...child.getElementsByTagName('annotation'), ...child.getElementsByTagName('m:annotation')] : [];
+        const texAnn = ann.find(a => (a.getAttribute ? (a.getAttribute('encoding') || '') : '').includes('tex'));
+        if (texAnn && texAnn.textContent) latex = texAnn.textContent.trim();
+        const mathBlock = { type: 'math', mathml };
+        if (latex) mathBlock.latex = latex;
+        blocks.push(mathBlock);
+      } else if (tag === 'line' || tag === 'ln') {
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(child);
+        if (t) {
+          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', segments: segs, text: t });
+          else blocks.push({ type: 'para', text: t });
+        }
+      } else if (tag === 'imggroup') {
+        const img = child.getElementsByTagName ? (child.getElementsByTagName('img')[0] || child.getElementsByTagName('image')[0]) : null;
+        const alt = (img?.getAttribute ? img.getAttribute('alt') : '') || (child.getAttribute ? child.getAttribute('alt') : '') || '';
+        const caption = child.getElementsByTagName ? (child.getElementsByTagName('caption')[0] || child.getElementsByTagName('prodnote')[0]) : null;
+        const capText = caption ? getCleanText(caption) : '';
+        const noteText = alt ? ('Image: ' + alt + (capText ? ' - ' + capText : '')) : (capText ? 'Image: ' + capText : 'Image');
+        blocks.push({ type: 'note', kind: 'image', text: noteText });
+        if (img) {
+          const src = (img.getAttribute ? img.getAttribute('src') : '') || '';
+          blocks.push({ type: 'graphic', src, alt });
+        }
+      } else if (tag === 'img' || tag === 'image') {
+        const src = (child.getAttribute ? child.getAttribute('src') : '') || '';
+        const alt = (child.getAttribute ? child.getAttribute('alt') : '') || '';
+        blocks.push({ type: 'graphic', src, alt });
+      } else if (tag === 'p') {
+        const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+        const levelAttr = child.getAttribute ? child.getAttribute('level') : null;
+        const pLevel = levelAttr != null ? parseInt(levelAttr, 10) || 0 : 0;
+        
+        const imgs = child.getElementsByTagName ? [...child.getElementsByTagName('img'), ...child.getElementsByTagName('image')] : [];
+        for (const im of imgs) {
+          const src = (im.getAttribute ? im.getAttribute('src') : '') || '';
+          const alt = (im.getAttribute ? im.getAttribute('alt') : '') || '';
+          blocks.push({ type: 'graphic', src, alt });
+        }
+
+        let directPText = '';
+        for (let cn = child.firstChild; cn; cn = cn.nextSibling) {
+          if (cn.nodeType === 3) directPText += cn.nodeValue;
+          else if (cn.nodeType === 1) {
+            const cnTag = (cn.localName || cn.tagName || '').toLowerCase();
+            if (cnTag === 'img' || cnTag === 'image') continue;
+            directPText += cn.textContent;
+          }
+        }
+        directPText = directPText.replace(/\s+/g, ' ').trim();
+
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        if (cls.includes('bai-play')) {
+          blocks.push({ type: 'play', subtype: 'prose', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-verse')) {
+          blocks.push({ type: 'play', subtype: 'verse', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-stage')) {
+          blocks.push({ type: 'stage', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (directPText) {
+          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', segments: segs, text: directPText });
+          else blocks.push({ type: 'para', text: directPText });
+        }
+      } else if (tag === 'list') {
+        parseSingleList(child);
+      } else if (tag === 'note') {
+        const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+        const t = getCleanText(child);
+        if (t) {
+          if (cls.includes('footnote') || (child.getAttribute && child.getAttribute('role') === 'doc-footnote')) {
+            blocks.push({ type: 'footnote', text: t });
+          } else {
+            blocks.push({ type: 'note', text: t });
+          }
+        }
+      } else if (tag === 'blockquote' || tag === 'annotation' || tag === 'prodnote') {
+        const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+        const t = getCleanText(child);
+        if (t) {
+          if (cls.includes('tabletn')) {
+            blocks.push({ type: 'note', kind: 'tabletn', text: t });
+          } else {
+            blocks.push({ type: 'note', text: t });
+          }
+        }
+      } else if (tag === 'pagenum' || tag === 'print-page') {
+        const pVal = getCleanText(child) || (child.getAttribute ? child.getAttribute('page') : '') || (child.getAttribute ? child.getAttribute('id') : '') || '';
+        if (pVal) blocks.push({ type: 'pagenum', text: pVal });
+      } else if (tag === 'page') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'para', text: t });
+      } else {
+        const hasElementChild = Array.from(child.childNodes || []).some((c) => c.nodeType === 1);
+        if (hasElementChild) {
+          walk(child);
+        } else {
+          const t = getCleanText(child);
+          if (t) blocks.push({ type: 'para', text: t });
+        }
+      }
+    }
+  }
+
+  const book = doc.getElementsByTagName('book')[0] || doc.documentElement;
+  walk(book);
+  if (!title && blocks.length && blocks[0].type === 'heading') {
+    title = blocks[0].text;
+  }
+  const result = { title, blocks };
+  if (Object.keys(metadata).length > 0) result.metadata = metadata;
+  return result;
+}
+
+export const parseNimasXml = parseDtbook;
+
+export async function parseNimasZip(arrayBuffer) {
+  const dv = new DataView(arrayBuffer);
+  const u8 = new Uint8Array(arrayBuffer);
+  let eocd = -1;
+  for (let i = u8.length - 22; i >= 0; i--) {
+    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error('not a zip (no EOCD)');
+  const count = dv.getUint16(eocd + 10, true);
+  let off = dv.getUint32(eocd + 16, true);
+  const dec = new TextDecoder();
+  const xmlEntries = [];
+  let opfEntry = null;
+  for (let n = 0; n < count; n++) {
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    const nameLen = dv.getUint16(off + 28, true);
+    const extraLen = dv.getUint16(off + 30, true);
+    const commentLen = dv.getUint16(off + 32, true);
+    const name = dec.decode(u8.subarray(off + 46, off + 46 + nameLen));
+    if (name.endsWith('.opf')) opfEntry = name;
+    else if (name.endsWith('.xml') && !name.includes('container.xml')) xmlEntries.push(name);
+    off += 46 + nameLen + extraLen + commentLen;
+  }
+  let targetXml = xmlEntries[0];
+  if (opfEntry) {
+    try {
+      const opfBytes = await unzipEntry(arrayBuffer, opfEntry);
+      const opfDoc = parseXml(dec.decode(opfBytes));
+      for (const it of opfDoc.getElementsByTagNameNS('*', 'item')) {
+        const mediaType = (it.getAttribute('media-type') || '').toLowerCase();
+        const href = it.getAttribute('href') || '';
+        if (mediaType.includes('dtbook') || mediaType.includes('xml') || href.endsWith('.xml')) {
+          const base = opfEntry.includes('/') ? opfEntry.slice(0, opfEntry.lastIndexOf('/') + 1) : '';
+          targetXml = base + href;
+          break;
+        }
+      }
+    } catch { /* fallback to first xml entry */ }
+  }
+  if (!targetXml) throw new Error('nimas zip: no XML content document found');
+  const xmlBytes = await unzipEntry(arrayBuffer, targetXml);
+  return parseDtbook(dec.decode(xmlBytes));
+}
+
+// Formats that need the raw bytes (ArrayBuffer) rather than text.
+export const BINARY_EXTS = new Set(['docx', 'odt', 'epub', 'zip', 'ebrl', 'ebraille']);
+
+// dispatch by filename / extension
+export async function parseFile(name, dataOrText) {
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if (ext === 'xml' || ext === 'nimas' || ext === 'dtbook' || (typeof dataOrText === 'string' && (dataOrText.includes('<dtbook') || dataOrText.includes('xmlns="http://www.daisy.org/z3986/2005/dtbook/')))) {
+    return parseDtbook(dataOrText);
+  }
+  switch (ext) {
+    case 'docx': return parseDocx(dataOrText);
+    case 'odt':  return parseOdt(dataOrText);
+    case 'epub':
+    case 'ebrl':
+    case 'ebraille': return parseEpub(dataOrText);
+    case 'zip':  return parseNimasZip(dataOrText);
+    case 'html': case 'htm': case 'xhtml': return parseHtml(dataOrText);
+    case 'md': case 'markdown': return parseMarkdown(dataOrText);
+    case 'rtf':  return parseRtf(dataOrText);
+    default:     return parseText(dataOrText);                   // txt / fallback
+  }
+}
+

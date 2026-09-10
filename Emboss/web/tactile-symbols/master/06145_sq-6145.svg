@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shared row and column gate lines with bold 4.5px strokes -->
+  <line x1="18" y1="38" x2="82" y2="38" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="18" y1="62" x2="82" y2="62" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="38" y1="18" x2="38" y2="82" stroke="#ca8a04" stroke-width="5.0"/>
+  <line x1="62" y1="18" x2="62" y2="82" stroke="#ca8a04" stroke-width="5.0"/>
+  <!-- Quantum dots at intersections with bold 4.0px strokes -->
+  <circle cx="38" cy="38" r="5" fill="#ef4444"/>
+  <circle cx="62" cy="38" r="5" fill="#ef4444"/>
+  <circle cx="38" cy="62" r="5" fill="#ef4444"/>
+  <circle cx="62" cy="62" r="5" fill="#ef4444"/>
+</svg>

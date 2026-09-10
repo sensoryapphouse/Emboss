@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Seabed sediment baseline with bold 4.5px stroke -->
+  <line x1="16" y1="74" x2="84" y2="74" stroke="#1e293b" stroke-width="5.5"/>
+  <!-- Solid white methane clathrate ice mound with bold 4.5px stroke -->
+  <polygon points="26,74 42,42 62,42 74,74" fill="#ffffff" stroke="#0284c7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Chemosynthetic tube worm cluster growing on edge with bold 4.0px strokes -->
+  <line x1="66" y1="44" x2="78" y2="28" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="72" y1="52" x2="82" y2="38" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

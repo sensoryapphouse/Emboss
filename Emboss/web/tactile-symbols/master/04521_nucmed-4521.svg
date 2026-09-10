@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tumor cell surface membrane with specific receptor lock with bold 4.5px stroke -->
+  <line x1="20" y1="74" x2="80" y2="74" stroke="#000000" stroke-width="5.0"/>
+  <rect x="42" y="62" width="16" height="12" rx="2" fill="#0284c7"/>
+  <!-- Targeting ligand molecule docked into receptor with bold 4.5px stroke -->
+  <polygon points="50,38 42,62 58,62" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Therapeutic Lutetium-177 beta emitter / diagnostic Ga-68 payload top with bold 4.5px stroke -->
+  <circle cx="50" cy="28" r="8" fill="#ef4444"/>
+</svg>

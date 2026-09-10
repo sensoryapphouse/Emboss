@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Isthmus S-curve with stepped lock chambers -->
+  <path d="M 22 26 L 42 42 L 58 58 L 78 74" fill="none" stroke="#0284c7" stroke-width="5.5" stroke-linecap="round"/>
+  <rect x="36" y="36" width="12" height="12" fill="#ffffff" stroke="#000000" stroke-width="3.0"/>
+  <rect x="52" y="52" width="12" height="12" fill="#ffffff" stroke="#000000" stroke-width="3.0"/>
+</svg>

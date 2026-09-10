@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cauliflower-textured cerebellum body with bold 4.5px stroke -->
+  <path d="M 24 50 C 24 30 50 24 74 36 C 82 54 78 74 58 76 C 36 78 24 68 24 50 Z" fill="#fed7aa" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Branching Arbor Vitae tree of life folia bands with bold 4.0px strokes -->
+  <path d="M 36 50 C 48 44 60 48 70 42" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 44 58 C 54 54 64 60 72 56" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

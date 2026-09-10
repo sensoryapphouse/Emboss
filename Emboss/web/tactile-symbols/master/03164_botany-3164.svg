@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bivalve clam-like hinged trap lobes with bold 4.5px stroke -->
+  <path d="M 24 50 C 24 28 76 28 76 50 C 76 72 24 72 24 50 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Interlocking marginal perimeter teeth spines with bold 3.5px strokes -->
+  <line x1="32" y1="28" x2="32" y2="18" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="24" x2="50" y2="14" stroke="#000000" stroke-width="4.0"/>
+  <line x1="68" y1="28" x2="68" y2="18" stroke="#000000" stroke-width="4.0"/>
+</svg>

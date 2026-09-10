@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Biased gold micro-electrodes on LT-GaAs triggered by femtosecond laser with bold 4.5px strokes -->
+  <line x1="20" y1="44" x2="44" y2="44" stroke="#ca8a04" stroke-width="5.5"/>
+  <line x1="56" y1="44" x2="80" y2="44" stroke="#ca8a04" stroke-width="5.5"/>
+  <circle cx="50" cy="44" r="5" fill="#ef4444"/>
+  <path d="M 50 44 L 50 76" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

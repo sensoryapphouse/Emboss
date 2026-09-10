@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long carbon shaft shaft diagonal -->
+  <line x1="20" y1="80" x2="62" y2="38" stroke="#1e293b" stroke-width="6.0"/>
+  <!-- Cleaver / hatchet spoon spoon blade top right -->
+  <polygon points="62,38 78,22 84,34 68,50" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

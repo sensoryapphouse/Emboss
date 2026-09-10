@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Main C-shaped bass clef arc -->
+  <path d="M 36 40 C 36 24 66 24 66 44 C 66 64 42 78 30 78" fill="none" stroke="#ef4444" stroke-width="6.5" stroke-linecap="round"/>
+  <!-- Top anchor start dot -->
+  <circle cx="36" cy="40" r="7" fill="#ef4444"/>
+  <!-- Two F-line bounding dots right -->
+  <circle cx="76" cy="38" r="4.5" fill="#000000"/>
+  <circle cx="76" cy="54" r="4.5" fill="#000000"/>
+</svg>

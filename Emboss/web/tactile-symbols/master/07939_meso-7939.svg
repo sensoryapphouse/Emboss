@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ferromagnetic source/drain with top gate controlling spin precession in 2DEG channel with bold 4.5px strokes -->
+  <rect x="18" y="44" width="16" height="20" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <rect x="66" y="44" width="16" height="20" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <line x1="34" y1="54" x2="66" y2="54" stroke="#0284c7" stroke-width="5.0"/>
+  <rect x="42" y="24" width="16" height="10" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+</svg>

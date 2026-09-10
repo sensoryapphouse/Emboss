@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Conducting sphere with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="30" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Coupled toroidal and poloidal velocity flow streamlines with bold 4.5px strokes -->
+  <ellipse cx="50" cy="50" rx="20" ry="8" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <ellipse cx="50" cy="50" rx="8" ry="20" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

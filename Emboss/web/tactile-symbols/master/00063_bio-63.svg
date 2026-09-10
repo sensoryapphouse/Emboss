@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cerebrum outer boundary -->
+  <path d="M 24 60 C 14 50 18 28 36 20 C 56 12 78 18 84 36 C 88 48 82 62 70 66 C 60 66 58 60 50 60 C 38 60 30 66 24 60 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Broad cerebral sulcus fissure folds with 8mm clearance -->
+  <path d="M 36 34 C 46 38 56 32 66 38" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 42 50 C 52 48 62 54 74 48" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Cerebellum (arbor vitae) -->
+  <ellipse cx="68" cy="74" rx="14" ry="10" fill="#38bdf8" stroke="#000000" stroke-width="4.0"/>
+  <!-- Brainstem medulla / spinal cord -->
+  <path d="M 48 60 L 48 88 L 56 88 L 56 64" fill="#ffffff" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

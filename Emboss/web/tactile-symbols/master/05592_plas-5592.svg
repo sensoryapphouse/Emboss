@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Crucible container with bold 5.0px stroke -->
+  <path d="M 22 24 L 22 78 L 78 78 L 78 24" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Molten resistive fluoride slag pool blanket with bold 4.5px stroke -->
+  <rect x="24" y="44" width="52" height="16" fill="#ca8a04" stroke="#ef4444" stroke-width="3.5"/>
+  <!-- Droplet refining through slag into purified ingot bottom -->
+  <circle cx="50" cy="52" r="4" fill="#ef4444"/>
+</svg>

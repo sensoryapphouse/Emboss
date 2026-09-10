@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- SAW strain wave modulating ferromagnetic film to excite spin-wave magnons with bold 4.5px strokes -->
+  <path d="M 20 60 Q 35 44 50 60 Q 65 76 80 60" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="50" y1="60" x2="50" y2="24" stroke="#ef4444" stroke-width="5.0"/>
+  <polygon points="50,24 42,34 58,34" fill="#ef4444"/>
+</svg>

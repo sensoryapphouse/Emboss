@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Segmented genome reassortment generating novel hybrid pandemic strain with bold 4.5px strokes -->
+  <circle cx="30" cy="36" r="10" fill="#0284c7"/>
+  <circle cx="70" cy="36" r="10" fill="#ef4444"/>
+  <circle cx="50" cy="72" r="14" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <line x1="44" y1="72" x2="44" y2="64" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="56" y1="72" x2="56" y2="64" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Extraction column shell with bold 4.5px stroke -->
+  <rect x="34" y="18" width="32" height="64" rx="16" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central rotor shaft with rotating mixing discs with bold 4.5px strokes -->
+  <line x1="50" y1="18" x2="50" y2="82" stroke="#1e293b" stroke-width="5.0"/>
+  <line x1="40" y1="36" x2="60" y2="36" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="40" y1="52" x2="60" y2="52" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="40" y1="68" x2="60" y2="68" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

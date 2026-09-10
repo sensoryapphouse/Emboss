@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Round glass bulb globe -->
+  <circle cx="50" cy="40" r="22" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Screw base cap -->
+  <rect x="42" y="62" width="16" height="14" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Filament loops inside -->
+  <path d="M 44 48 L 48 34 L 52 48 L 56 34" fill="none" stroke="#ef4444" stroke-width="3.0"/>
+</svg>

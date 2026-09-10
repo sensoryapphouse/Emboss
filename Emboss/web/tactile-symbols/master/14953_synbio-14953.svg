@@ -1,0 +1,16 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Punnett-violating pedigree inheritance tree converting all offspring branches to red drive trait with bold 4.5px strokes -->
+  <circle cx="50" cy="22" r="6" fill="#ef4444"/>
+  <line x1="50" y1="28" x2="30" y2="52" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="28" x2="70" y2="52" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="30" cy="52" r="6" fill="#ef4444"/>
+  <circle cx="70" cy="52" r="6" fill="#ef4444"/>
+  <line x1="30" y1="58" x2="20" y2="78" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="30" y1="58" x2="40" y2="78" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="70" y1="58" x2="60" y2="78" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="70" y1="58" x2="80" y2="78" stroke="#ef4444" stroke-width="4.5"/>
+  <circle cx="20" cy="78" r="4" fill="#ef4444"/>
+  <circle cx="40" cy="78" r="4" fill="#ef4444"/>
+  <circle cx="60" cy="78" r="4" fill="#ef4444"/>
+  <circle cx="80" cy="78" r="4" fill="#ef4444"/>
+</svg>

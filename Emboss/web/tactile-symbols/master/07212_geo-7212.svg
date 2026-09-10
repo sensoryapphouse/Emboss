@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Survey vessel towing acoustic airgun source and floating hydrophone cable with bold 4.5px strokes -->
+  <polygon points="18,34 36,34 32,46 22,46" fill="#64748b"/>
+  <line x1="18" y1="46" x2="82" y2="46" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="32" y1="46" x2="80" y2="46" stroke="#ef4444" stroke-width="4.0"/>
+  <circle cx="36" cy="56" r="4" fill="#ca8a04"/>
+</svg>

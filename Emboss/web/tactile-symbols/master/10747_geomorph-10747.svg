@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sinuous river loop with outer cut-bank erosion and abandoned oxbow lake with bold 4.5px strokes -->
+  <path d="M 20 20 Q 70 20 70 50 Q 70 80 20 80" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="36" cy="50" r="10" fill="#ca8a04" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+</svg>

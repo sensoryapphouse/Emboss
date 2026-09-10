@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Discharge chamber cylinder with bold 4.5px stroke -->
+  <rect x="18" y="30" width="44" height="40" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- High-voltage molybdenum accelerator grid optics right with bold 4.5px stroke -->
+  <line x1="62" y1="28" x2="62" y2="72" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Blue accelerated xenon ion beam exhaust plume right with bold 4.0px strokes -->
+  <polygon points="62,34 86,22 86,78 62,66" fill="#38bdf8" stroke="#0284c7" stroke-width="3.0"/>
+</svg>

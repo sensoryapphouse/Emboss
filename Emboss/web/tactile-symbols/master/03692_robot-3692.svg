@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Integrated motor body left with bold 4.5px stroke -->
+  <rect x="18" y="32" width="22" height="36" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Ballscrew cylinder tube barrel with bold 4.5px stroke -->
+  <rect x="40" y="40" width="30" height="20" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Extending stainless steel push rod with bold 4.5px stroke -->
+  <rect x="70" y="44" width="14" height="12" fill="#cbd5e1" stroke="#000000" stroke-width="3.5"/>
+</svg>

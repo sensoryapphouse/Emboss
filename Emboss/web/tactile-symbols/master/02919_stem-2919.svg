@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Alternating Na+ (small blue) and Cl- (large green) grid with bold 4.0px strokes -->
+  <line x1="28" y1="28" x2="72" y2="28" stroke="#94a3b8" stroke-width="4.0"/>
+  <line x1="28" y1="50" x2="72" y2="50" stroke="#94a3b8" stroke-width="4.0"/>
+  <line x1="28" y1="72" x2="72" y2="72" stroke="#94a3b8" stroke-width="4.0"/>
+  <circle cx="28" cy="28" r="5" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="28" r="8" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="72" cy="28" r="5" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="50" r="5" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Suspended vibrating carbon nanotube beam clamped between metal electrode anchors with bold 4.5px strokes -->
+  <rect x="18" y="40" width="16" height="20" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <rect x="66" y="40" width="16" height="20" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 34 50 Q 50 32 66 50" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 2D excitation vs emission frequency correlation map with off-diagonal cross peaks with bold 4.5px strokes -->
+  <rect x="20" y="20" width="60" height="60" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="80" x2="80" y2="20" stroke="#64748b" stroke-width="3.5" stroke-dasharray="4,2"/>
+  <circle cx="38" cy="62" r="8" fill="#0284c7" opacity="0.5"/>
+  <circle cx="62" cy="38" r="8" fill="#0284c7" opacity="0.5"/>
+  <circle cx="62" cy="62" r="6" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flexible reflective faceplate dynamically deformed by underlying piezoelectric actuator array with bold 4.5px strokes -->
+  <path d="M 20 36 Q 50 28 80 44" stroke="#000000" stroke-width="6.0" fill="none"/>
+  <rect x="30" y="52" width="8" height="24" fill="#64748b"/>
+  <rect x="46" y="48" width="8" height="28" fill="#64748b"/>
+  <rect x="62" y="56" width="8" height="20" fill="#64748b"/>
+  <line x1="20" y1="76" x2="80" y2="76" stroke="#000000" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Oblong oval cartouche loop with bold 5.0px stroke -->
+  <rect x="30" y="18" width="40" height="58" rx="20" fill="#ffffff" stroke="#000000" stroke-width="5.0"/>
+  <!-- Horizontal tie bar base bottom -->
+  <line x1="24" y1="78" x2="76" y2="78" stroke="#000000" stroke-width="7.0" stroke-linecap="round"/>
+</svg>

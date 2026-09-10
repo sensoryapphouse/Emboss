@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Signal pulse (tall, red), Decoy pulse (medium, blue), and Vacuum pulse (flat, black) with bold 5.0px strokes -->
+  <line x1="28" y1="76" x2="28" y2="24" stroke="#ef4444" stroke-width="6.0" stroke-linecap="round"/>
+  <line x1="50" y1="76" x2="50" y2="48" stroke="#0284c7" stroke-width="6.0" stroke-linecap="round"/>
+  <line x1="72" y1="76" x2="72" y2="72" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Baseline bottom -->
+  <line x1="16" y1="76" x2="84" y2="76" stroke="#000000" stroke-width="4.5"/>
+</svg>

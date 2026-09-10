@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bidirectional optical fiber loop with bold 4.5px stroke -->
+  <path d="M 20 40 L 76 40 L 76 60 L 20 60" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Faraday rotator mirror reflecting with 90-deg polarization rotation on right with bold 5.0px stroke -->
+  <rect x="76" y="34" width="10" height="32" rx="2" fill="#ef4444"/>
+</svg>

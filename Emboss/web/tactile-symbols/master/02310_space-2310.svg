@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Deep azure blue planet sphere -->
+  <circle cx="50" cy="50" r="28" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <!-- Great dark spot storm oval -->
+  <ellipse cx="44" cy="46" rx="8" ry="5" fill="#1e293b"/>
+  <!-- White cirrus methane cloud streak -->
+  <line x1="36" y1="58" x2="68" y2="58" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

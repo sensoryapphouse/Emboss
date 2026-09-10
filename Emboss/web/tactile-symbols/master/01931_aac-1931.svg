@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bold downward navigation arrow -->
+  <line x1="50" y1="22" x2="50" y2="76" stroke="#ef4444" stroke-width="8.0" stroke-linecap="round"/>
+  <polygon points="34,62 50,82 66,62" fill="#ef4444"/>
+</svg>

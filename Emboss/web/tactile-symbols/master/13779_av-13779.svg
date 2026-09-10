@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Longitudinal chassis backbone with angled front wheel and fixed rear wheel with bold 4.5px strokes -->
+  <line x1="30" y1="50" x2="70" y2="50" stroke="#000000" stroke-width="6.0"/>
+  <line x1="30" y1="36" x2="30" y2="64" stroke="#64748b" stroke-width="6.0"/>
+  <line x1="64" y1="36" x2="76" y2="64" stroke="#ef4444" stroke-width="6.0"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pinhole camera housing box with bold 4.5px stroke -->
+  <polygon points="56,36 82,24 82,76 56,64" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Multi-channel silicon photodiode detector array strip with bold 4.5px stroke -->
+  <rect x="76" y="32" width="6" height="36" fill="#ef4444"/>
+  <!-- Pinhole aperture focused on plasma core with bold 4.5px stroke -->
+  <circle cx="56" cy="50" r="4" fill="#000000"/>
+  <circle cx="26" cy="50" r="10" fill="#facc15"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Interferometric two-arm waveguide splitter and combiner with phase-shift electrodes with bold 4.5px strokes -->
+  <path d="M 18 50 L 32 50 L 44 32 L 64 32 L 76 50 L 82 50" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 32 50 L 44 68 L 64 68 L 76 50" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <rect x="46" y="24" width="16" height="12" fill="#ca8a04"/>
+  <rect x="46" y="64" width="16" height="12" fill="#ca8a04"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Convergent-divergent combustion duct -->
+  <path d="M 14 30 L 44 42 L 56 42 L 86 30 M 14 70 L 44 58 L 56 58 L 86 70" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center flame diamond -->
+  <polygon points="50,44 56,50 50,56 44,50" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bus waveguide bottom with bold 5.0px stroke -->
+  <line x1="18" y1="72" x2="82" y2="72" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- High-Q silicon photonic microring resonator with bold 5.0px stroke -->
+  <circle cx="50" cy="38" r="20" fill="#ffffff" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- FWM coupling point -->
+  <circle cx="50" cy="62" r="4" fill="#ca8a04"/>
+</svg>

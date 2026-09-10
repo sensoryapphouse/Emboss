@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tilting micro-mirror MEMS plate in center with bold 5.0px stroke -->
+  <line x1="34" y1="66" x2="66" y2="34" stroke="#000000" stroke-width="5.5"/>
+  <!-- Single-photon channel routed from left to top port with bold 5.0px strokes -->
+  <line x1="18" y1="50" x2="50" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="50" y1="50" x2="50" y2="18" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

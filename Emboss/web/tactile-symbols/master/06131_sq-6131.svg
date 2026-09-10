@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- FM layer (left) pumping spin current into NM heavy metal (right) with bold 4.5px strokes -->
+  <rect x="18" y="24" width="30" height="52" rx="2" fill="#ef4444"/>
+  <rect x="52" y="24" width="30" height="52" rx="2" fill="#0284c7"/>
+  <!-- Injected spin current arrow bridging interface -->
+  <line x1="44" y1="50" x2="56" y2="50" stroke="#ca8a04" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Scintillating lead tungstate crystal trapezoid array with bold 4.5px stroke -->
+  <polygon points="26,20 74,20 82,78 18,78" fill="#bae6fd" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Segmented crystal block lines with bold 3.5px strokes -->
+  <line x1="42" y1="20" x2="38" y2="78" stroke="#000000" stroke-width="3.5"/>
+  <line x1="58" y1="20" x2="62" y2="78" stroke="#000000" stroke-width="3.5"/>
+  <!-- Cascading electromagnetic particle shower tree with bold 4.0px strokes -->
+  <polyline points="50,22 50,40 38,62 50,40 62,62" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

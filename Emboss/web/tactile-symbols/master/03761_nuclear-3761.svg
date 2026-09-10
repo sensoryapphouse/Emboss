@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Incoming thermal neutron left with bold 3.5px stroke -->
+  <circle cx="20" cy="50" r="4" fill="#cbd5e1" stroke="#000000" stroke-width="3.0"/>
+  <!-- Splitting U-235 compound nucleus center with bold 4.5px stroke -->
+  <ellipse cx="44" cy="50" rx="14" ry="18" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <!-- Two fission fragments right with bold 4.0px strokes -->
+  <circle cx="72" cy="34" r="8" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="72" cy="66" r="9" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <!-- 2 Prompt neutrons emitted right -->
+  <circle cx="82" cy="48" r="3" fill="#cbd5e1"/>
+  <circle cx="82" cy="54" r="3" fill="#cbd5e1"/>
+</svg>

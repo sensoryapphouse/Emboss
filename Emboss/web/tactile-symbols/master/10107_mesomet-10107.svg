@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mesospheric electrical discharge flashing 50-90km above storm cloud with bold 4.5px strokes -->
+  <ellipse cx="50" cy="30" rx="20" ry="10" fill="#ef4444" opacity="0.4" stroke="#000000" stroke-width="4.0"/>
+  <line x1="42" y1="40" x2="36" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="50" y1="40" x2="50" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="58" y1="40" x2="64" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

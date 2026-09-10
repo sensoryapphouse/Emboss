@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Robotic drill hammering and rotating 2 meters beneath surface to collect un-irradiated cores with bold 4.5px strokes -->
+  <line x1="50" y1="18" x2="50" y2="76" stroke="#64748b" stroke-width="6.0"/>
+  <polygon points="50,84 42,72 58,72" fill="#000000"/>
+  <line x1="20" y1="42" x2="80" y2="42" stroke="#000000" stroke-width="4.5"/>
+</svg>

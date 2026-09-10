@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tilted stalled airfoil rotated up with bold 4.5px stroke -->
+  <path d="M 22 70 C 26 54 48 38 72 32 C 82 30 84 32 84 32 C 84 32 68 46 50 60 C 34 72 24 74 22 70 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Separated turbulent vortex wake above upper surface with bold 4.0px stroke -->
+  <path d="M 44 32 C 54 20 66 30 76 22" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="3,3"/>
+</svg>

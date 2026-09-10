@@ -1,0 +1,15 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer double oval envelope -->
+  <ellipse cx="50" cy="50" rx="38" ry="26" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <ellipse cx="50" cy="50" rx="32" ry="20" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <!-- Thylakoid granum stack 1 on left -->
+  <rect x="28" y="38" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <rect x="28" y="47" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <rect x="28" y="56" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <!-- Thylakoid granum stack 2 on right -->
+  <rect x="60" y="38" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <rect x="60" y="47" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <rect x="60" y="56" width="12" height="5" rx="1.5" fill="#22c55e" stroke="#000000" stroke-width="2.5"/>
+  <!-- Connecting lamella bridge -->
+  <line x1="40" y1="50" x2="60" y2="50" stroke="#000000" stroke-width="3.0"/>
+</svg>

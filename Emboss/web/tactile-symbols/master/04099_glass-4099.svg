@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Blank mold parison left with bold 4.5px stroke -->
+  <path d="M 24 24 L 38 24 L 36 60 L 26 60 Z" fill="#ffffff" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Final blow mold bottle shape right with bold 4.5px stroke -->
+  <path d="M 68 20 L 74 20 L 74 32 L 80 40 L 80 72 L 62 72 L 62 40 L 68 32 Z" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ultra-pure HRFZ silicon right-angle optical prism with bold 5.0px stroke -->
+  <polygon points="24,24 76,76 24,76" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Refracted terahertz beam exiting hypotenuse with bold 4.5px stroke -->
+  <line x1="14" y1="56" x2="44" y2="56" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="44" y1="56" x2="74" y2="28" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

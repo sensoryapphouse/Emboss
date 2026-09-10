@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two spherical powder particles bonding via solid-state diffusion neck with bold 4.5px strokes -->
+  <circle cx="36" cy="50" r="16" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="64" cy="50" r="16" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <rect x="44" y="44" width="12" height="12" fill="#ca8a04"/>
+</svg>

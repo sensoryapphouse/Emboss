@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Symmetrical fan fluted shell -->
+  <path d="M 50 78 C 22 66 18 36 34 26 C 50 20 66 26 82 36 C 78 66 50 78 50 78 Z" fill="#ffffff" stroke="#ef4444" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Radiating flute ribs -->
+  <line x1="50" y1="78" x2="34" y2="26" stroke="#ef4444" stroke-width="3.0"/>
+  <line x1="50" y1="78" x2="50" y2="22" stroke="#ef4444" stroke-width="3.0"/>
+  <line x1="50" y1="78" x2="66" y2="26" stroke="#ef4444" stroke-width="3.0"/>
+</svg>

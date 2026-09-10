@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Top convex steel rotational plate with bold 4.5px stroke -->
+  <path d="M 22 34 L 78 34 C 78 54 22 54 22 34 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Concave PTFE sliding base plate bottom with bold 4.5px stroke -->
+  <path d="M 20 54 C 20 66 80 66 80 54 L 80 74 L 20 74 Z" fill="#1e293b" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

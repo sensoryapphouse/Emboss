@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Process timelines P1 and P2 with cross-process message arrow with bold 4.5px strokes -->
+  <line x1="18" y1="32" x2="82" y2="32" stroke="#000000" stroke-width="4.5"/>
+  <line x1="18" y1="68" x2="82" y2="68" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="34" cy="32" r="5" fill="#0284c7"/>
+  <circle cx="66" cy="68" r="5" fill="#ef4444"/>
+  <line x1="34" y1="32" x2="66" y2="68" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

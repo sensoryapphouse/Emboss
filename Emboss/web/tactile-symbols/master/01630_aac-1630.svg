@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Glitter shaker jar -->
+  <rect x="28" y="36" width="32" height="44" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Sparkling glitter stars -->
+  <polygon points="68,26 71,32 78,32 72,36 74,42 68,38 62,42 64,36 58,32 65,32" fill="#facc15"/>
+  <polygon points="76,52 78,57 84,57 79,61 81,66 76,63 71,66 73,61 68,57 74,57" fill="#ef4444"/>
+</svg>

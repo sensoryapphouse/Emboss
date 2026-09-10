@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Gold field with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" rx="3" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Black imperial eagle Reichsadler with outspread wings with bold 4.5px stroke -->
+  <polygon points="50,32 66,42 62,64 38,64 34,42" fill="#1e293b" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

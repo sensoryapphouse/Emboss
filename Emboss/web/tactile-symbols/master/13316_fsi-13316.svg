@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fixed cantilever base with flapping piezoelectric blade generating electric voltage with bold 4.5px strokes -->
+  <rect x="20" y="36" width="8" height="28" fill="#000000"/>
+  <path d="M 28 50 Q 54 28 78 50" stroke="#ca8a04" stroke-width="6.0" fill="none"/>
+  <circle cx="78" cy="50" r="5" fill="#ef4444"/>
+</svg>

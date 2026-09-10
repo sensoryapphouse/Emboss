@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved waveguide array with path-length increments separating multiple optical wavelengths with bold 4.5px strokes -->
+  <path d="M 26 36 Q 50 20 74 36" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 26 50 Q 50 34 74 50" fill="none" stroke="#22c55e" stroke-width="4.5"/>
+  <path d="M 26 64 Q 50 48 74 64" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

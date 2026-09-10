@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Glass ampoule body and drawn neck with bold 4.5px stroke -->
+  <polygon points="46,18 54,18 54,42 62,54 62,80 38,80 38,54 46,42" fill="#ffffff" stroke="#0284c7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Oxy-gas flame torch melting tip closed with bold 4.0px stroke -->
+  <polygon points="68,26 56,22 68,18" fill="#ef4444"/>
+</svg>

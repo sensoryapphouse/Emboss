@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hexagonal prism crystal column with pyramidal termination with bold 4.5px stroke -->
+  <polygon points="50,18 66,34 66,78 34,78 34,34" fill="#e0f2fe" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Facet center seam line with bold 4.0px stroke -->
+  <line x1="50" y1="18" x2="50" y2="78" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

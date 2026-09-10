@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High-speed turbine wheel isentropically expanding high-pressure gas with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="26" fill="#64748b" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="24" x2="50" y2="76" stroke="#000000" stroke-width="4.5"/>
+  <line x1="24" y1="50" x2="76" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="8" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sensor mounting base mast with bold 4.5px stroke -->
+  <line x1="50" y1="56" x2="50" y2="84" stroke="#000000" stroke-width="5.5"/>
+  <!-- Triangular ultrasonic transducer arm cage with bold 4.5px stroke -->
+  <polygon points="50,22 74,56 26,56" fill="none" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Three acoustic sonic transducer probe tips with bold 4.0px strokes -->
+  <circle cx="50" cy="22" r="4.5" fill="#ef4444"/>
+  <circle cx="74" cy="56" r="4.5" fill="#ef4444"/>
+  <circle cx="26" cy="56" r="4.5" fill="#ef4444"/>
+</svg>

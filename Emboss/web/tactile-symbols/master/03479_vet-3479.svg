@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper scissor carnassial tooth (P4) with bold 4.5px stroke -->
+  <polygon points="30,28 46,50 56,36 70,50 66,28" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Lower interlocking shearing tooth (M1) with bold 4.5px stroke -->
+  <polygon points="34,72 48,52 58,66 68,52 70,72" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

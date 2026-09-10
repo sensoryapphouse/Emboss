@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flexible thin reflective mirror faceplate curve -->
+  <path d="M 16 38 C 36 30 64 46 84 38" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Piezoelectric actuator push-rods beneath faceplate -->
+  <line x1="28" y1="38" x2="28" y2="66" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="50" y1="42" x2="50" y2="66" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="72" y1="38" x2="72" y2="66" stroke="#ef4444" stroke-width="3.5"/>
+  <rect x="18" y="66" width="64" height="12" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

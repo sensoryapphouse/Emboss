@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- External magnetic RF transmitter coil with bold 4.5px stroke -->
+  <circle cx="34" cy="38" r="14" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Internal receiver-stimulator disc with bold 4.0px stroke -->
+  <circle cx="34" cy="38" r="6" fill="#1e293b"/>
+  <!-- Spiral cochlear electrode lead inserting right with bold 4.5px stroke -->
+  <path d="M 48 38 C 72 38 78 68 62 74 C 54 78 50 68 58 64" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

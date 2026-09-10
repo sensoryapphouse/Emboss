@@ -1,0 +1,206 @@
+[
+  {
+    "id": "sym-1484",
+    "name": "Book",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/book.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><path d=\"M 50 32 C 38 24 22 24 14 26 L 14 74 C 22 72 38 72 50 80 C 62 72 78 72 86 74 L 86 26 C 78 24 62 24 50 32 Z\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linejoin=\"round\"/><line x1=\"50\" y1=\"32\" x2=\"50\" y2=\"80\" fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linecap=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-1486",
+    "name": "Classroom Clock",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/classroom clock.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\"><circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"145\" cy=\"120\" r=\"98\"></circle><circle fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"145\" cy=\"120\" r=\"98\"></circle><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"145\" y1=\"120\" x2=\"145\" y2=\"65\"></line><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"145\" y1=\"120\" x2=\"190\" y2=\"120\"></line><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"145\" y1=\"120\" x2=\"145\" y2=\"180\"></line><circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"145\" cy=\"120\" r=\"6\"></circle></g>\n</svg>"
+  },
+  {
+    "id": "sym-1487",
+    "name": "File Folder",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/file-folder.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#efac3e\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M15.385 7.39062L12.9075 4.915C12.3219 4.32875 11.5275 4 10.6987 4H4.125C2.95125 4 2 4.95125 2 6.125V13.5H12.985H30V10.1375C30 8.96375 29.0488 8.0125 27.875 8.0125H16.8875C16.3237 8.0125 15.7838 7.78875 15.385 7.39062Z\"  />\n<path fill=\"#eecd4d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M27.875 30H4.125C2.95125 30 2 29.0545 2 27.8878V13.1122C2 11.9455 2.95125 11 4.125 11H27.875C29.0488 11 30 11.9455 30 13.1122V27.8878C30 29.0545 29.0488 30 27.875 30Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-1488",
+    "name": "Flashcards",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/flashcards.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\">\n  <path fill=\"#dff3fd\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 78,68 Q 78,58 88,58 L 205,58 Q 215,58 215,68 L 215,158 Q 215,168 205,168 L 88,168 Q 78,168 78,158 Z\"></path>\n  <path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 50,98 Q 50,88 60,88 L 175,88 Q 185,88 185,98 L 185,188 Q 185,198 175,198 L 60,198 Q 50,198 50,188 Z\"></path>\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 100,170 L 118,118 L 140,170 M 105,150 L 135,150\"></path>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-1489",
+    "name": "Geometry Class",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/geometry class.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\"><rect fill=\"#f5e7c4\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"25\" y=\"25\" width=\"240\" height=\"190\" rx=\"10\"></rect><path fill=\"#d01424\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 50,180 L 110,80 L 170,180 Z\"></path><rect fill=\"#2a4ec0\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"175\" y=\"105\" width=\"65\" height=\"65\"></rect><circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"207\" cy=\"68\" r=\"22\"></circle><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 55,180 L 165,180\" stroke-dasharray=\"3 3\"></path></g>\n</svg>"
+  },
+  {
+    "id": "sym-1491",
+    "name": "Open File Folder",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/open-file-folder.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#efac3e\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M16.8333 10H25C26.1487 10 27 10.8513 27 12V13L14 23.5L2.60938 28.2305C2.22099 27.6302 2 26.7728 2 26V8.08034C2 6.9316 2.93156 6 4.08027 6H10.7553C11.564 6 12.3396 6.3201 12.913 6.89041L15.3657 9.38757C15.7557 9.77506 16.2836 10 16.8333 10Z\"  />\n<path fill=\"#eecd4d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M27.911 13H10.886C10.1278 13.0002 9.38817 13.2346 8.76829 13.6711C8.1484 14.1077 7.67856 14.7251 7.42301 15.439C2.83201 28.604 3.21101 27.6579 3.09501 27.8059C3.04593 27.8817 2.97891 27.9442 2.89988 27.9878C2.82085 28.0314 2.73226 28.0548 2.64201 28.0559C2.57752 28.0551 2.51451 28.0364 2.46 28.002C2.80169 28.645 3.3217 29.1758 3.95762 29.5305C4.59354 29.8853 5.31836 30.049 6.04502 30.002H23.997C24.4333 29.9999 24.8575 29.8575 25.2066 29.5958C25.5558 29.3342 25.8115 28.9672 25.936 28.549L29.898 15.714C29.9968 15.4016 30.0207 15.0703 29.9676 14.7471C29.9145 14.4238 29.786 14.1176 29.5924 13.8533C29.3989 13.5889 29.1459 13.374 28.8537 13.2257C28.5616 13.0775 28.2386 13.0001 27.911 13Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-1493",
+    "name": "Paintbrush",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/paintbrush.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#efac3e\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M11.955 22.0137L10.5015 20.5544C9.47518 19.5241 7.85768 19.3782 6.66358 20.2083L5.98364 20.6809C5.20465 21.2225 4.72772 22.1005 4.69753 23.0488L4.66434 24.0914C4.6383 24.9097 4.27894 25.6818 3.66963 26.2286L3.17004 26.677C3.15437 26.6911 3.14381 26.7099 3.14002 26.7306C3.09653 26.9683 3.23828 27.2008 3.46948 27.2709L6.04827 28.0536L6.43469 28.1244C8.5665 28.5145 10.7474 27.7193 12.1329 26.0528C13.1225 24.8625 13.0474 23.1105 11.955 22.0137Z\"  />\n<path fill=\"#d3d3d3\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M11.3816 17.0868L15.2865 17.5938L15.5968 21.3568L13.8176 23.1131C13.4246 23.5011 12.7914 23.497 12.4034 23.1039L9.59334 20.2573C9.20535 19.8643 9.20944 19.2311 9.60248 18.8431L11.3816 17.0868Z\"  />\n<path fill=\"#ea3e68\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M11.3816 17.0868L15.5968 21.3568L28.8084 7.69391C29.7746 6.69466 29.7664 5.10678 28.7899 4.11756C27.8134 3.12834 26.2257 3.09962 25.2141 4.05288L11.3816 17.0868Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-1495",
+    "name": "Paperclip",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/paperclip.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><g clip-path=\"url(#clip0_2_579)\">\n<path fill=\"#bebebe\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M19.3736 5.43297C21.6397 2.92712 25.5081 2.73277 28.014 4.99887C30.5198 7.26497 30.7142 11.1334 28.4481 13.6392L16.8194 26.4981L16.804 26.5152C16.8008 26.5187 16.7976 26.5222 16.7944 26.5257C13.6998 29.9178 8.44203 30.1732 5.03298 27.0903C1.61473 23.9991 1.34961 18.7221 4.44083 15.3038L12.9428 5.90237C13.4056 5.39067 14.1955 5.35098 14.7072 5.81373C15.2189 6.27647 15.2586 7.06642 14.7959 7.57813L6.29387 16.9796C4.12815 19.3744 4.31389 23.0715 6.70874 25.2372C9.10359 27.403 12.8007 27.2172 14.9664 24.8224L26.595 11.9635C27.9356 10.4811 27.8207 8.19252 26.3382 6.85192C24.8558 5.51131 22.5673 5.62629 21.2267 7.10872L11.3539 18.026C10.8554 18.5772 10.8981 19.4282 11.4493 19.9266C12.0006 20.4251 12.8515 20.3824 13.35 19.8311L20.0037 12.4735C20.4665 11.9618 21.2564 11.9221 21.7681 12.3848C22.2798 12.8476 22.3195 13.6375 21.8568 14.1492L15.203 21.5069C13.779 23.0815 11.3482 23.2036 9.77359 21.7797C8.21219 20.3677 8.07901 17.9656 9.46528 16.3901L9.48542 16.3673L19.3736 5.43297Z\"  />\n</g>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-1496",
+    "name": "Pencil",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/pencil.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><path d=\"M 20 80 L 30 50 L 68 18 C 74 12 84 22 78 28 L 40 66 L 14 86 Z\" fill=\"#facc15\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linejoin=\"round\"/><line x1=\"62\" y1=\"24\" x2=\"72\" y2=\"34\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\"/><polygon points=\"14,86 20,80 16,74\" fill=\"#000000\" stroke=\"#000000\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-1497",
+    "name": "Push Pin",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/pushpin.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#d3d3d3\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M2.3825 29.495C1.8725 28.985 1.8725 28.165 2.3825 27.655L11.3425 18.695L13.1825 20.535L4.2225 29.495C3.7125 30.005 2.8925 30.005 2.3825 29.495Z\"  />\n<path fill=\"#bc194f\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M20.0329 19.174L24.6361 14.5708L23 8.5L17.2045 7.13916L12.6012 11.7424L14 17.5L20.0329 19.174Z\"  />\n<path fill=\"#e9403e\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M17.1825 7.125L24.6525 14.585C25.6725 15.605 27.3225 15.605 28.3425 14.585L29.4525 13.475C29.8725 13.055 29.8725 12.375 29.4525 11.955L19.8125 2.315C19.3925 1.895 18.7125 1.895 18.2925 2.315L17.1825 3.425C16.1625 4.445 16.1625 6.105 17.1825 7.125Z\"  />\n<path fill=\"#e9403e\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M6.0825 14.565L17.2025 25.685C17.7225 26.205 18.5725 26.205 19.0925 25.685L20.0025 24.775C21.5625 23.215 21.5625 20.695 20.0025 19.135L12.6325 11.765C11.0725 10.205 8.5525 10.205 6.9925 11.765L6.0825 12.675C5.5625 13.195 5.5625 14.045 6.0825 14.565Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-1499",
+    "name": "Ruler",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/ruler.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><rect x=\"12\" y=\"34\" width=\"76\" height=\"32\" rx=\"4\" fill=\"#facc15\" stroke=\"#000000\" stroke-width=\"4.5\"/><line x1=\"24\" y1=\"34\" x2=\"24\" y2=\"52\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><line x1=\"38\" y1=\"34\" x2=\"38\" y2=\"46\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><line x1=\"52\" y1=\"34\" x2=\"52\" y2=\"52\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><line x1=\"66\" y1=\"34\" x2=\"66\" y2=\"46\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><line x1=\"78\" y1=\"34\" x2=\"78\" y2=\"52\" fill=\"none\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linecap=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-1500",
+    "name": "Scissors",
+    "domain": "school-classroom",
+    "sub": "school",
+    "file": "school-classroom/scissors.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><path d=\"M 28 82 C 18 82 18 68 28 68 L 48 48 L 76 20\" fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><path d=\"M 72 82 C 82 82 82 68 72 68 L 52 48 L 24 20\" fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"50\" cy=\"48\" r=\"4\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"3.5\"/></svg>"
+  }
+]

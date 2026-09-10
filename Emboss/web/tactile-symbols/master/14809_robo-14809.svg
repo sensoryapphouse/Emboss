@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Horizontal articulated dual link swinging over vertical plunge quill tool with bold 4.5px strokes -->
+  <rect x="20" y="58" width="16" height="24" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <line x1="28" y1="58" x2="52" y2="34" stroke="#000000" stroke-width="5.5"/>
+  <line x1="52" y1="34" x2="74" y2="34" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="74" y1="24" x2="74" y2="54" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="52" cy="34" r="5" fill="#ca8a04"/>
+</svg>

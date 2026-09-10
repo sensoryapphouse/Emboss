@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Electrospray needle capillary left with bold 4.5px stroke -->
+  <line x1="16" y1="50" x2="36" y2="50" stroke="#1e293b" stroke-width="5.0"/>
+  <!-- Taylor cone electrospray plume ionization spray with bold 4.0px strokes -->
+  <polygon points="36,44 48,34 48,66 36,56" fill="#facc15" stroke="#ef4444" stroke-width="3.0"/>
+  <!-- Quadrupole mass analyzer rods right with bold 4.5px strokes -->
+  <rect x="56" y="32" width="28" height="8" rx="2" fill="#0284c7"/>
+  <rect x="56" y="60" width="28" height="8" rx="2" fill="#0284c7"/>
+</svg>

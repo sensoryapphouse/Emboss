@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 3 Dynamic swept crescents with bold 4.5px strokes -->
+  <path d="M 30 26 C 50 18 70 24 74 38 C 66 32 46 28 30 26 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 22 50 C 44 42 66 48 70 62 C 60 54 40 52 22 50 Z" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 30 74 C 50 66 70 72 74 86 C 66 80 46 76 30 74 Z" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+</svg>

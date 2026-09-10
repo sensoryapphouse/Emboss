@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large rumen fermentation vat top left with bold 4.5px stroke -->
+  <path d="M 22 46 C 22 26 50 24 50 46 C 50 64 22 64 22 46 Z" fill="#cbd5e1" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Reticulum honeycomb chamber bottom left with bold 4.0px stroke -->
+  <circle cx="36" cy="68" r="10" fill="#fed7aa" stroke="#000000" stroke-width="3.5"/>
+  <!-- Omasum manyplies chamber top right with bold 4.0px stroke -->
+  <circle cx="64" cy="40" r="10" fill="#fed7aa" stroke="#000000" stroke-width="3.5"/>
+  <!-- Abomasum true glandular stomach bottom right with bold 4.5px stroke -->
+  <path d="M 58 54 C 76 54 82 74 66 76 C 54 76 54 62 58 54 Z" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

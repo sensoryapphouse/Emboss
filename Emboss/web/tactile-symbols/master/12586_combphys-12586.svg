@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-camera projections reconstructing 3D volumetric flame heat release topology with bold 4.5px strokes -->
+  <polygon points="50,22 78,50 50,78 22,50" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="10" fill="#ef4444" opacity="0.4" stroke="#ef4444" stroke-width="3.5"/>
+</svg>

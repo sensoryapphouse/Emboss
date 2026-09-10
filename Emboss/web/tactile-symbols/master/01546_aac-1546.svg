@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large bold plus symbol center -->
+  <line x1="50" y1="24" x2="50" y2="76" stroke="#22c55e" stroke-width="8.0" stroke-linecap="round"/>
+  <line x1="24" y1="50" x2="76" y2="50" stroke="#22c55e" stroke-width="8.0" stroke-linecap="round"/>
+  <!-- Two flanking anchor circles -->
+  <circle cx="20" cy="20" r="6" fill="#0284c7" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="80" cy="80" r="6" fill="#ef4444" stroke="#000000" stroke-width="3.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Wave-notched sea cliff retreating to leave flat intertidal platform and isolated sea stack with bold 4.5px strokes -->
+  <path d="M 20 24 L 20 64 L 60 64" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <rect x="68" y="40" width="12" height="24" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="64" x2="82" y2="64" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

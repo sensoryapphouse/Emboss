@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Steep mountainous rock walls flanking narrow deep sea inlet -->
+  <polygon points="14,20 32,20 32,74 14,74" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <polygon points="68,20 86,20 86,74 68,74" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Deep water surface in trench -->
+  <line x1="32" y1="64" x2="68" y2="64" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

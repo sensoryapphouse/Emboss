@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Top support ring -->
+  <ellipse cx="50" cy="24" rx="34" ry="10" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Wire gauze mesh line -->
+  <line x1="26" y1="24" x2="74" y2="24" stroke="#000000" stroke-width="3.0" stroke-dasharray="4 4"/>
+  <!-- 3 Splayed legs -->
+  <line x1="22" y1="28" x2="14" y2="86" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="50" y1="34" x2="50" y2="86" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="78" y1="28" x2="86" y2="86" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

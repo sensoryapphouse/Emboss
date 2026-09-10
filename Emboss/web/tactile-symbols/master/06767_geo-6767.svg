@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- General shear failure with continuous heave surface rupture to ground with bold 4.5px strokes -->
+  <rect x="40" y="28" width="20" height="14" fill="#000000"/>
+  <path d="M 40 42 Q 26 74 16 42" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <path d="M 60 42 Q 74 74 84 42" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

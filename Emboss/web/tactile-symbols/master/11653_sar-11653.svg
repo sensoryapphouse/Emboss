@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Network of short baseline acquisition pairs linked via SVD for deformation series with bold 4.5px strokes -->
+  <circle cx="30" cy="34" r="5" fill="#0284c7"/>
+  <circle cx="50" cy="66" r="5" fill="#0284c7"/>
+  <circle cx="70" cy="34" r="5" fill="#0284c7"/>
+  <line x1="30" y1="34" x2="50" y2="66" stroke="#ca8a04" stroke-width="4.5"/>
+  <line x1="50" y1="66" x2="70" y2="34" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Vertical calandria tube heat exchanger left with bold 4.5px stroke -->
+  <rect x="22" y="20" width="22" height="60" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Vapor cyclone separator body right with bold 4.5px stroke -->
+  <polygon points="56,30 80,30 80,56 68,76 56,56" fill="#ffffff" stroke="#0284c7" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Vapor duct connecting calandria to cyclone with bold 4.0px stroke -->
+  <line x1="44" y1="36" x2="56" y2="36" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

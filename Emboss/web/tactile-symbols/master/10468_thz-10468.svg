@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Femtosecond laser exciting spin currents in Fe/Pt converting to THz pulse via Inverse Spin Hall Effect with bold 4.5px strokes -->
+  <rect x="20" y="34" width="60" height="16" fill="#ef4444" opacity="0.4" stroke="#000000" stroke-width="4.0"/>
+  <rect x="20" y="50" width="60" height="16" fill="#0284c7" opacity="0.4" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="18" x2="50" y2="34" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="50" y1="66" x2="50" y2="82" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

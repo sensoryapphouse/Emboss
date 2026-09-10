@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Array of emitter pins launching phase-delayed wavefronts synthesizing directional steerable beam with bold 4.5px strokes -->
+  <line x1="18" y1="74" x2="82" y2="74" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="28" cy="74" r="4" fill="#0284c7"/>
+  <circle cx="42" cy="74" r="4" fill="#0284c7"/>
+  <circle cx="56" cy="74" r="4" fill="#0284c7"/>
+  <circle cx="70" cy="74" r="4" fill="#0284c7"/>
+  <line x1="50" y1="74" x2="76" y2="24" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

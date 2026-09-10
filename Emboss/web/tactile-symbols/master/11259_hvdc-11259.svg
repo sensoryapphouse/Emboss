@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shunt and series converters on common DC bus independently steering real and reactive line flows with bold 4.5px strokes -->
+  <rect x="24" y="24" width="22" height="22" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="54" y="24" width="22" height="22" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <line x1="46" y1="35" x2="54" y2="35" stroke="#ca8a04" stroke-width="4.5"/>
+  <line x1="35" y1="46" x2="35" y2="76" stroke="#000000" stroke-width="4.5"/>
+</svg>

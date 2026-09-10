@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Inner orbit, outer target orbit, and high apocenter transfer loop with bold 4.5px strokes -->
+  <circle cx="45" cy="50" r="12" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="45" cy="50" r="22" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <path d="M 33 50 Q 45 14 82 50 T 23 50" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <circle cx="45" cy="50" r="6" fill="#000000"/>
+</svg>

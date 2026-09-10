@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sun and Earth alignment with L2 point and surrounding looping halo orbit with bold 4.5px strokes -->
+  <circle cx="24" cy="50" r="10" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="72" cy="50" r="4" fill="#ef4444"/>
+  <ellipse cx="72" cy="50" rx="10" ry="22" fill="none" stroke="#ca8a04" stroke-width="4.5" stroke-dasharray="3,3"/>
+</svg>

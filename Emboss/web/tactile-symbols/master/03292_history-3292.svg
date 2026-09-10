@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Braided silk pendant ribbons descending from top with bold 4.5px strokes -->
+  <line x1="44" y1="20" x2="44" y2="46" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="56" y1="20" x2="56" y2="46" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Circular stamped red beeswax seal bottom with bold 4.5px stroke -->
+  <circle cx="50" cy="62" r="18" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="62" r="10" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+</svg>

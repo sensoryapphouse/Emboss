@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Electric charge coupled weakly on left mapping to magnetic monopole coupled strongly on right with bold 4.5px strokes -->
+  <circle cx="30" cy="50" r="10" fill="#0284c7"/>
+  <polygon points="70,38 82,62 58,62" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 44 44 Q 50 34 56 44 M 56 56 Q 50 66 44 56" stroke="#000000" stroke-width="4.5" fill="none"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sloping shoreline with low broad deep wave compressing into giant steep coastal wall with bold 4.5px strokes -->
+  <line x1="18" y1="76" x2="82" y2="40" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 18 48 Q 36 44 54 48 Q 66 18 78 42" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy tamper-resistant locked green metal cabinet with bold 4.5px stroke -->
+  <rect x="22" y="28" width="56" height="50" rx="4" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <!-- Double cabinet door division line with bold 4.0px stroke -->
+  <line x1="50" y1="28" x2="50" y2="78" stroke="#000000" stroke-width="4.0"/>
+  <!-- High voltage warning triangle on front door -->
+  <polygon points="36,44 44,58 28,58" fill="#facc15" stroke="#000000" stroke-width="2.5"/>
+</svg>

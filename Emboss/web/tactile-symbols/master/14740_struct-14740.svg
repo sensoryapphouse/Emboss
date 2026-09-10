@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Confidence bar chart grading residue chain from high confidence blue to flexible orange with bold 4.5px strokes -->
+  <line x1="18" y1="74" x2="82" y2="74" stroke="#000000" stroke-width="4.5"/>
+  <rect x="22" y="24" width="10" height="50" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="36" y="30" width="10" height="44" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="50" y="48" width="10" height="26" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <rect x="64" y="60" width="10" height="14" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+</svg>

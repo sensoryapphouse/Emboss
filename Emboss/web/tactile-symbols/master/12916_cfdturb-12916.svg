@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background Cartesian grid overlapped by body-fitted curvilinear mesh with bold 4.5px strokes -->
+  <rect x="22" y="22" width="56" height="56" fill="none" stroke="#64748b" stroke-width="3.5"/>
+  <rect x="36" y="36" width="36" height="24" fill="#0284c7" opacity="0.3" stroke="#ef4444" stroke-width="4.5" transform="rotate(15 54 48)"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Male probe fitting left with bold 4.5px stroke -->
+  <rect x="18" y="38" width="34" height="24" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Female receiver socket right with bold 4.5px stroke -->
+  <rect x="52" y="30" width="30" height="40" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Double poppet dry-break zero-leak valve seals in center with bold 4.5px stroke -->
+  <line x1="52" y1="30" x2="52" y2="70" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,33 @@
+{
+  "name": "emboss",
+  "version": "1.0.0",
+  "description": "Emboss — document → BRF braille converter + live braille editor (PWA). liblouis + MathCAT WASM.",
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "Sensory App House Ltd",
+  "type": "module",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "build": "node Emboss/scripts/build-dist.mjs",
+    "test": "node Emboss/scripts/test-all-file-formats.mjs"
+  },
+  "dependencies": {
+    "@lexical/list": "^0.46.0",
+    "@lexical/rich-text": "^0.46.0",
+    "@lexical/selection": "^0.46.0",
+    "@lexical/utils": "^0.46.0",
+    "lexical": "^0.46.0",
+    "mathlive": "^0.101.2",
+    "svgo": "^4.1.0",
+    "temml": "0.13.3",
+    "usb": "^3.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@xmldom/xmldom": "^0.9.10",
+    "esbuild": "^0.28.1",
+    "playwright": "^1.62.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

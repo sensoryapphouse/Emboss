@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Relativistically oscillating boundary mirror radiating real photon pairs from vacuum with bold 4.5px strokes -->
+  <line x1="34" y1="20" x2="34" y2="80" stroke="#000000" stroke-width="6.0"/>
+  <path d="M 34 38 Q 50 30 66 38 T 82 38" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+  <path d="M 34 62 Q 50 54 66 62 T 82 62" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

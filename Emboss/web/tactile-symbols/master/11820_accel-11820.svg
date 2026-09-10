@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 4 capacitive button pickups resolving sub-micron beam position with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="28" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="34" cy="34" r="5" fill="#ca8a04" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="66" cy="34" r="5" fill="#ca8a04" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="34" cy="66" r="5" fill="#ca8a04" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="66" cy="66" r="5" fill="#ca8a04" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="50" cy="50" r="4" fill="#ef4444"/>
+</svg>

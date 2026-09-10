@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Conical taproot body -->
+  <path d="M 36 34 C 44 32 56 32 64 34 C 64 48 54 74 50 88 C 46 74 36 48 36 34 Z" fill="#f97316" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Foliage green tops -->
+  <path d="M 44 32 L 38 14 M 50 32 L 50 12 M 56 32 L 62 14" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Braking split between green electric regeneration and orange mechanical friction with bold 4.5px strokes -->
+  <rect x="22" y="34" width="56" height="32" rx="4" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <rect x="22" y="34" width="36" height="32" fill="#22c55e" opacity="0.4"/>
+  <rect x="58" y="34" width="20" height="32" fill="#ca8a04" opacity="0.4"/>
+</svg>

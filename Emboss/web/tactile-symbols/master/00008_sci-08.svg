@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rubber bulb -->
+  <path d="M 40 24 C 40 12 60 12 60 24 L 56 30 L 44 30 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Pipette collar -->
+  <rect x="42" y="30" width="16" height="6" fill="#94a3b8" stroke="#000000" stroke-width="3.0"/>
+  <!-- Glass barrel with tapered tip -->
+  <path d="M 45 36 L 55 36 L 53 66 L 50 76 L 47 66 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Liquid droplet with 10px clearance -->
+  <path d="M 50 80 C 46 84 46 90 50 90 C 54 90 54 84 50 80 Z" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+</svg>

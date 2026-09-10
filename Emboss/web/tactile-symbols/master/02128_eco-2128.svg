@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Elongated body -->
+  <polygon points="20,62 76,46 76,54 20,68" fill="#22c55e" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Giant bent jumping hind leg -->
+  <polyline points="40,62 58,28 78,74" fill="none" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

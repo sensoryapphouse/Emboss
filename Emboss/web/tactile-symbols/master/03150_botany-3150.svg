@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pistil ovary outline with bold 4.0px stroke -->
+  <path d="M 34 76 C 34 46 44 46 44 28 L 56 28 C 56 46 66 46 66 76 Z" fill="none" stroke="#22c55e" stroke-width="4.0"/>
+  <!-- Pollen grain on top stigma with bold 4.0px stroke -->
+  <circle cx="50" cy="24" r="5" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <!-- Pollen tube growing down style into ovary with bold 4.5px stroke -->
+  <line x1="50" y1="28" x2="50" y2="68" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Ovule egg inside ovary bottom with bold 3.5px stroke -->
+  <circle cx="50" cy="68" r="6" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

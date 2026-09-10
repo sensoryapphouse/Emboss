@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Horizontal calandria cylindrical vessel penetrated by fuel channels with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <line x1="26" y1="40" x2="74" y2="40" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="22" y1="50" x2="78" y2="50" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="26" y1="60" x2="74" y2="60" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

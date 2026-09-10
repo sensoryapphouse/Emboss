@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Room temperature flange head top with bold 4.5px stroke -->
+  <rect x="26" y="16" width="48" height="16" rx="3" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Regenerator tube left and pulse tube right extending to 4K cold tip with bold 4.5px strokes -->
+  <rect x="32" y="32" width="14" height="42" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <rect x="54" y="32" width="14" height="42" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- 4 Kelvin copper cold tip block connecting tubes at bottom with bold 4.5px stroke -->
+  <rect x="28" y="74" width="44" height="12" rx="2" fill="#ef4444"/>
+</svg>

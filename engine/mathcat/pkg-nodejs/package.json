@@ -1,0 +1,11 @@
+{
+  "name": "emboss_mathcat",
+  "version": "0.1.0",
+  "files": [
+    "emboss_mathcat_bg.wasm",
+    "emboss_mathcat.js",
+    "emboss_mathcat.d.ts"
+  ],
+  "main": "emboss_mathcat.js",
+  "types": "emboss_mathcat.d.ts"
+}

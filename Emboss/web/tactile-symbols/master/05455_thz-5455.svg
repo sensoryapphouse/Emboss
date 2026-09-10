@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Alternating sub-nanometer metal and dielectric multilayer stack with bold 4.0px strokes -->
+  <rect x="20" y="22" width="60" height="8" rx="2" fill="#ca8a04"/>
+  <rect x="20" y="36" width="60" height="8" rx="2" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <rect x="20" y="50" width="60" height="8" rx="2" fill="#ca8a04"/>
+  <rect x="20" y="64" width="60" height="8" rx="2" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <!-- High-k propagating wave vector arrow crossing multilayer -->
+  <line x1="30" y1="80" x2="70" y2="18" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

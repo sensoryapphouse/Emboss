@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Exhaling calming air stream ribbons -->
+  <path d="M 20 38 L 74 38 C 82 38 82 28 74 28" fill="none" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M 20 54 L 80 54 C 88 54 88 64 80 64" fill="none" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M 20 70 L 68 70" fill="none" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

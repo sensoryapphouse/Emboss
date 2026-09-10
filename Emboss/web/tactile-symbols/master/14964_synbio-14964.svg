@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Staggered double-strand DNA cut leaving 5-nt overhang sticky ends with bold 4.5px strokes -->
+  <path d="M 18 44 L 54 44 M 54 44 L 54 56 M 54 56 L 82 56" stroke="#ef4444" stroke-width="5.5"/>
+  <path d="M 18 56 L 46 56 M 46 56 L 46 44 M 46 44 L 82 44" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

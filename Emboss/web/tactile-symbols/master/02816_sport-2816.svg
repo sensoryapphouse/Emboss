@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Solid steel ball bottom left -->
+  <circle cx="34" cy="66" r="16" fill="#94a3b8" stroke="#000000" stroke-width="4.5"/>
+  <!-- Steel piano wire connecting line -->
+  <line x1="44" y1="56" x2="70" y2="30" stroke="#000000" stroke-width="4.5"/>
+  <!-- Triangular double grip handle top right -->
+  <polygon points="70,30 82,18 78,34" fill="none" stroke="#facc15" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

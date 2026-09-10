@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Wooden coat rail and hanging pegs -->
+  <rect x="18" y="28" width="64" height="14" rx="3" fill="#8a5a2b" stroke="#000000" stroke-width="4.0"/>
+  <!-- 3 Curved coat hooks -->
+  <path d="M 32 36 C 32 50 40 50 40 42" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 50 36 C 50 50 58 50 58 42" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 68 36 C 68 50 76 50 76 42" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

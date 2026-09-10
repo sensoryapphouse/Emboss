@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mountain valley channel with bold 4.5px stroke -->
+  <polygon points="18,36 34,78 66,78 82,36" fill="none" stroke="#8a5a2b" stroke-width="5.0"/>
+  <!-- Torrential debris mud flow filling valley with bold 4.0px stroke -->
+  <ellipse cx="50" cy="62" rx="18" ry="8" fill="#78350f" stroke="#000000" stroke-width="4.0"/>
+</svg>

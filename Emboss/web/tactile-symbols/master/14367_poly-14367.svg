@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Growing chain with terminal negative carbanion paired with lithium counterion with bold 4.5px strokes -->
+  <path d="M 20 60 L 38 40 L 56 60 L 72 40" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="72" cy="40" r="7" fill="#ca8a04"/>
+  <circle cx="82" cy="54" r="5" fill="#0284c7"/>
+</svg>

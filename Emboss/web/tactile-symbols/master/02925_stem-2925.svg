@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Axes (P vertical, T horizontal) -->
+  <line x1="20" y1="20" x2="20" y2="80" stroke="#000000" stroke-width="5.5"/>
+  <line x1="20" y1="80" x2="82" y2="80" stroke="#000000" stroke-width="5.5"/>
+  <!-- Y-shaped phase boundary curves with bold 4.5px strokes -->
+  <path d="M 22 72 C 36 68 46 54 48 50" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 48 50 C 48 34 46 22 46 20" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 48 50 C 58 44 72 38 80 36" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Triple Point junction with bold 4.0px stroke -->
+  <circle cx="48" cy="50" r="5" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+</svg>

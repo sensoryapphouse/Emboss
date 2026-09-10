@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Aryl group attached to trans-alkene double bond with bold 4.5px strokes -->
+  <polygon points="26,38 38,38 44,50 38,62 26,62 20,50" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <line x1="44" y1="50" x2="60" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="60" y1="50" x2="78" y2="34" stroke="#0284c7" stroke-width="6.0"/>
+</svg>

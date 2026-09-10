@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Modulated plane wave propagating through periodic lattice ions with bold 4.5px strokes -->
+  <circle cx="25" cy="50" r="5" fill="#000000"/>
+  <circle cx="50" cy="50" r="5" fill="#000000"/>
+  <circle cx="75" cy="50" r="5" fill="#000000"/>
+  <path d="M 18 50 Q 25 24 37 50 Q 50 76 62 50 Q 75 24 82 50" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

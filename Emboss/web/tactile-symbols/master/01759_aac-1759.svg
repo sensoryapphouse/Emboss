@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Front-loading washer body -->
+  <rect x="22" y="20" width="56" height="64" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Round glass door window -->
+  <circle cx="50" cy="56" r="18" fill="#38bdf8" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="34" cy="30" r="4" fill="#ef4444"/>
+</svg>

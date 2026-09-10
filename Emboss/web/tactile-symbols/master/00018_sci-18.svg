@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Top hanging ring -->
+  <circle cx="50" cy="18" r="6" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <!-- Scale body casing -->
+  <rect x="38" y="20" width="24" height="54" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Internal spring zigzag indicator -->
+  <path d="M 50 28 L 44 34 L 56 40 L 44 46 L 56 52 L 50 58" fill="none" stroke="#0284c7" stroke-width="3.0" stroke-linejoin="round"/>
+  <!-- Bottom hook -->
+  <path d="M 50 74 L 50 84 C 50 92 60 92 60 84" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

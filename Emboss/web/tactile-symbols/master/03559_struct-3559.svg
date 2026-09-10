@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central circular pivot island pier with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="14" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Rotated horizontal bridge span diagonal with bold 5.0px stroke -->
+  <line x1="22" y1="78" x2="78" y2="22" stroke="#ef4444" stroke-width="6.5" stroke-linecap="round"/>
+  <!-- Rotary rotation direction arrow with bold 4.0px stroke -->
+  <path d="M 58 38 A 12 12 0 0 1 66 50" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,802 @@
+[
+  {
+    "num": 1,
+    "name": "Aileron Roll Control",
+    "domain": "everyday-life",
+    "elements": 13,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 2,
+    "name": "Ankh Symbol",
+    "domain": "everyday-life",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 3,
+    "name": "Atari 2600 Joystick Single Red Button",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 4,
+    "name": "Gym Buddy",
+    "domain": "everyday-life",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 5,
+    "name": "Hongi Greeting",
+    "domain": "everyday-life",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 6,
+    "name": "Ice Rink",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 22.47,
+    "pass": false
+  },
+  {
+    "num": 7,
+    "name": "It",
+    "domain": "everyday-life",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 8,
+    "name": "Khanda (2)",
+    "domain": "everyday-life",
+    "elements": 8,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 9,
+    "name": "Laundry Symbol Dry",
+    "domain": "everyday-life",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 10,
+    "name": "Loading Spinner",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 11,
+    "name": "Marlinspike",
+    "domain": "everyday-life",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 12,
+    "name": "Mirror",
+    "domain": "everyday-life",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 13,
+    "name": "Muted Microphone",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 14,
+    "name": "Offering Bowl",
+    "domain": "everyday-life",
+    "elements": 15,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 15,
+    "name": "Paper Boat",
+    "domain": "everyday-life",
+    "elements": 8,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 16,
+    "name": "Pickleball Court",
+    "domain": "everyday-life",
+    "elements": 9,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 17,
+    "name": "Police Sketch",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 18,
+    "name": "Present Tense",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 19,
+    "name": "Readable",
+    "domain": "everyday-life",
+    "elements": 2,
+    "primaryStroke": 115.2,
+    "pass": false
+  },
+  {
+    "num": 20,
+    "name": "Rice Steamer",
+    "domain": "everyday-life",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 21,
+    "name": "Romance Novel",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 22,
+    "name": "Script",
+    "domain": "everyday-life",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 23,
+    "name": "Shape (1)",
+    "domain": "everyday-life",
+    "elements": 3,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 24,
+    "name": "Baby Beanie",
+    "domain": "everyday-life",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 25,
+    "name": "Before (3)",
+    "domain": "everyday-life",
+    "elements": 13,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 26,
+    "name": "Slingshot",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 27,
+    "name": "Spade",
+    "domain": "everyday-life",
+    "elements": 6,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 28,
+    "name": "Spittoon",
+    "domain": "everyday-life",
+    "elements": 9,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 29,
+    "name": "Surveying Level",
+    "domain": "everyday-life",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 30,
+    "name": "Taller",
+    "domain": "everyday-life",
+    "elements": 6,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 31,
+    "name": "Thankyou (F)",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 32,
+    "name": "Tomahawk",
+    "domain": "everyday-life",
+    "elements": 16,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 33,
+    "name": "Tuxedo (M)",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 34,
+    "name": "Upstairs",
+    "domain": "everyday-life",
+    "elements": 8,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 35,
+    "name": "Walking Stick Strap",
+    "domain": "everyday-life",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 36,
+    "name": "Wheeled Cooler",
+    "domain": "everyday-life",
+    "elements": 10,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 37,
+    "name": "Blown Bulb",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 38,
+    "name": "Bronze Pin",
+    "domain": "everyday-life",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 39,
+    "name": "Bucket (2)",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 40,
+    "name": "Captioned Phone",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 41,
+    "name": "Chess Black Queen",
+    "domain": "everyday-life",
+    "elements": 2,
+    "primaryStroke": 16.31,
+    "pass": false
+  },
+  {
+    "num": 42,
+    "name": "Cog",
+    "domain": "everyday-life",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 43,
+    "name": "Crescent Moon And Star Islam",
+    "domain": "everyday-life",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 44,
+    "name": "Crystal Ball",
+    "domain": "everyday-life",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 45,
+    "name": "Digital Art",
+    "domain": "everyday-life",
+    "elements": 9,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 46,
+    "name": "Dripping",
+    "domain": "everyday-life",
+    "elements": 8,
+    "primaryStroke": 20.62,
+    "pass": false
+  },
+  {
+    "num": 47,
+    "name": "Emoji Monocle",
+    "domain": "everyday-life",
+    "elements": 6,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 48,
+    "name": "Exercise (M)",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 49,
+    "name": "Fish And Chip Shop",
+    "domain": "everyday-life",
+    "elements": 12,
+    "primaryStroke": 22.25,
+    "pass": false
+  },
+  {
+    "num": 50,
+    "name": "Fountain Pen",
+    "domain": "everyday-life",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 51,
+    "name": "Funfair",
+    "domain": "everyday-life",
+    "elements": 13,
+    "primaryStroke": 25.75,
+    "pass": false
+  },
+  {
+    "num": 52,
+    "name": "Glasses",
+    "domain": "everyday-life",
+    "elements": 8,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 53,
+    "name": "Candy Apple",
+    "domain": "food-drink",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 54,
+    "name": "Danish",
+    "domain": "food-drink",
+    "elements": 15,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 55,
+    "name": "Green Tomato",
+    "domain": "food-drink",
+    "elements": 9,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 56,
+    "name": "Hot Dog (1)",
+    "domain": "food-drink",
+    "elements": 9,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 57,
+    "name": "Milk Storage Bag",
+    "domain": "food-drink",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 58,
+    "name": "Rotisserie Chicken",
+    "domain": "food-drink",
+    "elements": 16,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 59,
+    "name": "Silicone Bag",
+    "domain": "food-drink",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 60,
+    "name": "Tiramisu (1)",
+    "domain": "food-drink",
+    "elements": 9,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 61,
+    "name": "Atlas",
+    "domain": "geography-transport",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 62,
+    "name": "Easter Island",
+    "domain": "geography-transport",
+    "elements": 8,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 63,
+    "name": "Hip Hop Snapback Cap",
+    "domain": "geography-transport",
+    "elements": 9,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 64,
+    "name": "Luggage (2)",
+    "domain": "geography-transport",
+    "elements": 15,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 65,
+    "name": "Palestine",
+    "domain": "geography-transport",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 66,
+    "name": "Skip Lorry",
+    "domain": "geography-transport",
+    "elements": 15,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 67,
+    "name": "Suitcase",
+    "domain": "geography-transport",
+    "elements": 15,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 68,
+    "name": "Acorn",
+    "domain": "living-world",
+    "elements": 7,
+    "primaryStroke": 5,
+    "pass": true
+  },
+  {
+    "num": 69,
+    "name": "Chicken House",
+    "domain": "living-world",
+    "elements": 7,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 70,
+    "name": "Ewe (1)",
+    "domain": "living-world",
+    "elements": 8,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 71,
+    "name": "Goat (2)",
+    "domain": "living-world",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 72,
+    "name": "Mistletoe Plant",
+    "domain": "living-world",
+    "elements": 13,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 73,
+    "name": "Skate",
+    "domain": "living-world",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 74,
+    "name": "Sunrise (1)",
+    "domain": "living-world",
+    "elements": 12,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 75,
+    "name": "51",
+    "domain": "maths-geometry",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 76,
+    "name": "Chart Increasing",
+    "domain": "maths-geometry",
+    "elements": 9,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 77,
+    "name": "Starburst",
+    "domain": "maths-geometry",
+    "elements": 1,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 78,
+    "name": "Handwriting Book",
+    "domain": "school-classroom",
+    "elements": 15,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 79,
+    "name": "Labeler",
+    "domain": "school-classroom",
+    "elements": 7,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 80,
+    "name": "School Pipette",
+    "domain": "school-classroom",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 81,
+    "name": "Appendix",
+    "domain": "science-stem",
+    "elements": 3,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 82,
+    "name": "Cochlear Implant Magnet",
+    "domain": "science-stem",
+    "elements": 8,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 83,
+    "name": "Condom Male Catheter",
+    "domain": "science-stem",
+    "elements": 8,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 84,
+    "name": "Evaporate",
+    "domain": "science-stem",
+    "elements": 15,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 85,
+    "name": "Hair Roller",
+    "domain": "science-stem",
+    "elements": 12,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 86,
+    "name": "Hoist Over The Toilet",
+    "domain": "science-stem",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 87,
+    "name": "Liquid Medicine",
+    "domain": "science-stem",
+    "elements": 8,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 88,
+    "name": "Mumps (f)",
+    "domain": "science-stem",
+    "elements": 5,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 89,
+    "name": "Pulse (f)",
+    "domain": "science-stem",
+    "elements": 3,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 90,
+    "name": "Sediment",
+    "domain": "science-stem",
+    "elements": 12,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 91,
+    "name": "Sternum",
+    "domain": "science-stem",
+    "elements": 4,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 92,
+    "name": "Toenail Clippers",
+    "domain": "science-stem",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 93,
+    "name": "Ursa Major",
+    "domain": "science-stem",
+    "elements": 16,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 94,
+    "name": "Camera Strap",
+    "domain": "tools-technology",
+    "elements": 10,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 95,
+    "name": "Download Progress",
+    "domain": "tools-technology",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 96,
+    "name": "I Do Not Agree With This",
+    "domain": "tools-technology",
+    "elements": 9,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 97,
+    "name": "Led",
+    "domain": "tools-technology",
+    "elements": 11,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 98,
+    "name": "Program",
+    "domain": "tools-technology",
+    "elements": 14,
+    "primaryStroke": 28.8,
+    "pass": false
+  },
+  {
+    "num": 99,
+    "name": "Sequence",
+    "domain": "tools-technology",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  },
+  {
+    "num": 100,
+    "name": "Wait Please (1)",
+    "domain": "tools-technology",
+    "elements": 14,
+    "primaryStroke": 57.6,
+    "pass": false
+  }
+]

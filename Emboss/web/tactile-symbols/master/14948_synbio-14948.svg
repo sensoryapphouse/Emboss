@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cloverleaf tRNA molecule charged with novel chemical functional group with bold 4.5px strokes -->
+  <path d="M 50 20 L 50 44 M 32 44 L 68 44 M 50 44 L 50 68" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="32" cy="44" r="6" fill="#0284c7"/>
+  <circle cx="68" cy="44" r="6" fill="#0284c7"/>
+  <circle cx="50" cy="68" r="6" fill="#0284c7"/>
+  <circle cx="50" cy="20" r="8" fill="#ef4444"/>
+</svg>

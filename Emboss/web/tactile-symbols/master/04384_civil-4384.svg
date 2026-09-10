@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ground level and steel bearing plate with bold 4.5px strokes -->
+  <line x1="16" y1="76" x2="84" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <rect x="36" y="70" width="28" height="6" fill="#1e293b"/>
+  <!-- Hydraulic jack pushing down against reaction beam with bold 4.5px stroke -->
+  <rect x="42" y="44" width="16" height="26" rx="2" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <!-- Heavy steel reaction beam top with bold 4.5px stroke -->
+  <rect x="18" y="32" width="64" height="12" rx="2" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+</svg>

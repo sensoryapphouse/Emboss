@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bound book block centered on bed with bold 4.5px stroke -->
+  <rect x="32" y="32" width="36" height="36" rx="2" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Three simultaneous cutting knives: Fore-edge right, Head top, Foot bottom with bold 4.5px strokes -->
+  <line x1="28" y1="22" x2="72" y2="22" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="28" y1="78" x2="72" y2="78" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="78" y1="28" x2="78" y2="72" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

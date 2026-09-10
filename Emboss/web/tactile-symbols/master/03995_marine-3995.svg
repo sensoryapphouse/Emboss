@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Deep water flume basin cross section with bold 4.5px stroke -->
+  <polyline points="20,28 20,74 80,74 80,28" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Scaled ship test model floating in water with bold 4.5px stroke -->
+  <polygon points="34,48 66,48 60,64 40,64" fill="#ca8a04" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Overhead motorized towing carriage rail top with bold 4.0px stroke -->
+  <line x1="18" y1="24" x2="82" y2="24" stroke="#000000" stroke-width="4.5"/>
+</svg>

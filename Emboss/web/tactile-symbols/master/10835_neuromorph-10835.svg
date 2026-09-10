@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Real-time spike decoding delivering therapeutic microstimulation with sub-5ms latency with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="26" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <polygon points="50,24 58,16 58,32" fill="#0284c7"/>
+  <circle cx="50" cy="50" r="8" fill="#ef4444"/>
+</svg>

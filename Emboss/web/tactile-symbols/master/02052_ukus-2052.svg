@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 3 Wooden wicket stumps and bails left -->
+  <line x1="24" y1="36" x2="24" y2="78" stroke="#8a5a2b" stroke-width="4.5"/>
+  <line x1="32" y1="36" x2="32" y2="78" stroke="#8a5a2b" stroke-width="4.5"/>
+  <line x1="40" y1="36" x2="40" y2="78" stroke="#8a5a2b" stroke-width="4.5"/>
+  <line x1="20" y1="36" x2="44" y2="36" stroke="#8a5a2b" stroke-width="4.5"/>
+  <!-- Flat willow cricket bat right -->
+  <rect x="60" y="44" width="14" height="34" rx="2" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <line x1="67" y1="44" x2="67" y2="22" stroke="#1e293b" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

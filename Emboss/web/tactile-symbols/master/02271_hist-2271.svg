@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Eye outline almond -->
+  <path d="M 22 46 Q 50 26 78 46 Q 50 66 22 46 Z" fill="none" stroke="#1e293b" stroke-width="5.0" stroke-linejoin="round"/>
+  <!-- Pupil -->
+  <circle cx="50" cy="46" r="6" fill="#1e293b"/>
+  <!-- Spiral falcon cheek marking below -->
+  <path d="M 50 56 L 50 76 M 62 56 Q 72 70 60 78" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

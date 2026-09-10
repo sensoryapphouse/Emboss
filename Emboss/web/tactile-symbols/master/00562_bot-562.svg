@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Host tree branch -->
+  <line x1="12" y1="36" x2="88" y2="36" stroke="#8a5a2b" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Hanging absorbent velamen aerial roots -->
+  <path d="M 38 36 C 38 60 28 84 28 84 M 50 36 C 50 68 56 86 56 86 M 62 36 C 62 58 74 84 74 84" fill="none" stroke="#22c55e" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Crossed scissor handles with insulated blue grips -->
+  <line x1="30" y1="80" x2="48" y2="44" stroke="#0284c7" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="70" y1="80" x2="52" y2="44" stroke="#0284c7" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- Serrated gripping jaws top -->
+  <polygon points="44,44 42,20 50,20 50,44" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <polygon points="56,44 58,20 50,20 50,44" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="44" r="5" fill="#1e293b"/>
+</svg>

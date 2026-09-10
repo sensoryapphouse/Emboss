@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Trachea (windpipe) with cartilage rings -->
+  <rect x="45" y="14" width="10" height="24" rx="2" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <line x1="45" y1="22" x2="55" y2="22" stroke="#000000" stroke-width="2.5"/>
+  <line x1="45" y1="30" x2="55" y2="30" stroke="#000000" stroke-width="2.5"/>
+  <!-- Left lung lobe profile -->
+  <path d="M 45 38 C 30 38 18 48 18 64 C 18 78 30 84 42 84 C 44 84 45 60 45 38 Z" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Right lung lobe profile with cardiac notch -->
+  <path d="M 55 38 C 70 38 82 48 82 64 C 82 78 70 84 58 84 C 56 84 55 60 55 38 Z" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

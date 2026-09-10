@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sharp pyramidal horn peak flanked by steep hollowed cirque basins with bold 4.5px strokes -->
+  <path d="M 20 74 Q 36 40 50 20 Q 64 40 80 74" fill="none" stroke="#000000" stroke-width="5.5"/>
+  <circle cx="50" cy="20" r="5" fill="#ef4444"/>
+</svg>

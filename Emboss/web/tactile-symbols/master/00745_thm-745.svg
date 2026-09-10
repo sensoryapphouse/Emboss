@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Vertical spindle -->
+  <line x1="50" y1="16" x2="50" y2="84" stroke="#000000" stroke-width="4.5"/>
+  <!-- Hinged arms with heavy steel balls -->
+  <line x1="50" y1="28" x2="24" y2="52" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="24" cy="52" r="8" fill="#1e293b" stroke="#000000" stroke-width="3.0"/>
+  <line x1="50" y1="28" x2="76" y2="52" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="76" cy="52" r="8" fill="#1e293b" stroke="#000000" stroke-width="3.0"/>
+</svg>

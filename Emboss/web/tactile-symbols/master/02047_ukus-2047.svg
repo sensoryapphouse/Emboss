@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Soccer ball circle -->
+  <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#000000" stroke-width="5.0"/>
+  <!-- Central pentagon patch -->
+  <polygon points="50,38 60,46 56,58 44,58 40,46" fill="#1e293b"/>
+  <!-- Seam lines extending to edges -->
+  <line x1="50" y1="38" x2="50" y2="18" stroke="#000000" stroke-width="3.5"/>
+  <line x1="60" y1="46" x2="78" y2="40" stroke="#000000" stroke-width="3.5"/>
+  <line x1="56" y1="58" x2="70" y2="74" stroke="#000000" stroke-width="3.5"/>
+  <line x1="44" y1="58" x2="30" y2="74" stroke="#000000" stroke-width="3.5"/>
+  <line x1="40" y1="46" x2="22" y2="40" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bipedal DNA frame with two legs stepping sequentially along footholds on substrate rail with bold 4.5px strokes -->
+  <line x1="18" y1="74" x2="82" y2="74" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 36 74 L 50 34 L 64 74" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+  <circle cx="50" cy="34" r="6" fill="#ef4444"/>
+</svg>

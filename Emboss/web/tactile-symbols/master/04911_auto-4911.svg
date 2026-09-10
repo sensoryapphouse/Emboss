@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 3D oriented cuboid bounding box with bold 4.5px strokes -->
+  <polygon points="30,34 66,24 82,38 46,48" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <polygon points="30,68 66,58 82,72 46,82" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="30" y1="34" x2="30" y2="68" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="66" y1="24" x2="66" y2="58" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="82" y1="38" x2="82" y2="72" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="46" y1="48" x2="46" y2="82" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Yaw heading orientation vector arrow on top face -->
+  <line x1="46" y1="36" x2="64" y2="31" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

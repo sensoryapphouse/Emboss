@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Silicon substrate wafer with bold 4.5px stroke -->
+  <rect x="20" y="54" width="60" height="22" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Current-carrying gold micro-wire U-trap with bold 5.0px stroke -->
+  <path d="M 28 54 L 40 54 L 50 64 L 60 54 L 72 54" fill="none" stroke="#ca8a04" stroke-width="5.0"/>
+  <!-- Trapped BEC cloud hovering above chip surface -->
+  <circle cx="50" cy="38" r="6" fill="#ef4444"/>
+</svg>

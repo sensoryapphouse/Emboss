@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Measuring jug pitcher with spout -->
+  <polygon points="26,26 66,26 60,78 30,78" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Handle right -->
+  <path d="M 64 36 C 78 36 78 68 60 68" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Graduation volume marks -->
+  <line x1="30" y1="42" x2="42" y2="42" stroke="#ffffff" stroke-width="3.0"/>
+  <line x1="30" y1="56" x2="42" y2="56" stroke="#ffffff" stroke-width="3.0"/>
+</svg>

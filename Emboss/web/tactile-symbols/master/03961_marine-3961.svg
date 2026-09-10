@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Forward and aft buoyancy casing towers with low submerged deck between with bold 4.5px stroke -->
+  <polygon points="18,34 28,34 28,58 72,58 72,34 82,34 82,76 18,76" fill="#ca8a04" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Waterline level ballasted above cargo deck with bold 4.0px stroke -->
+  <line x1="14" y1="52" x2="86" y2="52" stroke="#38bdf8" stroke-width="4.5" stroke-dasharray="6,4"/>
+</svg>

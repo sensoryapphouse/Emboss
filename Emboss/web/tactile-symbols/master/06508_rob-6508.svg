@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Front steering linkage angled inward to common turn center with bold 4.5px strokes -->
+  <line x1="28" y1="74" x2="72" y2="74" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="74" x2="50" y2="28" stroke="#000000" stroke-width="4.5"/>
+  <line x1="22" y1="28" x2="78" y2="28" stroke="#000000" stroke-width="4.5"/>
+  <rect x="18" y="66" width="8" height="16" fill="#0284c7"/>
+  <rect x="74" y="66" width="8" height="16" fill="#0284c7"/>
+  <rect x="16" y="22" width="8" height="16" transform="rotate(-15 20 30)" fill="#ef4444"/>
+  <rect x="72" y="22" width="8" height="16" transform="rotate(-25 76 30)" fill="#ef4444"/>
+</svg>

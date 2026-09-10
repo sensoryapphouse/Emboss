@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rectangular PEEK/Titanium disc spacer cage block with bold 4.5px stroke -->
+  <rect x="20" y="30" width="60" height="40" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central bone graft packing chamber with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="14" ry="10" fill="#1e293b" stroke="#ef4444" stroke-width="3.5"/>
+  <!-- Toothed anti-migration serrations on top and bottom faces with bold 4.0px strokes -->
+  <line x1="28" y1="30" x2="32" y2="24" stroke="#000000" stroke-width="4.0"/>
+  <line x1="68" y1="30" x2="72" y2="24" stroke="#000000" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ear contour left -->
+  <path d="M 38 22 C 58 22 58 48 48 56 C 44 60 48 76 38 76" fill="none" stroke="#facc15" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Radiating sound wave arcs right -->
+  <path d="M 62 34 C 68 44 68 56 62 66" fill="none" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 74 24 C 84 40 84 60 74 76" fill="none" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

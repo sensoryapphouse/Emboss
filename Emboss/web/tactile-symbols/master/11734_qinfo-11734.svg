@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Splitting quantum secret among distributed parties requiring k-party collaboration to reconstruct with bold 4.5px strokes -->
+  <circle cx="50" cy="30" r="8" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="38" x2="30" y2="68" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="50" y1="38" x2="70" y2="68" stroke="#0284c7" stroke-width="4.5"/>
+  <circle cx="30" cy="68" r="6" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="70" cy="68" r="6" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+</svg>

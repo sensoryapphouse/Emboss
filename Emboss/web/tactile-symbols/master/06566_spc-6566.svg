@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Optical camera baffle detecting star pattern constellation with bold 4.5px strokes -->
+  <polygon points="26,74 36,36 64,36 74,74" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="44" cy="22" r="3" fill="#ca8a04"/>
+  <circle cx="56" cy="18" r="3" fill="#ca8a04"/>
+  <circle cx="68" cy="26" r="3" fill="#ca8a04"/>
+</svg>

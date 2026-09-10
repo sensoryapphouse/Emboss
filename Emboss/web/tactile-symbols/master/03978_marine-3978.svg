@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer polyurethane protective sheath ring with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="5.0"/>
+  <!-- Steel hydraulic tubes and power copper cores cross section with bold 3.5px strokes -->
+  <circle cx="42" cy="40" r="6" fill="#ef4444"/>
+  <circle cx="58" cy="40" r="6" fill="#ef4444"/>
+  <circle cx="42" cy="60" r="6" fill="#0284c7"/>
+  <circle cx="58" cy="60" r="6" fill="#0284c7"/>
+  <!-- Central optical fiber core bundle -->
+  <circle cx="50" cy="50" r="3" fill="#ca8a04"/>
+</svg>

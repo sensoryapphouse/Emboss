@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 63.5kg trip hammer drop weight with bold 4.5px stroke -->
+  <rect x="38" y="16" width="24" height="20" rx="3" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Drill drive rod shaft with bold 5.0px stroke -->
+  <line x1="50" y1="36" x2="50" y2="60" stroke="#000000" stroke-width="5.5"/>
+  <!-- Split-spoon soil sampler barrel bottom with bold 4.5px stroke -->
+  <rect x="44" y="60" width="12" height="26" rx="2" fill="#ca8a04" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

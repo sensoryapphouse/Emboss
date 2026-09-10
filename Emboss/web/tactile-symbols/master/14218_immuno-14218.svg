@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Four-quadrant gating plot showing distinct clustered cell populations in upper-left and lower-right with bold 4.5px strokes -->
+  <line x1="20" y1="20" x2="20" y2="80" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="80" x2="80" y2="80" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#64748b" stroke-width="3.5" stroke-dasharray="3,3"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#64748b" stroke-width="3.5" stroke-dasharray="3,3"/>
+  <circle cx="35" cy="35" r="5" fill="#ef4444"/>
+  <circle cx="65" cy="65" r="5" fill="#0284c7"/>
+</svg>

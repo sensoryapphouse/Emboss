@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Moving electrostatic shock potential front in overdense plasma with bold 5.5px stroke -->
+  <path d="M 20 74 L 46 74 L 54 26 L 80 26" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linejoin="round"/>
+  <!-- Reflected monoenergetic ion bunch surfing shock front with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="6" fill="#0284c7"/>
+</svg>

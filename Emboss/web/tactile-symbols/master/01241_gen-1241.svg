@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Differentiated somatic cell left -->
+  <circle cx="28" cy="50" r="14" fill="#94a3b8" stroke="#000000" stroke-width="4.0"/>
+  <!-- Reprogramming transition arrow -->
+  <line x1="44" y1="50" x2="56" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="54,44 64,50 54,56" fill="#000000"/>
+  <!-- Pluripotent stem cell cluster right -->
+  <circle cx="74" cy="50" r="14" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+</svg>

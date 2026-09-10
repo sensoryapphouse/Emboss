@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Internal shear strain velocity profile in flowing glacier ice with bold 4.5px strokes -->
+  <line x1="24" y1="76" x2="76" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 36 76 Q 64 70 70 24" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

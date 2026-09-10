@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Converted supertanker hull with bold 4.5px stroke -->
+  <polygon points="18,48 82,48 76,72 24,72" fill="#1e293b" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Internal mooring turret cylinder bow-left with bold 4.0px stroke -->
+  <circle cx="34" cy="48" r="8" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <!-- Flare boom angled structure stern-right with bold 4.0px stroke -->
+  <line x1="74" y1="48" x2="84" y2="24" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

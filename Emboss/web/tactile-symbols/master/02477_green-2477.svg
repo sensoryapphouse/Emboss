@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 3 Chasing arrows forming triangular Möbius loop with bold 5.0px strokes -->
+  <path d="M 50 18 L 68 44 M 68 44 L 40 76 M 40 76 L 22 44" fill="none" stroke="#22c55e" stroke-width="6.0" stroke-linecap="round"/>
+  <polygon points="68,44 76,40 72,50" fill="#22c55e"/>
+  <polygon points="40,76 34,84 44,82" fill="#22c55e"/>
+  <polygon points="22,44 14,40 22,34" fill="#22c55e"/>
+</svg>

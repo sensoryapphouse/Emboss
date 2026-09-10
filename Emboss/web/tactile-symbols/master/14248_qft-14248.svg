@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two incoming electron lines scattering via space-like virtual photon exchange with bold 4.5px strokes -->
+  <line x1="20" y1="24" x2="46" y2="36" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="46" y1="36" x2="80" y2="24" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="20" y1="76" x2="46" y2="64" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="46" y1="64" x2="80" y2="76" stroke="#0284c7" stroke-width="5.5"/>
+  <path d="M 46 36 Q 54 44 46 50 Q 38 56 46 64" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+</svg>

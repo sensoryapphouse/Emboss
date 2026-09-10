@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central petiole stalk base -->
+  <line x1="50" y1="56" x2="50" y2="84" stroke="#000000" stroke-width="4.5"/>
+  <!-- 5 Leaflets radiating from single central point -->
+  <ellipse cx="50" cy="30" rx="8" ry="16" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <ellipse cx="30" cy="38" rx="8" ry="14" transform="rotate(-40 30 38)" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <ellipse cx="70" cy="38" rx="8" ry="14" transform="rotate(40 70 38)" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <ellipse cx="22" cy="54" rx="6" ry="12" transform="rotate(-70 22 54)" fill="#22c55e" stroke="#000000" stroke-width="3.5"/>
+  <ellipse cx="78" cy="54" rx="6" ry="12" transform="rotate(70 78 54)" fill="#22c55e" stroke="#000000" stroke-width="3.5"/>
+</svg>

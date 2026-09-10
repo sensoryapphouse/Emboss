@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ultrasonic standing wave pressure nodes suspending liquid droplet in air with bold 4.5px strokes -->
+  <rect x="26" y="18" width="48" height="12" rx="2" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="26" y="70" width="48" height="12" rx="2" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 30 50 Q 50 34 70 50 Q 50 66 30 50" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="6" fill="#ca8a04"/>
+</svg>

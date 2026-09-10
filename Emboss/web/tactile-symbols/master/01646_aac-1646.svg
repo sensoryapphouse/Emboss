@@ -1,0 +1,16 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 2x2 Operator grid -->
+  <line x1="50" y1="18" x2="50" y2="82" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <!-- Plus top left -->
+  <line x1="34" y1="26" x2="34" y2="42" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="26" y1="34" x2="42" y2="34" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Minus top right -->
+  <line x1="58" y1="34" x2="74" y2="34" stroke="#facc15" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Multiply bottom left -->
+  <line x1="26" y1="60" x2="42" y2="76" stroke="#22c55e" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="42" y1="60" x2="26" y2="76" stroke="#22c55e" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Equals bottom right -->
+  <line x1="58" y1="64" x2="74" y2="64" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="58" y1="72" x2="74" y2="72" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

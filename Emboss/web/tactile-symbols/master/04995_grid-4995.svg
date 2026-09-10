@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High-voltage insulated fiberglass shaft with bold 5.0px stroke -->
+  <line x1="20" y1="84" x2="56" y2="34" stroke="#ca8a04" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Large curved yellow insulated body rescue hook top-right with bold 5.0px stroke -->
+  <path d="M 56 34 C 66 20 84 24 84 40 C 84 54 70 54 70 44" fill="none" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

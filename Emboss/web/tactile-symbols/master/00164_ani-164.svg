@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cloud-shaped fluffy wool body -->
+  <path d="M 38 36 C 30 28 42 18 52 24 C 62 16 76 22 74 32 C 84 36 86 50 78 58 C 84 68 70 78 60 72 C 50 78 38 72 38 64 C 28 60 28 46 38 36 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Dark head on left -->
+  <ellipse cx="24" cy="46" rx="8" ry="10" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Legs -->
+  <line x1="44" y1="72" x2="44" y2="86" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="66" y1="72" x2="66" y2="86" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

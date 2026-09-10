@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Linear FRC confinement solenoid coils with bold 4.5px stroke -->
+  <rect x="18" y="32" width="52" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- D-He3 rotating fusion plasmoid in center with bold 4.0px stroke -->
+  <ellipse cx="44" cy="50" rx="16" ry="8" fill="#facc15" stroke="#ef4444" stroke-width="3.5"/>
+  <!-- Propellant bypass exhaust nozzle right with bold 4.5px stroke -->
+  <polygon points="70,38 86,26 86,74 70,62" fill="#38bdf8" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

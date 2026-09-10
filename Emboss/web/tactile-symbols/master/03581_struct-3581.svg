@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fixed top ceiling mount with bold 4.5px stroke -->
+  <line x1="32" y1="20" x2="68" y2="20" stroke="#000000" stroke-width="5.5"/>
+  <!-- Coiled extension helical spring with bold 4.5px stroke -->
+  <polyline points="50,20 50,26 62,32 38,40 62,48 38,56 62,64 50,70 50,74" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Suspended weight block bottom with bold 4.0px stroke -->
+  <rect x="42" y="74" width="16" height="12" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+</svg>

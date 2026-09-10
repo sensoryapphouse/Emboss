@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Electron splitting into independently traveling charge holon and spin spinon with bold 4.5px strokes -->
+  <circle cx="30" cy="50" r="8" fill="#000000"/>
+  <line x1="38" y1="50" x2="56" y2="34" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="38" y1="50" x2="56" y2="66" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="66" cy="34" r="7" fill="#0284c7"/>
+  <circle cx="66" cy="66" r="7" fill="#ef4444"/>
+</svg>

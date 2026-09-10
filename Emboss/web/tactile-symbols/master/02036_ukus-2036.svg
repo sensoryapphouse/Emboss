@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large interactive touchscreen display -->
+  <rect x="18" y="20" width="64" height="50" rx="4" fill="#38bdf8" stroke="#000000" stroke-width="4.5"/>
+  <!-- Stylus pen tapping screen -->
+  <line x1="68" y1="46" x2="82" y2="32" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

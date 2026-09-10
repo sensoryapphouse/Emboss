@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Three oscillating lepton flavor channels (electron, muon, tau) mixing in flight with bold 4.5px strokes -->
+  <path d="M 20 34 Q 50 20 80 34" stroke="#0284c7" stroke-width="4.5" fill="none"/>
+  <path d="M 20 50 Q 50 64 80 50" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+  <path d="M 20 66 Q 50 52 80 66" stroke="#22c55e" stroke-width="4.5" fill="none"/>
+</svg>

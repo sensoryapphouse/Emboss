@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heeled ship midship cross section with bold 4.5px stroke -->
+  <polygon points="26,30 74,38 66,74 20,66" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Vertical centerline and Metacenter M top with bold 4.0px strokes -->
+  <line x1="44" y1="20" x2="44" y2="70" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="44" cy="24" r="4" fill="#ef4444"/>
+  <!-- Center of gravity G and Buoyancy B points -->
+  <circle cx="44" cy="44" r="3.5" fill="#1e293b"/>
+  <circle cx="44" cy="58" r="3.5" fill="#ca8a04"/>
+</svg>

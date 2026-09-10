@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flying nose cone right with bold 4.5px stroke -->
+  <polygon points="56,50 84,28 84,72" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Focused laser spark creating high-temperature plasma bubble ahead with bold 4.5px stroke -->
+  <circle cx="28" cy="50" r="10" fill="#facc15" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- Deflected parting shock wave contours around plasma bubble -->
+  <path d="M 28 34 Q 44 26 76 20" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 28 66 Q 44 74 76 80" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

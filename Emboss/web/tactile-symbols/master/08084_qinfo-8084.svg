@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tanner graph bipartite connections between sparse data qubits and check nodes with bold 4.5px strokes -->
+  <circle cx="28" cy="30" r="6" fill="#0284c7"/>
+  <circle cx="28" cy="50" r="6" fill="#0284c7"/>
+  <circle cx="28" cy="70" r="6" fill="#0284c7"/>
+  <rect x="68" y="24" width="12" height="12" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <rect x="68" y="64" width="12" height="12" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <line x1="34" y1="30" x2="68" y2="30" stroke="#000000" stroke-width="4.0"/>
+  <line x1="34" y1="50" x2="68" y2="70" stroke="#000000" stroke-width="4.0"/>
+  <line x1="34" y1="70" x2="68" y2="70" stroke="#000000" stroke-width="4.0"/>
+</svg>

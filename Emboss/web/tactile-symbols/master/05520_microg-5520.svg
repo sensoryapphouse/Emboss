@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tank drain sump base bottom with bold 5.0px stroke -->
+  <path d="M 20 40 L 20 78 L 80 78 L 80 40" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Permanent magnet pole under drain bottom -->
+  <rect x="36" y="78" width="28" height="10" fill="#ef4444"/>
+  <!-- Superparamagnetic ferrofluid mound anchored over drain with bold 4.5px stroke -->
+  <path d="M 28 78 Q 50 44 72 78 Z" fill="#1e293b" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

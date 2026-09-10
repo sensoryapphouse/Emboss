@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Raster folded long scaffold strand held by cross-staples with bold 4.5px strokes -->
+  <path d="M 20 30 L 80 30 L 80 44 L 20 44 L 20 58 L 80 58 L 80 72 L 20 72" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="40" y1="24" x2="40" y2="78" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="60" y1="24" x2="60" y2="78" stroke="#ef4444" stroke-width="3.5"/>
+</svg>

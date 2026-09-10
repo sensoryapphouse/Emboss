@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Precision optical joint casing with bold 4.5px stroke -->
+  <rect x="20" y="32" width="60" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Collimating lens pair transmitting continuous laser beam across rotation with bold 4.5px strokes -->
+  <rect x="34" y="38" width="8" height="24" rx="2" fill="#0284c7"/>
+  <rect x="58" y="38" width="8" height="24" rx="2" fill="#0284c7"/>
+  <line x1="42" y1="50" x2="58" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

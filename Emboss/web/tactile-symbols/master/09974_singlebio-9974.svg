@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Magnetic gradient applying calibrated forces to hundreds of tethered beads in parallel with bold 4.5px strokes -->
+  <line x1="18" y1="24" x2="82" y2="24" stroke="#ca8a04" stroke-width="5.5"/>
+  <circle cx="34" cy="52" r="7" fill="#64748b"/>
+  <circle cx="66" cy="52" r="7" fill="#64748b"/>
+  <line x1="34" y1="59" x2="34" y2="78" stroke="#000000" stroke-width="3.5"/>
+  <line x1="66" y1="59" x2="66" y2="78" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Primary noise wave cancelled by exact inverted anti-phase wave yielding zero acoustic pressure with bold 4.5px strokes -->
+  <path d="M 20 40 Q 35 24 50 40 Q 65 56 80 40" stroke="#0284c7" stroke-width="5.0" fill="none"/>
+  <path d="M 20 40 Q 35 56 50 40 Q 65 24 80 40" stroke="#ef4444" stroke-width="5.0" fill="none"/>
+  <line x1="20" y1="72" x2="80" y2="72" stroke="#22c55e" stroke-width="5.5"/>
+</svg>

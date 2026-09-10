@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Esophagus entry tube top -->
+  <line x1="38" y1="18" x2="38" y2="34" stroke="#000000" stroke-width="6.0"/>
+  <!-- J-shaped muscular stomach sac -->
+  <path d="M 38 34 C 44 26 68 26 72 44 C 76 66 66 82 46 82 C 28 82 24 64 34 54 C 40 48 40 40 38 34 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

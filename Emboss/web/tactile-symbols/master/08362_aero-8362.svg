@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Log E(k) vs Log k spectrum showing universal -5/3 inertial subrange slope with bold 4.5px strokes -->
+  <line x1="20" y1="78" x2="80" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="78" x2="20" y2="20" stroke="#000000" stroke-width="4.5"/>
+  <line x1="24" y1="30" x2="42" y2="30" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="42" y1="30" x2="72" y2="66" stroke="#ef4444" stroke-width="5.5"/>
+  <line x1="72" y1="66" x2="78" y2="76" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

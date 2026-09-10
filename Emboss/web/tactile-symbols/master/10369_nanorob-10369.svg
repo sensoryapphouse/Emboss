@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Gallium-indium liquid droplet propelled and shape-shifted by electrochemical surface tension with bold 4.5px strokes -->
+  <ellipse cx="44" cy="50" rx="22" ry="16" fill="#64748b" opacity="0.4" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 66 50 L 82 50" stroke="#ef4444" stroke-width="5.0"/>
+  <polygon points="82,50 72,44 72,56" fill="#ef4444"/>
+</svg>

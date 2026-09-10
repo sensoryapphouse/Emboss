@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Carbon-lined steel pot cathode tank with bold 4.5px stroke -->
+  <rect x="20" y="38" width="60" height="42" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Molten cryolite electrolyte bath with bold 4.0px stroke -->
+  <rect x="24" y="52" width="52" height="24" fill="#facc15"/>
+  <!-- Carbon anode blocks dipping from top with bold 4.0px strokes -->
+  <rect x="32" y="24" width="14" height="34" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <rect x="54" y="24" width="14" height="34" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

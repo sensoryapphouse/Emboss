@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Unique double-triangle pennant silhouette with bold 4.5px stroke -->
+  <polygon points="22,20 74,48 42,48 74,80 22,80" fill="#ef4444" stroke="#0284c7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- White crescent moon top -->
+  <circle cx="34" cy="38" r="5" fill="#ffffff"/>
+  <!-- White sun bottom -->
+  <circle cx="34" cy="66" r="6" fill="#ffffff"/>
+</svg>

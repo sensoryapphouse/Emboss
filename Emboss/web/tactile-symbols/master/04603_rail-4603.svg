@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Conical refractory welding crucible with bold 4.5px stroke -->
+  <polygon points="26,18 74,18 56,58 44,58" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Superheated 2500°C molten thermite steel pouring into rail gap bottom with bold 5.0px stroke -->
+  <line x1="50" y1="58" x2="50" y2="82" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- Rail ends resting under mould bottom -->
+  <rect x="20" y="78" width="60" height="8" rx="2" fill="#1e293b"/>
+</svg>

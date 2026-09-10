@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heart outer silhouette with bold 4.5px stroke -->
+  <path d="M 50 78 C 22 62 20 34 38 24 C 48 20 50 28 50 32 C 50 28 52 20 62 24 C 80 34 78 62 50 78 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Cross dividing 4 internal chambers with bold 4.5px stroke -->
+  <line x1="50" y1="32" x2="50" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <line x1="26" y1="46" x2="74" y2="46" stroke="#000000" stroke-width="4.5"/>
+</svg>

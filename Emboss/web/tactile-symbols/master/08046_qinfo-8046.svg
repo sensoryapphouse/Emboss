@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Density matrix diagonal spectrum bar chart with logarithmic entropy curve with bold 4.5px strokes -->
+  <line x1="20" y1="78" x2="80" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <rect x="28" y="44" width="12" height="34" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="46" y="56" width="12" height="22" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="64" y="66" width="12" height="12" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 22 28 Q 48 40 78 74" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

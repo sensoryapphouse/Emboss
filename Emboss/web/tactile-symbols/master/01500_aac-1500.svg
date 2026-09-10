@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Swimmer head sphere -->
+  <circle cx="40" cy="34" r="10" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Wavy blue water pool levels -->
+  <path d="M 16 54 Q 32 44 48 54 T 84 54" fill="none" stroke="#0284c7" stroke-width="6.0" stroke-linecap="round"/>
+  <path d="M 16 72 Q 32 62 48 72 T 84 72" fill="none" stroke="#0284c7" stroke-width="6.0" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Interlocking teeth line bottom -->
+  <line x1="50" y1="46" x2="50" y2="86" stroke="#000000" stroke-width="5.5" stroke-dasharray="3 3"/>
+  <!-- Y-shaped open zipper tapes top -->
+  <line x1="50" y1="46" x2="24" y2="16" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="46" x2="76" y2="16" stroke="#000000" stroke-width="4.5"/>
+  <!-- Metal zipper slider body -->
+  <polygon points="42,38 58,38 54,54 46,54" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+  <!-- Pull tab -->
+  <rect x="47" y="54" width="6" height="16" rx="2" fill="#94a3b8" stroke="#000000" stroke-width="2.5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Emergent layer tree crown poking high left with bold 4.5px stroke -->
+  <circle cx="34" cy="26" r="10" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <!-- Continuous main canopy layer in middle with bold 4.5px stroke -->
+  <path d="M 20 48 Q 36 38 50 48 Q 64 38 80 48" fill="none" stroke="#22c55e" stroke-width="5.5"/>
+  <!-- Shaded understory shrubs bottom with bold 4.0px strokes -->
+  <circle cx="50" cy="68" r="6" fill="#15803d"/>
+  <line x1="18" y1="78" x2="82" y2="78" stroke="#000000" stroke-width="4.5"/>
+</svg>

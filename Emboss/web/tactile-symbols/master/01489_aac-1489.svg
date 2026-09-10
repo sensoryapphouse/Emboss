@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Triangular watermelon slice -->
+  <polygon points="50,20 22,76 78,76" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Green rind bottom curve -->
+  <path d="M 20 78 C 40 84 60 84 80 78" stroke="#22c55e" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Seeds -->
+  <circle cx="44" cy="52" r="2.5" fill="#000000"/>
+  <circle cx="56" cy="52" r="2.5" fill="#000000"/>
+</svg>

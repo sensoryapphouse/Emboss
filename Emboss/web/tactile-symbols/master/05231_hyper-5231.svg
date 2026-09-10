@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stack of concentric inflatable synthetic tori forming conical aeroshell with bold 4.5px strokes -->
+  <polygon points="50,22 84,74 16,74" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Flexible thermal protection system (FTPS) outer blanket skin with bold 4.5px stroke -->
+  <line x1="16" y1="74" x2="84" y2="74" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- Central rigid spacecraft nose hub top -->
+  <polygon points="50,22 56,36 44,36" fill="#1e293b"/>
+</svg>

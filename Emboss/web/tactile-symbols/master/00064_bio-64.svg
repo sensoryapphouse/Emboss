@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sclera / Eyeball sphere with optic nerve exit on right -->
+  <path d="M 32 26 C 44 14 74 14 82 32 C 86 40 82 46 86 48 L 88 48 L 88 52 L 86 52 C 82 54 86 60 82 68 C 74 86 44 86 32 74" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Anterior cornea dome on left -->
+  <path d="M 32 26 C 18 36 18 64 32 74" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Crystalline biconvex lens -->
+  <path d="M 38 34 C 44 42 44 58 38 66 C 32 58 32 42 38 34 Z" fill="#38bdf8" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Retina layer on posterior wall -->
+  <path d="M 64 24 C 76 34 76 66 64 76" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

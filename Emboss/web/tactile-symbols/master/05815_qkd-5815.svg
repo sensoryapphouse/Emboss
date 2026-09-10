@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central Bell State Measurement (BSM) detector block with bold 4.5px stroke -->
+  <rect x="38" y="34" width="24" height="32" rx="3" fill="#1e293b"/>
+  <!-- Two independent entangled pairs (Pair 1 left, Pair 2 right) with bold 5.0px strokes -->
+  <line x1="18" y1="50" x2="38" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="82" y1="50" x2="62" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Swapped non-local entanglement arc bridging outer ends with bold 4.0px stroke -->
+  <path d="M 18 50 Q 50 16 82 50" fill="none" stroke="#ca8a04" stroke-width="4.5" stroke-dasharray="6,3"/>
+</svg>

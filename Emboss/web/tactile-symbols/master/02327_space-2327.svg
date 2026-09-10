@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Glowing interstellar gas cloud perimeter -->
+  <path d="M 28 32 C 16 50 20 72 38 78 C 56 84 76 78 82 58 C 88 38 68 20 48 24 Z" fill="#ef4444" stroke="#0284c7" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Newly born proto-stars inside -->
+  <circle cx="44" cy="46" r="4" fill="#facc15"/>
+  <circle cx="58" cy="54" r="5" fill="#ffffff"/>
+</svg>

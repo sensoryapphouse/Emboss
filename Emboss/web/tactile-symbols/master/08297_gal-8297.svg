@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two-armed logarithmic spiral density wave pattern with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="8" fill="#ca8a04"/>
+  <path d="M 50 42 Q 68 36 74 54 Q 78 72 60 76 Q 42 78 32 64" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 50 58 Q 32 64 26 46 Q 22 28 40 24 Q 58 22 68 36" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

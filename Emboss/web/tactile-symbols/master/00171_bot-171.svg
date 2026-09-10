@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cloud-shaped canopy foliage -->
+  <path d="M 34 46 C 20 46 16 30 30 22 C 34 12 50 12 56 18 C 66 12 80 18 80 28 C 88 36 84 52 70 54 C 74 64 60 70 50 64 C 40 70 28 62 34 46 Z" fill="#22c55e" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Tree trunk and roots -->
+  <path d="M 44 58 L 44 86 L 36 86 M 56 58 L 56 86 L 64 86" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

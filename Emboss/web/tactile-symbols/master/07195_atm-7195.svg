@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Quadripartite Earth system emblem linking Atmosphere, Hydrosphere, Biosphere, and Cryosphere with bold 4.5px strokes -->
+  <rect x="22" y="22" width="24" height="24" rx="3" fill="#0284c7"/>
+  <rect x="54" y="22" width="24" height="24" rx="3" fill="#ef4444"/>
+  <rect x="22" y="54" width="24" height="24" rx="3" fill="#22c55e"/>
+  <rect x="54" y="54" width="24" height="24" rx="3" fill="#ca8a04"/>
+  <circle cx="50" cy="50" r="10" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+</svg>

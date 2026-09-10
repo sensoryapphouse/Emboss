@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long curved Paulownia wood soundboard horizontal -->
+  <rect x="18" y="42" width="64" height="16" rx="4" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Movable ji bridge points along soundboard with bold 4.0px strokes -->
+  <polygon points="34,36 38,42 30,42" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="50,36 54,42 46,42" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="66,36 70,42 62,42" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+</svg>

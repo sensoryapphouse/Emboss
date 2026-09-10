@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Battery body cylinder -->
+  <rect x="28" y="24" width="44" height="62" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Positive top terminal knob -->
+  <rect x="42" y="14" width="16" height="10" rx="2" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <!-- Positive (+) symbol -->
+  <line x1="40" y1="44" x2="60" y2="44" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="50" y1="34" x2="50" y2="54" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Negative (-) symbol with 24px vertical separation -->
+  <line x1="40" y1="68" x2="60" y2="68" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hexapod Stewart platform motion base left with bold 4.5px stroke -->
+  <polygon points="18,74 38,74 34,54 22,54" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Telescopic motion-compensated walk-to-work gangway bridge extending to turbine with bold 5.0px stroke -->
+  <line x1="30" y1="54" x2="82" y2="30" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Target turbine ladder landing frame right with bold 4.5px stroke -->
+  <line x1="82" y1="20" x2="82" y2="80" stroke="#000000" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Acetabular cup shell top-left with bold 4.5px stroke -->
+  <path d="M 28 32 A 16 16 0 0 1 54 22" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Ceramic femoral head ball with bold 4.0px stroke -->
+  <circle cx="44" cy="30" r="8" fill="#ffffff" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- Curved titanium femoral stem with bold 5.0px stroke -->
+  <path d="M 46 38 L 56 46 L 56 78 L 48 78 L 48 48 Z" fill="#cbd5e1" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

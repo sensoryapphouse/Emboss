@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rock rim basin -->
+  <ellipse cx="50" cy="54" rx="34" ry="24" fill="#38bdf8" stroke="#8a5a2b" stroke-width="6.0"/>
+  <!-- Little starfish resting on bottom -->
+  <polygon points="50,44 53,50 60,50 55,54 57,60 50,56 43,60 45,54 40,50 47,50" fill="#ef4444"/>
+</svg>

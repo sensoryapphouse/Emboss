@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Soil horizon line -->
+  <line x1="14" y1="58" x2="86" y2="58" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Seed bean in soil -->
+  <ellipse cx="44" cy="68" rx="8" ry="12" transform="rotate(30 44 68)" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <!-- Downward root radicle -->
+  <path d="M 46 78 C 48 84 44 88 46 92" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Upward emerging stem and 2 cotyledon leaves -->
+  <path d="M 44 60 C 44 42 50 36 50 26" fill="none" stroke="#22c55e" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 50 26 C 40 18 32 26 50 30" fill="#22c55e" stroke="#000000" stroke-width="3.0" stroke-linejoin="round"/>
+  <path d="M 50 26 C 60 18 68 26 50 30" fill="#22c55e" stroke="#000000" stroke-width="3.0" stroke-linejoin="round"/>
+</svg>

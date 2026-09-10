@@ -1,0 +1,16 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dendrite branches on left -->
+  <line x1="12" y1="36" x2="26" y2="44" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="12" y1="64" x2="26" y2="56" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Soma (cell body) with nucleus -->
+  <circle cx="32" cy="50" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="32" cy="50" r="5" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+  <!-- Axon shaft -->
+  <line x1="46" y1="50" x2="82" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <!-- Myelin sheath segments -->
+  <rect x="48" y="44" width="12" height="12" rx="3" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <rect x="64" y="44" width="12" height="12" rx="3" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <!-- Axon terminal buttons on right -->
+  <line x1="82" y1="50" x2="90" y2="38" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="82" y1="50" x2="90" y2="62" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

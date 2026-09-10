@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Optical cavity mirror left and movable mechanical mirror right with bold 5.0px strokes -->
+  <rect x="18" y="24" width="8" height="52" fill="#0284c7"/>
+  <rect x="74" y="24" width="8" height="52" rx="2" fill="#ef4444"/>
+  <!-- Red-detuned cooling laser beam extracting mechanical phonons in center with bold 4.5px stroke -->
+  <line x1="26" y1="50" x2="74" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Clamped nucleus potential energy curves separating ground and excited electronic states with bold 4.5px strokes -->
+  <path d="M 20 40 Q 50 78 80 40" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 20 20 Q 50 50 80 20" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

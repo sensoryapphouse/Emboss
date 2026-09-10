@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Old black hole mirror in center with bold 4.5px stroke -->
+  <rect x="36" y="24" width="28" height="52" rx="3" fill="#1e293b"/>
+  <!-- Diary qubit thrown in left (blue) and rapidly reflected in Hawking photon right (red) with bold 5.0px strokes -->
+  <line x1="16" y1="50" x2="36" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="64" y1="50" x2="84" y2="50" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

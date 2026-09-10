@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two vehicles communicating directly via Sidelink PC5 with bold 4.5px strokes -->
+  <rect x="18" y="44" width="24" height="16" rx="3" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <rect x="58" y="44" width="24" height="16" rx="3" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 42 42 Q 50 30 58 42" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

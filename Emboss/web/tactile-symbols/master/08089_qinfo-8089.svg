@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Information flow contracting through noisy quantum channel chain with bold 4.5px strokes -->
+  <circle cx="26" cy="50" r="10" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="50" cy="50" r="8" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="74" cy="50" r="6" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <line x1="36" y1="50" x2="42" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <line x1="58" y1="50" x2="68" y2="50" stroke="#000000" stroke-width="4.0"/>
+</svg>

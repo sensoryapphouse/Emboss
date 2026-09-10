@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Puzzled face circle -->
+  <circle cx="50" cy="54" r="30" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Straight flat mouth and asymmetric eyebrows -->
+  <line x1="40" y1="68" x2="60" y2="68" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Big red question mark overhead -->
+  <path d="M 44 18 C 44 12 56 12 56 18 C 56 24 50 24 50 28" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

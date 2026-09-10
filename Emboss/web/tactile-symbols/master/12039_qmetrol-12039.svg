@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Chi(2) non-linear crystal splitting single pump photon into signal and idler entangled pair with bold 4.5px strokes -->
+  <rect x="36" y="28" width="28" height="44" fill="#64748b" opacity="0.4" stroke="#000000" stroke-width="4.0"/>
+  <line x1="20" y1="50" x2="36" y2="50" stroke="#0284c7" stroke-width="5.5"/>
+  <path d="M 64 50 L 80 34 M 64 50 L 80 66" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

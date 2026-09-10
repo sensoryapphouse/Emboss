@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Swivel gooseneck spout pipe -->
+  <path d="M 36 82 L 36 34 C 36 18 68 18 68 36 L 68 46" fill="none" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Aerator nozzle tip -->
+  <rect x="63" y="46" width="10" height="8" rx="2" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <!-- Single lever mixer handle left -->
+  <line x1="36" y1="62" x2="18" y2="52" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

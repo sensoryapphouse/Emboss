@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nonlinear optical cavity with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- First admitted single photon inside in center with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="8" fill="#ef4444"/>
+  <!-- Second incoming photon blocked at input left -->
+  <circle cx="16" cy="50" r="6" fill="#0284c7"/>
+</svg>

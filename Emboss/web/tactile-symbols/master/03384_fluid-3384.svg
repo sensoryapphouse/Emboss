@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central torpedo hub with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="10" ry="22" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Adjustable-pitch propeller blades left & right with bold 4.5px strokes -->
+  <ellipse cx="26" cy="50" rx="14" ry="6" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <ellipse cx="74" cy="50" rx="14" ry="6" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Inverted triangle sign with red border -->
+  <polygon points="18,22 82,22 50,82" fill="#ffffff" stroke="#ef4444" stroke-width="7.0" stroke-linejoin="round"/>
+  <!-- Black horizontal indicator bar -->
+  <line x1="34" y1="42" x2="66" y2="42" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

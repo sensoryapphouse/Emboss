@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Elongated cargo fuselage body with bold 4.5px stroke -->
+  <rect x="24" y="46" width="52" height="18" rx="6" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <!-- Front rotor mast & blades top left with bold 4.5px stroke -->
+  <line x1="20" y1="30" x2="48" y2="30" stroke="#000000" stroke-width="5.0"/>
+  <line x1="34" y1="30" x2="34" y2="46" stroke="#000000" stroke-width="4.5"/>
+  <!-- Rear rotor mast & blades top right with bold 4.5px stroke -->
+  <line x1="52" y1="24" x2="80" y2="24" stroke="#000000" stroke-width="5.0"/>
+  <line x1="66" y1="24" x2="66" y2="46" stroke="#000000" stroke-width="4.5"/>
+</svg>

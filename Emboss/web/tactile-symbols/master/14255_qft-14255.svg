@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Close-together quarks interacting weakly via thin spring gluon line at high momentum with bold 4.5px strokes -->
+  <circle cx="34" cy="50" r="8" fill="#ef4444"/>
+  <circle cx="66" cy="50" r="8" fill="#0284c7"/>
+  <path d="M 42 50 Q 46 42 50 50 Q 54 58 58 50" stroke="#ca8a04" stroke-width="5.0" fill="none"/>
+</svg>

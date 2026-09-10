@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy forged steel ring flange with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="30" fill="#ffffff" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="18" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Bolt hole circle array with bold 3.5px strokes -->
+  <circle cx="50" cy="26" r="3.5" fill="#ef4444"/>
+  <circle cx="74" cy="50" r="3.5" fill="#ef4444"/>
+  <circle cx="50" cy="74" r="3.5" fill="#ef4444"/>
+  <circle cx="26" cy="50" r="3.5" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stack of 3 golden pancakes -->
+  <ellipse cx="50" cy="70" rx="34" ry="10" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <ellipse cx="50" cy="56" rx="32" ry="10" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <ellipse cx="50" cy="42" rx="30" ry="10" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Butter square top -->
+  <rect x="44" y="26" width="12" height="8" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+</svg>

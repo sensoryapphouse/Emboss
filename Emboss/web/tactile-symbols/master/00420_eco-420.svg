@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Classic gambrel barn roof -->
+  <polygon points="50,16 78,32 78,54 22,54 22,32" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <rect x="22" y="54" width="56" height="32" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Barn doors with X brace -->
+  <rect x="38" y="60" width="24" height="26" fill="#8a5a2b" stroke="#000000" stroke-width="3.0"/>
+</svg>

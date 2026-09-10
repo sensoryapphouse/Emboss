@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dissolving circuit trace breaking into harmless biocompatible products with bold 4.5px strokes -->
+  <path d="M 22 50 L 40 50" stroke="#ca8a04" stroke-width="5.0"/>
+  <circle cx="48" cy="50" r="3" fill="#ca8a04"/>
+  <circle cx="58" cy="44" r="3" fill="#ca8a04"/>
+  <circle cx="66" cy="56" r="3" fill="#ca8a04"/>
+  <circle cx="76" cy="50" r="3" fill="#ca8a04"/>
+  <rect x="18" y="24" width="64" height="52" rx="4" fill="none" stroke="#000000" stroke-width="4.5" stroke-dasharray="6,3"/>
+</svg>

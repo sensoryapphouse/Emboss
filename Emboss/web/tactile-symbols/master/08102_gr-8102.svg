@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spiraling spacetime swirl dragged around spinning central mass with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="10" fill="#0284c7"/>
+  <path d="M 50 30 A 20 20 0 0 1 70 50 A 24 24 0 0 1 46 74 A 28 28 0 0 1 22 46" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

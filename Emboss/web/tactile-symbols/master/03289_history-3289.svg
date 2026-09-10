@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Golden sovereign orb sphere left with cross atop with bold 4.5px stroke -->
+  <circle cx="36" cy="54" r="14" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <line x1="36" y1="40" x2="36" y2="30" stroke="#000000" stroke-width="4.5"/>
+  <line x1="30" y1="34" x2="42" y2="34" stroke="#000000" stroke-width="4.5"/>
+  <!-- Jeweled golden sceptre rod right with bold 4.5px stroke -->
+  <line x1="68" y1="78" x2="68" y2="24" stroke="#facc15" stroke-width="6.5"/>
+  <circle cx="68" cy="22" r="6" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+</svg>

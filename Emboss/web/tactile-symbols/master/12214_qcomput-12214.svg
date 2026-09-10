@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Gaussian drive envelope with derivative quadrature pulse suppressing leakage to state |2> with bold 4.5px strokes -->
+  <path d="M 20 70 Q 50 20 80 70" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 20 50 Q 36 30 50 50 Q 64 70 80 50" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

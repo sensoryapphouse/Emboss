@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Teacup and saucer -->
+  <path d="M 28 36 L 64 36 C 64 56 36 56 36 56 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Handle right -->
+  <path d="M 64 40 C 74 40 74 52 64 52" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <!-- Saucer plate -->
+  <ellipse cx="48" cy="62" rx="26" ry="6" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+</svg>

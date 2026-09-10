@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Radial cluster of conical carbon nanohorns radiating from central core with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="10" fill="#64748b"/>
+  <polygon points="50,40 42,18 58,18" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="50,60 42,82 58,82" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="40,50 18,42 18,58" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="60,50 82,42 82,58" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+</svg>

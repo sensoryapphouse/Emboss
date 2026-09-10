@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Umbrella bell dome -->
+  <path d="M 20 48 C 20 22 80 22 80 48 C 70 52 60 48 50 52 C 40 48 30 52 20 48 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- 3 Wavy tentacles with 14px (5.6mm) clearance -->
+  <path d="M 30 52 C 24 64 36 74 30 86" fill="none" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 50 52 C 44 64 56 74 50 86" fill="none" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 70 52 C 64 64 76 74 70 86" fill="none" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

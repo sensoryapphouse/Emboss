@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tri-organellar metabolic loop passing metabolites between chloroplast, peroxisome, and mitochondrion with bold 4.5px strokes -->
+  <circle cx="50" cy="30" r="10" fill="#10b981"/>
+  <circle cx="30" cy="68" r="10" fill="#0284c7"/>
+  <circle cx="70" cy="68" r="10" fill="#ef4444"/>
+  <polygon points="50,30 30,68 70,68" fill="none" stroke="#000000" stroke-width="4.0"/>
+</svg>

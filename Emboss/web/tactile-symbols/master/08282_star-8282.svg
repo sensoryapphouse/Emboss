@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper forbidden mass gap where pair-instability supernovae prevent black hole formation with bold 4.5px strokes -->
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <rect x="40" y="28" width="20" height="44" fill="#ef4444" opacity="0.3" stroke="#ef4444" stroke-width="4.5"/>
+  <circle cx="28" cy="50" r="6" fill="#000000"/>
+  <circle cx="72" cy="50" r="10" fill="#000000"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mug body -->
+  <rect x="26" y="36" width="42" height="46" rx="4" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <!-- D-handle right -->
+  <path d="M 68 44 C 82 44 82 72 68 72" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Steam rising -->
+  <path d="M 46 28 C 42 22 50 18 46 14" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

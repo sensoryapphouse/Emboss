@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spherical mesh grille and handle housing electromagnetic moving-coil capsule with bold 4.5px strokes -->
+  <circle cx="50" cy="34" r="16" fill="#64748b" stroke="#000000" stroke-width="4.5"/>
+  <polygon points="44,50 56,50 52,80 48,80" fill="#000000"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rotating dust accretion disc ellipse with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="30" ry="12" fill="#fed7aa" stroke="#000000" stroke-width="4.5"/>
+  <!-- Hot central protostar core with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="10" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <!-- Bipolar magnetic plasma jets top & bottom with bold 4.5px strokes -->
+  <line x1="50" y1="38" x2="50" y2="18" stroke="#38bdf8" stroke-width="5.0"/>
+  <line x1="50" y1="62" x2="50" y2="82" stroke="#38bdf8" stroke-width="5.0"/>
+</svg>

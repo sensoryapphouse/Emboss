@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Parallel vertical wire frames with bold 5.0px strokes -->
+  <line x1="30" y1="18" x2="30" y2="82" stroke="#000000" stroke-width="5.0"/>
+  <line x1="70" y1="18" x2="70" y2="82" stroke="#000000" stroke-width="5.0"/>
+  <!-- Free-standing sub-micron liquid crystal sheet meniscus in center with bold 4.5px stroke -->
+  <rect x="30" y="24" width="40" height="52" fill="#38bdf8" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

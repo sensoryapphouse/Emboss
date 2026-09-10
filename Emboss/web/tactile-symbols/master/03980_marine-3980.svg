@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Seabed mudline horizontal with bold 4.5px stroke -->
+  <line x1="18" y1="36" x2="82" y2="36" stroke="#ca8a04" stroke-width="5.0"/>
+  <!-- Hollow cylindrical steel suction caisson penetrating mud with bold 4.5px stroke -->
+  <rect x="36" y="36" width="28" height="44" rx="2" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Top suction pump valve vent top with bold 4.0px stroke -->
+  <circle cx="50" cy="30" r="5" fill="#0284c7"/>
+</svg>

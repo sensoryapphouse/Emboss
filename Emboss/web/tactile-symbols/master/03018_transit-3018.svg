@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Slender concrete tower shaft with bold 4.5px stroke -->
+  <polygon points="44,38 56,38 58,80 42,80" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Panoramic 360-degree glassed cab top with bold 4.5px stroke -->
+  <polygon points="36,26 64,26 60,38 40,38" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Radome sphere dome atop cab with bold 4.0px stroke -->
+  <circle cx="50" cy="20" r="6" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+</svg>

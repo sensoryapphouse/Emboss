@@ -1,0 +1,15 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High index dielectric slab with bold 4.5px stroke -->
+  <rect x="18" y="20" width="64" height="60" rx="3" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Periodic array of air holes top and bottom rows with bold 3.5px strokes -->
+  <circle cx="28" cy="32" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="42" cy="32" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="56" cy="32" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="70" cy="32" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="28" cy="68" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="42" cy="68" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="56" cy="68" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <circle cx="70" cy="68" r="4" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <!-- Central missing-hole defect line optical waveguide with bold 4.0px stroke -->
+  <line x1="18" y1="50" x2="82" y2="50" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

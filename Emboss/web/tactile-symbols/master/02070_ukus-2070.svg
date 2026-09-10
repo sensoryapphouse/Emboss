@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pointed wax crayon shaft -->
+  <rect x="36" y="32" width="28" height="48" rx="2" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <!-- Conical sharpened tip top -->
+  <polygon points="36,32 64,32 50,18" fill="#ef4444" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Paper wrapper center band -->
+  <rect x="36" y="44" width="28" height="20" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+</svg>

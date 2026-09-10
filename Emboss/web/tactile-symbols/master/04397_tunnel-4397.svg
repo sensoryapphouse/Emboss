@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shield cylinder shell with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Submerged pressure air bubble bubble chamber top with bold 4.0px stroke -->
+  <circle cx="48" cy="38" r="8" fill="#38bdf8"/>
+  <!-- Bentonite slurry circuit pipes in bottom with bold 4.5px strokes -->
+  <line x1="40" y1="62" x2="82" y2="62" stroke="#ca8a04" stroke-width="4.5"/>
+  <!-- Cutterhead front left -->
+  <line x1="22" y1="20" x2="22" y2="80" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

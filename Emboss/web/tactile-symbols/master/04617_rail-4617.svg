@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central solid forged steel axle with bold 5.0px stroke -->
+  <line x1="24" y1="50" x2="76" y2="50" stroke="#1e293b" stroke-width="6.0"/>
+  <!-- Left and right conical wheels with safety flanges with bold 4.5px strokes -->
+  <polygon points="18,22 28,26 28,74 18,78" fill="#ffffff" stroke="#ef4444" stroke-width="4.0" stroke-linejoin="round"/>
+  <polygon points="82,22 72,26 72,74 82,78" fill="#ffffff" stroke="#ef4444" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

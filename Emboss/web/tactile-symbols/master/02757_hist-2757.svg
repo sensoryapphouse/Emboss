@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Colosseum tiered amphitheatre curved perimeter -->
+  <path d="M 18 78 L 18 36 C 18 36 50 24 82 36 L 82 78 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Stacked Roman arches on two levels with bold 4.0px strokes -->
+  <path d="M 26 50 C 26 42 36 42 36 50 L 36 54 L 26 54 Z" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 44 48 C 44 40 56 40 56 48 L 56 54 L 44 54 Z" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 64 50 C 64 42 74 42 74 50 L 74 54 L 64 54 Z" fill="#94a3b8" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Municipal piping network distributing 70C geothermal hot water to buildings with bold 4.5px strokes -->
+  <line x1="20" y1="64" x2="80" y2="64" stroke="#ef4444" stroke-width="5.5"/>
+  <polygon points="34,64 34,40 46,30 58,40 58,64" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+</svg>

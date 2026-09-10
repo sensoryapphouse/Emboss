@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ytterbium-doped phosphor splitting one high-energy UV photon into two near-infrared photons with bold 4.5px strokes -->
+  <line x1="20" y1="50" x2="44" y2="50" stroke="#0284c7" stroke-width="5.5"/>
+  <path d="M 44 50 L 76 30 M 44 50 L 76 70" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="44" cy="50" r="6" fill="#ca8a04"/>
+</svg>

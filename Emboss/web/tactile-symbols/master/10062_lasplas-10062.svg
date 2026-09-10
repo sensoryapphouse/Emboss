@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Crossing laser beams exchanging energy via driven acoustic waves controlled by wavelength shift with bold 4.5px strokes -->
+  <line x1="22" y1="22" x2="78" y2="78" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="22" y1="78" x2="78" y2="22" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="8" fill="#ca8a04"/>
+</svg>

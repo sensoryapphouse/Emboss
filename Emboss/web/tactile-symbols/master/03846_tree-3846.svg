@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Chainsaw engine powerhead body left with bold 4.5px stroke -->
+  <rect x="18" y="40" width="34" height="28" rx="4" fill="#f97316" stroke="#000000" stroke-width="4.0"/>
+  <!-- Top handle bar with bold 4.0px stroke -->
+  <path d="M 24 40 L 24 28 L 44 28 L 44 40" fill="none" stroke="#1e293b" stroke-width="4.5"/>
+  <!-- Extended guide bar right with bold 4.5px stroke -->
+  <rect x="52" y="46" width="30" height="16" rx="6" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Saw chain track center line -->
+  <line x1="52" y1="54" x2="76" y2="54" stroke="#000000" stroke-width="3.5"/>
+</svg>

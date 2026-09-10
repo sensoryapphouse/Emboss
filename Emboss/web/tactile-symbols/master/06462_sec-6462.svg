@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ceramic capacitor radiating ultrasonic acoustic sound waves with bold 4.5px strokes -->
+  <rect x="22" y="40" width="18" height="20" rx="2" fill="#ca8a04"/>
+  <path d="M 48 34 Q 60 50 48 66" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 60 26 Q 78 50 60 74" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

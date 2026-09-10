@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Left and right yellow sulfur atoms with bold 4.5px strokes -->
+  <circle cx="38" cy="50" r="11" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="62" cy="50" r="11" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Covalent sulfur-sulfur bond bridge center with bold 5.5px stroke -->
+  <line x1="38" y1="50" x2="62" y2="50" stroke="#000000" stroke-width="6.5"/>
+</svg>

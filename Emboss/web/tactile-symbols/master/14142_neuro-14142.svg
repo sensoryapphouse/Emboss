@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Basolateral nucleus integrating sensory threat and driving central nucleus autonomic output with bold 4.5px strokes -->
+  <ellipse cx="44" cy="50" rx="14" ry="18" fill="#ca8a04" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+  <ellipse cx="64" cy="50" rx="10" ry="12" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <line x1="44" y1="50" x2="64" y2="50" stroke="#000000" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Plasma boundary modulated into steady small ripple teeth by surrounding 3D magnetic perturbation coils with bold 4.5px strokes -->
+  <path d="M 36 24 Q 46 36 36 50 Q 46 64 36 76" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+  <rect x="64" y="32" width="14" height="14" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <rect x="64" y="54" width="14" height="14" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+</svg>

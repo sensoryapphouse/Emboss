@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Split mould halves closing around hollow parison tube with bold 4.5px strokes -->
+  <rect x="18" y="24" width="22" height="52" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <rect x="60" y="24" width="22" height="52" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Inflated hollow bottle cavity inside with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="10" ry="18" fill="#0284c7" stroke="#ef4444" stroke-width="3.5"/>
+</svg>

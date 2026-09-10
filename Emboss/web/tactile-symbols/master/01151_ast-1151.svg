@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Red giant donor star on left -->
+  <circle cx="28" cy="50" r="16" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <!-- Mass transfer stream flowing to white dwarf -->
+  <path d="M 44 50 C 52 48 58 44 64 42" fill="none" stroke="#facc15" stroke-width="4.0"/>
+  <!-- White dwarf accretion disk and exploding flash -->
+  <circle cx="72" cy="50" r="12" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="72" cy="50" r="4" fill="#38bdf8"/>
+</svg>

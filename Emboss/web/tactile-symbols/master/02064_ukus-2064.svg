@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- V-shaped neck ribbon top -->
+  <polygon points="34,18 50,46 66,18" fill="none" stroke="#ef4444" stroke-width="6.0" stroke-linejoin="round"/>
+  <!-- Golden medallion disk with star -->
+  <circle cx="50" cy="62" r="20" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <polygon points="50,50 53,58 62,58 55,63 57,71 50,66 43,71 45,63 38,58 47,58" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Brain hemisphere outline with bold 4.5px stroke -->
+  <path d="M 22 52 C 20 34 36 20 54 20 C 74 20 84 34 82 52 C 82 66 70 70 54 70 C 38 70 24 66 22 52 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Highlighted inferior-lateral Temporal Lobe auditory center (Green) with bold 4.0px stroke -->
+  <path d="M 40 48 L 68 48 C 70 64 54 68 40 68 Z" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+</svg>

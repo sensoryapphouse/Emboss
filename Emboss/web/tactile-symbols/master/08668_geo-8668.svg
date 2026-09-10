@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Trench retreating oceanward opening extensional back-arc basin behind volcanic arc with bold 4.5px strokes -->
+  <path d="M 64 30 L 64 74" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="48" cy="40" r="6" fill="#ef4444"/>
+  <path d="M 32 30 Q 40 50 32 70" fill="none" stroke="#ca8a04" stroke-width="5.0"/>
+</svg>

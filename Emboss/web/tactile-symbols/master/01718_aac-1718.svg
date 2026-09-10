@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 4-Legged walker tubular frame -->
+  <polyline points="32,24 36,76 M 68,24 64,76" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Cross support bar and seat -->
+  <line x1="34" y1="46" x2="66" y2="46" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Caster wheels bottom -->
+  <circle cx="36" cy="76" r="5" fill="#1e293b"/>
+  <circle cx="64" cy="76" r="5" fill="#1e293b"/>
+</svg>

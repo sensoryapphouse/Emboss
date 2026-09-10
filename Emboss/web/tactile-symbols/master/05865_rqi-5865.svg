@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Oblate ergosphere boundary outer ellipse with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="32" ry="18" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Spherical event horizon inner circle -->
+  <circle cx="50" cy="50" r="16" fill="#1e293b"/>
+</svg>

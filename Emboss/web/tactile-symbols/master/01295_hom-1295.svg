@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tapered steel sewing needle -->
+  <polygon points="50,14 54,18 52,86 50,88 48,86 46,18" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <!-- Eyelet hole near top -->
+  <ellipse cx="50" cy="24" rx="1.5" ry="5" fill="#000000"/>
+  <!-- Thread passing through eyelet looping left and right -->
+  <path d="M 18 36 C 36 36 46 24 50 24 C 54 24 64 36 82 36" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

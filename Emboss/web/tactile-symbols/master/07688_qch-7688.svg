@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nuclei following classical trajectory driven by on-the-fly Hellmann-Feynman forces with bold 4.5px strokes -->
+  <path d="M 22 68 Q 38 24 54 50 T 78 30" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="54" cy="50" r="6" fill="#ef4444"/>
+</svg>

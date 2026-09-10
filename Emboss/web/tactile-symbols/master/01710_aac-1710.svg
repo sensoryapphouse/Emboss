@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Firefighter protective helmet dome and wide brim -->
+  <path d="M 28 52 C 28 26 72 26 72 52 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <ellipse cx="50" cy="56" rx="34" ry="10" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <!-- Front golden crest badge -->
+  <polygon points="50,34 56,46 44,46" fill="#facc15"/>
+</svg>

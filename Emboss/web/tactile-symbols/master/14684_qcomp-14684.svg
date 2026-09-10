@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large composite N split into two prime factor keys p and q via period-finding loop with bold 4.5px strokes -->
+  <circle cx="32" cy="50" r="14" fill="#ef4444" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+  <line x1="46" y1="50" x2="64" y2="34" stroke="#000000" stroke-width="5.0"/>
+  <line x1="46" y1="50" x2="64" y2="66" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="74" cy="34" r="8" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="74" cy="66" r="8" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Matrix grid of bronze church bells -->
+  <path d="M 24 36 C 24 22 44 22 44 36 L 48 40 L 20 40 Z" fill="#facc15" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 56 36 C 56 22 76 22 76 36 L 80 40 L 52 40 Z" fill="#facc15" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 40 68 C 40 54 60 54 60 68 L 64 72 L 36 72 Z" fill="#facc15" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

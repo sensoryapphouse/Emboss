@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stokes pulse (first) followed by Pump pulse (second) with bold 5.0px strokes -->
+  <path d="M 18 74 Q 34 22 50 74" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 40 74 Q 56 22 72 74" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="16" y1="74" x2="84" y2="74" stroke="#000000" stroke-width="4.5"/>
+</svg>

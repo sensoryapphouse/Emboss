@@ -1,0 +1,10 @@
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/release/deps/quote-71007bdf6b9bb8e0.d: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/ext.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/to_tokens.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/runtime.rs
+
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/release/deps/libquote-71007bdf6b9bb8e0.rlib: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/ext.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/to_tokens.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/runtime.rs
+
+/Users/paulblenkhorn/Documents/Development/PWAs/To do next/Braille/engine/mathcat/src-crate/target/release/deps/libquote-71007bdf6b9bb8e0.rmeta: /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/lib.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/ext.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/to_tokens.rs /Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/runtime.rs
+
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/lib.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/ext.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/to_tokens.rs:
+/Users/paulblenkhorn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quote-0.6.13/src/runtime.rs:

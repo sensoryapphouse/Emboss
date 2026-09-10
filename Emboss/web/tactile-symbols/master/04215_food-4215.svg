@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Slotted rotating stainless drum cylinder with bold 4.5px stroke -->
+  <rect x="20" y="30" width="60" height="40" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Inflatable elastomeric rubber bladder membrane with bold 4.5px stroke -->
+  <path d="M 24 34 C 44 34 44 66 24 66 Z" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <!-- Grape juice drain pan bottom with bold 4.5px stroke -->
+  <polygon points="24,76 76,76 68,84 32,84" fill="#ca8a04"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bright red jagged pain burst star -->
+  <polygon points="50,14 62,36 86,28 72,50 88,72 64,66 52,86 42,66 18,72 32,50 16,28 40,36" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Central exclamation mark (!) -->
+  <line x1="50" y1="36" x2="50" y2="52" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="50" cy="62" r="2.5" fill="#ffffff"/>
+</svg>

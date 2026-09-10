@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Synaptic head swelling and inserting extra AMPA receptors following high-frequency tetanus with bold 4.5px strokes -->
+  <path d="M 32 78 L 44 54 Q 30 30 50 30 Q 70 30 56 54 L 68 78" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="42" cy="32" r="4" fill="#0284c7"/>
+  <circle cx="50" cy="30" r="4" fill="#0284c7"/>
+  <circle cx="58" cy="32" r="4" fill="#0284c7"/>
+  <path d="M 50 68 L 50 48" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ear covered by protecting hand -->
+  <path d="M 40 24 C 64 24 64 54 52 64 C 46 68 52 80 40 80" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Loud jagged sound lightning spikes -->
+  <polygon points="68,26 86,40 76,46 88,64 70,54 74,40" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Binary 1 glyph left -->
+  <line x1="32" y1="26" x2="32" y2="74" stroke="#0284c7" stroke-width="8.0" stroke-linecap="round"/>
+  <line x1="22" y1="38" x2="32" y2="26" stroke="#0284c7" stroke-width="8.0" stroke-linecap="round"/>
+  <!-- Binary 0 ring right -->
+  <ellipse cx="68" cy="50" rx="14" ry="24" fill="none" stroke="#22c55e" stroke-width="7.5"/>
+</svg>

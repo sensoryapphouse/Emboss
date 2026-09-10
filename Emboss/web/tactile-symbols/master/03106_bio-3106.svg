@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- White matter outer circle cross-section with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central H-shaped grey matter butterfly core with bold 4.0px stroke -->
+  <path d="M 38 32 C 44 44 44 56 38 68 C 46 64 54 64 62 68 C 56 56 56 44 62 32 C 54 36 46 36 38 32 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Central canal dot center with bold 3.5px stroke -->
+  <circle cx="50" cy="50" r="3.5" fill="#1e293b"/>
+</svg>

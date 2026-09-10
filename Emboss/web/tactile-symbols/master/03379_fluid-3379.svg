@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spherical globe valve body with bold 4.5px stroke -->
+  <circle cx="50" cy="54" r="20" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Stem and handwheel with bold 4.5px stroke -->
+  <line x1="50" y1="34" x2="50" y2="20" stroke="#000000" stroke-width="5.0"/>
+  <ellipse cx="50" cy="20" rx="12" ry="4" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

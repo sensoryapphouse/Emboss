@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central primary body with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="10" fill="#1e293b"/>
+  <!-- Outward multi-revolution continuous thrust spiral trajectory within safe envelope with bold 4.5px stroke -->
+  <path d="M 50 50 C 56 50 60 44 60 38 C 60 26 40 26 40 38 C 40 54 70 54 70 38 C 70 14 28 14 28 38 C 28 70 82 70 82 38" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

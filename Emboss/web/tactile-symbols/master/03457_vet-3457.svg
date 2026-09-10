@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fish body outline outer with bold 4.5px stroke -->
+  <path d="M 18 50 C 34 26 66 26 82 50 C 66 74 34 74 18 50 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Internal silver gas-filled swim bladder sac center with bold 4.0px stroke -->
+  <ellipse cx="48" cy="46" rx="18" ry="8" fill="#38bdf8" stroke="#000000" stroke-width="3.5"/>
+</svg>

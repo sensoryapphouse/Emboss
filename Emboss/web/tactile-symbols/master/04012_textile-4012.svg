@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Needle stem shaft with bold 5.0px stroke -->
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#64748b" stroke-width="5.5"/>
+  <!-- Top recurved needle hook with bold 4.5px stroke -->
+  <path d="M 50 20 C 50 14 38 14 38 24" fill="none" stroke="#1e293b" stroke-width="5.0"/>
+  <!-- Pivoting spoon latch open with bold 4.0px stroke -->
+  <line x1="50" y1="36" x2="40" y2="24" stroke="#ef4444" stroke-width="4.5"/>
+  <circle cx="50" cy="36" r="3" fill="#ca8a04"/>
+</svg>

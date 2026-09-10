@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Profiled steel linear rail horizontal with bold 4.5px stroke -->
+  <rect x="18" y="46" width="64" height="14" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Recirculating bearing carriage block with bold 4.5px stroke -->
+  <rect x="34" y="32" width="32" height="34" rx="4" fill="#1e293b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Greasing nipple port top -->
+  <circle cx="50" cy="32" r="3" fill="#facc15"/>
+</svg>

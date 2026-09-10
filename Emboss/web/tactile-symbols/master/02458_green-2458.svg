@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fuel cell stack layers box -->
+  <rect x="26" y="28" width="48" height="44" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <line x1="42" y1="28" x2="42" y2="72" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="58" y1="28" x2="58" y2="72" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- H2 chemical label -->
+  <text x="50" y="58" font-size="14" font-weight="bold" text-anchor="middle" fill="#0284c7">H2</text>
+</svg>

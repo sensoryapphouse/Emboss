@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sensor package frame with bold 4.5px stroke -->
+  <rect x="18" y="20" width="64" height="60" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Electrostatic oscillating 2D MEMS micro-mirror in center with bold 4.5px stroke -->
+  <ellipse cx="50" cy="50" rx="16" ry="12" fill="#ca8a04" stroke="#000000" stroke-width="3.5" transform="rotate(-30 50 50)"/>
+  <!-- Laser deflection ray sweeping field of view with bold 4.5px stroke -->
+  <line x1="50" y1="50" x2="80" y2="30" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ion wavepacket localized tightly inside sub-wavelength optical cycle with bold 4.5px strokes -->
+  <path d="M 20 50 Q 35 24 50 50 T 80 50" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+  <ellipse cx="50" cy="50" rx="6" ry="12" fill="#ef4444"/>
+</svg>

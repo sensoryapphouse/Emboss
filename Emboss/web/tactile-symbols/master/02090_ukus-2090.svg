@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Single ceiling swivel hook -->
+  <line x1="50" y1="18" x2="50" y2="30" stroke="#000000" stroke-width="6.0"/>
+  <!-- Fabric cocoon hammock loop -->
+  <path d="M 50 30 C 24 40 24 78 50 78 C 76 78 76 40 50 30 Z" fill="#0284c7" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

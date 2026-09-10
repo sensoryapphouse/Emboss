@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Five-vertex pentagon coherence diagram with bold 4.5px stroke -->
+  <polygon points="50,18 80,40 68,78 32,78 20,40" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Recoupling F-move transition arrows -->
+  <circle cx="50" cy="18" r="5" fill="#ef4444"/>
+  <circle cx="80" cy="40" r="5" fill="#0284c7"/>
+  <circle cx="68" cy="78" r="5" fill="#ef4444"/>
+  <circle cx="32" cy="78" r="5" fill="#0284c7"/>
+  <circle cx="20" cy="40" r="5" fill="#ca8a04"/>
+</svg>

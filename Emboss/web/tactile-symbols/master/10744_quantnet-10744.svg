@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-tier network connecting satellites, ground repeater nodes, and quantum supercomputers globally with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="26" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="24" r="5" fill="#ca8a04"/>
+  <circle cx="50" cy="76" r="5" fill="#ef4444"/>
+  <line x1="50" y1="24" x2="50" y2="76" stroke="#10b981" stroke-width="4.5"/>
+</svg>

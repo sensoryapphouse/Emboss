@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Disparate atomic sizes distorting lattice planes creating severe Peierls friction with bold 4.5px strokes -->
+  <path d="M 22 36 Q 50 24 78 36" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 22 64 Q 50 76 78 64" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="10" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+</svg>

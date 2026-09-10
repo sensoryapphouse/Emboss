@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Optical emission line split into two Doppler-shifted blueshifted and redshifted peaks with bold 4.5px strokes -->
+  <line x1="20" y1="78" x2="80" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 24 74 Q 36 72 40 24 Q 44 72 50 50 Q 56 72 60 24 Q 64 72 76 74" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

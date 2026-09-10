@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- ENZ ultra-narrow waveguide constriction channel with bold 5.0px stroke -->
+  <path d="M 18 30 L 38 46 L 62 46 L 82 30" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 18 70 L 38 54 L 62 54 L 82 70" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <!-- Spatially uniform phase squeeze wavefront through constriction with bold 5.0px stroke -->
+  <line x1="50" y1="46" x2="50" y2="54" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

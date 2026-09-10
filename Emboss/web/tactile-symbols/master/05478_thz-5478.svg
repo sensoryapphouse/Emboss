@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Bare copper cylindrical wire center with bold 5.5px stroke -->
+  <line x1="16" y1="50" x2="84" y2="50" stroke="#ca8a04" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Radially symmetric surface plasmon polariton wave profile with bold 4.0px strokes -->
+  <path d="M 24 32 Q 50 20 76 32" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 24 68 Q 50 80 76 68" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

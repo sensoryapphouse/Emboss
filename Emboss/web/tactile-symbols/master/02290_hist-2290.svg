@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Standing boulder slab -->
+  <path d="M 32 82 L 32 36 C 32 20 68 20 68 36 L 68 82 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Carved runic branch line -->
+  <line x1="50" y1="32" x2="50" y2="70" stroke="#ef4444" stroke-width="4.0"/>
+  <line x1="50" y1="42" x2="60" y2="36" stroke="#ef4444" stroke-width="4.0"/>
+  <line x1="50" y1="56" x2="60" y2="50" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Resolved discrete Fock state peaks |0>, |1>, |2> separated by 2*chi with bold 4.5px strokes -->
+  <path d="M 18 76 L 26 76 Q 30 76 32 30 Q 34 76 38 76" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 38 76 L 46 76 Q 50 76 52 24 Q 54 76 58 76" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 58 76 L 66 76 Q 70 76 72 40 Q 74 76 82 76" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

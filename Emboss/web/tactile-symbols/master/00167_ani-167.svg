@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved leaping body with snout beak and tail fluke -->
+  <path d="M 14 56 L 22 52 C 34 32 64 34 82 56 L 88 50 L 84 64 L 88 78 L 78 72 C 60 52 38 52 24 64 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Dorsal fin -->
+  <polygon points="46,36 54,20 60,36" fill="#38bdf8" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

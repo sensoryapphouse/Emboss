@@ -1,0 +1,69 @@
+{
+  "version": "6.1.0-clean-pristine",
+  "title": "Sensory Tactile Diagram Vector Library (Verified Pristine BANA Set)",
+  "updated": "2026-08-31T10:08:48.647Z",
+  "total_symbols": 1731,
+  "targets_supported": [
+    "swell",
+    "tiger",
+    "index",
+    "monarch",
+    "dotpad"
+  ],
+  "packs": [
+    {
+      "pack": "everyday-life-1.json",
+      "domain": "everyday-life",
+      "count": 499,
+      "path": "tactile-assets/packs/everyday-life-1.json"
+    },
+    {
+      "pack": "everyday-life-2.json",
+      "domain": "everyday-life",
+      "count": 373,
+      "path": "tactile-assets/packs/everyday-life-2.json"
+    },
+    {
+      "pack": "food-drink-1.json",
+      "domain": "food-drink",
+      "count": 127,
+      "path": "tactile-assets/packs/food-drink-1.json"
+    },
+    {
+      "pack": "geography-transport-1.json",
+      "domain": "geography-transport",
+      "count": 92,
+      "path": "tactile-assets/packs/geography-transport-1.json"
+    },
+    {
+      "pack": "living-world-1.json",
+      "domain": "living-world",
+      "count": 79,
+      "path": "tactile-assets/packs/living-world-1.json"
+    },
+    {
+      "pack": "maths-geometry-1.json",
+      "domain": "maths-geometry",
+      "count": 242,
+      "path": "tactile-assets/packs/maths-geometry-1.json"
+    },
+    {
+      "pack": "school-classroom-1.json",
+      "domain": "school-classroom",
+      "count": 18,
+      "path": "tactile-assets/packs/school-classroom-1.json"
+    },
+    {
+      "pack": "science-stem-1.json",
+      "domain": "science-stem",
+      "count": 194,
+      "path": "tactile-assets/packs/science-stem-1.json"
+    },
+    {
+      "pack": "tools-technology-1.json",
+      "domain": "tools-technology",
+      "count": 107,
+      "path": "tactile-assets/packs/tools-technology-1.json"
+    }
+  ]
+}

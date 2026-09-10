@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Reconnection in nightside tail launching plasmoid down-tail and fast injection earthward with bold 4.5px strokes -->
+  <circle cx="26" cy="50" r="8" fill="#0284c7"/>
+  <ellipse cx="64" cy="50" rx="14" ry="8" fill="#ef4444" opacity="0.4" stroke="#ef4444" stroke-width="4.0"/>
+  <line x1="38" y1="50" x2="48" y2="50" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="80" y1="50" x2="88" y2="50" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

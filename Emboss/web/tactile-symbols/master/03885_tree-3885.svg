@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long fiberglass extension pole shaft with bold 5.0px stroke -->
+  <line x1="30" y1="80" x2="62" y2="30" stroke="#facc15" stroke-width="6.0"/>
+  <!-- Curved pull-cut pruning saw blade at tip with bold 4.5px stroke -->
+  <path d="M 62 30 C 72 20 82 24 82 24" fill="none" stroke="#1e293b" stroke-width="5.0"/>
+  <!-- Bypass pruner shear hook -->
+  <circle cx="66" cy="32" r="5" fill="#cbd5e1" stroke="#000000" stroke-width="3.0"/>
+</svg>

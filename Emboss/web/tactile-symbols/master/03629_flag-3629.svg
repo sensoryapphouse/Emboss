@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Yellow field with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" rx="3" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central solid black disc with bold 4.0px stroke -->
+  <circle cx="50" cy="50" r="14" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

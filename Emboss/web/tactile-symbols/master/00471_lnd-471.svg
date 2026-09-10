@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ground basin -->
+  <line x1="12" y1="84" x2="88" y2="84" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Jetting vertical steam water column -->
+  <path d="M 44 84 L 44 24 C 44 14 56 14 56 24 L 56 84" fill="#38bdf8" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

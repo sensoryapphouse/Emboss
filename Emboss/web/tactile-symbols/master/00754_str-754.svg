@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Normal stress sigma vs Shear stress tau axes -->
+  <line x1="16" y1="50" x2="86" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <line x1="36" y1="16" x2="36" y2="84" stroke="#000000" stroke-width="4.5"/>
+  <!-- Mohr stress circle -->
+  <circle cx="56" cy="50" r="24" fill="#ffffff" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

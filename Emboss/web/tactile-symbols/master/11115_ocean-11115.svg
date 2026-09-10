@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hydrocarbon methane seeping through seafloor forming authigenic carbonate crusts and clam beds with bold 4.5px strokes -->
+  <line x1="20" y1="70" x2="80" y2="70" stroke="#000000" stroke-width="5.0"/>
+  <polygon points="30,70 42,48 54,70" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="68" cy="62" r="6" fill="#ca8a04"/>
+</svg>

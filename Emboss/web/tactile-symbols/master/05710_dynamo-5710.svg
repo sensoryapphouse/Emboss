@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ejected filamentary plasma bursts exploding from edge pedestal with bold 5.0px strokes -->
+  <path d="M 30 20 Q 20 50 30 80" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <!-- Peeling-ballooning filament fingers bursting outward right -->
+  <line x1="30" y1="36" x2="80" y2="24" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="28" y1="50" x2="86" y2="50" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="30" y1="64" x2="80" y2="76" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

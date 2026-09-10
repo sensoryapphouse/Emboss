@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Step 2 Verification: Swell Paper (BANA §4.5 Outline Standard)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0f19; color: #f8fafc; padding: 40px; }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; text-align: center; color: #ffffff; }
+    p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 30px; text-align: center; }
+    
+    .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    
+    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; display: grid; grid-template-columns: 280px 1fr 1fr; gap: 24px; align-items: center; }
+    
+    .info h3 { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+    .info .badge { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #38bdf8; background: rgba(56,189,248,0.12); padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+    .info p { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+    
+    .preview-box { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .preview-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #cbd5e1; }
+    
+    .paper-master { width: 220px; height: 220px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    
+    /* Authentic Swell Paper Simulation: Pure white heavy capsule paper with raised carbon-black vector line */
+    .paper-swell { width: 220px; height: 220px; background: #ffffff; border-radius: 12px; border: 2px solid #000000; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+    .paper-swell::before { content: '25mm BINDING MARGIN'; position: absolute; left: 6px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 8px; font-weight: 700; color: #cbd5e1; letter-spacing: 1px; }
+    .paper-swell svg { filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.4)); }
+  </style>
+</head>
+<body>
+
+  <h1>Step 2 Verification: Swell Paper (Capsule / PIAF / Zy-Fuse)</h1>
+  <p class="sub">Validating BANA §4.5 Outline Standard: Pure carbon-black vector contours (1.5–2.0mm), zero solid black fills, and 25mm binding margin.</p>
+
+  <div class="container">
+    
+      <div class="card">
+        <div class="info">
+          <div class="badge">Maths & Geometry</div>
+          <h3>Decagon</h3>
+          <p>10-sided regular polygon with exact mathematical vertices and clean interior.</p>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">Visual Master Vector</div>
+          <div class="paper-master">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <polygon points="50,10 73.5,17.6 88,37.6 88,62.4 73.5,82.4 50,90 26.5,82.4 12,62.4 12,37.6 26.5,17.6" fill="#f59e0b" stroke="#1e293b" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+          </div>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">📄 Swell Paper (BANA Standard)</div>
+          <div class="paper-swell">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <polygon points="50,10 73.5,17.6 88,37.6 88,62.4 73.5,82.4 50,90 26.5,82.4 12,62.4 12,37.6 26.5,17.6" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linejoin="round"/>
+    </svg>
+          </div>
+        </div>
+      </div>
+    
+
+      <div class="card">
+        <div class="info">
+          <div class="badge">Science & STEM</div>
+          <h3>Conical Beaker</h3>
+          <p>Laboratory glassware with distinct rim, conical walls, flat base, and horizontal liquid meniscus.</p>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">Visual Master Vector</div>
+          <div class="paper-master">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <path d="M35,18 L65,18 L65,28 L78,78 L22,78 L35,28 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+      <line x1="26" y1="60" x2="74" y2="60" stroke="#0284c7" stroke-width="3" stroke-dasharray="4,2"/>
+    </svg>
+          </div>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">📄 Swell Paper (BANA Standard)</div>
+          <div class="paper-swell">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <path d="M35,18 L65,18 L65,28 L78,78 L22,78 L35,28 Z" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linejoin="round"/>
+      <line x1="26" y1="60" x2="74" y2="60" stroke="#000000" stroke-width="4"/>
+    </svg>
+          </div>
+        </div>
+      </div>
+    
+
+      <div class="card">
+        <div class="info">
+          <div class="badge">Science & STEM</div>
+          <h3>Magnet Bar</h3>
+          <p>Bipolar magnet with distinct North and South poles separated by an unembossed central dividing gutter.</p>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">Visual Master Vector</div>
+          <div class="paper-master">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <rect x="12" y="34" width="38" height="32" rx="4" fill="#ef4444" stroke="#1e293b" stroke-width="4"/>
+      <rect x="50" y="34" width="38" height="32" rx="4" fill="#3b82f6" stroke="#1e293b" stroke-width="4"/>
+      <text x="26" y="56" font-size="18" font-weight="bold" fill="#ffffff" font-family="sans-serif">N</text>
+      <text x="64" y="56" font-size="18" font-weight="bold" fill="#ffffff" font-family="sans-serif">S</text>
+    </svg>
+          </div>
+        </div>
+        
+        <div class="preview-box">
+          <div class="preview-label">📄 Swell Paper (BANA Standard)</div>
+          <div class="paper-swell">
+            <svg viewBox="0 0 100 100" width="160" height="160">
+      <rect x="12" y="34" width="36" height="32" rx="4" fill="#ffffff" stroke="#000000" stroke-width="6"/>
+      <rect x="52" y="34" width="36" height="32" rx="4" fill="#ffffff" stroke="#000000" stroke-width="6"/>
+      <text x="25" y="56" font-size="18" font-weight="bold" fill="#000000" font-family="sans-serif">N</text>
+      <text x="65" y="56" font-size="18" font-weight="bold" fill="#000000" font-family="sans-serif">S</text>
+    </svg>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+
+</body>
+</html>

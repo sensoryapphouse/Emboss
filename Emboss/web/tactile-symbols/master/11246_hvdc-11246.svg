@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- AC grid feeding rectifier station converted to DC bipole lines with bold 4.5px strokes -->
+  <rect x="20" y="32" width="22" height="36" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="58" y="32" width="22" height="36" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <line x1="42" y1="42" x2="58" y2="42" stroke="#ca8a04" stroke-width="5.0"/>
+  <line x1="42" y1="58" x2="58" y2="58" stroke="#ca8a04" stroke-width="5.0"/>
+</svg>

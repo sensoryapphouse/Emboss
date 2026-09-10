@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flag boundary with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Alternating blue horizontal stripes with bold 3.5px strokes -->
+  <line x1="44" y1="34" x2="82" y2="34" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="44" y1="46" x2="82" y2="46" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="18" y1="58" x2="82" y2="58" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="18" y1="70" x2="82" y2="70" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Canton white square with golden Sun of May with bold 4.0px stroke -->
+  <rect x="18" y="24" width="26" height="26" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="31" cy="37" r="5" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+</svg>

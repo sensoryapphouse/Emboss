@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Elliptical planetary orbit -->
+  <ellipse cx="50" cy="50" rx="38" ry="24" fill="none" stroke="#000000" stroke-width="3.5" stroke-dasharray="6 4"/>
+  <!-- Central Sun at one orbital focus -->
+  <circle cx="38" cy="50" r="10" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Orbiting Earth with tilted axial tilt line -->
+  <circle cx="78" cy="50" r="6" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <line x1="74" y1="40" x2="82" y2="60" stroke="#ef4444" stroke-width="3.0"/>
+</svg>

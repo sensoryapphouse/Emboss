@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Head, arched neck, back, and tail -->
+  <path d="M 18 36 L 28 22 L 36 28 L 44 48 L 74 48 C 78 48 80 62 80 78 M 70 78 L 70 60 L 44 60 L 44 78" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Mane and tail lines -->
+  <path d="M 30 26 C 36 34 38 42 42 48" fill="none" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 78 50 C 86 58 88 72 86 82" fill="none" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

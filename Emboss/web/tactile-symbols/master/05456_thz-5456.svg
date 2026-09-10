@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two intersecting complex eigenvalue Riemann surface sheets with bold 5.0px strokes -->
+  <path d="M 20 28 Q 50 50 80 28" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 20 72 Q 50 50 80 72" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Exceptional point EP2 singular branch point where eigenvalues merge with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="7" fill="#ef4444"/>
+</svg>

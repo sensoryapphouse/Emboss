@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sun in sky -->
+  <circle cx="76" cy="28" r="10" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <!-- Front and rear dune ridges -->
+  <path d="M 12 72 C 34 54 62 76 88 56 L 88 86 L 12 86 Z" fill="#facc15" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M 12 56 C 38 42 66 60 88 46" fill="none" stroke="#000000" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

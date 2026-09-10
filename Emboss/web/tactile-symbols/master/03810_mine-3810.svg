@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer stationary concave bowl chamber with bold 4.5px strokes -->
+  <polyline points="22,24 34,74 66,74 78,24" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Inner conical gyrating mantle head with bold 4.5px stroke -->
+  <polygon points="50,30 60,66 40,66" fill="#ca8a04" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

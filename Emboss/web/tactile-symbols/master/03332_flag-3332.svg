@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Red field background with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="52" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- White crescent moon with bold 4.0px stroke -->
+  <path d="M 44 34 C 34 40 34 60 44 66 C 38 62 38 38 44 34 Z" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <!-- White five-pointed star with bold 3.5px stroke -->
+  <polygon points="56,46 58,50 62,50 59,53 60,57 56,54 52,57 53,53 50,50 54,50" fill="#ffffff"/>
+</svg>

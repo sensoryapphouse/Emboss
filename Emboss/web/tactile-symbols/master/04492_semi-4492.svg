@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continuous recirculation loop piping with bold 5.0px stroke -->
+  <rect x="24" y="24" width="52" height="52" rx="10" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Electro-deionization (EDI) polishing stage module with bold 4.5px stroke -->
+  <rect x="42" y="16" width="16" height="16" rx="2" fill="#ffffff" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- Sub-micron 0.05um membrane filter unit with bold 4.5px stroke -->
+  <circle cx="50" cy="76" r="8" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+</svg>

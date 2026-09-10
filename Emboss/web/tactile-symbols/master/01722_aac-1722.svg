@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Dog silhouette -->
+  <rect x="26" y="46" width="44" height="24" rx="6" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Guide harness with U-handle extending up -->
+  <rect x="36" y="44" width="16" height="26" fill="#ef4444"/>
+  <path d="M 44 44 L 44 20 L 66 20" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Circular glass encoder disc with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Radial slotted track pattern with bold 4.0px strokes -->
+  <circle cx="50" cy="50" r="18" fill="none" stroke="#1e293b" stroke-width="4.5" stroke-dasharray="4,4"/>
+  <!-- Center shaft bore hole with bold 4.0px stroke -->
+  <circle cx="50" cy="50" r="8" fill="#cbd5e1" stroke="#000000" stroke-width="3.5"/>
+</svg>

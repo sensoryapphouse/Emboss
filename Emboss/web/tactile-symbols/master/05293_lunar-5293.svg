@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Superconducting magnetic deflection coil arch over habitat with bold 5.0px stroke -->
+  <path d="M 20 76 C 20 22 80 22 80 76" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Deflected solar proton radiation trajectory with bold 4.5px stroke -->
+  <path d="M 14 30 Q 50 30 86 16" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Protected surface habitat module in center bottom -->
+  <rect x="38" y="58" width="24" height="18" rx="2" fill="#1e293b"/>
+</svg>

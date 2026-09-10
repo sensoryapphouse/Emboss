@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Large cargo trailer box -->
+  <rect x="18" y="30" width="44" height="38" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Cab front -->
+  <polygon points="62,44 76,44 82,54 82,68 62,68" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Wheels -->
+  <circle cx="28" cy="72" r="7" fill="#1e293b"/>
+  <circle cx="48" cy="72" r="7" fill="#1e293b"/>
+  <circle cx="74" cy="72" r="7" fill="#1e293b"/>
+</svg>

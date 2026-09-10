@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Laser totally reflected at glass interface creating 100nm evanescent wave with bold 4.5px strokes -->
+  <line x1="18" y1="64" x2="82" y2="64" stroke="#000000" stroke-width="5.5"/>
+  <path d="M 24 82 L 50 64 L 76 82" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+  <circle cx="50" cy="52" r="6" fill="#10b981"/>
+</svg>

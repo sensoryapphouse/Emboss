@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Metasurface executing 2D spatial Laplacian differentiation on optical wavefronts at the speed of light with bold 4.5px strokes -->
+  <rect x="38" y="24" width="24" height="52" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <line x1="18" y1="50" x2="38" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 62 50 L 70 38 L 78 62 L 84 50" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Plasma bubble outline with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Electron trajectory looping around rear bubble vertex with bold 5.0px stroke -->
+  <path d="M 22 24 C 14 50 14 50 24 50 C 34 50 34 50 44 50" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Injected bunch inside bubble -->
+  <circle cx="44" cy="50" r="5" fill="#0284c7"/>
+</svg>

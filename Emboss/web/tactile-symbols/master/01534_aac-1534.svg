@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cloud dome top -->
+  <path d="M 28 46 C 18 46 18 32 28 28 C 28 16 54 16 60 26 C 72 20 80 32 74 46 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Falling blue rain streaks -->
+  <line x1="32" y1="56" x2="26" y2="78" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="52" y1="56" x2="46" y2="78" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="72" y1="56" x2="66" y2="78" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

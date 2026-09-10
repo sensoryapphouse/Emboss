@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spinal cord butterfly gray matter with sensory dorsal root entering and motor ventral root exiting with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="26" fill="#ca8a04" opacity="0.2" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 20 36 Q 50 40 50 50 L 20 64" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="5" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Borehole casing drilled into tunnel crown with bold 4.5px stroke -->
+  <rect x="42" y="16" width="16" height="66" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Multiple anchor sensing heads at depths with bold 4.0px strokes -->
+  <circle cx="50" cy="26" r="4" fill="#ef4444"/>
+  <circle cx="50" cy="46" r="4" fill="#ef4444"/>
+  <circle cx="50" cy="66" r="4" fill="#ef4444"/>
+  <!-- Instrument readout head at tunnel face bottom with bold 4.5px stroke -->
+  <rect x="34" y="78" width="32" height="10" rx="2" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Microwave applicator cavity box with bold 4.5px stroke -->
+  <rect x="20" y="20" width="60" height="60" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Silicon carbide (SiC) susceptor insulation cask with bold 4.5px stroke -->
+  <rect x="32" y="32" width="36" height="36" rx="4" fill="#ca8a04" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Sintered ceramic pellet in center with bold 4.0px stroke -->
+  <circle cx="50" cy="50" r="8" fill="#ef4444"/>
+</svg>

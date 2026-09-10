@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- UN blue field boundary -->
+  <rect x="18" y="24" width="64" height="52" rx="2" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <!-- Azimuthal world globe projection circle -->
+  <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+  <!-- Crossed olive branch wreath wreath -->
+  <path d="M 32 58 C 30 46 36 36 50 34 M 68 58 C 70 46 64 36 50 34" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continuous slot-die coating of perovskite ink onto flexible moving plastic web with bold 4.5px strokes -->
+  <circle cx="30" cy="50" r="12" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="70" cy="50" r="12" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 30 38 L 70 38" stroke="#ca8a04" stroke-width="5.5"/>
+</svg>

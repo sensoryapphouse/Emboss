@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Moving source dot moving right -->
+  <circle cx="60" cy="50" r="4" fill="#000000"/>
+  <!-- Compressed waves on right (blueshift) -->
+  <path d="M 68 38 A 14 14 0 0 1 68 62" fill="none" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+  <path d="M 76 30 A 24 24 0 0 1 76 70" fill="none" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+  <!-- Stretched waves on left (redshift) -->
+  <path d="M 40 24 A 32 32 0 0 0 40 76" fill="none" stroke="#ef4444" stroke-width="4.0" stroke-linecap="round"/>
+  <path d="M 22 14 A 48 48 0 0 0 22 86" fill="none" stroke="#ef4444" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

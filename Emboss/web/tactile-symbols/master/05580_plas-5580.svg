@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Concentric quartz plasma torch tube with bold 4.5px stroke -->
+  <rect x="30" y="36" width="40" height="48" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- 27 MHz RF induction copper coil wraps with bold 5.0px strokes -->
+  <line x1="24" y1="46" x2="76" y2="46" stroke="#ca8a04" stroke-width="5.0"/>
+  <line x1="24" y1="58" x2="76" y2="58" stroke="#ca8a04" stroke-width="5.0"/>
+  <!-- 8000 K argon plasma flame discharge on top with bold 5.0px stroke -->
+  <path d="M 38 36 Q 50 14 62 36 Z" fill="#ef4444" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

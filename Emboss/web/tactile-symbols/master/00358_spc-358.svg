@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <circle cx="50" cy="50" r="36" fill="#38bdf8" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 32 30 C 44 26 48 38 42 46 C 36 54 44 64 36 74" fill="none" stroke="#22c55e" stroke-width="4.0" stroke-linecap="round"/>
+  <path d="M 60 32 C 72 32 76 44 68 54 C 64 60 70 70 62 76" fill="none" stroke="#22c55e" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

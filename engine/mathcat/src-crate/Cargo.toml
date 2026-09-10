@@ -1,0 +1,32 @@
+[package]
+name = "emboss_mathcat"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+# PINNED TO THE REGISTRY, NOT A LOCAL PATH (PB, 2026-08-11).
+#
+# This said path = "../MathCAT/" and that directory was not in the repo and
+# never had been — so the 3.2 MB wasm we ship could not be rebuilt by anyone
+# who cloned this. An exact-version registry dependency is immutable and
+# fetches itself, which fixes that without committing 2 MB of third-party
+# source.
+#
+# 0.7.6-beta.9, NOT the beta.5 the shipped binary reports. beta.5 has NO FRENCH
+# SPEECH RULES AT ALL — Rules/Languages/fr holds only the two unicode character
+# tables, no SimpleSpeak_Rules.yaml, no definitions.yaml — so French fell through
+# to other languages and said "quadratwurzel" for a square root. beta.9 carries
+# the full French set. Every other embedded language was already complete.
+[dependencies.mathcat]
+version = "=0.7.6-beta.9"
+features = ["include-zip"]
+
+[profile.release]
+lto = true
+opt-level = "z"
+panic = "unwind"

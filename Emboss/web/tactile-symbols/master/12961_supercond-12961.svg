@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Equivalent circuit with Josephson junction in parallel with resistor and capacitor with bold 4.5px strokes -->
+  <line x1="20" y1="50" x2="35" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <line x1="65" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <rect x="35" y="34" width="30" height="32" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <polygon points="50,42 44,58 56,58" fill="#ef4444"/>
+</svg>

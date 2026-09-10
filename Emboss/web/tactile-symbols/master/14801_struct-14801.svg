@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Three tight helical strands braided together into staggered triple helix with bold 4.5px strokes -->
+  <path d="M 30 20 Q 50 36 30 52 Q 50 68 30 84" stroke="#ca8a04" stroke-width="4.5" fill="none"/>
+  <path d="M 50 20 Q 70 36 50 52 Q 70 68 50 84" stroke="#0284c7" stroke-width="4.5" fill="none"/>
+  <path d="M 70 20 Q 30 36 70 52 Q 30 68 70 84" stroke="#ef4444" stroke-width="4.5" fill="none"/>
+</svg>

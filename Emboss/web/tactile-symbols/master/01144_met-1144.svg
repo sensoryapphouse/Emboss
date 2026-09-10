@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Frame chassis plate -->
+  <rect x="22" y="16" width="56" height="70" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Dry bulb thermometer on left -->
+  <line x1="36" y1="24" x2="36" y2="70" stroke="#ef4444" stroke-width="4.0"/>
+  <circle cx="36" cy="74" r="5" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+  <!-- Wet bulb thermometer with cloth wick on right -->
+  <line x1="64" y1="24" x2="64" y2="70" stroke="#38bdf8" stroke-width="4.0"/>
+  <circle cx="64" cy="74" r="5" fill="#38bdf8" stroke="#000000" stroke-width="2.5"/>
+</svg>

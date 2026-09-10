@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central infected peer gossiping to random neighbor nodes with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="8" fill="#ef4444"/>
+  <circle cx="26" cy="30" r="6" fill="#0284c7"/>
+  <circle cx="74" cy="30" r="6" fill="#0284c7"/>
+  <circle cx="50" cy="78" r="6" fill="#0284c7"/>
+  <line x1="44" y1="44" x2="31" y2="34" stroke="#000000" stroke-width="4.0"/>
+  <line x1="56" y1="44" x2="69" y2="34" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="58" x2="50" y2="72" stroke="#000000" stroke-width="4.0"/>
+</svg>

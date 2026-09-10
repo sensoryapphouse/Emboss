@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cave frame box -->
+  <rect x="14" y="16" width="72" height="68" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Roof hanging stalactites -->
+  <polygon points="26,16 34,16 30,42" fill="#8a5a2b" stroke="#000000" stroke-width="3.0" stroke-linejoin="round"/>
+  <polygon points="62,16 70,16 66,46" fill="#8a5a2b" stroke="#000000" stroke-width="3.0" stroke-linejoin="round"/>
+  <!-- Floor rising stalagmites -->
+  <polygon points="42,84 50,84 46,54" fill="#8a5a2b" stroke="#000000" stroke-width="3.0" stroke-linejoin="round"/>
+</svg>

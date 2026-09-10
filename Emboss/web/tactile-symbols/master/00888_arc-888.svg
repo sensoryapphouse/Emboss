@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Semicircular stepped tiered seating rows -->
+  <path d="M 16 34 C 16 72 84 72 84 34" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 26 44 C 26 70 74 70 74 44" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 36 54 C 36 68 64 68 64 54" fill="none" stroke="#000000" stroke-width="3.5"/>
+  <!-- Center semicircular orchestra stage -->
+  <ellipse cx="50" cy="34" rx="10" ry="6" fill="#38bdf8" stroke="#000000" stroke-width="2.5"/>
+</svg>

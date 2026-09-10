@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy powered base chassis with drive wheels -->
+  <rect x="26" y="56" width="46" height="20" rx="4" fill="#1e293b" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="36" cy="74" r="8" fill="#ef4444"/>
+  <circle cx="62" cy="74" r="8" fill="#ef4444"/>
+  <!-- Joystick controller arm on armrest -->
+  <polyline points="38,30 42,48 64,48" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="64" cy="40" r="5" fill="#facc15"/>
+</svg>

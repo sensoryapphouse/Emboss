@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heart chamber outline with bold 4.0px stroke -->
+  <path d="M 50 76 C 30 62 20 48 20 36 C 20 24 34 22 46 30 L 50 34 L 54 30 C 66 22 80 24 80 36 C 80 48 70 62 50 76 Z" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Sinoatrial SA Node pacemaker top right with bold 4.0px stroke -->
+  <circle cx="34" cy="32" r="5" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <!-- Purkinje conduction branch lines spreading down septum with bold 4.0px strokes -->
+  <path d="M 34 32 L 50 48 L 50 66 L 36 60" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 50 66 L 64 60" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

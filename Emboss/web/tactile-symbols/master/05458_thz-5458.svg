@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Non-Hermitian grating medium block with bold 4.5px stroke -->
+  <rect x="36" y="24" width="28" height="52" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Forward wave passing through with 100% transmission and zero reflection with bold 5.0px stroke -->
+  <line x1="16" y1="42" x2="84" y2="42" stroke="#22c55e" stroke-width="5.0"/>
+  <!-- Backward wave undergoing strong reflection left with bold 4.5px stroke -->
+  <line x1="84" y1="62" x2="64" y2="62" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="64" y1="62" x2="84" y2="76" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

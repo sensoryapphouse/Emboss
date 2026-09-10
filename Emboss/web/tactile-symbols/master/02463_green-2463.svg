@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Charger pedestal post -->
+  <rect x="24" y="24" width="30" height="58" rx="4" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <!-- Charging plug cable connector right -->
+  <path d="M 54 62 Q 74 62 74 44" fill="none" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <rect x="68" y="32" width="14" height="16" rx="3" fill="#22c55e" stroke="#000000" stroke-width="3.5"/>
+</svg>

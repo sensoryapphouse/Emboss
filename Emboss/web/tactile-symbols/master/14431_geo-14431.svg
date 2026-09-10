@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Slanted reverse fault with hanging wall block shoved up over footwall with bold 4.5px strokes -->
+  <line x1="24" y1="76" x2="76" y2="24" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="24" y1="76" x2="52" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <line x1="48" y1="24" x2="76" y2="24" stroke="#000000" stroke-width="5.0"/>
+</svg>

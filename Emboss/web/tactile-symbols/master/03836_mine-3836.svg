@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Split steel die halves clamping together with bold 4.5px stroke -->
+  <rect x="42" y="24" width="40" height="52" rx="3" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Horizontal shot sleeve cylinder and injection plunger with bold 4.0px strokes -->
+  <rect x="18" y="42" width="24" height="16" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Die cavity filled with molten metal with bold 4.0px stroke -->
+  <polygon points="52,36 72,36 72,64 52,64" fill="#ef4444" stroke="#000000" stroke-width="3.0"/>
+</svg>

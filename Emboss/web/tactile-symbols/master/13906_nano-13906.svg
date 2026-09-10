@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central double bond axle with overcrowded chiral rotor blades executing unidirectional spin with bold 4.5px strokes -->
+  <line x1="30" y1="50" x2="70" y2="50" stroke="#000000" stroke-width="6.0"/>
+  <circle cx="50" cy="50" r="8" fill="#ca8a04"/>
+  <path d="M 50 30 Q 72 30 72 50" stroke="#ef4444" stroke-width="5.0" fill="none"/>
+</svg>

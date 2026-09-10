@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Signal post mast with bold 4.5px stroke -->
+  <line x1="50" y1="68" x2="50" y2="84" stroke="#000000" stroke-width="5.5"/>
+  <!-- Vertical 4-lens rectangular housing head with bold 4.5px stroke -->
+  <rect x="38" y="16" width="24" height="52" rx="4" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Four colored aspect lenses with bold 3.0px strokes -->
+  <circle cx="50" cy="24" r="3.5" fill="#facc15"/>
+  <circle cx="50" cy="34" r="3.5" fill="#ef4444"/>
+  <circle cx="50" cy="44" r="3.5" fill="#facc15"/>
+  <circle cx="50" cy="54" r="3.5" fill="#22c55e"/>
+</svg>

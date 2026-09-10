@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Truck chassis frame with wheels with bold 4.5px strokes -->
+  <line x1="16" y1="72" x2="84" y2="72" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="28" cy="74" r="8" fill="#1e293b"/>
+  <circle cx="68" cy="74" r="8" fill="#1e293b"/>
+  <circle cx="80" cy="74" r="8" fill="#1e293b"/>
+  <!-- Inclined rotating mixing drum with bold 4.5px stroke -->
+  <polygon points="26,34 68,26 76,56 34,64" fill="#ffffff" stroke="#ef4444" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

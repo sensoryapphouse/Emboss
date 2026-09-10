@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Filtering noisy SCADA telemetry to calculate true real-time operating bus voltages and angles with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="26" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 28 62 L 44 42 L 56 54 L 72 34" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

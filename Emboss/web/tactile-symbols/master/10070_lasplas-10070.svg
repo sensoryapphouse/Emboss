@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Microchannel plate capturing series of 2D implosion self-emission frames at 30 ps gating with bold 4.5px strokes -->
+  <rect x="22" y="24" width="56" height="52" rx="4" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="36" cy="38" r="6" fill="#ef4444"/>
+  <circle cx="64" cy="38" r="6" fill="#ef4444"/>
+  <circle cx="36" cy="62" r="6" fill="#ef4444"/>
+  <circle cx="64" cy="62" r="6" fill="#ef4444"/>
+</svg>

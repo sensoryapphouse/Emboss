@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Keplerian differential rotation shearing vertical magnetic field line with bold 5.0px stroke -->
+  <path d="M 50 18 C 30 38 70 62 50 82" fill="none" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Opposing tether tension vectors transporting angular momentum with bold 4.5px strokes -->
+  <circle cx="38" cy="38" r="5" fill="#0284c7"/>
+  <circle cx="62" cy="62" r="5" fill="#0284c7"/>
+</svg>

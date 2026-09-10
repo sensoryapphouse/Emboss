@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Random milestone nodes interconnected by collision-free graph edges with bold 4.0px strokes -->
+  <polygon points="26,30 70,24 80,66 48,78 22,60" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="26" y1="30" x2="48" y2="78" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="26" cy="30" r="5" fill="#ef4444"/>
+  <circle cx="70" cy="24" r="5" fill="#ef4444"/>
+  <circle cx="80" cy="66" r="5" fill="#ef4444"/>
+  <circle cx="48" cy="78" r="5" fill="#ef4444"/>
+  <circle cx="22" cy="60" r="5" fill="#ef4444"/>
+</svg>

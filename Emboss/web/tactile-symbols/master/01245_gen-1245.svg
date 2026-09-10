@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Maternal active expressed allele (top) -->
+  <rect x="18" y="28" width="52" height="14" rx="3" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <line x1="70" y1="35" x2="84" y2="35" stroke="#000000" stroke-width="3.5"/>
+  <!-- Paternal methylated silenced allele (bottom) -->
+  <rect x="18" y="60" width="52" height="14" rx="3" fill="#94a3b8" stroke="#000000" stroke-width="4.0"/>
+  <!-- Methylation lock symbols -->
+  <circle cx="32" cy="56" r="4" fill="#ef4444"/>
+  <circle cx="54" cy="56" r="4" fill="#ef4444"/>
+</svg>

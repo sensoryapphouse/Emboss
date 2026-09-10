@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Double electron excitation jumping from occupied orbitals to virtual orbitals with bold 4.5px strokes -->
+  <line x1="20" y1="68" x2="80" y2="68" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="32" x2="80" y2="32" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 36 68 Q 36 32 36 32" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <polygon points="36,32 32,40 40,40" fill="#ef4444"/>
+  <path d="M 64 68 Q 64 32 64 32" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <polygon points="64,32 60,40 68,40" fill="#ef4444"/>
+</svg>

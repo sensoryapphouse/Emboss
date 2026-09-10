@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shielded gauge body resting on ground with bold 4.5px stroke -->
+  <rect x="24" y="38" width="52" height="28" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Indexing source rod handle extending down into soil with bold 4.5px stroke -->
+  <line x1="64" y1="18" x2="64" y2="82" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- LCD display window and keypad with bold 4.0px stroke -->
+  <rect x="32" y="44" width="20" height="12" rx="2" fill="#0284c7"/>
+</svg>

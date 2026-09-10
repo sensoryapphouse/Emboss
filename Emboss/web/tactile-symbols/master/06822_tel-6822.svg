@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Near-RT RIC microservice control loop managing radio resource allocation with bold 4.5px strokes -->
+  <rect x="22" y="22" width="56" height="30" rx="3" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="36" cy="72" r="10" fill="#ef4444"/>
+  <circle cx="64" cy="72" r="10" fill="#ef4444"/>
+  <line x1="36" y1="52" x2="36" y2="62" stroke="#000000" stroke-width="4.0"/>
+  <line x1="64" y1="52" x2="64" y2="62" stroke="#000000" stroke-width="4.0"/>
+</svg>

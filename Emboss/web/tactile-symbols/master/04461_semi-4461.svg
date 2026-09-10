@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper array of high-intensity tungsten halogen lamps with bold 4.0px strokes -->
+  <circle cx="32" cy="24" r="5" fill="#facc15"/>
+  <circle cx="50" cy="24" r="5" fill="#facc15"/>
+  <circle cx="68" cy="24" r="5" fill="#facc15"/>
+  <!-- Silicon wafer suspended on quartz pins in center with bold 4.5px stroke -->
+  <rect x="20" y="46" width="60" height="8" rx="2" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Lower lamp array with bold 4.0px strokes -->
+  <circle cx="32" cy="76" r="5" fill="#facc15"/>
+  <circle cx="50" cy="76" r="5" fill="#facc15"/>
+  <circle cx="68" cy="76" r="5" fill="#facc15"/>
+</svg>

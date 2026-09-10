@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Top chasing arrow -->
+  <path d="M 44 24 L 56 24 L 50 14 Z M 38 24 L 62 24" stroke="#22c55e" stroke-width="4.0" fill="#22c55e" stroke-linejoin="round"/>
+  <!-- Right chasing arrow -->
+  <path d="M 66 50 L 76 60 L 78 48 Z M 64 42 L 76 60" stroke="#22c55e" stroke-width="4.0" fill="#22c55e" stroke-linejoin="round"/>
+  <!-- Left chasing arrow -->
+  <path d="M 34 50 L 22 48 L 24 60 Z M 36 42 L 24 60" stroke="#22c55e" stroke-width="4.0" fill="#22c55e" stroke-linejoin="round"/>
+  <!-- Bottom connection line -->
+  <line x1="28" y1="74" x2="72" y2="74" stroke="#22c55e" stroke-width="4.0" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- DNA target duplex line -->
+  <line x1="14" y1="50" x2="86" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <!-- 3 Triplet boxes representing N-G-G trinucleotide -->
+  <rect x="42" y="36" width="12" height="28" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+  <rect x="56" y="36" width="12" height="28" fill="#22c55e" stroke="#000000" stroke-width="3.0"/>
+  <rect x="70" y="36" width="12" height="28" fill="#22c55e" stroke="#000000" stroke-width="3.0"/>
+</svg>

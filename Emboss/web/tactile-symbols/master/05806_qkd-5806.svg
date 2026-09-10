@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Satellite body top with solar panels with bold 4.5px strokes -->
+  <rect x="42" y="16" width="16" height="18" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <line x1="20" y1="25" x2="42" y2="25" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="58" y1="25" x2="80" y2="25" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Free-space quantum laser beam down to ground telescope station with bold 5.0px stroke -->
+  <line x1="50" y1="34" x2="50" y2="76" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Ground station dome bottom -->
+  <path d="M 38 82 Q 50 68 62 82 Z" fill="#1e293b"/>
+</svg>

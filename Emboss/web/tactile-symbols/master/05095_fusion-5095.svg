@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High-pressure 50-bar gas plenum chamber reservoir with bold 4.5px stroke -->
+  <rect x="20" y="32" width="28" height="36" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Fast eddy-current opening valve flyer plate with bold 4.5px stroke -->
+  <rect x="48" y="40" width="10" height="20" rx="2" fill="#ef4444"/>
+  <!-- Massive puff gas jet nozzle expanding into plasma right with bold 4.5px strokes -->
+  <polygon points="58,46 84,30 84,70 58,54" fill="#0284c7" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>

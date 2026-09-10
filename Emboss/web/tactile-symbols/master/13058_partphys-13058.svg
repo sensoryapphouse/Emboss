@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Triangular quark loop connecting axial pion to two vector photons with bold 4.5px strokes -->
+  <polygon points="34,50 58,32 58,68" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="20" y1="50" x2="34" y2="50" stroke="#000000" stroke-width="5.0"/>
+  <line x1="58" y1="32" x2="80" y2="24" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="58" y1="68" x2="80" y2="76" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

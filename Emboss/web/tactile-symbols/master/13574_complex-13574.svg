@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two initially identical phase trajectories diverging exponentially apart with bold 4.5px strokes -->
+  <path d="M 22 50 Q 40 50 54 36 Q 68 20 78 18" stroke="#ef4444" stroke-width="5.5" fill="none"/>
+  <path d="M 22 50 Q 40 50 54 64 Q 68 80 78 82" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+</svg>

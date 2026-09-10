@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Warm moist air drifting over cold ocean current cooling to saturation and blowing inland with bold 4.5px strokes -->
+  <line x1="20" y1="68" x2="80" y2="68" stroke="#0284c7" stroke-width="5.5"/>
+  <path d="M 24 50 Q 50 36 76 50" fill="none" stroke="#64748b" stroke-width="5.0"/>
+  <line x1="20" y1="50" x2="56" y2="50" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

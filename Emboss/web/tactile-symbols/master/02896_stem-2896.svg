@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 2 Concentric electron orbital rings with bold 4.0px strokes -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="50" cy="50" r="18" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Central heavy atomic nucleus -->
+  <circle cx="50" cy="50" r="8" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <!-- Dispersed electrons on shells with bold 4.0px stroke -->
+  <circle cx="50" cy="20" r="4.5" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="68" cy="50" r="4.5" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+</svg>

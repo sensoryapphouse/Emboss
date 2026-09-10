@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Legs vibrating with motion arcs -->
+  <line x1="38" y1="24" x2="38" y2="76" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  <line x1="62" y1="24" x2="62" y2="76" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M 22 46 C 26 50 26 58 22 62 M 78 46 C 74 50 74 58 78 62" fill="none" stroke="#facc15" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

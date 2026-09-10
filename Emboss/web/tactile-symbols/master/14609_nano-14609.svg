@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Clamshell barrel opening along hinge to release drug molecules with bold 4.5px strokes -->
+  <path d="M 30 50 Q 50 20 70 30" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+  <path d="M 30 50 Q 50 80 70 70" stroke="#0284c7" stroke-width="5.5" fill="none"/>
+  <circle cx="54" cy="50" r="6" fill="#ef4444"/>
+</svg>

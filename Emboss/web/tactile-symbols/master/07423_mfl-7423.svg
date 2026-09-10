@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Casting elastomeric PDMS replica over SU-8 master mold on silicon wafer with bold 4.5px strokes -->
+  <rect x="18" y="60" width="64" height="18" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <rect x="36" y="44" width="12" height="16" fill="#ca8a04"/>
+  <rect x="56" y="44" width="12" height="16" fill="#ca8a04"/>
+  <rect x="18" y="24" width="64" height="20" fill="#0284c7" opacity="0.4" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 2D tomographic grid section with juxtaposed slow hot velocity anomaly (red) and cold slab (blue) with bold 4.5px strokes -->
+  <rect x="22" y="24" width="56" height="52" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="38" cy="50" r="10" fill="#ef4444"/>
+  <circle cx="62" cy="50" r="10" fill="#0284c7"/>
+</svg>

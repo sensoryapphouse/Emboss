@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rotating wafer carrier head top with bold 4.5px stroke -->
+  <rect x="28" y="24" width="44" height="18" rx="3" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Silicon wafer held face-down with bold 4.0px stroke -->
+  <rect x="32" y="42" width="36" height="6" fill="#cbd5e1"/>
+  <!-- Revolving polyurethane CMP polishing pad bottom with bold 4.5px stroke -->
+  <rect x="18" y="58" width="64" height="20" rx="2" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 4-way differentiation quadrants of CD4+ helper T cells into specialized effector lineages with bold 4.5px strokes -->
+  <circle cx="34" cy="34" r="9" fill="#0284c7"/>
+  <circle cx="66" cy="34" r="9" fill="#ef4444"/>
+  <circle cx="34" cy="66" r="9" fill="#ca8a04"/>
+  <circle cx="66" cy="66" r="9" fill="#10b981"/>
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#000000" stroke-width="4.0"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.0"/>
+</svg>

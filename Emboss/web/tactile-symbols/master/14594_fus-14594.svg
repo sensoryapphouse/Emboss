@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Closed Brayton thermodynamic loop connecting heat exchanger, s-CO2 turbine, and compressor with bold 4.5px strokes -->
+  <rect x="22" y="24" width="56" height="52" rx="6" fill="none" stroke="#22c55e" stroke-width="5.0"/>
+  <circle cx="34" cy="50" r="6" fill="#ef4444"/>
+  <circle cx="66" cy="50" r="6" fill="#0284c7"/>
+</svg>

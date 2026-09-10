@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hard aperture transmitting focused high-power pulsed mode while blocking CW mode with bold 4.5px strokes -->
+  <rect x="50" y="18" width="8" height="24" fill="#000000"/>
+  <rect x="50" y="58" width="8" height="24" fill="#000000"/>
+  <path d="M 20 30 Q 54 48 80 48 M 20 70 Q 54 52 80 52" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

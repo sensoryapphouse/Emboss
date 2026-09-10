@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Micro-machined silicon emitter substrate plate left with bold 4.5px stroke -->
+  <rect x="18" y="24" width="16" height="52" rx="2" fill="#1e293b"/>
+  <!-- Micro-needle emitter array spraying ionic liquid droplets with bold 4.0px strokes -->
+  <polygon points="34,32 46,36 34,40" fill="#ef4444"/>
+  <polygon points="34,46 46,50 34,54" fill="#ef4444"/>
+  <polygon points="34,60 46,64 34,68" fill="#ef4444"/>
+  <!-- Charged sub-micron droplet spray fan right with bold 4.0px strokes -->
+  <line x1="50" y1="36" x2="82" y2="24" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="50" y1="50" x2="84" y2="50" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="50" y1="64" x2="82" y2="76" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

@@ -1,0 +1,1056 @@
+[
+  {
+    "id": "sym-403",
+    "name": "Beak",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/beak.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <circle fill=\"#cfd3d8\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"200\" cy=\"240\" r=\"116\"/>\n<circle fill=\"#e6e9ec\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"222\" cy=\"206\" r=\"20\"/>\n<circle fill=\"#8a9098\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"228\" cy=\"206\" r=\"9\"/>\n<path fill=\"#e08a3a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 296 206 L 430 226 L 296 250 Z\"/>\n<path fill=\"#e08a3a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 296 250 L 410 252 L 296 286 Z\"/>\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"296\" y1=\"248\" x2=\"412\" y2=\"246\"/>\n</svg>"
+  },
+  {
+    "id": "sym-405",
+    "name": "Berry",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/berry.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"150\" x2=\"256\" y2=\"232\"/><path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 168 Q 318 128 352 168 Q 322 200 268 188 Q 256 182 256 168 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 300 178 Q 326 172 346 168\"/><circle fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"316\" r=\"86\"/><path fill=\"#2e7d40\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 230 L 244 256 L 222 252 L 234 276 L 214 288 L 240 296 L 234 320 L 256 306 L 278 320 L 272 296 L 298 288 L 278 276 L 290 252 L 268 256 Z\"/><ellipse fill=\"#e85a6a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"226\" cy=\"296\" rx=\"16\" ry=\"22\" transform=\"rotate(-20 226 296)\"/>\n</svg>"
+  },
+  {
+    "id": "sym-406",
+    "name": "Birdhouse",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/birdhouse.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"330\" x2=\"256\" y2=\"430\"/>\n<rect fill=\"#c89a5b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"170\" y=\"200\" width=\"172\" height=\"160\" rx=\"6\"/>\n<path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 L 138 210 L 374 210 Z\"/>\n<circle fill=\"#6b4a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"270\" r=\"38\"/>\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"308\" x2=\"256\" y2=\"350\"/>\n<circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"170\" r=\"11\"/>\n</svg>"
+  },
+  {
+    "id": "sym-407",
+    "name": "Brown Mushroom",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/brown-mushroom.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#f9c3bb\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M10.9913 25.3086L13.4997 18.5H17.9997L20.8308 25.2239C21.3859 26.5422 20.4179 28 18.9876 28H12.868C11.4765 28 10.5102 26.6143 10.9913 25.3086Z\"  />\n<path fill=\"#a05454\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M5.72653 9.79528C4.80044 11.3254 4.20652 13.079 4.04477 14.9562C4.01513 15.3002 4 16.1483 4 16.5C3.9998 18.6183 4.93781 20 6.5 20H25.4654C27.4835 20 28 18.0235 28 16.5C28 16.1483 27.9849 15.3002 27.9552 14.9562C27.5632 10.4082 24.6343 6.58536 20.5907 4.90969C19.1766 4.32373 17.626 4 16 4C14.8768 4 13.7896 4.15433 12.7584 4.44294C9.79073 5.27367 7.2869 7.21779 5.72653 9.79528Z\"  />\n<ellipse fill=\"#e69377\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"20.2799\" cy=\"7.43619\" rx=\"2.58966\" ry=\"1.45972\" transform=\"rotate(30 20.2799 7.43619)\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-408",
+    "name": "Cloud",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/cloud.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#fff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 172 330 C 124 330 100 296 108 262 C 114 236 142 220 168 226 C 174 188 210 162 250 168 C 286 174 310 200 312 232 C 348 224 384 246 388 286 C 392 318 368 332 336 330 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-410",
+    "name": "Coconut",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/coconut.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <circle fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"300\" r=\"108\"/><circle fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"300\" r=\"108\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 168 264 Q 200 254 230 262 M 162 312 Q 196 304 226 314 M 174 356 Q 202 350 228 360 M 286 260 Q 318 252 346 262 M 288 312 Q 320 306 350 316 M 286 356 Q 316 350 342 360\"/><circle fill=\"#5a3a1b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"236\" cy=\"266\" r=\"14\"/><circle fill=\"#5a3a1b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"282\" cy=\"268\" r=\"14\"/><circle fill=\"#5a3a1b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"258\" cy=\"300\" r=\"14\"/>\n</svg>"
+  },
+  {
+    "id": "sym-412",
+    "name": "Crystal",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/crystal.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#4a90d9\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 L 318 210 L 300 380 L 256 412 L 212 380 L 194 210 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 L 256 412\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 194 210 L 256 240 L 318 210\"/><path fill=\"#3d7fb5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 L 318 210 L 300 380 L 256 240 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 230 150 L 244 198\"/>\n</svg>"
+  },
+  {
+    "id": "sym-413",
+    "name": "Cyclone",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/cyclone.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M11.0796 2.73553C11.7779 3.59132 11.6503 4.8512 10.7945 5.54955C7.86908 7.93674 6 11.5672 6 15.64C6 21.1654 10.4746 25.64 16 25.64C21.5254 25.64 26 21.1654 26 15.64C26 11.7746 22.8654 8.64 19 8.64C15.1346 8.64 12 11.7746 12 15.64C12 17.8554 13.7846 19.64 16 19.64C18.2154 19.64 20 17.8554 20 15.64C20 15.0846 19.5554 14.64 19 14.64C18.4446 14.64 18 15.0846 18 15.64C18 16.7446 17.1046 17.64 16 17.64C14.8954 17.64 14 16.7446 14 15.64C14 12.8754 16.2354 10.64 19 10.64C21.7646 10.64 24 12.8754 24 15.64C24 20.0646 20.4246 23.64 16 23.64C11.5754 23.64 8 20.0646 8 15.64C8 9.56543 12.9254 4.64 19 4.64C25.0746 4.64 30 9.56543 30 15.64C30 23.3746 23.7346 29.64 16 29.64C8.26543 29.64 2 23.3746 2 15.64C2 10.3128 4.45092 5.56326 8.26553 2.45045C9.12132 1.7521 10.3812 1.87974 11.0796 2.73553Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-414",
+    "name": "Deciduous Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/deciduous-tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#694738\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M18 22.24H14V30.02H18V22.24Z\"  />\n<path fill=\"#478824\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M25.9 15.2C26.28 14.44 26.5 13.58 26.5 12.67C26.5 9.76 24.31 7.37 21.5 7.04C21.5 7.03 21.5 7.01 21.5 7C21.5 4.24 19.26 2 16.5 2C13.74 2 11.5 4.24 11.5 7C11.5 7.01 11.5 7.03 11.5 7.04C8.68 7.37 6.5 9.76 6.5 12.67C6.5 13.58 6.72 14.44 7.1 15.2C5.84 16.14 5 17.63 5 19.32C5 22.16 7.32 24.48 10.16 24.48H22.84C25.68 24.48 28 22.16 28 19.32C28 17.63 27.16 16.14 25.9 15.2Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-415",
+    "name": "Den",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/den.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#7a8a5a\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 96 360 Q 120 230 256 224 Q 392 230 416 360 Q 416 386 390 386 L 122 386 Q 96 386 96 360 Z\"/>\n<path fill=\"#3a2a1a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 200 386 Q 204 300 256 296 Q 308 300 312 386 Z\"/>\n<ellipse fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"356\" rx=\"34\" ry=\"22\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 140 250 Q 150 232 168 244 M 360 252 Q 350 234 332 246 M 250 226 Q 256 210 268 224\"/>\n<ellipse fill=\"#9aa86a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"160\" cy=\"392\" rx=\"40\" ry=\"14\"/>\n<ellipse fill=\"#9aa86a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"356\" cy=\"392\" rx=\"40\" ry=\"14\"/>\n</svg>"
+  },
+  {
+    "id": "sym-416",
+    "name": "Droplet",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/droplet.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#36c1ec\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M18.2692 3.3875C17.2787 1.5375 14.6074 1.5375 13.6269 3.3875L7.35391 15.1875C3.51205 21.7675 8.30437 29.9975 15.9681 29.9975H16.1782C23.7318 29.9975 28.4441 21.8975 24.6723 15.4175L18.2692 3.3875Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-418",
+    "name": "Eel",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/eel.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 160 135 C 115 165 120 220 168 245 C 220 272 240 312 205 348 C 172 380 188 420 235 430 C 305 444 372 412 388 348 C 398 308 392 280 405 262\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 160 135 C 115 165 120 220 168 245 C 220 272 240 312 205 348 C 172 380 188 420 235 430 C 305 444 372 412 388 348 C 398 308 392 280 405 262\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 160 135 C 115 165 120 220 168 245 C 220 272 240 312 205 348 C 172 380 188 420 235 430 C 305 444 372 412 388 348 C 398 308 392 280 405 262\"/>\n<circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"158\" cy=\"148\" r=\"7\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 142 165 Q 155 173 168 164\"/>\n</svg>"
+  },
+  {
+    "id": "sym-423",
+    "name": "Evergreen Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/evergreen-tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#694738\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M19.1573 30H12.8456C12.3098 30 11.9026 29.3916 12.0204 28.7573L12.5348 26H19.4681L19.9824 28.7573C20.0896 29.3916 19.6931 30 19.1573 30Z\"  />\n<path fill=\"#478824\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M14.8771 6.71419L12.178 11.8408C11.6744 12.7931 12.2988 14 13.3059 14H13.9079C11.7467 14 10 15.5917 10 17.5612C10 18.3615 10.7105 19 11.5789 19H11.7231C9.11588 19 7 21.2269 7 23.971C7 25.6491 8.29359 27 9.87798 27H22.122C23.7164 27 25 25.6385 25 23.971C25.01 21.2269 22.8941 19 20.2769 19H20.4211C21.2994 19 22 18.3525 22 17.5612C22 15.6007 20.2533 14 18.0921 14H18.6941C19.7012 14 20.3256 12.8042 19.822 11.8408L17.1229 6.71419C16.6294 5.76194 15.3806 5.76194 14.8771 6.71419Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-424",
+    "name": "Ewe",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/ewe.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><ellipse cx=\"50\" cy=\"50\" rx=\"30\" ry=\"22\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\"/><circle cx=\"26\" cy=\"40\" r=\"12\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\"/><ellipse cx=\"20\" cy=\"34\" rx=\"4\" ry=\"7\" transform=\"rotate(-30 20 34)\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"3.5\"/><line x1=\"38\" y1=\"72\" x2=\"38\" y2=\"88\" fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><line x1=\"62\" y1=\"72\" x2=\"62\" y2=\"88\" fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linecap=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-425",
+    "name": "Fin",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/fin.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#3d7fb5\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 360 C 200 348 320 348 392 360 C 360 372 360 384 392 396 C 320 408 200 408 120 396 C 150 384 150 372 120 360 Z\"/>\n<path fill=\"#4a90d9\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 180 356 C 200 250 250 150 300 110 C 312 180 320 280 312 356 Z\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 220 340 C 232 270 250 200 280 160\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 264 336 C 274 280 286 224 300 184\"/>\n</svg>"
+  },
+  {
+    "id": "sym-426",
+    "name": "Fir Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/fir-tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 240 372 L 240 432 Q 256 446 272 432 L 272 372 Z\"/>\n<path fill=\"#2e7d40\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 82 L 196 196 L 230 196 L 178 286 L 218 286 L 172 372 L 340 372 L 294 286 L 334 286 L 282 196 L 316 196 Z\"/>\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 130 L 256 360\"/>\n</svg>"
+  },
+  {
+    "id": "sym-427",
+    "name": "Fire",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/fire.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#ee6d34\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M26 19.3399C26 25.4393 20.9491 30.3451 14.8501 29.981C8.58145 29.6067 4.2892 23.5781 5.09774 17.2765C5.58685 13.4429 7.38361 10.1555 9.34008 7.6065C9.67947 7.16144 10.0288 10.7422 10.3782 10.3477C10.7276 9.94307 13.9717 4.32923 15.0997 2.35679C15.3093 1.99265 15.7884 1.88139 16.1278 2.14438C18.3937 3.85382 26 10.2769 26 19.3399Z\"  />\n<path fill=\"#efac3e\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M23 21.8512C23 25.893 19.4812 29.142 15.2011 28.9952C10.5815 28.8386 7.41254 24.6109 8.09159 20.256C9.06903 14.0124 15.4789 10 15.4789 10C15.4789 10 23 14.7072 23 21.8512Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-428",
+    "name": "Fish",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/fish.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><ellipse cx=\"44\" cy=\"50\" rx=\"28\" ry=\"18\" fill=\"#38bdf8\" stroke=\"#000000\" stroke-width=\"4.5\"/><polygon points=\"70,50 86,34 86,66\" fill=\"#38bdf8\" stroke=\"#000000\" stroke-width=\"4.5\" stroke-linejoin=\"round\"/><circle cx=\"28\" cy=\"46\" r=\"4\" fill=\"#000000\" stroke=\"#000000\" stroke-width=\"2.0\"/></svg>"
+  },
+  {
+    "id": "sym-429",
+    "name": "Flipper",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/flipper.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#b9bdc2\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 160 122\n         C 236 130 322 200 368 302\n         C 388 344 380 372 346 372\n         C 278 374 196 322 152 244\n         C 126 198 126 152 140 132\n         C 145 125 152 121 160 122 Z\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 178 174 C 228 238 296 308 338 344\" opacity=\"0.5\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 210 162 C 260 216 314 280 348 320\" opacity=\"0.5\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 248 158 C 292 198 328 248 356 296\" opacity=\"0.5\"/>\n</svg>"
+  },
+  {
+    "id": "sym-430",
+    "name": "Flower",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/flower.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><line x1=\"50\" y1=\"50\" x2=\"50\" y2=\"86\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><circle cx=\"50\" cy=\"38\" r=\"24\" fill=\"#ec4899\" stroke=\"#000000\" stroke-width=\"4.5\"/><circle cx=\"50\" cy=\"38\" r=\"10\" fill=\"#facc15\" stroke=\"#000000\" stroke-width=\"3.5\"/><path d=\"M 50 68 C 62 64 68 72 68 72 C 68 72 62 80 50 74\" fill=\"#22c55e\" stroke=\"#000000\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-431",
+    "name": "Four Leaf Clover",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/four-leaf-clover.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M20.663 29.841C21.0929 30.0616 21.6203 29.892 21.841 29.462C22.0616 29.0321 21.892 28.5047 21.462 28.284L20.663 29.841ZM21.462 28.284C18.7537 26.8941 17.6508 25.0511 17.185 23.015C16.6948 20.872 16.9062 18.5746 16.9062 16.125H15.1562C15.1562 18.3504 14.9302 21.0061 15.4791 23.4053C16.0524 25.9114 17.4651 28.1997 20.663 29.841L21.462 28.284Z\"  />\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M16.0246 9.23656C15.9304 6.75556 15.5115 4.16996 13.8906 2.81248C11.6381 0.925953 8.21875 2.95312 8.70313 5.73435C5.56253 5.40623 3.44603 9.64468 6.60938 11.6406C8.11335 12.5895 9.65324 12.8871 11.4582 12.9681C9.63186 13.0697 8.07758 13.392 6.55988 14.3496C3.39653 16.3455 5.51303 20.584 8.65363 20.2559C8.16925 23.0371 11.497 24.9491 13.8411 23.1777C15.288 22.0844 15.811 20.1995 15.9787 18.2127C16.1672 20.1995 16.7117 22.0844 18.1586 23.1777C20.5027 24.9491 23.8304 23.0371 23.3461 20.2559C26.4867 20.584 28.6032 16.3455 25.4398 14.3496C23.934 13.3995 22.3657 13.0748 20.5353 12.9706C22.3643 12.8931 23.9204 12.5993 25.4398 11.6406C28.6032 9.64468 26.4867 5.40623 23.3461 5.73435C23.8304 2.95312 20.4111 0.925953 18.1586 2.81248C16.5377 4.16996 16.1188 6.75556 16.0246 9.23656Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-432",
+    "name": "Hill",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/hill.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(256 256) scale(0.9084) translate(-256.00 -256.00)\">\n<circle fill=\"#f6a800\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"400.0\" cy=\"150.0\" r=\"46.0\"/>\n<path fill=\"#4ea65a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 24 440 Q 256 70 488 440 Z\"/>\n<path fill=\"#6cc070\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 24 440 Q 200 150 372 440 Z\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 132 350 Q 200 308 268 350\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 196 412 Q 268 368 340 412\"/>\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"20\" y1=\"440\" x2=\"492\" y2=\"440\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-434",
+    "name": "Holly",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/holly.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g fill=\"#2e7d40\" stroke=\"#1a1a1a\" stroke-width=\"9\" stroke-linejoin=\"round\">\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 Q 300 130 296 168 Q 332 156 360 178 Q 338 206 360 234 Q 322 234 316 270 Q 286 246 256 268 Q 226 246 196 270 Q 190 234 152 234 Q 174 206 152 178 Q 180 156 216 168 Q 212 130 256 110 Z\"/>\n</g>\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 130 L 256 250\"/>\n<circle fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"240\" cy=\"300\" r=\"20\"/>\n<circle fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"284\" cy=\"300\" r=\"20\"/>\n<circle fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"262\" cy=\"338\" r=\"20\"/>\n</svg>"
+  },
+  {
+    "id": "sym-435",
+    "name": "Hoof",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/hoof.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#cfd3d8\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 214 110 L 298 110 L 300 200 L 212 200 Z\"/>\n<path fill=\"#6b4a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 200 196 C 196 250 188 300 196 340 C 204 384 248 404 256 404 C 264 404 308 384 316 340 C 324 300 316 250 312 196 Z\"/>\n<path fill=\"#3a2a18\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 200 320 C 220 348 292 348 312 320 L 308 392 C 300 404 212 404 204 392 Z\"/>\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"330\" x2=\"256\" y2=\"398\"/>\n</svg>"
+  },
+  {
+    "id": "sym-436",
+    "name": "Icicle",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/icicle.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#9aa0a6\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 138 L 392 138 L 392 174 C 360 168 330 172 300 174 L 300 174 C 270 178 240 172 212 176 C 182 180 150 174 120 178 Z\"/><path fill=\"#cfe6f5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 168 168 L 196 168 L 178 280 Z\"/><path fill=\"#cfe6f5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 240 172 L 274 172 L 256 360 Z\"/><path fill=\"#cfe6f5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 320 168 L 348 168 L 332 252 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-437",
+    "name": "Kennel",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/kennel.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <rect fill=\"#c89a5b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"146\" y=\"240\" width=\"220\" height=\"170\" rx=\"6\"/>\n<path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 124 L 386 246 L 126 246 Z\"/>\n<path fill=\"#5a3a1c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 256 C 214 256 198 290 198 320 C 198 372 256 410 256 410 C 256 410 314 372 314 320 C 314 290 298 256 256 256 Z\"/>\n<rect fill=\"#6b4a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"238\" y=\"120\" width=\"36\" height=\"34\" rx=\"6\"/>\n</svg>"
+  },
+  {
+    "id": "sym-438",
+    "name": "Lair",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/lair.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#8a8d92\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 86 408 L 110 250 Q 130 150 256 140 Q 382 150 402 250 L 426 408 Z\"/>\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 180 408 Q 188 268 256 256 Q 324 268 332 408 Z\"/>\n<path fill=\"#6e7176\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 230 L 186 230 L 168 264 Z M 326 230 L 362 230 L 344 264 Z\"/>\n<circle fill=\"#e23c3c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"222\" cy=\"350\" r=\"8\"/>\n<circle fill=\"#e23c3c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"290\" cy=\"350\" r=\"8\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 130 200 Q 150 180 168 198 M 344 198 Q 362 178 382 200\"/>\n</svg>"
+  },
+  {
+    "id": "sym-439",
+    "name": "Leaf",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/leaf (2).svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 44.00) scale(4.2400)\"><path fill=\"#529929\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 50,8 C 78,20 88,42 80,65 C 72,80 58,88 50,92 C 42,88 28,80 20,65 C 12,42 22,20 50,8 Z\" /></g>\n</svg>"
+  },
+  {
+    "id": "sym-441",
+    "name": "Lightening",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/lightening.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#c2cad3\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 250 Q 82 250 82 212 Q 82 176 122 174 Q 126 128 180 132 Q 198 96 248 110 Q 274 84 314 108 Q 368 100 368 152 Q 410 154 410 200 Q 410 250 368 250 Z\"/>\n<path fill=\"#fdde4e\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 286 240 L 206 392 L 260 392 L 222 470 L 332 332 L 274 332 L 314 240 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-442",
+    "name": "Lightning",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/lightning.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(256 256) scale(1.2177) translate(-308.00 -280.00)\">\n<polygon fill=\"#f6c500\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" points=\"296.0 100.0 376.0 100.0 320.0 224.0 406.0 224.0 226.0 460.0 296.0 290.0 210.0 290.0\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-444",
+    "name": "Lightning Bolt",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/lightning bolt.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 1,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 44.00) scale(4.2400)\"><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 60,8 L 25,54 L 48,54 L 34,92 L 72,44 L 48,44 Z\" /></g>\n</svg>"
+  },
+  {
+    "id": "sym-445",
+    "name": "Mane",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/mane.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#c87f2e\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 90\nC 300 96 318 70 350 92 C 360 130 392 132 396 168 C 430 188 412 226 430 250 C 408 280 432 318 396 332 C 392 366 360 366 348 398 C 316 418 300 396 256 402 C 212 396 196 418 164 398 C 152 366 120 366 116 332 C 80 318 104 280 82 250 C 100 226 82 188 116 168 C 120 132 152 130 162 92 C 194 70 212 96 256 90 Z\"/>\n<circle fill=\"#cfd3d8\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"248\" r=\"118\"/>\n<circle fill=\"#8a9098\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"214\" cy=\"232\" r=\"13\"/>\n<circle fill=\"#8a9098\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"298\" cy=\"232\" r=\"13\"/>\n<path fill=\"#a8adb5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 232 286 Q 256 304 280 286\"/>\n<path fill=\"#a8adb5\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 268 L 240 288 L 272 288 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-447",
+    "name": "Mist",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/mist.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#fff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 196 250 C 152 250 132 220 140 192 C 146 170 170 158 192 164 C 198 134 228 114 262 120 C 292 126 312 148 314 174 C 344 168 374 186 378 218 C 382 244 362 252 336 250 Z\"/><g stroke=\"#b9bdc2\" stroke-width=\"11\" stroke-linecap=\"round\" fill=\"none\"><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"150\" y1=\"300\" x2=\"362\" y2=\"300\"/><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"170\" y1=\"338\" x2=\"342\" y2=\"338\"/><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"150\" y1=\"376\" x2=\"362\" y2=\"376\"/></g>\n</svg>"
+  },
+  {
+    "id": "sym-448",
+    "name": "Mountain",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/mountain.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(256 256) scale(0.9011) translate(-254.00 -266.00)\">\n<polygon fill=\"#8a93a0\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" points=\"256,70 430,452 82,452\"/>\n<polygon fill=\"#6b7480\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" points=\"150,150 300,452 8,452\"/>\n<path fill=\"#f4f8fb\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 70 L 304 176 Q 280 158 256 176 Q 232 158 210 176 Q 232 130 256 70 Z\"/>\n<path fill=\"#f4f8fb\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 150 L 196 252 Q 172 234 150 252 Q 128 234 110 252 Q 128 206 150 150 Z\"/>\n<circle fill=\"#f6a800\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"396.0\" cy=\"128.0\" r=\"38.0\"/>\n<rect fill=\"#3fae5a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"8.0\" y=\"448.0\" width=\"496.0\" height=\"18.0\" rx=\"0\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-449",
+    "name": "Mussel",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/mussel.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#3d4a6b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 168 C 200 150 280 168 340 230 C 388 280 408 344 392 388 C 348 404 280 396 220 352 C 168 314 138 252 138 204 C 138 184 138 172 150 168 Z\"/>\n\n<path fill=\"#4a90d9\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 168 C 200 150 280 168 340 230 C 380 272 400 322 396 364 C 360 332 318 292 280 262 C 232 224 184 196 150 184 C 144 178 146 170 150 168 Z\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 172 C 212 196 296 256 392 386\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 196 184 C 230 250 290 322 360 370 M 168 214 C 200 280 256 348 322 392\"/>\n</svg>"
+  },
+  {
+    "id": "sym-450",
+    "name": "Nut",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/nut.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#c89a5b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 360 C 200 360 176 312 176 270 C 176 232 210 210 256 210 C 302 210 336 232 336 270 C 336 312 312 360 256 360 Z\"/><path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 176 232 Q 176 168 256 168 Q 336 168 336 232 Q 336 252 312 252 L 200 252 Q 176 252 176 232 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 204 200 L 308 200 M 198 224 L 314 224 M 218 178 L 294 178\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 226 280 Q 256 268 286 280\"/>\n</svg>"
+  },
+  {
+    "id": "sym-451",
+    "name": "Oak Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/oak-tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 240 360 L 240 430 Q 256 444 272 430 L 272 360 Z\"/>\n<path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 110 C 196 110 168 156 178 196 C 130 204 116 264 158 290 C 130 330 170 384 222 372 C 236 400 276 400 290 372 C 342 384 382 330 354 290 C 396 264 382 204 334 196 C 344 156 316 110 256 110 Z\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 150 C 240 184 244 220 256 360\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 232 240 Q 256 254 280 240\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 200 300 Q 224 312 248 300\"/>\n</svg>"
+  },
+  {
+    "id": "sym-452",
+    "name": "Paw",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/paw.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <ellipse fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"256\" cy=\"320\" rx=\"92\" ry=\"78\"/>\n<ellipse fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"150\" cy=\"230\" rx=\"34\" ry=\"44\"/>\n<ellipse fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"214\" cy=\"168\" rx=\"34\" ry=\"46\"/>\n<ellipse fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"298\" cy=\"168\" rx=\"34\" ry=\"46\"/>\n<ellipse fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"362\" cy=\"230\" rx=\"34\" ry=\"44\"/>\n</svg>"
+  },
+  {
+    "id": "sym-453",
+    "name": "Paw Print",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/paw print.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\"><ellipse fill=\"#5e1f0a\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"145\" cy=\"170\" rx=\"50\" ry=\"42\"></ellipse><circle fill=\"#5e1f0a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"95\" cy=\"120\" r=\"22\"></circle><circle fill=\"#5e1f0a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"130\" cy=\"80\" r=\"20\"></circle><circle fill=\"#5e1f0a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"160\" cy=\"80\" r=\"20\"></circle><circle fill=\"#5e1f0a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"195\" cy=\"120\" r=\"22\"></circle><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 145,180 L 145,200\"></path></g>\n</svg>"
+  },
+  {
+    "id": "sym-454",
+    "name": "Pebble",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/pebble.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#b9bdc2\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 300 C 130 250 190 200 256 196 C 330 192 392 232 388 296 C 386 348 330 388 256 388 C 196 388 168 348 150 300 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 196 248 C 230 224 290 226 318 252\"/><ellipse fill=\"#cfd6dc\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"232\" cy=\"288\" rx=\"22\" ry=\"14\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 300 320 C 320 322 338 332 344 348\"/>\n</svg>"
+  },
+  {
+    "id": "sym-456",
+    "name": "Petal",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/petal.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 4,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(256 256)\">\n\n<g transform=\"rotate(-20)\">\n<path fill=\"#e85a8a\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 150 C -90 100 -90 -60 0 -150 C 90 -60 90 100 0 150 Z\"/>\n\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"0\" y1=\"128\" x2=\"0\" y2=\"-120\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 60 Q 36 30 50 -10\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 60 Q -36 30 -50 -10\"/>\n</g>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-457",
+    "name": "Pig Nose",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/pig-nose.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#f68f90\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M30 21.79C29.89 14.17 23.66 9 16 9C8.34 9 2.11 14.17 2 21.79C2 21.86 2 21.93 2 22C2 26.42 5.58 30 10 30H22C26.42 30 30 26.42 30 22C30 21.93 30 21.86 30 21.79Z\"  />\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M10 16C8.34315 16 7 17.3431 7 19V23C7 24.6569 8.34315 26 10 26C11.6569 26 13 24.6569 13 23V19C13 17.3431 11.6569 16 10 16Z\"  />\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M22 16C20.3431 16 19 17.3431 19 19V23C19 24.6569 20.3431 26 22 26C23.6569 26 25 24.6569 25 23V19C25 17.3431 23.6569 16 22 16Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-458",
+    "name": "Pincers",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/pincers.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <rect fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"120\" y=\"372\" width=\"64\" height=\"52\" rx=\"14\" transform=\"rotate(-34 152 398)\"/>\n\n<rect fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"178\" y=\"312\" width=\"78\" height=\"54\" rx=\"14\" transform=\"rotate(-34 217 339)\"/>\n\n<path fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 250 300 C 300 260 340 250 372 262 C 410 276 414 318 396 348 C 380 374 344 384 314 374 C 286 364 262 340 250 300 Z\"/>\n\n<path fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 372 330 C 408 330 440 320 462 300 C 458 332 438 360 404 366 C 388 368 378 356 372 348 Z\"/>\n\n<path fill=\"#e23c3c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 352 268 C 380 240 416 214 448 196 C 442 230 420 262 392 280 C 376 290 360 284 352 274 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-459",
+    "name": "Pine Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/pine-tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 240 330 L 240 432 Q 256 446 272 432 L 272 330 Z\"/>\n<path fill=\"#2e7d40\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 80 L 200 178 L 226 178 L 184 256 L 214 256 L 168 340 L 344 340 L 298 256 L 328 256 L 286 178 L 312 178 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-460",
+    "name": "Pip",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/pip.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 257 172 L 262 105\"/><path fill=\"#f6e58d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 200 C 150 130 230 140 256 175 C 282 140 362 130 362 200 C 362 320 290 410 256 430 C 222 410 150 320 150 200 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 175 L 256 380\"/><g fill=\"#6b4a2b\" stroke=\"#1a1a1a\" stroke-width=\"6\" stroke-linejoin=\"round\"><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 222 250 C 210 250 208 282 222 296 C 236 282 234 250 222 250 Z\"/><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 290 250 C 278 250 276 282 290 296 C 304 282 302 250 290 250 Z\"/><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 300 C 244 300 242 332 256 346 C 270 332 268 300 256 300 Z\"/></g>\n</svg>"
+  },
+  {
+    "id": "sym-461",
+    "name": "Plant Pot",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/plant-pot.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 290 Q 200 250 196 198 Q 232 210 256 250 Q 280 210 316 198 Q 312 250 256 290 Z\"/><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"170\" x2=\"256\" y2=\"295\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 230 Q 214 218 196 178 M 256 230 Q 298 218 316 178\"/><path fill=\"#c89a5b\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 178 300 L 334 300 L 312 410 L 200 410 Z\"/><path fill=\"#e08a3a\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 166 282 L 346 282 L 334 312 L 178 312 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-462",
+    "name": "Rainbow",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/rainbow.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><path d=\"M 16 80 A 34 34 0 0 1 84 80\" fill=\"none\" stroke=\"#ef4444\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><path d=\"M 26 80 A 24 24 0 0 1 74 80\" fill=\"none\" stroke=\"#3b82f6\" stroke-width=\"4.5\" stroke-linecap=\"round\"/><path d=\"M 36 80 A 14 14 0 0 1 64 80\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"4.5\" stroke-linecap=\"round\"/></svg>"
+  },
+  {
+    "id": "sym-421",
+    "name": "Rose",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/emoji rose.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\"><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"145\" y1=\"210\" x2=\"145\" y2=\"120\"/><path fill=\"#529929\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M145 175 Q115 165 108 145 Q115 155 145 158\"/><path fill=\"#67832d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M145 155 Q175 145 182 125 Q175 135 145 138\"/><path fill=\"#f8130d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M145 120 Q130 105 120 90 Q125 75 140 80 Q145 85 150 80 Q165 75 170 90 Q160 105 145 120 Z\"/><path fill=\"#d01424\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M130 90 Q135 100 145 105 Q155 100 160 90\"/><path fill=\"#f8130d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M138 80 Q140 70 145 65 Q150 70 152 80\"/></g>\n</svg>"
+  },
+  {
+    "id": "sym-463",
+    "name": "Seedling",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/seedling.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(40,40) scale(13.5)\"><path fill=\"#86ca3c\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M22.39 6.45001C20.1 6.45001 18.07 7.53001 16.76 9.20001V9.15001V8.73001H16.75C16.53 4.98001 13.42 2 9.61 2H2C2 5.95 5.20001 9.15001 9.15001 9.15001H14.34V21.61H16.76V13.61H22.85C26.8 13.61 30 10.41 30 6.46001H22.39V6.45001Z\"  />\n<path fill=\"#694738\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M15.5501 21C10.5854 21 6.56024 25.0252 6.56024 29.9899H24.5499C24.5499 25.0252 20.5248 21 15.5501 21Z\"  /></g>\n</svg>"
+  },
+  {
+    "id": "sym-465",
+    "name": "Sky",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/sky.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <rect fill=\"#9ed0f0\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x=\"110\" y=\"110\" width=\"292\" height=\"292\" rx=\"24\"/><circle fill=\"#f4c430\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"180\" cy=\"186\" r=\"40\"/><path fill=\"#fff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 252 320 C 220 320 204 298 210 276 C 214 260 232 250 250 256 C 254 232 278 216 304 222 C 326 227 340 245 340 266 C 364 262 386 278 388 304 C 390 324 372 332 350 330 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-466",
+    "name": "Snowdrop",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/snowdrop.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(256 256)\">\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 -120 Q 30 -30 0 200\"/>\n\n<path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -2 60 Q -60 0 -54 200 Q -22 150 -2 90 Z\"/>\n<path fill=\"#8cc152\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 2 60 Q 60 0 54 200 Q 22 150 2 90 Z\"/>\n\n<path fill=\"#2e7d40\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -22 -116 Q 0 -150 22 -116 Q 0 -100 -22 -116 Z\"/>\n\n<path fill=\"#fff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -34 -112 Q -44 -20 0 -8 Q 44 -20 34 -112 Q 16 -56 0 -112 Q -16 -56 -34 -112 Z\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -12 -68 Q 0 -40 12 -68\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-467",
+    "name": "Stalk",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/stalk.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#8cc152\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 228 415 L 232 140 Q 256 120 280 140 L 284 415 Z\"/><line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"256\" y1=\"150\" x2=\"256\" y2=\"405\"/><path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 232 250 Q 160 235 128 180 Q 200 172 248 232 Z\"/><path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 284 200 Q 356 185 388 130 Q 316 122 268 182 Z\"/><path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 232 330 Q 168 318 138 268 Q 205 260 248 312 Z\"/>\n</svg>"
+  },
+  {
+    "id": "sym-468",
+    "name": "Stem",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/stem.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 415 L 256 110\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 410 L 256 120\"/><path fill=\"#8cc152\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 250 Q 175 235 140 175 Q 215 168 256 230 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150 178 Q 205 200 248 240\"/><path fill=\"#8cc152\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 256 320 Q 337 305 372 245 Q 297 238 256 300 Z\"/><path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 362 248 Q 307 270 264 310\"/>\n</svg>"
+  },
+  {
+    "id": "sym-469",
+    "name": "Stormy",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/stormy (1).svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\">\n  <path fill=\"#4d4d4d\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 50,115 C 25,115 22,82 50,75 C 45,52 75,38 100,50 C 110,30 150,30 165,52 C 185,42 220,48 230,72 C 260,68 280,95 260,118 C 270,140 240,148 215,140 L 80,140 C 55,145 38,128 50,115 Z\"></path>\n  <path fill=\"#f2e40d\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 150,118 L 190,118 L 168,158 L 200,158 L 130,232 L 152,178 L 124,178 Z\"></path>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-470",
+    "name": "Sun Set",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/sun-set.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(44.00 80.55) scale(1.4621)\">\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 10,158 Q 145,158 280,158\"></path>\n  <path fill=\"#ff9900\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 60,158 Q 60,108 145,108 Q 230,108 230,158 Z\"></path>\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 70,140 Q 145,140 220,140\"></path>\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 80,125 Q 145,125 210,125\"></path>\n  <path fill=\"#d01424\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 38,200 L 50,200 L 50,178 L 44,178 L 56,165 L 68,178 L 62,178 L 62,200\"></path>\n  <path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 5,200 Q 145,205 285,200\"></path>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-471",
+    "name": "Tail",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/tail.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#e08a3a\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 170 410 C 120 360 110 280 150 210 C 188 144 270 104 350 116 C 300 140 250 170 230 230 C 210 292 232 350 290 392 C 250 414 200 420 170 410 Z\"/>\n<path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 350 116 C 380 130 396 168 384 210 C 372 250 332 268 296 258 C 284 220 300 168 350 116 Z\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 180 360 C 200 320 210 270 230 230\"/>\n</svg>"
+  },
+  {
+    "id": "sym-474",
+    "name": "Tree",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/tree.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "picom",
+    "svg": "<svg viewBox=\"0 0 100 100\" width=\"100\" height=\"100\"><rect x=\"44\" y=\"60\" width=\"12\" height=\"26\" rx=\"2\" fill=\"#8a5a2b\" stroke=\"#000000\" stroke-width=\"4.5\"/><circle cx=\"50\" cy=\"40\" r=\"26\" fill=\"#22c55e\" stroke=\"#000000\" stroke-width=\"4.5\"/></svg>"
+  },
+  {
+    "id": "sym-475",
+    "name": "Tulip",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/tulip.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 6,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g transform=\"translate(256 256)\">\n\n<line fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" x1=\"0\" y1=\"-30\" x2=\"0\" y2=\"200\"/>\n\n<path fill=\"#5aa83c\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 120 Q -86 70 -96 168 Q -34 168 0 120 Z\"/>\n<path fill=\"#8cc152\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 150 Q 86 100 96 198 Q 34 198 0 150 Z\"/>\n\n<path fill=\"#d63b46\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -70 -150 Q -78 -10 0 -10 Q 78 -10 70 -150 Q 40 -90 0 -150 Q -40 -90 -70 -150 Z\"/>\n\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M -36 -148 Q -30 -50 0 -36\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 36 -148 Q 30 -50 0 -36\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-476",
+    "name": "Whale Fluke",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/whale-fluke.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 2,
+    "source": "picom",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1024 1024\" width=\"100\" height=\"100\">\n  <path fill=\"#2c567f\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M217 347c9.03 1.13 16.69 3.77 25.31 6.69 37.59 12.41 74.91 16.54 114.33 18.1 113.09 4.5 113.09 4.5 155.36 44.21 3.59-3.07 7.17-6.16 10.62-9.38 40.67-33.69 98.94-33.02 148.84-35.05 40.79-1.71 78.56-7.16 117.25-20.25C801.52 347 801.52 347 807 347c.98 41.28-12.56 74.11-40.81 104.19-40.94 38.45-93.21 54.66-145.69 70.35-33.76 9.48-33.76 9.48-57.31 33.71-12.9 33.9 5.81 72.77 17.74 104.51 2.13 5.71 4.14 11.46 6.07 17.24H437c2.97-9.91 6.55-19.47 10.25-29.12 18.68-47.14 18.68-47.14 12.13-95.76-15.34-23.27-50.25-29.17-75.34-36.62C325.08 497.97 266.79 473.59 233 419c-10.18-19.04-16.35-38.5-16.12-60.19.01-2.22.03-4.44.05-6.73.02-1.68.05-3.35.07-5.08\"/><path fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M217 347c9.03 1.13 16.69 3.77 25.31 6.69 37.59 12.41 74.91 16.54 114.33 18.1 113.09 4.5 113.09 4.5 155.36 44.21 3.59-3.07 7.17-6.16 10.62-9.38 40.67-33.69 98.94-33.02 148.84-35.05 40.79-1.71 78.56-7.16 117.25-20.25C801.52 347 801.52 347 807 347c.98 41.28-12.56 74.11-40.81 104.19-40.94 38.45-93.21 54.66-145.69 70.35-33.76 9.48-33.76 9.48-57.31 33.71-12.9 33.9 5.81 72.77 17.74 104.51 2.13 5.71 4.14 11.46 6.07 17.24H437c2.97-9.91 6.55-19.47 10.25-29.12 18.68-47.14 18.68-47.14 12.13-95.76-15.34-23.27-50.25-29.17-75.34-36.62C325.08 497.97 266.79 473.59 233 419c-10.18-19.04-16.35-38.5-16.12-60.19.01-2.22.03-4.44.05-6.73.02-1.68.05-3.35.07-5.08m17 22c0 27.81 18.55 52.93 36.88 72.25 21.28 20.17 47.44 35.2 75.12 44.75 4.72 1.77 9.44 3.57 14.12 5.44 6.9 2.57 13.79 4.58 20.88 6.56 4.77 1.52 9.53 3.03 14.3 4.55 6.52 2.01 13.11 3.71 19.7 5.45 21.84 7.28 44.08 14.93 57.88 34.5 14.6 30.37 7.01 60.89-2.88 91.5-1.3 3.35-2.63 6.68-4 10-3.52 7.77-3.52 7.77-5 16h101c-.9-7.23-2.42-12.27-5-19-11.49-30.53-20.89-64.2-7.31-95.5 14.47-25.17 44.43-33.52 70.93-40.75l5.29-1.39c7.88-2.11 15.45-4.5 23.09-7.36 4.33-1.34 8.66-2.67 13-4 9.73-3.08 18.81-6.57 28-11l5.4-2.51c41.54-19.47 75.1-46.48 91.6-90.49 1.67-6.56 3-12.22 3-19-9.03 1.87-9.03 1.87-17.75 4.75-39.41 11.83-79.75 13.54-120.57 14.83-44.47 1.42-91.33 5.15-125.99 36.3-4.04 4.39-4.04 4.39-8.57 10.62-1.36 1.81-2.72 3.63-4.12 5.5h-2c-1.18-1.63-2.35-3.26-3.56-4.94-19.13-26.13-49.68-37.18-80.44-43.06-20.85-2.87-41.74-3.76-62.75-4.5-41.09-1.46-80.51-4.55-119.95-16.86-5.2-1.71-5.2-1.71-10.3-2.64\"/>\n</svg>"
+  },
+  {
+    "id": "sym-477",
+    "name": "Wind",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/wind.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(256 256) scale(1.2800) translate(-296.00 -240.00)\">\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 196 h 240 q 44 0 44 -30 q 0 -26 -30 -26 q -22 0 -22 20\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 268 h 300 q 44 0 44 -30 q 0 -26 -30 -26 q -22 0 -22 20\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 120 340 h 220 q 44 0 44 -30 q 0 -26 -30 -26 q -22 0 -22 20\"/>\n</g>\n</svg>"
+  },
+  {
+    "id": "sym-479",
+    "name": "Wing",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/wing.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 3,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <path fill=\"#b9bdc2\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 140 130 C 240 130 360 170 410 270 C 430 312 420 360 380 380 C 340 360 320 322 280 312 C 320 322 330 360 320 392 C 280 384 256 350 224 330 C 256 348 258 386 244 412 C 200 392 176 348 160 300 C 144 252 138 188 140 130 Z\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 168 180 C 230 186 300 210 350 270\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 174 240 C 222 250 280 274 318 320\"/>\n</svg>"
+  },
+  {
+    "id": "sym-480",
+    "name": "Worm",
+    "domain": "living-world",
+    "sub": "nature",
+    "file": "living-world/worm.svg",
+    "targets": [
+      "swell",
+      "tiger",
+      "index",
+      "monarch",
+      "dotpad"
+    ],
+    "elements": 5,
+    "source": "fleximbols",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"100\" height=\"100\">\n  <g data-fit=\"1\" transform=\"translate(256 256) scale(1.1436) translate(-250.00 -244.00)\">\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"4.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 84 308 q 56 -86 116 -44 q 62 44 116 -42 q 40 -64 96 -30\"/>\n<circle fill=\"#e58fa6\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"414.0\" cy=\"238.0\" r=\"33.0\"/>\n<circle fill=\"#fff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"422.0\" cy=\"230.0\" r=\"8.0\"/>\n<circle fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" cx=\"422.0\" cy=\"230.0\" r=\"4.0\"/>\n<path fill=\"none\" stroke=\"#000000\" stroke-width=\"2.5\" vector-effect=\"non-scaling-stroke\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 412 252 q 14 10 26 0\"/>\n</g>\n</svg>"
+  }
+]

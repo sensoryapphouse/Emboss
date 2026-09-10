@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rooster body -->
+  <circle cx="54" cy="54" r="18" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Spectacular arched tail plumes left -->
+  <path d="M 44 54 C 20 44 18 24 32 20 C 38 36 40 44 48 50" fill="#0284c7" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Large serrated comb head right -->
+  <circle cx="68" cy="40" r="8" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+  <polygon points="64,32 68,22 72,32 76,22 78,34" fill="#ef4444"/>
+</svg>

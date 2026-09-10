@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Inverted silicon die top with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="18" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Array of lead-free C4 solder microbumps in center with bold 4.5px strokes -->
+  <circle cx="34" cy="50" r="6" fill="#cbd5e1" stroke="#ef4444" stroke-width="3.5"/>
+  <circle cx="50" cy="50" r="6" fill="#cbd5e1" stroke="#ef4444" stroke-width="3.5"/>
+  <circle cx="66" cy="50" r="6" fill="#cbd5e1" stroke="#ef4444" stroke-width="3.5"/>
+  <!-- Package substrate bottom with bold 4.5px stroke -->
+  <rect x="18" y="58" width="64" height="18" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

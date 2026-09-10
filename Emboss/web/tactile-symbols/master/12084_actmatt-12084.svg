@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Microswimmer scattering through periodic micropillar array exhibiting intermittent trapping with bold 4.5px strokes -->
+  <circle cx="34" cy="36" r="6" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="66" cy="36" r="6" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="50" cy="64" r="6" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 22 50 Q 50 30 78 50" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

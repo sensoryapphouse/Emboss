@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long silver tube diagonal with bold 4.5px stroke -->
+  <line x1="20" y1="80" x2="80" y2="20" stroke="#94a3b8" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- Key cups along body -->
+  <circle cx="44" cy="56" r="3.5" fill="#000000"/>
+  <circle cx="56" cy="44" r="3.5" fill="#000000"/>
+  <circle cx="68" cy="32" r="3.5" fill="#000000"/>
+</svg>

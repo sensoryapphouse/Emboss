@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy low-background lead/steel shielded chair vault with bold 5.0px stroke -->
+  <polyline points="24,20 24,78 76,78" fill="none" stroke="#000000" stroke-width="5.5" stroke-linejoin="round"/>
+  <!-- Seated human subject undergoing in vivo counting with bold 4.5px stroke -->
+  <circle cx="48" cy="36" r="8" fill="#cbd5e1"/>
+  <polyline points="48,44 48,64 68,64" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Array of NaI(Tl) detectors over lungs and GI tract with bold 4.5px stroke -->
+  <rect x="58" y="44" width="12" height="14" rx="2" fill="#ef4444"/>
+</svg>

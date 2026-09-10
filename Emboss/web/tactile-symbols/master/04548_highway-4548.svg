@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Operator chassis frame bridging drums with bold 4.5px stroke -->
+  <rect x="34" y="34" width="32" height="24" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Front and rear smooth steel compaction drums with bold 4.5px strokes -->
+  <circle cx="28" cy="64" r="14" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="72" cy="64" r="14" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Water spray bar indicators on drums with bold 4.0px strokes -->
+  <line x1="22" y1="46" x2="34" y2="46" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="66" y1="46" x2="78" y2="46" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

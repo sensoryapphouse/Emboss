@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Green field base rectangle -->
+  <rect x="18" y="24" width="64" height="52" rx="2" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <!-- White vertical stripe left -->
+  <rect x="18" y="24" width="16" height="52" fill="#ffffff"/>
+  <line x1="34" y1="24" x2="34" y2="76" stroke="#000000" stroke-width="3.5"/>
+  <!-- White crescent moon center -->
+  <circle cx="56" cy="50" r="14" fill="#ffffff"/>
+  <circle cx="60" cy="48" r="12" fill="#22c55e"/>
+  <!-- White 5-point star -->
+  <polygon points="68,40 70,44 74,44 71,47 72,51 68,49 64,51 65,47 62,44 66,44" fill="#ffffff"/>
+</svg>

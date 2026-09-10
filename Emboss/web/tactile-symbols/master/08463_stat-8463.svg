@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Comet-like +1/2 defect moving through oriented rod director field with bold 4.5px strokes -->
+  <path d="M 26 50 Q 50 32 74 50 M 34 62 Q 50 48 66 62" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="40" r="6" fill="#ef4444"/>
+  <line x1="50" y1="40" x2="50" y2="20" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

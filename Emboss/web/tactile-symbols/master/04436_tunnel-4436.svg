@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Segment joint line vertical with bold 4.5px stroke -->
+  <line x1="50" y1="16" x2="50" y2="84" stroke="#000000" stroke-width="5.5"/>
+  <!-- Sensor mounting anchors left and right of joint with bold 4.5px strokes -->
+  <circle cx="32" cy="50" r="5" fill="#1e293b"/>
+  <circle cx="68" cy="50" r="5" fill="#1e293b"/>
+  <!-- Vibrating wire displacement transducer bridging joint with bold 4.5px stroke -->
+  <rect x="36" y="44" width="28" height="12" rx="2" fill="#ef4444" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

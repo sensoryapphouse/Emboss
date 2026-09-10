@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Tapered vertical high-mast steel pole column with bold 5.0px stroke -->
+  <line x1="50" y1="26" x2="50" y2="82" stroke="#000000" stroke-width="5.5"/>
+  <!-- Circular lowering luminaire ring mounting high-output floodlights with bold 4.5px stroke -->
+  <ellipse cx="50" cy="26" rx="24" ry="6" fill="#ffffff" stroke="#ef4444" stroke-width="4.0"/>
+  <!-- High intensity LED lighting cones downward with bold 3.5px strokes -->
+  <polygon points="34,28 24,48 44,48" fill="#facc15"/>
+  <polygon points="66,28 56,48 76,48" fill="#facc15"/>
+</svg>

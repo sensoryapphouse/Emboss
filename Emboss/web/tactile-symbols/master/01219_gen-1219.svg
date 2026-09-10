@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Replicated X-shaped metaphase chromosome with sister chromatids -->
+  <path d="M 32 16 L 50 48 L 68 16 M 32 84 L 50 52 L 68 84" stroke="#000000" stroke-width="6.0" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Primary constriction centromere circle -->
+  <circle cx="50" cy="50" r="6" fill="#ffffff" stroke="#000000" stroke-width="3.0"/>
+  <!-- G-banding horizontal stripe bands -->
+  <line x1="38" y1="28" x2="62" y2="28" stroke="#1e293b" stroke-width="4.0"/>
+  <line x1="38" y1="72" x2="62" y2="72" stroke="#1e293b" stroke-width="4.0"/>
+</svg>

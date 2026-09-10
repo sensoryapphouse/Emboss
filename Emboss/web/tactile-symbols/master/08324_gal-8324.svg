@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Interstellar gas stripped backward from stellar disk by oncoming ICM wind with bold 4.5px strokes -->
+  <ellipse cx="64" cy="50" rx="8" ry="18" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <path d="M 64 36 Q 36 36 20 28 M 64 64 Q 36 64 20 72" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

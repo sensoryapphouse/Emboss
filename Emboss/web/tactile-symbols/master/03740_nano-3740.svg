@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Diamond Berkovich pyramidal indenter tip pressing down with bold 4.5px stroke -->
+  <polygon points="34,22 66,22 50,56" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Specimen surface with indentation pit with bold 4.5px stroke -->
+  <polygon points="18,56 46,56 50,66 54,56 82,56 82,80 18,80" fill="#64748b" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

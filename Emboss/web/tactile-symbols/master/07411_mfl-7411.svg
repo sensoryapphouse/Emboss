@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spiral curved microchannel focusing cells into single equilibrium streamline via Dean vortices with bold 5.0px stroke -->
+  <path d="M 50 50 A 10 10 0 0 1 60 50 A 20 20 0 0 1 40 50 A 30 30 0 0 1 70 50" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="50" cy="50" r="6" fill="#ef4444"/>
+</svg>

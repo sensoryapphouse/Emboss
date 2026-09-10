@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cancer spheroid in central ECM gel chamber flanked by perfusable blood microvessels with bold 4.5px strokes -->
+  <rect x="18" y="22" width="64" height="56" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="50" r="14" fill="#ef4444"/>
+  <line x1="24" y1="26" x2="24" y2="74" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="76" y1="26" x2="76" y2="74" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

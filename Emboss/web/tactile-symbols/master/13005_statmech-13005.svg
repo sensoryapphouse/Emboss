@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Disordered random spin orientations frozen into frustration with bold 4.5px strokes -->
+  <line x1="28" y1="36" x2="40" y2="24" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="72" y1="36" x2="60" y2="24" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="36" y1="64" x2="36" y2="76" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="64" y1="76" x2="64" y2="64" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="6" fill="#000000"/>
+</svg>

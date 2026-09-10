@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fusion reaction pinch chamber with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="34" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Axial Z-pinch current discharge column inside with bold 4.5px stroke -->
+  <line x1="50" y1="24" x2="50" y2="58" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- Diverging magnetic nozzle directing fusion plasma exhaust bottom with bold 4.5px strokes -->
+  <path d="M 36 58 Q 28 76 20 84" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 64 58 Q 72 76 80 84" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

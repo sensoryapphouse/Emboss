@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Single slit aperture mask left with bold 4.5px stroke -->
+  <line x1="24" y1="20" x2="24" y2="44" stroke="#000000" stroke-width="6.0"/>
+  <line x1="24" y1="56" x2="24" y2="80" stroke="#000000" stroke-width="6.0"/>
+  <!-- Central broad maximum intensity peak on right screen with bold 4.5px stroke -->
+  <path d="M 50 24 C 64 24 74 38 74 50 C 74 62 64 76 50 76" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

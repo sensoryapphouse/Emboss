@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Main robot torso body with bold 4.5px stroke -->
+  <rect x="36" y="20" width="28" height="42" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Left articulated manipulator arm with bold 4.5px stroke -->
+  <polyline points="36,28 18,44 26,72" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Right articulated manipulator arm with bold 4.5px stroke -->
+  <polyline points="64,28 82,44 74,72" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Tool sockets / grippers at arm tips -->
+  <circle cx="26" cy="72" r="5" fill="#0284c7"/>
+  <circle cx="74" cy="72" r="5" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ballast body chassis with bold 4.5px stroke -->
+  <rect x="22" y="34" width="56" height="26" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Multiple overlapping smooth pneumatic rubber tires with bold 4.5px strokes -->
+  <circle cx="28" cy="66" r="12" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="48" cy="66" r="12" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="72" cy="66" r="12" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long curved flexible steel saw blade with bold 4.5px stroke -->
+  <path d="M 22 48 Q 50 56 78 48 L 78 56 Q 50 64 22 56 Z" fill="#cbd5e1" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Left and right upright wooden handles with bold 4.5px strokes -->
+  <line x1="22" y1="30" x2="22" y2="66" stroke="#ca8a04" stroke-width="5.5"/>
+  <line x1="78" y1="30" x2="78" y2="66" stroke="#ca8a04" stroke-width="5.5"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Wrist carpal block -->
+  <rect x="38" y="74" width="24" height="14" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Thumb (left splayed) -->
+  <path d="M 38 74 L 20 60 L 14 46" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Index finger -->
+  <path d="M 42 74 L 34 46 L 30 18" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Middle finger (tallest) -->
+  <path d="M 50 74 L 50 44 L 50 14" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Ring finger -->
+  <path d="M 58 74 L 66 46 L 70 20" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Little pinky finger -->
+  <path d="M 62 74 L 78 54 L 84 32" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

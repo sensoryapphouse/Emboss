@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fixed ground pivots -->
+  <circle cx="26" cy="74" r="5" fill="#000000"/>
+  <circle cx="74" cy="74" r="5" fill="#000000"/>
+  <!-- Input crank, coupler, output rocker -->
+  <line x1="26" y1="74" x2="38" y2="34" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+  <line x1="38" y1="34" x2="70" y2="42" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="70" y1="42" x2="74" y2="74" stroke="#000000" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

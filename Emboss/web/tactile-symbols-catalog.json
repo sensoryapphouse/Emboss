@@ -1,0 +1,4292 @@
+[
+  {
+    "id": "sym-0-circular-segment.svg",
+    "name": "circular segment",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "circular-segment.svg",
+    "relPath": "Maths___Geometry/circular-segment.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-1-curve.svg",
+    "name": "curve",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "curve.svg",
+    "relPath": "Maths___Geometry/curve.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-2-decagon.svg",
+    "name": "decagon",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "decagon.svg",
+    "relPath": "Maths___Geometry/decagon.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-3-heptagon.svg",
+    "name": "heptagon",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "heptagon.svg",
+    "relPath": "Maths___Geometry/heptagon.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-4-isosceles-triangle.svg",
+    "name": "isosceles triangle",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "isosceles-triangle.svg",
+    "relPath": "Maths___Geometry/isosceles-triangle.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-5-nonagon.svg",
+    "name": "nonagon",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "nonagon.svg",
+    "relPath": "Maths___Geometry/nonagon.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-6-octagon.svg",
+    "name": "octagon",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "octagon.svg",
+    "relPath": "Maths___Geometry/octagon.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-7-parallelogram.svg",
+    "name": "parallelogram",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "parallelogram.svg",
+    "relPath": "Maths___Geometry/parallelogram.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-8-quadrilateral.svg",
+    "name": "quadrilateral",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "quadrilateral.svg",
+    "relPath": "Maths___Geometry/quadrilateral.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-9-quadrilaterals.svg",
+    "name": "quadrilaterals",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "quadrilaterals.svg",
+    "relPath": "Maths___Geometry/quadrilaterals.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-10-rhombus.svg",
+    "name": "rhombus",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "rhombus.svg",
+    "relPath": "Maths___Geometry/rhombus.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-11-right-angled-triangle.svg",
+    "name": "right angled triangle",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "right-angled-triangle.svg",
+    "relPath": "Maths___Geometry/right-angled-triangle.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-12-scalene-triangle.svg",
+    "name": "scalene triangle",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "scalene-triangle.svg",
+    "relPath": "Maths___Geometry/scalene-triangle.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-13-sector.svg",
+    "name": "sector",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "sector.svg",
+    "relPath": "Maths___Geometry/sector.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-14-semicircle.svg",
+    "name": "semicircle",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "semicircle.svg",
+    "relPath": "Maths___Geometry/semicircle.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-15-star-shape.svg",
+    "name": "star shape",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "star-shape.svg",
+    "relPath": "Maths___Geometry/star-shape.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-16-trapezium.svg",
+    "name": "trapezium",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "trapezium.svg",
+    "relPath": "Maths___Geometry/trapezium.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-17-trapezoid.svg",
+    "name": "trapezoid",
+    "category": "Maths & Geometry",
+    "subcategory": "2D shapes",
+    "filename": "trapezoid.svg",
+    "relPath": "Maths___Geometry/trapezoid.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-18-cone-2.svg",
+    "name": "cone 2",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "cone-2.svg",
+    "relPath": "Maths___Geometry/cone-2.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-19-cuboid.svg",
+    "name": "cuboid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "cuboid.svg",
+    "relPath": "Maths___Geometry/cuboid.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-20-dodecahedron.svg",
+    "name": "dodecahedron",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "dodecahedron.svg",
+    "relPath": "Maths___Geometry/dodecahedron.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-21-ellipsoid.svg",
+    "name": "ellipsoid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "ellipsoid.svg",
+    "relPath": "Maths___Geometry/ellipsoid.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-22-frustum.svg",
+    "name": "frustum",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "frustum.svg",
+    "relPath": "Maths___Geometry/frustum.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-23-hemisphere.svg",
+    "name": "hemisphere",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "hemisphere.svg",
+    "relPath": "Maths___Geometry/hemisphere.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-24-hexagonal-prism.svg",
+    "name": "hexagonal prism",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "hexagonal-prism.svg",
+    "relPath": "Maths___Geometry/hexagonal-prism.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-25-icosahedron.svg",
+    "name": "icosahedron",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "icosahedron.svg",
+    "relPath": "Maths___Geometry/icosahedron.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-26-net-of-a-cube.svg",
+    "name": "net of a cube",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "net-of-a-cube.svg",
+    "relPath": "Maths___Geometry/net-of-a-cube.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-27-octahedron.svg",
+    "name": "octahedron",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "octahedron.svg",
+    "relPath": "Maths___Geometry/octahedron.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-28-pentagonal-prism__1_.svg",
+    "name": "pentagonal prism (1)",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "pentagonal-prism__1_.svg",
+    "relPath": "Maths___Geometry/pentagonal-prism__1_.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-29-pentagonal-pyramid.svg",
+    "name": "pentagonal pyramid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "pentagonal-pyramid.svg",
+    "relPath": "Maths___Geometry/pentagonal-pyramid.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-30-spheroid.svg",
+    "name": "spheroid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "spheroid.svg",
+    "relPath": "Maths___Geometry/spheroid.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-31-square-based-pyramid.svg",
+    "name": "square based pyramid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "square-based-pyramid.svg",
+    "relPath": "Maths___Geometry/square-based-pyramid.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-32-square-pyramid.svg",
+    "name": "square pyramid",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "square-pyramid.svg",
+    "relPath": "Maths___Geometry/square-pyramid.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-33-tetrahedron.svg",
+    "name": "tetrahedron",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "tetrahedron.svg",
+    "relPath": "Maths___Geometry/tetrahedron.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-34-torus.svg",
+    "name": "torus",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "torus.svg",
+    "relPath": "Maths___Geometry/torus.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-35-triangular-prism.svg",
+    "name": "triangular prism",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "triangular-prism.svg",
+    "relPath": "Maths___Geometry/triangular-prism.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-36-vertex.svg",
+    "name": "vertex",
+    "category": "Maths & Geometry",
+    "subcategory": "3D shapes",
+    "filename": "vertex.svg",
+    "relPath": "Maths___Geometry/vertex.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-37-bar_chart.svg",
+    "name": "bar chart",
+    "category": "Maths & Geometry",
+    "subcategory": "Data Handling",
+    "filename": "bar_chart.svg",
+    "relPath": "Maths___Geometry/bar_chart.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-38-bar_graph.svg",
+    "name": "bar graph",
+    "category": "Maths & Geometry",
+    "subcategory": "Data Handling",
+    "filename": "bar_graph.svg",
+    "relPath": "Maths___Geometry/bar_graph.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-39-chart-bar.svg",
+    "name": "chart bar",
+    "category": "Maths & Geometry",
+    "subcategory": "Data Handling",
+    "filename": "chart-bar.svg",
+    "relPath": "Maths___Geometry/chart-bar.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-0-flower.svg",
+    "name": "flower",
+    "category": "Science & STEM",
+    "subcategory": "Agricultural Science",
+    "filename": "flower.svg",
+    "relPath": "Science___STEM/flower.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-1-fruit.svg",
+    "name": "fruit",
+    "category": "Science & STEM",
+    "subcategory": "Agricultural Science",
+    "filename": "fruit.svg",
+    "relPath": "Science___STEM/fruit.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-2-amoeba.svg",
+    "name": "amoeba",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "amoeba.svg",
+    "relPath": "Science___STEM/amoeba.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-3-anther.svg",
+    "name": "anther",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "anther.svg",
+    "relPath": "Science___STEM/anther.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-4-artery.svg",
+    "name": "artery",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "artery.svg",
+    "relPath": "Science___STEM/artery.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-5-bacteriophage.svg",
+    "name": "bacteriophage",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "bacteriophage.svg",
+    "relPath": "Science___STEM/bacteriophage.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-6-bacterium-rod.svg",
+    "name": "bacterium rod",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "bacterium-rod.svg",
+    "relPath": "Science___STEM/bacterium-rod.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-7-bacterium-spiral.svg",
+    "name": "bacterium spiral",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "bacterium-spiral.svg",
+    "relPath": "Science___STEM/bacterium-spiral.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-8-bone__1_.svg",
+    "name": "bone (1)",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "bone__1_.svg",
+    "relPath": "Science___STEM/bone__1_.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-9-brain.svg",
+    "name": "brain",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "brain.svg",
+    "relPath": "Science___STEM/brain.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-10-cell_wall.svg",
+    "name": "cell wall",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "cell_wall.svg",
+    "relPath": "Science___STEM/cell_wall.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-11-cell-division.svg",
+    "name": "cell division",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "cell-division.svg",
+    "relPath": "Science___STEM/cell-division.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-12-cell.svg",
+    "name": "cell",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "cell.svg",
+    "relPath": "Science___STEM/cell.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-13-chromosome-pair.svg",
+    "name": "chromosome pair",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "chromosome-pair.svg",
+    "relPath": "Science___STEM/chromosome-pair.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-14-chromosome.svg",
+    "name": "chromosome",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "chromosome.svg",
+    "relPath": "Science___STEM/chromosome.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-15-culture-plate.svg",
+    "name": "culture plate",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "culture-plate.svg",
+    "relPath": "Science___STEM/culture-plate.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-16-embryo.svg",
+    "name": "embryo",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "embryo.svg",
+    "relPath": "Science___STEM/embryo.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-17-enzyme.svg",
+    "name": "enzyme",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "enzyme.svg",
+    "relPath": "Science___STEM/enzyme.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-18-evolution-tree.svg",
+    "name": "evolution tree",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "evolution-tree.svg",
+    "relPath": "Science___STEM/evolution-tree.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-19-flagellum.svg",
+    "name": "flagellum",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "flagellum.svg",
+    "relPath": "Science___STEM/flagellum.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-20-gland.svg",
+    "name": "gland",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "gland.svg",
+    "relPath": "Science___STEM/gland.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-21-intestine.svg",
+    "name": "intestine",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "intestine.svg",
+    "relPath": "Science___STEM/intestine.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-22-kidney.svg",
+    "name": "kidney",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "kidney.svg",
+    "relPath": "Science___STEM/kidney.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-23-leaf.svg",
+    "name": "leaf",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "leaf.svg",
+    "relPath": "Science___STEM/leaf.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-24-liver.svg",
+    "name": "liver",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "liver.svg",
+    "relPath": "Science___STEM/liver.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-25-lungs.svg",
+    "name": "lungs",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "lungs.svg",
+    "relPath": "Science___STEM/lungs.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-26-microbe.svg",
+    "name": "microbe",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "microbe.svg",
+    "relPath": "Science___STEM/microbe.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-27-microscope.svg",
+    "name": "microscope",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "microscope.svg",
+    "relPath": "Science___STEM/microscope.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-28-mitochondria.svg",
+    "name": "mitochondria",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "mitochondria.svg",
+    "relPath": "Science___STEM/mitochondria.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-29-mrna.svg",
+    "name": "mrna",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "mrna.svg",
+    "relPath": "Science___STEM/mrna.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-30-muscle.svg",
+    "name": "muscle",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "muscle.svg",
+    "relPath": "Science___STEM/muscle.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-31-nucleus.svg",
+    "name": "nucleus",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "nucleus.svg",
+    "relPath": "Science___STEM/nucleus.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-32-ovary.svg",
+    "name": "ovary",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "ovary.svg",
+    "relPath": "Science___STEM/ovary.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-33-paramecium.svg",
+    "name": "paramecium",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "paramecium.svg",
+    "relPath": "Science___STEM/paramecium.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-34-petal.svg",
+    "name": "petal",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "petal.svg",
+    "relPath": "Science___STEM/petal.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-35-platelet.svg",
+    "name": "platelet",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "platelet.svg",
+    "relPath": "Science___STEM/platelet.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-36-punnett-square.svg",
+    "name": "punnett square",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "punnett-square.svg",
+    "relPath": "Science___STEM/punnett-square.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-37-red-blood-cell__1_.svg",
+    "name": "red blood cell (1)",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "red-blood-cell__1_.svg",
+    "relPath": "Science___STEM/red-blood-cell__1_.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-38-seed__1_.svg",
+    "name": "seed (1)",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "seed__1_.svg",
+    "relPath": "Science___STEM/seed__1_.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-39-sperm-cell.svg",
+    "name": "sperm cell",
+    "category": "Science & STEM",
+    "subcategory": "Biology",
+    "filename": "sperm-cell.svg",
+    "relPath": "Science___STEM/sperm-cell.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-0-ai-assistant.svg",
+    "name": "ai assistant",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "ai-assistant.svg",
+    "relPath": "Technology__Tools___Engineering/ai-assistant.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-1-ai-chatbot.svg",
+    "name": "ai chatbot",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "ai-chatbot.svg",
+    "relPath": "Technology__Tools___Engineering/ai-chatbot.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-2-alexa.svg",
+    "name": "alexa",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "alexa.svg",
+    "relPath": "Technology__Tools___Engineering/alexa.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-3-chatbot.svg",
+    "name": "chatbot",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "chatbot.svg",
+    "relPath": "Technology__Tools___Engineering/chatbot.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-4-chatgpt_icon.svg",
+    "name": "chatgpt icon",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "chatgpt_icon.svg",
+    "relPath": "Technology__Tools___Engineering/chatgpt_icon.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-5-robot-arm.svg",
+    "name": "robot arm",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "robot-arm.svg",
+    "relPath": "Technology__Tools___Engineering/robot-arm.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-6-voice-assistant.svg",
+    "name": "voice assistant",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "AI and Robots",
+    "filename": "voice-assistant.svg",
+    "relPath": "Technology__Tools___Engineering/voice-assistant.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-7-conveyor-belt.svg",
+    "name": "conveyor belt",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "conveyor-belt.svg",
+    "relPath": "Technology__Tools___Engineering/conveyor-belt.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-8-farm-camera.svg",
+    "name": "farm camera",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "farm-camera.svg",
+    "relPath": "Technology__Tools___Engineering/farm-camera.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-9-grain-silo.svg",
+    "name": "grain silo",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "grain-silo.svg",
+    "relPath": "Technology__Tools___Engineering/grain-silo.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-10-hay-rake.svg",
+    "name": "hay rake",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "hay-rake.svg",
+    "relPath": "Technology__Tools___Engineering/hay-rake.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-11-hydroponic-system.svg",
+    "name": "hydroponic system",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "hydroponic-system.svg",
+    "relPath": "Technology__Tools___Engineering/hydroponic-system.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-12-manure-spreader.svg",
+    "name": "manure spreader",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "manure-spreader.svg",
+    "relPath": "Technology__Tools___Engineering/manure-spreader.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-13-ph-meter.svg",
+    "name": "ph meter",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "ph-meter.svg",
+    "relPath": "Technology__Tools___Engineering/ph-meter.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-14-rfid-tag.svg",
+    "name": "rfid tag",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "rfid-tag.svg",
+    "relPath": "Technology__Tools___Engineering/rfid-tag.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-15-satellite-dish.svg",
+    "name": "satellite dish",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "satellite-dish.svg",
+    "relPath": "Technology__Tools___Engineering/satellite-dish.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-16-seeder.svg",
+    "name": "seeder",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "seeder.svg",
+    "relPath": "Technology__Tools___Engineering/seeder.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-17-soil-probe.svg",
+    "name": "soil probe",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "soil-probe.svg",
+    "relPath": "Technology__Tools___Engineering/soil-probe.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-18-soil-sensor.svg",
+    "name": "soil sensor",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "soil-sensor.svg",
+    "relPath": "Technology__Tools___Engineering/soil-sensor.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-19-water-tank.svg",
+    "name": "water tank",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "water-tank.svg",
+    "relPath": "Technology__Tools___Engineering/water-tank.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-20-weather-station.svg",
+    "name": "weather station",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "weather-station.svg",
+    "relPath": "Technology__Tools___Engineering/weather-station.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-21-wind-turbine.svg",
+    "name": "wind turbine",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Agriculture & Farming Tech",
+    "filename": "wind-turbine.svg",
+    "relPath": "Technology__Tools___Engineering/wind-turbine.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-22-arch.svg",
+    "name": "arch",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "arch.svg",
+    "relPath": "Technology__Tools___Engineering/arch.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-23-beam.svg",
+    "name": "beam",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "beam.svg",
+    "relPath": "Technology__Tools___Engineering/beam.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-24-brickwork.svg",
+    "name": "brickwork",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "brickwork.svg",
+    "relPath": "Technology__Tools___Engineering/brickwork.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-25-cantilever.svg",
+    "name": "cantilever",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "cantilever.svg",
+    "relPath": "Technology__Tools___Engineering/cantilever.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-26-column.svg",
+    "name": "column",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "column.svg",
+    "relPath": "Technology__Tools___Engineering/column.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-27-cornice.svg",
+    "name": "cornice",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "cornice.svg",
+    "relPath": "Technology__Tools___Engineering/cornice.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-28-crane.svg",
+    "name": "crane",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "crane.svg",
+    "relPath": "Technology__Tools___Engineering/crane.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-29-cross-section.svg",
+    "name": "cross section",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "cross-section.svg",
+    "relPath": "Technology__Tools___Engineering/cross-section.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-30-dome.svg",
+    "name": "dome",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "dome.svg",
+    "relPath": "Technology__Tools___Engineering/dome.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-31-drafting-table.svg",
+    "name": "drafting table",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "drafting-table.svg",
+    "relPath": "Technology__Tools___Engineering/drafting-table.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-32-facade.svg",
+    "name": "facade",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "facade.svg",
+    "relPath": "Technology__Tools___Engineering/facade.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-33-finial.svg",
+    "name": "finial",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "finial.svg",
+    "relPath": "Technology__Tools___Engineering/finial.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-34-flying-buttress.svg",
+    "name": "flying buttress",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "flying-buttress.svg",
+    "relPath": "Technology__Tools___Engineering/flying-buttress.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-35-girder.svg",
+    "name": "girder",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "girder.svg",
+    "relPath": "Technology__Tools___Engineering/girder.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-36-hard-hat.svg",
+    "name": "hard hat",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "hard-hat.svg",
+    "relPath": "Technology__Tools___Engineering/hard-hat.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-37-keystone.svg",
+    "name": "keystone",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "keystone.svg",
+    "relPath": "Technology__Tools___Engineering/keystone.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-38-level.svg",
+    "name": "level",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "level.svg",
+    "relPath": "Technology__Tools___Engineering/level.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-39-lintel.svg",
+    "name": "lintel",
+    "category": "Technology, Tools & Engineering",
+    "subcategory": "Architecture",
+    "filename": "lintel.svg",
+    "relPath": "Technology__Tools___Engineering/lintel.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-0-command.svg",
+    "name": "command",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "command.svg",
+    "relPath": "Curriculum__Science___Literacy/command.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-1-cpp.svg",
+    "name": "cpp",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "cpp.svg",
+    "relPath": "Curriculum__Science___Literacy/cpp.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-2-debug.svg",
+    "name": "debug",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "debug.svg",
+    "relPath": "Curriculum__Science___Literacy/debug.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-3-final-cut.svg",
+    "name": "final cut",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "final-cut.svg",
+    "relPath": "Curriculum__Science___Literacy/final-cut.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-4-formula-bar.svg",
+    "name": "formula bar",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "formula-bar.svg",
+    "relPath": "Curriculum__Science___Literacy/formula-bar.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-5-git.svg",
+    "name": "git",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "git.svg",
+    "relPath": "Curriculum__Science___Literacy/git.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-6-github-repo.svg",
+    "name": "github repo",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "github-repo.svg",
+    "relPath": "Curriculum__Science___Literacy/github-repo.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-7-github2.svg",
+    "name": "github2",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "github2.svg",
+    "relPath": "Curriculum__Science___Literacy/github2.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-8-if-then.svg",
+    "name": "if then",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "if-then.svg",
+    "relPath": "Curriculum__Science___Literacy/if-then.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-9-iteration.svg",
+    "name": "iteration",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "iteration.svg",
+    "relPath": "Curriculum__Science___Literacy/iteration.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-10-java.svg",
+    "name": "java",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "java.svg",
+    "relPath": "Curriculum__Science___Literacy/java.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-11-loop.svg",
+    "name": "loop",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "loop.svg",
+    "relPath": "Curriculum__Science___Literacy/loop.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-12-output.svg",
+    "name": "output",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "output.svg",
+    "relPath": "Curriculum__Science___Literacy/output.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-13-phantomjs.svg",
+    "name": "phantomjs",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "phantomjs.svg",
+    "relPath": "Curriculum__Science___Literacy/phantomjs.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-14-photoshop.svg",
+    "name": "photoshop",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "photoshop.svg",
+    "relPath": "Curriculum__Science___Literacy/photoshop.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-15-program.svg",
+    "name": "program",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "program.svg",
+    "relPath": "Curriculum__Science___Literacy/program.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-16-redux.svg",
+    "name": "redux",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "redux.svg",
+    "relPath": "Curriculum__Science___Literacy/redux.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-17-repeat.svg",
+    "name": "repeat",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "repeat.svg",
+    "relPath": "Curriculum__Science___Literacy/repeat.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-18-sequence.svg",
+    "name": "sequence",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "sequence.svg",
+    "relPath": "Curriculum__Science___Literacy/sequence.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-19-svg.svg",
+    "name": "svg",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "svg.svg",
+    "relPath": "Curriculum__Science___Literacy/svg.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-20-w3c.svg",
+    "name": "w3c",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "w3c.svg",
+    "relPath": "Curriculum__Science___Literacy/w3c.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-21-web-assembly.svg",
+    "name": "web assembly",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "web-assembly.svg",
+    "relPath": "Curriculum__Science___Literacy/web-assembly.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-22-xcode.svg",
+    "name": "xcode",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Coding",
+    "filename": "xcode.svg",
+    "relPath": "Curriculum__Science___Literacy/xcode.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-23-better.svg",
+    "name": "better",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "better.svg",
+    "relPath": "Curriculum__Science___Literacy/better.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-24-fastest.svg",
+    "name": "fastest",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "fastest.svg",
+    "relPath": "Curriculum__Science___Literacy/fastest.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-25-longest.svg",
+    "name": "longest",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "longest.svg",
+    "relPath": "Curriculum__Science___Literacy/longest.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-26-slower.svg",
+    "name": "slower",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "slower.svg",
+    "relPath": "Curriculum__Science___Literacy/slower.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-27-tallest.svg",
+    "name": "tallest",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "tallest.svg",
+    "relPath": "Curriculum__Science___Literacy/tallest.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-28-worse.svg",
+    "name": "worse",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "Comparatives & superlatives",
+    "filename": "worse.svg",
+    "relPath": "Curriculum__Science___Literacy/worse.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-29-act.svg",
+    "name": "act",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "act.svg",
+    "relPath": "Curriculum__Science___Literacy/act.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-30-alliteration.svg",
+    "name": "alliteration",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "alliteration.svg",
+    "relPath": "Curriculum__Science___Literacy/alliteration.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-31-ampersand.svg",
+    "name": "ampersand",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "ampersand.svg",
+    "relPath": "Curriculum__Science___Literacy/ampersand.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-32-apostrophe.svg",
+    "name": "apostrophe",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "apostrophe.svg",
+    "relPath": "Curriculum__Science___Literacy/apostrophe.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-33-asterisk.svg",
+    "name": "asterisk",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "asterisk.svg",
+    "relPath": "Curriculum__Science___Literacy/asterisk.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-34-atlas.svg",
+    "name": "atlas",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "atlas.svg",
+    "relPath": "Curriculum__Science___Literacy/atlas.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-35-audiobook.svg",
+    "name": "audiobook",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "audiobook.svg",
+    "relPath": "Curriculum__Science___Literacy/audiobook.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-36-author-_f_.svg",
+    "name": "author (f)",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "author-_f_.svg",
+    "relPath": "Curriculum__Science___Literacy/author-_f_.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-37-baby-book.svg",
+    "name": "baby book",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "baby-book.svg",
+    "relPath": "Curriculum__Science___Literacy/baby-book.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-38-badge.svg",
+    "name": "badge",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "badge.svg",
+    "relPath": "Curriculum__Science___Literacy/badge.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-39-beginning.svg",
+    "name": "beginning",
+    "category": "Curriculum, Science & Literacy",
+    "subcategory": "English",
+    "filename": "beginning.svg",
+    "relPath": "Curriculum__Science___Literacy/beginning.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-0-depth_sounder_display.svg",
+    "name": "depth sounder display",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "depth_sounder_display.svg",
+    "relPath": "Transport___Infrastructure/depth_sounder_display.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-1-foghorn-trumpet-maritime.svg",
+    "name": "foghorn trumpet maritime",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "foghorn-trumpet-maritime.svg",
+    "relPath": "Transport___Infrastructure/foghorn-trumpet-maritime.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-2-lifebuoy-ring-orange.svg",
+    "name": "lifebuoy ring orange",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "lifebuoy-ring-orange.svg",
+    "relPath": "Transport___Infrastructure/lifebuoy-ring-orange.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-3-lighthouse-beacon-tower.svg",
+    "name": "lighthouse beacon tower",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "lighthouse-beacon-tower.svg",
+    "relPath": "Transport___Infrastructure/lighthouse-beacon-tower.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-4-navigation_buoy_floating.svg",
+    "name": "navigation buoy floating",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "navigation_buoy_floating.svg",
+    "relPath": "Transport___Infrastructure/navigation_buoy_floating.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-5-porthole_window_brass.svg",
+    "name": "porthole window brass",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "porthole_window_brass.svg",
+    "relPath": "Transport___Infrastructure/porthole_window_brass.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-6-radar_scanner_dome.svg",
+    "name": "radar scanner dome",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "radar_scanner_dome.svg",
+    "relPath": "Transport___Infrastructure/radar_scanner_dome.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-7-ship_cleat_metal.svg",
+    "name": "ship cleat metal",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "ship_cleat_metal.svg",
+    "relPath": "Transport___Infrastructure/ship_cleat_metal.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-8-ship-propeller-bronze.svg",
+    "name": "ship propeller bronze",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "ship-propeller-bronze.svg",
+    "relPath": "Transport___Infrastructure/ship-propeller-bronze.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-9-sonar-transducer-pod.svg",
+    "name": "sonar transducer pod",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "sonar-transducer-pod.svg",
+    "relPath": "Transport___Infrastructure/sonar-transducer-pod.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-10-tugboat_harbor_vessel.svg",
+    "name": "tugboat harbor vessel",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "tugboat_harbor_vessel.svg",
+    "relPath": "Transport___Infrastructure/tugboat_harbor_vessel.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-11-vhf_marine_radio_antenna.svg",
+    "name": "vhf marine radio antenna",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Harbor and Maritime",
+    "filename": "vhf_marine_radio_antenna.svg",
+    "relPath": "Transport___Infrastructure/vhf_marine_radio_antenna.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-12-address-label-pouch.svg",
+    "name": "address label pouch",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "address-label-pouch.svg",
+    "relPath": "Transport___Infrastructure/address-label-pouch.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-13-cardboard-shipping-box.svg",
+    "name": "cardboard shipping box",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "cardboard-shipping-box.svg",
+    "relPath": "Transport___Infrastructure/cardboard-shipping-box.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-14-cargo-airplane-nose.svg",
+    "name": "cargo airplane nose",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "cargo-airplane-nose.svg",
+    "relPath": "Transport___Infrastructure/cargo-airplane-nose.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-15-cargo-container-ship.svg",
+    "name": "cargo container ship",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "cargo-container-ship.svg",
+    "relPath": "Transport___Infrastructure/cargo-container-ship.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-16-cargo-strap-ratchet.svg",
+    "name": "cargo strap ratchet",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "cargo-strap-ratchet.svg",
+    "relPath": "Transport___Infrastructure/cargo-strap-ratchet.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-17-crate-wooden-heavy.svg",
+    "name": "crate wooden heavy",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "crate-wooden-heavy.svg",
+    "relPath": "Transport___Infrastructure/crate-wooden-heavy.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-18-delivery-van-vehicle.svg",
+    "name": "delivery van vehicle",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "delivery-van-vehicle.svg",
+    "relPath": "Transport___Infrastructure/delivery-van-vehicle.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-19-fragile-glass-wine-label.svg",
+    "name": "fragile glass wine label",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "fragile-glass-wine-label.svg",
+    "relPath": "Transport___Infrastructure/fragile-glass-wine-label.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-20-freight.svg",
+    "name": "freight",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "freight.svg",
+    "relPath": "Transport___Infrastructure/freight.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-21-handheld-barcode-scanner.svg",
+    "name": "handheld barcode scanner",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "handheld-barcode-scanner.svg",
+    "relPath": "Transport___Infrastructure/handheld-barcode-scanner.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-22-hazmat-warning-diamond.svg",
+    "name": "hazmat warning diamond",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "hazmat-warning-diamond.svg",
+    "relPath": "Transport___Infrastructure/hazmat-warning-diamond.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-23-last-mile-delivery-scooter.svg",
+    "name": "last mile delivery scooter",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "last-mile-delivery-scooter.svg",
+    "relPath": "Transport___Infrastructure/last-mile-delivery-scooter.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-24-package-tracking-map-pin.svg",
+    "name": "package tracking map pin",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "package-tracking-map-pin.svg",
+    "relPath": "Transport___Infrastructure/package-tracking-map-pin.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-25-packing-tape-dispenser.svg",
+    "name": "packing tape dispenser",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "packing-tape-dispenser.svg",
+    "relPath": "Transport___Infrastructure/packing-tape-dispenser.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-26-pallet-jack-manual.svg",
+    "name": "pallet jack manual",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "pallet-jack-manual.svg",
+    "relPath": "Transport___Infrastructure/pallet-jack-manual.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-27-return-package-box.svg",
+    "name": "return package box",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "return-package-box.svg",
+    "relPath": "Transport___Infrastructure/return-package-box.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-28-shipping-label-thermal.svg",
+    "name": "shipping label thermal",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "shipping-label-thermal.svg",
+    "relPath": "Transport___Infrastructure/shipping-label-thermal.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-29-stretch-wrap-film-roll.svg",
+    "name": "stretch wrap film roll",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "stretch-wrap-film-roll.svg",
+    "relPath": "Transport___Infrastructure/stretch-wrap-film-roll.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-30-tamper-evident-seal.svg",
+    "name": "tamper evident seal",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "tamper-evident-seal.svg",
+    "relPath": "Transport___Infrastructure/tamper-evident-seal.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-31-temperature-indicator-sticker.svg",
+    "name": "temperature indicator sticker",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "temperature-indicator-sticker.svg",
+    "relPath": "Transport___Infrastructure/temperature-indicator-sticker.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-32-this_side_up_arrows_label.svg",
+    "name": "this side up arrows label",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "this_side_up_arrows_label.svg",
+    "relPath": "Transport___Infrastructure/this_side_up_arrows_label.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-33-weighing-scale-industrial.svg",
+    "name": "weighing scale industrial",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Logistics and Shipping",
+    "filename": "weighing-scale-industrial.svg",
+    "relPath": "Transport___Infrastructure/weighing-scale-industrial.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-34-backward.svg",
+    "name": "backward",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "backward.svg",
+    "relPath": "Transport___Infrastructure/backward.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-35-compass.svg",
+    "name": "compass",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "compass.svg",
+    "relPath": "Transport___Infrastructure/compass.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-36-compass3.svg",
+    "name": "compass3",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "compass3.svg",
+    "relPath": "Transport___Infrastructure/compass3.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-37-directions.svg",
+    "name": "directions",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "directions.svg",
+    "relPath": "Transport___Infrastructure/directions.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-38-east.svg",
+    "name": "east",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "east.svg",
+    "relPath": "Transport___Infrastructure/east.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-39-follow-me-_f_.svg",
+    "name": "follow me (f)",
+    "category": "Transport & Infrastructure",
+    "subcategory": "Navigation",
+    "filename": "follow-me-_f_.svg",
+    "relPath": "Transport___Infrastructure/follow-me-_f_.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-0-Plane.svg",
+    "name": "Plane",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "Plane.svg",
+    "relPath": "Vehicles/Plane.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-1-airplane-_1_.svg",
+    "name": "airplane (1)",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane-_1_.svg",
+    "relPath": "Vehicles/airplane-_1_.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-2-airplane-arrival-_1_.svg",
+    "name": "airplane arrival (1)",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane-arrival-_1_.svg",
+    "relPath": "Vehicles/airplane-arrival-_1_.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-3-airplane-departure__1_.svg",
+    "name": "airplane departure (1)",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane-departure__1_.svg",
+    "relPath": "Vehicles/airplane-departure__1_.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-4-airplane-departure.svg",
+    "name": "airplane departure",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane-departure.svg",
+    "relPath": "Vehicles/airplane-departure.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-5-airplane-take-off.svg",
+    "name": "airplane take off",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane-take-off.svg",
+    "relPath": "Vehicles/airplane-take-off.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-6-airplane.svg",
+    "name": "airplane",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "airplane.svg",
+    "relPath": "Vehicles/airplane.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-7-cargo-plane.svg",
+    "name": "cargo plane",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "cargo-plane.svg",
+    "relPath": "Vehicles/cargo-plane.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-8-emoji_airplane.svg",
+    "name": "emoji airplane",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "emoji_airplane.svg",
+    "relPath": "Vehicles/emoji_airplane.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-9-glider.svg",
+    "name": "glider",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "glider.svg",
+    "relPath": "Vehicles/glider.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-10-gyrocopter.svg",
+    "name": "gyrocopter",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "gyrocopter.svg",
+    "relPath": "Vehicles/gyrocopter.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-11-hang-glider.svg",
+    "name": "hang glider",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "hang-glider.svg",
+    "relPath": "Vehicles/hang-glider.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-12-helicopter-news.svg",
+    "name": "helicopter news",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "helicopter-news.svg",
+    "relPath": "Vehicles/helicopter-news.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-13-helicopter.svg",
+    "name": "helicopter",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "helicopter.svg",
+    "relPath": "Vehicles/helicopter.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-14-hot-air-balloon.svg",
+    "name": "hot air balloon",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "hot-air-balloon.svg",
+    "relPath": "Vehicles/hot-air-balloon.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-15-jet-airliner.svg",
+    "name": "jet airliner",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "jet-airliner.svg",
+    "relPath": "Vehicles/jet-airliner.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-16-jet.svg",
+    "name": "jet",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "jet.svg",
+    "relPath": "Vehicles/jet.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-17-parachute__1_.svg",
+    "name": "parachute (1)",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "parachute__1_.svg",
+    "relPath": "Vehicles/parachute__1_.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-18-parachute.svg",
+    "name": "parachute",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "parachute.svg",
+    "relPath": "Vehicles/parachute.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-19-plane_take_off.svg",
+    "name": "plane take off",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "plane_take_off.svg",
+    "relPath": "Vehicles/plane_take_off.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-20-quadcopter.svg",
+    "name": "quadcopter",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "quadcopter.svg",
+    "relPath": "Vehicles/quadcopter.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-21-rocket__1_.svg",
+    "name": "rocket (1)",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "rocket__1_.svg",
+    "relPath": "Vehicles/rocket__1_.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-22-small-aeroplane.svg",
+    "name": "small aeroplane",
+    "category": "Vehicles",
+    "subcategory": "Air Vehicles",
+    "filename": "small-aeroplane.svg",
+    "relPath": "Vehicles/small-aeroplane.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-24-altimeter.svg",
+    "name": "altimeter",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "altimeter.svg",
+    "relPath": "Vehicles/altimeter.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-25-black-box.svg",
+    "name": "black box",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "black-box.svg",
+    "relPath": "Vehicles/black-box.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-26-blimp.svg",
+    "name": "blimp",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "blimp.svg",
+    "relPath": "Vehicles/blimp.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-29-control-tower.svg",
+    "name": "control tower",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "control-tower.svg",
+    "relPath": "Vehicles/control-tower.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-30-drone.svg",
+    "name": "drone",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "drone.svg",
+    "relPath": "Vehicles/drone.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-32-gps.svg",
+    "name": "gps",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "gps.svg",
+    "relPath": "Vehicles/gps.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-33-hangar.svg",
+    "name": "hangar",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "hangar.svg",
+    "relPath": "Vehicles/hangar.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-35-jet-bridge.svg",
+    "name": "jet bridge",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "jet-bridge.svg",
+    "relPath": "Vehicles/jet-bridge.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-37-joystick.svg",
+    "name": "joystick",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "joystick.svg",
+    "relPath": "Vehicles/joystick.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-38-landing-gear.svg",
+    "name": "landing gear",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "landing-gear.svg",
+    "relPath": "Vehicles/landing-gear.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-39-propeller.svg",
+    "name": "propeller",
+    "category": "Vehicles",
+    "subcategory": "Aviation & Aeronautics",
+    "filename": "propeller.svg",
+    "relPath": "Vehicles/propeller.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-0-blender-jug.svg",
+    "name": "blender jug",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "blender-jug.svg",
+    "relPath": "Home___Household/blender-jug.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-1-clothes-steamer.svg",
+    "name": "clothes steamer",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "clothes-steamer.svg",
+    "relPath": "Home___Household/clothes-steamer.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-2-dishwasher.svg",
+    "name": "dishwasher",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "dishwasher.svg",
+    "relPath": "Home___Household/dishwasher.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-3-hand-blender.svg",
+    "name": "hand blender",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "hand-blender.svg",
+    "relPath": "Home___Household/hand-blender.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-4-iron.svg",
+    "name": "iron",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "iron.svg",
+    "relPath": "Home___Household/iron.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-5-juicer-citrus.svg",
+    "name": "juicer citrus",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "juicer-citrus.svg",
+    "relPath": "Home___Household/juicer-citrus.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-6-kettle-cordless.svg",
+    "name": "kettle cordless",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "kettle-cordless.svg",
+    "relPath": "Home___Household/kettle-cordless.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-7-kettle.svg",
+    "name": "kettle",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "kettle.svg",
+    "relPath": "Home___Household/kettle.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-8-microwave-oven.svg",
+    "name": "microwave oven",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "microwave-oven.svg",
+    "relPath": "Home___Household/microwave-oven.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-9-oven.svg",
+    "name": "oven",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "oven.svg",
+    "relPath": "Home___Household/oven.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-10-rice-steamer.svg",
+    "name": "rice steamer",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "rice-steamer.svg",
+    "relPath": "Home___Household/rice-steamer.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-11-toaster-two-slice.svg",
+    "name": "toaster two slice",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "toaster-two-slice.svg",
+    "relPath": "Home___Household/toaster-two-slice.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-12-washing-machine.svg",
+    "name": "washing machine",
+    "category": "Home & Household",
+    "subcategory": "Appliances",
+    "filename": "washing-machine.svg",
+    "relPath": "Home___Household/washing-machine.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-13-aftershave.svg",
+    "name": "aftershave",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "aftershave.svg",
+    "relPath": "Home___Household/aftershave.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-14-baby_bath_tub.svg",
+    "name": "baby bath tub",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "baby_bath_tub.svg",
+    "relPath": "Home___Household/baby_bath_tub.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-15-baby-bathtub.svg",
+    "name": "baby bathtub",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "baby-bathtub.svg",
+    "relPath": "Home___Household/baby-bathtub.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-16-baby-towel.svg",
+    "name": "baby towel",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "baby-towel.svg",
+    "relPath": "Home___Household/baby-towel.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-17-baby-washcloth.svg",
+    "name": "baby washcloth",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "baby-washcloth.svg",
+    "relPath": "Home___Household/baby-washcloth.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-18-bamboo-toothbrush.svg",
+    "name": "bamboo toothbrush",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bamboo-toothbrush.svg",
+    "relPath": "Home___Household/bamboo-toothbrush.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-19-bar_soap.svg",
+    "name": "bar soap",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bar_soap.svg",
+    "relPath": "Home___Household/bar_soap.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-20-bath-thermometer.svg",
+    "name": "bath thermometer",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bath-thermometer.svg",
+    "relPath": "Home___Household/bath-thermometer.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-21-bath-towel.svg",
+    "name": "bath towel",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bath-towel.svg",
+    "relPath": "Home___Household/bath-towel.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-22-bath-tub.svg",
+    "name": "bath tub",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bath-tub.svg",
+    "relPath": "Home___Household/bath-tub.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-23-bath.svg",
+    "name": "bath",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bath.svg",
+    "relPath": "Home___Household/bath.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-24-bathmat.svg",
+    "name": "bathmat",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bathmat.svg",
+    "relPath": "Home___Household/bathmat.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-25-bathroom-bin.svg",
+    "name": "bathroom bin",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bathroom-bin.svg",
+    "relPath": "Home___Household/bathroom-bin.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-26-bathroom-cabinet.svg",
+    "name": "bathroom cabinet",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bathroom-cabinet.svg",
+    "relPath": "Home___Household/bathroom-cabinet.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-27-bathroom-scales.svg",
+    "name": "bathroom scales",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bathroom-scales.svg",
+    "relPath": "Home___Household/bathroom-scales.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-28-bidet.svg",
+    "name": "bidet",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "bidet.svg",
+    "relPath": "Home___Household/bidet.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-29-body-lotion-bottle.svg",
+    "name": "body lotion bottle",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "body-lotion-bottle.svg",
+    "relPath": "Home___Household/body-lotion-bottle.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-30-body-wash.svg",
+    "name": "body wash",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "body-wash.svg",
+    "relPath": "Home___Household/body-wash.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-31-cologne.svg",
+    "name": "cologne",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "cologne.svg",
+    "relPath": "Home___Household/cologne.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-32-comb.svg",
+    "name": "comb",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "comb.svg",
+    "relPath": "Home___Household/comb.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-33-conditioner-bottle.svg",
+    "name": "conditioner bottle",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "conditioner-bottle.svg",
+    "relPath": "Home___Household/conditioner-bottle.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-34-conditioner.svg",
+    "name": "conditioner",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "conditioner.svg",
+    "relPath": "Home___Household/conditioner.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-35-cotton_bud.svg",
+    "name": "cotton bud",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "cotton_bud.svg",
+    "relPath": "Home___Household/cotton_bud.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-36-cotton-ball.svg",
+    "name": "cotton ball",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "cotton-ball.svg",
+    "relPath": "Home___Household/cotton-ball.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-37-cotton-swab.svg",
+    "name": "cotton swab",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "cotton-swab.svg",
+    "relPath": "Home___Household/cotton-swab.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-38-deodorant.svg",
+    "name": "deodorant",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "deodorant.svg",
+    "relPath": "Home___Household/deodorant.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-39-drain.svg",
+    "name": "drain",
+    "category": "Home & Household",
+    "subcategory": "Bathroom",
+    "filename": "drain.svg",
+    "relPath": "Home___Household/drain.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-0-berliner.svg",
+    "name": "berliner",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "berliner.svg",
+    "relPath": "Food___Dining/berliner.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-1-bismark.svg",
+    "name": "bismark",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "bismark.svg",
+    "relPath": "Food___Dining/bismark.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-2-cannel___1_.svg",
+    "name": "cannelé (1)",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "cannel___1_.svg",
+    "relPath": "Food___Dining/cannel___1_.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-3-chausson-aux-pommes.svg",
+    "name": "chausson aux pommes",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "chausson-aux-pommes.svg",
+    "relPath": "Food___Dining/chausson-aux-pommes.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-4-cherry-turnover.svg",
+    "name": "cherry turnover",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "cherry-turnover.svg",
+    "relPath": "Food___Dining/cherry-turnover.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-5-chocolate-turnover.svg",
+    "name": "chocolate turnover",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "chocolate-turnover.svg",
+    "relPath": "Food___Dining/chocolate-turnover.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-6-cream_horn.svg",
+    "name": "cream horn",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "cream_horn.svg",
+    "relPath": "Food___Dining/cream_horn.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-7-danish.svg",
+    "name": "danish",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "danish.svg",
+    "relPath": "Food___Dining/danish.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-8-elephant_ear.svg",
+    "name": "elephant ear",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "elephant_ear.svg",
+    "relPath": "Food___Dining/elephant_ear.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-9-financier.svg",
+    "name": "financier",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "financier.svg",
+    "relPath": "Food___Dining/financier.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-10-gougere.svg",
+    "name": "gougere",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "gougere.svg",
+    "relPath": "Food___Dining/gougere.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-11-long-john.svg",
+    "name": "long john",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "long-john.svg",
+    "relPath": "Food___Dining/long-john.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-12-madeleine.svg",
+    "name": "madeleine",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "madeleine.svg",
+    "relPath": "Food___Dining/madeleine.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-13-pain-au-chocolat.svg",
+    "name": "pain au chocolat",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "pain-au-chocolat.svg",
+    "relPath": "Food___Dining/pain-au-chocolat.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-14-palmier.svg",
+    "name": "palmier",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "palmier.svg",
+    "relPath": "Food___Dining/palmier.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-15-pandoro.svg",
+    "name": "pandoro",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "pandoro.svg",
+    "relPath": "Food___Dining/pandoro.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-16-peach-turnover.svg",
+    "name": "peach turnover",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "peach-turnover.svg",
+    "relPath": "Food___Dining/peach-turnover.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-17-raspberry_turnover.svg",
+    "name": "raspberry turnover",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "raspberry_turnover.svg",
+    "relPath": "Food___Dining/raspberry_turnover.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-18-sfogliatella.svg",
+    "name": "sfogliatella",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "sfogliatella.svg",
+    "relPath": "Food___Dining/sfogliatella.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-19-stollen.svg",
+    "name": "stollen",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "stollen.svg",
+    "relPath": "Food___Dining/stollen.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-20-strawberry_turnover.svg",
+    "name": "strawberry turnover",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "strawberry_turnover.svg",
+    "relPath": "Food___Dining/strawberry_turnover.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-21-tartlet.svg",
+    "name": "tartlet",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "tartlet.svg",
+    "relPath": "Food___Dining/tartlet.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-22-vol_au_vent.svg",
+    "name": "vol au vent",
+    "category": "Food & Dining",
+    "subcategory": "Bakery and Patisserie",
+    "filename": "vol_au_vent.svg",
+    "relPath": "Food___Dining/vol_au_vent.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-23-Brandy.svg",
+    "name": "Brandy",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Brandy.svg",
+    "relPath": "Food___Dining/Brandy.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-24-Champagne.svg",
+    "name": "Champagne",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Champagne.svg",
+    "relPath": "Food___Dining/Champagne.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-25-Cola.svg",
+    "name": "Cola",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Cola.svg",
+    "relPath": "Food___Dining/Cola.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-26-Ice_Water.svg",
+    "name": "Ice Water",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Ice_Water.svg",
+    "relPath": "Food___Dining/Ice_Water.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-27-Mead.svg",
+    "name": "Mead",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Mead.svg",
+    "relPath": "Food___Dining/Mead.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-28-Rum.svg",
+    "name": "Rum",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Rum.svg",
+    "relPath": "Food___Dining/Rum.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-29-Tomato_Juice.svg",
+    "name": "Tomato Juice",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "Tomato_Juice.svg",
+    "relPath": "Food___Dining/Tomato_Juice.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-30-alcohol-free-beer.svg",
+    "name": "alcohol free beer",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "alcohol-free-beer.svg",
+    "relPath": "Food___Dining/alcohol-free-beer.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-31-alcohol.svg",
+    "name": "alcohol",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "alcohol.svg",
+    "relPath": "Food___Dining/alcohol.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-32-almond-milk-carton.svg",
+    "name": "almond milk carton",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "almond-milk-carton.svg",
+    "relPath": "Food___Dining/almond-milk-carton.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-33-americano.svg",
+    "name": "americano",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "americano.svg",
+    "relPath": "Food___Dining/americano.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-34-apple-juice.svg",
+    "name": "apple juice",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "apple-juice.svg",
+    "relPath": "Food___Dining/apple-juice.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-35-beer_bottle.svg",
+    "name": "beer bottle",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "beer_bottle.svg",
+    "relPath": "Food___Dining/beer_bottle.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-36-beer-can.svg",
+    "name": "beer can",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "beer-can.svg",
+    "relPath": "Food___Dining/beer-can.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-37-beer-glass.svg",
+    "name": "beer glass",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "beer-glass.svg",
+    "relPath": "Food___Dining/beer-glass.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-38-beer-tap.svg",
+    "name": "beer tap",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "beer-tap.svg",
+    "relPath": "Food___Dining/beer-tap.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-39-beer.svg",
+    "name": "beer",
+    "category": "Food & Dining",
+    "subcategory": "Beverages and Drinks",
+    "filename": "beer.svg",
+    "relPath": "Food___Dining/beer.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-0-bullfrog.svg",
+    "name": "bullfrog",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "bullfrog.svg",
+    "relPath": "Animals___Wildlife/bullfrog.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-1-caecilian.svg",
+    "name": "caecilian",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "caecilian.svg",
+    "relPath": "Animals___Wildlife/caecilian.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-2-common-frog.svg",
+    "name": "common frog",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "common-frog.svg",
+    "relPath": "Animals___Wildlife/common-frog.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-3-fire-salamander.svg",
+    "name": "fire salamander",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "fire-salamander.svg",
+    "relPath": "Animals___Wildlife/fire-salamander.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-4-froglet-stage.svg",
+    "name": "froglet stage",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "froglet-stage.svg",
+    "relPath": "Animals___Wildlife/froglet-stage.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-5-pacman-frog.svg",
+    "name": "pacman frog",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "pacman-frog.svg",
+    "relPath": "Animals___Wildlife/pacman-frog.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-6-smooth-newt.svg",
+    "name": "smooth newt",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "smooth-newt.svg",
+    "relPath": "Animals___Wildlife/smooth-newt.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-7-spotted-salamander.svg",
+    "name": "spotted salamander",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "spotted-salamander.svg",
+    "relPath": "Animals___Wildlife/spotted-salamander.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-8-tadpole-with-legs.svg",
+    "name": "tadpole with legs",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "tadpole-with-legs.svg",
+    "relPath": "Animals___Wildlife/tadpole-with-legs.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-9-tadpole.svg",
+    "name": "tadpole",
+    "category": "Animals & Wildlife",
+    "subcategory": "Amphibians",
+    "filename": "tadpole.svg",
+    "relPath": "Animals___Wildlife/tadpole.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-10-antenna.svg",
+    "name": "antenna",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "antenna.svg",
+    "relPath": "Animals___Wildlife/antenna.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-11-antlers.svg",
+    "name": "antlers",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "antlers.svg",
+    "relPath": "Animals___Wildlife/antlers.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-12-baleen.svg",
+    "name": "baleen",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "baleen.svg",
+    "relPath": "Animals___Wildlife/baleen.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-13-barbel.svg",
+    "name": "barbel",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "barbel.svg",
+    "relPath": "Animals___Wildlife/barbel.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-14-blubber.svg",
+    "name": "blubber",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "blubber.svg",
+    "relPath": "Animals___Wildlife/blubber.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-15-caudal-fin.svg",
+    "name": "caudal fin",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "caudal-fin.svg",
+    "relPath": "Animals___Wildlife/caudal-fin.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-16-fang.svg",
+    "name": "fang",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "fang.svg",
+    "relPath": "Animals___Wildlife/fang.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-17-fluke.svg",
+    "name": "fluke",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "fluke.svg",
+    "relPath": "Animals___Wildlife/fluke.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-18-operculum.svg",
+    "name": "operculum",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "operculum.svg",
+    "relPath": "Animals___Wildlife/operculum.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-19-paw-print.svg",
+    "name": "paw print",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "paw-print.svg",
+    "relPath": "Animals___Wildlife/paw-print.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-20-paw.svg",
+    "name": "paw",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "paw.svg",
+    "relPath": "Animals___Wildlife/paw.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-21-pouch-marsupial.svg",
+    "name": "pouch marsupial",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "pouch-marsupial.svg",
+    "relPath": "Animals___Wildlife/pouch-marsupial.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-22-proboscis.svg",
+    "name": "proboscis",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "proboscis.svg",
+    "relPath": "Animals___Wildlife/proboscis.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-23-shell.svg",
+    "name": "shell",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "shell.svg",
+    "relPath": "Animals___Wildlife/shell.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-24-snout-ridge.svg",
+    "name": "snout ridge",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "snout-ridge.svg",
+    "relPath": "Animals___Wildlife/snout-ridge.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-25-snout.svg",
+    "name": "snout",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "snout.svg",
+    "relPath": "Animals___Wildlife/snout.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-26-spur.svg",
+    "name": "spur",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "spur.svg",
+    "relPath": "Animals___Wildlife/spur.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-27-sting.svg",
+    "name": "sting",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "sting.svg",
+    "relPath": "Animals___Wildlife/sting.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-28-sucker.svg",
+    "name": "sucker",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "sucker.svg",
+    "relPath": "Animals___Wildlife/sucker.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-29-tail.svg",
+    "name": "tail",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "tail.svg",
+    "relPath": "Animals___Wildlife/tail.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-30-thorax.svg",
+    "name": "thorax",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "thorax.svg",
+    "relPath": "Animals___Wildlife/thorax.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-31-trunk.svg",
+    "name": "trunk",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "trunk.svg",
+    "relPath": "Animals___Wildlife/trunk.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-32-tusk.svg",
+    "name": "tusk",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "tusk.svg",
+    "relPath": "Animals___Wildlife/tusk.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-33-udder__1_.svg",
+    "name": "udder (1)",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "udder__1_.svg",
+    "relPath": "Animals___Wildlife/udder__1_.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-34-webbed-feet.svg",
+    "name": "webbed feet",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "webbed-feet.svg",
+    "relPath": "Animals___Wildlife/webbed-feet.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-35-webbed-foot.svg",
+    "name": "webbed foot",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "webbed-foot.svg",
+    "relPath": "Animals___Wildlife/webbed-foot.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-36-whisker.svg",
+    "name": "whisker",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "whisker.svg",
+    "relPath": "Animals___Wildlife/whisker.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-37-whiskers.svg",
+    "name": "whiskers",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "whiskers.svg",
+    "relPath": "Animals___Wildlife/whiskers.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-38-wing-membrane.svg",
+    "name": "wing membrane",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal body parts",
+    "filename": "wing-membrane.svg",
+    "relPath": "Animals___Wildlife/wing-membrane.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-39-carnivore__2_.svg",
+    "name": "carnivore (2)",
+    "category": "Animals & Wildlife",
+    "subcategory": "Animal groups",
+    "filename": "carnivore__2_.svg",
+    "relPath": "Animals___Wildlife/carnivore__2_.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-0-abdomen.svg",
+    "name": "abdomen",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "abdomen.svg",
+    "relPath": "Healthcare___Medical/abdomen.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-1-appendix.svg",
+    "name": "appendix",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "appendix.svg",
+    "relPath": "Healthcare___Medical/appendix.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-2-arm.svg",
+    "name": "arm",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "arm.svg",
+    "relPath": "Healthcare___Medical/arm.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-4-back.svg",
+    "name": "back",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "back.svg",
+    "relPath": "Healthcare___Medical/back.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-5-bladder.svg",
+    "name": "bladder",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "bladder.svg",
+    "relPath": "Healthcare___Medical/bladder.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-6-bone.svg",
+    "name": "bone",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "bone.svg",
+    "relPath": "Healthcare___Medical/bone.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-8-diaphragm.svg",
+    "name": "diaphragm",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "diaphragm.svg",
+    "relPath": "Healthcare___Medical/diaphragm.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-9-ear.svg",
+    "name": "ear",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "ear.svg",
+    "relPath": "Healthcare___Medical/ear.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-10-elbow.svg",
+    "name": "elbow",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "elbow.svg",
+    "relPath": "Healthcare___Medical/elbow.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-11-esophagus.svg",
+    "name": "esophagus",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "esophagus.svg",
+    "relPath": "Healthcare___Medical/esophagus.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-12-eye.svg",
+    "name": "eye",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "eye.svg",
+    "relPath": "Healthcare___Medical/eye.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-13-finger.svg",
+    "name": "finger",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "finger.svg",
+    "relPath": "Healthcare___Medical/finger.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-14-foot.svg",
+    "name": "foot",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "foot.svg",
+    "relPath": "Healthcare___Medical/foot.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-15-gallbladder.svg",
+    "name": "gallbladder",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "gallbladder.svg",
+    "relPath": "Healthcare___Medical/gallbladder.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-16-hair.svg",
+    "name": "hair",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "hair.svg",
+    "relPath": "Healthcare___Medical/hair.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-17-hand.svg",
+    "name": "hand",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "hand.svg",
+    "relPath": "Healthcare___Medical/hand.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-18-head.svg",
+    "name": "head",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "head.svg",
+    "relPath": "Healthcare___Medical/head.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-19-heart.svg",
+    "name": "heart",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "heart.svg",
+    "relPath": "Healthcare___Medical/heart.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-20-inner-ear.svg",
+    "name": "inner ear",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "inner-ear.svg",
+    "relPath": "Healthcare___Medical/inner-ear.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-22-joint.svg",
+    "name": "joint",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "joint.svg",
+    "relPath": "Healthcare___Medical/joint.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-24-knee.svg",
+    "name": "knee",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "knee.svg",
+    "relPath": "Healthcare___Medical/knee.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-25-leg.svg",
+    "name": "leg",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "leg.svg",
+    "relPath": "Healthcare___Medical/leg.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-26-lip.svg",
+    "name": "lip",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "lip.svg",
+    "relPath": "Healthcare___Medical/lip.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-28-lung.svg",
+    "name": "lung",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "lung.svg",
+    "relPath": "Healthcare___Medical/lung.svg",
+    "tier": "tier2",
+    "elementCount": 12
+  },
+  {
+    "id": "sym-29-middle-ear.svg",
+    "name": "middle ear",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "middle-ear.svg",
+    "relPath": "Healthcare___Medical/middle-ear.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-30-mouth.svg",
+    "name": "mouth",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "mouth.svg",
+    "relPath": "Healthcare___Medical/mouth.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-31-nail.svg",
+    "name": "nail",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "nail.svg",
+    "relPath": "Healthcare___Medical/nail.svg",
+    "tier": "tier2",
+    "elementCount": 4
+  },
+  {
+    "id": "sym-32-neck.svg",
+    "name": "neck",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "neck.svg",
+    "relPath": "Healthcare___Medical/neck.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-33-nose.svg",
+    "name": "nose",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "nose.svg",
+    "relPath": "Healthcare___Medical/nose.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-34-outer-ear.svg",
+    "name": "outer ear",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "outer-ear.svg",
+    "relPath": "Healthcare___Medical/outer-ear.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-35-pancreas.svg",
+    "name": "pancreas",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "pancreas.svg",
+    "relPath": "Healthcare___Medical/pancreas.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-36-spleen.svg",
+    "name": "spleen",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "spleen.svg",
+    "relPath": "Healthcare___Medical/spleen.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-37-stomach.svg",
+    "name": "stomach",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "stomach.svg",
+    "relPath": "Healthcare___Medical/stomach.svg",
+    "tier": "tier1",
+    "elementCount": 2
+  },
+  {
+    "id": "sym-38-thumb.svg",
+    "name": "thumb",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "thumb.svg",
+    "relPath": "Healthcare___Medical/thumb.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-39-thyroid.svg",
+    "name": "thyroid",
+    "category": "Healthcare & Medical",
+    "subcategory": "Anatomy & Organs",
+    "filename": "thyroid.svg",
+    "relPath": "Healthcare___Medical/thyroid.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-0-asthma-inhaler-inside.svg",
+    "name": "asthma inhaler inside",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "asthma-inhaler-inside.svg",
+    "relPath": "Safety__First_Aid___Law/asthma-inhaler-inside.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-1-choking-hazard-warning.svg",
+    "name": "choking hazard warning",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "choking-hazard-warning.svg",
+    "relPath": "Safety__First_Aid___Law/choking-hazard-warning.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-2-dairy-free.svg",
+    "name": "dairy free",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "dairy-free.svg",
+    "relPath": "Safety__First_Aid___Law/dairy-free.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-3-diabetic-high-sugar.svg",
+    "name": "diabetic high sugar",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "diabetic-high-sugar.svg",
+    "relPath": "Safety__First_Aid___Law/diabetic-high-sugar.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-4-diabetic-low-sugar.svg",
+    "name": "diabetic low sugar",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "diabetic-low-sugar.svg",
+    "relPath": "Safety__First_Aid___Law/diabetic-low-sugar.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-5-egg-allergy.svg",
+    "name": "egg allergy",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "egg-allergy.svg",
+    "relPath": "Safety__First_Aid___Law/egg-allergy.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-6-epipen-inside.svg",
+    "name": "epipen inside",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "epipen-inside.svg",
+    "relPath": "Safety__First_Aid___Law/epipen-inside.svg",
+    "tier": "tier2",
+    "elementCount": 6
+  },
+  {
+    "id": "sym-7-gluten-free.svg",
+    "name": "gluten free",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "gluten-free.svg",
+    "relPath": "Safety__First_Aid___Law/gluten-free.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-8-halal-food.svg",
+    "name": "halal food",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "halal-food.svg",
+    "relPath": "Safety__First_Aid___Law/halal-food.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-9-hearing-impaired.svg",
+    "name": "hearing impaired",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "hearing-impaired.svg",
+    "relPath": "Safety__First_Aid___Law/hearing-impaired.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-10-heat-sensitivity.svg",
+    "name": "heat sensitivity",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "heat-sensitivity.svg",
+    "relPath": "Safety__First_Aid___Law/heat-sensitivity.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-11-insulin-pen.svg",
+    "name": "insulin pen",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "insulin-pen.svg",
+    "relPath": "Safety__First_Aid___Law/insulin-pen.svg",
+    "tier": "tier2",
+    "elementCount": 9
+  },
+  {
+    "id": "sym-12-kosher-food.svg",
+    "name": "kosher food",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "kosher-food.svg",
+    "relPath": "Safety__First_Aid___Law/kosher-food.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-13-medication-timing.svg",
+    "name": "medication timing",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "medication-timing.svg",
+    "relPath": "Safety__First_Aid___Law/medication-timing.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-14-no-peanuts.svg",
+    "name": "no peanuts",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "no-peanuts.svg",
+    "relPath": "Safety__First_Aid___Law/no-peanuts.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-15-no-sodium.svg",
+    "name": "no sodium",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "no-sodium.svg",
+    "relPath": "Safety__First_Aid___Law/no-sodium.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-16-nut-free-facility.svg",
+    "name": "nut free facility",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "nut-free-facility.svg",
+    "relPath": "Safety__First_Aid___Law/nut-free-facility.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-17-oxygen-in-use.svg",
+    "name": "oxygen in use",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "oxygen-in-use.svg",
+    "relPath": "Safety__First_Aid___Law/oxygen-in-use.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-18-pacemaker-warning.svg",
+    "name": "pacemaker warning",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "pacemaker-warning.svg",
+    "relPath": "Safety__First_Aid___Law/pacemaker-warning.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-19-seizure-warning.svg",
+    "name": "seizure warning",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "seizure-warning.svg",
+    "relPath": "Safety__First_Aid___Law/seizure-warning.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-20-service-dog-present.svg",
+    "name": "service dog present",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "service-dog-present.svg",
+    "relPath": "Safety__First_Aid___Law/service-dog-present.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-21-soy-allergy.svg",
+    "name": "soy allergy",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "soy-allergy.svg",
+    "relPath": "Safety__First_Aid___Law/soy-allergy.svg",
+    "tier": "tier2",
+    "elementCount": 18
+  },
+  {
+    "id": "sym-22-sugar-free.svg",
+    "name": "sugar free",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "sugar-free.svg",
+    "relPath": "Safety__First_Aid___Law/sugar-free.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-23-thickened-liquid-only.svg",
+    "name": "thickened liquid only",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Allergies and Medical Warnings",
+    "filename": "thickened-liquid-only.svg",
+    "relPath": "Safety__First_Aid___Law/thickened-liquid-only.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-24-antiseptic-wipe.svg",
+    "name": "antiseptic wipe",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "antiseptic-wipe.svg",
+    "relPath": "Safety__First_Aid___Law/antiseptic-wipe.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-25-band-aid.svg",
+    "name": "band aid",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "band-aid.svg",
+    "relPath": "Safety__First_Aid___Law/band-aid.svg",
+    "tier": "tier2",
+    "elementCount": 5
+  },
+  {
+    "id": "sym-26-bandage-roll.svg",
+    "name": "bandage roll",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "bandage-roll.svg",
+    "relPath": "Safety__First_Aid___Law/bandage-roll.svg",
+    "tier": "tier2",
+    "elementCount": 17
+  },
+  {
+    "id": "sym-27-blood-pressure-cuff.svg",
+    "name": "blood pressure cuff",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "blood-pressure-cuff.svg",
+    "relPath": "Safety__First_Aid___Law/blood-pressure-cuff.svg",
+    "tier": "tier2",
+    "elementCount": 13
+  },
+  {
+    "id": "sym-28-burn-cream.svg",
+    "name": "burn cream",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "burn-cream.svg",
+    "relPath": "Safety__First_Aid___Law/burn-cream.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-29-burning-building.svg",
+    "name": "burning building",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "burning-building.svg",
+    "relPath": "Safety__First_Aid___Law/burning-building.svg",
+    "tier": "tier2",
+    "elementCount": 14
+  },
+  {
+    "id": "sym-30-carabiner.svg",
+    "name": "carabiner",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "carabiner.svg",
+    "relPath": "Safety__First_Aid___Law/carabiner.svg",
+    "tier": "tier2",
+    "elementCount": 8
+  },
+  {
+    "id": "sym-31-caution-tape.svg",
+    "name": "caution tape",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "caution-tape.svg",
+    "relPath": "Safety__First_Aid___Law/caution-tape.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-32-do-not-enter-sign.svg",
+    "name": "do not enter sign",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "do-not-enter-sign.svg",
+    "relPath": "Safety__First_Aid___Law/do-not-enter-sign.svg",
+    "tier": "tier1",
+    "elementCount": 3
+  },
+  {
+    "id": "sym-33-fire-alarm.svg",
+    "name": "fire alarm",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "fire-alarm.svg",
+    "relPath": "Safety__First_Aid___Law/fire-alarm.svg",
+    "tier": "tier2",
+    "elementCount": 11
+  },
+  {
+    "id": "sym-34-fire-extinguisher.svg",
+    "name": "fire extinguisher",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "fire-extinguisher.svg",
+    "relPath": "Safety__First_Aid___Law/fire-extinguisher.svg",
+    "tier": "tier2",
+    "elementCount": 15
+  },
+  {
+    "id": "sym-35-fire-hose.svg",
+    "name": "fire hose",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "fire-hose.svg",
+    "relPath": "Safety__First_Aid___Law/fire-hose.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-36-fire-hydrant.svg",
+    "name": "fire hydrant",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "fire-hydrant.svg",
+    "relPath": "Safety__First_Aid___Law/fire-hydrant.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  },
+  {
+    "id": "sym-37-first-aid-kit.svg",
+    "name": "first aid kit",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "first-aid-kit.svg",
+    "relPath": "Safety__First_Aid___Law/first-aid-kit.svg",
+    "tier": "tier2",
+    "elementCount": 7
+  },
+  {
+    "id": "sym-38-first-aid-manual.svg",
+    "name": "first aid manual",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "first-aid-manual.svg",
+    "relPath": "Safety__First_Aid___Law/first-aid-manual.svg",
+    "tier": "tier2",
+    "elementCount": 10
+  },
+  {
+    "id": "sym-39-flare_gun.svg",
+    "name": "flare gun",
+    "category": "Safety, First Aid & Law",
+    "subcategory": "Emergency",
+    "filename": "flare_gun.svg",
+    "relPath": "Safety__First_Aid___Law/flare_gun.svg",
+    "tier": "tier2",
+    "elementCount": 16
+  }
+]

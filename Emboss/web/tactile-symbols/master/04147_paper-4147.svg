@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Submerged revolving wire-covered cylinder mould with bold 4.5px stroke -->
+  <circle cx="50" cy="46" r="22" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Pulp slurry vat tank surrounding cylinder bottom with bold 4.5px stroke -->
+  <path d="M 20 44 C 20 76 80 76 80 44" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Formed paper web taking off top with bold 4.5px stroke -->
+  <line x1="50" y1="24" x2="84" y2="24" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

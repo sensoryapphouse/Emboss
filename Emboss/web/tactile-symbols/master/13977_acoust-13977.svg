@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Moving sound source compressing circular wavefronts ahead and expanding behind with bold 4.5px strokes -->
+  <circle cx="64" cy="50" r="6" fill="#ef4444"/>
+  <circle cx="58" cy="50" r="14" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="48" cy="50" r="26" fill="none" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Periodic optical potential wells trapping atoms on egg-carton lattice sites with bold 4.5px strokes -->
+  <path d="M 20 50 Q 28 26 36 50 T 52 50 T 68 50 T 84 50" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <circle cx="36" cy="50" r="5" fill="#ef4444"/>
+  <circle cx="52" cy="50" r="5" fill="#ef4444"/>
+  <circle cx="68" cy="50" r="5" fill="#ef4444"/>
+</svg>

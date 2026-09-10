@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Diverging magnetic solenoid field lines acting as nozzle walls with bold 5.0px strokes -->
+  <path d="M 20 42 C 40 42 50 20 84 18" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <path d="M 20 58 C 40 58 50 80 84 82" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Supersonic detached plasma exhaust jet in center with bold 4.5px stroke -->
+  <polygon points="20,46 54,46 84,34 84,66 54,54 20,54" fill="#38bdf8" stroke="#0284c7" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- D-Section longbow stave curve with bold 5.0px stroke -->
+  <path d="M 32 20 C 58 36 58 64 32 80" fill="none" stroke="#8a5a2b" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Bowstring straight line with bold 3.5px stroke -->
+  <line x1="32" y1="20" x2="32" y2="80" stroke="#000000" stroke-width="3.5"/>
+  <!-- Bodkin war arrow notched horizontally with bold 4.5px stroke -->
+  <line x1="24" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="5.0"/>
+  <!-- Square armor piercing bodkin point right with bold 4.0px stroke -->
+  <polygon points="80,46 88,50 80,54" fill="#1e293b"/>
+</svg>

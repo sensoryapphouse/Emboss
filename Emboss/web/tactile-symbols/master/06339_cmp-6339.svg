@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sequence of inductive clause frames F_0, F_1, F_2 blocking bad states with bold 4.5px stroke frame -->
+  <rect x="16" y="20" width="68" height="60" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <rect x="22" y="26" width="14" height="48" rx="2" fill="#0284c7"/>
+  <rect x="42" y="26" width="14" height="48" rx="2" fill="#0284c7"/>
+  <rect x="62" y="26" width="16" height="48" rx="2" fill="#ef4444"/>
+</svg>

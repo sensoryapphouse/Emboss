@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central 13-atom gold core surrounded by 6 protecting dimeric gold-thiolate staple motifs with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="14" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="50" cy="24" r="5" fill="#ef4444"/>
+  <circle cx="50" cy="76" r="5" fill="#ef4444"/>
+  <circle cx="24" cy="50" r="5" fill="#ef4444"/>
+  <circle cx="76" cy="50" r="5" fill="#ef4444"/>
+</svg>

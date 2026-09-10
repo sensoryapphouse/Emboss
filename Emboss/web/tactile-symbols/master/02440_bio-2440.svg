@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Optical circular lens ring -->
+  <circle cx="44" cy="44" r="22" fill="#38bdf8" stroke="#000000" stroke-width="5.5"/>
+  <!-- Sturdy ergonomic handle bottom right -->
+  <line x1="60" y1="60" x2="82" y2="82" stroke="#8a5a2b" stroke-width="8.0" stroke-linecap="round"/>
+</svg>

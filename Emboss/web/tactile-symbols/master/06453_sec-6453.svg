@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- RSB stack underflow jumping to poisoned branch predictor with bold 4.5px strokes -->
+  <rect x="24" y="24" width="22" height="52" rx="2" fill="#0284c7"/>
+  <path d="M 35 76 Q 50 88 65 64" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="68" cy="58" r="8" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nitrocellulose membrane sheet -->
+  <rect x="18" y="16" width="64" height="68" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Chemiluminescent target antigen protein bands -->
+  <rect x="28" y="32" width="44" height="8" rx="2" fill="#1e293b"/>
+  <rect x="28" y="52" width="44" height="10" rx="2" fill="#1e293b"/>
+</svg>

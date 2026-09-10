@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Low-profile articulated chassis body with bold 4.5px stroke -->
+  <rect x="28" y="44" width="38" height="18" rx="2" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Heavy muck scoop bucket front right with bold 4.5px stroke -->
+  <polygon points="66,42 84,42 80,62 66,62" fill="#64748b" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Front and rear underground tires with bold 4.0px strokes -->
+  <circle cx="36" cy="62" r="10" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="62" cy="62" r="10" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

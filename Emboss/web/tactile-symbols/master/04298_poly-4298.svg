@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Annular circular die base block with bold 4.5px stroke -->
+  <rect x="24" y="52" width="52" height="28" rx="4" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- Spiral mandrel flow channels inside with bold 4.0px strokes -->
+  <line x1="38" y1="56" x2="48" y2="76" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="62" y1="56" x2="52" y2="76" stroke="#0284c7" stroke-width="4.5"/>
+  <!-- Continuous tubular plastic bubble emerging upward with bold 4.5px stroke -->
+  <path d="M 36 52 L 32 20 L 68 20 L 64 52" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

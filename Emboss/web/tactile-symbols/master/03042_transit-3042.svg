@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Front cargo box with bold 4.5px stroke -->
+  <rect x="22" y="44" width="26" height="20" rx="3" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Rear rider frame with bold 4.5px stroke -->
+  <polygon points="48,64 64,44 74,64" fill="none" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Front and rear wheels with bold 4.0px strokes -->
+  <circle cx="28" cy="68" r="8" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="74" cy="68" r="10" fill="none" stroke="#000000" stroke-width="4.0"/>
+</svg>

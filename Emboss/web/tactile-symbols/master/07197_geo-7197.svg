@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sharp crust-mantle boundary with P-wave velocity jump from 6.8 to 8.1 km/s with bold 4.5px strokes -->
+  <rect x="20" y="24" width="60" height="24" fill="#64748b" stroke="#000000" stroke-width="4.0"/>
+  <rect x="20" y="48" width="60" height="28" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <line x1="16" y1="48" x2="84" y2="48" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

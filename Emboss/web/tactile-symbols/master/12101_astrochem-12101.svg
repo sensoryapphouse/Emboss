@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Zero-point energy difference driving heavy deuterium concentration into H2D+ with bold 4.5px strokes -->
+  <polygon points="50,28 72,68 28,68" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="50" cy="28" r="8" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="72" cy="68" r="6" fill="#0284c7"/>
+  <circle cx="28" cy="68" r="6" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Concrete cross section slab outline with bold 4.5px stroke -->
+  <rect x="16" y="34" width="68" height="32" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Continuous weight-reducing circular void cores with bold 4.5px strokes -->
+  <circle cx="30" cy="50" r="8" fill="#cbd5e1" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="50" cy="50" r="8" fill="#cbd5e1" stroke="#0284c7" stroke-width="4.0"/>
+  <circle cx="70" cy="50" r="8" fill="#cbd5e1" stroke="#0284c7" stroke-width="4.0"/>
+</svg>

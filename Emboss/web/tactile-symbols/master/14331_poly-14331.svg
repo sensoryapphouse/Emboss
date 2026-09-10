@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rigid parallel aramid aromatic rods tightly packed with inter-chain hydrogen bonds with bold 4.5px strokes -->
+  <rect x="20" y="26" width="60" height="12" rx="3" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <rect x="20" y="62" width="60" height="12" rx="3" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <line x1="38" y1="38" x2="38" y2="62" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="3,3"/>
+  <line x1="62" y1="38" x2="62" y2="62" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="3,3"/>
+</svg>

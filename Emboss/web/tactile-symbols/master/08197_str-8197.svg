@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Open string segment with endpoints and closed loop string with bold 4.5px strokes -->
+  <path d="M 22 28 Q 36 44 22 60" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <circle cx="22" cy="28" r="5" fill="#ef4444"/>
+  <circle cx="22" cy="60" r="5" fill="#ef4444"/>
+  <ellipse cx="68" cy="44" rx="16" ry="24" fill="none" stroke="#ca8a04" stroke-width="5.5"/>
+</svg>

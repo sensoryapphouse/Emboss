@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Nitrocellulose test strip with colloidal gold Test and Control lines for rapid antigen detection with bold 4.5px strokes -->
+  <rect x="20" y="38" width="60" height="24" rx="4" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <line x1="46" y1="38" x2="46" y2="62" stroke="#ef4444" stroke-width="5.5"/>
+  <line x1="62" y1="38" x2="62" y2="62" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

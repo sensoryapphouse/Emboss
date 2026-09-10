@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central thecal body -->
+  <circle cx="50" cy="46" r="16" fill="#22c55e" stroke="#000000" stroke-width="4.5"/>
+  <!-- Long apical horn top -->
+  <line x1="50" y1="30" x2="50" y2="14" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Two curved antapical horns bottom -->
+  <path d="M 38 58 C 30 72 24 82 24 82" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 62 58 C 70 72 76 82 76 82" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

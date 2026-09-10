@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Inner and outer radiation belt tori surrounding central dipole planet with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="8" fill="#0284c7"/>
+  <ellipse cx="34" cy="50" rx="6" ry="16" fill="#ef4444" opacity="0.4" stroke="#ef4444" stroke-width="4.0"/>
+  <ellipse cx="66" cy="50" rx="6" ry="16" fill="#ef4444" opacity="0.4" stroke="#ef4444" stroke-width="4.0"/>
+  <ellipse cx="22" cy="50" rx="6" ry="24" fill="#ca8a04" opacity="0.3" stroke="#ca8a04" stroke-width="4.0"/>
+  <ellipse cx="78" cy="50" rx="6" ry="24" fill="#ca8a04" opacity="0.3" stroke="#ca8a04" stroke-width="4.0"/>
+</svg>

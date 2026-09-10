@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continuous running rail top with bold 5.0px stroke -->
+  <line x1="16" y1="36" x2="84" y2="36" stroke="#000000" stroke-width="6.0"/>
+  <!-- Parallel check rail with flared end curves below with bold 4.5px stroke -->
+  <polyline points="20,60 32,50 68,50 80,60" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sharp silicon tip with integrated piezoresistor measuring deflection directly without laser alignment with bold 4.5px strokes -->
+  <line x1="20" y1="40" x2="70" y2="40" stroke="#000000" stroke-width="5.0"/>
+  <polygon points="70,40 80,40 75,64" fill="#000000"/>
+  <rect x="28" y="34" width="12" height="12" fill="#ca8a04"/>
+</svg>

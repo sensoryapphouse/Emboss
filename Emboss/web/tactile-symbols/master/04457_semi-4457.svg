@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Overhead RF gas showerhead dispersion plate with bold 4.5px stroke -->
+  <rect x="20" y="20" width="60" height="16" rx="2" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Plasma discharge glow field between electrodes with bold 4.0px strokes -->
+  <line x1="28" y1="46" x2="72" y2="46" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="6,3"/>
+  <!-- Heated wafer susceptor pedestal bottom with bold 4.5px stroke -->
+  <rect x="26" y="58" width="48" height="18" rx="2" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+</svg>

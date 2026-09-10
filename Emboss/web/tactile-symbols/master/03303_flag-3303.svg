@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Yellow-Blue-Red tricolor with bold 4.5px stroke -->
+  <rect x="18" y="24" width="64" height="26" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <rect x="18" y="50" width="64" height="13" fill="#0284c7" stroke="#000000" stroke-width="4.0"/>
+  <rect x="18" y="63" width="64" height="13" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central oval coat of arms shield with bold 3.5px stroke -->
+  <ellipse cx="50" cy="50" rx="7" ry="9" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Target spot on timeline -->
+  <circle cx="50" cy="68" r="12" fill="#22c55e" stroke="#000000" stroke-width="4.0"/>
+  <!-- Bold downward arrow pointing to immediate now -->
+  <line x1="50" y1="20" x2="50" y2="52" stroke="#ef4444" stroke-width="7.0" stroke-linecap="round"/>
+  <polygon points="40,46 50,58 60,46" fill="#ef4444"/>
+</svg>

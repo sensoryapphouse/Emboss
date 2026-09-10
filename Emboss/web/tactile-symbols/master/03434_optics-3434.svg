@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Glass cube prism with bold 4.5px stroke -->
+  <rect x="30" y="30" width="40" height="40" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Diagonal dielectric coating interface with bold 4.5px stroke -->
+  <line x1="30" y1="70" x2="70" y2="30" stroke="#0284c7" stroke-width="5.5"/>
+  <!-- Reflected S-beam up and transmitted P-beam right with bold 4.0px strokes -->
+  <line x1="50" y1="50" x2="50" y2="18" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="50" y1="50" x2="82" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

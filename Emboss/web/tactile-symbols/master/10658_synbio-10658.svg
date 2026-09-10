@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two mutually repressing transcription factors creating stable binary memory bit with bold 4.5px strokes -->
+  <path d="M 28 40 Q 50 20 72 40" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <path d="M 72 60 Q 50 80 28 60" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <circle cx="28" cy="50" r="7" fill="#0284c7"/>
+  <circle cx="72" cy="50" r="7" fill="#ef4444"/>
+</svg>

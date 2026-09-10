@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- T-shaped valve body housing with bold 4.5px stroke -->
+  <polygon points="32,24 68,24 68,44 78,44 78,66 22,66 22,44 32,44" fill="#cbd5e1" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Rapid exhaust dump port bottom with bold 4.0px stroke -->
+  <line x1="50" y1="66" x2="50" y2="82" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

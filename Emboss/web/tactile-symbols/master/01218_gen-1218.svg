@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Looping solenoid helical fiber -->
+  <path d="M 20 80 C 20 30 80 30 80 80" fill="none" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Condensin / Cohesin loop base clamp ring -->
+  <rect x="42" y="72" width="16" height="12" rx="4" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+</svg>

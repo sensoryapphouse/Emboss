@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Single-hinged scallop showing reciprocal zero-net-displacement motion in viscous fluid with bold 4.5px strokes -->
+  <path d="M 24 50 L 70 30 M 24 50 L 70 70" stroke="#ca8a04" stroke-width="5.5"/>
+  <circle cx="24" cy="50" r="6" fill="#000000"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sinusoidal meandering polar jet stream wave transporting cold Arctic air with bold 5.0px stroke -->
+  <path d="M 18 50 Q 34 20 50 50 T 82 50" fill="none" stroke="#0284c7" stroke-width="6.0"/>
+  <circle cx="34" cy="32" r="6" fill="#ef4444"/>
+  <circle cx="66" cy="68" r="6" fill="#0284c7"/>
+</svg>

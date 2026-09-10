@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Virgin carbon phenolic substrate base left with bold 4.5px stroke -->
+  <rect x="18" y="24" width="20" height="52" fill="#cbd5e1" stroke="#000000" stroke-width="4.0"/>
+  <!-- Endothermic pyrolysis zone in middle with bold 4.0px stroke -->
+  <rect x="38" y="24" width="20" height="52" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <!-- Porous carbon char layer right exposed to high heat with bold 4.5px stroke -->
+  <rect x="58" y="24" width="24" height="52" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+</svg>

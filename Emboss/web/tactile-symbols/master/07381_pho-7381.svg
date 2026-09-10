@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Resonant cavity enclosing non-linear crystal converting pump into signal and idler with bold 4.5px strokes -->
+  <circle cx="26" cy="36" r="6" fill="#64748b"/>
+  <circle cx="74" cy="36" r="6" fill="#64748b"/>
+  <circle cx="50" cy="74" r="6" fill="#64748b"/>
+  <polygon points="26,36 74,36 50,74" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <rect x="42" y="30" width="16" height="12" fill="#ca8a04"/>
+</svg>

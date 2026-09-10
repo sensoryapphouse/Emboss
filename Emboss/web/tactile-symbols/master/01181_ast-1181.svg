@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Baseline ground track -->
+  <line x1="14" y1="78" x2="86" y2="78" stroke="#000000" stroke-width="4.5"/>
+  <!-- 3 Radio dish antennas with synthesized baseline spacing -->
+  <path d="M 20 62 C 20 72 32 72 32 62" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <line x1="26" y1="68" x2="26" y2="78" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 44 62 C 44 72 56 72 56 62" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="68" x2="50" y2="78" stroke="#000000" stroke-width="3.5"/>
+  <path d="M 68 62 C 68 72 80 72 80 62" fill="none" stroke="#000000" stroke-width="4.0"/>
+  <line x1="74" y1="68" x2="74" y2="78" stroke="#000000" stroke-width="3.5"/>
+</svg>

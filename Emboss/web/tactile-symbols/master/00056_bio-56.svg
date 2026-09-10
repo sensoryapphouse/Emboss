@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Left and right sinusoidal strands -->
+  <path d="M 30 14 C 70 32 70 48 30 66 C 10 76 10 84 30 86" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 70 14 C 30 32 30 48 70 66 C 90 76 90 84 70 86" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Horizontal base-pair rungs with 14px vertical spacing -->
+  <line x1="36" y1="20" x2="64" y2="20" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="46" y1="40" x2="54" y2="40" stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="36" y1="60" x2="64" y2="60" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="46" y1="80" x2="54" y2="80" stroke="#facc15" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

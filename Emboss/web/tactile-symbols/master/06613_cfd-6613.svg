@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two-zone blending layer: k-omega near wall to k-epsilon in free stream with bold 4.5px strokes -->
+  <line x1="18" y1="78" x2="82" y2="78" stroke="#000000" stroke-width="5.0"/>
+  <rect x="20" y="48" width="60" height="30" fill="#0284c7"/>
+  <rect x="20" y="18" width="60" height="30" fill="#ef4444"/>
+  <line x1="20" y1="48" x2="80" y2="48" stroke="#ca8a04" stroke-width="4.0" stroke-dasharray="5,3"/>
+</svg>

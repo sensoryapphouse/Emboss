@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Radial coordinate baseline axes (Core r=0 to Edge r=a) with bold 4.5px strokes -->
+  <line x1="20" y1="18" x2="20" y2="80" stroke="#000000" stroke-width="5.0"/>
+  <line x1="20" y1="80" x2="84" y2="80" stroke="#000000" stroke-width="5.0"/>
+  <!-- H-mode temperature/density steep edge pedestal step profile with bold 5.5px stroke -->
+  <path d="M 20 28 Q 54 32 66 36 L 76 74 L 84 76" fill="none" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

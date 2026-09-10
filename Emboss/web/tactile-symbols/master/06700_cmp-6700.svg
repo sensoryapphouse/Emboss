@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Pair of opposite chirality Weyl cone nodes connected by surface Fermi arc with bold 4.5px strokes -->
+  <polygon points="32,24 44,50 20,50" fill="#0284c7"/>
+  <polygon points="32,76 44,50 20,50" fill="#0284c7"/>
+  <polygon points="68,24 80,50 56,50" fill="#ef4444"/>
+  <polygon points="68,76 80,50 56,50" fill="#ef4444"/>
+  <path d="M 32 24 Q 50 12 68 24" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

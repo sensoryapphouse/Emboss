@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <rect x="14" y="36" width="28" height="28" rx="3" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Ultra-straight coherent laser beam -->
+  <line x1="42" y1="50" x2="88" y2="50" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

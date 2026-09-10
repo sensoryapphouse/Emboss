@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cohesin ring motor extruding DNA loop until stalling at convergent CTCF boundary anchors with bold 4.5px strokes -->
+  <circle cx="50" cy="58" r="12" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 24 74 Q 50 18 76 74" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="34" cy="54" r="5" fill="#ef4444"/>
+  <circle cx="66" cy="54" r="5" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rover main body warm electronics box -->
+  <rect x="28" y="44" width="44" height="20" rx="3" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Mastcam neck head sensor mast top left -->
+  <line x1="36" y1="44" x2="36" y2="20" stroke="#000000" stroke-width="4.5"/>
+  <rect x="30" y="16" width="12" height="8" rx="2" fill="#ef4444"/>
+  <!-- Wheels below -->
+  <circle cx="28" cy="74" r="6" fill="#1e293b"/>
+  <circle cx="50" cy="74" r="6" fill="#1e293b"/>
+  <circle cx="72" cy="74" r="6" fill="#1e293b"/>
+</svg>

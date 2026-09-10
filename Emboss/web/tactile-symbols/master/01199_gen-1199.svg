@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Template DNA strand bottom -->
+  <line x1="14" y1="70" x2="86" y2="70" stroke="#000000" stroke-width="5.0"/>
+  <!-- Discontinuous Okazaki DNA fragment 1 -->
+  <line x1="22" y1="52" x2="46" y2="52" stroke="#0284c7" stroke-width="4.5"/>
+  <rect x="14" y="48" width="8" height="8" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+  <!-- Discontinuous Okazaki DNA fragment 2 with 10px gap -->
+  <line x1="62" y1="52" x2="86" y2="52" stroke="#0284c7" stroke-width="4.5"/>
+  <rect x="54" y="48" width="8" height="8" fill="#ef4444" stroke="#000000" stroke-width="2.5"/>
+</svg>

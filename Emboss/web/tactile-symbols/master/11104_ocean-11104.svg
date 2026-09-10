@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Giant planetary waves propagating westward across ocean basin adjusting thermocline with bold 4.5px strokes -->
+  <path d="M 80 50 Q 65 30 50 50 Q 35 70 20 50" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <polygon points="20,50 32,42 32,58" fill="#0284c7"/>
+</svg>

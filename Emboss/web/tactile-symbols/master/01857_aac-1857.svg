@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flower in terracotta pot -->
+  <polygon points="34,54 66,54 60,82 40,82" fill="#8a5a2b" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <circle cx="50" cy="34" r="10" fill="#facc15" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="50" cy="20" r="6" fill="#ef4444"/>
+  <circle cx="50" cy="48" r="6" fill="#ef4444"/>
+  <circle cx="36" cy="34" r="6" fill="#ef4444"/>
+  <circle cx="64" cy="34" r="6" fill="#ef4444"/>
+</svg>

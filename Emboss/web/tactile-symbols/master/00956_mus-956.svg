@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Double cutaway horn solidbody -->
+  <path d="M 32 44 C 20 48 24 74 38 82 C 62 86 78 74 72 52 C 68 44 60 48 56 46 L 56 16 L 44 16 L 44 46 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Pickups -->
+  <rect x="44" y="56" width="12" height="6" fill="#1e293b"/>
+  <rect x="44" y="66" width="12" height="6" fill="#1e293b"/>
+</svg>

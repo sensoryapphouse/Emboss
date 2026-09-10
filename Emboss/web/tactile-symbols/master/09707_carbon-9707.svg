@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Seeding high-altitude cirrus clouds allowing longwave infrared heat to radiate into space with bold 4.5px strokes -->
+  <line x1="20" y1="34" x2="80" y2="34" stroke="#64748b" stroke-width="4.5" stroke-dasharray="6,3"/>
+  <line x1="50" y1="74" x2="50" y2="20" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

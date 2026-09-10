@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Textured rough grooved surface with bold 4.5px stroke -->
+  <polyline points="18,74 26,62 34,74 42,62 50,74 58,62 66,74 74,62 82,74" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <!-- Droplet penetrating completely into roughness grooves with bold 4.5px stroke -->
+  <path d="M 26 62 Q 50 26 74 62" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

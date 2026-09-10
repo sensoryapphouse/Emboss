@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 800nm and 400nm laser pulses ionizing air plasma emitting seamless 100 THz bandwidth with bold 4.5px strokes -->
+  <line x1="20" y1="46" x2="46" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="20" y1="54" x2="46" y2="50" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="6" fill="#ca8a04"/>
+  <path d="M 56 50 L 80 50" stroke="#10b981" stroke-width="6.0"/>
+</svg>

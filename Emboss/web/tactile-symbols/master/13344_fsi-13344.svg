@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Highly tensioned vertical tether executing standing-wave multi-mode VIV vibrations with bold 4.5px strokes -->
+  <line x1="30" y1="20" x2="70" y2="20" stroke="#000000" stroke-width="5.0"/>
+  <line x1="30" y1="80" x2="70" y2="80" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 50 20 Q 36 35 50 50 Q 64 65 50 80" stroke="#ef4444" stroke-width="5.5" fill="none"/>
+</svg>

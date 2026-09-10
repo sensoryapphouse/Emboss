@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stepped corbelled niche cells -->
+  <path d="M 22 24 C 22 36 36 36 36 24 C 36 36 50 36 50 24 C 50 36 64 36 64 24 C 64 36 78 36 78 24" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 28 48 C 28 60 42 60 42 48 C 42 60 56 60 56 48 C 56 60 70 60 70 48" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 36 72 C 36 84 50 84 50 72 C 50 84 64 84 64 72" fill="none" stroke="#000000" stroke-width="4.5"/>
+</svg>

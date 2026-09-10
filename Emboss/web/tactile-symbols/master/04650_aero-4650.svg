@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Fir-tree root base and aerodynamic airfoil blade profile with bold 4.5px stroke -->
+  <path d="M 38 80 L 38 46 C 38 24 64 20 64 46 L 64 80 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Internal serpentine cooling passages with bold 4.0px strokes -->
+  <line x1="46" y1="74" x2="46" y2="34" stroke="#0284c7" stroke-width="4.0"/>
+  <line x1="56" y1="74" x2="56" y2="34" stroke="#0284c7" stroke-width="4.0"/>
+  <!-- Laser drilled film cooling hole exits on leading edge with bold 4.0px strokes -->
+  <circle cx="40" cy="30" r="3" fill="#ef4444"/>
+  <circle cx="40" cy="42" r="3" fill="#ef4444"/>
+</svg>

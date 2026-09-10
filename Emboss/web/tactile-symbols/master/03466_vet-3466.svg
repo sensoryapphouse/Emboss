@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central ring canal circle with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- 5 Radiating radial water canals with bold 4.5px strokes -->
+  <line x1="50" y1="36" x2="50" y2="18" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="63" y1="45" x2="80" y2="34" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="58" y1="61" x2="72" y2="78" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="42" y1="61" x2="28" y2="78" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="37" y1="45" x2="20" y2="34" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

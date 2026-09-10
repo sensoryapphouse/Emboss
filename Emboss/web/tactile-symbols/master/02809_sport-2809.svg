@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Striped top crossbar rail horizontal with bold 4.0px stroke -->
+  <rect x="18" y="28" width="64" height="12" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <rect x="36" y="28" width="14" height="12" fill="#1e293b"/>
+  <rect x="64" y="28" width="14" height="12" fill="#1e293b"/>
+  <!-- Inverted L-upright support legs -->
+  <polyline points="26,40 26,78 40,78" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <polyline points="74,40 74,78 60,78" fill="none" stroke="#000000" stroke-width="5.0"/>
+</svg>

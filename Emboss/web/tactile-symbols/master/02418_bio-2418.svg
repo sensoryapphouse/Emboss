@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Humerus bone vertical shaft -->
+  <line x1="50" y1="18" x2="50" y2="82" stroke="#94a3b8" stroke-width="6.0"/>
+  <!-- Bulging contracting biceps flexor left -->
+  <ellipse cx="36" cy="46" rx="10" ry="18" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+  <!-- Antagonistic triceps right -->
+  <ellipse cx="64" cy="46" rx="8" ry="22" fill="#ef4444" stroke="#000000" stroke-width="4.0"/>
+</svg>

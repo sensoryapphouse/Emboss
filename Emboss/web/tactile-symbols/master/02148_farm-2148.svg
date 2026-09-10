@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Head silhouette -->
+  <polygon points="38,44 62,44 56,76 44,76" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Giant horizontal longhorn horns spreading left and right -->
+  <line x1="38" y1="44" x2="16" y2="28" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  <line x1="62" y1="44" x2="84" y2="28" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

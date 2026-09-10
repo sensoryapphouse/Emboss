@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Mouth profile -->
+  <path d="M 24 38 C 40 38 42 48 38 56 C 42 64 40 74 24 74" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Folded triangular napkin wiping face -->
+  <polygon points="50,30 82,54 50,78" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

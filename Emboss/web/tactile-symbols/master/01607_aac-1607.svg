@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two focused eyes -->
+  <ellipse cx="36" cy="38" rx="14" ry="10" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="38" cy="38" r="4" fill="#000000"/>
+  <ellipse cx="64" cy="38" rx="14" ry="10" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="66" cy="38" r="4" fill="#000000"/>
+  <!-- Focal beam pointing down to star target -->
+  <polygon points="50,60 53,68 62,68 55,74 57,82 50,77 43,82 45,74 38,68 47,68" fill="#facc15" stroke="#000000" stroke-width="2.5"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Exponential dephasing envelope with photon shot noise fluctuations with bold 4.5px stroke -->
+  <path d="M 18 24 Q 40 24 50 50 Q 60 76 82 76" fill="none" stroke="#64748b" stroke-width="4.0" stroke-dasharray="5,3"/>
+  <path d="M 18 24 L 32 36 L 42 28 L 54 54 L 66 46 L 82 76" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

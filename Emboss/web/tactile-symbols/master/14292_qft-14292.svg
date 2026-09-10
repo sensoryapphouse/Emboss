@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cylinder representing Anti-de Sitter bulk interior with boundary conformal quantum field theory with bold 4.5px strokes -->
+  <ellipse cx="50" cy="24" rx="26" ry="8" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <ellipse cx="50" cy="76" rx="26" ry="8" fill="#0284c7" opacity="0.3" stroke="#000000" stroke-width="4.5"/>
+  <line x1="24" y1="24" x2="24" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <line x1="76" y1="24" x2="76" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="6" fill="#ef4444"/>
+</svg>

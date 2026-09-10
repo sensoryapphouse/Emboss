@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- White chitinous tube stalk anchored in basalt -->
+  <rect x="42" y="34" width="16" height="52" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Bright red hemoglobin plume tip extracting H2S -->
+  <ellipse cx="50" cy="24" rx="10" ry="10" fill="#ef4444" stroke="#000000" stroke-width="4.5"/>
+</svg>

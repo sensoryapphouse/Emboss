@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Array of beating cilia forming coordinated hydrodynamic metachronal traveling wave with bold 4.5px strokes -->
+  <line x1="20" y1="76" x2="80" y2="76" stroke="#000000" stroke-width="5.0"/>
+  <path d="M 28 76 Q 30 40 38 34 M 44 76 Q 50 44 58 38 M 60 76 Q 70 48 78 44" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Male square & female circle parents -->
+  <rect x="22" y="22" width="18" height="18" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <line x1="40" y1="31" x2="60" y2="31" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="70" cy="31" r="10" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+  <!-- Offspring branch line -->
+  <line x1="50" y1="31" x2="50" y2="58" stroke="#000000" stroke-width="3.5"/>
+  <line x1="32" y1="58" x2="68" y2="58" stroke="#000000" stroke-width="3.5"/>
+  <rect x="24" y="58" width="16" height="16" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+  <circle cx="68" cy="66" r="9" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+</svg>

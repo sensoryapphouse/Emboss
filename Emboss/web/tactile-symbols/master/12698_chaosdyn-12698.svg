@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Planar outward spiral coupled to vertical folding band with bold 4.5px strokes -->
+  <path d="M 50 50 Q 60 50 60 60 Q 60 72 48 72 Q 32 72 32 50 Q 32 26 54 26 Q 78 26 78 60 L 50 50" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <circle cx="50" cy="50" r="5" fill="#ef4444"/>
+</svg>

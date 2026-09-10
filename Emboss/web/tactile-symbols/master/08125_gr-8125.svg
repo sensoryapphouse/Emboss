@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Hourglass throat geometry connecting two parallel universe sheets with bold 4.5px strokes -->
+  <path d="M 20 30 Q 50 50 20 70 M 80 30 Q 50 50 80 70" fill="none" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="20" y1="30" x2="80" y2="30" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="70" x2="80" y2="70" stroke="#000000" stroke-width="4.5"/>
+</svg>

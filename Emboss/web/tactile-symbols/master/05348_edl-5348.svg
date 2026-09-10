@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- 70-degree sphere-cone blunt body capsule with bold 5.0px stroke -->
+  <path d="M 18 64 L 32 30 Q 50 24 68 30 L 82 64 Q 50 82 18 64 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Curved spherical blunt nose cap bottom with bold 5.0px stroke -->
+  <path d="M 28 66 Q 50 82 72 66" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

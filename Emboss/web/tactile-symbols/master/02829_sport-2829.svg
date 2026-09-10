@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Teardrop racket head frame -->
+  <path d="M 40 64 C 20 50 20 22 40 22 C 60 22 60 50 40 64 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Handle extending bottom -->
+  <line x1="40" y1="64" x2="40" y2="84" stroke="#0284c7" stroke-width="7.0" stroke-linecap="round"/>
+  <!-- Rubber ball right with twin yellow dots -->
+  <circle cx="74" cy="54" r="10" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="72" cy="54" r="2" fill="#facc15"/>
+  <circle cx="76" cy="54" r="2" fill="#facc15"/>
+</svg>

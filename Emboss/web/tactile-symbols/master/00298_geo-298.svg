@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Waterline horizontal divider -->
+  <line x1="12" y1="44" x2="88" y2="44" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Visible tip above waterline -->
+  <polygon points="50,18 64,44 36,44" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Massive submerged keel below with 10px clearance -->
+  <polygon points="32,44 68,44 78,82 22,82" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

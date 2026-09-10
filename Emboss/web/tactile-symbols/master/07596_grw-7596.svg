@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spacetime grid rippling with transverse wave strain with bold 4.5px strokes -->
+  <line x1="18" y1="30" x2="82" y2="30" stroke="#64748b" stroke-width="3.5" stroke-dasharray="4,2"/>
+  <line x1="18" y1="70" x2="82" y2="70" stroke="#64748b" stroke-width="3.5" stroke-dasharray="4,2"/>
+  <path d="M 18 50 Q 34 26 50 50 T 82 50" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

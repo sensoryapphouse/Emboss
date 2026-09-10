@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flat-topped barrel steel helm profile with bold 4.5px stroke -->
+  <polygon points="30,22 70,22 74,54 66,78 34,78 26,54" fill="#cbd5e1" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Cross-shaped narrow ocular eye visor slits with bold 4.0px strokes -->
+  <line x1="34" y1="42" x2="66" y2="42" stroke="#000000" stroke-width="5.0"/>
+  <line x1="50" y1="36" x2="50" y2="54" stroke="#000000" stroke-width="5.0"/>
+</svg>

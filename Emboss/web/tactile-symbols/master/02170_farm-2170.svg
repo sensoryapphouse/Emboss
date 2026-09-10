@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Main steel beam frame -->
+  <line x1="20" y1="36" x2="80" y2="36" stroke="#1e293b" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Curved moldboard plowshares digging down -->
+  <path d="M 38 36 L 38 68 C 38 78 50 78 50 70" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+  <path d="M 64 36 L 64 68 C 64 78 76 78 76 70" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

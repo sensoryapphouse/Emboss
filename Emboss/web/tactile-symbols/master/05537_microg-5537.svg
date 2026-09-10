@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rectangular fluid channel duct with bold 5.0px stroke -->
+  <rect x="22" y="26" width="56" height="48" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Orthogonal magnetic pole plates top/bottom and electrode pads left/right with bold 4.5px strokes -->
+  <line x1="30" y1="26" x2="70" y2="26" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="30" y1="74" x2="70" y2="74" stroke="#0284c7" stroke-width="5.0"/>
+  <!-- Forward Lorentz force J x B vector in center -->
+  <line x1="36" y1="50" x2="64" y2="50" stroke="#22c55e" stroke-width="5.5" stroke-linecap="round"/>
+</svg>

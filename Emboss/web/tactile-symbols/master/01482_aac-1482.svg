@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Milk carton gable top -->
+  <polygon points="34,42 66,42 66,82 34,82" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <polygon points="34,42 50,22 66,42" fill="#38bdf8" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cat sitting body -->
+  <ellipse cx="50" cy="62" rx="20" ry="18" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Cat head with triangular ears -->
+  <circle cx="50" cy="38" r="14" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="38,28 44,16 48,26" fill="#ef4444"/>
+  <polygon points="52,26 56,16 62,28" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Twisted magnetic field lines launching relativistic twin jets along rotation axis with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="10" fill="#000000"/>
+  <line x1="50" y1="40" x2="50" y2="18" stroke="#ef4444" stroke-width="6.0"/>
+  <line x1="50" y1="60" x2="50" y2="82" stroke="#ef4444" stroke-width="6.0"/>
+  <ellipse cx="50" cy="50" rx="28" ry="8" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

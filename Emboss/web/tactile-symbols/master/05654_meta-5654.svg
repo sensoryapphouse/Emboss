@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Linear conical 3D Weyl dispersion cone crossing in momentum space with bold 5.0px stroke -->
+  <polygon points="24,24 76,24 50,50 76,76 24,76 50,50" fill="#ffffff" stroke="#ef4444" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Weyl point monopole of Berry curvature at touch point in center -->
+  <circle cx="50" cy="50" r="6" fill="#0284c7"/>
+</svg>

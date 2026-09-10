@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Insulated yellow handles -->
+  <line x1="32" y1="80" x2="48" y2="48" stroke="#facc15" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="68" y1="80" x2="52" y2="48" stroke="#facc15" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- Calibrated wire gauge stripping notches top with bold 4.0px strokes -->
+  <polygon points="44,48 40,22 50,22 50,48" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <polygon points="56,48 60,22 50,22 50,48" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+</svg>

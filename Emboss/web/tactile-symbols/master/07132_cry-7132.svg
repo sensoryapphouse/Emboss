@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Catalytic converter shifting ortho-hydrogen to stable para-hydrogen at 20K with bold 4.5px strokes -->
+  <rect x="24" y="28" width="52" height="44" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="40" cy="50" r="8" fill="#ef4444"/>
+  <circle cx="60" cy="50" r="8" fill="#0284c7"/>
+  <line x1="48" y1="50" x2="52" y2="50" stroke="#000000" stroke-width="4.0"/>
+</svg>

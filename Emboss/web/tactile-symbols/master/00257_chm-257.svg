@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Top hexagonal sheet -->
+  <polygon points="32,24 50,16 68,24 68,36 50,44 32,36" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Bottom hexagonal sheet -->
+  <polygon points="32,64 50,56 68,64 68,76 50,84 32,76" fill="#ffffff" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+  <!-- Weak van der Waals interlayer forces -->
+  <line x1="50" y1="44" x2="50" y2="56" stroke="#94a3b8" stroke-width="3.5" stroke-dasharray="3 3"/>
+</svg>

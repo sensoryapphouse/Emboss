@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Balanced photodiode detector pair with differential amplifier with bold 4.5px strokes -->
+  <circle cx="36" cy="34" r="8" fill="#0284c7"/>
+  <circle cx="36" cy="66" r="8" fill="#0284c7"/>
+  <polygon points="60,34 76,50 60,66" fill="#ffffff" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="44" y1="34" x2="60" y2="44" stroke="#000000" stroke-width="4.0"/>
+  <line x1="44" y1="66" x2="60" y2="56" stroke="#000000" stroke-width="4.0"/>
+</svg>

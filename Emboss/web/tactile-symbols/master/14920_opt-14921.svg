@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Stepped quantum well energy staircase cascading electrons emitting photons at each drop with bold 4.5px strokes -->
+  <path d="M 20 30 L 34 30 L 34 46 L 48 46 L 48 62 L 62 62 L 62 78 L 76 78" stroke="#000000" stroke-width="4.5" fill="none"/>
+  <circle cx="34" cy="38" r="4" fill="#ef4444"/>
+  <circle cx="48" cy="54" r="4" fill="#ef4444"/>
+  <circle cx="62" cy="70" r="4" fill="#ef4444"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Upper transparent 2.0mm lead-equivalent glass viewing window with bold 4.5px stroke -->
+  <rect x="24" y="18" width="52" height="34" rx="4" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Lower opaque solid lead protective skirt panel with bold 4.5px stroke -->
+  <rect x="24" y="52" width="52" height="26" rx="2" fill="#1e293b" stroke="#000000" stroke-width="4.0"/>
+  <!-- Lockable floor caster wheels bottom with bold 4.0px strokes -->
+  <circle cx="32" cy="82" r="4" fill="#000000"/>
+  <circle cx="68" cy="82" r="4" fill="#000000"/>
+</svg>

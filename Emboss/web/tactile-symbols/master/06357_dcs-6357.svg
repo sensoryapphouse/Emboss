@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Commander (top) sending conflicting orders to Loyal vs Traitor generals with bold 4.5px strokes -->
+  <circle cx="50" cy="22" r="8" fill="#0284c7"/>
+  <circle cx="26" cy="70" r="8" fill="#0284c7"/>
+  <circle cx="74" cy="70" r="8" fill="#ef4444"/>
+  <line x1="45" y1="28" x2="28" y2="64" stroke="#000000" stroke-width="4.0"/>
+  <line x1="55" y1="28" x2="72" y2="64" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="5,3"/>
+</svg>

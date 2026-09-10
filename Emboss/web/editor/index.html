@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emboss</title>
+  <!-- Surface any load/runtime error visibly on the page (for diagnosing) -->
+  <script>
+    (function () {
+      function bar() {
+        var b = document.getElementById('errbar');
+        if (!b) {
+          b = document.createElement('div'); b.id = 'errbar';
+          b.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#c0392b;color:#fff;' +
+            'font:12px/1.45 ui-monospace,Menlo,monospace;padding:8px 12px;white-space:pre-wrap;' +
+            'max-height:45vh;overflow:auto;z-index:99999';
+          (document.body || document.documentElement).appendChild(b);
+        }
+        return b;
+      }
+      window.addEventListener('error', function (e) {
+        bar().textContent += '⚠ ' + (e.message || e.error) + '  [' + ((e.filename || '').split('/').pop()) + ':' + e.lineno + ']\n';
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        bar().textContent += '⚠ promise: ' + ((e.reason && e.reason.message) || e.reason) + '\n';
+      });
+    })();
+  </script>
+  <link rel="stylesheet" href="/web/style.css" />
+  <style>
+    :root {
+      --ink: #171d1c;
+      --muted: #5c6462;
+      --accent: #2a7de1;
+      --line: #eaebec;
+      --bg: #f3f4fc;
+      --bg-grad: linear-gradient(135deg, #ffffff 0%, #f3f4fc 100%);
+      --pane-bg: rgba(255, 255, 255, 0.75);
+      --panel: rgba(255, 255, 255, 0.85);
+      --panel-head: rgba(255, 255, 255, 0.95);
+      --btn-bg: #ffffff;
+      --pill-bg: #ffffff;
+      --head-bg: #ffffff;
+      --select-bg: #ffffff;
+      --sb-bg: #ffffff;
+      --code-bg: #f0f2f8;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) {
+        --line: #30363d;
+        --bg: #0d1117;
+        --bg-grad: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        --pane-bg: rgba(22, 27, 34, 0.75);
+        --panel: rgba(22, 27, 34, 0.85);
+        --panel-head: rgba(33, 38, 45, 0.95);
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --accent: #387df5;
+        --accent-text: #d4e5f9;
+        --accent-ink: #ffffff;
+        --link: #302209;
+        --linkb: #c99a2e;
+        --pill-bg: #21262d;
+        --head-bg: #161b22;
+        --btn-bg: #21262d;
+        --code-bg: #21262d;
+        --select-bg: #161b22;
+        --sb-bg: #161b22;
+        color-scheme: dark;
+      }
+    }
+    :root.dark {
+      --line: #30363d;
+      --bg: #0d1117;
+      --bg-grad: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      --pane-bg: rgba(22, 27, 34, 0.75);
+      --panel: rgba(22, 27, 34, 0.85);
+      --panel-head: rgba(33, 38, 45, 0.95);
+      --ink: #e6edf3;
+      --muted: #8b949e;
+      --accent: #387df5;
+      --accent-text: #d4e5f9;
+      --accent-ink: #ffffff;
+      --link: #302209;
+      --linkb: #c99a2e;
+      --pill-bg: #21262d;
+      --head-bg: #161b22;
+      --btn-bg: #21262d;
+      --code-bg: #21262d;
+      --select-bg: #161b22;
+      --sb-bg: #161b22;
+      color-scheme: dark;
+    }
+    * { box-sizing:border-box; }
+    html, body { height:100%; }
+    body { margin:0; font-family:"Inter", "APHfont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+           color:var(--ink); background:var(--bg-grad); line-height:1.5;
+           display:flex; flex-direction:column; overflow:hidden; height:100vh; height:100dvh;
+           transition: background 0.3s ease, color 0.3s ease; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); border:0; }
+
+    header { position:relative; z-index:50; padding:10px 14px; background:var(--head-bg); border-bottom:1px solid var(--line); flex:0 0 auto; transition: background 0.3s ease; }
+    .head-row { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; flex-wrap:nowrap; }
+    .head-col-left { flex:0 0 auto; display:flex; align-items:center; gap:10px; flex-wrap:nowrap; }
+    .head-brand { display:flex; align-items:center; gap:10px; flex:0 0 auto; }
+    .head-doc-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; flex-wrap:nowrap; }
+    .head-col-center { flex:1 1 auto; display:flex; align-items:center; justify-content:center; margin:0 8px; }
+    .head-center-group { display:flex; align-items:center; gap:8px; flex-wrap:nowrap; }
+    .head-col-right { flex:0 0 auto; display:flex; align-items:center; justify-content:flex-end; gap:10px; flex-wrap:nowrap; margin-left:auto; }
+    .head-braille-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; flex-wrap:nowrap; }
+    .head-util-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+
+    /* Responsive collapsing of button labels to icons only on compact viewports (<= 980px) */
+    @media (max-width: 980px) {
+      .head-doc-actions .btn-lbl { display:none; }
+      .head-center-group .btn-lbl { display:none; }
+      .head-braille-actions .btn-lbl { display:none; }
+      .pill-btn { padding:0 9px; }
+      .download-group button { padding:0 6px 0 8px; }
+      .toolbar .btn-lbl { display:none; }
+      .toolbar .tb-btn { padding:0 8px; gap:0; }
+      .toolbar select { padding-right:20px; font-size:.82rem; }
+      .toolbar .toc-wrap { padding:0 4px; }
+    }
+    @media (max-width: 800px) {
+      .app-logo { width:34px; height:34px; border-radius:8px; }
+      header h1 { font-size:.95rem; }
+      .head-row { gap:8px; }
+      .head-col-left { gap:6px; }
+      .head-doc-actions { gap:4px; }
+      .head-braille-actions { gap:6px; }
+      .head-util-actions { gap:6px; }
+      .icon-btn { width:32px; height:32px; font-size:1.2rem; }
+    }
+
+    .pill-btn { height:34px; padding:0 12px; border:1px solid var(--line); background:var(--pill-bg);
+                color:var(--ink); border-radius:8px; font:inherit; font-size:.88rem; font-weight:600;
+                cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease; }
+    .pill-btn * { pointer-events:none; }
+    .pill-btn:hover { transform:translateY(-1px); border-color:var(--accent); color:var(--accent); box-shadow:0 4px 12px rgba(0,0,0,0.05); }
+
+    .download-group { display:inline-flex; align-items:center; height:34px; border-radius:8px; border:1px solid var(--line);
+                      background:var(--pill-bg); color:var(--ink); font:inherit; font-size:0.88rem; font-weight:600; overflow:hidden; transition:all 0.2s ease; }
+    .download-group:hover, .download-group:focus-within { border-color:var(--accent); box-shadow:0 4px 12px rgba(0,0,0,0.05); }
+    .download-group button { height:100%; border:0; background:transparent; color:inherit; font:inherit; font-weight:600;
+                             padding:0 8px 0 10px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+    .download-group button:hover { color:var(--accent); }
+    .download-group select { height:100%; border:0; border-left:1px solid var(--line); background:transparent; color:inherit;
+                             font:inherit; font-weight:600; padding:0 22px 0 8px; cursor:pointer; appearance:none;
+                             background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+                             background-position:calc(100% - 12px) 14px,calc(100% - 7px) 14px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+
+    .icon-btn { width:38px; height:38px; border:1px solid var(--line); background:var(--pill-bg);
+                border-radius:8px; cursor:pointer; font-size:1.45rem; line-height:1; font-weight:600;
+                display:inline-flex; align-items:center; justify-content:center; transition:all 0.2s ease; color:var(--ink); }
+    .icon-btn * { pointer-events:none; }
+    .icon-btn svg { display:block; }
+
+    .hardware-expert-only { display: none !important; }
+    body.expert-hardware .hardware-expert-only { display: inline-flex !important; }
+    body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
+
+    main {
+      flex:1 1 auto;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      padding:6px 14px 12px;
+      margin:0;
+      max-width:none !important;
+      width:100%;
+      overflow:hidden;
+    }
+
+    .pane-h-editor {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 4px 10px;
+      min-height: 42px;
+    }
+    .pane-label {
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      flex-shrink: 0;
+    }
+    .pane-braille .pane-h {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      padding: 4px 14px;
+    }
+
+    .toolbar { flex:1 1 auto; display:flex; flex-wrap:nowrap; gap:5px; align-items:center; padding:0;
+               background:transparent; border:0; border-radius:0; margin:0; box-shadow:none;
+               overflow:visible !important; }
+    .toolbar select { font:inherit; font-size:.84rem; font-weight:500; padding:4px 22px 4px 8px; border:1px solid var(--line);
+               border-radius:6px; background:var(--select-bg); color:var(--ink); cursor:pointer; height:30px; appearance:none;
+               background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+               background-position:calc(100% - 11px) 13px,calc(100% - 6px) 13px; background-size:4px 4px,4px 4px; background-repeat:no-repeat;
+               transition:all 0.2s ease; }
+    .toolbar select:hover { border-color:var(--accent); }
+    .toolbar .sep { width:1px; height:18px; background:var(--line); margin:0 2px; flex-shrink:0; }
+    .tb-btn { height:30px; min-width:30px; padding:0 8px; border:1px solid var(--line); background:var(--pill-bg);
+              color:var(--ink); border-radius:6px; cursor:pointer; font-size:.84rem; line-height:1; font-weight:500;
+              display:inline-flex; align-items:center; justify-content:center; gap:4px; transition:all 0.2s ease; flex-shrink:0; }
+    .tb-btn * { pointer-events:none; }
+    .tb-btn:hover { transform:translateY(-1px); border-color:var(--accent); color:var(--accent); box-shadow:0 3px 8px rgba(0,0,0,0.04); }
+    .tb-btn:focus-visible, .toolbar select:focus-visible, .toc-wrap:focus-within { outline:2px solid var(--accent); outline-offset:2px; }
+    .tb-btn[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 4px 12px rgba(42,125,225,0.25); }
+    .tb-ico { min-width:30px; padding:0 8px; font-size:1rem; }
+    .tb-btn[hidden] { display:none; }
+    .block-sel { min-width:0; width:auto; }
+    #btnMath[aria-pressed="true"], #btnSixKey[aria-pressed="true"], #btnBrlSixKey[aria-pressed="true"], #btnBrlAscii[aria-pressed="true"], #btnBrlInsertMode[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+    #btnRead[aria-pressed="true"] { background:#137a3b; color:#fff; border-color:#137a3b; }
+    ::highlight(tts-word) { text-decoration-line:underline; text-decoration-color:#d81b1b; text-decoration-thickness:2px; text-decoration-skip-ink:none; }
+    .print-reading { background:rgba(19,122,59,.13); box-shadow:inset 3px 0 0 #137a3b; border-radius:4px; }
+    .math-speaking { outline:2px solid rgba(216,27,27,.55); outline-offset:2px; border-radius:5px; }
+    .sk-pending { margin-left:auto; font-size:.82rem; color:var(--accent); font-weight:600; }
+    .sk-pending:not(:empty) { padding:2px 8px; background:var(--btn-bg); border:1px solid var(--line); border-radius:999px; }
+    .sk-pending .sk-cells { font-size:1.2em; } .sk-pending .sk-text { color:#137a3b; }
+    .tb-fmt { width:30px; padding:0; }
+    .tb-b { font-weight:800; font-family:Georgia,serif; } .tb-i { font-style:italic; font-family:Georgia,serif; font-weight:600; }
+    .tb-u { text-decoration:underline; font-family:Georgia,serif; font-weight:600; }
+    .toc-wrap { display:inline-flex; align-items:center; gap:5px; font-size:.85rem; padding:0 6px; height:34px; cursor:pointer; }
+    .toc-wrap input { width:16px; height:16px; cursor:pointer; }
+
+    /* Dropdown Menus */
+    .menu-wrap { position: relative; display: inline-flex; }
+    .menu-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      background: var(--head-bg, #ffffff) !important;
+      opacity: 1 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.32);
+      padding: 5px;
+      min-width: 195px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .menu-dropdown.align-right {
+      left: auto;
+      right: 0;
+    }
+    .menu-dropdown[hidden] { display: none !important; }
+    .menu-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: .84rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      white-space: nowrap;
+      opacity: 1 !important;
+      transition: background 0.15s, color 0.15s;
+    }
+    .menu-dropdown-item:hover, .menu-dropdown-item:focus-visible {
+      background: var(--btn-bg, rgba(42, 125, 225, 0.12));
+      color: var(--accent);
+      outline: none;
+    }
+    .menu-item-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      min-width: 22px;
+      font-size: 1rem;
+      flex-shrink: 0;
+      text-align: center;
+      line-height: 1;
+      opacity: 1 !important;
+    }
+    .menu-item-lbl {
+      flex: 1 1 auto;
+      text-align: left;
+      opacity: 1 !important;
+    }
+
+    /* Insert Dropdown Menu */
+    .insert-menu-wrap { position: relative; display: inline-flex; z-index: 35; }
+    .insert-btn { padding: 0 9px; font-weight: 600; }
+    .insert-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      background: var(--head-bg, #ffffff) !important;
+      opacity: 1 !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.32);
+      padding: 5px;
+      min-width: 175px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .insert-dropdown[hidden] { display: none !important; }
+    .insert-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: .84rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      white-space: nowrap;
+      opacity: 1 !important;
+      transition: background 0.15s, color 0.15s;
+    }
+    .insert-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      min-width: 22px;
+      font-size: 1rem;
+      flex-shrink: 0;
+      text-align: center;
+      line-height: 1;
+    }
+    .insert-lbl {
+      flex: 1 1 auto;
+      text-align: left;
+    }
+    .insert-item:hover, .insert-item:focus-visible {
+      background: var(--btn-bg, rgba(42, 125, 225, 0.12));
+      color: var(--accent);
+      outline: none;
+    }
+    body:not(.expert-hardware) .insert-item.hardware-expert-only {
+      display: none !important;
+    }
+    .pill-btn.danger-hover:hover {
+      border-color: #d81b1b;
+      color: #d81b1b;
+    }
+
+    .print-toc-box {
+      background: var(--pane-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin: 10px 14px 6px;
+      user-select: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+    }
+    .print-toc-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .print-toc-head h3 {
+      margin: 0;
+      font-size: .88rem;
+      color: var(--accent);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .print-toc-count {
+      font-size: .76rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .print-toc-toggle-btn {
+      background: var(--btn-bg, #f1f3f7);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .print-toc-toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .print-toc-list {
+      margin: 8px 0 2px;
+      padding-left: 1.2rem;
+      font-size: .88rem;
+      list-style-type: disc;
+      max-height: 25vh;
+      overflow-y: auto;
+    }
+    .print-toc-box.collapsed .print-toc-list {
+      display: none;
+    }
+    .print-toc-box a { color:var(--ink); text-decoration:none; cursor:pointer; }
+    .print-toc-box a:hover { text-decoration:underline; color:var(--accent); }
+
+    .panes { flex:1 1 0; min-height:0; display:flex; gap:14px; margin:0 0 14px 0; padding:0; width:100%; overflow:visible; }
+    .pane { flex:1 1 0; min-width:0; min-height:0; height:100%; background:var(--pane-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+            border:1px solid var(--line); border-radius:16px; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.04); position:relative; }
+    .pane-editor { flex:1 1 0; min-width:0; overflow: visible; position:relative; z-index:20; }
+    .pane-editor:focus-within, .pane-editor:has(.insert-dropdown:not([hidden])) { z-index:30; }
+    .pane-braille { flex:1 1 0; min-width:0; overflow:hidden; position:relative; z-index:10; }
+    .pane-h { margin:0; padding:10px 14px; font-size:.8rem; font-weight:600; letter-spacing:.02em;
+              color:var(--muted); background:var(--panel-head, rgba(255,255,255,0.95)); border-bottom:1px solid var(--line); flex:0 0 auto; text-transform:none;
+              position:sticky; top:0; z-index:25; overflow:visible; }
+    .editor { flex:1 1 0; min-height:0; max-height:none; overflow-y:auto; overscroll-behavior:contain; padding:14px; outline:none; color:var(--ink); background:transparent; }
+    .editor:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+    .editor .ed-h1, .editor h1.bana-style-h1 { font-size:1.5rem; font-weight:700; text-align:center; margin:.6em 0 .3em; color:var(--ink); }
+    .editor .ed-h2, .editor h2.bana-style-h2 { font-size:1.25rem; font-weight:700; margin:.5em 0 .25em; color:var(--ink); }
+    .editor .ed-h3, .editor h3.bana-style-h3 { font-size:1.08rem; font-weight:600; margin:.4em 0 .2em; color:var(--ink); }
+    .editor .ed-p { margin:.4em 0; }
+    .editor .ed-ul, .editor .ed-ol { margin:.4em 0; padding-left:1.6em; }
+    .editor .emboss-plain-list, .editor .bana-style-toc, .editor .bana-style-index,
+    .editor [data-bana-style="toc"], .editor [data-list-kind="toc"], .editor [data-list-kind="plain"] {
+      list-style: none !important; list-style-type: none !important; padding-left: 0 !important; margin: 0.4em 0;
+    }
+    .editor .emboss-plain-list > li, .editor .bana-style-toc > li, .editor .bana-style-index > li,
+    .editor li.bana-style-toc-entry {
+      list-style: none !important; list-style-type: none !important; margin: 4px 0; position: relative;
+    }
+    .editor .emboss-plain-list > li[data-level="1"], .editor .bana-style-toc > li[data-level="1"], .editor li.bana-style-toc-entry[data-level="1"] { margin-left: 1.5rem !important; }
+    .editor .emboss-plain-list > li[data-level="2"], .editor .bana-style-toc > li[data-level="2"], .editor li.bana-style-toc-entry[data-level="2"] { margin-left: 3.0rem !important; }
+    .editor .emboss-plain-list > li[data-level="3"], .editor .bana-style-toc > li[data-level="3"], .editor li.bana-style-toc-entry[data-level="3"] { margin-left: 4.5rem !important; }
+    .editor .bana-style-toc > li[data-page], .editor li.bana-style-toc-entry[data-page] {
+      display: flex; align-items: baseline; justify-content: space-between;
+    }
+    .editor .bana-style-toc > li[data-page]::after, .editor li.bana-style-toc-entry[data-page]::after {
+      content: attr(data-page); margin-left: auto; padding-left: 1.5rem; font-variant-numeric: tabular-nums; font-weight: 500; color: var(--muted, #64748b); white-space: nowrap;
+    }
+    .editor .emboss-sidebar-card,
+    .editor aside.bana-style-sidebar,
+    .editor [data-bana-style="sidebar"] {
+      border: 1.5px solid var(--line, #cbd5e1);
+      border-left: 4px solid var(--accent, #3b82f6);
+      border-top: 2.5px solid var(--accent, #3b82f6);
+      border-bottom: 2.5px solid var(--accent, #3b82f6);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      background: rgba(59, 130, 246, 0.04);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      position: relative;
+      box-sizing: border-box;
+    }
+    .editor .emboss-sidebar-card > h1:first-child,
+    .editor .emboss-sidebar-card > h2:first-child,
+    .editor .emboss-sidebar-card > h3:first-child,
+    .editor aside.bana-style-sidebar > h1:first-child,
+    .editor aside.bana-style-sidebar > h2:first-child,
+    .editor aside.bana-style-sidebar > h3:first-child {
+      margin-top: 0;
+      color: var(--accent-text, #1d4ed8);
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-bottom: 1px dashed var(--line, #cbd5e1);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .editor .emboss-sidebar-card > :last-child,
+    .editor aside.bana-style-sidebar > :last-child {
+      margin-bottom: 0;
+    }
+    .editor .ed-p.bana-style-note, .editor p.bana-style-note, .editor [data-bana-style="note"] {
+      border-left: 3.5px solid #6366f1; background: rgba(99, 102, 241, 0.08); padding: 6px 12px; border-radius: 6px; margin: 8px 0; color: var(--ink);
+    }
+    .editor .ed-p.bana-style-stage, .editor p.bana-style-stage, .editor [data-bana-style="stage"] {
+      margin-left: 2.5rem; font-style: italic; color: #475569;
+    }
+    .editor .ed-p.bana-style-dialogue, .editor p.bana-style-dialogue, .editor [data-bana-style="dialogue"] {
+      margin-left: 1.75rem; text-indent: -1.75rem; color: var(--ink);
+    }
+    .editor .ed-p.bana-style-caption, .editor p.bana-style-caption, .editor caption, .editor [data-bana-style="caption"] {
+      font-size: 0.92em; font-style: italic; color: #475569; margin: 6px 0 10px 0;
+    }
+    .editor .ed-p.bana-style-footnote, .editor p.bana-style-footnote, .editor note.footnote, .editor [data-bana-style="footnote"] {
+      font-size: 0.88em; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 10px; color: #475569;
+    }
+    .editor .ed-p.bana-style-poem, .editor p.bana-style-poem, .editor poem, .editor [data-bana-style="poem"], .editor [data-bana-style="verse"] {
+      margin-left: 2rem; white-space: pre-wrap; line-height: 1.55; color: var(--ink);
+    }
+    .editor .ed-p.bana-style-quote, .editor p.bana-style-quote, .editor blockquote.bana-style-quote, .editor [data-bana-style="quote"] {
+      border-left: 3.5px solid var(--accent, #2563eb); padding: 6px 14px; margin: 10px 0; font-style: italic; background: rgba(42, 125, 225, 0.05); border-radius: 0 6px 6px 0; color: #334155;
+    }
+    .editor .bana-style-exercise, .editor [data-bana-style="exercise"], .editor [data-list-kind="exercise"] {
+      list-style-type: decimal; margin-left: 1.5rem; margin-top: 6px; margin-bottom: 6px;
+    }
+    .editor .bana-style-exercise-sub, .editor [data-bana-style="exercise-sub"] {
+      list-style-type: lower-alpha; margin-left: 3.0rem; margin-top: 4px; margin-bottom: 4px;
+    }
+    .style-inspector-badge {
+      font-size: 0.82rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+      background: var(--btn-bg, #f1f5f9); border: 1px solid var(--line, #cbd5e1); color: var(--ink);
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+      white-space: nowrap; flex-shrink: 0; transition: all 0.15s ease;
+    }
+    .style-inspector-badge:hover {
+      border-color: var(--accent); color: var(--accent); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .style-inspector-badge:focus-visible {
+      outline: 2px solid var(--accent); outline-offset: 1px;
+    }
+    :root.dark .style-inspector-badge,
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) .style-inspector-badge { background: #21262d; border-color: #30363d; color: #e6edf3; }
+      :root:not(.light) .style-inspector-badge:hover { border-color: #387df5; color: #58a6ff; }
+      :root:not(.light) .editor .ed-p.bana-style-note, :root:not(.light) .editor p.bana-style-note, :root:not(.light) .editor [data-bana-style="note"] { border-left-color: #818cf8; background: rgba(99, 102, 241, 0.18); color: #e0e7ff; }
+      :root:not(.light) .editor .ed-p.bana-style-stage, :root:not(.light) .editor p.bana-style-stage, :root:not(.light) .editor [data-bana-style="stage"] { color: #94a3b8; }
+      :root:not(.light) .editor .ed-p.bana-style-caption, :root:not(.light) .editor p.bana-style-caption, :root:not(.light) .editor caption, :root:not(.light) .editor [data-bana-style="caption"] { color: #94a3b8; }
+      :root:not(.light) .editor .ed-p.bana-style-footnote, :root:not(.light) .editor p.bana-style-footnote, :root:not(.light) .editor note.footnote, :root:not(.light) .editor [data-bana-style="footnote"] { border-top-color: #334155; color: #94a3b8; }
+      :root:not(.light) .editor .ed-p.bana-style-quote, :root:not(.light) .editor p.bana-style-quote, :root:not(.light) .editor blockquote.bana-style-quote, :root:not(.light) .editor [data-bana-style="quote"] { background: rgba(56, 125, 245, 0.10); border-left-color: #60a5fa; color: #cbd5e1; }
+      :root:not(.light) .editor .emboss-sidebar-card, :root:not(.light) .editor aside.bana-style-sidebar, :root:not(.light) .editor [data-bana-style="sidebar"] { background: rgba(59, 130, 246, 0.08); border-color: #334155; border-left-color: #60a5fa; border-top-color: #60a5fa; border-bottom-color: #60a5fa; }
+    }
+    .editor b, .editor strong { font-weight:700; } .editor i, .editor em { font-style:italic; }
+
+    .editor u, .editor .ed-u { text-decoration:underline; } .editor .ed-s { text-decoration:line-through; }
+    .editor .ed-u.ed-s { text-decoration:underline line-through; }
+    .math-embed { display:inline-block; vertical-align:middle; margin:0 2px; border-radius:6px; }
+    .math-embed math-field, math-field {
+      color: var(--ink);
+      background: transparent;
+      --math-mode-color: var(--ink);
+      --text-color: var(--ink);
+      --caret-color: var(--accent);
+      --selection-background-color: rgba(56, 125, 245, 0.35);
+      --selection-color: var(--ink);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 1.05em;
+      border: 1px solid transparent;
+      transition: background 0.15s ease, outline 0.15s ease, border-color 0.15s ease;
+    }
+    .math-embed math-field:hover, math-field:hover {
+      border-color: var(--line);
+      background: rgba(128, 128, 128, 0.08);
+    }
+    .math-embed math-field:focus, math-field:focus,
+    .math-embed math-field:focus-within, math-field:focus-within,
+    math-field[focused] {
+      outline: 2px solid var(--accent) !important;
+      outline-offset: 1px !important;
+      background: rgba(42, 125, 225, 0.12) !important;
+      color: var(--ink) !important;
+      --math-mode-color: var(--ink) !important;
+    }
+
+    /* Light mode clicked / highlighted math */
+    .math-embed.math-hl math-field, math-field.math-hl, .math-embed.math-hl {
+      outline: 2px solid #d99b00 !important;
+      outline-offset: 1px !important;
+      background: #fff3cc !important;
+      color: #1a1a1a !important;
+      --math-mode-color: #1a1a1a !important;
+      --text-color: #1a1a1a !important;
+      border-radius: 6px !important;
+      box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.35) !important;
+    }
+
+    /* Dark mode clicked / highlighted math */
+    :root.dark .math-embed.math-hl math-field,
+    :root.dark math-field.math-hl,
+    :root.dark .math-embed.math-hl,
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) .math-embed.math-hl math-field,
+      :root:not(.light) math-field.math-hl,
+      :root:not(.light) .math-embed.math-hl {
+        outline: 2px solid #f0b429 !important;
+        outline-offset: 1px !important;
+        background: #3b2e0a !important;
+        color: #ffea79 !important;
+        --math-mode-color: #ffea79 !important;
+        --text-color: #ffea79 !important;
+        border-radius: 6px !important;
+        box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.3) !important;
+      }
+      :root:not(.light) .math-embed math-field:focus,
+      :root:not(.light) math-field:focus,
+      :root:not(.light) .math-embed math-field:focus-within,
+      :root:not(.light) math-field:focus-within,
+      :root:not(.light) math-field[focused] {
+        outline: 2px solid #387df5 !important;
+        outline-offset: 1px !important;
+        background: rgba(56, 125, 245, 0.22) !important;
+        color: #f0f6fc !important;
+        --math-mode-color: #f0f6fc !important;
+        --text-color: #f0f6fc !important;
+      }
+    }
+    .doc-break { text-align:center; letter-spacing:.5em; color:var(--muted); margin:.5em 0; user-select:none; }
+    .doc-print-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 1.2em 0;
+      padding: 5px 12px;
+      background: var(--head-bg, #f1f5f9);
+      border: 1px dashed var(--line, #cbd5e1);
+      border-radius: 6px;
+      user-select: none;
+      color: var(--muted, #64748b);
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .doc-print-page .page-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      color: var(--ink, #0f172a);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.78rem;
+    }
+    .doc-print-page .page-num-input {
+      font-weight: 700;
+      font-size: 0.88rem;
+      width: 55px;
+      padding: 2px 6px;
+      border: 1px solid var(--line, #cbd5e1);
+      border-radius: 4px;
+      background: var(--panel, #fff);
+      color: var(--ink, #0f172a);
+      text-align: center;
+    }
+    .doc-print-page .page-num-input:focus {
+      outline: 2px solid var(--accent, #2563eb);
+      border-color: transparent;
+    }
+    .doc-print-page .page-del-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted, #94a3b8);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px 5px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .doc-print-page .page-del-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .braille-stack {
+      position: relative;
+      flex: 1 1 0;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      padding: 0;
+      color: var(--ink);
+      background: transparent;
+      box-sizing: border-box;
+    }
+    .braille-stack:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+      border-radius: 8px;
+    }
+    .braille {
+      position: relative;
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 14px;
+      overflow: visible;
+      color: var(--ink);
+      background: transparent;
+      box-sizing: border-box;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace;
+      line-height: 1.4;
+      letter-spacing: normal;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    #brlInput {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 14px;
+      border: 0;
+      outline: none;
+      resize: none;
+      overflow: hidden;
+      background: transparent;
+      color: transparent;
+      caret-color: var(--accent);
+      white-space: pre;
+      word-break: break-all;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace;
+      line-height: 1.4;
+      letter-spacing: normal;
+      box-sizing: border-box;
+      z-index: 2;
+    }
+    #brlInput::selection {
+      background: rgba(42, 125, 225, 0.25);
+      color: transparent;
+    }
+    .braille .brl-row {
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      white-space: pre;
+      border-radius: 4px;
+      cursor: pointer;
+      overflow: visible;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: inherit;
+      letter-spacing: normal;
+    }
+    .braille .brl-text-wrap {
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      letter-spacing: normal;
+      white-space: pre;
+      box-sizing: border-box;
+    }
+    .braille .bcell {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: normal;
+    }
+    .braille .brl-row.brl-linked { background:rgba(240,180,41,.30); }
+    .braille .brl-row.brl-reading { background:rgba(19,122,59,.18); }
+    .braille .bcell.cell-hl { background:#ffd23f; color:#000; border-radius:3px; outline:1.5px solid #d99b00; outline-offset:-1px; }
+    :root.dark .braille .bcell.cell-hl,
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) .braille .bcell.cell-hl { background:#e3b341; color:#0d1117; outline:1.5px solid #b8860b; outline-offset:-1px; }
+    }
+    .braille rect.cell-box { fill:#ffd23f; }
+    .braille .bcell.cell-hl circle.doff { fill:#b98b00; }
+    .braille .bcell.cell-speaking circle.don { fill:#d81b1b; }
+    ::highlight(link-word) { background:#ffe08a; color:#000; }
+    :root.dark ::highlight(link-word),
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) ::highlight(link-word) { background:#5c4308; color:#ffd23f; }
+    }
+    ::highlight(proof-warn-word) {
+      text-decoration-line: underline;
+      text-decoration-style: wavy;
+      text-decoration-color: #d98500;
+      text-decoration-thickness: 2px;
+      text-decoration-skip-ink: none;
+      text-underline-offset: 3px;
+    }
+
+    .dotpad-panel {
+      flex: 1 1 0;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .dotpad-device-frame {
+      width: 100%;
+      max-width: 540px;
+      background: #090d16;
+      border: 1.5px solid #1e293b;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+    .dotpad-hw-btn {
+      transition: background 0.15s, transform 0.05s, border-color 0.15s;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .dotpad-hw-btn:hover {
+      background: #334155 !important;
+      color: #38bdf8 !important;
+      border-color: #475569 !important;
+    }
+    .dotpad-hw-btn:active {
+      transform: translateY(1px) scale(0.97);
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+    .dotpad-hw-btn:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 1px;
+    }
+
+    .braille-view-tabs .tab-btn {
+      padding: 3px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .braille-view-tabs .tab-btn:hover {
+      color: var(--ink);
+    }
+    .braille-view-tabs .tab-btn.active {
+      background: var(--head-bg, #f1f5f9);
+      border-color: var(--line, #cbd5e1);
+      color: var(--ink);
+    }
+
+    @keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    #statusBar {
+      flex:0 0 auto; background:var(--sb-bg, #ffffff); border:1px solid var(--line);
+      margin:0 0 10px; border-radius:18px; box-shadow:0 8px 32px rgba(0,0,0,0.08);
+      padding:8px 24px; font-size:calc(.9rem * var(--sb-scale, 1));
+      min-height:var(--sb-h, 44px);
+      max-height: min(30vh, 220px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+      display:flex; align-items:center; align-content:flex-start; gap:10px; flex-wrap:wrap;
+      animation:slideUp 0.3s ease forwards;
+    }
+    #statusBar::-webkit-scrollbar { width: 6px; }
+    #statusBar::-webkit-scrollbar-track { background: transparent; }
+    #statusBar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+    #statusBar::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    .sb-grab-rail { position:relative; height:0; flex:0 0 auto; }
+    .sb-grab {
+      position:absolute; left:50%; transform:translateX(-50%); bottom:-9px;
+      width:64px; height:18px; display:flex; align-items:center; justify-content:center;
+      padding:0; border:0; background:none; cursor:ns-resize; touch-action:none; z-index:3;
+    }
+    .sb-grab::before {
+      content:''; display:block; width:42px; height:4px; border-radius:2px;
+      background:var(--line); transition:background .15s ease;
+    }
+    .sb-grab:hover::before, .sb-grab:focus-visible::before { background:var(--accent); }
+    .sb-grab:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+    .sb-hint { color:var(--muted); font-size:.88rem; }
+    .doc-stats { margin-left:auto; color:var(--muted); font-size:.82rem; font-weight:500; }
+
+    #statusBar .ri-word { font-weight:700; display:inline-flex; align-items:center; gap:2px; }
+    #statusBar .ri-math { display:inline-flex; align-items:center; font-weight:700; gap:2px; }
+    #statusBar .ri-math math, #statusBar .ri-math .temml { font-size:1.15em; vertical-align:middle; color:var(--ink); }
+    #statusBar .ri-seg.c0 { background:#ffe9a8; color:#573e00; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c1 { background:#c9e7ff; color:#084c8d; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c2 { background:#d7f5cf; color:#165b10; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c3 { background:#ffd9d1; color:#871d0b; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c4 { background:#e8dbff; color:#4c1d95; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c5 { background:#cff3f0; color:#0f564e; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-seg.c6 { background:#f7d9ee; color:#701a53; border-radius:3px; padding:0 3px; }
+    #statusBar .ri-arrow { color:var(--muted); margin:0 2px; font-weight:600; }
+    #statusBar .ri-brl { font-family:"APHfont","Apple Braille","Segoe UI Symbol",monospace;
+                         font-size:1.35em; vertical-align:-2px; display:inline-flex; align-items:center; gap:2px; }
+    #statusBar .ri-note { color:var(--muted); font-size:.88rem; }
+    #statusBar .ri-rule { background:#eef3fb; border:1px solid #d3e0f5; border-radius:99px;
+                          padding:2px 10px; color:#15181d; font-size:.85rem; display:inline-flex; align-items:center; gap:4px; }
+    #statusBar .ri-rule .ri-brl { font-size:1.15em; }
+    #statusBar .ri-seg { border-radius:99px; padding:2px 7px; font-weight:500; display:inline-block; }
+
+    :root.dark #statusBar .ri-rule { background:#21262d; border-color:#30363d; color:#e6edf3; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-rule { background:#21262d; border-color:#30363d; color:#e6edf3; }
+    }
+    :root.dark #statusBar .ri-math math,
+    :root.dark #statusBar .ri-math .temml { color:#e6edf3; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-math math,
+      :root:not(.light) #statusBar .ri-math .temml { color:#e6edf3; }
+    }
+    :root.dark #statusBar .ri-seg.c0 { background:#4d3800; color:#ffe699; border:1px solid #735400; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c0 { background:#4d3800; color:#ffe699; border:1px solid #735400; }
+    }
+    :root.dark #statusBar .ri-seg.c1 { background:#0c335e; color:#bde0fe; border:1px solid #1a528e; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c1 { background:#0c335e; color:#bde0fe; border:1px solid #1a528e; }
+    }
+    :root.dark #statusBar .ri-seg.c2 { background:#133e14; color:#c3f3b9; border:1px solid #1e5e20; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c2 { background:#133e14; color:#c3f3b9; border:1px solid #1e5e20; }
+    }
+    :root.dark #statusBar .ri-seg.c3 { background:#5c1409; color:#ffc9be; border:1px solid #8e2313; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c3 { background:#5c1409; color:#ffc9be; border:1px solid #8e2313; }
+    }
+    :root.dark #statusBar .ri-seg.c4 { background:#351566; color:#e1ccff; border:1px solid #54229e; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c4 { background:#351566; color:#e1ccff; border:1px solid #54229e; }
+    }
+    :root.dark #statusBar .ri-seg.c5 { background:#0c3b36; color:#baf5ee; border:1px solid #165d55; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c5 { background:#0c3b36; color:#baf5ee; border:1px solid #165d55; }
+    }
+    :root.dark #statusBar .ri-seg.c6 { background:#4d1239; color:#fccce9; border:1px solid #781f5c; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #statusBar .ri-seg.c6 { background:#4d1239; color:#fccce9; border:1px solid #781f5c; }
+    }
+    .print-linked { background:rgba(240,180,41,.16); border-radius:4px; box-shadow:inset 3px 0 0 #f0b429; }
+    .braille .brl-sr-hint { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
+      clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
+    .braille .brl-svg { display:block; width:100%; max-width:100%; height:auto; }
+    .braille .brl-svg .don { fill:var(--ink); }
+    .braille .brl-svg .doff { fill:var(--line); }
+    .braille .brl-pagebreak { color:var(--muted); font:600 .7rem/2 -apple-system,system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; text-align:center; border-top:1px dashed var(--line); margin:6px 0; }
+    .braille .brl-volumebreak { margin:14px 0 8px; padding:6px 12px; background:var(--btn-bg, #f1f5f9); border:1.5px solid var(--accent, #0284c7); border-radius:6px; display:flex; align-items:center; justify-content:space-between; color:var(--ink); font:700 .78rem/1.4 system-ui,-apple-system,sans-serif; }
+    .braille .brl-vol-tag { background:var(--accent, #0284c7); color:#fff; padding:2px 7px; border-radius:4px; font-size:.7rem; letter-spacing:.04em; text-transform:uppercase; font-weight:700; }
+    .braille .brl-vol-page { color:var(--muted); font-size:.74rem; font-weight:500; }
+    .pane-h-right { display:flex; align-items:center; gap:8px; }
+    .brl-size button { width:22px; height:22px; margin-left:4px; border:1px solid var(--line); background:var(--btn-bg); border-radius:5px; cursor:pointer; font-size:.95rem; line-height:1; color:var(--ink); }
+    .brl-size button:hover { border-color:var(--accent); }
+    .proof-badge { font:600 .72rem/1 -apple-system,system-ui,sans-serif; padding:4px 9px; border-radius:999px; white-space:nowrap; border:0; cursor:default; letter-spacing:.01em; }
+    .proof-badge.ok   { background:#e6f7ec; color:#137a3b; }
+    .proof-badge.warn { background:#fff3d6; color:#8a5d00; cursor:pointer; }
+    .proof-badge.off  { background:var(--btn-bg); color:var(--muted); }
+    .proof-warn { text-decoration:underline wavy #d98500; text-decoration-skip-ink:none; text-underline-offset:3px; }
+    .rate-val { color:var(--muted); font-weight:600; text-transform:none; letter-spacing:0; }
+    #dropHint { position:fixed; inset:0; z-index:60; display:none; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center;
+      background:rgba(47,111,237,.10); border:3px dashed var(--accent); color:var(--accent); font-weight:700; font-size:1.15rem; pointer-events:none; backdrop-filter:blur(1px); }
+    #dropHint small { color:var(--muted); font-weight:500; }
+    body.dropping #dropHint { display:flex; }
+    .help-content { font-size:.92rem; line-height:1.6; max-height:60vh; overflow:auto; color:var(--ink); }
+    .help-content h2, .help-content h3 { font-size:1.05rem; font-weight:700; margin:16px 0 6px; color:var(--ink); }
+    .help-content p, .help-content ul, .help-content ol { margin:6px 0; color:var(--ink); }
+    .help-content ul, .help-content ol { padding-left:22px; }
+    .help-content li { margin:4px 0; color:var(--ink); }
+    .help-content strong { color:var(--ink); font-weight:700; }
+    .help-content em { color:var(--ink); }
+    .help-content code, .help-content kbd { background:var(--code-bg, #21262d); color:var(--ink); border:1px solid var(--line); padding:2px 6px; border-radius:5px; font-size:.88em; font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace; }
+    .help-content kbd { border-bottom-width:2px; box-shadow:0 1px 2px rgba(0,0,0,0.15); }
+    .help-content a { color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+    .help-content a:hover { filter:brightness(1.2); }
+    .help-content .help-note { color:var(--ink); font-style:italic; font-size:.86rem; background:var(--btn-bg); border-left:3px solid var(--accent); padding:8px 12px; border-radius:4px; margin:8px 0; }
+    .help-content .credits { list-style:none; padding-left:0; margin:8px 0; color:var(--ink); }
+    .help-content .credits li { margin-bottom:7px; padding-left:14px; position:relative; color:var(--ink); }
+    .help-content .credits li strong { color:var(--ink); }
+    .help-content .credits li::before { content:"•"; position:absolute; left:0; color:var(--accent); font-weight:bold; }
+    .dialog-head h2 { margin:0; font-size:1.25rem; color:var(--accent); font-weight:700; letter-spacing:-0.02em; }
+    .dialog-head button { border:0; background:none; font-size:1.2rem; cursor:pointer; color:var(--muted); padding:4px 8px; border-radius:6px; }
+    .dialog-head button:hover { background:var(--btn-bg); color:var(--ink); }
+    .dialog-foot .primary { background:var(--accent); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-weight:600; cursor:pointer; }
+    @media (max-width:820px) { .panes { flex-direction:column; } .pane { flex:0 0 auto; } }
+
+    /* Slash command popover menu */
+    .slash-menu { position:absolute; z-index:100; width:280px; max-height:280px; overflow-y:auto;
+                  background:var(--head-bg, #ffffff); border:1px solid var(--line); border-radius:10px;
+                  box-shadow:0 12px 30px rgba(0,0,0,.35); padding:6px; font-size:.88rem; }
+    .slash-menu[hidden] { display:none; }
+    .slash-menu-head { padding:4px 8px 6px; font-size:.72rem; font-weight:700; text-transform:uppercase;
+                       letter-spacing:.04em; color:var(--muted); border-bottom:1px solid var(--line); margin-bottom:4px; }
+    .slash-item { display:flex; align-items:center; gap:10px; padding:7px 9px; border-radius:7px;
+                  cursor:pointer; color:var(--ink); user-select:none; }
+    .slash-item:hover, .slash-item[aria-selected="true"] { background:var(--accent); color:#fff; }
+    .slash-item:hover .slash-desc, .slash-item[aria-selected="true"] .slash-desc { color:rgba(255,255,255,.85); }
+    .slash-ico { font-size:1.1rem; min-width:24px; text-align:center; flex-shrink:0; font-family:Georgia,serif; }
+    .slash-info { display:flex; flex-direction:column; min-width:0; }
+    .slash-title { font-weight:600; font-size:.88rem; line-height:1.2; }
+    .slash-desc { font-size:.75rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Dialog flex structure to pin footer */
+    .dialog { max-height: 85vh; overflow: hidden; }
+    .dialog-body { display: flex; flex-direction: column; max-height: 85vh; overflow: hidden; padding: 16px 20px; }
+    .dialog-head { flex: 0 0 auto; }
+    .dialog-foot { flex: 0 0 auto; }
+
+    /* Formula & Equation Templates Palette (SumIt Formula Library) */
+    .formula-cats {
+      flex: 0 0 auto;
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; max-height: 140px; overflow-y: auto; padding: 2px;
+    }
+    .formula-cat-btn {
+      height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--line);
+      background: var(--pill-bg); color: var(--ink); font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; transition: all 0.15s ease; user-select: none;
+    }
+    .formula-cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .formula-cat-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .formula-list { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; max-height: 46vh; overflow-y: auto; padding: 4px; }
+    .formula-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px;
+                    border:1px solid var(--line); border-radius:8px; background:var(--panel, #fff); color:var(--ink);
+                    cursor:pointer; transition:border-color .15s, background .15s; user-select:none; }
+    .formula-item:hover, .formula-item[aria-selected="true"], .formula-item:focus {
+      background:var(--accent); color:#fff; border-color:var(--accent); outline:none;
+    }
+    .formula-item:hover .formula-preview, .formula-item[aria-selected="true"] .formula-preview {
+      background:rgba(255,255,255,0.2); color:#fff;
+    }
+    .formula-item:hover .formula-desc, .formula-item[aria-selected="true"] .formula-desc {
+      color:rgba(255,255,255,0.85);
+    }
+    .formula-meta { display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+    .formula-title { font-weight:700; font-size:.92rem; display:flex; align-items:center; gap:8px; }
+    .formula-cat-badge { font-size: .72rem; padding: 2px 7px; border-radius: 999px; background: var(--btn-bg, #f1f3f7); color: var(--muted); font-weight: 500; }
+    .formula-item:hover .formula-cat-badge, .formula-item[aria-selected="true"] .formula-cat-badge { background: rgba(255,255,255,0.25); color: #fff; }
+    .formula-desc { font-size:.78rem; color:var(--muted); }
+    .formula-preview {
+      font-size: .95rem;
+      background: var(--btn-bg, #f1f3f7);
+      color: var(--ink);
+      padding: 6px 12px;
+      border-radius: 8px;
+      max-width: 320px;
+      min-width: 70px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .formula-preview math {
+      font-size: 1.05em;
+      color: inherit;
+    }
+    .formula-item:hover .formula-preview,
+    .formula-item[aria-selected="true"] .formula-preview,
+    .formula-item:focus .formula-preview {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    /* Tactile Graphics Grid & Block Styling */
+    .graphic-card {
+      display: flex; flex-direction: column; gap: 6px; padding: 10px;
+      border: 1px solid var(--line); border-radius: 8px; background: var(--panel, #fff);
+      cursor: pointer; transition: all .15s ease; user-select: none;
+    }
+    .graphic-card:hover, .graphic-card[aria-selected="true"], .graphic-card:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); outline: none;
+    }
+    .graphic-thumb {
+      height: 110px; background: var(--btn-bg, #f8fafc); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px;
+    }
+    .graphic-thumb svg { width: 100%; height: 100%; object-fit: contain; }
+    .graphic-card-title { font-weight: 700; font-size: .88rem; color: var(--ink); margin-top: 2px; }
+    .graphic-card-desc { font-size: .75rem; color: var(--muted); line-height: 1.3; }
+
+    /* Inline Graphic Block in Lexical Editor */
+    .doc-graphic-block {
+      margin: 14px 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px;
+      background: var(--panel, #fff); position: relative;
+    }
+    .doc-graphic-block:hover, .doc-graphic-block.selected {
+      border-color: var(--accent);
+    }
+    .graphic-context-bar {
+      display: flex; gap: 8px; align-items: center; padding: 4px 8px; margin-bottom: 8px;
+      background: var(--btn-bg, #f1f3f7); border-radius: 6px; font-size: .8rem;
+    }
+    .graphic-context-btn {
+      background: var(--panel, #fff); border: 1px solid var(--line); border-radius: 4px;
+      padding: 3px 8px; font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer; color: var(--ink);
+    }
+    .graphic-context-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .graphic-context-btn.danger { color: #dc2626; }
+    .graphic-context-btn.danger:hover { border-color: #dc2626; background: #fee2e2; }
+    /* Sizing options */
+    .doc-graphic-block.size-compact .graphic-preview-svg-wrap,
+    .graphic-preview-svg-wrap.size-compact { max-width: 260px; }
+    .doc-graphic-block.size-compact .graphic-preview-svg-wrap svg { max-height: 160px; }
+
+    .doc-graphic-block.size-half .graphic-preview-svg-wrap,
+    .graphic-preview-svg-wrap.size-half { max-width: 440px; }
+    .doc-graphic-block.size-half .graphic-preview-svg-wrap svg { max-height: 260px; }
+
+    .doc-graphic-block.size-full .graphic-preview-svg-wrap,
+    .graphic-preview-svg-wrap.size-full { max-width: 100%; }
+    .doc-graphic-block.size-full .graphic-preview-svg-wrap svg { max-height: 480px; }
+
+    /* Table Block Styling */
+    .doc-table-block {
+      margin: 14px 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px;
+      background: var(--panel, #fff); position: relative; overflow-x: auto;
+    }
+    .doc-table-block:hover, .doc-table-block:focus-within { border-color: var(--accent); }
+    .table-context-bar {
+      display: flex; gap: 8px; align-items: center; padding: 4px 8px; margin-bottom: 8px;
+      background: var(--btn-bg, #f1f3f7); border-radius: 6px; font-size: .8rem;
+    }
+    .table-context-btn {
+      background: var(--panel, #fff); border: 1px solid var(--line); border-radius: 4px;
+      padding: 3px 8px; font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer; color: var(--ink);
+    }
+    .table-context-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .table-context-btn.danger { color: #dc2626; }
+    .table-context-btn.danger:hover { border-color: #dc2626; background: #fee2e2; }
+    .editor-table-widget { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: .9rem; }
+    .editor-table-widget th, .editor-table-widget td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+    .editor-table-widget th { background: var(--btn-bg, #f8fafc); font-weight: 600; color: var(--ink); }
+    .editor-table-widget td { background: var(--panel, #fff); color: var(--ink); }
+    .editor-table-widget input.table-cell-input { width: 100%; border: 0; outline: none; background: transparent; font: inherit; color: var(--ink); }
+    .editor-table-widget input.table-cell-input:focus { outline: 2px solid var(--accent); border-radius: 2px; }
+
+    /* Hardware Tactile Embosser Relief Simulation */
+    .brl-tactile-graphic-view {
+      margin: 10px 0; padding: 12px; border-radius: 8px; background: #faf9f6;
+      border: 1px solid #e2ded4; box-shadow: inset 0 1px 3px rgba(0,0,0,0.06); text-align: center;
+      position: relative;
+    }
+    .hardware-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px;
+      border-radius: 999px; font-size: .75rem; font-weight: 700; margin-bottom: 8px;
+      background: var(--btn-bg, #f1f3f7); color: var(--ink); border: 1px solid var(--line);
+    }
+    .hardware-badge.tiger { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+    .hardware-badge.monarch { background: #ede9fe; color: #6d28d9; border-color: #ddd6fe; }
+    .hardware-badge.dotpad { background: #e0f2fe; color: #0284c7; border-color: #7dd3fc; }
+    .hardware-badge.index { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .hardware-badge.swell { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+    .hardware-badge.textonly { background: #f3f4f6; color: #4b5563; border-color: #e5e7eb; }
+
+    /* Yellow Parse Warning Callout Banner (Translate Style) */
+    .parse-warning-banner { background:#fff8e6; border:1px solid #f2c744; border-left:4px solid #e09f00; color:#6b4700;
+                           border-radius:8px; padding:10px 14px; margin:10px 16px 0; font-size:.88rem; display:flex;
+                           align-items:flex-start; justify-content:space-between; gap:12px; }
+    .parse-warning-banner[hidden] { display:none; }
+    .parse-warning-content { flex:1; }
+    .parse-warning-close { background:transparent; border:0; color:#6b4700; font-size:1.1rem; cursor:pointer; padding:0 4px; }
+  </style>
+  <script src="/engine/liblouis-wasm.js"></script>
+  <script src="/web/vendor/temml.min.js"></script>
+  <script src="/web/formulas.js"></script>
+  <script defer src="/web/vendor/mathlive.min.js"></script>
+  <!-- SumIt's equation speech-highlight engine: window.generateMathSpeech(latex) -->
+  <script defer src="/web/vendor/speech-script.js"></script>
+</head>
+<body class="editor-page">
+  <header>
+    <div class="head-row">
+      <div class="head-col-left">
+        <div class="head-brand">
+          <a class="app-logo-link" href="https://paigebraille.com"
+             target="_blank" rel="noopener noreferrer" tabindex="-1"
+             aria-label="Paige Braille website, opens in a new tab">
+            <img class="app-logo" src="/web/logo.svg" alt="" />
+          </a>
+          <div>
+            <h1>Emboss</h1>
+          </div>
+        </div>
+        <div class="head-doc-actions">
+          <button type="button" id="backToSimple" class="pill-btn" data-i18n-title="toolbar.quick_mode" title="Switch to the drag-and-drop converter">← <span class="btn-lbl" data-i18n="toolbar.quick_mode">Quick Mode</span></button>
+          <button type="button" id="btnRead" class="pill-btn" data-i18n-title="toolbar.read_aloud" title="Read document aloud (Ctrl/⌘ ⇧ Space)">▶ <span class="btn-lbl" data-i18n="toolbar.read_aloud">Read</span></button>
+          <button type="button" id="loadFileBtn" class="pill-btn" data-i18n-title="common.load" title="Open or import a document file (.docx, .html, .txt, .md, .epub, .rtf, .xml, .nimas)">📂 <span class="btn-lbl" data-i18n="common.load">Load</span></button>
+          <input type="file" id="loadFileInput" accept=".txt,.md,.markdown,.html,.htm,.docx,.rtf,.xml,.xhtml,.epub,.zip,.nimas,.dtbook" style="display:none;" />
+          <div class="menu-wrap" id="saveMenuWrap">
+            <button type="button" class="pill-btn" id="saveDocBtn" aria-haspopup="menu" aria-expanded="false" data-i18n-title="common.save" title="Save NIMAS Project (.xml) (Ctrl/⌘ S)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span class="btn-lbl" data-i18n="common.save">Save</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
+            </button>
+            <div class="menu-dropdown" id="saveMenu" role="menu" hidden>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveXmlItem"><span class="menu-item-icon">📐</span> <span class="menu-item-lbl">NIMAS Project (.xml)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveDocxItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl">Word Document (.docx)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveMdItem"><span class="menu-item-icon">📝</span> <span class="menu-item-lbl">Markdown (.md)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveJsonItem"><span class="menu-item-icon">💾</span> <span class="menu-item-lbl">Native Project (.json)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveTxtItem"><span class="menu-item-icon">📃</span> <span class="menu-item-lbl">Plain Text (.txt)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveHtmlItem"><span class="menu-item-icon">🌐</span> <span class="menu-item-lbl">HTML Document (.html)</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="head-col-center">
+        <div class="head-center-group">
+          <label class="toc-wrap" data-i18n-title="toolbar.toc" title="Include Table of Contents in document"><input type="checkbox" id="tocToggle" /> <span class="btn-lbl" data-i18n="toolbar.toc">TOC</span></label>
+          <button type="button" id="btnClear" class="pill-btn danger-hover" data-i18n-title="toolbar.clear_doc" title="Clear document text"><span>🗑</span> <span class="btn-lbl" data-i18n="common.clear">Clear</span></button>
+        </div>
+      </div>
+      <div class="head-col-right">
+        <div class="head-braille-actions">
+          <button type="button" id="embossBtn" class="pill-btn hardware-expert-only" style="display:none;" data-i18n-title="toolbar.emboss" title="Emboss / Print document">🖨 <span class="btn-lbl" data-i18n="toolbar.emboss">Emboss</span></button>
+          <div class="menu-wrap" id="downloadMenuWrap">
+            <button type="button" class="pill-btn" id="downloadBtn" aria-haspopup="menu" aria-expanded="false" data-i18n-title="toolbar.braille" title="Export braille deliverables (.brf, .pef, .ebraille)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="btn-lbl" data-i18n="toolbar.braille">Braille</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
+            </button>
+            <div class="menu-dropdown align-right" id="downloadMenu" role="menu" hidden>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl">Braille (BRF)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl">PEF 1.0 (.pef)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl">eBraille (.ebraille)</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="head-util-actions">
+          <button type="button" id="settingsBtn" class="icon-btn" data-i18n-title="common.settings" data-i18n-aria="common.settings" title="Settings" aria-label="Settings">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <button type="button" id="helpBtn" class="icon-btn" data-i18n-title="common.help" data-i18n-aria="common.help" title="Help &amp; credits" aria-label="Help and credits">?</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div id="parseWarningBanner" class="parse-warning-banner" hidden>
+      <div class="parse-warning-content">
+        <strong>⚠️ Notice:</strong> <span id="parseWarningText"></span>
+      </div>
+      <button type="button" id="parseWarningClose" class="parse-warning-close" aria-label="Close Notice">✕</button>
+    </div>
+
+    <div class="panes">
+      <section class="pane pane-editor" aria-label="Document text" style="position:relative">
+        <div class="pane-h pane-h-editor" id="editorHeader">
+          <span class="pane-label" id="editorLabel">Text</span>
+          <div class="toolbar" role="toolbar" aria-label="Formatting" id="toolbar">
+            <button type="button" id="btnUndo" class="tb-btn" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" data-tb>↶</button>
+            <button type="button" id="btnRedo" class="tb-btn" title="Redo (Ctrl+Y / ⌘⇧Z)" aria-label="Redo" data-tb>↷</button>
+            <span class="sep" aria-hidden="true"></span>
+            <label class="sr-only" for="blockStyle">Paragraph style</label>
+            <select id="blockStyle" class="block-sel" aria-label="Paragraph style" data-tb>
+              <option value="p">¶ Body Text</option>
+              <option value="h1">H1 Heading</option>
+              <option value="h2">H2 Subheading</option>
+              <option value="h3">H3 Sub-subheading</option>
+              <option value="bullet">• Bullet List</option>
+              <option value="number">1. Numbered List</option>
+              <option value="toc">📑 TOC Entry</option>
+              <option value="dialogue">🎭 Play Dialogue</option>
+              <option value="stage">🎬 Stage Direction</option>
+              <option value="poem">📜 Poetry / Verse</option>
+              <option value="exercise">❓ Exercise Question</option>
+              <option value="caption">💬 Caption / Attribution</option>
+              <option value="footnote">📝 Footnote</option>
+              <option value="note">📋 Transcriber's Note</option>
+              <option value="quote">“ Blockquote</option>
+            </select>
+            <button type="button" id="btnBold" class="tb-btn tb-b tb-fmt" data-i18n-title="toolbar.bold" data-i18n-aria="toolbar.bold" title="Bold (Ctrl/⌘ B)" aria-label="Bold" data-tb>B</button>
+            <button type="button" id="btnItalic" class="tb-btn tb-i tb-fmt" data-i18n-title="toolbar.italic" data-i18n-aria="toolbar.italic" title="Italic (Ctrl/⌘ I)" aria-label="Italic" data-tb>I</button>
+            <button type="button" id="btnUnderline" class="tb-btn tb-u tb-fmt" data-i18n-title="toolbar.underline" data-i18n-aria="toolbar.underline" title="Underline (Ctrl/⌘ U)" aria-label="Underline" data-tb>U</button>
+            <span class="sep" aria-hidden="true"></span>
+            <div class="insert-menu-wrap" id="insertMenuWrap">
+              <button type="button" id="btnInsertMenu" class="tb-btn insert-btn" data-i18n-title="toolbar.insert" title="Insert Equation, Templates, Table, Graphic, Break" aria-haspopup="menu" aria-expanded="false" data-tb>
+                <span>➕</span> <span class="btn-lbl" data-i18n="toolbar.insert">Insert</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
+              </button>
+              <div class="insert-dropdown" id="insertDropdown" role="menu" hidden>
+                <button type="button" id="btnMath" class="insert-item" role="menuitem"><span class="insert-icon">∑</span> <span class="insert-lbl" data-i18n="toolbar.insert_equation">Equation</span></button>
+                <button type="button" id="btnFormula" class="insert-item" role="menuitem"><span class="insert-icon">🧮</span> <span class="insert-lbl">Templates</span></button>
+                <button type="button" id="btnTable" class="insert-item" role="menuitem"><span class="insert-icon">📊</span> <span class="insert-lbl" data-i18n="toolbar.insert_table">Table</span></button>
+                <button type="button" id="btnGraphic" class="insert-item hardware-expert-only" role="menuitem"><span class="insert-icon">🖼</span> <span class="insert-lbl" data-i18n="toolbar.insert_graphic">Graphic</span></button>
+                <button type="button" id="btnBreak" class="insert-item" role="menuitem"><span class="insert-icon">⁂</span> <span class="insert-lbl" data-i18n="toolbar.insert_divider">Break</span></button>
+                <button type="button" id="btnInsertPrintPage" class="insert-item" role="menuitem"><span class="insert-icon">📄</span> <span class="insert-lbl" data-i18n="toolbar.insert_page_break">Print Page</span></button>
+              </div>
+            </div>
+            <span id="skPending" class="sk-pending" role="status" aria-live="polite"></span>
+            <button type="button" id="btnSixKey" class="tb-btn" data-i18n-title="toolbar.toggle_perkins" data-i18n-aria="toolbar.toggle_perkins" title="Six-key Perkins braille entry (SDF JKL keys)" data-tb style="margin-left:auto; font-size:1.05rem; font-weight:700; letter-spacing:1px;" aria-label="Six-key Perkins braille entry">⠼⠋</button>
+          </div>
+        </div>
+        <div id="printTocContainer"></div>
+        <div id="editor" class="editor" contenteditable="true" role="textbox" aria-multiline="true"
+             aria-labelledby="editorLabel" spellcheck="false"></div>
+        <div id="slashMenu" class="slash-menu" role="listbox" aria-label="Slash Commands" hidden>
+          <div class="slash-menu-head">Commands</div>
+          <div id="slashList"></div>
+        </div>
+      </section>
+      <section class="pane pane-braille" aria-label="Braille preview">
+        <h2 class="pane-h pane-h-row" id="brailleLabel">
+          <div class="braille-view-tabs" role="tablist" style="display:inline-flex; gap:4px; align-items:center;">
+            <button type="button" id="tabViewBraille" class="tb-btn tab-btn active" role="tab" aria-selected="true" title="Standard embossed braille page view">⠿ Braille View</button>
+            <button type="button" id="tabViewDotPad" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="DotPad 320 Tactile Display (20×10 + 20-cell reading line)">📟 DotPad</button>
+          </div>
+          <div id="brailleToolbar" class="braille-toolbar" role="toolbar" aria-label="Braille editor controls">
+            <select id="selBrlMargin" class="tb-select" title="UKAAF Margin Preset" aria-label="UKAAF Margin Preset" style="font-size:0.75rem; padding:1px 4px; max-width:95px; border-radius:4px; background:var(--btn-bg); color:var(--ink); border:1px solid var(--border);">
+              <option value="body">3-1 Paragraph</option>
+              <option value="h1">Centered Heading</option>
+              <option value="h2">5-5 Subheading</option>
+              <option value="h3">5-5 Heading 3</option>
+              <option value="list-bullet">1-3 List</option>
+              <option value="exercise">1-5 Exercise</option>
+            </select>
+            <span id="brlPosBadge" class="brl-pos-badge" aria-live="polite" title="Cursor Line and Cell Position">L1, C1/40</span>
+            <span id="brlSyncStatus" class="brl-sync-status synced" role="status" aria-live="polite" title="Braille-Print Sync State"><span class="sync-dot"></span><span class="sync-label">Synced</span></span>
+            <button type="button" id="brlValidationBadge" class="tb-btn brl-val-badge valid" title="Braille Structure Validation" aria-label="Braille Structure Validation">✓ Valid</button>
+            <div style="margin-left:auto; display:inline-flex; gap:2px; align-items:center;">
+              <button type="button" id="btnBrlInsertMode" class="tb-btn" title="Toggle Insert / Overwrite mode" aria-label="Toggle Insert / Overwrite mode">INS</button>
+              <button type="button" id="btnBrlAscii" class="tb-btn" title="Toggle Unicode Braille vs. BRF ASCII display" aria-label="Toggle Unicode Braille vs. BRF ASCII display" style="font-size:0.82rem; font-weight:600; padding:0 6px;">BRF</button>
+              <button type="button" id="btnBrlSixKey" class="tb-btn" title="Six-key Perkins braille entry on braille pane (SDF JKL keys)" data-tb style="font-size:1.05rem; font-weight:700; letter-spacing:1px;" aria-label="Six-key Perkins braille entry" aria-pressed="true">⠼⠋</button>
+            </div>
+          </div>
+          <span class="pane-h-right">
+            <button type="button" id="proofBadge" class="proof-badge warn" hidden
+              title="Round-trip check: the braille is translated back to text and compared with what you typed. A warning marks lines to review.">⚠</button>
+          </span>
+        </h2>
+        <div id="brlStack" class="braille-stack">
+          <div id="braille" class="braille" aria-hidden="true"></div>
+          <textarea id="brlInput" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" wrap="off" aria-label="Braille document text"></textarea>
+        </div>
+        <div id="brlSlashMenu" class="slash-menu" role="listbox" aria-label="Braille Commands" hidden>
+          <div class="slash-menu-head">Braille Commands</div>
+          <div id="brlSlashList"></div>
+        </div>
+        <div id="dotpadPanel" class="dotpad-panel" style="display:none;" aria-label="DotPad 320 Emulator">
+          <div class="dotpad-device-frame">
+            <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px; font-size:0.78rem; color:#94a3b8;">
+              <span id="dotpadPanelTitle" style="font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:6px;">
+                <span>📟</span> DotPad 320
+              </span>
+              <span id="dotpadPanelSubtitle" style="color:#cbd5e1;">Page 1 of 1</span>
+            </div>
+            <canvas id="dotpadPanelCanvas" width="520" height="340" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Upper display: 60×40 tactile pin matrix"></canvas>
+            <div class="dotpad-hardware-strip" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:6px; padding:2px 0;">
+              <button type="button" id="dotpadBtnLP" class="dotpad-hw-btn" title="Left Pan: Previous Page" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">◀ LP</button>
+              <button type="button" id="dotpadBtnF1" class="dotpad-hw-btn" title="F1: Speak Page Aloud" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F1</button>
+              <button type="button" id="dotpadBtnF2" class="dotpad-hw-btn" title="F2: Jump to Top (Page 1)" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F2</button>
+              <button type="button" id="dotpadBtnF3" class="dotpad-hw-btn" title="F3: Toggle Mode" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F3</button>
+              <button type="button" id="dotpadBtnF4" class="dotpad-hw-btn" title="F4: Refresh / Re-sync" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F4</button>
+              <button type="button" id="dotpadBtnRP" class="dotpad-hw-btn" title="Right Pan: Next Page" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">RP ▶</button>
+            </div>
+            <canvas id="dotpadTextCanvas" width="520" height="70" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Lower display: 20-cell Braille text reading row"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="sb-grab-rail">
+      <button type="button" class="sb-grab" id="sbGrab"
+              role="separator" aria-orientation="horizontal" tabindex="0"
+              aria-label="Resize the explanation bar"
+              title="Drag, or use the up and down arrow keys, to resize the explanation bar"></button>
+    </div>
+    <footer id="statusBar" class="rule-info">
+      <span id="styleInspector" class="style-inspector-badge" role="status" aria-live="polite" tabindex="0" title="Active block style and BANA margins. Press Alt+Up/Down to cycle styles.">Style: Body Text (3-1) | Cell: 3 | Alignment: Left | Profile: BANA</span>
+      <span id="ruleInfoBody" style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap;"><span class="sb-hint">Click a word in either panel to see the braille rules used.</span></span>
+      <span class="doc-stats" id="docStats"></span>
+      <span id="tactileDisplayBadge" style="display:none; margin-left:auto; align-items:center; gap:6px; font-size:0.75rem; background:rgba(56,189,248,0.15); color:var(--accent); border:1px solid rgba(56,189,248,0.3); border-radius:4px; padding:2px 8px;">
+        <span id="tactileDisplayLbl">Monarch (1-10)</span>
+        <button type="button" id="tactilePrevBtn" class="icon-btn" title="Previous 10 lines" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▲</button>
+        <button type="button" id="tactileNextBtn" class="icon-btn" title="Next 10 lines" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▼</button>
+      </span>
+    </footer>
+    <div id="announce" class="sr-only" aria-live="polite"></div>
+  </main>
+
+  <dialog id="settingsDialog" class="dialog">
+    <form method="dialog" class="dialog-body">
+      <div class="dialog-head"><h2>Settings</h2><button value="close" aria-label="Close">✕</button></div>
+      <div class="settings-layout">
+        <nav class="settings-nav" role="tablist" aria-label="Settings Categories">
+          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 Rules &amp; Standards</button>
+          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 Embosser &amp; Display</button>
+          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 User Interface</button>
+          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ Advanced Production</button>
+        </nav>
+        <div class="settings-panels">
+          <div id="tab-rules" class="settings-panel active" role="tabpanel">
+            <h3>Rules &amp; Translation Standards</h3>
+            <div class="field"><label for="set-language">Language &amp; Contraction Grade</label>
+              <select id="set-language">
+                <option value="ueb_g2">English UEB (Grade 2 - Contracted)</option>
+                <option value="ueb_g1">English UEB (Grade 1 - Uncontracted)</option>
+                <option value="welsh_g2">Welsh (Grade 2 - Contracted)</option>
+                <option value="welsh_g1">Welsh (Grade 1 - Uncontracted)</option>
+                <option value="spanish_g1">Spanish (Grade 1)</option>
+                <option value="spanish_g2">Spanish (Grade 2)</option>
+                <option value="french_g1">French (Grade 1)</option>
+                <option value="french_g2">French (Grade 2)</option>
+                <option value="german_g1">German (Grade 1)</option>
+                <option value="german_g2">German (Grade 2)</option>
+                <option value="italian_g1">Italian (Grade 1)</option>
+                <option value="italian_g2">Italian (Grade 2)</option>
+                <option value="gaelic_g1">Gaelic (Grade 1)</option>
+                <option value="gaelic_g2">Gaelic (Grade 2)</option>
+              </select></div>
+            <div class="field"><label for="set-mathCode">Math Braille Code</label>
+              <select id="set-mathCode">
+                <option value="auto">Follow layout standard (UKAAF → UEB maths, BANA → Nemeth)</option>
+                <option value="ueb">UEB Math (Unified English Braille - UK / AU / NZ / US)</option>
+                <option value="nemeth">Nemeth Code (US STEM Standard)</option>
+              </select></div>
+            <div class="field"><label for="set-mode">Layout Standard</label>
+              <select id="set-mode">
+                <option value="ukaaf">UKAAF (UK Standard)</option>
+                <option value="bana">BANA (US Standard)</option>
+              </select></div>
+            <div class="field"><label for="set-paragraphStyle">Paragraph Style</label>
+              <select id="set-paragraphStyle"><option value="indented">Indented (3-1, standard)</option><option value="block">Block (1-1, blank lines)</option></select></div>
+            <div class="field"><label for="set-quoteStyle">Quotation Marks</label>
+              <select id="set-quoteStyle"><option value="faithful">Faithful to print</option><option value="exchange">Exchange single → double</option></select></div>
+            <div class="field"><label for="set-listStyle">List Format</label>
+              <select id="set-listStyle"><option value="spaced">Blank-line list (1-3)</option><option value="compact">Compact list (5-1)</option></select></div>
+            <div class="field"><label for="set-tableFormat">Table Layout</label>
+              <select id="set-tableFormat">
+                <option value="auto">Auto (Listed if wide, Columnar if small)</option>
+                <option value="listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
+                <option value="columnar">Columnar Table Format</option>
+              </select></div>
+          </div>
+
+          <div id="tab-hardware" class="settings-panel" role="tabpanel">
+            <h3>Embosser Hardware &amp; Connection</h3>
+            <div class="field"><label for="set-connectionType">Connection Mode</label>
+              <select id="set-connectionType">
+                <option value="serial">USB Serial / Direct Cable (WebSerial)</option>
+                <option value="hid">USB HID / Driverless (Universal WebHID)</option>
+                <option value="ble">Wireless Bluetooth Low Energy (Web Bluetooth)</option>
+                <option value="network">Network / Wi-Fi (REST / WebSocket / IP)</option>
+              </select></div>
+            <div class="field"><label for="set-embosser">Embosser Preset Model</label>
+              <select id="set-embosser">
+                <option value="generic">Generic BRF / Standard Embosser (38x25)</option>
+                <option value="monarch">APH Monarch Dynamic Display (32x10)</option>
+                <option value="dotpad">DotPad Dynamic Display (20x10 + 20 Braille)</option>
+                <option value="custom">Simple One-Page Braille Printer (30x20)</option>
+                <option value="aph">APH PageBlaster / PixBlaster (34x25)</option>
+                <option value="viewplus">ViewPlus Columbia / Premier (40x25)</option>
+                <option value="braillo">Braillo 300 / 600 (42x25)</option>
+                <option value="index">Index Basic-D / Everest-D V5 (42x25)</option>
+                <option value="romeo">Romeo 60 / Enabling Juliet 120 (40x25)</option>
+              </select></div>
+            <div id="networkSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Network Embosser (REST / Port 9100 / IP)</h4>
+              <div class="field-row">
+                <div class="field"><label for="set-networkHost">IP Address or Hostname</label><input id="set-networkHost" type="text" placeholder="192.168.1.150" value="192.168.1.150" /></div>
+                <div class="field" style="max-width:110px;"><label for="set-networkPort">Port</label><input id="set-networkPort" type="number" min="1" max="65535" value="9100" /></div>
+              </div>
+              <small style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Supports modern HTTP REST /api/print endpoints or raw TCP port 9100.</small>
+            </div>
+            <div id="bleSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Wireless Bluetooth Low Energy (BLE)</h4>
+              <small style="color:var(--muted); font-size:.78rem; display:block;">Direct wireless pairing with custom GATT 0xFEB0, DotPad, or Nordic UART embossers without cables or OS drivers.</small>
+            </div>
+            <div id="hidSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Driverless Universal USB (WebHID)</h4>
+              <small style="color:var(--muted); font-size:.78rem; display:block;">Connect directly to custom microcontroller embossers (ESP32-S3, RP2040/RP2350, STM32, Arduino) bypassing OS printer-driver lockouts.</small>
+            </div>
+            <div class="field"><label for="set-embosserDuplex">Duplex Mode</label>
+              <select id="set-embosserDuplex">
+                <option value="double">Interpoint (Double-Sided)</option>
+                <option value="single">Single-Sided (Simplex)</option>
+              </select></div>
+            <div id="serialBaudGroup" class="field" style="display:none;"><label for="set-baudRate">Hardware Serial Baud Rate</label>
+              <select id="set-baudRate">
+                <option value="9600">9600 bps (Standard)</option>
+                <option value="19200">19200 bps</option>
+                <option value="38400">38400 bps</option>
+                <option value="115200">115200 bps (High Speed)</option>
+              </select></div>
+            <div class="field-row">
+              <div class="field"><label for="set-cells">Cells / Line</label><input id="set-cells" type="number" min="10" max="60" value="38" /></div>
+              <div class="field"><label for="set-lines">Lines / Page</label><input id="set-lines" type="number" min="10" max="40" value="25" /></div>
+            </div>
+            <div class="field field-check" style="margin-top:8px;">
+              <label class="check-label" for="set-tactileGraphics">
+                <input type="checkbox" id="set-tactileGraphics" checked />
+                Enable Tactile Graphics Mode (Tiger &amp; Index rasterization)
+              </label>
+              <small style="display:block; margin-left:24px; color:var(--muted); font-size:.78rem;">When unchecked, diagrams are exported as accessible Transcriber's Note descriptions for text-only embossers and braille displays.</small>
+            </div>
+            <div class="field" style="margin-top:16px;border-top:1px solid var(--line);padding-top:12px;">
+              <label>Tactile Display Live Stream (APH Monarch / DotPad / HID)</label>
+              <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+                <button type="button" id="btnConnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--accent);color:#fff;border-radius:7px;font-weight:600;cursor:pointer;">📶 Connect Bluetooth (DotPad BLE)</button>
+                <button type="button" id="btnConnectHid" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">🔌 Connect USB / HID (Monarch)</button>
+                <button type="button" id="btnDisconnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;display:none;">Disconnect Display</button>
+                <button type="button" id="btnSimulateTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">Test Simulated Monarch (32×10)</button>
+                <button type="button" id="btnSimulateDotPad" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">Test Simulated DotPad (20×10 + 20)</button>
+                <span id="tactileConnStatus" style="font-size:0.84rem;color:var(--muted);font-weight:500;">No display connected</span>
+              </div>
+              <small style="display:block;margin-top:6px;color:var(--muted);font-size:.78rem;">Streams the live braille viewport and tactile graphics directly over WebBluetooth (DotPad BLE UART) or WebHID (Monarch/USB) without external drivers.</small>
+            </div>
+          </div>
+
+          <div id="tab-display" class="settings-panel" role="tabpanel">
+            <h3 data-i18n="settings.tab_language">Interface Language &amp; View</h3>
+            <div class="field" style="margin-bottom:14px;">
+              <label for="set-uiLanguage" data-i18n="settings.language_label">Interface Language</label>
+              <select id="set-uiLanguage">
+                <option value="en">English (English)</option>
+                <option value="es">Español (Spanish)</option>
+                <option value="fr">Français (French)</option>
+                <option value="de">Deutsch (German)</option>
+                <option value="pt">Português (Portuguese)</option>
+                <option value="it">Italiano (Italian)</option>
+                <option value="nl">Nederlands (Dutch)</option>
+                <option value="ar">العربية (Arabic)</option>
+                <option value="he">עברית (Hebrew)</option>
+              </select>
+              <small data-i18n="settings.language_help" style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Select the language used for buttons, menus, dialogs, and screen reader announcements.</small>
+            </div>
+            <div class="field field-check">
+              <label class="check-label" for="set-sixkey">
+                <input type="checkbox" id="set-sixkey" />
+                <span><strong data-i18n="toolbar.toggle_perkins">Perkins 6-Key Input</strong> — type braille with SDF and JKL keys</span>
+              </label>
+            </div>
+            <div class="field field-check">
+              <label class="check-label" for="set-asciiBraille">
+                <input type="checkbox" id="set-asciiBraille" />
+                <span><strong data-i18n="toolbar.toggle_brf">Display as ASCII Braille</strong> — show raw ASCII braille characters</span>
+              </label>
+            </div>
+            <div class="field-row" style="margin-top:14px; padding-top:10px; border-top:1px solid var(--line);">
+              <div class="field"><label for="set-voice">Reading Voice</label><select id="set-voice"></select></div>
+              <div class="field"><label for="set-rate">Reading Speed <span id="rateVal" class="rate-val"></span></label>
+                <input id="set-rate" type="range" min="0.5" max="2" step="0.1" value="1" /></div>
+            </div>
+          </div>
+
+          <div id="tab-document" class="settings-panel" role="tabpanel">
+            <h3>Advanced Production</h3>
+            <div class="field"><label for="set-volumePages">Volume Split Interval (0 = single volume)</label>
+              <input id="set-volumePages" type="number" min="0" max="500" value="0" /></div>
+            <div class="field">
+              <label class="check-label" for="set-includeCovers">
+                <input type="checkbox" id="set-includeCovers" />
+                <span><strong>Tactile Volume Covers</strong> — embossed title covers when splitting books</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-foot"><button value="close" class="primary">Done</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog" class="dialog">
+    <div class="dialog-body">
+      <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" aria-label="Close">✕</button></div>
+      <div class="help-content">
+        <h3>Two Ways to Work</h3>
+        <p>Emboss provides two integrated operating modes, sharing your translation standards, language tables, contraction grades, and page geometry:</p>
+        <ul>
+          <li><strong>Quick Mode (Simple Converter)</strong> — The fast route for converting existing documents: drag and drop Word (<code>.docx</code>), Markdown (<code>.md</code>), NIMAS XML (<code>.xml / .nimas / .dtbook</code>), EPUB, ODT, HTML, RTF, or plain text to produce an embosser-ready <strong>BRF</strong> instantly.</li>
+          <li><strong>Advanced Direct Braille Editor (This Screen)</strong> — Write, format, and edit with real-time bidirectional print↔braille synchronization, mathematical equations, formula templates, spatial tables, tactile diagrams, Perkins 6-key chording, read-aloud speech, automated proofreading, and driverless hardware spooling.</li>
+        </ul>
+        <p>Switch back to Quick Mode at any time by clicking <strong>← Quick&nbsp;Mode</strong> in the top header.</p>
+
+        <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
+        <p>Emboss is fully internationalized to support transcribers, educators, and blind students worldwide:</p>
+        <ul>
+          <li><strong>112 Interface Languages:</strong> Switch the complete user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) into 112 languages via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. Common languages (English, Spanish, French, and your local system language) are pinned to the top of the list for quick access.</li>
+          <li><strong>Native Right-to-Left (RTL) Support:</strong> When selecting Arabic, Hebrew, Persian, or Urdu, the entire editor layout and document panes automatically adjust to Right-to-Left orientation with mirrored toolbars and bidirectional caret tracking.</li>
+          <li><strong>142+ Document Braille Codes:</strong> Independently select your document's braille translation tables and contraction level (UEB Grade 1/2, Spanish, French, German, Arabic, Welsh, Gaelic, Hindi, Chinese, etc.) in <strong>Settings ⚙ &gt; Rules &amp; Standards</strong>.</li>
+        </ul>
+
+        <h3>Writing, Formatting &amp; Live Synchronisation</h3>
+        <p>Type in the print pane on the left, and your formatted braille generates live on the right. Structure is what matters: real headings become braille headings; real lists become braille lists.</p>
+        <ul>
+          <li><strong>Paragraph Styles (¶ Body):</strong> Apply standard styles from the toolbar or with slash commands: Heading 1 (<kbd>/h1</kbd>), Heading 2 (<kbd>/h2</kbd>), Heading 3 (<kbd>/h3</kbd>), Bulleted List (<kbd>/ul</kbd>), Numbered List (<kbd>/ol</kbd>), Blockquote (<kbd>/quote</kbd>), Exercise (<kbd>/exercise</kbd>), and Footnotes (<kbd>/footnote</kbd>).</li>
+          <li><strong>Typeform Emphasis (B / I / U):</strong> Bold (<kbd>Ctrl/⌘ B</kbd>), Italic (<kbd>Ctrl/⌘ I</kbd>), and Underline (<kbd>Ctrl/⌘ U</kbd>) are transcribed faithfully to authentic UEB typeform indicators.</li>
+          <li><strong>Bidirectional Cell-Level Linking:</strong> Click any word, equation, or list item in either pane to highlight its exact matching cells in the other pane.</li>
+          <li><strong>Continuous Proofreading &amp; Contraction Inspection:</strong> Emboss back-translates every line continuously; lines with discrepancies are flagged with a gentle wavy underline. Hover over any flagged word or press <kbd>Ctrl/⌘ ⇧ D</kbd> to inspect its contraction breakdown.</li>
+        </ul>
+
+        <h3>Top Header Controls &amp; Deliverables</h3>
+        <ul>
+          <li><strong>📂 Load:</strong> Open and import documents (<code>.docx</code>, <code>.md</code>, <code>.xml</code>, <code>.nimas</code>, <code>.html</code>, <code>.epub</code>, <code>.odt</code>, <code>.pef</code>, <code>.brf</code>, <code>.txt</code>).</li>
+          <li><strong>💾 Save ▾ (Menu):</strong>
+            <ul>
+              <li>📐 <strong>NIMAS Project (.xml):</strong> Master canonical XML project file preserving all BANA formatting, math, tactile graphics, and structural metadata.</li>
+              <li>📄 <strong>Word Document (.docx):</strong> Standard formatted Microsoft Word document.</li>
+              <li>📝 <strong>Markdown (.md):</strong> Structured GitHub-flavored markdown with equation and table syntax.</li>
+              <li>💾 <strong>Native Project (.json):</strong> Full raw document state backup.</li>
+              <li>📃 <strong>Plain Text (.txt) &amp; 🌐 HTML Document (.html)</strong>.</li>
+            </ul>
+          </li>
+          <li><strong>Download ▾ (Braille Deliverables Menu):</strong>
+            <ul>
+              <li>📱 <strong>eBraille (.ebraille / .ebrl):</strong> Modern DAISY/BANA digital braille package containing formatted braille, MathML, vector tactile SVGs, and print page navigation.</li>
+              <li>⠿ <strong>Braille (BRF):</strong> Universal embossed braille standard compatible with all paper embossers and refreshable braille displays.</li>
+              <li>📄 <strong>PEF 1.0 (.pef):</strong> Portable Embosser Format XML with multi-volume page tables.</li>
+            </ul>
+          </li>
+          <li><strong>☐ TOC (Table of Contents):</strong> Generates formal braille preliminary contents pages with an interactive outline in the editor.</li>
+          <li><strong>▶ Read:</strong> High-quality text-to-speech engine reading text and MathML equations with synchronized word lighting (<kbd>Ctrl/⌘ ⇧ Space</kbd>).</li>
+          <li><strong>🖨 Emboss:</strong> Direct hardware spooling across USB, Bluetooth BLE, WebHID, and Network.</li>
+        </ul>
+
+        <h3>➕ Insert Menu: Equations, Templates, Tables, Graphics &amp; Breaks</h3>
+        <ul>
+          <li><strong>∑ — Equation (<kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd>):</strong> Visual MathLive equation editor transcribed to <strong>UEB maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA) via MathCAT with automatic code switch indicators.</li>
+          <li><strong>🧮 — Templates (<kbd>/formula</kbd>):</strong> 346 searchable equations across 16 STEM categories (Algebra, Calculus, Geometry, Trigonometry, Linear Algebra, Physics, Chemistry, etc.) with math previews and spoken audio descriptions.</li>
+          <li><strong>📊 — Table (<kbd>/table</kbd>):</strong> Insert spatial braille data tables with interactive row/column tools. Formats as BANA §11 / UKAAF §8 Spatial Columnar tables with column headers, guide lines, and 2-cell gutters, or auto-adapts to Listed Table format on narrow widths.</li>
+          <li><strong>🖼 — Graphic (<kbd>/graphic</kbd>):</strong> Insert curated STEM and educational diagrams from the 1,731-symbol library or upload custom SVG vectors. Maps colors to tactile textures and transcribes labels to Braille with protective halos.</li>
+          <li><strong>📄 — Print Page (<kbd>/page</kbd>):</strong> Inserts source textbook print page breaks with BANA continuous leaders or UKAAF <code>⠐⠤</code> page change lines.</li>
+          <li><strong>⁂ — Break (<kbd>/break</kbd>):</strong> Inserts formal section dividers ( ∗ ∗ ∗ ).</li>
+          <li><strong>⠼⠋ — Perkins 6-Key Input (<kbd>Ctrl/⌘ ⇧ K</kbd>):</strong> Type chords directly using home keys <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6) in either the print or braille pane.</li>
+        </ul>
+
+        <h3>📐 Advanced Formatting Standards (BANA Formats 2016 &amp; UKAAF B004)</h3>
+        <ul>
+          <li><strong>Footnotes &amp; Endnotes (BANA §12):</strong> Formatted with 1-3 margin indents (first cell 1, runovers cell 3) preceded by a blank line.</li>
+          <li><strong>Transcriber's Notes (BANA §3 / UKAAF):</strong> Formatted with 3-1 margins and enclosed in official braille transcriber note indicators (<code>TN_OPEN</code> / <code>TN_CLOSE</code>).</li>
+          <li><strong>Boxlines (BANA §12):</strong> Enclosed in top borders of dots 2-5 (<code>333 Title 333</code>) and bottom borders of dots 2-3-5-6 (<code>777</code>).</li>
+          <li><strong>Play / Drama Dialogue &amp; Stage Directions (BANA §13):</strong> Character dialogues format with 1-5 or 1-3 margins; stage directions format with 7-7 or 9-7 margins.</li>
+          <li><strong>Poetry &amp; Verse (BANA §13):</strong> Formatted with 1-3 margins for verse stanzas with runovers.</li>
+          <li><strong>Glossaries &amp; Definitions (BANA §19):</strong> Definition lists formatted with 1-3 margins and proper punctuation handling.</li>
+        </ul>
+
+        <h3>🖼 Tactile Graphics, Anti-Slicing RIP &amp; Dynamic Displays</h3>
+        <ul>
+          <li><strong>Page-Boundary Anti-Slicing:</strong> Emboss automatically calculates tactile diagram heights and inserts page breaks before diagrams that would otherwise be sliced across braille sheets, ensuring every diagram starts cleanly on Line 1 of the following sheet.</li>
+          <li><strong>Multi-Height 3D Tiger RIP (ViewPlus Columbia / PixBlaster):</strong> Rasterizes vector SVGs into 8 distinct physical dot elevations (Heights 0–7) with 3D tactile relief for outlines, curves, and textures.</li>
+          <li><strong>Index Braille Floating-Dot Matrix:</strong> Encodes high-resolution dot-matrix packets via native <code>ESC +g</code> graphics streams.</li>
+          <li><strong>Swell Paper / Capsule Paper (PIAF &amp; Zy-Fuse):</strong> Renders crisp carbon-black vector outlines with 100% white background stripping for micro-capsule heat-expansion.</li>
+          <li><strong>APH Monarch (32 cells × 10 lines):</strong> Direct driverless 10-line multiline braille terminal streaming and eBraille package deployment.</li>
+          <li><strong>DotPad 320 Dynamic Display:</strong> Built-in 60×40 pin array simulator and direct Web Bluetooth (BLE) / WebHID connectivity.</li>
+        </ul>
+
+        <h3>🖨 Modern Driverless Embosser Hardware (Universal Spooler)</h3>
+        <p>Emboss allows you to spool documents directly to braille embossers from Chrome, Edge, and Opera without installing proprietary drivers or utilities:</p>
+        <ul>
+          <li><strong>1. Wireless Bluetooth Low Energy (Web Bluetooth):</strong> Direct pairing with ESP32-S3, RP2350, nRF52, or Nordic UART bridges via Custom GATT Profile (<code>0xFEB0</code>) with adaptive MTU packet chunking (128–512 bytes) and live telemetry notifications.</li>
+          <li><strong>2. Universal Driverless USB (WebHID):</strong> Eliminates Windows <code>usbprint.sys</code> and macOS CUPS kernel driver lockouts by streaming directly through user-space HID output reports for ESP32-S3, RP2040/RP2350, STM32, Arduino, Index Braille V5, and ViewPlus.</li>
+          <li><strong>3. Network REST / WebSockets / IP:</strong> Direct local IP spooling via HTTP POST (<code>/api/print</code>) or network socket bridges with real-time status feedback.</li>
+          <li><strong>4. USB Serial (WebSerial):</strong> Virtual COM port communication with automatic hardware profile identification (Index, ViewPlus, Romeo/Juliet, Braillo, Custom MCUs).</li>
+        </ul>
+
+        <h3>⌨️ Keyboard Shortcuts &amp; Slash Commands Cheat Sheet</h3>
+        <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:.86rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--line); text-align:left;">
+              <th style="padding:6px;">Shortcut / Command</th>
+              <th style="padding:6px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ S</kbd></td><td>Save master NIMAS Project XML</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ Z</kbd> / <kbd>Ctrl/⌘ ⇧ Z</kbd></td><td>Undo / Redo document edit</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ B</kbd> / <kbd>I</kbd> / <kbd>U</kbd></td><td>Bold / Italic / Underline typeform emphasis</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd></td><td>Insert visual MathLive equation</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ K</kbd></td><td>Toggle Perkins 6-key braille chording</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ Space</kbd></td><td>Start / stop synchronized text &amp; math speech</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ D</kbd></td><td>Describe braille contraction at cursor</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/h1</kbd>, <kbd>/h2</kbd>, <kbd>/h3</kbd>, <kbd>/p</kbd></td><td>Convert block to Heading 1–3 or Paragraph</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/ul</kbd>, <kbd>/ol</kbd></td><td>Convert block to Bulleted or Numbered List</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/table</kbd></td><td>Insert spatial braille table</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/graphic</kbd> or <kbd>/svg</kbd></td><td>Open tactile graphics symbol library or upload SVG</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/formula</kbd></td><td>Open 346-formula equation template library</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/page</kbd></td><td>Insert print textbook page number indicator</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/note</kbd></td><td>Insert formal Transcriber's Note</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/quote</kbd></td><td>Insert indented Blockquote</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/code</kbd></td><td>Insert Computer Code block with UEB indicators</td></tr>
+            <tr><td style="padding:5px;"><kbd>/break</kbd></td><td>Insert formal section divider ( ∗ ∗ ∗ )</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Credits &amp; Licensing</h3>
+        <ul class="credits">
+          <li><strong>Emboss</strong> © 2026 <strong>Sensory App House&nbsp;Ltd</strong>. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">CC&nbsp;BY-NC-SA&nbsp;4.0</a>.</li>
+          <li><strong>Translation Engine:</strong> <a href="https://liblouis.io" target="_blank" rel="noopener">liblouis</a> <span id="engineVer">…</span> (LGPL), compiled to WebAssembly. © liblouis contributors.</li>
+          <li><strong>Maths &amp; Speech:</strong> <a href="https://daisy.github.io/MathCAT/" target="_blank" rel="noopener">MathCAT</a> (MIT, © Neil Soiffer / DAISY) and <a href="https://cortexjs.io/mathlive/" target="_blank" rel="noopener">MathLive</a> (MIT).</li>
+          <li><strong>Editor Framework:</strong> <a href="https://lexical.dev" target="_blank" rel="noopener">Lexical</a> (MIT).</li>
+          <li><strong>Formatting Standards:</strong> UKAAF <em>Guiding Principles for the Presentation of Braille</em> (B004) and BANA <em>Braille Formats: Principles of Print-to-Braille Transcription, 2016</em>.</li>
+          <li><strong>Tactile Graphics:</strong> <a href="http://www.brailleauthority.org/tg/" target="_blank" rel="noopener">BANA Guidelines for Tactile Graphics</a> and <a href="https://github.com/benetech/AccessibleImageSampleBook" target="_blank" rel="noopener">Benetech / DIAGRAM Center Accessible Image Standards</a> (CC-BY).</li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Accessible Math Formula & Equation Templates Modal (SumIt Formula Library) -->
+  <dialog id="formulaDialog" class="dialog" style="max-width: 780px;" aria-labelledby="formulaTitle">
+    <div class="dialog-body">
+      <div class="dialog-head">
+        <h2 id="formulaTitle">Formula &amp; Equation Templates</h2>
+        <button type="button" id="formulaClose" aria-label="Close formula templates dialog">✕</button>
+      </div>
+      <div class="field" style="margin: 8px 0 10px;">
+        <label for="formulaSearch" class="sr-only">Search formulas</label>
+        <input type="search" id="formulaSearch" placeholder="Search formulas, e.g. quadratic, energy, integral, matrix, pH..." autocomplete="off"
+               aria-controls="formulaList" aria-autocomplete="list"
+               style="width:100%; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
+      </div>
+      <div id="formulaStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+      <nav id="formulaCats" class="formula-cats" aria-label="Formula Categories"></nav>
+      <div id="formulaList" class="formula-list" role="listbox" aria-label="Math formula templates">
+        <!-- Populated dynamically from SumIt's formula library with category filtering -->
+      </div>
+      <div class="dialog-foot" style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
+        <button type="button" id="formulaDone" class="primary" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Tactile SVG Graphics Library & Import Modal -->
+  <dialog id="graphicDialog" class="dialog" style="max-width: 840px;" aria-labelledby="graphicTitle">
+    <div class="dialog-body">
+      <div class="dialog-head">
+        <h2 id="graphicTitle">Tactile Graphic Diagrams</h2>
+        <button type="button" id="graphicClose" aria-label="Close graphics dialog">✕</button>
+      </div>
+      <div style="display:flex; gap:12px; margin: 10px 0 6px;">
+        <input type="search" id="graphicSearch" placeholder="Search diagrams, e.g. triangle, cell, circuit, compass, pie chart..." autocomplete="off"
+               aria-controls="graphicList" aria-autocomplete="list"
+               style="flex:1; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
+        <label for="graphicUploadInput" class="tb-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font-size:.88rem; font-weight:600;">
+          <span>📁 Upload SVG</span>
+          <input type="file" id="graphicUploadInput" accept=".svg,image/svg+xml" style="display:none;" />
+        </label>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin: 0 0 10px 0; font-size:.82rem; color:var(--muted); flex-wrap:wrap;">
+        <span>🌐 Open Tactile Repositories:</span>
+        <a href="https://btactile.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">BTactile (Free) ↗</a> ·
+        <a href="https://imagelibrary.aph.org/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">APH TGIL (1,800+ Templates) ↗</a> ·
+        <a href="https://github.com/benetech/AccessibleImageSampleBook" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">Benetech DIAGRAM (GitHub) ↗</a>
+      </div>
+      <div id="graphicStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+      <nav id="graphicCats" class="formula-cats" aria-label="Graphic Categories"></nav>
+      <div id="graphicList" class="graphic-list" role="listbox" aria-label="Tactile graphic diagrams" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; max-height:360px; overflow-y:auto; padding:4px 2px;">
+        <!-- Populated dynamically from TACTILE_SVG_LIBRARY -->
+      </div>
+      <div class="dialog-foot" style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
+        <small style="color:var(--muted); font-size:.8rem;">💡 Black outlines become solid tactile borders; colors automatically map to distinct tactile textures.</small>
+        <button type="button" id="graphicDone" class="primary" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="dropHint" aria-hidden="true">⬇ Drop a document to import it into the editor<br><small>.docx · .odt · .epub · .html · .md · .rtf · .txt</small></div>
+
+  <script type="module" src="/web/editor/editor.mjs?v=20260910_095600"></script>
+</body>
+</html>

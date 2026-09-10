@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- US plug molded rubber grip body -->
+  <rect x="28" y="44" width="44" height="38" rx="8" fill="#1e293b" stroke="#000000" stroke-width="4.5"/>
+  <!-- Dual flat parallel metal prongs extending up -->
+  <rect x="36" y="18" width="6" height="26" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+  <rect x="58" y="18" width="6" height="26" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+  <!-- Round ground pin -->
+  <circle cx="50" cy="32" r="3" fill="#94a3b8"/>
+</svg>

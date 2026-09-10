@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved crescent ram-air foil canopy top with bold 4.5px stroke -->
+  <path d="M 20 38 C 36 22 64 22 80 38 C 64 30 36 30 20 38 Z" fill="#ef4444" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Suspension riser lines converging to pilot cradle with bold 3.5px strokes -->
+  <line x1="26" y1="36" x2="50" y2="76" stroke="#000000" stroke-width="3.5"/>
+  <line x1="74" y1="36" x2="50" y2="76" stroke="#000000" stroke-width="3.5"/>
+</svg>

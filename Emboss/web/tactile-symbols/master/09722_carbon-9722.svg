@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ultra-white barium sulfate surface reflecting 98% of solar heat directly into space with bold 4.5px strokes -->
+  <polygon points="50,22 80,48 20,48" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <rect x="28" y="48" width="44" height="30" fill="#64748b" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+</svg>

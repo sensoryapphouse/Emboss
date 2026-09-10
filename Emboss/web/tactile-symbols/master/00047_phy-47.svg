@@ -1,0 +1,12 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Principal optical axis -->
+  <line x1="10" y1="50" x2="90" y2="50" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="4 4"/>
+  <!-- Convex lens body profile with wide 14px center thickness -->
+  <path d="M 44 16 C 56 30 56 70 44 84 C 32 70 32 30 44 16 Z" fill="#38bdf8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Top parallel incoming ray converging to focal point (80, 50) -->
+  <path d="M 12 30 L 44 30 L 80 50" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom parallel incoming ray converging to focal point -->
+  <path d="M 12 70 L 44 70 L 80 50" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Focal point node F -->
+  <circle cx="80" cy="50" r="3" fill="#000000" stroke="#000000" stroke-width="2.0"/>
+</svg>

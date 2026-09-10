@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Multi-lobed neutrophil extruding mesh-like chromatin trap webs with bold 4.5px strokes -->
+  <circle cx="36" cy="50" r="10" fill="#0284c7"/>
+  <circle cx="48" cy="42" r="8" fill="#0284c7"/>
+  <path d="M 54 46 Q 74 30 78 50 Q 82 70 64 64" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-dasharray="4,2"/>
+</svg>

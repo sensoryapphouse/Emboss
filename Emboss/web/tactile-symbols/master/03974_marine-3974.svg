@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Torpedo-shaped streamlined AUV submersible body with bold 4.5px stroke -->
+  <path d="M 28 50 C 28 36 72 36 78 50 C 72 64 28 64 28 50 Z" fill="#ca8a04" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Stern propeller and control fins left with bold 4.0px strokes -->
+  <polygon points="18,42 28,48 28,52 18,58" fill="#1e293b"/>
+  <!-- Acoustic communication transducer dome on top -->
+  <circle cx="58" cy="38" r="4" fill="#0284c7"/>
+</svg>

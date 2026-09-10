@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Original obstacle (black) grown by robot radius into C-obstacle with bold 4.5px stroke -->
+  <rect x="34" y="34" width="32" height="32" rx="2" fill="#000000"/>
+  <rect x="22" y="22" width="56" height="56" rx="14" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

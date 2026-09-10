@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Walking pedestrian stick figure -->
+  <circle cx="48" cy="22" r="5" fill="#000000"/>
+  <line x1="48" y1="28" x2="48" y2="52" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 36 38 L 48 34 L 60 42" fill="none" stroke="#000000" stroke-width="4.0" stroke-linecap="round"/>
+  <path d="M 38 68 L 48 52 L 58 68" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Zebra crossing road bars below -->
+  <line x1="16" y1="78" x2="32" y2="78" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <line x1="42" y1="78" x2="58" y2="78" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <line x1="68" y1="78" x2="84" y2="78" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+</svg>

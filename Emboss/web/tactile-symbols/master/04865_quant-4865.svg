@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Input wires for qubit A and B with bold 4.5px strokes -->
+  <line x1="16" y1="34" x2="84" y2="34" stroke="#000000" stroke-width="5.0"/>
+  <line x1="16" y1="66" x2="84" y2="66" stroke="#000000" stroke-width="5.0"/>
+  <!-- Hadamard gate on top wire with bold 4.0px stroke -->
+  <rect x="28" y="24" width="18" height="20" rx="2" fill="#ffffff" stroke="#0284c7" stroke-width="3.5"/>
+  <!-- CNOT gate entangling pair right with bold 4.5px stroke -->
+  <line x1="62" y1="34" x2="62" y2="66" stroke="#000000" stroke-width="4.5"/>
+  <circle cx="62" cy="34" r="5" fill="#1e293b"/>
+  <circle cx="62" cy="66" r="8" fill="#ffffff" stroke="#ef4444" stroke-width="4.0"/>
+</svg>

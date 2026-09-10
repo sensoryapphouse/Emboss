@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Shared central feedline bus with bold 5.0px stroke -->
+  <line x1="16" y1="50" x2="84" y2="50" stroke="#000000" stroke-width="5.5"/>
+  <!-- Multi-frequency readout resonator hangars coupled along feedline with bold 4.5px strokes -->
+  <path d="M 28 50 L 28 26 L 36 26" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 50 50 L 50 22 L 60 22" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 72 50 L 72 28 L 80 28" fill="none" stroke="#ca8a04" stroke-width="4.5"/>
+</svg>

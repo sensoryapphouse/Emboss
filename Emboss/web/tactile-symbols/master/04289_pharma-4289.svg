@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Portable particle counter body housing with bold 4.5px stroke -->
+  <rect x="24" y="32" width="52" height="48" rx="6" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Top stainless isokinetic sample probe inlet with bold 4.5px stroke -->
+  <polygon points="42,16 58,16 54,32 46,32" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <!-- Digital particle count LCD display screen with bold 4.0px stroke -->
+  <rect x="34" y="44" width="32" height="16" rx="2" fill="#0284c7"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Yellow multimeter casing -->
+  <rect x="26" y="18" width="48" height="64" rx="6" fill="#facc15" stroke="#000000" stroke-width="4.5"/>
+  <!-- Digital LCD screen top -->
+  <rect x="34" y="26" width="32" height="16" rx="2" fill="#ffffff" stroke="#000000" stroke-width="3.0"/>
+  <!-- Rotary selector dial center with bold 3.5px stroke -->
+  <circle cx="50" cy="58" r="10" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+</svg>

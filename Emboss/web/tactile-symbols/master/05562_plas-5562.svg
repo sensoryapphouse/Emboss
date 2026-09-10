@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Counter-streaming current filaments with bold 5.0px strokes -->
+  <line x1="28" y1="20" x2="28" y2="80" stroke="#ef4444" stroke-width="5.0"/>
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#0284c7" stroke-width="5.0"/>
+  <line x1="72" y1="20" x2="72" y2="80" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- Self-generated transverse magnetic field loop in middle -->
+  <ellipse cx="50" cy="50" rx="30" ry="10" fill="none" stroke="#ca8a04" stroke-width="4.0"/>
+</svg>

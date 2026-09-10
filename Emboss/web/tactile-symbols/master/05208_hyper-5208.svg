@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spherical RCC nose cap shell with bold 5.0px stroke -->
+  <path d="M 64 22 C 34 32 34 68 64 78 L 78 78 L 78 22 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Silicon Carbide (SiC) oxidation conversion coating on outer skin with bold 4.5px stroke -->
+  <path d="M 60 26 C 38 34 38 66 60 74" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Aluminum mirror tilting +/- 12 degrees on torsion hinge over electrostatic CMOS cells with bold 4.5px strokes -->
+  <line x1="26" y1="62" x2="74" y2="38" stroke="#0284c7" stroke-width="6.0"/>
+  <line x1="50" y1="50" x2="50" y2="76" stroke="#000000" stroke-width="4.5"/>
+  <rect x="26" y="74" width="48" height="8" fill="#64748b"/>
+</svg>

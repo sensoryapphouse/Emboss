@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy box lifted by upward force arrow -->
+  <rect x="30" y="44" width="40" height="34" rx="4" fill="#8a5a2b" stroke="#000000" stroke-width="4.5"/>
+  <line x1="50" y1="44" x2="50" y2="20" stroke="#22c55e" stroke-width="6.5" stroke-linecap="round"/>
+  <polygon points="42,28 50,16 58,28" fill="#22c55e"/>
+</svg>

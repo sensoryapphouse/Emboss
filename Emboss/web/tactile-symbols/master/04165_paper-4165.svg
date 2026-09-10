@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long inclined rotating lime kiln cylinder with bold 4.5px stroke -->
+  <polygon points="18,48 80,30 84,46 22,64" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Firing burner flame at lower discharge end with bold 4.5px stroke -->
+  <polygon points="14,56 24,52 22,62" fill="#ef4444"/>
+</svg>

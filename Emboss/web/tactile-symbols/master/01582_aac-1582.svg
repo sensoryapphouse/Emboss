@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Two hands meeting in center -->
+  <path d="M 16 60 L 40 60 C 46 60 48 54 44 48 L 32 48" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+  <path d="M 84 60 L 60 60 C 54 60 52 54 56 48 L 68 48" fill="none" stroke="#22c55e" stroke-width="5.0" stroke-linecap="round"/>
+  <!-- Shared heart in center -->
+  <circle cx="50" cy="38" r="10" fill="#ef4444" stroke="#000000" stroke-width="3.0"/>
+</svg>

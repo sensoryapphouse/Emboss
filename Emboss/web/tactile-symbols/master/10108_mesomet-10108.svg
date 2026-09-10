@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Sharp boundary between moist maritime and dry continental air triggering supercell lines with bold 4.5px strokes -->
+  <path d="M 40 18 Q 65 50 40 82" fill="none" stroke="#ca8a04" stroke-width="5.5"/>
+  <circle cx="60" cy="50" r="6" fill="#ef4444"/>
+  <circle cx="26" cy="50" r="6" fill="#0284c7"/>
+</svg>

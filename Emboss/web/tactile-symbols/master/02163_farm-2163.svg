@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Long upright neck and head -->
+  <path d="M 30 68 C 30 52 50 52 54 44 L 54 22 L 66 22 L 66 48 C 76 52 76 72 62 74 Z" fill="#ffffff" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Orange beak right -->
+  <polygon points="66,22 76,26 66,30" fill="#facc15"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Outer capsule membrane -->
+  <rect x="18" y="30" width="64" height="40" rx="20" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Folded inner cristae folds -->
+  <path d="M 28 50 L 40 50 M 50 40 L 50 60 M 60 50 L 72 50" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

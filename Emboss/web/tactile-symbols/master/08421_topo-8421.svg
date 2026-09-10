@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Collective sinusoidal bosonic density waves propagating along 1D quantum wire with bold 4.5px strokes -->
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 20 50 Q 35 32 50 50 Q 65 68 80 50" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+</svg>

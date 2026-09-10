@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Chilled fluid bath tank with bold 4.5px stroke -->
+  <rect x="20" y="32" width="60" height="48" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Bitumen beam supported on two blunt knife edges with bold 5.0px stroke -->
+  <line x1="30" y1="52" x2="70" y2="52" stroke="#1e293b" stroke-width="6.0"/>
+  <!-- Center loading ram applying constant 980mN creep force with bold 4.5px stroke -->
+  <line x1="50" y1="36" x2="50" y2="52" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

@@ -1,0 +1,15 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Complete graph K5 connecting 5 ion qubits with bold 4.0px strokes -->
+  <polygon points="50,18 80,40 68,78 32,78 20,40" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <line x1="50" y1="18" x2="68" y2="78" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="50" y1="18" x2="32" y2="78" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="80" y1="40" x2="20" y2="40" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="80" y1="40" x2="32" y2="78" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="68" y1="78" x2="20" y2="40" stroke="#ef4444" stroke-width="3.5"/>
+  <!-- Qubit node dots on vertices -->
+  <circle cx="50" cy="18" r="5" fill="#0284c7"/>
+  <circle cx="80" cy="40" r="5" fill="#0284c7"/>
+  <circle cx="68" cy="78" r="5" fill="#0284c7"/>
+  <circle cx="32" cy="78" r="5" fill="#0284c7"/>
+  <circle cx="20" cy="40" r="5" fill="#0284c7"/>
+</svg>

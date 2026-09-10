@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background random dot pattern grid with bold 4.0px strokes -->
+  <circle cx="28" cy="30" r="3.5" fill="#1e293b"/>
+  <circle cx="50" cy="30" r="3.5" fill="#1e293b"/>
+  <circle cx="72" cy="30" r="3.5" fill="#1e293b"/>
+  <circle cx="28" cy="70" r="3.5" fill="#1e293b"/>
+  <circle cx="50" cy="70" r="3.5" fill="#1e293b"/>
+  <circle cx="72" cy="70" r="3.5" fill="#1e293b"/>
+  <!-- Supersonic aircraft shock wave distorting apparent dot positions across center with bold 5.0px stroke -->
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

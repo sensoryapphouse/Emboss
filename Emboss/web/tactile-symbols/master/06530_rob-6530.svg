@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Publisher Node -> Topic -> Subscriber Node with bold 4.5px strokes -->
+  <circle cx="24" cy="50" r="10" fill="#0284c7"/>
+  <rect x="44" y="42" width="16" height="16" rx="2" fill="#ef4444"/>
+  <circle cx="76" cy="50" r="10" fill="#22c55e"/>
+  <line x1="34" y1="50" x2="44" y2="50" stroke="#000000" stroke-width="4.0"/>
+  <line x1="60" y1="50" x2="66" y2="50" stroke="#000000" stroke-width="4.0"/>
+</svg>

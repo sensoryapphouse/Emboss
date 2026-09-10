@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Superconducting loop ring with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#000000" stroke-width="5.5"/>
+  <!-- Two parallel Josephson junctions (X marks) on left and right with bold 4.5px strokes -->
+  <line x1="16" y1="44" x2="24" y2="56" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="16" y1="56" x2="24" y2="44" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="76" y1="44" x2="84" y2="56" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="76" y1="56" x2="84" y2="44" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Quantized magnetic flux quantum Phi_0 in center -->
+  <circle cx="50" cy="50" r="8" fill="#0284c7"/>
+</svg>

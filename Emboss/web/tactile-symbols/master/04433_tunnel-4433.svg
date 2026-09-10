@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Heavy traveling steel arch formwork shutter with bold 5.0px stroke -->
+  <path d="M 22 76 C 22 30 78 30 78 76" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+  <!-- Internal traveler carriage with hydraulic collapsing cylinders with bold 4.5px strokes -->
+  <rect x="36" y="52" width="28" height="24" rx="2" fill="#1e293b" stroke="#000000" stroke-width="3.5"/>
+  <line x1="36" y1="52" x2="28" y2="44" stroke="#0284c7" stroke-width="4.5"/>
+  <line x1="64" y1="52" x2="72" y2="44" stroke="#0284c7" stroke-width="4.5"/>
+</svg>

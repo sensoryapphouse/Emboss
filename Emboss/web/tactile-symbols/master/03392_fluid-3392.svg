@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved convex solid body top with bold 4.5px stroke -->
+  <path d="M 22 34 C 44 34 68 46 76 74" fill="none" stroke="#000000" stroke-width="6.0" stroke-linecap="round"/>
+  <!-- Fluid jet clinging to convex contour with bold 4.5px stroke -->
+  <path d="M 22 46 C 42 46 60 56 68 76" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

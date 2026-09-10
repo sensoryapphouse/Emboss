@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Synchronized clock pulse train guaranteeing deterministic zero-jitter slots with bold 4.5px strokes -->
+  <line x1="18" y1="64" x2="82" y2="64" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 22 64 L 22 32 L 34 32 L 34 64 L 46 64 L 46 32 L 58 32 L 58 64 L 70 64 L 70 32 L 82 32" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

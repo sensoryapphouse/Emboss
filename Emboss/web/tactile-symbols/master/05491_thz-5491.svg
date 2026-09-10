@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Curved synchrotron electron orbit trajectory with bold 5.0px stroke -->
+  <path d="M 18 78 Q 38 40 78 22" fill="none" stroke="#000000" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Relativistic electron micro-bunch emitting coherent terahertz beam tangentially with bold 5.0px stroke -->
+  <circle cx="44" cy="44" r="6" fill="#ef4444"/>
+  <line x1="44" y1="44" x2="82" y2="58" stroke="#0284c7" stroke-width="5.0"/>
+</svg>

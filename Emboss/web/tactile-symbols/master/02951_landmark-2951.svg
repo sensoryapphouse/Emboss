@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Segmental stone bridge arch bottom with bold 4.5px stroke -->
+  <path d="M 20 74 C 36 56 64 56 80 74" fill="none" stroke="#8a5a2b" stroke-width="5.5"/>
+  <!-- Overhanging medieval shops on deck top with bold 4.0px strokes -->
+  <rect x="24" y="36" width="16" height="24" fill="#fed7aa" stroke="#000000" stroke-width="4.0"/>
+  <rect x="42" y="32" width="16" height="28" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <rect x="60" y="36" width="16" height="24" fill="#fed7aa" stroke="#000000" stroke-width="4.0"/>
+</svg>

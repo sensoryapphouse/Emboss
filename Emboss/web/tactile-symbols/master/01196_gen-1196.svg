@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Double intertwining sugar-phosphate strands -->
+  <path d="M 28 16 Q 50 32 72 16 M 72 16 Q 50 48 28 48 M 28 48 Q 50 80 72 80 M 72 80 Q 50 88 28 88" fill="none" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M 72 16 Q 50 32 28 16 M 28 16 Q 50 48 72 48 M 72 48 Q 50 80 28 80 M 28 80 Q 50 88 72 88" fill="none" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Horizontal base pair rungs -->
+  <line x1="36" y1="24" x2="64" y2="24" stroke="#ef4444" stroke-width="3.5"/>
+  <line x1="36" y1="56" x2="64" y2="56" stroke="#22c55e" stroke-width="3.5"/>
+  <line x1="36" y1="72" x2="64" y2="72" stroke="#facc15" stroke-width="3.5"/>
+</svg>

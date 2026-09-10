@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Open jagged bivalve bottom shell -->
+  <path d="M 22 58 C 22 78 78 78 78 58 Z" fill="#94a3b8" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Glowing round pearl inside -->
+  <circle cx="50" cy="56" r="10" fill="#ffffff" stroke="#000000" stroke-width="3.5"/>
+</svg>

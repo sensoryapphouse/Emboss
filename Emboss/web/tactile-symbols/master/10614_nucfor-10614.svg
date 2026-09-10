@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Vial with fluorescent cocktail between dual coincidence PMTs discriminating alpha from beta with bold 4.5px strokes -->
+  <rect x="38" y="28" width="24" height="44" rx="3" fill="#ca8a04" opacity="0.3" stroke="#000000" stroke-width="4.0"/>
+  <circle cx="24" cy="50" r="8" fill="#64748b" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="76" cy="50" r="8" fill="#64748b" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Axes -->
+  <line x1="20" y1="20" x2="20" y2="80" stroke="#000000" stroke-width="5.5"/>
+  <line x1="20" y1="80" x2="82" y2="80" stroke="#000000" stroke-width="5.5"/>
+  <!-- Planck distribution curve peaking at short wavelength with bold 5.0px stroke -->
+  <path d="M 20 80 C 28 24 38 24 50 56 C 60 72 74 78 80 80" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

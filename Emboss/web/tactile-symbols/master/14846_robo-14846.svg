@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Ring of mutually coupled neural oscillator nodes firing in rhythmic phase sequence with bold 4.5px strokes -->
+  <circle cx="34" cy="34" r="7" fill="#ef4444"/>
+  <circle cx="66" cy="34" r="7" fill="#0284c7"/>
+  <circle cx="66" cy="66" r="7" fill="#ef4444"/>
+  <circle cx="34" cy="66" r="7" fill="#0284c7"/>
+  <path d="M 34 34 L 66 34 L 66 66 L 34 66 Z" fill="none" stroke="#000000" stroke-width="4.5"/>
+</svg>

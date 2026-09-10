@@ -1,0 +1,11 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central rotating spacecraft hub with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="10" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Long positively charged +20kV wire tethers radiating outward with bold 4.5px strokes -->
+  <line x1="50" y1="40" x2="50" y2="16" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="50" y1="60" x2="50" y2="84" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="40" y1="50" x2="16" y2="50" stroke="#ef4444" stroke-width="4.5"/>
+  <line x1="60" y1="50" x2="84" y2="50" stroke="#ef4444" stroke-width="4.5"/>
+  <!-- Solar wind proton deflection electric field bubbles -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#0284c7" stroke-width="4.0" stroke-dasharray="6,3"/>
+</svg>

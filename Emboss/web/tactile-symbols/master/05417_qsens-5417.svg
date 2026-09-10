@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spherical noble gas (Xe-129) vapor cell with bold 5.0px stroke -->
+  <circle cx="50" cy="50" r="28" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Precessing nuclear magnetic dipole spin vector with bold 5.0px stroke -->
+  <line x1="50" y1="50" x2="68" y2="28" stroke="#ef4444" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Larmor precession cone ellipse around magnetic axis -->
+  <ellipse cx="60" cy="36" rx="14" ry="6" fill="none" stroke="#0284c7" stroke-width="3.5" transform="rotate(-40 60 36)"/>
+</svg>

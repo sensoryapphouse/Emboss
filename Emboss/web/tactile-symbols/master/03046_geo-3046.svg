@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Oceanic slab plunging diagonally downward right with bold 4.5px stroke -->
+  <polygon points="18,50 48,50 72,78 60,78 38,58 18,58" fill="#0284c7" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Overriding continental crust block top right with bold 4.5px stroke -->
+  <polygon points="48,46 82,46 82,68 62,68 52,54" fill="#8a5a2b" stroke="#000000" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Volcanic cone on continental crust with bold 4.0px stroke -->
+  <polygon points="66,46 72,34 78,46" fill="#ef4444" stroke="#000000" stroke-width="4.0" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Periodic metallic grating matching photon momentum to excite surface plasmon polaritons with bold 4.5px strokes -->
+  <rect x="20" y="56" width="60" height="18" fill="#ca8a04" stroke="#000000" stroke-width="4.0"/>
+  <line x1="28" y1="46" x2="28" y2="56" stroke="#000000" stroke-width="4.5"/>
+  <line x1="42" y1="46" x2="42" y2="56" stroke="#000000" stroke-width="4.5"/>
+  <line x1="56" y1="46" x2="56" y2="56" stroke="#000000" stroke-width="4.5"/>
+  <line x1="70" y1="46" x2="70" y2="56" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 30 24 L 50 46" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

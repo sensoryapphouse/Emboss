@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Water surface line -->
+  <line x1="12" y1="24" x2="88" y2="24" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Seabed mount column -->
+  <line x1="50" y1="50" x2="50" y2="88" stroke="#000000" stroke-width="5.0"/>
+  <!-- Submerged 2-blade tidal rotor -->
+  <circle cx="50" cy="50" r="6" fill="#000000"/>
+  <ellipse cx="50" cy="34" rx="6" ry="14" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+  <ellipse cx="50" cy="66" rx="6" ry="14" fill="#38bdf8" stroke="#000000" stroke-width="3.0"/>
+</svg>

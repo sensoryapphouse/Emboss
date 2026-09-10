@@ -1,0 +1,14 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Agarose gel slab border -->
+  <rect x="18" y="16" width="64" height="68" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Loading sample wells at top -->
+  <rect x="26" y="22" width="12" height="6" fill="#1e293b"/>
+  <rect x="44" y="22" width="12" height="6" fill="#1e293b"/>
+  <rect x="62" y="22" width="12" height="6" fill="#1e293b"/>
+  <!-- Migrated DNA fluorescent bands separated by size -->
+  <line x1="26" y1="38" x2="38" y2="38" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="26" y1="52" x2="38" y2="52" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="26" y1="68" x2="38" y2="68" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="44" y1="44" x2="56" y2="44" stroke="#38bdf8" stroke-width="4.0"/>
+  <line x1="62" y1="60" x2="74" y2="60" stroke="#38bdf8" stroke-width="4.0"/>
+</svg>

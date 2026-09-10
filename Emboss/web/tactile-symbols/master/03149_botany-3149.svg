@@ -1,0 +1,10 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Flower stigma left with bold 4.5px stroke -->
+  <path d="M 24 74 L 24 50 C 18 44 32 44 26 50" fill="none" stroke="#22c55e" stroke-width="5.5"/>
+  <!-- Honeybee pollinator body right with bold 4.5px stroke -->
+  <ellipse cx="64" cy="46" rx="14" ry="10" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <line x1="64" y1="36" x2="64" y2="56" stroke="#000000" stroke-width="4.0"/>
+  <!-- Transferred pollen grain particles with bold 3.5px strokes -->
+  <circle cx="36" cy="46" r="4" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+  <circle cx="46" cy="42" r="4" fill="#facc15" stroke="#000000" stroke-width="3.0"/>
+</svg>

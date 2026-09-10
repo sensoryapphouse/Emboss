@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- City building skyline with elevated thermal heat dome dome over urban center with bold 4.5px strokes -->
+  <rect x="22" y="54" width="14" height="24" fill="#64748b"/>
+  <rect x="42" y="40" width="16" height="38" fill="#64748b"/>
+  <rect x="64" y="50" width="14" height="28" fill="#64748b"/>
+  <path d="M 18 64 Q 50 20 82 64" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+</svg>

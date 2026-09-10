@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- High load servo-driven barrel with bold 4.5px stroke -->
+  <rect x="30" y="22" width="40" height="54" rx="4" fill="#ffffff" stroke="#000000" stroke-width="4.5"/>
+  <!-- Pressure transducer sensor port side with bold 4.0px stroke -->
+  <rect x="70" y="44" width="12" height="10" fill="#0284c7"/>
+  <!-- Precision tungsten capillary orifice die bottom with bold 4.5px stroke -->
+  <rect x="44" y="76" width="12" height="10" fill="#1e293b"/>
+</svg>

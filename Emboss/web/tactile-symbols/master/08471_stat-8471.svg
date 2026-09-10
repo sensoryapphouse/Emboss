@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Spanning continuous percolation path connecting top to bottom across porous grid with bold 4.5px strokes -->
+  <rect x="22" y="22" width="56" height="56" fill="none" stroke="#000000" stroke-width="4.5"/>
+  <path d="M 50 22 L 50 40 L 36 40 L 36 60 L 64 60 L 64 78" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+</svg>

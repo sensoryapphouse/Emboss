@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Yellow syntactic foam flotation pack top with bold 4.5px stroke -->
+  <rect x="22" y="24" width="56" height="20" rx="4" fill="#facc15" stroke="#000000" stroke-width="4.0"/>
+  <!-- Open aluminum equipment frame with bold 4.5px stroke -->
+  <rect x="26" y="44" width="48" height="24" rx="2" fill="#ffffff" stroke="#000000" stroke-width="4.0"/>
+  <!-- Hydraulic manipulator arm extending right with bold 4.5px stroke -->
+  <polyline points="74,52 86,60 82,72" fill="none" stroke="#ef4444" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

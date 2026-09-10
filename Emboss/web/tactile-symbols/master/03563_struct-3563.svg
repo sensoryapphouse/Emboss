@@ -1,0 +1,9 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Concrete beam profile with bold 4.5px stroke -->
+  <rect x="18" y="38" width="64" height="24" fill="#cbd5e1" stroke="#000000" stroke-width="4.5"/>
+  <!-- High-strength steel pre-tensioning parabolic tendon line with bold 4.5px stroke -->
+  <path d="M 18 42 Q 50 56 82 42" fill="none" stroke="#ef4444" stroke-width="5.0"/>
+  <!-- End anchor wedges -->
+  <polygon points="18,38 24,42 18,46" fill="#1e293b"/>
+  <polygon points="82,38 76,42 82,46" fill="#1e293b"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Non-holonomic vehicle motion trajectory maneuvering through obstacle grid with bold 4.5px strokes -->
+  <path d="M 22 74 Q 40 74 46 50 Q 52 26 78 26" fill="none" stroke="#ef4444" stroke-width="5.5"/>
+  <rect x="22" y="32" width="14" height="14" fill="#64748b"/>
+  <rect x="64" y="54" width="14" height="14" fill="#64748b"/>
+</svg>

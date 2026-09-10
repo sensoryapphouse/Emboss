@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Active river sinuous channel -->
+  <path d="M 16 22 C 44 22 44 54 20 54 C 44 54 44 82 16 82" fill="none" stroke="#0284c7" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Abandoned cutoff oxbow loop right -->
+  <path d="M 52 38 C 78 38 78 68 52 68" fill="none" stroke="#0284c7" stroke-width="5.0" stroke-linecap="round"/>
+</svg>

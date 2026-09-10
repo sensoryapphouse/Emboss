@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Uranus spinning on its side with horizontal equator and vertical orbital plane with bold 4.5px strokes -->
+  <circle cx="50" cy="50" r="22" fill="#0284c7" stroke="#000000" stroke-width="4.5"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#ef4444" stroke-width="5.0"/>
+  <ellipse cx="50" cy="50" rx="6" ry="28" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+</svg>

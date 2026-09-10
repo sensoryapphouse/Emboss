@@ -1,0 +1,8 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Optical axis beam path -->
+  <line x1="14" y1="50" x2="86" y2="50" stroke="#000000" stroke-width="4.5"/>
+  <!-- Central opaque Lyot occulting spot disk blocking host starlight -->
+  <circle cx="50" cy="50" r="10" fill="#000000" stroke="#000000" stroke-width="3.0"/>
+  <!-- Faint orbiting exoplanet signal passing around mask -->
+  <circle cx="76" cy="32" r="5" fill="#38bdf8" stroke="#000000" stroke-width="2.5"/>
+</svg>

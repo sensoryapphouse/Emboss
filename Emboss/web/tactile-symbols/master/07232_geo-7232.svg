@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Continental crust flexing upward following ice sheet retreat with bold 4.5px strokes -->
+  <path d="M 18 64 Q 50 40 82 64" fill="none" stroke="#0284c7" stroke-width="5.5"/>
+  <line x1="50" y1="60" x2="50" y2="30" stroke="#ef4444" stroke-width="5.0"/>
+  <polygon points="50,22 42,32 58,32" fill="#ef4444"/>
+</svg>

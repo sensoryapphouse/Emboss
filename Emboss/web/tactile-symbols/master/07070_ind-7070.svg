@@ -1,0 +1,5 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Square wave quadrature pulses with 90-degree phase shift with bold 4.5px strokes -->
+  <path d="M 20 38 L 32 38 L 32 24 L 44 24 L 44 38 L 56 38 L 56 24 L 68 24 L 68 38 L 80 38" fill="none" stroke="#0284c7" stroke-width="4.5"/>
+  <path d="M 20 72 L 26 72 L 26 58 L 38 58 L 38 72 L 50 72 L 50 58 L 62 58 L 62 72 L 74 72 L 74 58 L 80 58" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

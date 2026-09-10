@@ -1,0 +1,7 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Core H-antigen fucose modified by terminal GalNAc (A-antigen) or Gal (B-antigen) with bold 4.5px strokes -->
+  <line x1="20" y1="64" x2="60" y2="64" stroke="#000000" stroke-width="5.0"/>
+  <polygon points="40,64 50,46 30,46" fill="#ef4444" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="60" cy="64" r="8" fill="#ca8a04" stroke="#000000" stroke-width="3.5"/>
+  <circle cx="78" cy="64" r="8" fill="#0284c7" stroke="#000000" stroke-width="3.5"/>
+</svg>

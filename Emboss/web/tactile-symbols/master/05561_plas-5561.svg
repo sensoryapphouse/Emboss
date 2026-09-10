@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Rolling shear interface curling into Cat's-Eye vortex with bold 5.0px stroke -->
+  <path d="M 16 66 C 30 66 40 40 50 50 C 60 60 70 34 84 34" fill="none" stroke="#000000" stroke-width="5.0"/>
+  <!-- Swirling vortex eye core in center with bold 4.5px stroke -->
+  <circle cx="50" cy="50" r="10" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+</svg>

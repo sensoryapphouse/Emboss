@@ -1,0 +1,6 @@
+<svg data-copyright="© 2026 Sensory App House Ltd" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 100 100" width="100" height="100">
+  <!-- Double well energy potential landscape with quantum wavefunction tunneling through central barrier with bold 4.5px strokes -->
+  <path d="M 20 30 Q 34 76 50 50 Q 66 76 80 30" stroke="#000000" stroke-width="5.0" fill="none"/>
+  <circle cx="34" cy="68" r="5" fill="#ef4444"/>
+  <line x1="34" y1="68" x2="66" y2="68" stroke="#0284c7" stroke-width="4.5" stroke-dasharray="3,3"/>
+</svg>
