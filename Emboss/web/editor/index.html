@@ -847,9 +847,16 @@
       outline-offset: 1px;
     }
 
+    .braille-view-tabs {
+      display: inline-flex;
+      gap: 3px;
+      align-items: center;
+      flex-shrink: 0;
+    }
     .braille-view-tabs .tab-btn {
-      padding: 3px 10px;
-      font-size: 0.82rem;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      height: 26px;
       font-weight: 600;
       border-radius: 6px;
       background: transparent;
@@ -858,7 +865,10 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: auto;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
     .braille-view-tabs .tab-btn:hover {
