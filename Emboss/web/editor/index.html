@@ -1579,7 +1579,7 @@
     </form>
   </dialog>
 
-  <dialog id="helpDialog" class="dialog">
+  <dialog id="helpDialog" class="dialog" style="max-width: 860px;">
     <div class="dialog-body">
       <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" aria-label="Close">✕</button></div>
       <div class="help-content">
@@ -1587,9 +1587,94 @@
         <p>Emboss provides two integrated operating modes, sharing your translation standards, language tables, contraction grades, and page geometry:</p>
         <ul>
           <li><strong>Quick Mode (Simple Converter)</strong> — The fast route for converting existing documents: drag and drop Word (<code>.docx</code>), Markdown (<code>.md</code>), NIMAS XML (<code>.xml / .nimas / .dtbook</code>), EPUB, ODT, HTML, RTF, or plain text to produce an embosser-ready <strong>BRF</strong> instantly.</li>
-          <li><strong>Advanced Direct Braille Editor (This Screen)</strong> — Write, format, and edit with real-time bidirectional print↔braille synchronization, mathematical equations, formula templates, spatial tables, tactile diagrams, Perkins 6-key chording, read-aloud speech, automated proofreading, and driverless hardware spooling.</li>
+          <li><strong>Advanced Direct Braille Editor (This Screen)</strong> — Write, format, and edit with real-time bidirectional print↔braille synchronization, mathematical equations, formula templates, spatial tables, tactile diagrams, 6-key braille chording, read-aloud speech, automated proofreading, and driverless hardware spooling.</li>
         </ul>
         <p>Switch back to Quick Mode at any time by clicking <strong>← Quick&nbsp;Mode</strong> in the top header.</p>
+
+        <h3>📝 Print Text Editor &amp; Formatting Tools (Left Pane)</h3>
+        <p>The print pane provides a full-featured accessible rich text editor powered by Lexical. Typing or modifying content updates the braille representation on the right in real time:</p>
+        <ul>
+          <li><strong>Paragraph Styles Menu (¶ Body):</strong> Select standard styles from the dropdown or use slash commands:
+            <ul>
+              <li><strong>Heading 1 (<kbd>/h1</kbd>):</strong> Major title, centered in braille (BANA / UKAAF).</li>
+              <li><strong>Heading 2 (<kbd>/h2</kbd>):</strong> Section heading with 5-5 margin indents.</li>
+              <li><strong>Heading 3 (<kbd>/h3</kbd>):</strong> Subsection heading with 5-5 margin indents.</li>
+              <li><strong>Body Text (<kbd>/p</kbd>):</strong> Standard paragraph with 3-1 margin indents (first line cell 3, runovers cell 1).</li>
+              <li><strong>Bulleted List (<kbd>/ul</kbd>) &amp; Numbered List (<kbd>/ol</kbd>):</strong> List items with 1-3 margin indents.</li>
+              <li><strong>Blockquote (<kbd>/quote</kbd>):</strong> Indented quote block with 3-3 margins.</li>
+              <li><strong>Exercise (<kbd>/exercise</kbd>):</strong> Educational question/exercise with 1-5 margin indents.</li>
+              <li><strong>Footnote (<kbd>/footnote</kbd>):</strong> Footnote block with 1-3 margins.</li>
+              <li><strong>Computer Code (<kbd>/code</kbd>):</strong> Code passage enclosed in UEB computer code indicators (<code>;#</code>).</li>
+            </ul>
+          </li>
+          <li><strong>Typeform Formatting:</strong> Apply Bold (<kbd>Ctrl/⌘ B</kbd>), Italic (<kbd>Ctrl/⌘ I</kbd>), and Underline (<kbd>Ctrl/⌘ U</kbd>). Emboss transcribes these into authentic UEB typeform indicators.</li>
+          <li><strong>Markdown Shortcuts:</strong> Type Markdown prefixes directly in the print editor for quick formatting:
+            <ul>
+              <li><code># </code> Heading 1 · <code>## </code> Heading 2 · <code>### </code> Heading 3</li>
+              <li><code>* </code> or <code>- </code> Bulleted list · <code>1. </code> Numbered list</li>
+              <li><code>&gt; </code> Blockquote · <code>``` </code> Code block</li>
+              <li><code>$x+1$</code> Inline equation · <code>$$x^2+y^2=r^2$$</code> Display equation</li>
+            </ul>
+          </li>
+          <li><strong>Interactive Table of Contents (☐ TOC):</strong> Clicking <strong>☐ TOC</strong> in the top header automatically parses all headings and displays a collapsible, interactive outline above the editor for instant navigation across large documents.</li>
+          <li><strong>Continuous Proofreading &amp; Contraction Inspection:</strong> Emboss continuously back-translates every line; words with contraction ambiguities or discrepancies are flagged with a gentle wavy underline. Hover over any word or press <kbd>Ctrl/⌘ ⇧ D</kbd> to view its exact contraction rule breakdown.</li>
+          <li><strong>Synchronized Speech &amp; Word Lighting:</strong> Click <strong>▶ Read</strong> or press <kbd>Ctrl/⌘ ⇧ Space</kbd> to listen to the document read aloud with synchronized highlighting across both print and braille panes.</li>
+        </ul>
+
+        <h3>➕ Insert Menu: Equations, Templates, Tables, Graphics &amp; Breaks</h3>
+        <ul>
+          <li><strong>∑ — Equation (<kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd>):</strong> Visual MathLive equation editor transcribed to <strong>UEB maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA) via MathCAT with automatic code switch indicators.</li>
+          <li><strong>🧮 — Templates (<kbd>/formula</kbd>):</strong> 346 searchable equations across 16 STEM categories (Algebra, Calculus, Geometry, Trigonometry, Linear Algebra, Physics, Chemistry, etc.) with math previews and spoken audio descriptions.</li>
+          <li><strong>📊 — Table (<kbd>/table</kbd>):</strong> Insert spatial braille data tables with interactive row/column tools. Formats as BANA §11 / UKAAF §8 Spatial Columnar tables with column headers, guide lines, and 2-cell gutters, or auto-adapts to Listed Table format on narrow widths.</li>
+          <li><strong>🖼 — Graphic (<kbd>/graphic</kbd>):</strong> Insert curated STEM and educational diagrams from the 1,731-symbol library or upload custom SVG vectors. Maps colors to tactile textures and transcribes labels to Braille with protective halos.</li>
+          <li><strong>📄 — Print Page (<kbd>/page</kbd>):</strong> Inserts source textbook print page breaks with BANA continuous leaders or UKAAF <code>⠐⠤</code> page change lines.</li>
+          <li><strong>⁂ — Break (<kbd>/break</kbd>):</strong> Inserts formal section dividers ( ∗ ∗ ∗ ).</li>
+          <li><strong>⠼⠋ — 6-Key Braille Input (<kbd>Ctrl/⌘ ⇧ K</kbd>):</strong> Type chords directly using home keys <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6) in either the print or braille pane.</li>
+        </ul>
+
+        <h3>⠿ Braille Editor Pane &amp; Dedicated Toolbar (Right Pane)</h3>
+        <p>The Braille pane on the right is an active, two-way interactive braille editor—not just a static preview. You can type, delete, reformat, and touch up braille cells directly:</p>
+        <ul>
+          <li><strong>Bidirectional Synchronization &amp; Reverse Translation:</strong> When you edit cells in the Braille pane (via keyboard, 6-key chording, or pasting BRF), Emboss automatically back-translates the braille and reconciles the print text and document structure on the left in real time.</li>
+          <li><strong>Cell-Level Interactive Linking:</strong> Click any braille cell or print word to highlight its exact corresponding counterpart in the opposite pane.</li>
+          <li><strong>Braille Toolbar Controls (Top of Braille Pane):</strong>
+            <ul>
+              <li><strong>Margin Preset Selector (<code>3-1 Paragraph</code>, <code>Centered</code>, <code>5-5 Subheading</code>, <code>1-3 List</code>, <code>1-5 Exercise</code>):</strong> Instantly adjust the margin indents of the current braille line to match official BANA / UKAAF rules without switching panes.</li>
+              <li><strong>Line &amp; Cell Coordinate Badge (<code>L1, C1/40</code>):</strong> Real-time cursor coordinate badge showing your exact line number on the page and column cell position relative to the maximum page width.</li>
+              <li><strong>Sync Status Indicator (<span style="color:#10b981;">●</span> Synced):</strong> Visual indicator confirming that the print document and braille stream are in complete synchronization.</li>
+              <li><strong>Structural Validation Badge (<code>✓ Valid</code>):</strong> Live structural checker verifying heading placement, blank line rules, transcriber note closures, and page line budgets.</li>
+              <li><strong><code>INS</code> / <code>OVR</code> Mode Toggle:</strong> Switch between standard text insertion (<code>INS</code>) and cell overwrite mode (<code>OVR</code>)—ideal for editing spatial math matrices and aligned braille tables.</li>
+              <li><strong><code>BRF</code> / Unicode Toggle:</strong> Switch the display between tactile 6-dot Unicode braille (<code>⠓⠑⠇⠇⠕</code>) and North American Braille ASCII (<code>HELLO</code> / <code>,HLL</code>) for hardware displays.</li>
+              <li><strong>6-Key Braille Button (<code>⠼⠋</code>):</strong> Enable 6-key braille chording directly into the raw braille pane using <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6).</li>
+            </ul>
+          </li>
+          <li><strong>Braille Slash Menu:</strong> Type <kbd>/</kbd> directly in the braille pane to open a dedicated braille command menu for inserting BANA boxlines (<code>333 / 777</code>), transcriber notes (<code>. , ... ,.</code>), page change lines, and spatial tables.</li>
+        </ul>
+
+        <h3>📊 Spatial Tables &amp; Listed Formats (BANA §11 / UKAAF §8)</h3>
+        <ul>
+          <li><strong>Automatic Layout Selection:</strong> Emboss automatically calculates the width required for each column (including 2-cell blank gutters) and generates a <strong>Spatial Columnar Table</strong> with aligned columns and separator guide lines.</li>
+          <li><strong>Listed Table Format Fallback:</strong> When a table has too many columns to fit the configured page width, Emboss automatically reformats it into the official <strong>Listed Table Format</strong> (UKAAF §8 / BANA §11), presenting each row as a structured list entry with column headers as field labels.</li>
+        </ul>
+
+        <h3>🖼 Tactile Graphics, Anti-Slicing RIP &amp; Dynamic Displays</h3>
+        <ul>
+          <li><strong>Page-Boundary Anti-Slicing:</strong> Emboss automatically calculates tactile diagram heights and inserts page breaks before diagrams that would otherwise be sliced across braille sheets, ensuring every diagram starts cleanly on Line 1 of the following sheet.</li>
+          <li><strong>Multi-Height 3D Tiger RIP (ViewPlus Columbia / PixBlaster):</strong> Rasterizes vector SVGs into 8 distinct physical dot elevations (Heights 0–7) with 3D tactile relief for outlines, curves, and textures.</li>
+          <li><strong>Index Braille Floating-Dot Matrix:</strong> Encodes high-resolution dot-matrix packets via native <code>ESC +g</code> graphics streams.</li>
+          <li><strong>Swell Paper / Capsule Paper (PIAF &amp; Zy-Fuse):</strong> Renders crisp carbon-black vector outlines with 100% white background stripping for micro-capsule heat-expansion.</li>
+          <li><strong>APH Monarch (32 cells × 10 lines):</strong> Direct driverless 10-line multiline braille terminal streaming and eBraille package deployment.</li>
+          <li><strong>DotPad 320 Dynamic Display:</strong> Built-in 60×40 pin array simulator and direct Web Bluetooth (BLE) / WebHID connectivity.</li>
+        </ul>
+
+        <h3>🖨 Modern Driverless Embosser Hardware (Universal Spooler)</h3>
+        <p>Emboss allows you to spool documents directly to braille embossers from Chrome, Edge, and Opera without installing proprietary drivers or utilities:</p>
+        <ul>
+          <li><strong>1. Wireless Bluetooth Low Energy (Web Bluetooth):</strong> Direct pairing with ESP32-S3, RP2350, nRF52, or Nordic UART bridges via Custom GATT Profile (<code>0xFEB0</code>) with adaptive MTU packet chunking (128–512 bytes) and live telemetry notifications.</li>
+          <li><strong>2. Universal Driverless USB (WebHID):</strong> Eliminates Windows <code>usbprint.sys</code> and macOS CUPS kernel driver lockouts by streaming directly through user-space HID output reports for ESP32-S3, RP2040/RP2350, STM32, Arduino, Index Braille V5, and ViewPlus.</li>
+          <li><strong>3. Network REST / WebSockets / IP:</strong> Direct local IP spooling via HTTP POST (<code>/api/print</code>) or network socket bridges with real-time status feedback.</li>
+          <li><strong>4. USB Serial (WebSerial):</strong> Virtual COM port communication with automatic hardware profile identification (Index, ViewPlus, Romeo/Juliet, Braillo, Custom MCUs).</li>
+        </ul>
 
         <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
         <p>Emboss is fully internationalized to support transcribers, educators, and blind students worldwide:</p>
@@ -1597,15 +1682,6 @@
           <li><strong>112 Interface Languages:</strong> Switch the complete user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) into 112 languages via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. Common languages (English, Spanish, French, and your local system language) are pinned to the top of the list for quick access.</li>
           <li><strong>Native Right-to-Left (RTL) Support:</strong> When selecting Arabic, Hebrew, Persian, or Urdu, the entire editor layout and document panes automatically adjust to Right-to-Left orientation with mirrored toolbars and bidirectional caret tracking.</li>
           <li><strong>142+ Document Braille Codes:</strong> Independently select your document's braille translation tables and contraction level (UEB Grade 1/2, Spanish, French, German, Arabic, Welsh, Gaelic, Hindi, Chinese, etc.) in <strong>Settings ⚙ &gt; Rules &amp; Standards</strong>.</li>
-        </ul>
-
-        <h3>Writing, Formatting &amp; Live Synchronisation</h3>
-        <p>Type in the print pane on the left, and your formatted braille generates live on the right. Structure is what matters: real headings become braille headings; real lists become braille lists.</p>
-        <ul>
-          <li><strong>Paragraph Styles (¶ Body):</strong> Apply standard styles from the toolbar or with slash commands: Heading 1 (<kbd>/h1</kbd>), Heading 2 (<kbd>/h2</kbd>), Heading 3 (<kbd>/h3</kbd>), Bulleted List (<kbd>/ul</kbd>), Numbered List (<kbd>/ol</kbd>), Blockquote (<kbd>/quote</kbd>), Exercise (<kbd>/exercise</kbd>), and Footnotes (<kbd>/footnote</kbd>).</li>
-          <li><strong>Typeform Emphasis (B / I / U):</strong> Bold (<kbd>Ctrl/⌘ B</kbd>), Italic (<kbd>Ctrl/⌘ I</kbd>), and Underline (<kbd>Ctrl/⌘ U</kbd>) are transcribed faithfully to authentic UEB typeform indicators.</li>
-          <li><strong>Bidirectional Cell-Level Linking:</strong> Click any word, equation, or list item in either pane to highlight its exact matching cells in the other pane.</li>
-          <li><strong>Continuous Proofreading &amp; Contraction Inspection:</strong> Emboss back-translates every line continuously; lines with discrepancies are flagged with a gentle wavy underline. Hover over any flagged word or press <kbd>Ctrl/⌘ ⇧ D</kbd> to inspect its contraction breakdown.</li>
         </ul>
 
         <h3>Top Header Controls &amp; Deliverables</h3>
@@ -1632,46 +1708,6 @@
           <li><strong>🖨 Emboss:</strong> Direct hardware spooling across USB, Bluetooth BLE, WebHID, and Network.</li>
         </ul>
 
-        <h3>➕ Insert Menu: Equations, Templates, Tables, Graphics &amp; Breaks</h3>
-        <ul>
-          <li><strong>∑ — Equation (<kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd>):</strong> Visual MathLive equation editor transcribed to <strong>UEB maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA) via MathCAT with automatic code switch indicators.</li>
-          <li><strong>🧮 — Templates (<kbd>/formula</kbd>):</strong> 346 searchable equations across 16 STEM categories (Algebra, Calculus, Geometry, Trigonometry, Linear Algebra, Physics, Chemistry, etc.) with math previews and spoken audio descriptions.</li>
-          <li><strong>📊 — Table (<kbd>/table</kbd>):</strong> Insert spatial braille data tables with interactive row/column tools. Formats as BANA §11 / UKAAF §8 Spatial Columnar tables with column headers, guide lines, and 2-cell gutters, or auto-adapts to Listed Table format on narrow widths.</li>
-          <li><strong>🖼 — Graphic (<kbd>/graphic</kbd>):</strong> Insert curated STEM and educational diagrams from the 1,731-symbol library or upload custom SVG vectors. Maps colors to tactile textures and transcribes labels to Braille with protective halos.</li>
-          <li><strong>📄 — Print Page (<kbd>/page</kbd>):</strong> Inserts source textbook print page breaks with BANA continuous leaders or UKAAF <code>⠐⠤</code> page change lines.</li>
-          <li><strong>⁂ — Break (<kbd>/break</kbd>):</strong> Inserts formal section dividers ( ∗ ∗ ∗ ).</li>
-          <li><strong>⠼⠋ — Perkins 6-Key Input (<kbd>Ctrl/⌘ ⇧ K</kbd>):</strong> Type chords directly using home keys <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6) in either the print or braille pane.</li>
-        </ul>
-
-        <h3>📐 Advanced Formatting Standards (BANA Formats 2016 &amp; UKAAF B004)</h3>
-        <ul>
-          <li><strong>Footnotes &amp; Endnotes (BANA §12):</strong> Formatted with 1-3 margin indents (first cell 1, runovers cell 3) preceded by a blank line.</li>
-          <li><strong>Transcriber's Notes (BANA §3 / UKAAF):</strong> Formatted with 3-1 margins and enclosed in official braille transcriber note indicators (<code>TN_OPEN</code> / <code>TN_CLOSE</code>).</li>
-          <li><strong>Boxlines (BANA §12):</strong> Enclosed in top borders of dots 2-5 (<code>333 Title 333</code>) and bottom borders of dots 2-3-5-6 (<code>777</code>).</li>
-          <li><strong>Play / Drama Dialogue &amp; Stage Directions (BANA §13):</strong> Character dialogues format with 1-5 or 1-3 margins; stage directions format with 7-7 or 9-7 margins.</li>
-          <li><strong>Poetry &amp; Verse (BANA §13):</strong> Formatted with 1-3 margins for verse stanzas with runovers.</li>
-          <li><strong>Glossaries &amp; Definitions (BANA §19):</strong> Definition lists formatted with 1-3 margins and proper punctuation handling.</li>
-        </ul>
-
-        <h3>🖼 Tactile Graphics, Anti-Slicing RIP &amp; Dynamic Displays</h3>
-        <ul>
-          <li><strong>Page-Boundary Anti-Slicing:</strong> Emboss automatically calculates tactile diagram heights and inserts page breaks before diagrams that would otherwise be sliced across braille sheets, ensuring every diagram starts cleanly on Line 1 of the following sheet.</li>
-          <li><strong>Multi-Height 3D Tiger RIP (ViewPlus Columbia / PixBlaster):</strong> Rasterizes vector SVGs into 8 distinct physical dot elevations (Heights 0–7) with 3D tactile relief for outlines, curves, and textures.</li>
-          <li><strong>Index Braille Floating-Dot Matrix:</strong> Encodes high-resolution dot-matrix packets via native <code>ESC +g</code> graphics streams.</li>
-          <li><strong>Swell Paper / Capsule Paper (PIAF &amp; Zy-Fuse):</strong> Renders crisp carbon-black vector outlines with 100% white background stripping for micro-capsule heat-expansion.</li>
-          <li><strong>APH Monarch (32 cells × 10 lines):</strong> Direct driverless 10-line multiline braille terminal streaming and eBraille package deployment.</li>
-          <li><strong>DotPad 320 Dynamic Display:</strong> Built-in 60×40 pin array simulator and direct Web Bluetooth (BLE) / WebHID connectivity.</li>
-        </ul>
-
-        <h3>🖨 Modern Driverless Embosser Hardware (Universal Spooler)</h3>
-        <p>Emboss allows you to spool documents directly to braille embossers from Chrome, Edge, and Opera without installing proprietary drivers or utilities:</p>
-        <ul>
-          <li><strong>1. Wireless Bluetooth Low Energy (Web Bluetooth):</strong> Direct pairing with ESP32-S3, RP2350, nRF52, or Nordic UART bridges via Custom GATT Profile (<code>0xFEB0</code>) with adaptive MTU packet chunking (128–512 bytes) and live telemetry notifications.</li>
-          <li><strong>2. Universal Driverless USB (WebHID):</strong> Eliminates Windows <code>usbprint.sys</code> and macOS CUPS kernel driver lockouts by streaming directly through user-space HID output reports for ESP32-S3, RP2040/RP2350, STM32, Arduino, Index Braille V5, and ViewPlus.</li>
-          <li><strong>3. Network REST / WebSockets / IP:</strong> Direct local IP spooling via HTTP POST (<code>/api/print</code>) or network socket bridges with real-time status feedback.</li>
-          <li><strong>4. USB Serial (WebSerial):</strong> Virtual COM port communication with automatic hardware profile identification (Index, ViewPlus, Romeo/Juliet, Braillo, Custom MCUs).</li>
-        </ul>
-
         <h3>⌨️ Keyboard Shortcuts &amp; Slash Commands Cheat Sheet</h3>
         <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:.86rem;">
           <thead>
@@ -1685,7 +1721,7 @@
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ Z</kbd> / <kbd>Ctrl/⌘ ⇧ Z</kbd></td><td>Undo / Redo document edit</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ B</kbd> / <kbd>I</kbd> / <kbd>U</kbd></td><td>Bold / Italic / Underline typeform emphasis</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd></td><td>Insert visual MathLive equation</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ K</kbd></td><td>Toggle Perkins 6-key braille chording</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ K</kbd></td><td>Toggle 6-key braille chording</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ Space</kbd></td><td>Start / stop synchronized text &amp; math speech</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ D</kbd></td><td>Describe braille contraction at cursor</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/h1</kbd>, <kbd>/h2</kbd>, <kbd>/h3</kbd>, <kbd>/p</kbd></td><td>Convert block to Heading 1–3 or Paragraph</td></tr>
