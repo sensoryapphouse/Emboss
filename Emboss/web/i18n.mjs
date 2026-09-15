@@ -150,7 +150,7 @@ async function loadLocaleDictionary(code) {
     ];
     for (const p of candidatePaths) {
       try {
-        const res = await fetch(p);
+        const res = await fetch(`${p}?v=20260915_171500`, { cache: 'no-cache' });
         if (res.ok) {
           const dict = await res.json();
           localeCache.set(normalized, dict);

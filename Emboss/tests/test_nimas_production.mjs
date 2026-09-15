@@ -308,6 +308,8 @@ check('Lexical editor root holds all top-level blocks', lexicalChildrenCount ===
 // -------------------------------------------------------------
 // Section 6: Full Document BANA Braille Formatting Benchmark
 // -------------------------------------------------------------
+// Section 6: Full Document BANA Braille Formatting Benchmark
+// -------------------------------------------------------------
 console.log('\n--- Section 6: Full Document BANA Braille Formatting ---');
 const tBrl = performance.now();
 const brailleDoc = formatDocument(doc1, {
@@ -328,7 +330,76 @@ check('Full document formats to Braille without errors', pages.length > 500, `Ge
 check('Top boxlines present across Braille output', brailleDoc.includes('333'), 'Boxlines formatted');
 check('Bottom boxlines present across Braille output', brailleDoc.includes('7777777'), 'Bottom boxlines formatted');
 
+// -------------------------------------------------------------
+// Section 7: TOC Coordinate Tracing & Word Sync Verification
+// -------------------------------------------------------------
+console.log('\n--- Section 7: TOC Coordinate Tracing & Word Sync ---');
+const tTrace = performance.now();
+const traceObj = {};
+const brailleDocTraced = formatDocument(doc1, {
+  translate: (s) => s.toUpperCase(),
+  translatePos: (s) => ({ text: s.toUpperCase(), map: Array.from({ length: s.length }, (_, i) => i) }),
+  width: 40,
+  depth: 25,
+  cells: 40,
+  lines: 25,
+  mode: 'bana',
+  standard: 'bana',
+  trace: traceObj
+});
+const traceTime = performance.now() - tTrace;
+console.log(`Traced full document coordinates in ${traceTime.toFixed(2)} ms`);
+
+check('Trace result generated rows and rowCells', Array.isArray(traceObj.rows) && Array.isArray(traceObj.rowCells));
+
+// Find TOC list block with "Big Things Come in Small Packages"
+let tocBlockIdx = -1;
+let tocBlock = null;
+for (let i = 0; i < doc1.blocks.length; i++) {
+  const b = doc1.blocks[i];
+  if (b.type === 'list' && b.kind === 'toc' && Array.isArray(b.items)) {
+    const hasTarget = b.items.some(it => (it.title || it.text || '').includes('Big Things Come in Small Packages'));
+    if (hasTarget) {
+      tocBlockIdx = i;
+      tocBlock = b;
+      break;
+    }
+  }
+}
+
+check('Found target TOC list block with "Big Things Come in Small Packages"', tocBlockIdx >= 0, `Block ${tocBlockIdx}`);
+
+if (tocBlockIdx >= 0) {
+  // Find all rows corresponding to this TOC block
+  const tocRows = [];
+  for (let r = 0; r < traceObj.rows.length; r++) {
+    if (traceObj.rows[r] === tocBlockIdx) {
+      tocRows.push({ rowIdx: r, cells: traceObj.rowCells[r] });
+    }
+  }
+  
+  check('TOC block generated braille rows with coordinates', tocRows.length > 0, `${tocRows.length} rows`);
+  
+  let validCellCount = 0;
+  let hasNullRow = false;
+  for (const row of tocRows) {
+    if (!row.cells || !Array.isArray(row.cells)) {
+      hasNullRow = true;
+    } else {
+      for (const c of row.cells) {
+        if (c && typeof c.u === 'number' && typeof c.c === 'number') {
+          validCellCount++;
+        }
+      }
+    }
+  }
+  
+  check('TOC coordinate array is intact (no null / corrupted srcs)', !hasNullRow);
+  check('TOC braille cells have valid character-level trace coordinates', validCellCount > 100, `${validCellCount} cells linked`);
+}
+
 console.log(`\n=============================================================`);
 console.log(`  Production Scale Test Results: ${pass} passed, ${fail} failed.`);
 console.log(`=============================================================\n`);
 process.exit(fail ? 1 : 0);
+

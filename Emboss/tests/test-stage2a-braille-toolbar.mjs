@@ -150,10 +150,11 @@ const ok = (name, cond, got = '') => {
   ok('btnBrlInsertMode toggles to OVR', r4.label2 === 'OVR', r4);
 
   // Test 5: Overwrite mode functionality (6-key chording)
+  await new Promise((r) => setTimeout(r, 150));
   const r5 = await page.evaluate(() => {
     const input = document.getElementById('brlInput');
-    input.value = '⠁⠃⠉';
     input.focus();
+    input.value = '⠁⠃⠉';
     input.setSelectionRange(1, 1); // at '⠃'
 
     // Type Dot 4 (KeyJ -> '⠈') with 6-key

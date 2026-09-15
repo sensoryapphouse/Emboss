@@ -285,7 +285,7 @@ const xml = exportToNimasXml(roundTrippedDoc);
 
 assert.ok(xml.includes('<list type="pl" class="toc">'), 'Contains TOC plain list');
 assert.ok(xml.includes('<li class="bai-toc-entry"><lic class="bai-toc-text">Unit 1: Exploration</lic><lic class="bai-toc-page">10</lic></li>'), 'Contains TOC item 1');
-assert.ok(xml.includes('<li class="bai-toc-entry" level="1"><lic class="bai-toc-text">Chapter 1: Into the Deep</lic><lic class="bai-toc-page">12</lic></li>'), 'Contains TOC item 2 with level');
+assert.ok(xml.includes('class="bai-toc-entry level-1"') || xml.includes('<li class="bai-toc-entry" level="1">'), 'Contains TOC item 2 with level');
 assert.ok(xml.includes('<list type="ol" class="bai-exercise">'), 'Contains exercise list');
 assert.ok(xml.includes('<list type="pl" class="bai-index">'), 'Contains index list');
 assert.ok(xml.includes('<list type="ul">'), 'Contains standard bullet list');

@@ -15,6 +15,7 @@ import { exportToEbraille } from '/format/ebraille.mjs';
 import { tactileDisplay } from '/format/tactile-display.mjs';
 import { CODES } from '/Translate/braille-codes.mjs';
 import { setHandoffDoc } from '/web/handoff-db.mjs';
+import { initI18n, t, setLocale, getLocale, getOrderedLocales, translateDOM } from '/web/i18n.mjs';
 
 // If the user turned Simple mode OFF, this page is the editor's — go there.
 if (!loadSettings().simpleMode) location.replace('/web/editor/index.html');
@@ -113,6 +114,22 @@ function populateLanguageDropdown() {
   }
 }
 
+function populateUiLanguageDropdown() {
+  const sel = $('set-uiLanguage');
+  if (!sel) return;
+  const s = loadSettings();
+  const current = s.uiLanguage || getLocale() || 'en';
+  const ordered = getOrderedLocales(current);
+  sel.innerHTML = '';
+  for (const loc of ordered) {
+    const opt = document.createElement('option');
+    opt.value = loc.code;
+    opt.textContent = `${loc.nativeName} (${loc.name})`;
+    sel.appendChild(opt);
+  }
+  sel.value = current;
+}
+
 // Tabbed settings navigation
 document.querySelectorAll('.settings-nav .tab-btn').forEach((btn) => {
   btn.addEventListener('click', (e) => {
@@ -132,8 +149,11 @@ document.querySelectorAll('.settings-nav .tab-btn').forEach((btn) => {
 
 // apply the shared persisted settings to the controls, and persist changes back so
 // the editor ("Simple mode off") stays in sync.
-(() => {
+(async () => {
   const s = loadSettings();
+  try {
+    await initI18n(s.uiLanguage || 'en');
+  } catch (_) {}
   if (el.mode) el.mode.value = s.mode;
   el.cells.value = s.cells; el.lines.value = s.lines;
   el.quoteStyle.value = s.quoteStyle; el.listStyle.value = s.listStyle;
@@ -141,6 +161,7 @@ document.querySelectorAll('.settings-nav .tab-btn').forEach((btn) => {
   if (el.embosser) el.embosser.value = s.embosser || 'generic';
   if (el.embosserDuplex) el.embosserDuplex.value = s.embosserDuplex || 'double';
   populateLanguageDropdown();
+  populateUiLanguageDropdown();
   if (el.tableFormat) el.tableFormat.value = s.tableFormat || 'auto';
   if (el.baudRate) el.baudRate.value = String(s.baudRate || 9600);
   if (el.includeCovers) el.includeCovers.checked = !!s.includeCovers;
@@ -148,6 +169,14 @@ document.querySelectorAll('.settings-nav .tab-btn').forEach((btn) => {
   if (el.pinpoint) el.pinpoint.checked = (s.dotStyle === 'pinpoint');
   if (el.asciiBraille) el.asciiBraille.checked = !!s.asciiBraille;
   if (el.simpleMode) el.simpleMode.checked = s.simpleMode;
+
+  $('set-uiLanguage')?.addEventListener('change', async (e) => {
+    const newLang = e.target.value;
+    saveSettings({ uiLanguage: newLang });
+    await setLocale(newLang);
+    populateUiLanguageDropdown();
+    populateLanguageDropdown();
+  });
 })();
 function persistSettings() {
   const langVal = el.language ? el.language.value : 'en-ueb-g2';

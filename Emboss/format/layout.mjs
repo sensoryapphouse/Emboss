@@ -38,6 +38,7 @@ function wrapCells(braille, width = 38, firstIndent = 0, runoverIndent = 0) {
       }
       const chunkSize = Math.max(1, width - indent);
       lines.push(' '.repeat(Math.max(0, indent)) + w.slice(0, chunkSize));
+      indent = runoverIndent;
       w = w.slice(chunkSize);
     }
     const avail = width - indent;
@@ -80,10 +81,15 @@ function wrapCellsSrc(braille, src, width, firstIndent, runoverIndent) {
     parts.forEach((part, idx) => {
       const subSrc = src ? src.slice(start, start + part.length) : [];
       start += part.length + 1;
-      const curFirst = idx === 0 ? firstIndent : runoverIndent;
-      const { lines, srcs } = wrapCellsSrc(part, subSrc, width, curFirst, runoverIndent);
-      allLines.push(...lines);
-      allSrcs.push(...srcs);
+      if (!part) {
+        allLines.push('');
+        allSrcs.push([]);
+      } else {
+        const curFirst = idx === 0 ? firstIndent : runoverIndent;
+        const { lines, srcs } = wrapCellsSrc(part, subSrc, width, curFirst, runoverIndent);
+        allLines.push(...lines);
+        allSrcs.push(...srcs);
+      }
     });
     return { lines: allLines, srcs: allSrcs };
   }

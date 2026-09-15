@@ -78,6 +78,7 @@ for (const [s, d] of [
   ['engine/louis-browser.mjs', 'engine/louis-browser.mjs'],
   ['engine/maths.mjs', 'engine/maths.mjs'],
   ['engine/brf-ascii.mjs', 'engine/brf-ascii.mjs'],
+  ['engine/mathml-to-latex.mjs', 'engine/mathml-to-latex.mjs'],
   ['format/layout.mjs', 'format/layout.mjs'],
   ['format/page.mjs', 'format/page.mjs'],
   ['format/document.mjs', 'format/document.mjs'],

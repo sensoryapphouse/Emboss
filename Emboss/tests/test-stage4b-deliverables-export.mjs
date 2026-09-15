@@ -193,38 +193,33 @@ const ok = (name, cond, got = '') => {
   ok('Plain text export creates .txt file', r8.hasTxt === true, r8);
   ok('HTML export creates .html file', r8.hasHtml === true, r8);
 
-  // Test 9: UI Dropdown Menu Interactions
+  // Test 9: UI Save Button & Braille Dropdown Menu Interactions
   const r9 = await page.evaluate(async () => {
     const saveBtn = document.getElementById('saveDocBtn');
-    const saveMenu = document.getElementById('saveMenu');
     const downloadBtn = document.getElementById('downloadBtn');
     const downloadMenu = document.getElementById('downloadMenu');
 
-    // Click save button to toggle menu
-    saveBtn.click();
-    const saveOpen = !saveMenu.hidden;
-    const saveItemsCount = saveMenu.querySelectorAll('.menu-dropdown-item').length;
+    // Check save button is a direct action button
+    const hasSaveBtn = !!saveBtn;
+    const saveTitle = saveBtn?.getAttribute('title') || '';
 
-    // Click download button to toggle download menu
+    // Click download button to toggle braille download menu
     downloadBtn.click();
     const downloadOpen = !downloadMenu.hidden;
-    const saveClosedAfterDownloadClick = saveMenu.hidden;
     const downloadItemsCount = downloadMenu.querySelectorAll('.menu-dropdown-item').length;
 
     return {
-      saveOpen,
-      saveItemsCount,
+      hasSaveBtn,
+      saveTitle,
       downloadOpen,
-      saveClosedAfterDownloadClick,
       downloadItemsCount,
     };
   });
 
-  ok('Save dropdown menu opens on button click', r9.saveOpen === true, r9);
-  ok('Save menu has 6 format items', r9.saveItemsCount === 6, r9.saveItemsCount);
-  ok('Download dropdown menu opens on button click', r9.downloadOpen === true, r9);
-  ok('Opening Download menu closes Save menu', r9.saveClosedAfterDownloadClick === true, r9);
-  ok('Download menu has 3 deliverable format items (BRF, PEF, eBraille)', r9.downloadItemsCount === 3, r9.downloadItemsCount);
+  ok('Save button is present as a direct 1-click action', r9.hasSaveBtn === true, r9);
+  ok('Save button indicates NIMAS project save', r9.saveTitle.includes('NIMAS'), r9.saveTitle);
+  ok('Braille deliverable dropdown menu opens on button click', r9.downloadOpen === true, r9);
+  ok('Braille deliverable menu has 3 format items (BRF, PEF, eBraille)', r9.downloadItemsCount === 3, r9.downloadItemsCount);
 
   await browser.close();
 

@@ -273,8 +273,8 @@ const ok = (name, cond, got = '') => {
     const brlInput = document.getElementById('brlInput');
     const lines = brlInput.value.split('\n');
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].includes('APPLES') || lines[i].includes('⠁⠏⠏⠇⠑⠎') || lines[i].includes('⠠⠁⠏⠏⠇⠑⠎') || lines[i].includes(',APPLES')) {
-        lines[i] = lines[i].replace(/,APPLES/g, ',PEARS').replace(/APPLES/g, 'PEARS').replace(/⠠⠁⠏⠏⠇⠑⠎/g, '⠠⠏⠑⠁⠗⠎').replace(/⠁⠏⠏⠇⠑⠎/g, '⠏⠑⠁⠗⠎').replace(/#E/g, '#F').replace(/⠼⠑/g, '⠼⠋');
+      if (lines[i].includes('APPLES') || lines[i].includes('APPL+') || lines[i].includes('⠁⠏⠏⠇⠑⠎') || lines[i].includes('⠠⠁⠏⠏⠇⠑⠎') || lines[i].includes(',APPLES') || lines[i].includes(',APPL+')) {
+        lines[i] = lines[i].replace(/,APPL\+/g, ',PEARS').replace(/APPL\+/g, 'PEARS').replace(/,APPLES/g, ',PEARS').replace(/APPLES/g, 'PEARS').replace(/⠠⠁⠏⠏⠇⠑⠎/g, '⠠⠏⠑⠁⠗⠎').replace(/⠁⠏⠏⠇⠑⠎/g, '⠏⠑⠁⠗⠎').replace(/#E/g, '#F').replace(/⠼⠑/g, '⠼⠋');
       }
     }
     brlInput.value = lines.join('\n');

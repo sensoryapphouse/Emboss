@@ -110,8 +110,11 @@
   "settings": {
     "title": "Einstellungen",
     "tab_rules": "Regeln & Standards",
-    "tab_embosser": "Drucker & Verbindung",
-    "tab_view": "Ansicht & Geometrie",
+    "tab_embosser": "Drucker & Hardware",
+    "tab_interface": "Benutzeroberfläche",
+    "tab_production": "Erweiterte Produktion",
+    "tab_geometry": "Geometrie & Bände",
+    "tab_view": "Erweiterte Produktion",
     "tab_speech": "Sprachausgabe & Audio",
     "tab_language": "Sprache & Lokalisierung",
     "language_label": "Oberflächensprache",

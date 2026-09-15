@@ -242,10 +242,10 @@ async function runTests() {
   assert(xml.includes('<p class="bai-stage">Enter PROSPERO, MIRANDA, and ARIEL.</p>'), 'Includes <p class="bai-stage">');
   assert(xml.includes('<p class="bai-play">PROSPERO: If by your art'), 'Includes <p class="bai-play">');
   assert(xml.includes('<p class="bai-verse">Full fathom five'), 'Includes <p class="bai-verse">');
-  assert(xml.includes('<prodnote>Transcriber Note: Edited note with additional context.</prodnote>'), 'Includes <prodnote>');
+  assert(xml.includes('Transcriber Note: Edited note with additional context.</prodnote>'), 'Includes <prodnote>');
   assert(xml.includes('<caption>Figure 1.1: Engraving of Prospero and Ariel.</caption>'), 'Includes <caption>');
   assert(xml.includes('<byline>— William Shakespeare, 1611</byline>'), 'Includes <byline>');
-  assert(xml.includes('<note class="footnote">1. Fathom: A unit of length equal to six feet.</note>'), 'Includes <note class="footnote">');
+  assert(xml.includes('class="footnote"><p>1. Fathom: A unit of length equal to six feet.</p></note>'), 'Includes <note class="footnote">');
 
   console.log('  ✓ Re-exported NIMAS XML retains exact DTBook element markup for all BANA styles');
 

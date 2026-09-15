@@ -16,35 +16,96 @@ import { charToDotMask } from './tactile-display.mjs';
  */
 export function latexToMathJs(latex) {
   if (!latex) return '';
-  let expr = latex.trim();
+  let expr = String(latex).trim();
 
   // Strip "y =", "f(x) =", "g(x) =" prefix
   expr = expr.replace(/^(y\s*=|f\s*\(\s*x\s*\)\s*=|g\s*\(\s*x\s*\)\s*=)\s*/i, '');
 
-  // Handle \frac{a}{b} -> ((a)/(b))
-  expr = expr.replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '(($1)/($2))');
+  // Handle \cdot or \times
+  expr = expr.replace(/\\cdot|\\times/g, ' * ');
+
+  // Handle implicit multiplication before functions, radicals, or e^
+  expr = expr.replace(/(\d+)\s*\\?(sin|cos|tan|ln|log|exp|abs|sqrt|cbrt)\b/g, '$1 * $2');
+  expr = expr.replace(/(\d+)\s*\\?e\^/g, '$1 * e^');
+  expr = expr.replace(/([)])\s*\\?(sin|cos|tan|ln|log|exp|abs|sqrt|cbrt)\b/g, '$1 * $2');
+
+  // Balanced fraction parser \frac{numerator}{denominator}
+  let fracIdx = 0;
+  while ((fracIdx = expr.indexOf('\\frac')) !== -1) {
+    let p = fracIdx + 5;
+    while (p < expr.length && /\s/.test(expr[p])) p++;
+    if (expr[p] !== '{') break;
+    let numStart = p + 1;
+    let depth = 1;
+    p++;
+    while (p < expr.length && depth > 0) {
+      if (expr[p] === '{') depth++;
+      else if (expr[p] === '}') depth--;
+      p++;
+    }
+    let numEnd = p - 1;
+    let numerator = expr.slice(numStart, numEnd);
+
+    while (p < expr.length && /\s/.test(expr[p])) p++;
+    if (expr[p] !== '{') break;
+    let denStart = p + 1;
+    depth = 1;
+    p++;
+    while (p < expr.length && depth > 0) {
+      if (expr[p] === '{') depth++;
+      else if (expr[p] === '}') depth--;
+      p++;
+    }
+    let denEnd = p - 1;
+    let denominator = expr.slice(denStart, denEnd);
+
+    let replacement = `((${numerator})/(${denominator}))`;
+    expr = expr.slice(0, fracIdx) + replacement + expr.slice(p);
+  }
+
+  // Handle nth root \sqrt[n]{x}
+  expr = expr.replace(/\\sqrt\[3\]\{([^{}]+)\}/g, 'Math.cbrt($1)');
+  expr = expr.replace(/\\sqrt\[([0-9.]+)\]\{([^{}]+)\}/g, 'Math.pow($2, 1/($1))');
+
+  // Handle square root \sqrt{...}
+  expr = expr.replace(/\\sqrt\{([^{}]+)\}/g, 'sqrt($1)');
+  expr = expr.replace(/\\sqrt\s*([a-zA-Z0-9.]+)/g, 'sqrt($1)');
+
+  // Handle nested absolute value \left| ... \right| or | ... |
+  while (/\\left\|([^|]+)\\right\|/.test(expr)) {
+    expr = expr.replace(/\\left\|([^|]+)\\right\|/g, 'Math.abs($1)');
+  }
+  while (/\|([^|]+)\|/.test(expr)) {
+    expr = expr.replace(/\|([^|]+)\|/g, 'Math.abs($1)');
+  }
+
+  // Handle e^x, e^{...} -> Math.exp(...)
+  expr = expr.replace(/(?<![a-zA-Z0-9_])e\^\{([^{}]+)\}/g, 'Math.exp($1)');
+  expr = expr.replace(/(?<![a-zA-Z0-9_])e\^([a-zA-Z0-9_.-]+)/g, 'Math.exp($1)');
 
   // Handle powers: x^{2} -> x ** (2), x^2 -> x ** (2)
   expr = expr.replace(/\^\{([^{}]+)\}/g, ' ** ($1)');
   expr = expr.replace(/\^([0-9a-zA-Z.]+)/g, ' ** ($1)');
 
-  // Handle \sqrt{a} -> Math.sqrt(a)
-  expr = expr.replace(/\\sqrt\{([^{}]+)\}/g, 'Math.sqrt($1)');
+  // Disambiguate unary minus before exponentiation: -x ** (2) -> -1 * ((x) ** (2))
+  expr = expr.replace(/(^|[+\-*/(,=])\s*-\s*([a-zA-Z0-9_.]+)\s*\*\*\s*(\([^()]+\)|[a-zA-Z0-9_.]+)/g, '$1 -1 * (($2) ** $3)');
 
-  // Handle standard trig and functions
-  expr = expr.replace(/\\sin/g, 'Math.sin');
-  expr = expr.replace(/\\cos/g, 'Math.cos');
-  expr = expr.replace(/\\tan/g, 'Math.tan');
-  expr = expr.replace(/\\ln/g, 'Math.log');
-  expr = expr.replace(/\\log/g, 'Math.log10');
-  expr = expr.replace(/\\exp/g, 'Math.exp');
-  expr = expr.replace(/\\pi/g, 'Math.PI');
+  // Strip backslashes from known functions
+  expr = expr.replace(/\\(sin|cos|tan|ln|log|exp|abs|sqrt|cbrt)\b/g, '$1');
+  expr = expr.replace(/\\pi\b/g, 'Math.PI');
   expr = expr.replace(/\\e\b/g, 'Math.E');
 
+  // Wrap functions with Math namespace
+  expr = expr.replace(/(?<!\.)\b(sin|cos|tan|exp|abs|sqrt|cbrt)\s*\(/g, 'Math.$1(');
+  expr = expr.replace(/(?<!\.)\bln\s*\(/g, 'Math.log(');
+  expr = expr.replace(/(?<!\.)\blog\s*\(/g, 'Math.log10(');
+
   // Handle implicit multiplication (e.g. 2x -> 2*x, 3(x) -> 3*(x), )x -> )*x)
-  expr = expr.replace(/(\d+)\s*([a-zA-Z(])/g, '$1 * $2');
-  expr = expr.replace(/([)])\s*([a-zA-Z0-9(])/g, '$1 * $2');
-  expr = expr.replace(/\b([a-wy-zA-WY-Z])\s*([(])/g, '$1 * $2');
+  expr = expr.replace(/(\d+)\s*([xXtT])/g, '$1 * $2');
+  expr = expr.replace(/(^|[^a-zA-Z0-9_.])(\d+)\s*\(/g, '$1$2 * (');
+  expr = expr.replace(/([)])\s*([xXtT0-9(])/g, '$1 * $2');
+  expr = expr.replace(/([)])\s*Math\./g, '$1 * Math.');
+  expr = expr.replace(/\b([xX])\s*([(])/g, '$1 * $2');
 
   return expr;
 }
@@ -107,7 +168,20 @@ export function isPlottableEquation(latex) {
  */
 export function formatUebMathLine(eqList = [], pois = []) {
   if (!eqList.length) eqList = ['x'];
-  const firstEq = eqList[0].replace(/^(y\s*=|f\(x\)\s*=|g\(x\)\s*=)\s*/i, '').trim();
+  let firstEq = eqList[0].replace(/^(y\s*=|f\(x\)\s*=|g\(x\)\s*=)\s*/i, '').trim();
+
+  // Convert LaTeX math constructs into UEB equivalents
+  firstEq = firstEq.replace(/\\?frac\{([^{}]+)\}\{([^{}]+)\}/g, '⠹$1⠐⠌$2⠼');
+  firstEq = firstEq.replace(/\\?sqrt\{([^{}]+)\}/g, '⠜$1⠻');
+  firstEq = firstEq.replace(/\\?sqrt\s*([a-zA-Z0-9]+)/g, '⠜$1⠻');
+  firstEq = firstEq.replace(/\\?ln\b/g, '⠇⠝');
+  firstEq = firstEq.replace(/\\?log\b/g, '⠇⠕⠛');
+  firstEq = firstEq.replace(/\\?sin\b/g, '⠎⠊⠝');
+  firstEq = firstEq.replace(/\\?cos\b/g, '⠉⠕⠎');
+  firstEq = firstEq.replace(/\\?tan\b/g, '⠞⠁⠝');
+  firstEq = firstEq.replace(/\be\^x\b/g, '⠑⠔⠭');
+  firstEq = firstEq.replace(/\be\^\{([^{}]+)\}/g, '⠑⠔$1');
+  firstEq = firstEq.replace(/\be\^([a-zA-Z0-9.]+)/g, '⠑⠔$1');
 
   // Convert formula tokens to UEB Math:
   let formulaUeb = '⠰⠰⠰⠽⠀⠐⠶⠀';
@@ -120,10 +194,6 @@ export function formatUebMathLine(eqList = [], pois = []) {
     .replace(/-/g, '⠐⠤')
     .replace(/\*/g, '⠐⠡')
     .replace(/\//g, '⠐⠌')
-    .replace(/\\sin/g, '⠎⠊⠝')
-    .replace(/\\cos/g, '⠉⠕⠎')
-    .replace(/\\tan/g, '⠞⠁⠝')
-    .replace(/\\sqrt/g, '⠜')
     .replace(/(\d+)/g, (m) => defaultBrailleTranslator(m));
 
   formulaUeb += formattedExpr + '⠰⠄';
@@ -154,11 +224,27 @@ export function calculateOptimalPlotBounds(eqList, opts = {}) {
     return { xMin: opts.xMin, xMax: opts.xMax, yMin: opts.yMin, yMax: opts.yMax };
   }
 
+  // Normalize and split any comma-separated equations
+  const normalizedEqList = (Array.isArray(eqList) ? eqList : [eqList])
+    .flatMap((s) => String(s || '').split(/[,;]+/))
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (!normalizedEqList.length) normalizedEqList.push('x');
+
+  const widthPins = opts.widthPins || (opts.width ? Math.round(opts.width / 7) : 60);
+  const heightPins = opts.heightPins || (opts.height ? Math.round(opts.height / 7) : 40);
+  const availW = Math.max(16, widthPins - 8);
+  const availH = Math.max(16, heightPins - 8);
+  const aspect = availW / availH; // ~1.625 for DotPad (60x40), 1.75 for Monarch (64x40)
+
   const evalStep = 0.05;
   const features = [];
   const yAtZero = [];
+  let isTrig = false;
 
-  eqList.forEach((eqStr) => {
+  normalizedEqList.forEach((eqStr) => {
+    if (/sin|cos|tan/i.test(eqStr)) isTrig = true;
     const expr = latexToMathJs(eqStr);
     let prevY = null;
     let prevSlope = null;
@@ -166,7 +252,7 @@ export function calculateOptimalPlotBounds(eqList, opts = {}) {
     const y0 = evaluateFunction(expr, 0);
     if (y0 !== null && isFinite(y0)) yAtZero.push(y0);
 
-    for (let x = -8; x <= 8.001; x += evalStep) {
+    for (let x = -10; x <= 10.001; x += evalStep) {
       const y = evaluateFunction(expr, x);
       if (y !== null && isFinite(y)) {
         // Detect Root (sign change in y)
@@ -190,30 +276,36 @@ export function calculateOptimalPlotBounds(eqList, opts = {}) {
     }
   });
 
-  const nearFeatures = features.filter((f) => Math.abs(f.x) <= 6 && Math.abs(f.y) <= 8);
+  const nearFeatures = features.filter((f) => Math.abs(f.x) <= 8 && Math.abs(f.y) <= 12);
 
-  let span = 5;
-  if (nearFeatures.length > 0) {
-    const minFx = Math.min(...nearFeatures.map(f => f.x));
-    const maxFx = Math.max(...nearFeatures.map(f => f.x));
+  let spanY = 5;
+  if (isTrig) {
+    spanY = 2.5;
+  } else if (nearFeatures.length > 0) {
     const minFy = Math.min(...nearFeatures.map(f => f.y));
     const maxFy = Math.max(...nearFeatures.map(f => f.y));
-
-    const maxAbsX = Math.max(Math.abs(minFx), Math.abs(maxFx), 2);
-    const maxAbsY = Math.max(Math.abs(minFy), Math.abs(maxFy), 2);
-
-    const spanX = Math.min(8, Math.max(3, Math.ceil(maxAbsX + 1.5)));
-    const spanY = Math.min(8, Math.max(3, Math.ceil(maxAbsY + 1.5)));
-    span = Math.max(spanX, spanY);
+    const maxAbsY = Math.max(Math.abs(minFy), Math.abs(maxFy), 1.5);
+    spanY = Math.min(8, Math.max(3, Math.ceil(maxAbsY + 1.2)));
   } else if (yAtZero.length > 0) {
     const y0 = yAtZero[0];
-    span = Math.min(8, Math.max(4, Math.ceil(Math.abs(y0) + 2)));
+    spanY = Math.min(8, Math.max(3, Math.ceil(Math.abs(y0) + 1.5)));
   }
 
-  const xMin = typeof opts.xMin === 'number' ? opts.xMin : -span;
-  const xMax = typeof opts.xMax === 'number' ? opts.xMax : span;
-  const yMin = typeof opts.yMin === 'number' ? opts.yMin : -span;
-  const yMax = typeof opts.yMax === 'number' ? opts.yMax : span;
+  let spanX = Math.round(spanY * aspect);
+  if (!isTrig && nearFeatures.length > 0) {
+    const minFx = Math.min(...nearFeatures.map(f => f.x));
+    const maxFx = Math.max(...nearFeatures.map(f => f.x));
+    const maxAbsX = Math.max(Math.abs(minFx), Math.abs(maxFx), 2);
+    spanX = Math.max(spanX, Math.ceil(maxAbsX + 1.5));
+    spanY = Math.max(spanY, Math.round(spanX / aspect));
+  } else if (isTrig) {
+    spanX = Math.max(spanX, 7);
+  }
+
+  const xMin = typeof opts.xMin === 'number' ? opts.xMin : -spanX;
+  const xMax = typeof opts.xMax === 'number' ? opts.xMax : spanX;
+  const yMin = typeof opts.yMin === 'number' ? opts.yMin : -spanY;
+  const yMax = typeof opts.yMax === 'number' ? opts.yMax : spanY;
 
   return { xMin, xMax, yMin, yMax };
 }
@@ -276,7 +368,29 @@ export function plotFunctionToPinGrid(latexOrExpr, opts = {}) {
         if (prevY !== null) {
           const slope = (y - prevY) / evalStep;
           if (prevSlope !== null && ((prevSlope > 0 && slope < 0) || (prevSlope < 0 && slope > 0))) {
-            pointsOfInterest.push({ type: 'extrema', x, y });
+            // Refine vertex/extrema using 3-point parabolic interpolation for exact mathematical coordinate
+            const prev2Y = pts[pts.length - 3]?.y;
+            let extX = x - evalStep;
+            let extY = prevY;
+            if (prev2Y !== undefined && prev2Y !== null) {
+              const denom = 2 * (prev2Y - 2 * prevY + y);
+              if (Math.abs(denom) > 1e-9) {
+                const delta = ((prev2Y - y) * evalStep) / denom;
+                if (Math.abs(delta) <= evalStep) {
+                  extX = (x - evalStep) + delta;
+                  const refinedY = evaluateFunction(expr, extX);
+                  if (refinedY !== null && isFinite(refinedY)) extY = refinedY;
+                }
+              }
+            }
+            // Snap near-integers (e.g. -0.9999999 -> -1.0)
+            if (Math.abs(extX - Math.round(extX)) < 1e-4) {
+              extX = Math.round(extX);
+              const snappedY = evaluateFunction(expr, extX);
+              if (snappedY !== null && isFinite(snappedY)) extY = snappedY;
+            }
+            if (Math.abs(extY - Math.round(extY)) < 1e-4) extY = Math.round(extY);
+            pointsOfInterest.push({ type: 'extrema', x: extX, y: extY });
           }
           prevSlope = slope;
         }
@@ -325,53 +439,55 @@ export function plotFunctionToPinGrid(latexOrExpr, opts = {}) {
     return 0;
   };
 
-  // 3. Draw Single-Pin X and Y Axes with 1-Pin Arrowheads
+  // 3. Helper to draw Single-Pin X and Y Axes with 1-Pin Arrowheads and Ticks
   const minAxisX = Math.max(2, toPinX(xMin));
   const maxAxisX = Math.min(widthPins - 3, toPinX(xMax));
   const minAxisY = Math.max(2, toPinY(yMax));
   const maxAxisY = Math.min(heightPins - 3, toPinY(yMin));
 
-  // X-Axis (row = originPinY)
-  if (originPinY >= 0 && originPinY < heightPins) {
-    for (let px = minAxisX; px <= maxAxisX; px++) {
-      setPin(px, originPinY);
+  const drawAxesAndTicks = () => {
+    // X-Axis (row = originPinY)
+    if (originPinY >= 0 && originPinY < heightPins) {
+      for (let px = minAxisX; px <= maxAxisX; px++) {
+        setPin(px, originPinY);
+      }
+      // X-Axis Arrowhead at maxAxisX
+      setPin(maxAxisX - 1, originPinY - 1);
+      setPin(maxAxisX, originPinY);
+      setPin(maxAxisX - 1, originPinY + 1);
     }
-    // X-Axis Arrowhead at maxAxisX
-    setPin(maxAxisX - 1, originPinY - 1);
-    setPin(maxAxisX, originPinY);
-    setPin(maxAxisX - 1, originPinY + 1);
-  }
 
-  // Y-Axis (col = originPinX)
-  if (originPinX >= 0 && originPinX < widthPins) {
-    for (let py = minAxisY; py <= maxAxisY; py++) {
-      setPin(originPinX, py);
+    // Y-Axis (col = originPinX)
+    if (originPinX >= 0 && originPinX < widthPins) {
+      for (let py = minAxisY; py <= maxAxisY; py++) {
+        setPin(originPinX, py);
+      }
+      // Y-Axis Arrowhead at minAxisY (top)
+      setPin(originPinX - 1, minAxisY + 1);
+      setPin(originPinX, minAxisY);
+      setPin(originPinX + 1, minAxisY + 1);
     }
-    // Y-Axis Arrowhead at minAxisY (top)
-    setPin(originPinX - 1, minAxisY + 1);
-    setPin(originPinX, minAxisY);
-    setPin(originPinX + 1, minAxisY + 1);
-  }
 
-  // 4. Draw 1-Pin Tick Marks
-  const tickStep = scale >= 4 ? 1 : (scale >= 2 ? 2 : 5);
-  for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += tickStep) {
-    if (x === 0) continue;
-    const px = toPinX(x);
-    if (px >= minAxisX + 1 && px <= maxAxisX - 2 && originPinY >= 0 && originPinY < heightPins) {
-      setPin(px, originPinY - 1);
-      setPin(px, originPinY + 1);
+    // 4. Draw 1-Pin Tick Marks
+    const tickStep = scale >= 4 ? 1 : (scale >= 2 ? 2 : 5);
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += tickStep) {
+      if (x === 0) continue;
+      const px = toPinX(x);
+      if (px >= minAxisX + 1 && px <= maxAxisX - 2 && originPinY >= 0 && originPinY < heightPins) {
+        setPin(px, originPinY - 1);
+        setPin(px, originPinY + 1);
+      }
     }
-  }
 
-  for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y += tickStep) {
-    if (y === 0) continue;
-    const py = toPinY(y);
-    if (py >= minAxisY + 2 && py <= maxAxisY - 1 && originPinX >= 0 && originPinX < widthPins) {
-      setPin(originPinX - 1, py);
-      setPin(originPinX + 1, py);
+    for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y += tickStep) {
+      if (y === 0) continue;
+      const py = toPinY(y);
+      if (py >= minAxisY + 2 && py <= maxAxisY - 1 && originPinX >= 0 && originPinX < widthPins) {
+        setPin(originPinX - 1, py);
+        setPin(originPinX + 1, py);
+      }
     }
-  }
+  };
 
   // 5. Draw Continuous Function Curves (Bresenham's Line Algorithm)
   const drawBresenhamLine = (x0, y0, x1, y1, pattern = 'solid') => {
@@ -405,7 +521,7 @@ export function plotFunctionToPinGrid(latexOrExpr, opts = {}) {
     let prevPx = null;
     let prevPy = null;
 
-    // High density sampling (0.2 pin step in x)
+    // High density sampling (0.25 pin step in x)
     const pinSampleStep = 0.25 / scale;
     for (let x = xMin; x <= xMax + 0.001; x += pinSampleStep) {
       const y = evaluateFunction(curve.expr, x);
@@ -492,14 +608,19 @@ export function plotFunctionToPinGrid(latexOrExpr, opts = {}) {
   };
 
   if (opts.showBrailleLabels !== false) {
-    // Braille 'y' (⠽) placed at cell above Y-axis
-    const yCellCol = Math.max(0, Math.min(numCellsW - 1, Math.floor((originPinX + 2) / 2)));
-    drawBrailleCell(yCellCol, 0, '⠽');
+    // Braille 'y' (⠽) placed neatly beside positive Y-axis arrowhead
+    const yLabelX = originPinX <= widthPins - 6 ? originPinX + 3 : originPinX - 5;
+    const yLabelY = Math.max(0, Math.min(heightPins - 4, minAxisY));
+    drawBrailleLabel(yLabelX, yLabelY, '⠽');
 
-    // Braille 'x' (⠭) placed at cell to the right of X-axis
-    const xCellRow = Math.max(0, Math.min(numCellsH - 1, Math.floor((originPinY - 4) / 4)));
-    drawBrailleCell(numCellsW - 1, xCellRow, '⠭');
+    // Braille 'x' (⠭) placed cleanly above the positive X-axis arrowhead
+    const xLabelX = Math.max(0, Math.min(widthPins - 3, maxAxisX - 3));
+    const xLabelY = originPinY >= 5 ? originPinY - 5 : originPinY + 3;
+    drawBrailleLabel(xLabelX, xLabelY, '⠭');
   }
+
+  // Draw/refresh axes and arrowheads so they remain 100% crisp and unbroken
+  drawAxesAndTicks();
 
   // 8. Convert 60x40 Pin Grid to 300-Byte Matrix (30 cols x 10 rows)
   const matrix = new Uint8Array(numCellsW * numCellsH);
@@ -777,12 +898,36 @@ export function plotTactileFunction(latexOrExpr, opts = {}) {
     keySvg = `<g class="tactile-key" role="region" aria-label="Tactile Key">${keyItemsSvg}</g>`;
   }
 
-  // Pack precomputed DotPad cell matrix into hex string attribute
-  const matrixHex = Array.from(pinPlot.matrix, (b) => b.toString(16).padStart(2, '0')).join('');
+  // Pack precomputed DotPad (60x40 pins / 300 bytes) and Monarch (64x40 pins / 320 bytes) matrices
+  const dotpadPinPlot = isDotpad ? pinPlot : plotFunctionToPinGrid(latexOrExpr, {
+    widthPins: 60,
+    heightPins: 40,
+    xMin: opts.xMin,
+    xMax: opts.xMax,
+    yMin: opts.yMin,
+    yMax: opts.yMax,
+    autoScaleY: opts.autoScaleY !== false,
+    showPoints: opts.showPoints !== false,
+    showBrailleLabels: true,
+  });
+  const monarchPinPlot = isMonarch ? pinPlot : plotFunctionToPinGrid(latexOrExpr, {
+    widthPins: 64,
+    heightPins: 40,
+    xMin: opts.xMin,
+    xMax: opts.xMax,
+    yMin: opts.yMin,
+    yMax: opts.yMax,
+    autoScaleY: opts.autoScaleY !== false,
+    showPoints: opts.showPoints !== false,
+    showBrailleLabels: true,
+  });
+
+  const dotpadMatrixHex = Array.from(dotpadPinPlot.matrix, (b) => b.toString(16).padStart(2, '0')).join('');
+  const monarchMatrixHex = Array.from(monarchPinPlot.matrix, (b) => b.toString(16).padStart(2, '0')).join('');
 
   // 5. Assemble Full Raw SVG
   const rawSvg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" data-dotpad-matrix="${matrixHex}" data-braille-line="${pinPlot.brailleLine}">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" data-dotpad-matrix="${dotpadMatrixHex}" data-monarch-matrix="${monarchMatrixHex}" data-braille-line="${pinPlot.brailleLine}">
       <!-- Grid -->
       <g class="tactile-grid">${gridSvg}</g>
       <!-- Axes & Ticks -->

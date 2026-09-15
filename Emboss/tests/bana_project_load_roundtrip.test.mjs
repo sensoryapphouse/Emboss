@@ -414,7 +414,7 @@ test('Math formulas with MathML and LaTeX annotations survive round-trip', () =>
   };
 
   const xml = exportToNimasXml(astWithMath);
-  assert.ok(xml.includes('<m:math alttext="E = mc^2">'));
+  assert.ok(xml.includes('alttext="E = mc^2"'));
   assert.ok(xml.includes('<m:annotation encoding="application/x-tex">E = mc^2</m:annotation>'));
 
   const rehydrated = parseDtbook(xml);

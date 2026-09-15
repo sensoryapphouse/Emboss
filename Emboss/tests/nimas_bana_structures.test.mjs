@@ -286,7 +286,7 @@ test('Step 4: Poetry Line Numbers (<linenum>) placed cleanly without disrupting 
 </dtbook>`;
 
   const doc = parseNimasXml(xml);
-  const linesWithLinenum = doc.blocks.filter((b) => b.type === 'para' && b.text && b.text.includes('ribbon of moonlight'));
+  const linesWithLinenum = doc.blocks.filter((b) => (b.type === 'para' || b.type === 'play') && b.text && b.text.includes('ribbon of moonlight'));
   assert.ok(linesWithLinenum.length > 0, 'Poem line should be parsed');
   assert.ok(linesWithLinenum[0].text.includes('5'), 'Line number should be retained in the block');
 

@@ -65,10 +65,26 @@ export function exportToDocxBlob(model, title = 'Document') {
 </w:styles>`;
 
   const pXmls = [];
-  (model?.blocks || []).forEach((b) => {
-    if (b.type === 'heading') {
+  function renderBlock(b) {
+    if (!b) return;
+    if (b.type === 'heading' || b.type === 'title') {
       const style = b.level === 1 ? 'Heading1' : b.level === 2 ? 'Heading2' : 'Heading3';
       pXmls.push(`<w:p><w:pPr><w:pStyle w:val="${style}"/></w:pPr><w:r><w:t xml:space="preserve">${escapeXml(b.text)}</w:t></w:r></w:p>`);
+    } else if (b.type === 'pagenum') {
+      const pageStr = b.page || b.text || '';
+      pXmls.push(`<w:p><w:pPr><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:sz w:val="18"/><w:color w:val="777777"/><w:i/></w:rPr><w:t xml:space="preserve">[Page ${escapeXml(pageStr)}]</w:t></w:r></w:p>`);
+    } else if (b.type === 'box') {
+      if (b.title) {
+        pXmls.push(`<w:p><w:pPr><w:ind w:left="720" w:right="720"/><w:pBdr><w:left w:val="single" w:sz="12" w:space="4" w:color="0284C7"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${escapeXml(b.title)}</w:t></w:r></w:p>`);
+      }
+      if (Array.isArray(b.blocks)) {
+        b.blocks.forEach(renderBlock);
+      }
+    } else if (b.type === 'math') {
+      const mathStr = b.latex || b.mathml || '';
+      pXmls.push(`<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:i/><w:color w:val="0284C7"/></w:rPr><w:t xml:space="preserve">$$${escapeXml(mathStr)}$$</w:t></w:r></w:p>`);
+    } else if (b.type === 'graphic') {
+      pXmls.push(`<w:p><w:pPr><w:jc w:val="center"/><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="1" w:color="CCCCCC"/></w:pBdr></w:pPr><w:r><w:rPr><w:i/><w:color w:val="555555"/></w:rPr><w:t xml:space="preserve">[Graphic: ${escapeXml(b.caption || b.alt || 'Image')}]</w:t></w:r></w:p>`);
     } else if (b.type === 'para') {
       const rXmls = [];
       if (b.segments) {
@@ -116,7 +132,7 @@ export function exportToDocxBlob(model, title = 'Document') {
         tblRows.push(`<w:tr>${rCells}</w:tr>`);
       }
       pXmls.push(`<w:tbl><w:tblPr><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/><w:left w:val="none"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/><w:right w:val="none"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="EEEEEE"/><w:insideV w:val="none"/></w:tblBorders></w:tblPr>${tblRows.join('')}</w:tbl>`);
-    } else if (b.type === 'indicator') {            // buildModel's section break
+    } else if (b.type === 'indicator' || b.type === 'break') {            // section break
       pXmls.push(`<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:t xml:space="preserve">∗ ∗ ∗</w:t></w:r></w:p>`);
     } else if (b.type === 'note') {
       pXmls.push(`<w:p><w:pPr><w:ind w:left="720"/></w:pPr><w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">${escapeXml(b.text || '')}</w:t></w:r></w:p>`);
@@ -136,8 +152,11 @@ export function exportToDocxBlob(model, title = 'Document') {
       }
     } else if (b.style === 'quote') {
       pXmls.push(`<w:p><w:pPr><w:ind w:left="720" w:right="720"/></w:pPr><w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">${escapeXml(b.text || '')}</w:t></w:r></w:p>`);
+    } else if (b.text) {
+      pXmls.push(`<w:p><w:r><w:t xml:space="preserve">${escapeXml(b.text)}</w:t></w:r></w:p>`);
     }
-  });
+  }
+  (model?.blocks || []).forEach(renderBlock);
 
   const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"

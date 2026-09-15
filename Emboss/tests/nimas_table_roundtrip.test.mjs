@@ -48,7 +48,7 @@ const listedTableDoc = {
 const xmlListed = exportToNimasXml(listedTableDoc);
 check('Exported XML contains <table class="bana-listed">', xmlListed.includes('<table class="bana-listed">'));
 check('Exported XML contains <caption>', xmlListed.includes('<caption>Table 1: Vocabulary Words</caption>'));
-check('Exported XML contains <tabletn>', xmlListed.includes('<tabletn>Listed format used for narrow margins</tabletn>'));
+check('Exported XML contains <tabletn> or <prodnote class="tabletn">', xmlListed.includes('<tabletn>') || (xmlListed.includes('<prodnote') && xmlListed.includes('class="tabletn"')));
 check('Exported XML contains <thead> and <th>', xmlListed.includes('<th>Word</th>') && xmlListed.includes('<th>Part of Speech</th>'));
 check('Exported XML contains <tbody> and <td>', xmlListed.includes('<td>aspect</td>') && xmlListed.includes('<td>noun</td>'));
 

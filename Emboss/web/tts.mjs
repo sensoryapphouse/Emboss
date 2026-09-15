@@ -24,6 +24,7 @@ export class Reader {
     this.paused = false;
     this.gen = 0;         // bumped on every stop()/speak() so a late utterance or watchdog callback can bail
     this._timers = [];    // pending watchdog timeouts, cleared on stop()/speak() so they can't tear down a new read
+    this._u = null;       // persist active SpeechSynthesisUtterance to prevent V8 garbage collection
   }
 
   get speaking() { return this.active; }
@@ -31,7 +32,9 @@ export class Reader {
   _safe(fn) { try { fn(); } catch (e) { console.error('TTS callback:', e); } }   // a highlight bug must never wedge the read loop
   _reset() {            // invalidate any in-flight utterance + its watchdogs
     this.gen++;
-    this._timers.forEach((t) => clearTimeout(t)); this._timers = [];
+    this._u = null;
+    this._timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+    this._timers = [];
     try { speechSynthesis.cancel(); } catch { /* not supported */ }
   }
 
@@ -48,23 +51,64 @@ export class Reader {
 
   _next() {
     if (!this.active) return;
-    if (this.i >= this.items.length) { this.active = false; this._safe(this.onEnd); return; }
+    if (this.i >= this.items.length) { this.active = false; this._u = null; this._safe(this.onEnd); return; }
     const gen = this.gen;                              // this read's generation; a stop()/new speak() bumps it
     const stale = () => gen !== this.gen || !this.active;   // a leftover callback/timer from a cancelled read
     const item = this.items[this.i];
     const u = new SpeechSynthesisUtterance(item.text);
+    this._u = u; // Keep reference to prevent GC!
     u.rate = this.rate;
     if (this.voice) u.voice = this.voice;
     let started = false, done = false;
-    u.onstart = () => { if (stale()) return; started = true; this._safe(() => this.onBlock(item)); };
-    u.onboundary = (e) => { if (stale()) return; if (!e.name || e.name === 'word') this._safe(() => this.onBoundary(item, e.charIndex || 0, e.charLength || 0)); };
-    u.onend = () => { if (stale() || done) return; done = true; this.i++; this._next(); };
-    u.onerror = () => { if (stale() || done) return; done = true; this.i++; this._next(); };
-    try { speechSynthesis.speak(u); speechSynthesis.resume(); } catch { /* */ }   // resume() counters Chrome queuing paused
+
+    // Clear previous chunk watchdog timers
+    this._timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+    this._timers = [];
+
+    const cleanup = () => {
+      this._timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+      this._timers = [];
+      if (this._u === u) this._u = null;
+    };
+
+    u.onstart = () => {
+      if (stale()) return;
+      started = true;
+      this._safe(() => this.onBlock(item));
+    };
+    u.onboundary = (e) => {
+      if (stale()) return;
+      if (!e.name || e.name === 'word') {
+        this._safe(() => this.onBoundary(item, e.charIndex || 0, e.charLength || 0));
+      }
+    };
+    u.onend = () => {
+      if (stale() || done) return;
+      done = true;
+      cleanup();
+      this.i++;
+      this._next();
+    };
+    u.onerror = () => {
+      if (stale() || done) return;
+      done = true;
+      cleanup();
+      this.i++;
+      this._next();
+    };
+
+    try { speechSynthesis.speak(u); speechSynthesis.resume(); } catch { /* */ }
+
+    // Keep-alive for long utterances (Chrome pauses after 14s without resume)
+    const keepAlive = setInterval(() => {
+      if (stale() || done) { clearInterval(keepAlive); return; }
+      try { speechSynthesis.resume(); } catch {}
+    }, 4000);
+    this._timers.push(keepAlive);
+
     // Watchdog: Chrome's speechSynthesis sometimes wedges (queued but never fires
     // start). Nudge once, then give up gracefully + tell the caller rather than
-    // sitting silent forever. Tracked + generation-guarded so a late timer from a
-    // stopped read can never cancel or "stuck"-report a subsequent one.
+    // sitting silent forever.
     const t1 = setTimeout(() => {
       if (stale() || done || started) return;
       try { speechSynthesis.resume(); } catch { /* */ }
@@ -74,9 +118,9 @@ export class Reader {
         try { speechSynthesis.cancel(); } catch { /* */ }
         if (this.onStuck) this._safe(this.onStuck);
         this._safe(this.onEnd);
-      }, 1600);
+      }, 3000);
       this._timers.push(t2);
-    }, 1200);
+    }, 2000);
     this._timers.push(t1);
   }
 
@@ -104,37 +148,129 @@ export function buildSpokenItems(model, mathSpeech) {
   // `srcStart` = the item's first char offset in its unit's flat text, so a caret
   // can start reading mid-block from the right word (see sliceItemsFrom).
   const ident = (idx, text, unit) => ({ blockIdx: idx, unit, text, map: text.split('').map((_, i) => i), srcStart: 0 });
+
+  function processSegments(segments, blockIdx, unit) {
+    let text = '', map = [], flat = 0, mathIdx = 0, textStart = 0;
+    const flushText = () => {
+      if (text.trim()) {
+        items.push({ blockIdx, unit, text, map, srcStart: textStart });
+      }
+      text = '';
+      map = [];
+    };
+    for (const s of segments || []) {
+      if (!s) continue;
+      if (s.type === 'math') {
+        flushText();
+        const mathLen = (s.latex ? `$${s.latex}$` : '⟨equation⟩').length;
+        const r = mathSpeech ? mathSpeech(s.latex || '') : null;
+        const ms = (typeof r === 'string') ? { spokenText: r, atomMap: [], wrappedLatex: '' } : (r || {});
+        items.push({
+          blockIdx,
+          unit,
+          kind: 'math',
+          mathIndex: mathIdx,
+          srcStart: flat,
+          latex: s.latex || '',
+          text: ms.spokenText || '',
+          atomMap: ms.atomMap || [],
+          wrappedLatex: ms.wrappedLatex || ''
+        });
+        flat += mathLen;
+        mathIdx++;
+      } else {
+        const t = collapse(s.text);
+        if (text === '') textStart = flat;
+        text += t;
+        for (let i = 0; i < t.length; i++) map.push(flat + i);
+        flat += t.length;
+      }
+    }
+    flushText();
+  }
+
   (model.blocks || []).forEach((b, idx) => {
     if (!b) return;
     if (b.type === 'heading' || b.type === 'title') {
-      const t = collapse(b.text || (b.segments ? b.segments.map(s => s.text || (s.latex ? ' ' + s.latex + ' ' : '')).join('') : ''));
-      items.push(ident(idx, t, 0));
+      if (b.segments && b.segments.length) {
+        processSegments(b.segments, idx, 0);
+      } else {
+        const t = collapse(b.text || '');
+        if (t.trim()) items.push(ident(idx, t, 0));
+      }
       return;
     }
-    if (b.type === 'indicator') { items.push({ blockIdx: idx, unit: 0, text: ', , ,', map: [], srcStart: 0 }); return; }   // pause; nothing to highlight
-    // An emphasised or maths-bearing item carries `segments` and no `text`.
-    const itemText = (it) => (typeof it === 'string' ? it : (it.text ?? (it.segments || []).map((s) => s.text || (s.latex ? ' ' + s.latex + ' ' : '')).join('')));
-    if (b.type === 'list') { (b.items || []).forEach((it, li) => items.push(ident(idx, collapse(itemText(it)), li))); return; }
-    if (b.type === 'para' || b.type === 'note') {
-      if (b.segments) {
-        // Equations are spoken as their OWN item (like SumIt reads a single equation),
-        // carrying { spokenText, atomMap, wrappedLatex } so the reader can light up each
-        // term. Text runs stay word-mapped for the print/braille word karaoke.
-        let text = '', map = [], flat = 0, mathIdx = 0, textStart = 0;
-        const flushText = () => { if (text.trim()) items.push({ blockIdx: idx, unit: 0, text, map, srcStart: textStart }); text = ''; map = []; };
-        for (const s of b.segments) {
-          if (s.type === 'math') {
-            flushText();
-            const r = mathSpeech(s.latex || '');
-            const ms = (typeof r === 'string') ? { spokenText: r, atomMap: [], wrappedLatex: '' } : (r || {});
-            items.push({ blockIdx: idx, unit: 0, kind: 'math', mathIndex: mathIdx, srcStart: flat, latex: s.latex || '', text: ms.spokenText || '', atomMap: ms.atomMap || [], wrappedLatex: ms.wrappedLatex || '' });
-            mathIdx++;
-          } else {
-            const t = collapse(s.text); if (text === '') textStart = flat; text += t; for (let i = 0; i < t.length; i++) map.push(flat + i); flat += t.length;
-          }
+    if (b.type === 'indicator') {
+      items.push({ blockIdx: idx, unit: 0, text: ', , ,', map: [], srcStart: 0 });
+      return;
+    }
+    if (b.type === 'list') {
+      (b.items || []).forEach((it, li) => {
+        if (it && it.segments && it.segments.length) {
+          processSegments(it.segments, idx, li);
+        } else {
+          const t = collapse(typeof it === 'string' ? it : (it?.text || ''));
+          if (t.trim()) items.push(ident(idx, t, li));
         }
-        flushText();
-      } else { const t = collapse(b.text); items.push(ident(idx, t, 0)); }
+      });
+      return;
+    }
+    if (b.type === 'table') {
+      const rawHeaders = Array.isArray(b.headers) ? b.headers : [];
+      const rawRows = (Array.isArray(b.rows) ? b.rows : []).map((r) => (Array.isArray(r) ? r : (r == null ? [] : [r])));
+      const colCount = Math.max(rawHeaders.length, ...rawRows.map((r) => r.length));
+      const headerCount = rawHeaders.length;
+      for (let ci = 0; ci < headerCount; ci++) {
+        const t = collapse(rawHeaders[ci] != null ? String(rawHeaders[ci]) : '');
+        if (t.trim()) items.push(ident(idx, t, ci));
+      }
+      rawRows.forEach((r, ri) => {
+        for (let ci = 0; ci < colCount; ci++) {
+          const unit = headerCount + ri * colCount + ci;
+          const t = collapse((r && r[ci] != null) ? String(r[ci]) : '');
+          if (t.trim()) items.push(ident(idx, t, unit));
+        }
+      });
+      if (headerCount === 0 && rawRows.length === 0 && (b.title || b.caption)) {
+        const t = collapse(String(b.title || b.caption));
+        if (t.trim()) items.push(ident(idx, t, 0));
+      }
+      return;
+    }
+    if (b.type === 'box' || b.type === 'sidebar') {
+      if (Array.isArray(b.blocks) && b.blocks.length) {
+        b.blocks.forEach((cb, u) => {
+          if (cb.type === 'list' && Array.isArray(cb.items)) {
+            cb.items.forEach((it, liIdx) => {
+              const itemUnit = u * 1000 + liIdx;
+              if (it && it.segments && it.segments.length) {
+                processSegments(it.segments, idx, itemUnit);
+              } else {
+                const t = collapse(typeof it === 'string' ? it : (it?.text || ''));
+                if (t.trim()) items.push(ident(idx, t, itemUnit));
+              }
+            });
+          } else if (cb.segments && cb.segments.length) {
+            processSegments(cb.segments, idx, u);
+          } else {
+            const t = collapse(cb.text || cb.title || '');
+            if (t.trim()) items.push(ident(idx, t, u));
+          }
+        });
+      } else if (b.segments && b.segments.length) {
+        processSegments(b.segments, idx, 0);
+      } else {
+        const t = collapse(b.text || b.title || b.caption || '');
+        if (t.trim()) items.push(ident(idx, t, 0));
+      }
+      return;
+    }
+    // All other block types (para, note, caption, footnote, attribution, stage, play, etc.)
+    if (b.segments && b.segments.length) {
+      processSegments(b.segments, idx, 0);
+    } else {
+      const t = collapse(b.text || b.title || b.caption || '');
+      if (t.trim()) items.push(ident(idx, t, 0));
     }
   });
   return items;

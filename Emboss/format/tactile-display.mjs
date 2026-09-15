@@ -412,22 +412,26 @@ export function zhangSuenThinning(grid, width, height) {
 }
 
 /**
- * Rasterizes an SVG string to a 300-byte cell matrix (30x10 cells, 60x40 pins) for DotPad.
- * If the SVG contains precomputed `data-dotpad-matrix`, it directly decodes the hex bytes.
- * Otherwise, uses high-precision edge extraction and morphological thinning to guarantee crisp
+/**
+ * Rasterizes an SVG string to a multi-line Braille cell matrix (e.g. 30x10 for DotPad, 32x10 for Monarch).
+ * Uses high-precision edge extraction and morphological thinning to guarantee crisp
  * 1-pin continuous contours without anti-aliasing blooming or unreadable solid-fill plateaus.
  * @param {string} svgString - Tactile SVG vector content.
- * @param {number} [widthPins=60] - Width in pins (default 60 for 30 cells).
- * @param {number} [heightPins=40] - Height in pins (default 40 for 10 rows).
- * @returns {Promise<Uint8Array>} 300-byte array where each byte is an 8-pin cell mask.
+ * @param {number} [numCols=32] - Width in cells (30 for DotPad, 32 for Monarch).
+ * @param {number} [numLines=10] - Height in lines (default 10).
+ * @returns {Promise<Uint8Array>} Array where each byte is an 8-pin cell mask.
  */
-export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heightPins = 40) {
+export async function rasterizeSvgToTactileCells(svgString, numCols = 32, numLines = 10) {
+  const widthPins = numCols * 2;
+  const heightPins = numLines * 4;
+  const totalCells = numCols * numLines;
+
   if (!svgString) {
-    return new Uint8Array(300);
+    return new Uint8Array(totalCells);
   }
 
-  // 1. Direct hex decoding if SVG carries precomputed discrete pin matrix
-  if (typeof svgString === 'string' && svgString.includes('data-dotpad-matrix=')) {
+  // 1. Direct hex decoding if SVG carries precomputed discrete pin matrix for DotPad (30 cols)
+  if (numCols === 30 && typeof svgString === 'string' && svgString.includes('data-dotpad-matrix=')) {
     const m = svgString.match(/data-dotpad-matrix=["']([0-9a-fA-F]+)["']/);
     if (m && m[1] && m[1].length >= 600) {
       const hex = m[1];
@@ -439,19 +443,32 @@ export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heigh
     }
   }
 
+  // 1b. Direct hex decoding if SVG carries precomputed discrete pin matrix for Monarch (32 cols)
+  if (numCols === 32 && typeof svgString === 'string' && svgString.includes('data-monarch-matrix=')) {
+    const m = svgString.match(/data-monarch-matrix=["']([0-9a-fA-F]+)["']/);
+    if (m && m[1] && m[1].length >= 640) {
+      const hex = m[1];
+      const bytes = new Uint8Array(320);
+      for (let i = 0; i < 320; i++) {
+        bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16) || 0;
+      }
+      return bytes;
+    }
+  }
+
   if (typeof document === 'undefined') {
-    return new Uint8Array(300);
+    return new Uint8Array(totalCells);
   }
 
   return new Promise((resolve) => {
     try {
-      const renderW = 600;
+      const renderW = 640;
       const renderH = Math.round(renderW * (heightPins / widthPins));
       const sampleCanvas = document.createElement('canvas');
       sampleCanvas.width = renderW;
       sampleCanvas.height = renderH;
       const sCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
-      if (!sCtx) return resolve(new Uint8Array(300));
+      if (!sCtx) return resolve(new Uint8Array(totalCells));
 
       sCtx.fillStyle = '#ffffff';
       sCtx.fillRect(0, 0, renderW, renderH);
@@ -465,7 +482,7 @@ export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heigh
         URL.revokeObjectURL(url);
 
         const highResData = sCtx.getImageData(0, 0, renderW, renderH).data;
-        const matrix = new Uint8Array(300); // 30 cols x 10 rows
+        const matrix = new Uint8Array(totalCells);
 
         const sampleStepX = renderW / widthPins;
         const sampleStepY = renderH / heightPins;
@@ -507,8 +524,8 @@ export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heigh
         // Apply Morphological Thinning to reduce thick anti-aliased strokes to crisp 1-pin contours
         zhangSuenThinning(binaryGrid, widthPins, heightPins);
 
-        for (let cellRow = 0; cellRow < 10; cellRow++) {
-          for (let cellCol = 0; cellCol < 30; cellCol++) {
+        for (let cellRow = 0; cellRow < numLines; cellRow++) {
+          for (let cellCol = 0; cellCol < numCols; cellCol++) {
             const px = cellCol * 2;
             const py = cellRow * 4;
 
@@ -523,7 +540,7 @@ export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heigh
 
             const mask = (d1 << 0) | (d2 << 1) | (d3 << 2) | (d4 << 3) |
                          (d5 << 4) | (d6 << 5) | (d7 << 6) | (d8 << 7);
-            matrix[cellRow * 30 + cellCol] = mask;
+            matrix[cellRow * numCols + cellCol] = mask;
           }
         }
 
@@ -532,14 +549,28 @@ export async function rasterizeSvgToDotPadCells(svgString, widthPins = 60, heigh
 
       img.onerror = () => {
         URL.revokeObjectURL(url);
-        resolve(new Uint8Array(300));
+        resolve(new Uint8Array(totalCells));
       };
 
       img.src = url;
     } catch {
-      resolve(new Uint8Array(300));
+      resolve(new Uint8Array(totalCells));
     }
   });
+}
+
+/**
+ * Rasterizes an SVG string to a 300-byte cell matrix (30x10 cells, 60x40 pins) for DotPad.
+ */
+export async function rasterizeSvgToDotPadCells(svgString) {
+  return rasterizeSvgToTactileCells(svgString, 30, 10);
+}
+
+/**
+ * Rasterizes an SVG string to a 320-byte cell matrix (32x10 cells, 64x40 pins) for APH Monarch.
+ */
+export async function rasterizeSvgToMonarchCells(svgString) {
+  return rasterizeSvgToTactileCells(svgString, 32, 10);
 }
 
 /**
@@ -1047,6 +1078,41 @@ export class TactileDisplayManager {
       textRows: viewport.textRows,
       viewportLines: viewport.lines,
       startLine: this.currentStartLine,
+      totalLines,
+      pageNumber,
+      totalPages
+    };
+  }
+
+  getMonarchActiveFrame() {
+    const lines = 10;
+    const width = 32;
+    const totalLines = this.lastBraille.length || 1;
+    const pageNumber = Math.floor(this.currentStartLine / lines) + 1;
+    const totalPages = Math.ceil(totalLines / lines) || 1;
+
+    const viewport = formatTactileViewport(this.lastBraille, {
+      startLine: this.currentStartLine,
+      width: 32,
+      lines: 10
+    });
+
+    const graphic = this.getGraphicForLine(this.currentStartLine);
+    const isGraphic = Boolean(graphic && (graphic.monarchMatrix || graphic.matrix));
+    const graphicMatrix = isGraphic ? (graphic.monarchMatrix || graphic.matrix) : null;
+
+    const activeLine = (typeof this.activeLineIndex === 'number' && this.activeLineIndex >= this.currentStartLine && this.activeLineIndex < this.currentStartLine + lines)
+      ? this.activeLineIndex
+      : this.currentStartLine;
+
+    return {
+      isGraphic,
+      graphicMatrix,
+      brailleLine: isGraphic ? (graphic.title || '') : '',
+      textRows: viewport.textRows,
+      viewportLines: viewport.lines,
+      startLine: this.currentStartLine,
+      activeLine,
       totalLines,
       pageNumber,
       totalPages

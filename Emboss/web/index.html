@@ -22,21 +22,21 @@
       </a>
       <h1>Emboss</h1>
       <div class="toolbar" style="margin-left:auto;display:flex;align-items:center;gap:8px">
-        <button id="advancedBtn" class="adv-btn" type="button" title="Open the Advanced editor — type &amp; format with live braille">Advanced&nbsp;editor →</button>
-        <button id="settingsBtn" class="icon-btn icon-btn-lg" type="button" title="Settings" aria-label="Settings">
+        <button id="advancedBtn" class="adv-btn" type="button" data-i18n="toolbar.advanced_editor" data-i18n-title="toolbar.advanced_editor" title="Open the Advanced editor — type &amp; format with live braille">Advanced&nbsp;editor →</button>
+        <button id="settingsBtn" class="icon-btn icon-btn-lg" type="button" data-i18n-title="common.settings" data-i18n-aria="common.settings" title="Settings" aria-label="Settings">
           <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="3"></circle>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
         </button>
-        <button id="helpBtn" class="icon-btn icon-btn-lg" type="button" title="Help &amp; credits" aria-label="Help and credits">?</button>
+        <button id="helpBtn" class="icon-btn icon-btn-lg" type="button" data-i18n-title="common.help" data-i18n-aria="common.help" title="Help &amp; credits" aria-label="Help and credits">?</button>
       </div>
     </div>
     <p class="sub">document → <strong>BRF</strong> braille · UEB (<span id="settingsSummary">…</span>)</p>
   </header>
 
   <main>
-    <section id="dropzone" class="dropzone" tabindex="0" aria-label="Drop a document here or click to choose a file">
+    <section id="dropzone" class="dropzone" tabindex="0" data-i18n-aria="dropzone.title" aria-label="Drop a document here or click to choose a file">
       <div class="dz-inner">
         <div class="dz-icon" aria-hidden="true">
           <svg viewBox="0 0 64 64" width="60" height="60" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -44,10 +44,10 @@
             <path d="M32 30v18" /><path d="M24 38l8-8 8 8" />
           </svg>
         </div>
-        <h2 class="dz-title">Drop a document here</h2>
-        <p class="dz-or">or</p>
-        <button id="chooseBtn" type="button">Choose file</button>
-        <div class="dz-formats" aria-label="Supported file formats">
+        <h2 class="dz-title" data-i18n="dropzone.title">Drop a document here</h2>
+        <p class="dz-or" data-i18n="dropzone.or">or</p>
+        <button id="chooseBtn" type="button" data-i18n="dropzone.choose">Choose file</button>
+        <div class="dz-formats" data-i18n-aria="dropzone.formats" aria-label="Supported file formats">
           <span class="chip">DOCX</span><span class="chip">ODT</span><span class="chip">EPUB</span>
           <span class="chip">HTML</span><span class="chip">NIMAS XML</span><span class="chip">DAISY</span><span class="chip">MD</span><span class="chip">RTF</span><span class="chip">TXT</span>
         </div>
@@ -55,8 +55,8 @@
                accept=".docx,.odt,.epub,.html,.htm,.md,.markdown,.rtf,.txt,.xml,.nimas,.dtbook,.zip,text/plain,text/html,text/xml,application/xml" hidden />
         <p id="fileName" class="dz-file"></p>
         <div id="fileActions" style="display:none;margin-top:12px;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
-          <button id="dzReadBtn" type="button" style="height:40px;padding:0 16px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600;border-radius:6px">▶ Read Aloud</button>
-          <button id="dzEmbossBtn" type="button" style="height:40px;padding:0 18px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;border-radius:6px;font-size:1rem">🖨 Emboss</button>
+          <button id="dzReadBtn" type="button" style="height:40px;padding:0 16px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600;border-radius:6px">▶ <span data-i18n="toolbar.read_aloud">Read Aloud</span></button>
+          <button id="dzEmbossBtn" type="button" style="height:40px;padding:0 18px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;border-radius:6px;font-size:1rem">🖨 <span data-i18n="toolbar.emboss">Emboss</span></button>
         </div>
       </div>
     </section>
@@ -67,17 +67,17 @@
       <div class="result-bar">
         <span id="resultMeta"></span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <button id="readBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600">▶ Read Aloud</button>
-          <button id="embossBtn" type="button" class="tb-btn hardware-expert-only" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;display:none;">🖨 Emboss</button>
+          <button id="readBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600">▶ <span data-i18n="toolbar.read_aloud">Read Aloud</span></button>
+          <button id="embossBtn" type="button" class="tb-btn hardware-expert-only" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;display:none;">🖨 <span data-i18n="toolbar.emboss">Emboss</span></button>
           <div class="menu-wrap" id="downloadMenuWrap">
-            <button id="downloadBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600" aria-haspopup="menu" aria-expanded="false" title="Download formatted braille document (.brf, .pef, .ebrl)">
+            <button id="downloadBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600" aria-haspopup="menu" aria-expanded="false" data-i18n-title="common.download" title="Download formatted braille document (.brf, .pef, .ebrl)">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.8;">▼</span>
+              <span data-i18n="common.download">Download</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.8;">▼</span>
             </button>
             <div class="menu-dropdown align-right" id="downloadMenu" role="menu" hidden>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl">Braille (BRF)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📑</span> <span class="menu-item-lbl">Embosser (PEF)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl">eBraille 1.0 (.ebrl)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl" data-i18n="toolbar.download_brf">Braille (BRF)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📑</span> <span class="menu-item-lbl" data-i18n="toolbar.download_pef">Embosser (PEF)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl" data-i18n="toolbar.download_ebrl">eBraille 1.0 (.ebrl)</span></button>
             </div>
           </div>
         </div>
@@ -89,19 +89,19 @@
   <!-- Settings dialog -->
   <dialog id="settingsDialog" class="dialog">
     <form method="dialog" class="dialog-body">
-      <div class="dialog-head"><h2>Settings</h2><button class="icon-btn" value="close" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2 data-i18n="settings.title">Settings</h2><button class="icon-btn" value="close" aria-label="Close">✕</button></div>
       <div class="settings-layout">
         <nav class="settings-nav" role="tablist" aria-label="Settings Categories">
-          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 Rules &amp; Standards</button>
-          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 Embosser &amp; Serial</button>
-          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 User Interface</button>
-          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ Advanced Production</button>
+          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 <span data-i18n="settings.tab_rules">Rules &amp; Standards</span></button>
+          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 <span data-i18n="settings.tab_embosser">Embosser &amp; Hardware</span></button>
+          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 <span data-i18n="settings.tab_interface">User Interface</span></button>
+          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ <span data-i18n="settings.tab_production">Advanced Production</span></button>
         </nav>
         <div class="settings-panels">
           <div id="tab-rules" class="settings-panel active" role="tabpanel">
-            <h3>Rules &amp; Translation Standards</h3>
+            <h3 data-i18n="settings.tab_rules">Rules &amp; Translation Standards</h3>
             <div class="field">
-              <label for="language">Language &amp; Contraction Grade</label>
+              <label for="language" data-i18n="settings.braille_code_label">Language &amp; Contraction Grade</label>
               <select id="language">
                 <option value="ueb_g2" selected>English UEB (Grade 2 - Contracted)</option>
                 <option value="ueb_g1">English UEB (Grade 1 - Uncontracted)</option>
@@ -120,35 +120,35 @@
               </select>
             </div>
             <div class="field">
-              <label for="mode">Layout Standard</label>
+              <label for="mode" data-i18n="settings.standard_label">Layout Standard</label>
               <select id="mode">
                 <option value="ukaaf" selected>UKAAF (UK Standard, 38×25)</option>
                 <option value="bana">BANA (US Standard, 40×25)</option>
               </select>
             </div>
             <div class="field">
-              <label for="paragraphStyle">Paragraph Style</label>
+              <label for="paragraphStyle" data-i18n="settings.paragraph_style_label">Paragraph Style</label>
               <select id="paragraphStyle">
                 <option value="indented" selected>Indented (3-1, standard)</option>
                 <option value="block">Block (1-1, blank lines)</option>
               </select>
             </div>
             <div class="field">
-              <label for="quoteStyle">Quotation Marks</label>
+              <label for="quoteStyle" data-i18n="settings.quote_style_label">Quotation Marks</label>
               <select id="quoteStyle">
                 <option value="faithful" selected>Faithful to print</option>
                 <option value="exchange">Exchange single → double (UK house style)</option>
               </select>
             </div>
             <div class="field">
-              <label for="listStyle">List Format</label>
+              <label for="listStyle" data-i18n="settings.list_style_label">List Format</label>
               <select id="listStyle">
                 <option value="spaced" selected>Blank-line list (B004 Ex1, 1-3)</option>
                 <option value="compact">Compact list (B004 Ex2, 5-1)</option>
               </select>
             </div>
             <div class="field">
-              <label for="tableFormat">Table Layout</label>
+              <label for="tableFormat" data-i18n="settings.table_format_label">Table Layout</label>
               <select id="tableFormat">
                 <option value="auto" selected>Auto (Listed if wide, Columnar if small)</option>
                 <option value="listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
@@ -158,9 +158,9 @@
           </div>
 
           <div id="tab-hardware" class="settings-panel" role="tabpanel">
-            <h3>Embosser Hardware &amp; Serial Spooling</h3>
+            <h3 data-i18n="settings.tab_embosser">Embosser Hardware &amp; Serial Spooling</h3>
             <div class="field">
-              <label for="embosser">Embosser Preset</label>
+              <label for="embosser" data-i18n="settings.embosser_preset_label">Embosser Preset</label>
               <select id="embosser">
                 <option value="generic" selected>Generic BRF / Standard Embosser (38×25)</option>
                 <option value="monarch">APH Monarch Dynamic Display (32×10)</option>
@@ -174,14 +174,14 @@
               </select>
             </div>
             <div class="field">
-              <label for="embosserDuplex">Duplex Mode</label>
+              <label for="embosserDuplex" data-i18n="settings.duplex_label">Duplex Mode</label>
               <select id="embosserDuplex">
-                <option value="double" selected>Interpoint (Double-Sided)</option>
-                <option value="single">Single-Sided (Simplex)</option>
+                <option value="double" selected data-i18n="settings.duplex_double">Interpoint (Double-Sided)</option>
+                <option value="single" data-i18n="settings.duplex_single">Single-Sided (Simplex)</option>
               </select>
             </div>
             <div class="field" style="display:none;">
-              <label for="baudRate">Serial Baud Rate (WebSerial Spooling)</label>
+              <label for="baudRate" data-i18n="settings.baud_rate_label">Serial Baud Rate (WebSerial Spooling)</label>
               <select id="baudRate">
                 <option value="9600" selected>9600 bps (Standard Embosser default)</option>
                 <option value="19200">19200 bps</option>
@@ -189,53 +189,58 @@
                 <option value="115200">115200 bps (High Speed USB/Serial)</option>
               </select>
             </div>
-            <div class="field-row">
-              <div class="field"><label for="cells">Cells / line</label><input id="cells" type="number" min="10" max="60" value="38" /></div>
-              <div class="field"><label for="lines">Lines / page</label><input id="lines" type="number" min="10" max="45" value="25" /></div>
-            </div>
           </div>
 
           <div id="tab-display" class="settings-panel" role="tabpanel">
-            <h3>User Interface</h3>
+            <h3 data-i18n="settings.tab_interface">User Interface</h3>
+            <div class="field" style="margin-bottom:14px;">
+              <label for="set-uiLanguage" data-i18n="settings.language_label">Interface Language</label>
+              <select id="set-uiLanguage"></select>
+              <small data-i18n="settings.language_help" style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Select the language used for buttons, menus, dialogs, and screen reader announcements.</small>
+            </div>
             <div class="field field-check">
               <label class="check-label" for="interline">
                 <input type="checkbox" id="interline" />
-                <span><strong>Interline Print View</strong> — show print text directly above braille lines</span>
+                <span><strong data-i18n="settings.interline_label">Interline Print View</strong> — show print text directly above braille lines</span>
               </label>
             </div>
             <div class="field field-check">
               <label class="check-label" for="asciiBraille">
                 <input type="checkbox" id="asciiBraille" />
-                <span><strong>Display as ASCII Braille</strong> — show raw ASCII braille characters</span>
+                <span><strong data-i18n="settings.ascii_braille_label">Display as ASCII Braille</strong> — show raw ASCII braille characters</span>
               </label>
             </div>
             <div class="field field-check">
               <label class="check-label" for="simpleMode">
                 <input type="checkbox" id="simpleMode" checked />
-                <span><strong>Simple mode</strong> — drag-and-drop converter mode</span>
+                <span><strong data-i18n="settings.simple_mode_label">Simple mode</strong> — drag-and-drop converter mode</span>
               </label>
             </div>
           </div>
 
           <div id="tab-document" class="settings-panel" role="tabpanel">
-            <h3>Advanced Production</h3>
+            <h3 data-i18n="settings.tab_production">Page Geometry &amp; Volume Splitting</h3>
+            <div class="field-row" style="margin-bottom:12px;">
+              <div class="field"><label for="cells" data-i18n="settings.geometry_cells">Cells / line</label><input id="cells" type="number" min="10" max="60" value="38" /></div>
+              <div class="field"><label for="lines" data-i18n="settings.geometry_lines">Lines / page</label><input id="lines" type="number" min="10" max="45" value="25" /></div>
+            </div>
             <div class="field">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
                 <input type="checkbox" id="includeCovers" style="width:16px;height:16px" />
-                <span>Tactile Volume Cover Pages <span style="color:var(--muted);font-weight:400">— embossed title covers when splitting books</span></span>
+                <span><strong data-i18n="settings.include_covers">Tactile Volume Cover Pages</strong> <span style="color:var(--muted);font-weight:400">— embossed title covers when splitting books</span></span>
               </label>
             </div>
           </div>
         </div>
       </div>
-      <div class="dialog-foot"><button value="close" class="primary">Done</button></div>
+      <div class="dialog-foot"><button value="close" class="primary" data-i18n="common.done">Done</button></div>
     </form>
   </dialog>
 
   <!-- Help & credits dialog -->
   <dialog id="helpDialog" class="dialog">
     <div class="dialog-body">
-      <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" class="icon-btn" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2 data-i18n="common.help">Help &amp; Documentation</h2><button id="helpClose" class="icon-btn" data-i18n-aria="common.close" aria-label="Close">✕</button></div>
       <div class="help-content">
         <h3>What Emboss Does</h3>
         <p>Emboss converts modern documents into properly formatted braille files (<strong>BRF</strong>, <strong>eBraille</strong>, and <strong>PEF</strong>), ready for physical embossing or digital refreshable braille displays. It interprets document structure — headings, paragraphs, lists, tables, mathematics, poetry, drama, footnotes, and tactile graphics — and lays them out according to official international braille standards.</p>
@@ -244,7 +249,7 @@
         <p>Emboss has two integrated modes sharing your settings and translation configurations:</p>
         <ul>
           <li><strong>Quick Mode (This Screen)</strong> — The fast route for documents you already have: drag and drop a file and get an embosser-ready BRF straight away.</li>
-          <li><strong>Advanced Direct Braille Editor</strong> — A live dual-pane editor featuring a rich print text editor (headings, styles, typeforms, 346 STEM formula templates, tables, tactile graphics, 6-key braille chording, speech) and an interactive Braille editor pane with direct reverse-translation, margin presets, line/cell coordinate badges, sync validation, INS/OVR modes, and Unicode/ASCII braille toggles. Open it with <strong>Advanced&nbsp;editor&nbsp;→</strong> at the top of the screen.</li>
+          <li><strong>Advanced Direct Braille Editor</strong> — A live dual-pane editor where you write and format with braille building live beside you, including MathLive equations, 346 formula templates, spatial tables, tactile graphics RIP, Perkins 6-key chording, read-aloud speech, and self-checking proofreader. Open it with <strong>Advanced&nbsp;editor&nbsp;→</strong> at the top of the screen.</li>
         </ul>
 
         <h3>How to Use Quick Mode</h3>
@@ -266,8 +271,8 @@
         <h3>📊 Spatial Tables &amp; Advanced Formatting (BANA &amp; UKAAF)</h3>
         <p>Emboss automatically transcribes tabular data into standard <strong>Spatial Columnar Tables</strong> with aligned columns and 2-cell gutters, falling back to <strong>Listed Table</strong> format when tables exceed page width. It also supports formal Transcriber's Notes (<code>TN_OPEN</code>/<code>TN_CLOSE</code>), BANA §12 Footnotes (1-3 margin), Boxlines (<code>333 / 777</code>), Play dialogues, and Verse stanzas.</p>
 
-        <h3>🖼 Tactile Graphics &amp; Anti-Slicing</h3>
-        <p>Emboss includes an automatic <strong>page-boundary anti-slicing</strong> engine that ensures tactile diagrams never get cut across page breaks, and rasterizes vector SVGs directly into <strong>ViewPlus Tiger 8-height 3D relief</strong> and <strong>Index Braille floating-dot streams</strong>.</p>
+        <h3>🖼 Tactile Graphics &amp; Anti-Slicing (Experimental)</h3>
+        <p>Emboss includes an experimental <strong>page-boundary anti-slicing</strong> engine that ensures tactile diagrams never get cut across page breaks, and rasterizes vector SVGs directly into <strong>ViewPlus Tiger 8-height 3D relief</strong> and <strong>Index Braille floating-dot streams</strong>. <em>(Note: Tactile graphics rasterization is an experimental feature currently in active development.)</em></p>
 
         <h3>🖨 Modern Driverless Embosser Spooling</h3>
         <p>Emboss allows you to punch pages directly to braille embossers from Chrome, Edge, and Opera without installing proprietary drivers:</p>

@@ -31,7 +31,7 @@ function lineSvg(line, cellW, cellH, dotR, rowIndex, rowSrc) {
     const link = src ? ` data-unit="${src.u}" data-char="${src.c}"` : '';
     inner += `<g class="bcell" data-row="${rowIndex}" data-col="${ci}"${bits ? ' data-on="1"' : ''}${link}>${dots}</g>`;
   });
-  return `<svg class="brl-svg" viewBox="0 0 ${w} ${cellH.toFixed(0)}" style="width:100%; max-width:${w}px; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg" role="presentation">${inner}</svg>`;
+  return `<svg class="brl-svg" viewBox="0 0 ${w} ${cellH.toFixed(0)}" style="width:100%; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg" role="presentation">${inner}</svg>`;
 }
 
 export function expandRowCells(row) {
@@ -53,6 +53,18 @@ export function expandRowCells(row) {
   row._expanded = true;
 }
 
+export function autoFitBraille(container, numCells = 38) {
+  if (!container) return;
+  const num = Math.max(10, (numCells | 0) || 38);
+  const containerW = container.clientWidth || 540;
+  const targetFontSize = Math.max(10, Math.min(30, Math.floor((containerW - 48) / (num * 0.78))));
+  container.style.fontSize = `${targetFontSize}px`;
+  const brlInput = container?.parentElement?.querySelector?.('#brlInput') || (typeof document !== 'undefined' ? document.getElementById('brlInput') : null);
+  if (brlInput) {
+    brlInput.style.fontSize = `${targetFontSize}px`;
+  }
+}
+
 // Render `brf` (form-feed page breaks, CR?LF lines) into `container`. If
 // `opts.rows` is given (from formatDocument's trace), each row div is tagged with
 // `data-block` = its source block index (-1 = running head / page number / TOC),
@@ -61,8 +73,8 @@ export function renderBraille(container, brf, opts = {}) {
   const numCells = Math.max(10, (opts.cells | 0) || 38);
   const containerW = container ? (container.clientWidth || 540) : 540;
   // Calculate font size so ALL numCells fit inside available container width (minus padding & scrollbar gutter)
-  const targetFontSize = Math.max(11, Math.min(22, Math.floor((containerW - 48) / (numCells * 0.78))));
-  const fontSize = opts.cellW ? Math.max(11, Math.round(opts.cellW * 1.55)) : targetFontSize;
+  const targetFontSize = Math.max(10, Math.min(30, Math.floor((containerW - 48) / (numCells * 0.78))));
+  const fontSize = opts.cellW ? Math.max(10, Math.round(opts.cellW * 1.55)) : targetFontSize;
   const cellW = Math.round(fontSize / 1.55);
   const rows = opts.rows || null;
   const rowCells = opts.rowCells || null;            // per-row cell→source map (word/cell linking)
@@ -256,7 +268,6 @@ export function renderBraille(container, brf, opts = {}) {
     }
     const textContainer = document.createElement('div');
     textContainer.className = 'brl-text-wrap' + (isAscii ? ' brl-ascii' : '');
-    textContainer.style.fontSize = `${fontSize}px`;
     textContainer.style.lineHeight = '1.4';
     textContainer.style.letterSpacing = 'normal';
     textContainer.style.fontFamily = fontFam;
@@ -336,6 +347,8 @@ export function renderBraille(container, brf, opts = {}) {
 
   function applyWordHighlightToRow(rowEl, it) {
     if (!activeWordHl || it.block !== activeWordHl.block) return;
+    const rIdx = it.rowIndex != null ? it.rowIndex : (rowEl.dataset?.row != null ? Number(rowEl.dataset.row) : null);
+    if (activeWordHl.rowIdx != null && activeWordHl.rowIdx >= 0 && rIdx != null && !isNaN(rIdx) && rIdx !== activeWordHl.rowIdx) return;
     expandRowCells(rowEl);
     const { unit, s, e, cw, ch } = activeWordHl;
     rowEl.querySelectorAll('.bcell[data-char]').forEach((c) => {
@@ -421,6 +434,15 @@ export function renderBraille(container, brf, opts = {}) {
       const itemIdx = blockFirstItem.get(blockIdx);
       return itemIdx != null ? items[itemIdx]?.top ?? 0 : null;
     },
+    getBlockHeight: (blockIdx) => {
+      const itemIdx = blockFirstItem.get(blockIdx);
+      if (itemIdx == null) return null;
+      let h = 0;
+      for (let i = itemIdx; i < items.length && items[i].block === blockIdx; i++) {
+        h += items[i].height;
+      }
+      return h > 0 ? h : (items[itemIdx]?.height ?? 20);
+    },
     getVisibleBlock: () => {
       const sTop = container.scrollTop;
       let low = 0, high = items.length - 1, best = null;
@@ -438,7 +460,15 @@ export function renderBraille(container, brf, opts = {}) {
     scrollToBlock: (blockIdx, offset = 0) => {
       const itemIdx = blockFirstItem.get(blockIdx);
       if (itemIdx != null && items[itemIdx]) {
-        container.scrollTop = Math.max(0, items[itemIdx].top - offset);
+        let blockH = 0;
+        for (let i = itemIdx; i < items.length && items[i].block === blockIdx; i++) {
+          blockH += items[i].height;
+        }
+        if (blockH === 0) blockH = items[itemIdx].height || 20;
+        const delta = (typeof offset === 'number' && offset >= 0 && offset <= 1)
+          ? offset * blockH
+          : (typeof offset === 'number' && offset < 0 ? -offset : 0);
+        container.scrollTop = Math.max(0, items[itemIdx].top + delta);
         renderVisible(true);
       }
     },

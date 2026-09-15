@@ -225,7 +225,8 @@ const ok = (name, cond, got = '') => {
     }
 
     window.modelToLexical({ blocks });
-    await new Promise((r) => setTimeout(r, 600));
+    await window.render();
+    await new Promise((r) => setTimeout(r, 300));
 
     const pageBreaks = brailleEl.querySelectorAll('.brl-pagebreak');
     const numBraillePages = pageBreaks.length + 1;

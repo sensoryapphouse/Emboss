@@ -279,11 +279,11 @@ const stageBlock = { type: 'stage', style: 'stage', text: 'Enter Ghost, Hamlet, 
 const stageLines = formatBlock(stageBlock, brailleOpts);
 check('Stage direction starts in Cell 7 (6 spaces indent)', stageLines[0].startsWith('      '));
 
-// 3. Poetry / Verse: 1-3 margin (Cell 1 first line, Cell 5 / Cell 3 runover)
+// 3. Poetry / Verse: 1-3 margin (Cell 1 first line, Cell 3 runover)
 const poemBlock = { type: 'play', subtype: 'verse', style: 'poem', text: 'Two roads diverged in a yellow wood, and sorry I could not travel both.' };
 const poemLines = formatBlock(poemBlock, brailleOpts);
 check('Poetry first line starts in Cell 1', poemLines[0].startsWith('TWO ROADS'));
-check('Poetry runover line starts with indent (Cell 5)', poemLines[1].startsWith('    '));
+check('Poetry runover line starts with indent (Cell 3)', poemLines[1].startsWith('  '));
 
 // 4. Transcriber Note: BANA TN indicators (@.< ... @.>) with 7-5 margin
 const noteBlock = { type: 'note', style: 'note', text: 'This chart was modified for clarity.' };

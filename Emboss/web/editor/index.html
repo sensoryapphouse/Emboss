@@ -19,9 +19,11 @@
         return b;
       }
       window.addEventListener('error', function (e) {
+        if ((e.message || '').includes('ResizeObserver')) return;
         bar().textContent += '⚠ ' + (e.message || e.error) + '  [' + ((e.filename || '').split('/').pop()) + ':' + e.lineno + ']\n';
       });
       window.addEventListener('unhandledrejection', function (e) {
+        if ((e.reason && (e.reason.message || '')).includes('ResizeObserver')) return;
         bar().textContent += '⚠ promise: ' + ((e.reason && e.reason.message) || e.reason) + '\n';
       });
     })();
@@ -111,27 +113,36 @@
     .head-braille-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; flex-wrap:nowrap; }
     .head-util-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; }
 
-    /* Responsive collapsing of button labels to icons only on compact viewports (<= 980px) */
-    @media (max-width: 980px) {
+    /* Responsive collapsing of header button labels to icons on compact viewports */
+    @media (max-width: 1220px) {
       .head-doc-actions .btn-lbl { display:none; }
+      .pill-btn { padding:0 9px; }
+    }
+    @media (max-width: 1080px) {
       .head-center-group .btn-lbl { display:none; }
       .head-braille-actions .btn-lbl { display:none; }
-      .pill-btn { padding:0 9px; }
       .download-group button { padding:0 6px 0 8px; }
-      .toolbar .btn-lbl { display:none; }
-      .toolbar .tb-btn { padding:0 8px; gap:0; }
-      .toolbar select { padding-right:20px; font-size:.82rem; }
-      .toolbar .toc-wrap { padding:0 4px; }
     }
-    @media (max-width: 800px) {
+    @media (max-width: 820px) {
       .app-logo { width:34px; height:34px; border-radius:8px; }
       header h1 { font-size:.95rem; }
-      .head-row { gap:8px; }
-      .head-col-left { gap:6px; }
-      .head-doc-actions { gap:4px; }
-      .head-braille-actions { gap:6px; }
-      .head-util-actions { gap:6px; }
+      .head-row { gap:6px; }
+      .head-col-left { gap:4px; }
+      .head-doc-actions { gap:3px; }
+      .head-braille-actions { gap:4px; }
+      .head-util-actions { gap:4px; }
       .icon-btn { width:32px; height:32px; font-size:1.2rem; }
+    }
+    @media (max-width: 600px) {
+      header { padding: 6px 8px; }
+      main { padding: 4px 6px 8px; }
+      .head-row { gap: 4px; }
+      .head-col-left { gap: 3px; }
+      .head-brand h1 { display: none; }
+      .head-col-right { gap: 4px; }
+      .pill-btn { height: 30px; padding: 0 6px; font-size: .8rem; }
+      .icon-btn { width: 30px; height: 30px; font-size: 1.1rem; }
+      .download-group { height: 30px; }
     }
 
     .pill-btn { height:34px; padding:0 12px; border:1px solid var(--line); background:var(--pill-bg);
@@ -207,19 +218,134 @@
                transition:all 0.2s ease; }
     .toolbar select:hover { border-color:var(--accent); }
     .toolbar .sep { width:1px; height:18px; background:var(--line); margin:0 2px; flex-shrink:0; }
-    .tb-btn { height:30px; min-width:30px; padding:0 8px; border:1px solid var(--line); background:var(--pill-bg);
-              color:var(--ink); border-radius:6px; cursor:pointer; font-size:.84rem; line-height:1; font-weight:500;
-              display:inline-flex; align-items:center; justify-content:center; gap:4px; transition:all 0.2s ease; flex-shrink:0; }
+    .tb-btn { height:30px; min-width:30px; padding:0 8px; border:1px solid var(--line, #cbd5e1); background:var(--pill-bg, #ffffff);
+              color:var(--ink, #0f172a); border-radius:6px; cursor:pointer; font-size:.84rem; line-height:1; font-weight:600;
+              display:inline-flex; align-items:center; justify-content:center; gap:4px; transition:all 0.2s ease; flex-shrink:0;
+              box-shadow:0 1px 2px rgba(0,0,0,0.04); }
     .tb-btn * { pointer-events:none; }
-    .tb-btn:hover { transform:translateY(-1px); border-color:var(--accent); color:var(--accent); box-shadow:0 3px 8px rgba(0,0,0,0.04); }
+    .tb-btn svg { width:16px; height:16px; display:block; stroke:currentColor; stroke-width:2.6; flex-shrink:0; }
+    .tb-btn:hover:not(:disabled) { transform:translateY(-1px); border-color:var(--accent); color:var(--accent); box-shadow:0 3px 8px rgba(0,0,0,0.08); }
     .tb-btn:focus-visible, .toolbar select:focus-visible, .toc-wrap:focus-within { outline:2px solid var(--accent); outline-offset:2px; }
-    .tb-btn[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 4px 12px rgba(42,125,225,0.25); }
+    .tb-btn[aria-pressed="true"], :root.dark .tb-btn[aria-pressed="true"], :root:not(.light) .tb-btn[aria-pressed="true"] { background:var(--accent) !important; color:#fff !important; border-color:var(--accent) !important; box-shadow:0 4px 12px rgba(42,125,225,0.25); }
+    .tb-btn:disabled, .tb-btn[disabled] { opacity:0.55; color:#475569; border-color:#cbd5e1; background:#f8fafc; cursor:not-allowed; box-shadow:none; }
+    :root.dark .tb-btn { border-color:#30363d; background:#21262d; color:#f0f6fc; }
+    :root.dark .tb-btn:disabled, :root.dark .tb-btn[disabled] { opacity:0.45; color:#8b949e; border-color:#30363d; background:#161b22; }
+
+    /* Clean transparent undo/redo buttons with black-on-white and white-on-black icons */
+    #btnUndo, #btnRedo {
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      box-shadow: none !important;
+      color: #000000 !important;
+      padding: 0 4px;
+      min-width: 28px;
+    }
+    #btnUndo svg, #btnRedo svg {
+      width: 18px;
+      height: 18px;
+      stroke: #000000 !important;
+      stroke-width: 2.8;
+      fill: none;
+    }
+    #btnUndo:hover:not(:disabled), #btnRedo:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.08) !important;
+      border-color: transparent !important;
+      transform: translateY(-1px);
+    }
+    #btnUndo:disabled, #btnUndo[disabled], #btnRedo:disabled, #btnRedo[disabled] {
+      opacity: 0.35 !important;
+      cursor: not-allowed;
+      background: transparent !important;
+      border-color: transparent !important;
+      color: #94a3b8 !important;
+    }
+    #btnUndo:disabled svg, #btnUndo[disabled] svg, #btnRedo:disabled svg, #btnRedo[disabled] svg {
+      stroke: #94a3b8 !important;
+    }
+    :root.dark #btnUndo, :root.dark #btnRedo {
+      background: transparent !important;
+      border-color: transparent !important;
+      color: #ffffff !important;
+    }
+    :root.dark #btnUndo svg, :root.dark #btnRedo svg {
+      stroke: #ffffff !important;
+    }
+    :root.dark #btnUndo:hover:not(:disabled), :root.dark #btnRedo:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: transparent !important;
+    }
+    :root.dark #btnUndo:disabled, :root.dark #btnUndo[disabled], :root.dark #btnRedo:disabled, :root.dark #btnRedo[disabled] {
+      opacity: 0.35 !important;
+      color: #64748b !important;
+      background: transparent !important;
+      border-color: transparent !important;
+    }
+    :root.dark #btnUndo:disabled svg, :root.dark #btnUndo[disabled] svg, :root.dark #btnRedo:disabled svg, :root.dark #btnRedo[disabled] svg {
+      stroke: #64748b !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) #btnUndo, :root:not(.light) #btnRedo {
+        background: transparent !important;
+        border-color: transparent !important;
+        color: #ffffff !important;
+      }
+      :root:not(.light) #btnUndo svg, :root:not(.light) #btnRedo svg {
+        stroke: #ffffff !important;
+      }
+      :root:not(.light) #btnUndo:hover:not(:disabled), :root:not(.light) #btnRedo:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+      :root:not(.light) #btnUndo:disabled svg, :root:not(.light) #btnUndo[disabled] svg, :root:not(.light) #btnRedo:disabled svg, :root:not(.light) #btnRedo[disabled] svg {
+        stroke: #64748b !important;
+      }
+    }
     .tb-ico { min-width:30px; padding:0 8px; font-size:1rem; }
     .tb-btn[hidden] { display:none; }
-    .block-sel { min-width:0; width:auto; }
+    .block-sel { min-width:0; width:auto; max-width:160px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
+    /* Responsive container query & fallback styles for narrow text editor panes */
+    @container editorPane (max-width: 540px) {
+      .pane-h-editor { padding: 4px 6px; gap: 4px; }
+      .pane-label { display: none; }
+      .toolbar { gap: 3px; }
+      .tb-btn { height: 28px; min-width: 28px; padding: 0 6px; font-size: .8rem; }
+      .toolbar select.block-sel { height: 28px; font-size: .8rem; padding: 2px 18px 2px 6px; max-width: 88px; background-position: calc(100% - 9px) 11px, calc(100% - 5px) 11px; }
+      .toolbar .sep { height: 16px; margin: 0 1px; }
+      .insert-btn .btn-lbl-full { display: none !important; }
+      .insert-btn .btn-lbl-short { display: inline !important; }
+    }
+    @container editorPane (max-width: 390px) {
+      .pane-h-editor { padding: 3px 4px; gap: 2px; }
+      .toolbar { gap: 2px; }
+      .tb-btn { height: 26px; min-width: 26px; padding: 0 4px; font-size: .78rem; }
+      .toolbar select.block-sel { height: 26px; font-size: .78rem; padding: 2px 14px 2px 4px; max-width: 60px; }
+      .insert-btn .btn-lbl-full, .insert-btn .btn-lbl-short { display: none !important; }
+      .insert-btn { padding: 0 5px; }
+    }
+
+    .pane-compact .pane-h-editor { padding: 4px 6px; gap: 4px; }
+    .pane-compact .pane-label { display: none; }
+    .pane-compact .toolbar { gap: 3px; }
+    .pane-compact .tb-btn { height: 28px; min-width: 28px; padding: 0 6px; font-size: .8rem; }
+    .pane-compact .toolbar select.block-sel { height: 28px; font-size: .8rem; padding: 2px 18px 2px 6px; max-width: 88px; background-position: calc(100% - 9px) 11px, calc(100% - 5px) 11px; }
+    .pane-compact .toolbar .sep { height: 16px; margin: 0 1px; }
+    .pane-compact .insert-btn .btn-lbl-full { display: none !important; }
+    .pane-compact .insert-btn .btn-lbl-short { display: inline !important; }
+
+    .pane-ultra-compact .pane-h-editor { padding: 3px 4px; gap: 2px; }
+    .pane-ultra-compact .toolbar { gap: 2px; }
+    .pane-ultra-compact .tb-btn { height: 26px; min-width: 26px; padding: 0 4px; font-size: .78rem; }
+    .pane-ultra-compact .toolbar select.block-sel { height: 26px; font-size: .78rem; padding: 2px 14px 2px 4px; max-width: 60px; }
+    .pane-ultra-compact .insert-btn .btn-lbl-full,
+    .pane-ultra-compact .insert-btn .btn-lbl-short { display: none !important; }
+    .pane-ultra-compact .insert-btn { padding: 0 5px; }
     #btnMath[aria-pressed="true"], #btnSixKey[aria-pressed="true"], #btnBrlSixKey[aria-pressed="true"], #btnBrlAscii[aria-pressed="true"], #btnBrlInsertMode[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
     #btnRead[aria-pressed="true"] { background:#137a3b; color:#fff; border-color:#137a3b; }
-    ::highlight(tts-word) { text-decoration-line:underline; text-decoration-color:#d81b1b; text-decoration-thickness:2px; text-decoration-skip-ink:none; }
+    ::highlight(tts-word) { text-decoration-line:underline; text-decoration-color:#d81b1b; text-decoration-thickness:2.5px; text-underline-offset:3px; text-decoration-skip-ink:none; background:rgba(216,27,27,0.12); color:#b3140f; border-radius:2px; }
+    :root.dark ::highlight(tts-word),
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) ::highlight(tts-word) { text-decoration-line:underline; text-decoration-color:#ff6b6b; text-decoration-thickness:2.5px; text-underline-offset:3px; text-decoration-skip-ink:none; background:rgba(255,107,107,0.25); color:#ff8787; border-radius:2px; }
+    }
     .print-reading { background:rgba(19,122,59,.13); box-shadow:inset 3px 0 0 #137a3b; border-radius:4px; }
     .math-speaking { outline:2px solid rgba(216,27,27,.55); outline-offset:2px; border-radius:5px; }
     .sk-pending { margin-left:auto; font-size:.82rem; color:var(--accent); font-weight:600; }
@@ -228,8 +354,7 @@
     .tb-fmt { width:30px; padding:0; }
     .tb-b { font-weight:800; font-family:Georgia,serif; } .tb-i { font-style:italic; font-family:Georgia,serif; font-weight:600; }
     .tb-u { text-decoration:underline; font-family:Georgia,serif; font-weight:600; }
-    .toc-wrap { display:inline-flex; align-items:center; gap:5px; font-size:.85rem; padding:0 6px; height:34px; cursor:pointer; }
-    .toc-wrap input { width:16px; height:16px; cursor:pointer; }
+    .toc-wrap { display: none !important; }
 
     /* Dropdown Menus */
     .menu-wrap { position: relative; display: inline-flex; }
@@ -246,6 +371,11 @@
       box-shadow: 0 10px 28px rgba(0,0,0,0.32);
       padding: 5px;
       min-width: 195px;
+      max-width: calc(100vw - 20px);
+      max-height: min(360px, calc(100vh - 120px));
+      max-height: min(360px, calc(100dvh - 120px));
+      overflow-y: auto;
+      overscroll-behavior: contain;
       z-index: 1000;
       display: flex;
       flex-direction: column;
@@ -314,6 +444,11 @@
       box-shadow: 0 10px 28px rgba(0,0,0,0.32);
       padding: 5px;
       min-width: 175px;
+      max-width: calc(100vw - 20px);
+      max-height: min(360px, calc(100vh - 120px));
+      max-height: min(360px, calc(100dvh - 120px));
+      overflow-y: auto;
+      overscroll-behavior: contain;
       z-index: 10000;
       display: flex;
       flex-direction: column;
@@ -367,6 +502,7 @@
       color: #d81b1b;
     }
 
+    #printTocContainer { flex: 0 0 auto; max-width: 100%; }
     .print-toc-box {
       background: var(--pane-bg);
       backdrop-filter: blur(8px);
@@ -374,10 +510,11 @@
       border: 1px solid var(--line);
       border-radius: 10px;
       padding: 8px 12px;
-      margin: 10px 14px 6px;
+      margin: 8px 14px 4px;
       user-select: none;
       box-shadow: 0 4px 16px rgba(0,0,0,0.03);
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
     .print-toc-head {
       display: flex;
@@ -423,7 +560,7 @@
       padding-left: 1.2rem;
       font-size: .88rem;
       list-style-type: disc;
-      max-height: 25vh;
+      max-height: 160px;
       overflow-y: auto;
     }
     .print-toc-box.collapsed .print-toc-list {
@@ -432,38 +569,65 @@
     .print-toc-box a { color:var(--ink); text-decoration:none; cursor:pointer; }
     .print-toc-box a:hover { text-decoration:underline; color:var(--accent); }
 
-    .panes { flex:1 1 0; min-height:0; display:flex; gap:14px; margin:0 0 14px 0; padding:0; width:100%; overflow:visible; }
+    .panes { flex:1 1 0; min-height:0; display:flex; gap:14px; margin:0 0 14px 0; padding:0; width:100%; overflow:visible; position:relative; }
     .pane { flex:1 1 0; min-width:0; min-height:0; height:100%; background:var(--pane-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
             border:1px solid var(--line); border-radius:16px; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.04); position:relative; }
-    .pane-editor { flex:1 1 0; min-width:0; overflow: visible; position:relative; z-index:20; }
+    .pane-editor { flex:1 1 0; min-width:0; overflow:hidden; position:relative; z-index:20; container-type:inline-size; container-name:editorPane; display:flex; flex-direction:column; }
     .pane-editor:focus-within, .pane-editor:has(.insert-dropdown:not([hidden])) { z-index:30; }
     .pane-braille { flex:1 1 0; min-width:0; overflow:hidden; position:relative; z-index:10; }
+    .pane-grab-rail { display:none !important; }
     .pane-h { margin:0; padding:10px 14px; font-size:.8rem; font-weight:600; letter-spacing:.02em;
               color:var(--muted); background:var(--panel-head, rgba(255,255,255,0.95)); border-bottom:1px solid var(--line); flex:0 0 auto; text-transform:none;
-              position:sticky; top:0; z-index:25; overflow:visible; }
-    .editor { flex:1 1 0; min-height:0; max-height:none; overflow-y:auto; overscroll-behavior:contain; padding:14px; outline:none; color:var(--ink); background:transparent; }
+              position:relative; z-index:25; overflow:visible; }
+    .editor {
+      flex: 1 1 0;
+      min-height: 0;
+      max-height: none;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 14px;
+      outline: none;
+      color: var(--ink);
+      background: transparent;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
     .editor:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
-    .editor .ed-h1, .editor h1.bana-style-h1 { font-size:1.5rem; font-weight:700; text-align:center; margin:.6em 0 .3em; color:var(--ink); }
-    .editor .ed-h2, .editor h2.bana-style-h2 { font-size:1.25rem; font-weight:700; margin:.5em 0 .25em; color:var(--ink); }
+    .editor .ed-h1, .editor h1.bana-style-h1 { font-size:1.5rem; font-weight:600; text-align:center; margin:.6em 0 .3em; color:var(--ink); }
+    .editor .ed-h2, .editor h2.bana-style-h2 { font-size:1.25rem; font-weight:600; margin:.5em 0 .25em; color:var(--ink); }
     .editor .ed-h3, .editor h3.bana-style-h3 { font-size:1.08rem; font-weight:600; margin:.4em 0 .2em; color:var(--ink); }
     .editor .ed-p { margin:.4em 0; }
     .editor .ed-ul, .editor .ed-ol { margin:.4em 0; padding-left:1.6em; }
     .editor .emboss-plain-list, .editor .bana-style-toc, .editor .bana-style-index,
-    .editor [data-bana-style="toc"], .editor [data-list-kind="toc"], .editor [data-list-kind="plain"] {
+    .editor [data-bana-style="toc"], .editor [data-bana-style="index"],
+    .editor [data-list-kind="toc"], .editor [data-list-kind="index"], .editor [data-list-kind="plain"],
+    .editor [data-list-type="plain"], .editor ul.bana-style-index, .editor ul.emboss-plain-list {
       list-style: none !important; list-style-type: none !important; padding-left: 0 !important; margin: 0.4em 0;
     }
     .editor .emboss-plain-list > li, .editor .bana-style-toc > li, .editor .bana-style-index > li,
-    .editor li.bana-style-toc-entry {
+    .editor [data-bana-style="index"] li, .editor [data-list-kind="index"] li, .editor [data-list-kind="plain"] li,
+    .editor li.bana-style-toc-entry, .editor li.bana-style-index-entry {
       list-style: none !important; list-style-type: none !important; margin: 4px 0; position: relative;
     }
-    .editor .emboss-plain-list > li[data-level="1"], .editor .bana-style-toc > li[data-level="1"], .editor li.bana-style-toc-entry[data-level="1"] { margin-left: 1.5rem !important; }
-    .editor .emboss-plain-list > li[data-level="2"], .editor .bana-style-toc > li[data-level="2"], .editor li.bana-style-toc-entry[data-level="2"] { margin-left: 3.0rem !important; }
-    .editor .emboss-plain-list > li[data-level="3"], .editor .bana-style-toc > li[data-level="3"], .editor li.bana-style-toc-entry[data-level="3"] { margin-left: 4.5rem !important; }
+    .editor li[data-level="1"] { margin-left: 2.0rem !important; }
+    .editor li[data-level="2"] { margin-left: 4.0rem !important; }
+    .editor li[data-level="3"] { margin-left: 6.0rem !important; }
+    .editor li[data-level="4"] { margin-left: 8.0rem !important; }
+    .editor ul:not([data-list-kind="index"]):not([data-list-kind="plain"]):not([data-list-kind="toc"]):not([data-bana-style="index"]):not([data-bana-style="toc"]):not(.emboss-plain-list) > li[data-level="1"] { list-style-type: circle !important; }
+    .editor ul:not([data-list-kind="index"]):not([data-list-kind="plain"]):not([data-list-kind="toc"]):not([data-bana-style="index"]):not([data-bana-style="toc"]):not(.emboss-plain-list) > li[data-level="2"] { list-style-type: square !important; }
+    .editor ul:not([data-list-kind="index"]):not([data-list-kind="plain"]):not([data-list-kind="toc"]):not([data-bana-style="index"]):not([data-bana-style="toc"]):not(.emboss-plain-list) > li[data-level="3"] { list-style-type: disc !important; }
+    .editor ol > li[data-level="1"] { list-style-type: lower-alpha !important; }
+    .editor ol > li[data-level="2"] { list-style-type: lower-roman !important; }
+    .editor ol > li[data-level="3"] { list-style-type: upper-alpha !important; }
     .editor .bana-style-toc > li[data-page], .editor li.bana-style-toc-entry[data-page] {
       display: flex; align-items: baseline; justify-content: space-between;
     }
     .editor .bana-style-toc > li[data-page]::after, .editor li.bana-style-toc-entry[data-page]::after {
-      content: attr(data-page); margin-left: auto; padding-left: 1.5rem; font-variant-numeric: tabular-nums; font-weight: 500; color: var(--muted, #64748b); white-space: nowrap;
+      content: attr(data-page); margin-left: auto; padding-left: 1.5rem; font-variant-numeric: tabular-nums; font-weight: 500; color: var(--muted, #64748b); white-space: nowrap; max-width: 40%; overflow: hidden; text-overflow: ellipsis; text-align: right; flex-shrink: 0;
     }
     .editor .emboss-sidebar-card,
     .editor aside.bana-style-sidebar,
@@ -502,22 +666,25 @@
       border-left: 3.5px solid #6366f1; background: rgba(99, 102, 241, 0.08); padding: 6px 12px; border-radius: 6px; margin: 8px 0; color: var(--ink);
     }
     .editor .ed-p.bana-style-stage, .editor p.bana-style-stage, .editor [data-bana-style="stage"] {
-      margin-left: 2.5rem; font-style: italic; color: #475569;
+      margin-left: 2.5rem; font-style: italic; color: var(--muted, #475569);
     }
     .editor .ed-p.bana-style-dialogue, .editor p.bana-style-dialogue, .editor [data-bana-style="dialogue"] {
       margin-left: 1.75rem; text-indent: -1.75rem; color: var(--ink);
     }
     .editor .ed-p.bana-style-caption, .editor p.bana-style-caption, .editor caption, .editor [data-bana-style="caption"] {
-      font-size: 0.92em; font-style: italic; color: #475569; margin: 6px 0 10px 0;
+      font-size: 0.92em; font-style: italic; color: var(--muted, #475569); margin: 6px 0 10px 0;
     }
     .editor .ed-p.bana-style-footnote, .editor p.bana-style-footnote, .editor note.footnote, .editor [data-bana-style="footnote"] {
-      font-size: 0.88em; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 10px; color: #475569;
+      font-size: 0.88em; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 10px; color: var(--muted, #475569);
     }
     .editor .ed-p.bana-style-poem, .editor p.bana-style-poem, .editor poem, .editor [data-bana-style="poem"], .editor [data-bana-style="verse"] {
       margin-left: 2rem; white-space: pre-wrap; line-height: 1.55; color: var(--ink);
     }
+    .editor .ed-p.bana-style-dialogue, .editor p.bana-style-dialogue, .editor [data-bana-style="dialogue"], .editor [data-bana-style="speaker"] {
+      margin-left: 1.5rem; text-indent: -1.5rem; margin-top: 4px; margin-bottom: 4px; line-height: 1.55; color: var(--ink);
+    }
     .editor .ed-p.bana-style-quote, .editor p.bana-style-quote, .editor blockquote.bana-style-quote, .editor [data-bana-style="quote"] {
-      border-left: 3.5px solid var(--accent, #2563eb); padding: 6px 14px; margin: 10px 0; font-style: italic; background: rgba(42, 125, 225, 0.05); border-radius: 0 6px 6px 0; color: #334155;
+      border-left: 3.5px solid var(--accent, #2563eb); padding: 8px 14px; margin: 10px 0; font-style: italic; background: rgba(42, 125, 225, 0.05); border-radius: 0 6px 6px 0; color: var(--ink);
     }
     .editor .bana-style-exercise, .editor [data-bana-style="exercise"], .editor [data-list-kind="exercise"] {
       list-style-type: decimal; margin-left: 1.5rem; margin-top: 6px; margin-bottom: 6px;
@@ -526,7 +693,7 @@
       list-style-type: lower-alpha; margin-left: 3.0rem; margin-top: 4px; margin-bottom: 4px;
     }
     .style-inspector-badge {
-      font-size: 0.82rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+      font-size: 0.92em; font-weight: 600; padding: 3px 10px; border-radius: 999px;
       background: var(--btn-bg, #f1f5f9); border: 1px solid var(--line, #cbd5e1); color: var(--ink);
       display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
       white-space: nowrap; flex-shrink: 0; transition: all 0.15s ease;
@@ -537,18 +704,25 @@
     .style-inspector-badge:focus-visible {
       outline: 2px solid var(--accent); outline-offset: 1px;
     }
-    :root.dark .style-inspector-badge,
+    :root.dark .style-inspector-badge { background: #21262d; border-color: #30363d; color: #e6edf3; }
+    :root.dark .style-inspector-badge:hover { border-color: #387df5; color: #58a6ff; }
+    :root.dark .editor .ed-p.bana-style-note, :root.dark .editor p.bana-style-note, :root.dark .editor [data-bana-style="note"] { border-left-color: #818cf8; background: rgba(99, 102, 241, 0.18); color: #e0e7ff; }
+    :root.dark .editor .ed-p.bana-style-stage, :root.dark .editor p.bana-style-stage, :root.dark .editor [data-bana-style="stage"] { color: #e2e8f0; }
+    :root.dark .editor .ed-p.bana-style-caption, :root.dark .editor p.bana-style-caption, :root.dark .editor caption, :root.dark .editor [data-bana-style="caption"] { color: #e2e8f0; }
+    :root.dark .editor .ed-p.bana-style-footnote, :root.dark .editor p.bana-style-footnote, :root.dark .editor note.footnote, :root.dark .editor [data-bana-style="footnote"] { border-top-color: #384151; color: #e2e8f0; }
+    :root.dark .editor .ed-p.bana-style-quote, :root.dark .editor p.bana-style-quote, :root.dark .editor blockquote.bana-style-quote, :root.dark .editor [data-bana-style="quote"] { background: rgba(56, 125, 245, 0.16); border-left-color: #60a5fa; color: #f1f5f9; }
+    :root.dark .editor .emboss-sidebar-card, :root.dark .editor aside.bana-style-sidebar, :root.dark .editor [data-bana-style="sidebar"] { background: rgba(59, 130, 246, 0.08); border-color: #30363d; border-left-color: #60a5fa; border-top-color: #60a5fa; border-bottom-color: #60a5fa; }
     @media (prefers-color-scheme: dark) {
       :root:not(.light) .style-inspector-badge { background: #21262d; border-color: #30363d; color: #e6edf3; }
       :root:not(.light) .style-inspector-badge:hover { border-color: #387df5; color: #58a6ff; }
       :root:not(.light) .editor .ed-p.bana-style-note, :root:not(.light) .editor p.bana-style-note, :root:not(.light) .editor [data-bana-style="note"] { border-left-color: #818cf8; background: rgba(99, 102, 241, 0.18); color: #e0e7ff; }
-      :root:not(.light) .editor .ed-p.bana-style-stage, :root:not(.light) .editor p.bana-style-stage, :root:not(.light) .editor [data-bana-style="stage"] { color: #94a3b8; }
-      :root:not(.light) .editor .ed-p.bana-style-caption, :root:not(.light) .editor p.bana-style-caption, :root:not(.light) .editor caption, :root:not(.light) .editor [data-bana-style="caption"] { color: #94a3b8; }
-      :root:not(.light) .editor .ed-p.bana-style-footnote, :root:not(.light) .editor p.bana-style-footnote, :root:not(.light) .editor note.footnote, :root:not(.light) .editor [data-bana-style="footnote"] { border-top-color: #334155; color: #94a3b8; }
-      :root:not(.light) .editor .ed-p.bana-style-quote, :root:not(.light) .editor p.bana-style-quote, :root:not(.light) .editor blockquote.bana-style-quote, :root:not(.light) .editor [data-bana-style="quote"] { background: rgba(56, 125, 245, 0.10); border-left-color: #60a5fa; color: #cbd5e1; }
-      :root:not(.light) .editor .emboss-sidebar-card, :root:not(.light) .editor aside.bana-style-sidebar, :root:not(.light) .editor [data-bana-style="sidebar"] { background: rgba(59, 130, 246, 0.08); border-color: #334155; border-left-color: #60a5fa; border-top-color: #60a5fa; border-bottom-color: #60a5fa; }
+      :root:not(.light) .editor .ed-p.bana-style-stage, :root:not(.light) .editor p.bana-style-stage, :root:not(.light) .editor [data-bana-style="stage"] { color: #e2e8f0; }
+      :root:not(.light) .editor .ed-p.bana-style-caption, :root:not(.light) .editor p.bana-style-caption, :root:not(.light) .editor caption, :root:not(.light) .editor [data-bana-style="caption"] { color: #e2e8f0; }
+      :root:not(.light) .editor .ed-p.bana-style-footnote, :root:not(.light) .editor p.bana-style-footnote, :root:not(.light) .editor note.footnote, :root:not(.light) .editor [data-bana-style="footnote"] { border-top-color: #384151; color: #e2e8f0; }
+      :root:not(.light) .editor .ed-p.bana-style-quote, :root:not(.light) .editor p.bana-style-quote, :root:not(.light) .editor blockquote.bana-style-quote, :root:not(.light) .editor [data-bana-style="quote"] { background: rgba(56, 125, 245, 0.16); border-left-color: #60a5fa; color: #f1f5f9; }
+      :root:not(.light) .editor .emboss-sidebar-card, :root:not(.light) .editor aside.bana-style-sidebar, :root:not(.light) .editor [data-bana-style="sidebar"] { background: rgba(59, 130, 246, 0.08); border-color: #30363d; border-left-color: #60a5fa; border-top-color: #60a5fa; border-bottom-color: #60a5fa; }
     }
-    .editor b, .editor strong { font-weight:700; } .editor i, .editor em { font-style:italic; }
+    .editor b, .editor strong, .editor .ed-b { font-weight:800; } .editor i, .editor em, .editor .ed-i { font-style:italic; }
 
     .editor u, .editor .ed-u { text-decoration:underline; } .editor .ed-s { text-decoration:line-through; }
     .editor .ed-u.ed-s { text-decoration:underline line-through; }
@@ -596,7 +770,28 @@
     /* Dark mode clicked / highlighted math */
     :root.dark .math-embed.math-hl math-field,
     :root.dark math-field.math-hl,
-    :root.dark .math-embed.math-hl,
+    :root.dark .math-embed.math-hl {
+      outline: 2px solid #f0b429 !important;
+      outline-offset: 1px !important;
+      background: #3b2e0a !important;
+      color: #ffea79 !important;
+      --math-mode-color: #ffea79 !important;
+      --text-color: #ffea79 !important;
+      border-radius: 6px !important;
+      box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.3) !important;
+    }
+    :root.dark .math-embed math-field:focus,
+    :root.dark math-field:focus,
+    :root.dark .math-embed math-field:focus-within,
+    :root.dark math-field:focus-within,
+    :root.dark math-field[focused] {
+      outline: 2px solid #387df5 !important;
+      outline-offset: 1px !important;
+      background: rgba(56, 125, 245, 0.22) !important;
+      color: #f0f6fc !important;
+      --math-mode-color: #f0f6fc !important;
+      --text-color: #f0f6fc !important;
+    }
     @media (prefers-color-scheme: dark) {
       :root:not(.light) .math-embed.math-hl math-field,
       :root:not(.light) math-field.math-hl,
@@ -681,32 +876,15 @@
       color: #ef4444;
     }
 
-    .braille-stack {
-      position: relative;
+    .braille {
       flex: 1 1 0;
       min-height: 0;
       max-height: none;
       overflow-y: auto;
-      overflow-x: hidden;
       overscroll-behavior: contain;
       scrollbar-gutter: stable;
-      padding: 0;
-      color: var(--ink);
-      background: transparent;
-      box-sizing: border-box;
-    }
-    .braille-stack:focus-within {
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
-      border-radius: 8px;
-    }
-    .braille {
-      position: relative;
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
       padding: 14px;
-      overflow: visible;
+      outline: none;
       color: var(--ink);
       background: transparent;
       box-sizing: border-box;
@@ -718,34 +896,8 @@
       white-space: pre-wrap;
       word-break: break-all;
     }
-    #brlInput {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 14px;
-      border: 0;
-      outline: none;
-      resize: none;
-      overflow: hidden;
-      background: transparent;
-      color: transparent;
-      caret-color: var(--accent);
-      white-space: pre;
-      word-break: break-all;
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-      font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace;
-      line-height: 1.4;
-      letter-spacing: normal;
-      box-sizing: border-box;
-      z-index: 2;
-    }
-    #brlInput::selection {
-      background: rgba(42, 125, 225, 0.25);
-      color: transparent;
+    .braille:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--accent);
     }
     .braille .brl-row {
       line-height: 1.4;
@@ -827,6 +979,9 @@
       gap: 10px;
       box-sizing: border-box;
     }
+    .monarch-device-frame {
+      max-width: 700px;
+    }
     .dotpad-hw-btn {
       transition: background 0.15s, transform 0.05s, border-color 0.15s;
       user-select: none;
@@ -847,16 +1002,9 @@
       outline-offset: 1px;
     }
 
-    .braille-view-tabs {
-      display: inline-flex;
-      gap: 3px;
-      align-items: center;
-      flex-shrink: 0;
-    }
     .braille-view-tabs .tab-btn {
-      padding: 2px 8px;
-      font-size: 0.78rem;
-      height: 26px;
+      padding: 3px 10px;
+      font-size: 0.82rem;
       font-weight: 600;
       border-radius: 6px;
       background: transparent;
@@ -865,10 +1013,7 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      width: auto;
+      gap: 5px;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
     .braille-view-tabs .tab-btn:hover {
@@ -883,21 +1028,21 @@
     @keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
     #statusBar {
       flex:0 0 auto; background:var(--sb-bg, #ffffff); border:1px solid var(--line);
-      margin:0 0 10px; border-radius:18px; box-shadow:0 8px 32px rgba(0,0,0,0.08);
-      padding:8px 24px; font-size:calc(.9rem * var(--sb-scale, 1));
+      margin:0 0 8px; border-radius:18px; box-shadow:0 8px 32px rgba(0,0,0,0.08);
+      padding:6px 18px; font-size:calc(.88rem * var(--sb-scale, 1));
       min-height:var(--sb-h, 44px);
       max-height: min(30vh, 220px);
       overflow-y: auto;
-      overflow-x: hidden;
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
-      display:flex; align-items:center; align-content:flex-start; gap:10px; flex-wrap:wrap;
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
       animation:slideUp 0.3s ease forwards;
     }
     #statusBar::-webkit-scrollbar { width: 6px; }
     #statusBar::-webkit-scrollbar-track { background: transparent; }
     #statusBar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
     #statusBar::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    #ruleInfoBody { display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0; flex:1 1 auto; }
     .sb-grab-rail { position:relative; height:0; flex:0 0 auto; }
     .sb-grab {
       position:absolute; left:50%; transform:translateX(-50%); bottom:-9px;
@@ -910,8 +1055,10 @@
     }
     .sb-grab:hover::before, .sb-grab:focus-visible::before { background:var(--accent); }
     .sb-grab:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
-    .sb-hint { color:var(--muted); font-size:.88rem; }
-    .doc-stats { margin-left:auto; color:var(--muted); font-size:.82rem; font-weight:500; }
+    .sb-hint { color:var(--muted); font-size:0.96em; flex-shrink:0; }
+    .doc-stats { margin-left:auto; color:var(--muted); font-size:0.92em; font-weight:500; white-space:nowrap; flex-shrink:0; }
+    :root.dark .doc-stats { color: #94a3b8; }
+    :root.dark .sb-hint { color: #94a3b8; }
 
     #statusBar .ri-word { font-weight:700; display:inline-flex; align-items:center; gap:2px; }
     #statusBar .ri-math { display:inline-flex; align-items:center; font-weight:700; gap:2px; }
@@ -923,12 +1070,12 @@
     #statusBar .ri-seg.c4 { background:#e8dbff; color:#4c1d95; border-radius:3px; padding:0 3px; }
     #statusBar .ri-seg.c5 { background:#cff3f0; color:#0f564e; border-radius:3px; padding:0 3px; }
     #statusBar .ri-seg.c6 { background:#f7d9ee; color:#701a53; border-radius:3px; padding:0 3px; }
-    #statusBar .ri-arrow { color:var(--muted); margin:0 2px; font-weight:600; }
+    #statusBar .ri-arrow { color:var(--muted); margin:0 2px; font-weight:600; flex-shrink:0; }
     #statusBar .ri-brl { font-family:"APHfont","Apple Braille","Segoe UI Symbol",monospace;
-                         font-size:1.35em; vertical-align:-2px; display:inline-flex; align-items:center; gap:2px; }
-    #statusBar .ri-note { color:var(--muted); font-size:.88rem; }
+                         font-size:1.35em; vertical-align:-2px; display:inline-flex; align-items:center; gap:2px; flex-shrink:0; }
+    #statusBar .ri-note { color:var(--muted); font-size:0.95em; }
     #statusBar .ri-rule { background:#eef3fb; border:1px solid #d3e0f5; border-radius:99px;
-                          padding:2px 10px; color:#15181d; font-size:.85rem; display:inline-flex; align-items:center; gap:4px; }
+                          padding:2px 10px; color:#15181d; font-size:0.95em; display:inline-flex; align-items:center; gap:4px; }
     #statusBar .ri-rule .ri-brl { font-size:1.15em; }
     #statusBar .ri-seg { border-radius:99px; padding:2px 7px; font-weight:500; display:inline-block; }
 
@@ -1013,7 +1160,31 @@
     .dialog-head button { border:0; background:none; font-size:1.2rem; cursor:pointer; color:var(--muted); padding:4px 8px; border-radius:6px; }
     .dialog-head button:hover { background:var(--btn-bg); color:var(--ink); }
     .dialog-foot .primary { background:var(--accent); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-weight:600; cursor:pointer; }
-    @media (max-width:820px) { .panes { flex-direction:column; } .pane { flex:0 0 auto; } }
+    @media (max-width:820px) {
+      .panes {
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding: 0 10px 16px;
+      }
+      .pane {
+        flex: 0 0 auto;
+        min-height: 360px;
+        height: 52vh;
+      }
+      .pane-editor {
+        flex: 0 0 auto;
+        min-height: 360px;
+        height: 52vh;
+      }
+      .pane-braille {
+        flex: 0 0 auto;
+        min-height: 360px;
+        height: 52vh;
+      }
+    }
 
     /* Slash command popover menu */
     .slash-menu { position:absolute; z-index:100; width:280px; max-height:280px; overflow-y:auto;
@@ -1167,6 +1338,9 @@
     .editor-table-widget td { background: var(--panel, #fff); color: var(--ink); }
     .editor-table-widget input.table-cell-input { width: 100%; border: 0; outline: none; background: transparent; font: inherit; color: var(--ink); }
     .editor-table-widget input.table-cell-input:focus { outline: 2px solid var(--accent); border-radius: 2px; }
+    .editor-table-widget input.table-cell-input.table-cell-hl { background: #ffe08a; color: #000; outline: 2px solid #d99b00; border-radius: 2px; }
+    :root.dark .editor-table-widget input.table-cell-input.table-cell-hl,
+    :root:not(.light) .editor-table-widget input.table-cell-input.table-cell-hl { background: #5c4308; color: #ffd23f; outline: 2px solid #b8860b; }
 
     /* Hardware Tactile Embosser Relief Simulation */
     .brl-tactile-graphic-view {
@@ -1218,28 +1392,18 @@
         <div class="head-doc-actions">
           <button type="button" id="backToSimple" class="pill-btn" data-i18n-title="toolbar.quick_mode" title="Switch to the drag-and-drop converter">← <span class="btn-lbl" data-i18n="toolbar.quick_mode">Quick Mode</span></button>
           <button type="button" id="btnRead" class="pill-btn" data-i18n-title="toolbar.read_aloud" title="Read document aloud (Ctrl/⌘ ⇧ Space)">▶ <span class="btn-lbl" data-i18n="toolbar.read_aloud">Read</span></button>
-          <button type="button" id="loadFileBtn" class="pill-btn" data-i18n-title="common.load" title="Open or import a document file (.docx, .html, .txt, .md, .epub, .rtf, .xml, .nimas)">📂 <span class="btn-lbl" data-i18n="common.load">Load</span></button>
-          <input type="file" id="loadFileInput" accept=".txt,.md,.markdown,.html,.htm,.docx,.rtf,.xml,.xhtml,.epub,.zip,.nimas,.dtbook" style="display:none;" />
-          <div class="menu-wrap" id="saveMenuWrap">
-            <button type="button" class="pill-btn" id="saveDocBtn" aria-haspopup="menu" aria-expanded="false" data-i18n-title="common.save" title="Save NIMAS Project (.xml) (Ctrl/⌘ S)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              <span class="btn-lbl" data-i18n="common.save">Save</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
-            </button>
-            <div class="menu-dropdown" id="saveMenu" role="menu" hidden>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveXmlItem"><span class="menu-item-icon">📐</span> <span class="menu-item-lbl">NIMAS Project (.xml)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveDocxItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl">Word Document (.docx)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveMdItem"><span class="menu-item-icon">📝</span> <span class="menu-item-lbl">Markdown (.md)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveJsonItem"><span class="menu-item-icon">💾</span> <span class="menu-item-lbl">Native Project (.json)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveTxtItem"><span class="menu-item-icon">📃</span> <span class="menu-item-lbl">Plain Text (.txt)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="saveHtmlItem"><span class="menu-item-icon">🌐</span> <span class="menu-item-lbl">HTML Document (.html)</span></button>
-            </div>
-          </div>
+          <button type="button" id="loadFileBtn" class="pill-btn">📂 <span class="btn-lbl" data-i18n="common.load">Load</span></button>
+          <input type="file" id="loadFileInput" aria-label="Load document file" accept=".txt,.md,.markdown,.html,.htm,.docx,.rtf,.xml,.xhtml,.epub,.zip,.nimas,.dtbook" style="display:none;" />
+          <button type="button" class="pill-btn" id="saveDocBtn" data-i18n-title="common.save" title="Save NIMAS Project (.xml) (Ctrl/⌘ S)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span class="btn-lbl" data-i18n="common.save">Save</span>
+          </button>
+          <button type="button" id="btnClear" class="pill-btn danger-hover" data-i18n-title="toolbar.clear_doc" title="Clear document text"><span>🗑</span> <span class="btn-lbl" data-i18n="common.clear">Clear</span></button>
         </div>
       </div>
       <div class="head-col-center">
         <div class="head-center-group">
-          <label class="toc-wrap" data-i18n-title="toolbar.toc" title="Include Table of Contents in document"><input type="checkbox" id="tocToggle" /> <span class="btn-lbl" data-i18n="toolbar.toc">TOC</span></label>
-          <button type="button" id="btnClear" class="pill-btn danger-hover" data-i18n-title="toolbar.clear_doc" title="Clear document text"><span>🗑</span> <span class="btn-lbl" data-i18n="common.clear">Clear</span></button>
+          <label class="toc-wrap" id="tocWrap" data-i18n-title="toolbar.toc" title="Include Table of Contents in document" style="display:none;" hidden><input type="checkbox" id="tocToggle" aria-label="Include Table of Contents in document" disabled /> <span class="btn-lbl" data-i18n="toolbar.toc">TOC</span></label>
         </div>
       </div>
       <div class="head-col-right">
@@ -1251,9 +1415,9 @@
               <span class="btn-lbl" data-i18n="toolbar.braille">Braille</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
             </button>
             <div class="menu-dropdown align-right" id="downloadMenu" role="menu" hidden>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl">Braille (BRF)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl">PEF 1.0 (.pef)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl">eBraille (.ebraille)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl" data-i18n="toolbar.download_brf">Braille (BRF)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl" data-i18n="toolbar.download_pef">PEF 1.0 (.pef)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl" data-i18n="toolbar.download_ebrl">eBraille (.ebraille)</span></button>
             </div>
           </div>
         </div>
@@ -1269,50 +1433,59 @@
   <main>
     <div id="parseWarningBanner" class="parse-warning-banner" hidden>
       <div class="parse-warning-content">
-        <strong>⚠️ Notice:</strong> <span id="parseWarningText"></span>
+        <strong data-i18n="common.notice">⚠️ Notice:</strong> <span id="parseWarningText"></span>
       </div>
-      <button type="button" id="parseWarningClose" class="parse-warning-close" aria-label="Close Notice">✕</button>
+      <button type="button" id="parseWarningClose" class="parse-warning-close" data-i18n-aria="messages.close_notice" aria-label="Close Notice">✕</button>
     </div>
 
-    <div class="panes">
+    <div class="panes" id="panesLayout">
       <section class="pane pane-editor" aria-label="Document text" style="position:relative">
         <div class="pane-h pane-h-editor" id="editorHeader">
           <span class="pane-label" id="editorLabel">Text</span>
           <div class="toolbar" role="toolbar" aria-label="Formatting" id="toolbar">
-            <button type="button" id="btnUndo" class="tb-btn" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" data-tb>↶</button>
-            <button type="button" id="btnRedo" class="tb-btn" title="Redo (Ctrl+Y / ⌘⇧Z)" aria-label="Redo" data-tb>↷</button>
+            <button type="button" id="btnUndo" class="tb-btn" data-i18n-title="toolbar.undo" data-i18n-aria="toolbar.undo" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
+            <button type="button" id="btnRedo" class="tb-btn" data-i18n-title="toolbar.redo" data-i18n-aria="toolbar.redo" title="Redo (Ctrl+Y / ⌘⇧Z)" aria-label="Redo" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg></button>
             <span class="sep" aria-hidden="true"></span>
             <label class="sr-only" for="blockStyle">Paragraph style</label>
             <select id="blockStyle" class="block-sel" aria-label="Paragraph style" data-tb>
-              <option value="p">¶ Body Text</option>
-              <option value="h1">H1 Heading</option>
-              <option value="h2">H2 Subheading</option>
-              <option value="h3">H3 Sub-subheading</option>
-              <option value="bullet">• Bullet List</option>
-              <option value="number">1. Numbered List</option>
-              <option value="toc">📑 TOC Entry</option>
-              <option value="dialogue">🎭 Play Dialogue</option>
-              <option value="stage">🎬 Stage Direction</option>
-              <option value="poem">📜 Poetry / Verse</option>
-              <option value="exercise">❓ Exercise Question</option>
-              <option value="caption">💬 Caption / Attribution</option>
-              <option value="footnote">📝 Footnote</option>
-              <option value="note">📋 Transcriber's Note</option>
-              <option value="quote">“ Blockquote</option>
+              <option value="p" data-full="¶ Body Text" data-short="¶ Text" data-mini="¶">¶ Body Text</option>
+              <option value="h1" data-full="H1 Heading" data-short="H1" data-mini="H1">H1 Heading</option>
+              <option value="h2" data-full="H2 Subheading" data-short="H2" data-mini="H2">H2 Subheading</option>
+              <option value="h3" data-full="H3 Sub-subheading" data-short="H3" data-mini="H3">H3 Sub-subheading</option>
+              <option value="bullet" data-full="• Bullet List" data-short="• List" data-mini="•">• Bullet List</option>
+              <option value="number" data-full="1. Numbered List" data-short="1. List" data-mini="1.">1. Numbered List</option>
+              <option value="index" data-full="📇 Index Entry" data-short="Index" data-mini="Idx">📇 Index Entry</option>
+              <option value="toc" data-full="📑 TOC Entry" data-short="TOC" data-mini="TOC">📑 TOC Entry</option>
+              <option value="dialogue" data-full="🎭 Play Dialogue" data-short="Play" data-mini="Play">🎭 Play Dialogue</option>
+              <option value="stage" data-full="🎬 Stage Direction" data-short="Stage" data-mini="Stage">🎬 Stage Direction</option>
+              <option value="poem" data-full="📜 Poetry / Verse" data-short="Poem" data-mini="Poem">📜 Poetry / Verse</option>
+              <option value="exercise" data-full="❓ Exercise Question" data-short="Exercise" data-mini="Ex">❓ Exercise Question</option>
+              <option value="caption" data-full="💬 Caption / Byline" data-short="Caption" data-mini="Cap">💬 Caption / Byline</option>
+              <option value="attribution" data-full="✍️ Attribution" data-short="Attrib" data-mini="Attr">✍️ Attribution</option>
+              <option value="footnote" data-full="📝 Footnote" data-short="Footnote" data-mini="Fn">📝 Footnote</option>
+              <option value="note" data-full="📋 Transcriber's Note" data-short="Note" data-mini="TN">📋 Transcriber's Note</option>
+              <option value="sidebar" data-full="📦 Sidebar Box" data-short="Sidebar" data-mini="Box">📦 Sidebar Box</option>
+              <option value="table-spatial" data-full="📊 Table (Spatial)" data-short="Table" data-mini="Tbl">📊 Table (Spatial)</option>
+              <option value="table-listed" data-full="📋 Table (Listed)" data-short="Tbl-List" data-mini="List">📋 Table (Listed)</option>
+              <option value="quote" data-full="“ Blockquote" data-short="Quote" data-mini="Quote">“ Blockquote</option>
             </select>
             <button type="button" id="btnBold" class="tb-btn tb-b tb-fmt" data-i18n-title="toolbar.bold" data-i18n-aria="toolbar.bold" title="Bold (Ctrl/⌘ B)" aria-label="Bold" data-tb>B</button>
             <button type="button" id="btnItalic" class="tb-btn tb-i tb-fmt" data-i18n-title="toolbar.italic" data-i18n-aria="toolbar.italic" title="Italic (Ctrl/⌘ I)" aria-label="Italic" data-tb>I</button>
             <button type="button" id="btnUnderline" class="tb-btn tb-u tb-fmt" data-i18n-title="toolbar.underline" data-i18n-aria="toolbar.underline" title="Underline (Ctrl/⌘ U)" aria-label="Underline" data-tb>U</button>
             <span class="sep" aria-hidden="true"></span>
+            <button type="button" id="btnOutdent" class="tb-btn tb-fmt" data-i18n-title="toolbar.outdent" data-i18n-aria="toolbar.outdent" title="Outdent (Shift+Tab or Ctrl/⌘[) — Promote list item to higher level" aria-label="Outdent list item (Ctrl/⌘[)" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7 8 3 12 7 16"/><line x1="21" y1="12" x2="11" y2="12"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
+            <button type="button" id="btnIndent" class="tb-btn tb-fmt" data-i18n-title="toolbar.indent" data-i18n-aria="toolbar.indent" title="Indent (Tab or Ctrl/⌘]) — Nest list item to deeper level" aria-label="Indent list item (Ctrl/⌘])" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="11 8 15 12 11 16"/><line x1="21" y1="12" x2="15" y2="12"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
+            <span class="sep" aria-hidden="true"></span>
             <div class="insert-menu-wrap" id="insertMenuWrap">
               <button type="button" id="btnInsertMenu" class="tb-btn insert-btn" data-i18n-title="toolbar.insert" title="Insert Equation, Templates, Table, Graphic, Break" aria-haspopup="menu" aria-expanded="false" data-tb>
-                <span>➕</span> <span class="btn-lbl" data-i18n="toolbar.insert">Insert</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
+                <span>➕</span> <span class="btn-lbl btn-lbl-full" data-i18n="toolbar.insert">Insert</span><span class="btn-lbl btn-lbl-short" style="display:none">Ins</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
               </button>
               <div class="insert-dropdown" id="insertDropdown" role="menu" hidden>
                 <button type="button" id="btnMath" class="insert-item" role="menuitem"><span class="insert-icon">∑</span> <span class="insert-lbl" data-i18n="toolbar.insert_equation">Equation</span></button>
-                <button type="button" id="btnFormula" class="insert-item" role="menuitem"><span class="insert-icon">🧮</span> <span class="insert-lbl">Templates</span></button>
+                <button type="button" id="btnFormula" class="insert-item" role="menuitem"><span class="insert-icon">🧮</span> <span class="insert-lbl" data-i18n="toolbar.insert_formula">Templates</span></button>
                 <button type="button" id="btnTable" class="insert-item" role="menuitem"><span class="insert-icon">📊</span> <span class="insert-lbl" data-i18n="toolbar.insert_table">Table</span></button>
                 <button type="button" id="btnGraphic" class="insert-item hardware-expert-only" role="menuitem"><span class="insert-icon">🖼</span> <span class="insert-lbl" data-i18n="toolbar.insert_graphic">Graphic</span></button>
+                <button type="button" id="btnSidebar" class="insert-item" role="menuitem"><span class="insert-icon">📦</span> <span class="insert-lbl" data-i18n="toolbar.insert_sidebar">Sidebar Box</span></button>
                 <button type="button" id="btnBreak" class="insert-item" role="menuitem"><span class="insert-icon">⁂</span> <span class="insert-lbl" data-i18n="toolbar.insert_divider">Break</span></button>
                 <button type="button" id="btnInsertPrintPage" class="insert-item" role="menuitem"><span class="insert-icon">📄</span> <span class="insert-lbl" data-i18n="toolbar.insert_page_break">Print Page</span></button>
               </div>
@@ -1332,39 +1505,26 @@
       <section class="pane pane-braille" aria-label="Braille preview">
         <h2 class="pane-h pane-h-row" id="brailleLabel">
           <div class="braille-view-tabs" role="tablist" style="display:inline-flex; gap:4px; align-items:center;">
-            <button type="button" id="tabViewBraille" class="tb-btn tab-btn active" role="tab" aria-selected="true" title="Standard embossed braille page view">⠿ Braille View</button>
+            <button type="button" id="tabViewBraille" class="tb-btn tab-btn active" role="tab" aria-selected="true" title="Standard embossed braille page view" data-i18n-title="toolbar.braille">⠿ <span data-i18n="toolbar.braille">Braille View</span></button>
+            <button type="button" id="tabViewMonarch" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="APH Monarch Dynamic Display (32×10 Braille grid)">📟 Monarch</button>
             <button type="button" id="tabViewDotPad" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="DotPad 320 Tactile Display (20×10 + 20-cell reading line)">📟 DotPad</button>
-          </div>
-          <div id="brailleToolbar" class="braille-toolbar" role="toolbar" aria-label="Braille editor controls">
-            <select id="selBrlMargin" class="tb-select" title="UKAAF Margin Preset" aria-label="UKAAF Margin Preset" style="font-size:0.75rem; padding:1px 4px; max-width:95px; border-radius:4px; background:var(--btn-bg); color:var(--ink); border:1px solid var(--border);">
-              <option value="body">3-1 Paragraph</option>
-              <option value="h1">Centered Heading</option>
-              <option value="h2">5-5 Subheading</option>
-              <option value="h3">5-5 Heading 3</option>
-              <option value="list-bullet">1-3 List</option>
-              <option value="exercise">1-5 Exercise</option>
-            </select>
-            <span id="brlPosBadge" class="brl-pos-badge" aria-live="polite" title="Cursor Line and Cell Position">L1, C1/40</span>
-            <span id="brlSyncStatus" class="brl-sync-status synced" role="status" aria-live="polite" title="Braille-Print Sync State"><span class="sync-dot"></span><span class="sync-label">Synced</span></span>
-            <button type="button" id="brlValidationBadge" class="tb-btn brl-val-badge valid" title="Braille Structure Validation" aria-label="Braille Structure Validation">✓ Valid</button>
-            <div style="margin-left:auto; display:inline-flex; gap:2px; align-items:center;">
-              <button type="button" id="btnBrlInsertMode" class="tb-btn" title="Toggle Insert / Overwrite mode" aria-label="Toggle Insert / Overwrite mode">INS</button>
-              <button type="button" id="btnBrlAscii" class="tb-btn" title="Toggle Unicode Braille vs. BRF ASCII display" aria-label="Toggle Unicode Braille vs. BRF ASCII display" style="font-size:0.82rem; font-weight:600; padding:0 6px;">BRF</button>
-              <button type="button" id="btnBrlSixKey" class="tb-btn" title="Six-key Perkins braille entry on braille pane (SDF JKL keys)" data-tb style="font-size:1.05rem; font-weight:700; letter-spacing:1px;" aria-label="Six-key Perkins braille entry" aria-pressed="true">⠼⠋</button>
-            </div>
           </div>
           <span class="pane-h-right">
             <button type="button" id="proofBadge" class="proof-badge warn" hidden
-              title="Round-trip check: the braille is translated back to text and compared with what you typed. A warning marks lines to review.">⚠</button>
+              data-i18n-title="proofread.badge_clean" title="Round-trip check: no word discrepancies found.">⚠</button>
           </span>
         </h2>
-        <div id="brlStack" class="braille-stack">
-          <div id="braille" class="braille" aria-hidden="true"></div>
-          <textarea id="brlInput" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" wrap="off" aria-label="Braille document text"></textarea>
-        </div>
-        <div id="brlSlashMenu" class="slash-menu" role="listbox" aria-label="Braille Commands" hidden>
-          <div class="slash-menu-head">Braille Commands</div>
-          <div id="brlSlashList"></div>
+        <div id="braille" class="braille" aria-labelledby="brailleLabel"></div>
+        <div id="monarchPanel" class="dotpad-panel monarch-panel" style="display:none;" aria-label="APH Monarch 32×10 Emulator">
+          <div class="dotpad-device-frame monarch-device-frame">
+            <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px; font-size:0.78rem; color:#94a3b8;">
+              <span id="monarchPanelTitle" style="font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:6px;">
+                <span>📟</span> APH Monarch (32 × 10)
+              </span>
+              <span id="monarchPanelSubtitle" style="color:#cbd5e1;">Lines 1–10 of 25</span>
+            </div>
+            <canvas id="monarchPanelCanvas" width="680" height="260" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="APH Monarch: 32×10 Braille cell grid"></canvas>
+          </div>
         </div>
         <div id="dotpadPanel" class="dotpad-panel" style="display:none;" aria-label="DotPad 320 Emulator">
           <div class="dotpad-device-frame">
@@ -1395,8 +1555,8 @@
               title="Drag, or use the up and down arrow keys, to resize the explanation bar"></button>
     </div>
     <footer id="statusBar" class="rule-info">
-      <span id="styleInspector" class="style-inspector-badge" role="status" aria-live="polite" tabindex="0" title="Active block style and BANA margins. Press Alt+Up/Down to cycle styles.">Style: Body Text (3-1) | Cell: 3 | Alignment: Left | Profile: BANA</span>
-      <span id="ruleInfoBody" style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap;"><span class="sb-hint">Click a word in either panel to see the braille rules used.</span></span>
+      <span id="styleInspector" class="style-inspector-badge" role="status" aria-live="polite" tabindex="0" title="Active block style and BANA margins. Press Alt+Up/Down to cycle styles." style="display:none;"></span>
+      <span id="ruleInfoBody" style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap; min-width:0; flex:1 1 auto;"><span class="sb-hint">Click a word in either panel to see the braille rules used.</span></span>
       <span class="doc-stats" id="docStats"></span>
       <span id="tactileDisplayBadge" style="display:none; margin-left:auto; align-items:center; gap:6px; font-size:0.75rem; background:rgba(56,189,248,0.15); color:var(--accent); border:1px solid rgba(56,189,248,0.3); border-radius:4px; padding:2px 8px;">
         <span id="tactileDisplayLbl">Monarch (1-10)</span>
@@ -1409,18 +1569,18 @@
 
   <dialog id="settingsDialog" class="dialog">
     <form method="dialog" class="dialog-body">
-      <div class="dialog-head"><h2>Settings</h2><button value="close" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2 data-i18n="settings.title">Settings</h2><button value="close" aria-label="Close">✕</button></div>
       <div class="settings-layout">
         <nav class="settings-nav" role="tablist" aria-label="Settings Categories">
-          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 Rules &amp; Standards</button>
-          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 Embosser &amp; Display</button>
-          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 User Interface</button>
-          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ Advanced Production</button>
+          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 <span data-i18n="settings.tab_rules">Rules &amp; Standards</span></button>
+          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 <span data-i18n="settings.tab_embosser">Embosser &amp; Hardware</span></button>
+          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 <span data-i18n="settings.tab_interface">User Interface</span></button>
+          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ <span data-i18n="settings.tab_production">Advanced Production</span></button>
         </nav>
         <div class="settings-panels">
           <div id="tab-rules" class="settings-panel active" role="tabpanel">
-            <h3>Rules &amp; Translation Standards</h3>
-            <div class="field"><label for="set-language">Language &amp; Contraction Grade</label>
+            <h3 data-i18n="settings.tab_rules">Rules &amp; Translation Standards</h3>
+            <div class="field"><label for="set-language" data-i18n="settings.braille_code_label">Language &amp; Contraction Grade</label>
               <select id="set-language">
                 <option value="ueb_g2">English UEB (Grade 2 - Contracted)</option>
                 <option value="ueb_g1">English UEB (Grade 1 - Uncontracted)</option>
@@ -1437,24 +1597,24 @@
                 <option value="gaelic_g1">Gaelic (Grade 1)</option>
                 <option value="gaelic_g2">Gaelic (Grade 2)</option>
               </select></div>
-            <div class="field"><label for="set-mathCode">Math Braille Code</label>
+            <div class="field"><label for="set-mathCode" data-i18n="settings.math_code_label">Math Braille Code</label>
               <select id="set-mathCode">
                 <option value="auto">Follow layout standard (UKAAF → UEB maths, BANA → Nemeth)</option>
                 <option value="ueb">UEB Math (Unified English Braille - UK / AU / NZ / US)</option>
                 <option value="nemeth">Nemeth Code (US STEM Standard)</option>
               </select></div>
-            <div class="field"><label for="set-mode">Layout Standard</label>
+            <div class="field"><label for="set-mode" data-i18n="settings.standard_label">Layout Standard</label>
               <select id="set-mode">
                 <option value="ukaaf">UKAAF (UK Standard)</option>
                 <option value="bana">BANA (US Standard)</option>
               </select></div>
-            <div class="field"><label for="set-paragraphStyle">Paragraph Style</label>
+            <div class="field"><label for="set-paragraphStyle" data-i18n="settings.paragraph_style_label">Paragraph Style</label>
               <select id="set-paragraphStyle"><option value="indented">Indented (3-1, standard)</option><option value="block">Block (1-1, blank lines)</option></select></div>
-            <div class="field"><label for="set-quoteStyle">Quotation Marks</label>
+            <div class="field"><label for="set-quoteStyle" data-i18n="settings.quote_style_label">Quotation Marks</label>
               <select id="set-quoteStyle"><option value="faithful">Faithful to print</option><option value="exchange">Exchange single → double</option></select></div>
-            <div class="field"><label for="set-listStyle">List Format</label>
+            <div class="field"><label for="set-listStyle" data-i18n="settings.list_style_label">List Format</label>
               <select id="set-listStyle"><option value="spaced">Blank-line list (1-3)</option><option value="compact">Compact list (5-1)</option></select></div>
-            <div class="field"><label for="set-tableFormat">Table Layout</label>
+            <div class="field"><label for="set-tableFormat" data-i18n="settings.table_format_label">Table Layout</label>
               <select id="set-tableFormat">
                 <option value="auto">Auto (Listed if wide, Columnar if small)</option>
                 <option value="listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
@@ -1463,15 +1623,15 @@
           </div>
 
           <div id="tab-hardware" class="settings-panel" role="tabpanel">
-            <h3>Embosser Hardware &amp; Connection</h3>
-            <div class="field"><label for="set-connectionType">Connection Mode</label>
+            <h3 data-i18n="settings.tab_embosser">Embosser Hardware &amp; Connection</h3>
+            <div class="field"><label for="set-connectionType" data-i18n="settings.connection_type_label">Connection Mode</label>
               <select id="set-connectionType">
                 <option value="serial">USB Serial / Direct Cable (WebSerial)</option>
                 <option value="hid">USB HID / Driverless (Universal WebHID)</option>
                 <option value="ble">Wireless Bluetooth Low Energy (Web Bluetooth)</option>
                 <option value="network">Network / Wi-Fi (REST / WebSocket / IP)</option>
               </select></div>
-            <div class="field"><label for="set-embosser">Embosser Preset Model</label>
+            <div class="field"><label for="set-embosser" data-i18n="settings.embosser_preset_label">Embosser Preset Model</label>
               <select id="set-embosser">
                 <option value="generic">Generic BRF / Standard Embosser (38x25)</option>
                 <option value="monarch">APH Monarch Dynamic Display (32x10)</option>
@@ -1486,8 +1646,8 @@
             <div id="networkSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
               <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Network Embosser (REST / Port 9100 / IP)</h4>
               <div class="field-row">
-                <div class="field"><label for="set-networkHost">IP Address or Hostname</label><input id="set-networkHost" type="text" placeholder="192.168.1.150" value="192.168.1.150" /></div>
-                <div class="field" style="max-width:110px;"><label for="set-networkPort">Port</label><input id="set-networkPort" type="number" min="1" max="65535" value="9100" /></div>
+                <div class="field"><label for="set-networkHost" data-i18n="settings.network_host_label">IP Address or Hostname</label><input id="set-networkHost" type="text" placeholder="192.168.1.150" value="192.168.1.150" /></div>
+                <div class="field" style="max-width:110px;"><label for="set-networkPort" data-i18n="settings.network_port_label">Port</label><input id="set-networkPort" type="number" min="1" max="65535" value="9100" /></div>
               </div>
               <small style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Supports modern HTTP REST /api/print endpoints or raw TCP port 9100.</small>
             </div>
@@ -1499,31 +1659,27 @@
               <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Driverless Universal USB (WebHID)</h4>
               <small style="color:var(--muted); font-size:.78rem; display:block;">Connect directly to custom microcontroller embossers (ESP32-S3, RP2040/RP2350, STM32, Arduino) bypassing OS printer-driver lockouts.</small>
             </div>
-            <div class="field"><label for="set-embosserDuplex">Duplex Mode</label>
+            <div class="field"><label for="set-embosserDuplex" data-i18n="settings.duplex_label">Duplex Mode</label>
               <select id="set-embosserDuplex">
-                <option value="double">Interpoint (Double-Sided)</option>
-                <option value="single">Single-Sided (Simplex)</option>
+                <option value="double" data-i18n="settings.duplex_double">Interpoint (Double-Sided)</option>
+                <option value="single" data-i18n="settings.duplex_single">Single-Sided (Simplex)</option>
               </select></div>
-            <div id="serialBaudGroup" class="field" style="display:none;"><label for="set-baudRate">Hardware Serial Baud Rate</label>
+            <div id="serialBaudGroup" class="field" style="display:none;"><label for="set-baudRate" data-i18n="settings.baud_rate_label">Hardware Serial Baud Rate</label>
               <select id="set-baudRate">
                 <option value="9600">9600 bps (Standard)</option>
                 <option value="19200">19200 bps</option>
                 <option value="38400">38400 bps</option>
                 <option value="115200">115200 bps (High Speed)</option>
               </select></div>
-            <div class="field-row">
-              <div class="field"><label for="set-cells">Cells / Line</label><input id="set-cells" type="number" min="10" max="60" value="38" /></div>
-              <div class="field"><label for="set-lines">Lines / Page</label><input id="set-lines" type="number" min="10" max="40" value="25" /></div>
-            </div>
             <div class="field field-check" style="margin-top:8px;">
               <label class="check-label" for="set-tactileGraphics">
                 <input type="checkbox" id="set-tactileGraphics" checked />
-                Enable Tactile Graphics Mode (Tiger &amp; Index rasterization)
+                <span data-i18n="settings.tactile_graphics_label">Enable Tactile Graphics Mode (Tiger &amp; Index rasterization)</span>
               </label>
               <small style="display:block; margin-left:24px; color:var(--muted); font-size:.78rem;">When unchecked, diagrams are exported as accessible Transcriber's Note descriptions for text-only embossers and braille displays.</small>
             </div>
             <div class="field" style="margin-top:16px;border-top:1px solid var(--line);padding-top:12px;">
-              <label>Tactile Display Live Stream (APH Monarch / DotPad / HID)</label>
+              <div class="field-label" style="font-weight:600;font-size:0.88rem;color:var(--ink);">Tactile Display Live Stream (APH Monarch / DotPad / HID)</div>
               <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap;">
                 <button type="button" id="btnConnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--accent);color:#fff;border-radius:7px;font-weight:600;cursor:pointer;">📶 Connect Bluetooth (DotPad BLE)</button>
                 <button type="button" id="btnConnectHid" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">🔌 Connect USB / HID (Monarch)</button>
@@ -1537,7 +1693,7 @@
           </div>
 
           <div id="tab-display" class="settings-panel" role="tabpanel">
-            <h3 data-i18n="settings.tab_language">Interface Language &amp; View</h3>
+            <h3 data-i18n="settings.tab_interface">User Interface &amp; View</h3>
             <div class="field" style="margin-bottom:14px;">
               <label for="set-uiLanguage" data-i18n="settings.language_label">Interface Language</label>
               <select id="set-uiLanguage">
@@ -1573,23 +1729,27 @@
           </div>
 
           <div id="tab-document" class="settings-panel" role="tabpanel">
-            <h3>Advanced Production</h3>
-            <div class="field"><label for="set-volumePages">Volume Split Interval (0 = single volume)</label>
+            <h3 data-i18n="settings.tab_production">Page Geometry &amp; Volume Splitting</h3>
+            <div class="field-row" style="margin-bottom:12px;">
+              <div class="field"><label for="set-cells" data-i18n="settings.geometry_cells">Cells / Line</label><input id="set-cells" type="number" min="10" max="60" value="38" /></div>
+              <div class="field"><label for="set-lines" data-i18n="settings.geometry_lines">Lines / Page</label><input id="set-lines" type="number" min="10" max="40" value="25" /></div>
+            </div>
+            <div class="field"><label for="set-volumePages" data-i18n="settings.volume_pages_label">Volume Split Interval (0 = single volume)</label>
               <input id="set-volumePages" type="number" min="0" max="500" value="0" /></div>
             <div class="field">
               <label class="check-label" for="set-includeCovers">
                 <input type="checkbox" id="set-includeCovers" />
-                <span><strong>Tactile Volume Covers</strong> — embossed title covers when splitting books</span>
+                <span><strong data-i18n="settings.include_covers">Tactile Volume Covers</strong> — embossed title covers when splitting books</span>
               </label>
             </div>
           </div>
         </div>
       </div>
-      <div class="dialog-foot"><button value="close" class="primary">Done</button></div>
+      <div class="dialog-foot"><button value="close" class="primary" data-i18n="common.done">Done</button></div>
     </form>
   </dialog>
 
-  <dialog id="helpDialog" class="dialog" style="max-width: 860px;">
+  <dialog id="helpDialog" class="dialog">
     <div class="dialog-body">
       <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" aria-label="Close">✕</button></div>
       <div class="help-content">
@@ -1597,77 +1757,102 @@
         <p>Emboss provides two integrated operating modes, sharing your translation standards, language tables, contraction grades, and page geometry:</p>
         <ul>
           <li><strong>Quick Mode (Simple Converter)</strong> — The fast route for converting existing documents: drag and drop Word (<code>.docx</code>), Markdown (<code>.md</code>), NIMAS XML (<code>.xml / .nimas / .dtbook</code>), EPUB, ODT, HTML, RTF, or plain text to produce an embosser-ready <strong>BRF</strong> instantly.</li>
-          <li><strong>Advanced Direct Braille Editor (This Screen)</strong> — Write, format, and edit with real-time bidirectional print↔braille synchronization, mathematical equations, formula templates, spatial tables, tactile diagrams, 6-key braille chording, read-aloud speech, automated proofreading, and driverless hardware spooling.</li>
+          <li><strong>Advanced Direct Braille Editor (This Screen)</strong> — Write, format, and edit with real-time bidirectional print↔braille synchronization, mathematical equations, formula templates, spatial tables, tactile diagrams, Perkins 6-key chording, read-aloud speech, automated proofreading, and driverless hardware spooling.</li>
         </ul>
         <p>Switch back to Quick Mode at any time by clicking <strong>← Quick&nbsp;Mode</strong> in the top header.</p>
 
-        <h3>📝 Print Text Editor &amp; Formatting Tools (Left Pane)</h3>
-        <p>The print pane provides a full-featured accessible rich text editor powered by Lexical. Typing or modifying content updates the braille representation on the right in real time:</p>
+        <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
+        <p>Emboss is fully internationalized to support transcribers, educators, and blind students worldwide:</p>
         <ul>
-          <li><strong>Paragraph Styles Menu (¶ Body):</strong> Select standard styles from the dropdown or use slash commands:
-            <ul>
-              <li><strong>Heading 1 (<kbd>/h1</kbd>):</strong> Major title, centered in braille (BANA / UKAAF).</li>
-              <li><strong>Heading 2 (<kbd>/h2</kbd>):</strong> Section heading with 5-5 margin indents.</li>
-              <li><strong>Heading 3 (<kbd>/h3</kbd>):</strong> Subsection heading with 5-5 margin indents.</li>
-              <li><strong>Body Text (<kbd>/p</kbd>):</strong> Standard paragraph with 3-1 margin indents (first line cell 3, runovers cell 1).</li>
-              <li><strong>Bulleted List (<kbd>/ul</kbd>) &amp; Numbered List (<kbd>/ol</kbd>):</strong> List items with 1-3 margin indents.</li>
-              <li><strong>Blockquote (<kbd>/quote</kbd>):</strong> Indented quote block with 3-3 margins.</li>
-              <li><strong>Exercise (<kbd>/exercise</kbd>):</strong> Educational question/exercise with 1-5 margin indents.</li>
-              <li><strong>Footnote (<kbd>/footnote</kbd>):</strong> Footnote block with 1-3 margins.</li>
-              <li><strong>Computer Code (<kbd>/code</kbd>):</strong> Code passage enclosed in UEB computer code indicators (<code>;#</code>).</li>
-            </ul>
-          </li>
-          <li><strong>Typeform Formatting:</strong> Apply Bold (<kbd>Ctrl/⌘ B</kbd>), Italic (<kbd>Ctrl/⌘ I</kbd>), and Underline (<kbd>Ctrl/⌘ U</kbd>). Emboss transcribes these into authentic UEB typeform indicators.</li>
-          <li><strong>Markdown Shortcuts:</strong> Type Markdown prefixes directly in the print editor for quick formatting:
-            <ul>
-              <li><code># </code> Heading 1 · <code>## </code> Heading 2 · <code>### </code> Heading 3</li>
-              <li><code>* </code> or <code>- </code> Bulleted list · <code>1. </code> Numbered list</li>
-              <li><code>&gt; </code> Blockquote · <code>``` </code> Code block</li>
-              <li><code>$x+1$</code> Inline equation · <code>$$x^2+y^2=r^2$$</code> Display equation</li>
-            </ul>
-          </li>
-          <li><strong>Interactive Table of Contents (☐ TOC):</strong> Clicking <strong>☐ TOC</strong> in the top header automatically parses all headings and displays a collapsible, interactive outline above the editor for instant navigation across large documents.</li>
-          <li><strong>Continuous Proofreading &amp; Contraction Inspection:</strong> Emboss continuously back-translates every line; words with contraction ambiguities or discrepancies are flagged with a gentle wavy underline. Hover over any word or press <kbd>Ctrl/⌘ ⇧ D</kbd> to view its exact contraction rule breakdown.</li>
-          <li><strong>Synchronized Speech &amp; Word Lighting:</strong> Click <strong>▶ Read</strong> or press <kbd>Ctrl/⌘ ⇧ Space</kbd> to listen to the document read aloud with synchronized highlighting across both print and braille panes.</li>
+          <li><strong>112 Interface Languages:</strong> Switch the complete user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) into 112 languages via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. Common languages (English, Spanish, French, and your local system language) are pinned to the top of the list for quick access.</li>
+          <li><strong>Native Right-to-Left (RTL) Support:</strong> When selecting Arabic, Hebrew, Persian, or Urdu, the entire editor layout and document panes automatically adjust to Right-to-Left orientation with mirrored toolbars and bidirectional caret tracking.</li>
+          <li><strong>142+ Document Braille Codes:</strong> Independently select your document's braille translation tables and contraction level (UEB Grade 1/2, Spanish, French, German, Arabic, Welsh, Gaelic, Hindi, Chinese, etc.) in <strong>Settings ⚙ &gt; Rules &amp; Standards</strong>.</li>
         </ul>
 
-        <h3>➕ Insert Menu: Equations, Templates, Tables, Graphics &amp; Breaks</h3>
+        <h3>Writing, Formatting &amp; Live Synchronisation</h3>
+        <p>Type in the print pane on the left, and your formatted braille generates live on the right. Structure is what matters: real headings become braille headings; real lists become braille lists.</p>
+        <ul>
+          <li><strong>15 BANA / UEB Block Styles:</strong> Select any style from the <strong>¶ Body Text</strong> dropdown or type slash commands directly in the editor:
+            <ul>
+              <li><strong>¶ Body Text:</strong> Standard paragraph with 3-1 margins (<kbd>/p</kbd>).</li>
+              <li><strong>H1 Heading:</strong> Centered major heading with blank lines before and after (<kbd>/h1</kbd>).</li>
+              <li><strong>H2 Subheading:</strong> Section heading indented to Cell 5 (<kbd>/h2</kbd>).</li>
+              <li><strong>H3 Sub-subheading:</strong> Minor heading indented to Cell 7 (<kbd>/h3</kbd>).</li>
+              <li><strong>• Bullet List &amp; 1. Numbered List:</strong> 1-3 hierarchical lists with multi-level nesting (<kbd>/bullet</kbd>, <kbd>/number</kbd>, <kbd>/ul</kbd>, <kbd>/ol</kbd>).</li>
+              <li><strong>📑 Table of Contents Entry:</strong> Indented entry with automated BANA dot leaders (<code>_ _ _</code>) and right-aligned print page numbers (<kbd>/toc</kbd>).</li>
+              <li><strong>🎭 Play Dialogue:</strong> Character dialogue with speaker in Cell 1 and speech runovers in Cell 3 (<kbd>/dialogue</kbd>).</li>
+              <li><strong>🎬 Stage Direction:</strong> Parenthetical stage directions indented to Cell 7 (<kbd>/stage</kbd>).</li>
+              <li><strong>📜 Poetry / Verse:</strong> Verse stanzas with line indents (Cell 1, runover Cell 3/5) (<kbd>/poem</kbd> or <kbd>/verse</kbd>).</li>
+              <li><strong>❓ Exercise Question (BANA §10):</strong> Numbered questions and multi-level sub-questions formatted per BANA §10. Level 1 main questions format as <strong>1-5</strong> (<code>1.</code>, <code>2.</code>); Level 2 sub-questions format as <strong>3-5</strong> (<code>a.</code>, <code>b.</code>); Level 3 sub-parts format as <strong>5-7</strong> (<code>i.</code>, <code>ii.</code>); Level 4 sub-parts format as <strong>7-9</strong> (<code>A.</code>, <code>B.</code>) (<kbd>/exercise</kbd>).</li>
+              <li><strong>💬 Caption / Attribution:</strong> Italicized attribution block with 7-5 margins (<kbd>/caption</kbd>).</li>
+              <li><strong>📝 Footnote:</strong> Formal footnote reference with 1-3 margins (<kbd>/footnote</kbd> or <kbd>/fn</kbd>).</li>
+              <li><strong>🏷 Transcriber Note:</strong> Tinted callout box enclosed in BANA transcriber note indicators (<code>@.&lt; ... @.&gt;</code>) (<kbd>/note</kbd> or <kbd>/tn</kbd>).</li>
+              <li><strong>“ Blockquote:</strong> Indented quotation paragraph (<kbd>/quote</kbd>).</li>
+            </ul>
+          </li>
+          <li><strong>Multi-Level Indentation &amp; Outdentation:</strong> Easily structure hierarchical outlines, numbered lists, and educational exercise questions up to 5 nested levels:
+            <ul>
+              <li><strong>Indent / Nest Item (<kbd>Ctrl/⌘ ]</kbd> or <kbd>Tab</kbd>):</strong> Indents the current item or selected block deeper into the hierarchy (e.g. Level 1 &rarr; Level 2 &rarr; Level 3). Also accessible via the toolbar <button type="button" class="tb-btn tb-fmt" style="display:inline-flex; vertical-align:middle; padding:2px 4px; pointer-events:none;" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 8 15 12 11 16"/><line x1="21" y1="12" x2="15" y2="12"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button> <strong>Indent</strong> button or <kbd>/indent</kbd>.</li>
+              <li><strong>Outdent / Promote Item (<kbd>Ctrl/⌘ [</kbd> or <kbd>Shift+Tab</kbd>):</strong> Promotes the item higher in the hierarchy. Also accessible via the toolbar <button type="button" class="tb-btn tb-fmt" style="display:inline-flex; vertical-align:middle; padding:2px 4px; pointer-events:none;" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 8 3 12 7 16"/><line x1="21" y1="12" x2="11" y2="12"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button> <strong>Outdent</strong> button or <kbd>/outdent</kbd>.</li>
+              <li><strong>Screen Reader Safe:</strong> <kbd>Tab</kbd> is contextual and only active within lists/exercises; in standard body text, <kbd>Tab</kbd> allows screen reader users to navigate out of the editor without keyboard traps.</li>
+              <li><strong>Live Spoken Feedback:</strong> Screen readers receive immediate spoken announcements on every level change (e.g. <em>"List item indented to level 2 (sub-item a, b, c)"</em>).</li>
+            </ul>
+          </li>
+          <li><strong>Typeform Emphasis (B / I / U):</strong> Bold (<kbd>Ctrl/⌘ B</kbd>), Italic (<kbd>Ctrl/⌘ I</kbd>), and Underline (<kbd>Ctrl/⌘ U</kbd>) transcribe faithfully to authentic UEB typeform indicators.</li>
+          <li><strong>Bidirectional Cell-Level Linking:</strong> Click any word, equation, table cell, or list item in either pane to highlight its exact matching cells in the other pane.</li>
+          <li><strong>Live Style Inspector:</strong> The bottom status bar continuously displays the active style, cell indent, text alignment, and braille rule breakdown for the word under the caret.</li>
+        </ul>
+
+        <h3>Top Header Controls &amp; Deliverables</h3>
+        <ul>
+          <li><strong>📂 Load:</strong> Open and import documents in any format (<code>.docx</code>, <code>.md</code>, <code>.xml</code>, <code>.nimas</code>, <code>.dtbook</code>, <code>.html</code>, <code>.epub</code>, <code>.odt</code>, <code>.rtf</code>, <code>.txt</code>).</li>
+          <li><strong>💾 Save (<kbd>Ctrl/⌘ S</kbd>):</strong> 1-click save to master <strong>NIMAS Project (.xml)</strong>, preserving 100% of document hierarchy, BANA styles, MathML, tactile diagrams, and print page numbers with zero data loss.</li>
+          <li><strong>🗑 Clear:</strong> Clears the current document and resets the editor workspace to start fresh, with confirmation protection against losing unsaved changes.</li>
+          <li><strong>Download ▾ (Braille Deliverables Menu):</strong>
+            <ul>
+              <li>📱 <strong>eBraille (.ebraille):</strong> Modern DAISY/BANA digital braille package containing formatted braille, MathML, vector tactile SVGs (Experimental), and print page navigation.</li>
+              <li>⠿ <strong>Braille (BRF):</strong> Universal embossed braille standard compatible with all paper embossers and refreshable braille displays.</li>
+              <li>📄 <strong>PEF 1.0 (.pef):</strong> Portable Embosser Format XML with multi-volume page tables.</li>
+            </ul>
+          </li>
+          <li><strong>☐ TOC (Table of Contents):</strong> Generates formal braille preliminary contents pages with an interactive outline in the editor.</li>
+          <li><strong>▶ Read:</strong> High-quality text-to-speech engine reading text and MathML equations with synchronized word lighting (<kbd>Ctrl/⌘ ⇧ Space</kbd>).</li>
+          <li><strong>🖨 Emboss:</strong> Direct hardware spooling across USB, Bluetooth BLE, WebHID, and Network.</li>
+        </ul>
+
+        <h3>🔍 Real-Time Round-Trip Proofreading &amp; Diagnostics</h3>
+        <p>Emboss automatically performs real-time round-trip verification as you type: it transcribes your text to braille with Liblouis, then back-translates the braille to text. If any word discrepancy is detected, a yellow review badge appears at the top right of the Braille view (<code>⚠ N to review</code>). Clicking the badge jumps directly to each discrepancy in the editor for instant review.</p>
+
+        <h3>➕ Insert Menu: Equations, Templates, Tables, Graphics &amp; Sidebars</h3>
         <ul>
           <li><strong>∑ — Equation (<kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd>):</strong> Visual MathLive equation editor transcribed to <strong>UEB maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA) via MathCAT with automatic code switch indicators.</li>
           <li><strong>🧮 — Templates (<kbd>/formula</kbd>):</strong> 346 searchable equations across 16 STEM categories (Algebra, Calculus, Geometry, Trigonometry, Linear Algebra, Physics, Chemistry, etc.) with math previews and spoken audio descriptions.</li>
-          <li><strong>📊 — Table (<kbd>/table</kbd>):</strong> Insert spatial braille data tables with interactive row/column tools. Formats as BANA §11 / UKAAF §8 Spatial Columnar tables with column headers, guide lines, and 2-cell gutters, or auto-adapts to Listed Table format on narrow widths.</li>
-          <li><strong>🖼 — Graphic (<kbd>/graphic</kbd>):</strong> Insert curated STEM and educational diagrams from the 1,731-symbol library or upload custom SVG vectors. Maps colors to tactile textures and transcribes labels to Braille with protective halos.</li>
-          <li><strong>📄 — Print Page (<kbd>/page</kbd>):</strong> Inserts source textbook print page breaks with BANA continuous leaders or UKAAF <code>⠐⠤</code> page change lines.</li>
-          <li><strong>⁂ — Break (<kbd>/break</kbd>):</strong> Inserts formal section dividers ( ∗ ∗ ∗ ).</li>
-          <li><strong>⠼⠋ — 6-Key Braille Input (<kbd>Ctrl/⌘ ⇧ K</kbd>):</strong> Type chords directly using home keys <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6) in either the print or braille pane.</li>
-        </ul>
-
-        <h3>⠿ Braille Editor Pane &amp; Dedicated Toolbar (Right Pane)</h3>
-        <p>The Braille pane on the right is an active, two-way interactive braille editor—not just a static preview. You can type, delete, reformat, and touch up braille cells directly:</p>
-        <ul>
-          <li><strong>Bidirectional Synchronization &amp; Reverse Translation:</strong> When you edit cells in the Braille pane (via keyboard, 6-key chording, or pasting BRF), Emboss automatically back-translates the braille and reconciles the print text and document structure on the left in real time.</li>
-          <li><strong>Cell-Level Interactive Linking:</strong> Click any braille cell or print word to highlight its exact corresponding counterpart in the opposite pane.</li>
-          <li><strong>Braille Toolbar Controls (Top of Braille Pane):</strong>
+          <li><strong>📊 — Tables (<kbd>/table</kbd> or <kbd>/listedtable</kbd>):</strong>
             <ul>
-              <li><strong>Margin Preset Selector (<code>3-1 Paragraph</code>, <code>Centered</code>, <code>5-5 Subheading</code>, <code>1-3 List</code>, <code>1-5 Exercise</code>):</strong> Instantly adjust the margin indents of the current braille line to match official BANA / UKAAF rules without switching panes.</li>
-              <li><strong>Line &amp; Cell Coordinate Badge (<code>L1, C1/40</code>):</strong> Real-time cursor coordinate badge showing your exact line number on the page and column cell position relative to the maximum page width.</li>
-              <li><strong>Sync Status Indicator (<span style="color:#10b981;">●</span> Synced):</strong> Visual indicator confirming that the print document and braille stream are in complete synchronization.</li>
-              <li><strong>Structural Validation Badge (<code>✓ Valid</code>):</strong> Live structural checker verifying heading placement, blank line rules, transcriber note closures, and page line budgets.</li>
-              <li><strong><code>INS</code> / <code>OVR</code> Mode Toggle:</strong> Switch between standard text insertion (<code>INS</code>) and cell overwrite mode (<code>OVR</code>)—ideal for editing spatial math matrices and aligned braille tables.</li>
-              <li><strong><code>BRF</code> / Unicode Toggle:</strong> Switch the display between tactile 6-dot Unicode braille (<code>⠓⠑⠇⠇⠕</code>) and North American Braille ASCII (<code>HELLO</code> / <code>,HLL</code>) for hardware displays.</li>
-              <li><strong>6-Key Braille Button (<code>⠼⠋</code>):</strong> Enable 6-key braille chording directly into the raw braille pane using <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6).</li>
+              <li><strong>Spatial Columnar Table (<kbd>/table</kbd>):</strong> Visual 2D data grid formatted per BANA §11 with column separator lines and cell gutters.</li>
+              <li><strong>Listed Table (<kbd>/listedtable</kbd>):</strong> Row-by-row listed format for text-heavy tables (e.g. Vocabulary/Glossaries), with column headers prepended to each line.</li>
+              <li>Switch between Spatial and Listed modes anytime via the table header toggle.</li>
             </ul>
           </li>
-          <li><strong>Braille Slash Menu:</strong> Type <kbd>/</kbd> directly in the braille pane to open a dedicated braille command menu for inserting BANA boxlines (<code>333 / 777</code>), transcriber notes (<code>. , ... ,.</code>), page change lines, and spatial tables.</li>
+          <li><strong>📦 — Sidebar Box (<kbd>/sidebar</kbd> or <kbd>/box</kbd>):</strong> Insert callout cards enclosed in BANA top boxlines (<code>333 Title 333</code>) and bottom boxlines (<code>777</code>).</li>
+          <li><strong>🖼 — Graphic (<kbd>/graphic</kbd> or <kbd>/svg</kbd>) <em style="color:var(--accent); font-weight:600;">[Experimental]</em>:</strong> Insert curated STEM and educational diagrams from the 1,731-symbol library or upload custom SVG vectors. Maps colors to tactile textures and transcribes labels to Braille with protective halos.</li>
+          <li><strong>📄 — Print Page (<kbd>/page</kbd>):</strong> Inserts source textbook print page breaks with BANA continuous leaders or UKAAF <code>⠐⠤</code> page change lines.</li>
+          <li><strong>⁂ — Break (<kbd>/break</kbd>):</strong> Inserts formal section dividers ( ∗ ∗ ∗ ).</li>
+          <li><strong>⠼⠋ — Perkins 6-Key Input (<kbd>Ctrl/⌘ ⇧ K</kbd>):</strong> Type chords directly using home keys <code>S D F</code> (dots 3-2-1) and <code>J K L</code> (dots 4-5-6).</li>
         </ul>
 
-        <h3>📊 Spatial Tables &amp; Listed Formats (BANA §11 / UKAAF §8)</h3>
+        <h3>📐 Advanced Formatting Standards (BANA Formats 2016 &amp; UKAAF B004)</h3>
         <ul>
-          <li><strong>Automatic Layout Selection:</strong> Emboss automatically calculates the width required for each column (including 2-cell blank gutters) and generates a <strong>Spatial Columnar Table</strong> with aligned columns and separator guide lines.</li>
-          <li><strong>Listed Table Format Fallback:</strong> When a table has too many columns to fit the configured page width, Emboss automatically reformats it into the official <strong>Listed Table Format</strong> (UKAAF §8 / BANA §11), presenting each row as a structured list entry with column headers as field labels.</li>
+          <li><strong>Footnotes &amp; Endnotes (BANA §12):</strong> Formatted with 1-3 margin indents (first cell 1, runovers cell 3) preceded by a blank line.</li>
+          <li><strong>Transcriber's Notes (BANA §3 / UKAAF):</strong> Formatted with 7-5 margins and enclosed in official braille transcriber note indicators (<code>@.&lt; ... @.&gt;</code>).</li>
+          <li><strong>Boxlines (BANA §12):</strong> Enclosed in top borders of dots 2-5 (<code>333 Title 333</code>) and bottom borders of dots 2-3-5-6 (<code>777</code>).</li>
+          <li><strong>Play / Drama Dialogue &amp; Stage Directions (BANA §13):</strong> Character dialogues format with 1-3 margins; stage directions format with 7-7 margins.</li>
+          <li><strong>Poetry &amp; Verse (BANA §13):</strong> Formatted with 1-3 margins for verse stanzas with runovers in Cell 5.</li>
+          <li><strong>Table of Contents (BANA §2):</strong> Hierarchical entries with automated dot leaders (<code>_ _ _</code>) aligned with right-margin page numbers.</li>
         </ul>
 
-        <h3>🖼 Tactile Graphics, Anti-Slicing RIP &amp; Dynamic Displays</h3>
+        <h3>🖼 Tactile Graphics, Anti-Slicing RIP &amp; Dynamic Displays (Experimental)</h3>
+        <p><em>(Note: Tactile graphics conversion and rasterization into 3D Tiger and Index streams are experimental features currently in active development.)</em></p>
         <ul>
           <li><strong>Page-Boundary Anti-Slicing:</strong> Emboss automatically calculates tactile diagram heights and inserts page breaks before diagrams that would otherwise be sliced across braille sheets, ensuring every diagram starts cleanly on Line 1 of the following sheet.</li>
           <li><strong>Multi-Height 3D Tiger RIP (ViewPlus Columbia / PixBlaster):</strong> Rasterizes vector SVGs into 8 distinct physical dot elevations (Heights 0–7) with 3D tactile relief for outlines, curves, and textures.</li>
@@ -1686,38 +1871,6 @@
           <li><strong>4. USB Serial (WebSerial):</strong> Virtual COM port communication with automatic hardware profile identification (Index, ViewPlus, Romeo/Juliet, Braillo, Custom MCUs).</li>
         </ul>
 
-        <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
-        <p>Emboss is fully internationalized to support transcribers, educators, and blind students worldwide:</p>
-        <ul>
-          <li><strong>112 Interface Languages:</strong> Switch the complete user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) into 112 languages via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. Common languages (English, Spanish, French, and your local system language) are pinned to the top of the list for quick access.</li>
-          <li><strong>Native Right-to-Left (RTL) Support:</strong> When selecting Arabic, Hebrew, Persian, or Urdu, the entire editor layout and document panes automatically adjust to Right-to-Left orientation with mirrored toolbars and bidirectional caret tracking.</li>
-          <li><strong>142+ Document Braille Codes:</strong> Independently select your document's braille translation tables and contraction level (UEB Grade 1/2, Spanish, French, German, Arabic, Welsh, Gaelic, Hindi, Chinese, etc.) in <strong>Settings ⚙ &gt; Rules &amp; Standards</strong>.</li>
-        </ul>
-
-        <h3>Top Header Controls &amp; Deliverables</h3>
-        <ul>
-          <li><strong>📂 Load:</strong> Open and import documents (<code>.docx</code>, <code>.md</code>, <code>.xml</code>, <code>.nimas</code>, <code>.html</code>, <code>.epub</code>, <code>.odt</code>, <code>.pef</code>, <code>.brf</code>, <code>.txt</code>).</li>
-          <li><strong>💾 Save ▾ (Menu):</strong>
-            <ul>
-              <li>📐 <strong>NIMAS Project (.xml):</strong> Master canonical XML project file preserving all BANA formatting, math, tactile graphics, and structural metadata.</li>
-              <li>📄 <strong>Word Document (.docx):</strong> Standard formatted Microsoft Word document.</li>
-              <li>📝 <strong>Markdown (.md):</strong> Structured GitHub-flavored markdown with equation and table syntax.</li>
-              <li>💾 <strong>Native Project (.json):</strong> Full raw document state backup.</li>
-              <li>📃 <strong>Plain Text (.txt) &amp; 🌐 HTML Document (.html)</strong>.</li>
-            </ul>
-          </li>
-          <li><strong>Download ▾ (Braille Deliverables Menu):</strong>
-            <ul>
-              <li>📱 <strong>eBraille (.ebraille / .ebrl):</strong> Modern DAISY/BANA digital braille package containing formatted braille, MathML, vector tactile SVGs, and print page navigation.</li>
-              <li>⠿ <strong>Braille (BRF):</strong> Universal embossed braille standard compatible with all paper embossers and refreshable braille displays.</li>
-              <li>📄 <strong>PEF 1.0 (.pef):</strong> Portable Embosser Format XML with multi-volume page tables.</li>
-            </ul>
-          </li>
-          <li><strong>☐ TOC (Table of Contents):</strong> Generates formal braille preliminary contents pages with an interactive outline in the editor.</li>
-          <li><strong>▶ Read:</strong> High-quality text-to-speech engine reading text and MathML equations with synchronized word lighting (<kbd>Ctrl/⌘ ⇧ Space</kbd>).</li>
-          <li><strong>🖨 Emboss:</strong> Direct hardware spooling across USB, Bluetooth BLE, WebHID, and Network.</li>
-        </ul>
-
         <h3>⌨️ Keyboard Shortcuts &amp; Slash Commands Cheat Sheet</h3>
         <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:.86rem;">
           <thead>
@@ -1727,21 +1880,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ S</kbd></td><td>Save master NIMAS Project XML</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ S</kbd></td><td>Save master NIMAS Project XML (.xml)</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ Z</kbd> / <kbd>Ctrl/⌘ ⇧ Z</kbd></td><td>Undo / Redo document edit</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ B</kbd> / <kbd>I</kbd> / <kbd>U</kbd></td><td>Bold / Italic / Underline typeform emphasis</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ]</kbd> / <kbd>Tab</kbd></td><td>Indent / nest list or exercise item to deeper level</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ [</kbd> / <kbd>Shift+Tab</kbd></td><td>Outdent / promote list or exercise item to higher level</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ E</kbd> or <kbd>/math</kbd></td><td>Insert visual MathLive equation</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ K</kbd></td><td>Toggle 6-key braille chording</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ K</kbd></td><td>Toggle Perkins 6-key braille chording</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ Space</kbd></td><td>Start / stop synchronized text &amp; math speech</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>Ctrl/⌘ ⇧ D</kbd></td><td>Describe braille contraction at cursor</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/h1</kbd>, <kbd>/h2</kbd>, <kbd>/h3</kbd>, <kbd>/p</kbd></td><td>Convert block to Heading 1–3 or Paragraph</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/ul</kbd>, <kbd>/ol</kbd></td><td>Convert block to Bulleted or Numbered List</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/table</kbd></td><td>Insert spatial braille table</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/graphic</kbd> or <kbd>/svg</kbd></td><td>Open tactile graphics symbol library or upload SVG</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/p</kbd></td><td>Convert block to Body Text (3-1)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/h1</kbd>, <kbd>/h2</kbd>, <kbd>/h3</kbd></td><td>Convert block to Heading 1 (Centered), Heading 2 (Cell 5), or Heading 3 (Cell 7)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/bullet</kbd> or <kbd>/ul</kbd></td><td>Convert block to Bulleted List (1-3)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/number</kbd> or <kbd>/ol</kbd></td><td>Convert block to Numbered List (1-3)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/toc</kbd></td><td>Convert block to Table of Contents Entry with Dot Leaders</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/dialogue</kbd></td><td>Convert block to Play Dialogue (1-3)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/stage</kbd></td><td>Convert block to Stage Direction (7-7)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/poem</kbd> or <kbd>/verse</kbd></td><td>Convert block to Poetry / Verse Line (1-3 / 5)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/exercise</kbd></td><td>Convert block to Exercise Question (1-5 / 3-5)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/caption</kbd></td><td>Convert block to Caption / Attribution (7-5)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/footnote</kbd> or <kbd>/fn</kbd></td><td>Convert block to Footnote (1-3)</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/note</kbd> or <kbd>/tn</kbd></td><td>Convert block to Transcriber Note Box</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/quote</kbd></td><td>Convert block to Indented Blockquote</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/sidebar</kbd> or <kbd>/box</kbd></td><td>Insert Sidebar Callout Box with Boxlines</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/table</kbd></td><td>Insert Spatial Columnar Data Table</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/listedtable</kbd></td><td>Insert BANA §11 Listed Table</td></tr>
+            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/graphic</kbd> or <kbd>/svg</kbd></td><td>Open tactile graphics symbol library or upload SVG (Experimental)</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/formula</kbd></td><td>Open 346-formula equation template library</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/page</kbd></td><td>Insert print textbook page number indicator</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/note</kbd></td><td>Insert formal Transcriber's Note</td></tr>
-            <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/quote</kbd></td><td>Insert indented Blockquote</td></tr>
             <tr style="border-bottom:1px solid var(--line);"><td style="padding:5px;"><kbd>/code</kbd></td><td>Insert Computer Code block with UEB indicators</td></tr>
             <tr><td style="padding:5px;"><kbd>/break</kbd></td><td>Insert formal section divider ( ∗ ∗ ∗ )</td></tr>
           </tbody>
@@ -1764,12 +1930,12 @@
   <dialog id="formulaDialog" class="dialog" style="max-width: 780px;" aria-labelledby="formulaTitle">
     <div class="dialog-body">
       <div class="dialog-head">
-        <h2 id="formulaTitle">Formula &amp; Equation Templates</h2>
+        <h2 id="formulaTitle" data-i18n="formulas.title">Formula &amp; Equation Templates</h2>
         <button type="button" id="formulaClose" aria-label="Close formula templates dialog">✕</button>
       </div>
       <div class="field" style="margin: 8px 0 10px;">
         <label for="formulaSearch" class="sr-only">Search formulas</label>
-        <input type="search" id="formulaSearch" placeholder="Search formulas, e.g. quadratic, energy, integral, matrix, pH..." autocomplete="off"
+        <input type="search" id="formulaSearch" aria-label="Search formula and equation templates" data-i18n-placeholder="formulas.search_placeholder" placeholder="Search formulas, e.g. quadratic, energy, integral, matrix, pH..." autocomplete="off"
                aria-controls="formulaList" aria-autocomplete="list"
                style="width:100%; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
       </div>
@@ -1779,7 +1945,7 @@
         <!-- Populated dynamically from SumIt's formula library with category filtering -->
       </div>
       <div class="dialog-foot" style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
-        <button type="button" id="formulaDone" class="primary" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
+        <button type="button" id="formulaDone" class="primary" data-i18n="common.done" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
       </div>
     </div>
   </dialog>
@@ -1788,20 +1954,20 @@
   <dialog id="graphicDialog" class="dialog" style="max-width: 840px;" aria-labelledby="graphicTitle">
     <div class="dialog-body">
       <div class="dialog-head">
-        <h2 id="graphicTitle">Tactile Graphic Diagrams</h2>
+        <h2 id="graphicTitle" data-i18n="tactile.library_title">Tactile Graphic Diagrams</h2>
         <button type="button" id="graphicClose" aria-label="Close graphics dialog">✕</button>
       </div>
       <div style="display:flex; gap:12px; margin: 10px 0 6px;">
-        <input type="search" id="graphicSearch" placeholder="Search diagrams, e.g. triangle, cell, circuit, compass, pie chart..." autocomplete="off"
+        <input type="search" id="graphicSearch" aria-label="Search tactile graphics diagram library" data-i18n-placeholder="tactile.search_placeholder" placeholder="Search diagrams, e.g. triangle, cell, circuit, compass, pie chart..." autocomplete="off"
                aria-controls="graphicList" aria-autocomplete="list"
                style="flex:1; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
         <label for="graphicUploadInput" class="tb-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font-size:.88rem; font-weight:600;">
-          <span>📁 Upload SVG</span>
-          <input type="file" id="graphicUploadInput" accept=".svg,image/svg+xml" style="display:none;" />
+          <span data-i18n="tactile.upload_svg">📁 Upload SVG</span>
+          <input type="file" id="graphicUploadInput" aria-label="Upload custom tactile SVG diagram" accept=".svg,image/svg+xml" style="display:none;" />
         </label>
       </div>
       <div style="display:flex; align-items:center; gap:8px; margin: 0 0 10px 0; font-size:.82rem; color:var(--muted); flex-wrap:wrap;">
-        <span>🌐 Open Tactile Repositories:</span>
+        <span data-i18n="tactile.open_repositories">🌐 Open Tactile Repositories:</span>
         <a href="https://btactile.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">BTactile (Free) ↗</a> ·
         <a href="https://imagelibrary.aph.org/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">APH TGIL (1,800+ Templates) ↗</a> ·
         <a href="https://github.com/benetech/AccessibleImageSampleBook" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">Benetech DIAGRAM (GitHub) ↗</a>
@@ -1812,14 +1978,24 @@
         <!-- Populated dynamically from TACTILE_SVG_LIBRARY -->
       </div>
       <div class="dialog-foot" style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
-        <small style="color:var(--muted); font-size:.8rem;">💡 Black outlines become solid tactile borders; colors automatically map to distinct tactile textures.</small>
-        <button type="button" id="graphicDone" class="primary" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
+        <small data-i18n="tactile.footer_tip" style="color:var(--muted); font-size:.8rem;">💡 Black outlines become solid tactile borders; colors automatically map to distinct tactile textures.</small>
+        <button type="button" id="graphicDone" class="primary" data-i18n="common.done" style="background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 20px; font:inherit; font-size:.9rem; font-weight:600; cursor:pointer;">Done</button>
       </div>
     </div>
   </dialog>
 
-  <div id="dropHint" aria-hidden="true">⬇ Drop a document to import it into the editor<br><small>.docx · .odt · .epub · .html · .md · .rtf · .txt</small></div>
+  <div id="dropHint" aria-hidden="true"><span data-i18n="messages.drop_hint">⬇ Drop a document to import it into the editor</span><br><small>.docx · .odt · .epub · .html · .md · .rtf · .txt</small></div>
 
-  <script type="module" src="/web/editor/editor.mjs?v=20260910_095600"></script>
+  <!-- Loading overlay for file parsing / model mounting -->
+  <div id="loadingOverlay" class="loading-overlay" hidden aria-live="assertive" role="alert">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <div class="loading-title" id="loadingTitle" data-i18n="loading.title">Loading document…</div>
+      <div class="loading-msg" id="loadingMsg" data-i18n="loading.reading_file">Reading document file…</div>
+      <div class="loading-percent" id="loadingPercent">10%</div>
+    </div>
+  </div>
+
+  <script type="module" src="/web/editor/editor.mjs?v=20260915_172000"></script>
 </body>
 </html>

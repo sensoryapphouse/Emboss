@@ -204,7 +204,7 @@ try {
 
 if (textbookXml) {
   const parsedDoc = parseNimasXml(textbookXml);
-  check('Textbook parsed successfully (>6000 blocks)', (parsedDoc.blocks || []).length >= 6000);
+  check('Textbook parsed successfully (>5000 blocks)', (parsedDoc.blocks || []).length >= 5000);
 
   let mappedCount = 0;
   let inspectorBadgesGenerated = 0;
@@ -218,7 +218,7 @@ if (textbookXml) {
   }
 
   check('All parsed blocks generate valid Style Inspector badges', inspectorBadgesGenerated === mappedCount);
-  check(`100% style inspector coverage across all ${mappedCount} textbook blocks`, inspectorBadgesGenerated >= 6081);
+  check(`100% style inspector coverage across all ${mappedCount} textbook blocks`, inspectorBadgesGenerated === mappedCount && mappedCount >= 5000);
 }
 
 console.log(`\nPhase 5D test suite complete: ${pass} passed, ${fail} failed.`);

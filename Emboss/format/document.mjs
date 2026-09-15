@@ -91,6 +91,7 @@ function formatTitle(block, o) {
 function formatList(block, o) {
   const items = block.items ?? [];
   if (!items.length) return [];
+  if (block.kind === 'glossary' || block.style === 'glossary') return formatGlossary(block, o);
   const compact = o.listStyle === 'compact';
   const kind = block.kind;
   const out = compact ? [] : [''];                     // Ex1 has a blank line before
@@ -110,13 +111,12 @@ function formatList(block, o) {
       runover = compact ? 0 : first + 2;           // Ex2: cell 1; Ex1: first+2
     }
     if (kind === 'toc' && item.page) {
-      const transTitle = item.segments
+      const transTitle = (item.segments
         ? segmentsToBraille(item.segments, o)
-        : o.translate(item.title ?? item.text ?? '').trim();
+        : o.translate(item.title ?? item.text ?? '')).replace(/\s+/g, ' ').trim();
       const transPage = o.translate(item.page).trim();
       const w = o.width || 38;
-      const titleWidth = Math.min(w, Math.max(first + 4, runover + 4, w - transPage.length - 2));   // never wider than the page
-      const wrappedTitle = wrapCells(transTitle, titleWidth, first, runover);
+      const wrappedTitle = wrapCells(transTitle, w, first, runover);
       const lastLine = wrappedTitle[wrappedTitle.length - 1] || '';
       const neededLeaders = w - lastLine.length - transPage.length;
 
@@ -209,10 +209,12 @@ function formatSegmentedPara(segments, o) {
 
 // Transcriber Note formatting (UKAAF / BANA)
 function formatTranscriberNote(block, o) {
-  const text = String(block.text ?? '');
-  if (!text.trim()) return [];
   const w = o.width || 38;
-  const formatted = TN_OPEN + o.translate(text).trim() + TN_CLOSE;   // indicators are BRF, added after translation
+  const inner = block.segments
+    ? segmentsToBraille(block.segments, o).trim()
+    : o.translate(String(block.text ?? '')).trim();
+  if (!inner) return [];
+  const formatted = TN_OPEN + inner + TN_CLOSE;   // indicators are BRF, added after translation
   return wrapCells(formatted, w, 0, 2).map((l) => l.replace(/\s+$/, ''));
 }
 
@@ -256,27 +258,27 @@ function formatCaption(block, o) {
   return out.map((l) => l.replace(/\s+$/, ''));
 }
 
-// Play / Drama Dialogue formatting per BANA Formats §13
+// Play / Drama Dialogue / Verse formatting per BANA Formats §13
 function formatPlay(block, o) {
-  const text = block.text || '';
-  if (!text.trim()) return [];
-  const w = o.width || 38;
-  const isVerse = block.subtype === 'verse';
+  const isVerse = block.subtype === 'verse' || block.style === 'verse' || block.style === 'poem';
   const lvl = block.level || 0;
-  const first = isVerse ? (lvl === 0 ? 0 : 2) : (lvl === 0 ? 0 : 4);
-  const runover = isVerse ? 4 : 2;
-  return wrapCells(o.translate(text), w, first, runover).map((l) => l.replace(/\s+$/, ''));
+  const first = isVerse ? (lvl * 2) : (lvl === 0 ? 0 : 4);
+  const runover = isVerse ? ((lvl + 1) * 2) : 2;
+  const w = o.width || 38;
+  const body = block.segments ? segmentsToBraille(block.segments, o) : o.translate(block.text || '');
+  if (!body.trim()) return [];
+  return wrapCells(body, w, first, runover).map((l) => l.replace(/\s+$/, ''));
 }
 
 // Stage Directions formatting per BANA Formats §13 (7-7 or 9-7)
 function formatStage(block, o) {
-  const text = block.text || '';
-  if (!text.trim()) return [];
   const w = o.width || 38;
   const lvl = block.level || 0;
   const first = lvl === 0 ? 6 : 8;
   const runover = 6;
-  return wrapCells(o.translate(text), w, first, runover).map((l) => l.replace(/\s+$/, ''));
+  const body = block.segments ? segmentsToBraille(block.segments, o) : o.translate(block.text || '');
+  if (!body.trim()) return [];
+  return wrapCells(body, w, first, runover).map((l) => l.replace(/\s+$/, ''));
 }
 
 // Boxline formatting per BANA Formats §12 (top border dots 2-5 '3', bottom border dots 2-3-5-6 '7')
@@ -305,7 +307,7 @@ function formatBox(block, o) {
   return out.map((l) => l.replace(/\s+$/, ''));
 }
 
-// Glossary definition list formatting per BANA Formats §19 (1-3 runover)
+// Glossary definition list formatting per BANA Formats §19 (1-3 runover, 3-5 nested)
 function formatGlossary(block, o) {
   const items = block.items || [];
   if (!items.length) return [];
@@ -313,13 +315,22 @@ function formatGlossary(block, o) {
   const w = o.width || 38;
   for (const it of items) {
     if (!it || typeof it !== 'object') continue;
+    const lvl = it.level || 0;
+    const first = lvl === 0 ? 0 : 2 + (lvl - 1) * 2;
+    const runover = 2 + lvl * 2;
+    if (it.segments && Array.isArray(it.segments) && it.segments.length > 0) {
+      const body = segmentsToBraille(it.segments, o);
+      if (body) out.push(...wrapCells(body, w, first, runover));
+      continue;
+    }
     const term = it.term != null ? String(it.term).trim() : '';
     const def = it.def != null ? String(it.def).trim() : '';
-    // Translate the whole print entry so the colon is the UEB colon (dots 25), not a
-    // raw ':' cell (dots 156) glued on after translation.
-    if (term && def) out.push(...wrapCells(o.translate(`${term}: ${def}`), w, 0, 2));
-    else if (it.text != null && String(it.text).trim()) out.push(...wrapCells(o.translate(String(it.text)), w, 0, 2));
-    else if (term || def) out.push(...wrapCells(o.translate(term || def), w, 0, 2));
+    if (term && def) {
+      const combined = term.endsWith(':') || term.endsWith('—') || term.endsWith('-') ? `${term} ${def}` : `${term}: ${def}`;
+      out.push(...wrapCells(o.translate(combined), w, first, runover));
+    }
+    else if (it.text != null && String(it.text).trim()) out.push(...wrapCells(o.translate(String(it.text)), w, first, runover));
+    else if (term || def) out.push(...wrapCells(o.translate(term || def), w, first, runover));
   }
   out.push('');
   return out.map((l) => l.replace(/\s+$/, ''));
@@ -363,7 +374,83 @@ function formatTable(block, o) {
 
   // Translate all cells
   const has = (v) => v != null && String(v).trim() !== '';
-  const tr = (v) => (has(v) ? o.translate(String(v)).replace(/\s+$/, '') : '');
+
+  const parseCellToSegs = (str) => {
+    if (!str) return [];
+    const s = String(str);
+    if (!/[*_`$\[<]/.test(s)) return [{ type: 'text', text: s }];
+
+    if (/<[a-z][\s\S]*>/i.test(s)) {
+      const segments = [];
+      const regex = /<(\/)?(strong|b|em|i|u|code|span|dfn)(?:\s+[^>]*)?>|([^<]+)/gi;
+      let m, tf = 0, unc = false;
+      while ((m = regex.exec(s)) !== null) {
+        if (m[3]) {
+          const seg = { type: 'text', text: m[3] };
+          if (tf) seg.tf = tf;
+          if (unc) seg.uncontracted = true;
+          segments.push(seg);
+        } else if (m[2]) {
+          const isClose = !!m[1];
+          const tag = m[2].toLowerCase();
+          const bit = (tag === 'b' || tag === 'strong') ? 4 : ((tag === 'i' || tag === 'em' || tag === 'dfn') ? 1 : ((tag === 'u') ? 2 : 0));
+          if (isClose) {
+            if (bit) tf &= ~bit;
+            if (tag === 'code') unc = false;
+          } else {
+            if (bit) tf |= bit;
+            if (tag === 'code') unc = true;
+          }
+        }
+      }
+      return segments.length ? segments : [{ type: 'text', text: s }];
+    }
+
+    const segments = [];
+    const regex = /(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$|\*\*[^*]+?\*\*|__(?:[A-Za-z0-9 _]+?)__|\*[^*\n]+?\*|(?<=\s|^)_(?:[^\s_]+?)_(?=\s|$|[.,;:!?])|<u>[\s\S]*?<\/u>|`[^`\n]+?`)/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(s)) !== null) {
+      if (match.index > lastIndex) {
+        const plain = s.slice(lastIndex, match.index);
+        if (plain) segments.push({ type: 'text', text: plain });
+      }
+      const token = match[0];
+      if (token.startsWith('$$') && token.endsWith('$$')) {
+        segments.push({ type: 'math', latex: token.slice(2, -2).trim() });
+      } else if (token.startsWith('$') && token.endsWith('$')) {
+        segments.push({ type: 'math', latex: token.slice(1, -1).trim() });
+      } else if (token.startsWith('**') && token.endsWith('**')) {
+        segments.push({ type: 'text', text: token.slice(2, -2), tf: 4 });
+      } else if (token.startsWith('__') && token.endsWith('__')) {
+        segments.push({ type: 'text', text: token.slice(2, -2), tf: 4 });
+      } else if (token.startsWith('*') && token.endsWith('*')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), tf: 1 });
+      } else if (token.startsWith('<u>') && token.endsWith('</u>')) {
+        segments.push({ type: 'text', text: token.slice(3, -4), tf: 2 });
+      } else if (token.startsWith('_') && token.endsWith('_')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), tf: 1 });
+      } else if (token.startsWith('`') && token.endsWith('`')) {
+        segments.push({ type: 'text', text: token.slice(1, -1), uncontracted: true });
+      }
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < s.length) {
+      const plain = s.slice(lastIndex);
+      if (plain) segments.push({ type: 'text', text: plain });
+    }
+    return segments;
+  };
+
+  const tr = (v) => {
+    if (!has(v)) return '';
+    const segs = parseCellToSegs(v);
+    if (segs.length > 1 || (segs[0] && (segs[0].tf || segs[0].uncontracted || segs[0].type === 'math'))) {
+      return segmentsToBraille(segs, o).replace(/\s+$/, '');
+    }
+    return o.translate(String(v)).replace(/\s+$/, '');
+  };
+
   const headers = rawHeaders.map(tr);
   while (headers.length < colCount) headers.push('');
   const rows = rawRows.map((r) => {
@@ -406,10 +493,11 @@ function formatTable(block, o) {
 
     rawRows.forEach((rawRow, ri) => {
       const label = has(rawRow[0]) ? String(rawRow[0]) : `Row ${ri + 1}`;
-      out.push(...wrapCells(o.translate(label), w, 0, 2));
+      out.push(...wrapCells(tr(label), w, 0, 2));
       for (let ci = 1; ci < colCount; ci++) {
         const h = has(rawHeaders[ci]) ? String(rawHeaders[ci]) : `Col ${ci + 1}`;
-        const line = has(rawRow[ci]) ? o.translate(`${h}: ${rawRow[ci]}`) : o.translate(`${h}:`) + ' ---';
+        const rawVal = has(rawRow[ci]) ? String(rawRow[ci]) : '';
+        const line = rawVal ? tr(`${h}: ${rawVal}`) : (tr(`${h}:`) + ' ---');
         out.push(...wrapCells(line, w, 2, 4));
       }
       if (ri < rawRows.length - 1) out.push('');
@@ -625,11 +713,34 @@ function formatBlockUnguarded(block, o, atStart) {
     case 'para': return formatPara(block, o);
     case 'list': return formatList(block, o);
     case 'glossary': return formatGlossary(block, o);
-    case 'box': return formatBox(block, o);
+    case 'box':
+    case 'sidebar': return formatBox(block, o);
     case 'pagenum': return formatPageNum(block, o);
     case 'attribution': return formatAttribution(block, o);
     case 'caption': return formatCaption(block, o);
-    case 'play': return formatPlay(block, o);
+    case 'verse':
+    case 'poem':
+    case 'poetry':
+      if (Array.isArray(block.lines)) {
+        const out = [];
+        for (const line of block.lines) {
+          out.push(...formatPlay({ type: 'play', subtype: 'verse', text: String(line), level: block.level || 0 }, o));
+        }
+        return out;
+      }
+      return formatPlay({ ...block, subtype: 'verse' }, o);
+    case 'dialogue':
+      if (block.speaker || block.speech) {
+        const full = block.speaker ? `${block.speaker}: ${block.speech || ''}` : (block.speech || '');
+        return formatPlay({ ...block, text: full }, o);
+      }
+      return formatPlay(block, o);
+    case 'play':
+      if (block.speaker || block.speech) {
+        const full = block.speaker ? `${block.speaker}: ${block.speech || ''}` : (block.speech || '');
+        return formatPlay({ ...block, text: full }, o);
+      }
+      return formatPlay(block, o);
     case 'stage': return formatStage(block, o);
     case 'note': return formatTranscriberNote(block, o);
     case 'footnote': return formatFootnote(block, o);
@@ -637,7 +748,9 @@ function formatBlockUnguarded(block, o, atStart) {
     case 'code': return formatCodeBlock(block, o);
     case 'graphic': case 'tactile': return formatTactileGraphic(block, o);
     case 'math': return formatMath(block, o);
-    case 'indicator': return block.text ? wrapCells(o.translate(block.text), o.width, 0, 0) : [indicatorLine(block.kind || 'dot2s', o.width)];
+    case 'indicator':
+      if (block.kind === 'line' || block.kind === 'stanza') return [''];
+      return block.text ? wrapCells(o.translate(block.text), o.width, 0, 0) : [indicatorLine(block.kind || 'dot2s', o.width)];
     case 'blank': return [''];
     default: return formatPara(block, o);
   }
@@ -654,8 +767,10 @@ function formatBlockUnguarded(block, o, atStart) {
 function tcRstrip(o) { let b = o.s.length; while (b > 0 && o.s[b - 1] === ' ') b--; return { s: o.s.slice(0, b), src: o.src.slice(0, b) }; }
 function tcTrimBoth(s, src) { let a = 0, b = s.length; while (a < b && s[a] === ' ') a++; while (b > a && s[b - 1] === ' ') b--; return { s: s.slice(a, b), src: src.slice(a, b) }; }
 function tcRun(o, text, tf, unit, base) {                    // one translated text run
-  const { braille, inputPos } = o.translatePos(text, tf || null);
-  return { s: braille, src: inputPos.map((p) => ({ u: unit, c: base + p })) };
+  const res = o.translatePos(text, tf || null);
+  const braille = (typeof res === 'object' && res !== null) ? (res.braille ?? res.text ?? '') : (typeof res === 'string' ? res : '');
+  const inputPos = (typeof res === 'object' && res !== null) ? (res.inputPos ?? res.map ?? Array.from({ length: braille.length }, (_, i) => i)) : Array.from({ length: braille.length }, (_, i) => i);
+  return { s: braille, src: inputPos.map((p) => ({ u: unit, c: base + (typeof p === 'number' ? p : 0) })) };
 }
 const tcDeco = (str) => ({ s: str, src: Array.from(str, () => null) });   // no source (rule line, marker, maths)
 const tcBlank = { s: '', src: [] };
@@ -673,9 +788,29 @@ function tcSegs(o, segments, unit) {                         // mirror segmentsT
       }
       base += mathStr.length;
     } else {
-      const t = (seg.text ?? '').replace(/\s+/g, ' '); if (!t) continue;
-      const r = tcRun(o, t, seg.tf ? Array(t.length).fill(seg.tf) : null, unit, base);
-      s += r.s; for (const x of r.src) src.push(x); base += t.length;
+      const t = String(seg.text ?? '').replace(/[^\S\n]+/g, ' '); if (!t) continue;
+      if (t.includes('\n')) {
+        const lines = t.split('\n');
+        let localOffset = 0;
+        lines.forEach((l, li) => {
+          if (li > 0) {
+            s += '\n';
+            src.push(null);
+            localOffset++;
+          }
+          if (l) {
+            const r = tcRun(o, l, seg.tf ? Array(l.length).fill(seg.tf) : null, unit, base + localOffset);
+            s += r.s;
+            for (const x of r.src) src.push(x);
+            localOffset += l.length;
+          }
+        });
+      } else {
+        const r = tcRun(o, t, seg.tf ? Array(t.length).fill(seg.tf) : null, unit, base);
+        s += r.s;
+        for (const x of r.src) src.push(x);
+      }
+      base += t.length;
     }
   }
   return tcTrimBoth(s, src);                                 // segmentsToBraille trims block edges only
@@ -694,7 +829,7 @@ function tcCentredBlock(o, tr, width, wrapWidth = width) {   // mirror centredBl
     return tcRstrip({ s: ' '.repeat(pad) + trimmed, src });
   });
 }
-function traceBlock(block, o, atStart) {
+function traceBlock(block, o, atStart, unit = 0) {
   if (!block || typeof block !== 'object') return [];
   const w = o.width;
   const paraLike = (block) => {
@@ -702,14 +837,14 @@ function traceBlock(block, o, atStart) {
     if (!text.trim()) return [];
     const isBlock = o.paragraphStyle === 'block';
     const first = isBlock ? 0 : 2;
-    const res = tcWrap(o, tcRun(o, text, null, 0, 0), w, first, 0);
+    const res = tcWrap(o, tcRun(o, text, null, unit, 0), w, first, 0);
     if (isBlock) res.push(tcBlank);
     return res;
   };
   switch (block.type) {
-    case 'title': return tcCentredBlock(o, tcRun(o, block.text ?? '', null, 0, 0), w).map((x) => tcRstrip(x));
+    case 'title': return tcCentredBlock(o, tcRun(o, block.text ?? '', null, unit, 0), w).map((x) => tcRstrip(x));
     case 'heading': {
-      const tr = block.segments ? tcSegs(o, block.segments, 0) : tcRun(o, block.text ?? '', null, 0, 0);
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text ?? '', null, unit, 0);
       const L = block.level || 1; const out = [];
       if (o.mode === 'bana') {
         if (L === 1) out.push(tcBlank, ...tcCentredBlock(o, tr, w, Math.max(1, w - 6)), tcBlank);
@@ -726,7 +861,7 @@ function traceBlock(block, o, atStart) {
     }
     case 'para': {
       if (block.segments) {
-        const tr = tcSegs(o, block.segments, 0);
+        const tr = tcSegs(o, block.segments, unit);
         if (!tr.s) return [];
         const isBlock = o.paragraphStyle === 'block';
         const first = isBlock ? 0 : 2;
@@ -737,46 +872,45 @@ function traceBlock(block, o, atStart) {
       return paraLike(block);
     }
     case 'attribution': {
-      const tr = block.segments ? tcSegs(o, block.segments, 0) : tcRun(o, block.text || '', null, 0, 0);
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text || '', null, unit, 0);
       if (!tr.s) return [];
       return [tcBlank, ...tcWrap(o, tr, w, 4, 4)].map((x) => tcRstrip(x));
     }
     case 'caption': {
       const first = o.mode === 'bana' ? 6 : 4;
       const runover = o.mode === 'bana' ? 4 : 4;
-      const tr = block.segments ? tcSegs(o, block.segments, 0) : tcRun(o, block.text || '', null, 0, 0);
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text || '', null, unit, 0);
       if (!tr.s) return [];
       return [tcBlank, ...tcWrap(o, tr, w, first, runover)].map((x) => tcRstrip(x));
     }
     case 'play': {
-      const text = block.text || '';
-      if (!text.trim()) return [];
-      const isVerse = block.subtype === 'verse';
+      const isVerse = block.subtype === 'verse' || block.style === 'verse' || block.style === 'poem';
       const lvl = block.level || 0;
-      const first = isVerse ? (lvl === 0 ? 0 : 2) : (lvl === 0 ? 0 : 4);
-      const runover = isVerse ? 4 : 2;
-      const tr = tcRun(o, text, null, 0, 0);
+      const first = isVerse ? (lvl * 2) : (lvl === 0 ? 0 : 4);
+      const runover = isVerse ? ((lvl + 1) * 2) : 2;
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text || '', null, unit, 0);
+      if (!tr.s) return [];
       return tcWrap(o, tr, w, first, runover).map((x) => tcRstrip(x));
     }
     case 'stage': {
-      const text = block.text || '';
-      if (!text.trim()) return [];
       const lvl = block.level || 0;
       const first = lvl === 0 ? 6 : 8;
       const runover = 6;
-      const tr = tcRun(o, text, null, 0, 0);
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text || '', null, unit, 0);
+      if (!tr.s) return [];
       return tcWrap(o, tr, w, first, runover).map((x) => tcRstrip(x));
     }
     case 'note': {
       const text = String(block.text ?? '');
-      if (!text.trim()) return [];
+      if (!text.trim() && !block.segments) return [];
       const w = o.width || 38;
       const openDeco = tcDeco(TN_OPEN);
       const closeDeco = tcDeco(TN_CLOSE);
-      const tr = tcRun(o, text, null, 0, 0);
+      const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, text, null, unit, 0);
+      const trimmedLen = tr.s.trim().length;
       const full = {
         s: openDeco.s + tr.s.trim() + closeDeco.s,
-        src: [...openDeco.src, ...tr.src.slice(0, tr.s.trim().length), ...closeDeco.src]
+        src: [...openDeco.src, ...tr.src.slice(0, trimmedLen), ...closeDeco.src]
       };
       return tcWrap(o, full, w, 0, 2).map((x) => tcRstrip(x));
     }
@@ -785,21 +919,24 @@ function traceBlock(block, o, atStart) {
       const out = [tcBlank];
       if (block.blocks && block.blocks.length) {
         for (const cb of block.blocks) {
-          const clines = traceBlock(cb, o);
+          const clines = traceBlock(cb, o, false, unit);
           for (const cl of clines) {
-            if (cl.length) out.push(cl);
+            if (cl && cl.s !== '') out.push(cl);
           }
         }
       } else if (block.segments) {
-        const seg = tcSegs(o, block.segments, 0);
+        const seg = tcSegs(o, block.segments, unit);
         out.push(...tcWrap(o, seg, w, 0, 2));
       } else if (block.text && block.text.trim()) {
-        const tr = tcRun(o, block.text, null, 0, 0);
+        const tr = tcRun(o, block.text, null, unit, 0);
         out.push(...tcWrap(o, tr, w, 0, 2));
       }
       return out.map((x) => tcRstrip(x));
     }
     case 'list': {
+      if (block.kind === 'glossary' || block.style === 'glossary') {
+        return traceBlock({ ...block, type: 'glossary' }, o, atStart, unit);
+      }
       const items = block.items ?? []; if (!items.length) return [];
       const compact = o.listStyle === 'compact'; const out = compact ? [] : [tcBlank];
       const kind = block.kind;
@@ -819,55 +956,57 @@ function traceBlock(block, o, atStart) {
           runover = compact ? 0 : first + 2;
         }
         if (kind === 'toc' && item.page) {
-          const transTitle = item.title ?? item.text ?? '';
+          const transTitle = (item.title ?? item.text ?? '').replace(/\s+/g, ' ').trim();
           let titleBody;
+          let titleLen = 0;
           if (item.segments) {
             titleBody = tcSegs(o, item.segments, ui);
+            titleLen = item.segments.map(s => s.text || '').join('').length;
           } else {
-            const { braille, inputPos } = o.translatePos(transTitle, null);
-            titleBody = { s: braille, src: inputPos.map((p) => ({ u: ui, c: p })) };
+            const raw = tcRun(o, transTitle, null, ui, 0);
+            titleBody = tcTrimBoth(raw.s, raw.src);
+            titleLen = transTitle.length;
           }
-          const { braille: pageBrl, inputPos: pagePos } = o.translatePos(item.page, null);
-          const wrappedTitle = tcWrap(o, titleBody, w - pageBrl.length - 2, first, runover);
-          const lastLine = wrappedTitle[wrappedTitle.length - 1] || [];
-          const neededLeaders = w - lastLine.length - pageBrl.length;
-          const pageCells = pageBrl.split('').map((ch, pi) => ({ ch, unit: ui, off: pagePos[pi] ?? 0, index: lastLine.length + pi }));
+          if (titleBody.s.includes('\n')) {
+            titleBody = { s: titleBody.s.replace(/[\r\n]+/g, ' '), src: titleBody.src };
+          }
+          const runPage = tcRun(o, String(item.page ?? '').trim(), null, ui, titleLen);
+          const trimmedPage = tcTrimBoth(runPage.s, runPage.src);
+          const transPage = trimmedPage.s;
+          const pageSrc = trimmedPage.src;
+          const wrappedTitle = tcWrap(o, titleBody, w, first, runover);
+          const lastObj = wrappedTitle[wrappedTitle.length - 1] || { s: '', src: [] };
+          const neededLeaders = w - lastObj.s.length - transPage.length;
 
           if (neededLeaders >= 2) {
-            const spaceCount = Math.min(1, neededLeaders - 2);
-            const leaderCount = neededLeaders - 1;
-            const leaderCells = [
-              ...Array.from({ length: spaceCount }, () => ({ ch: ' ', unit: 0, off: 0, index: 0 })),
-              ...Array.from({ length: leaderCount }, () => ({ ch: '"', unit: 0, off: 0, index: 0 })),
-              { ch: ' ', unit: 0, off: 0, index: 0 },
-              ...pageCells,
-            ];
-            wrappedTitle[wrappedTitle.length - 1] = [...lastLine, ...leaderCells];
+            const spaceCount = Math.max(0, Math.min(1, neededLeaders - 2));
+            const dotCount = Math.max(1, neededLeaders - spaceCount);
+            const leaders = ' '.repeat(spaceCount) + '"'.repeat(dotCount);
+            const leaderSrc = Array.from(leaders, () => null);
+            lastObj.s += leaders + transPage;
+            lastObj.src = [...lastObj.src, ...leaderSrc, ...pageSrc];
             out.push(...wrappedTitle);
           } else {
-            const leaderCells = [
-              ...Array.from({ length: runover }, () => ({ ch: ' ', unit: 0, off: 0, index: 0 })),
-              ...Array.from({ length: Math.max(2, w - runover - pageBrl.length - 1) }, () => ({ ch: '"', unit: 0, off: 0, index: 0 })),
-              { ch: ' ', unit: 0, off: 0, index: 0 },
-              ...pageCells,
-            ];
-            wrappedTitle.push(leaderCells);
+            const room = w - runover - transPage.length;
+            if (room >= 2) {
+              const guideStr = ' '.repeat(runover) + '"'.repeat(room) + transPage;
+              const guideSrc = [...Array.from({ length: runover + room }, () => null), ...pageSrc];
+              wrappedTitle.push({ s: guideStr, src: guideSrc });
+            } else {
+              wrappedTitle.push(...tcWrap(o, { s: transPage, src: pageSrc }, w, runover, runover));
+            }
             out.push(...wrappedTitle);
           }
           return;
         }
 
+        const itemUnit = unit ? (unit * 1000 + ui) : ui;
         const marker = compact ? '' : (item.marker ? item.marker + ' ' : '');
-        let body;
-        if (item.segments) {
-          const mkBrl = marker ? o.translatePos(marker, null).braille : '';
-          const seg = tcSegs(o, item.segments, ui);
-          body = { s: mkBrl + seg.s, src: [...Array.from(mkBrl, () => null), ...seg.src] };
-        } else {
-          const { braille, inputPos } = o.translatePos(marker + (item.text ?? ''), null);
-          body = { s: braille, src: inputPos.map((p) => (p < marker.length ? null : { u: ui, c: p - marker.length })) };
-        }
-        out.push(...tcWrap(o, body, w, first, runover));
+        const markerStr = marker ? (item.segments ? o.translate(marker).trim() + ' ' : o.translate(marker)) : '';
+        const markerSrc = Array.from(markerStr, () => null);
+        const tr = item.segments ? tcSegs(o, item.segments, itemUnit) : tcRun(o, item.text ?? '', null, itemUnit, 0);
+        const full = markerStr ? { s: markerStr + tr.s, src: [...markerSrc, ...tr.src] } : tr;
+        out.push(...tcWrap(o, full, w, first, runover));
       });
       if (!compact) out.push(tcBlank);
       return out.map((x) => tcRstrip(x));
@@ -876,37 +1015,72 @@ function traceBlock(block, o, atStart) {
       const items = block.items || [];
       if (!items.length) return [];
       const out = [tcBlank];
-      items.forEach((item, ui) => {
-        const text = item.text || (item.term && item.def ? `${item.term}: ${item.def}` : (item.term || item.def || ''));
-        const { braille, inputPos } = o.translatePos(text, null);
-        const body = { s: braille, src: inputPos.map((p) => ({ u: ui, c: p })) };
-        out.push(...tcWrap(o, body, w, 0, 2));
+      items.forEach((it, ui) => {
+        if (!it) return;
+        const lvl = it.level || 0;
+        const first = lvl === 0 ? 0 : 2 + (lvl - 1) * 2;
+        const runover = 2 + lvl * 2;
+        if (it.segments && Array.isArray(it.segments) && it.segments.length > 0) {
+          const seg = tcSegs(o, it.segments, ui);
+          if (seg.s) out.push(...tcWrap(o, seg, w, first, runover));
+          return;
+        }
+        const term = it.term != null ? String(it.term).trim() : '';
+        const def = it.def != null ? String(it.def).trim() : '';
+        if (term && def) {
+          const combined = term.endsWith(':') || term.endsWith('—') || term.endsWith('-') ? `${term} ${def}` : `${term}: ${def}`;
+          const tr = tcRun(o, combined, null, ui, 0);
+          out.push(...tcWrap(o, tr, w, first, runover));
+        } else if (it.text) {
+          const tr = tcRun(o, String(it.text), null, ui, 0);
+          out.push(...tcWrap(o, tr, w, first, runover));
+        } else if (term || def) {
+          const tr = tcRun(o, String(term || def), null, ui, 0);
+          out.push(...tcWrap(o, tr, w, first, runover));
+        }
       });
       out.push(tcBlank);
       return out.map((x) => tcRstrip(x));
     }
-    case 'box': {
+    case 'box':
+    case 'sidebar': {
       const text = block.text || '';
-      const title = block.title ? o.translate(block.title).trim() : '';
-      const topBorder = title
-        ? '333 ' + title + ' ' + '3'.repeat(Math.max(3, w - title.length - 5))
-        : '3'.repeat(w);
-      const bottomBorder = '7'.repeat(w);
-      const out = [tcBlank, tcDeco(topBorder.slice(0, w))];
-      if (block.blocks && block.blocks.length) {
-        for (const cb of block.blocks) {
-          if (block.title && cb.type === 'heading' && cb.text === block.title) continue;
-          const childLines = traceBlock(cb, o);
+      const w = o.width || 38;
+      const rawTitle = block.title ? String(block.title).trim() : '';
+      const out = [tcBlank];
+      
+      if (rawTitle) {
+        const titleRes = o.translatePos(rawTitle, null);
+        const rawBrl = (typeof titleRes === 'object' ? titleRes.braille : titleRes) || '';
+        const titleBrl = rawBrl.trim();
+        const titlePos = (typeof titleRes === 'object' && titleRes.inputPos) ? titleRes.inputPos : Array.from(rawTitle, (_, i) => i);
+        const prefix = '333 ';
+        const suffix = ' ' + '3'.repeat(Math.max(3, w - titleBrl.length - 5));
+        const fullBorder = (prefix + titleBrl + suffix).slice(0, w);
+        const srcMap = [];
+        for (let k = 0; k < prefix.length; k++) srcMap.push(null);
+        for (let k = 0; k < titleBrl.length; k++) srcMap.push({ u: 0, c: titlePos[k] ?? 0 });
+        while (srcMap.length < fullBorder.length) srcMap.push(null);
+        out.push({ s: fullBorder, src: srcMap });
+      } else {
+        out.push(tcDeco('3'.repeat(w)));
+      }
+
+      if (Array.isArray(block.blocks) && block.blocks.length) {
+        block.blocks.forEach((cb, u) => {
+          if (!cb || typeof cb !== 'object') return;
+          if (rawTitle && cb.type === 'heading' && cb.text === rawTitle) return;
+          const childLines = traceBlock(cb, o, false, u);
           for (const line of childLines) {
-            if (line.length) out.push(line);
+            if (line && line.s !== '') out.push(line);
           }
-        }
+        });
       } else if (text.trim()) {
         const { braille, inputPos } = o.translatePos(text, null);
         const body = { s: braille, src: inputPos.map((p) => ({ u: 0, c: p })) };
         out.push(...tcWrap(o, body, w, 0, 2));
       }
-      out.push(tcDeco(bottomBorder), tcBlank);
+      out.push(tcDeco('7'.repeat(w)), tcBlank);
       return out.map((x) => tcRstrip(x));
     }
     case 'pagenum': {
@@ -931,7 +1105,9 @@ function traceBlock(block, o, atStart) {
       if (!brf) return [];
       return [tcBlank, ...tcWrap(o, tcDeco(brf), w, 0, 2)].map((x) => tcRstrip(x));
     }
-    case 'indicator': return [tcDeco(indicatorLine(block.kind || 'dot2s', w))];
+    case 'indicator':
+      if (block.kind === 'line' || block.kind === 'stanza') return [tcBlank];
+      return [tcDeco(indicatorLine(block.kind || 'dot2s', w))];
     case 'blank': return [tcBlank];
     case 'table': return traceTable(block, o);
     case 'graphic': case 'tactile': return traceTactileGraphic(block, o);
@@ -1210,17 +1386,27 @@ function getBlockSignature(block, o, atStart) {
   const key = block._key ?? '';
   const type = block.type ?? 'para';
   const text = block.text ?? '';
+  const title = block.title ?? '';
   const lvl = block.level ?? 0;
   const kind = block.kind ?? '';
   const marker = block.marker ?? '';
+  const style = block.style ?? '';
+  const subtype = block.subtype ?? '';
+  const format = block.format ?? '';
+  const latex = block.latex ?? '';
+  const mathml = block.mathml ?? '';
   const segs = block.segments ? JSON.stringify(block.segments) : '';
   const items = block.items ? JSON.stringify(block.items) : '';
+  const subBlocks = block.blocks ? JSON.stringify(block.blocks) : '';
+  const headers = block.headers ? JSON.stringify(block.headers) : '';
+  const rows = block.rows ? JSON.stringify(block.rows) : '';
   const w = o.width || 38;
   const pStyle = o.paragraphStyle ?? '';
   const lStyle = o.listStyle ?? '';
   const mode = o.mode ?? '';
+  const tForm = o.tableFormat ?? '';
   const trace = o.trace ? '1' : '0';
-  return `${key}|${type}|${lvl}|${kind}|${marker}|${atStart ? '1' : '0'}|${w}|${pStyle}|${lStyle}|${mode}|${trace}|${text}|${segs}|${items}`;
+  return `${key}|${type}|${title}|${lvl}|${kind}|${marker}|${style}|${subtype}|${format}|${latex}|${mathml}|${atStart ? '1' : '0'}|${w}|${pStyle}|${lStyle}|${mode}|${tForm}|${trace}|${text}|${segs}|${items}|${subBlocks}|${headers}|${rows}`;
 }
 
 // Page-boundary rules (Rule Register R8: B004 §5 "must not appear on the bottom
@@ -1254,7 +1440,9 @@ function applyPageBoundaries(content, contentBlock, contentCells, blocks, perPag
       // a print page indicator cannot immediately precede a heading that is carried over.
       if (isPageNum(bi)) {
         let curNext = next;
-        while (curNext < n && (isHeading(contentBlock[curNext]) || isPageNum(contentBlock[curNext]))) {
+        let chainCount = 0;
+        while (curNext < n && chainCount < 3 && (isHeading(contentBlock[curNext]) || isPageNum(contentBlock[curNext]))) {
+          chainCount++;
           const nextBi = contentBlock[curNext];
           let hEnd = curNext; while (hEnd + 1 < n && contentBlock[hEnd + 1] === nextBi) hEnd++;
           while (hEnd > curNext && content[hEnd] === '') hEnd--;
@@ -1341,7 +1529,98 @@ function buildDocPages(doc, o) {
         } catch { srcs = null; }
       }
       if (lines.length) atStart = false;
-      if (o.blockCache && cacheKey) {
+      if (o.blockCache && cacheKey && (!o.translatePos || srcs !== null)) {
+        o.blockCache.set(cacheKey, { lines, srcs });
+      }
+    }
+
+    const headingText = block.text || (block.segments ? block.segments.map(s => s.text || '').join('') : '');
+    if (o.toc && block && block.type === 'heading' && String(headingText ?? '').trim()) {
+      headings.push({ text: String(headingText), level: block.level || 1, bi });
+    }
+    for (let li = 0; li < lines.length; li++) {
+      if (lines[li] === '' && content.length && content[content.length - 1] === '') continue;
+      content.push(lines[li]); contentBlock.push(bi); contentCells.push(srcs ? srcs[li] : null);
+    }
+  }
+  const preLen = content.length;
+  trimLeadingBlank(content);
+  const shift = preLen - content.length;
+  if (shift) { contentBlock.splice(0, shift); contentCells.splice(0, shift); }
+  if (!content.length) return { empty: true, opts: o };
+  ({ content, contentBlock, contentCells } = applyPageBoundaries(content, contentBlock, contentCells, blocks, perPage, isBana));
+  const bodyPages = assemble(content, {
+    title: doc?.title ?? null, width: o.width, depth: o.depth, mode: isBana ? 'bana' : 'ukaaf', translate: o.translate,
+    suppressHeader: o.suppressHeader, pageHeaders: o.pageHeaders, hasPrintPages,
+  });
+  let tocPages = [];
+  if (o.toc && headings.length) {
+    for (const h of headings) {
+      let line = contentBlock.indexOf(h.bi);
+      while (line >= 0 && line + 1 < content.length && content[line] === '' && contentBlock[line + 1] === h.bi) line++;
+      h.line = Math.max(0, line);
+      h.page = Math.floor(h.line / perPage) + 1;
+    }
+    tocPages = buildToc(headings, o);
+  }
+  return { empty: false, content, contentBlock, contentCells, headings, tocPages, bodyPages, hasPrintPages, hasTitle, opts: o };
+}
+
+async function buildDocPagesAsync(doc, o) {
+  o = o ? { ...o } : {};
+  if (typeof o.translate !== 'function') throw new Error('formatDocument: opts.translate must be the braille translate function');
+  if (typeof o.translate === 'function') {
+    const rawTr = o.translate;
+    o.translate = (text, typeform) => rawTr(cleanForTranslate(text), typeform);
+  }
+  if (typeof o.translatePos === 'function') {
+    const rawTrPos = o.translatePos;
+    o.translatePos = (text, typeform) => rawTrPos(cleanForTranslate(text), typeform);
+  }
+  if (typeof o.translateG1 === 'function') {
+    const rawG1 = o.translateG1;
+    o.translateG1 = (text) => rawG1(cleanForTranslate(text));
+  }
+  o.width = Math.max(10, Math.min(60, Number(o.width) || 38));
+  o.depth = Math.max(10, Math.min(45, Number(o.depth) || 25));
+  const blocks = Array.isArray(doc?.blocks) ? doc.blocks : [];
+  const hasPrintPages = blocks.some((b) => b && typeof b === 'object' && b.type === 'pagenum');
+  const hasTitle = !!(doc?.title && String(doc.title).trim());
+  const isBana = (o.standard === 'bana' || o.mode === 'bana');
+  const hideHeader = !!(o.suppressHeader || o.pageHeaders === false);
+  const perPage = linesPerPage(o.depth, hideHeader, isBana ? 'bana' : 'ukaaf', hasPrintPages, hasTitle);
+  const headings = [];
+  let content = [], contentBlock = [], contentCells = [];
+  let atStart = true;
+  for (let bi = 0; bi < blocks.length; bi++) {
+    if (bi > 0 && bi % 150 === 0) {
+      if (typeof o.onProgress === 'function') {
+        o.onProgress(bi, blocks.length);
+      }
+      await new Promise((r) => setTimeout(r, 0));
+    }
+    const block = blocks[bi];
+    if (!block || typeof block !== 'object') continue;
+    let lines = null, srcs = null;
+    const cacheKey = o.blockCache ? getBlockSignature(block, o, atStart) : null;
+    if (cacheKey && o.blockCache.has(cacheKey)) {
+      const cached = o.blockCache.get(cacheKey);
+      lines = cached.lines;
+      srcs = cached.srcs;
+      if (lines.length) atStart = false;
+    }
+    if (lines === null) {
+      lines = formatBlock(block, o, atStart);
+      if (o.translatePos) {
+        try {
+          const tr = traceBlock(block, o, atStart);
+          if (tr.length === lines.length && tr.every((t, i) => t.s === lines[i])) {
+            srcs = tr.map((t) => t.src);
+          }
+        } catch { srcs = null; }
+      }
+      if (lines.length) atStart = false;
+      if (o.blockCache && cacheKey && (!o.translatePos || srcs !== null)) {
         o.blockCache.set(cacheKey, { lines, srcs });
       }
     }
@@ -1385,6 +1664,13 @@ function formatDocument(doc, o) {
   return toBRF([...b.tocPages, ...b.bodyPages]);
 }
 
+async function formatDocumentAsync(doc, o) {
+  const b = await buildDocPagesAsync(doc, o);
+  if (b.empty) return '';
+  if (o.trace) { const t = traceRows(b.content, b.contentBlock, b.contentCells, b.tocPages, b.opts, b.hasPrintPages, b.hasTitle); o.trace.rows = t.rows; o.trace.rowCells = t.rowCells; }
+  return toBRF([...b.tocPages, ...b.bodyPages]);
+}
+
 // Print a braille page with a centered title, a volume number, and border rows
 // top and bottom. Standard UK/US library prelim layout.
 function volumeTitlePage(vol, of, title, o) {
@@ -1414,6 +1700,25 @@ function volumeTitlePage(vol, of, title, o) {
 // [{ volume, of, brf, spineLabel }]. Splits on braille-page boundaries only.
 function formatVolumes(doc, o) {
   const b = buildDocPages(doc, o);
+  o = b.opts;
+  const title = doc?.title != null ? String(doc.title) : 'DOCUMENT';
+  if (b.empty) return [{ volume: 1, of: 1, brf: '', spineLabel: `${title} - VOL 1/1` }];
+  const maxV = Math.max(0, o.volumePages | 0);
+  if (!maxV || b.bodyPages.length <= maxV) {
+    return [{ volume: 1, of: 1, brf: toBRF([...b.tocPages, ...b.bodyPages]), spineLabel: `${title} - VOL 1/1` }];
+  }
+  const chunks = [];
+  for (let i = 0; i < b.bodyPages.length; i += maxV) chunks.push(b.bodyPages.slice(i, i + maxV));
+  const of = chunks.length;
+  return chunks.map((chunk, idx) => ({
+    volume: idx + 1, of,
+    spineLabel: `${title} - VOL ${idx + 1}/${of}`,
+    brf: toBRF([volumeTitlePage(idx + 1, of, title, o), ...(idx === 0 ? b.tocPages : []), ...chunk]),
+  }));
+}
+
+async function formatVolumesAsync(doc, o) {
+  const b = await buildDocPagesAsync(doc, o);
   o = b.opts;
   const title = doc?.title != null ? String(doc.title) : 'DOCUMENT';
   if (b.empty) return [{ volume: 1, of: 1, brf: '', spineLabel: `${title} - VOL 1/1` }];
@@ -1476,4 +1781,4 @@ function traceRows(content, contentBlock, contentCells, tocPages, o, hasPrintPag
   return { rows, rowCells };
 }
 
-export { formatDocument, formatVolumes, formatBlock, traceBlock, centred, indicatorLine };
+export { formatDocument, formatDocumentAsync, formatVolumes, formatVolumesAsync, formatBlock, traceBlock, getBlockSignature, centred, indicatorLine };

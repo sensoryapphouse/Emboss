@@ -1,5 +1,5 @@
 // Offline app shell + engine + tables. Cache-first for known assets.
-const CACHE = 'emboss-v32';
+const CACHE = 'emboss-v42';
 const ASSETS = [
   '/web/index.html', '/web/style.css', '/web/app.mjs', '/web/manifest.webmanifest', '/web/logo.svg',
   '/web/settings.mjs', '/web/braille-table.mjs', '/web/braille-render.mjs', '/web/proofread.mjs', '/web/zip.mjs', '/web/tts.mjs',

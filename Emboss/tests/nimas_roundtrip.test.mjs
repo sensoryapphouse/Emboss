@@ -39,7 +39,7 @@ function normalizeSegments(segments) {
     if (!s) continue;
     if (s.type === 'math') {
       const copy = { ...s };
-      if (copy.mathml) copy.mathml = copy.mathml.replace(/\s*xmlns:m="[^"]*"/g, '').replace(/\s+/g, ' ').trim();
+      if (copy.mathml) copy.mathml = copy.mathml.replace(/\s*xmlns:m="[^"]*"/g, '').replace(/\s*altimg="[^"]*"/g, '').replace(/\s*alttext="[^"]*"/g, '').replace(/\s+/g, ' ').trim();
       if (!copy.latex && copy.mathml) {
         const m = copy.mathml.match(/alttext="([^"]+)"/) || copy.mathml.match(/<annotation[^>]*>([^<]+)<\/annotation>/);
         if (m) copy.latex = m[1].trim();
@@ -85,20 +85,68 @@ function normalizeBlock(b) {
   if (copy.level === 0) delete copy.level; // Level 0 is default base level
   if (copy.kind === 'image') delete copy.kind; // XML round-trip standardizes prodnotes
   
+  if (copy.type === 'list') {
+    if (copy.kind && !copy.style) copy.style = copy.kind;
+    if (copy.style && !copy.kind) copy.kind = copy.style;
+    if (copy.kind === 'exercise') copy.ordered = true;
+  }
+  if (copy.type === 'play') {
+    if (copy.subtype === 'prose' && !copy.style) copy.style = 'play-speaker';
+    if (copy.subtype === 'verse' && !copy.style) copy.style = 'verse';
+  }
+  if (copy.type === 'stage' && !copy.style) {
+    copy.style = 'play-stage';
+  }
+  if (copy.type === 'box') {
+    if (copy.blocks && copy.blocks.length > 0 && copy.blocks[0]?.type === 'heading') {
+      copy.title = copy.blocks[0].text;
+      copy.blocks[0] = { ...copy.blocks[0], level: 2 };
+    }
+  }
+  if (copy.type === 'math') {
+    if (copy.mathml) copy.mathml = copy.mathml.replace(/\s*xmlns:m="[^"]*"/g, '').replace(/\s*altimg="[^"]*"/g, '').replace(/\s*alttext="[^"]*"/g, '').replace(/\s+/g, ' ').trim();
+    if (!copy.latex && copy.mathml) {
+      const m = copy.mathml.match(/alttext="([^"]+)"/) || copy.mathml.match(/<annotation[^>]*>([^<]+)<\/annotation>/);
+      if (m) copy.latex = m[1].trim();
+    }
+    if (copy.latex === 'math expression') delete copy.latex;
+  }
   if (copy.segments) {
     copy.segments = normalizeSegments(copy.segments);
-    if (!copy.segments) delete copy.segments;
-    else delete copy.text; // Segmented blocks are canonically compared on segments
+    if (!copy.segments) {
+      delete copy.segments;
+    } else if (copy.segments.length === 1 && copy.segments[0].type === 'text' && !copy.segments[0].tf && !copy.segments[0].uncontracted && !copy.segments[0].text.includes('\n')) {
+      copy.text = copy.segments[0].text;
+      delete copy.segments;
+    } else {
+      delete copy.text; // Segmented blocks are canonically compared on segments
+    }
   }
   if (copy.items) {
     copy.items = copy.items.map(it => {
       const itc = { ...it };
       if (itc.text) itc.text = itc.text.replace(/\s+/g, ' ').trim();
+      if (itc.term) itc.term = itc.term.replace(/\s+/g, ' ').trim();
+      if (itc.def) itc.def = itc.def.replace(/\s+/g, ' ').trim();
       if (itc.level === 0) delete itc.level;
       if (itc.segments) {
         itc.segments = normalizeSegments(itc.segments);
-        if (!itc.segments) delete itc.segments;
-        else delete itc.text;
+        if (!itc.segments) {
+          delete itc.segments;
+        } else if (itc.segments.length === 1 && itc.segments[0].type === 'text' && !itc.segments[0].tf && !itc.segments[0].uncontracted && !itc.segments[0].text.includes('\n')) {
+          itc.text = itc.segments[0].text;
+          delete itc.segments;
+        } else {
+          delete itc.text;
+        }
+      }
+      if (itc.termSegments) {
+        itc.termSegments = normalizeSegments(itc.termSegments);
+        if (!itc.termSegments) delete itc.termSegments;
+      }
+      if (itc.defSegments) {
+        itc.defSegments = normalizeSegments(itc.defSegments);
+        if (!itc.defSegments) delete itc.defSegments;
       }
       delete itc.marker; // Ordered list markers are computed deterministically on layout
       return itc;
@@ -190,7 +238,7 @@ console.log('--- Section 1: Synthetic AST Block Types ---');
           { type: 'text', text: ', ' },
           { type: 'text', text: 'italic', tf: 1 },
           { type: 'text', text: ', and math ' },
-          { type: 'math', latex: 'x^2 + y^2 = r^2', mathml: '<m:math alttext="x^2 + y^2 = r^2"><m:semantics><m:annotation encoding="application/x-tex">x^2 + y^2 = r^2</m:annotation></m:semantics></m:math>' },
+          { type: 'math', latex: 'x^2 + y^2 = r^2', mathml: '<m:math alttext="x^2 + y^2 = r^2" altimg="math.png"><m:semantics><m:mrow><m:mtext>x^2 + y^2 = r^2</m:mtext></m:mrow><m:annotation encoding="application/x-tex">x^2 + y^2 = r^2</m:annotation></m:semantics></m:math>' },
           { type: 'text', text: '.' }
         ]
       },
@@ -234,6 +282,7 @@ console.log('--- Section 1: Synthetic AST Block Types ---');
         ]
       },
       { type: 'play', subtype: 'prose', text: 'HAMLET: To be, or not to be.' },
+      { type: 'play', subtype: 'verse', style: 'verse', text: 'Two roads diverged in a yellow wood,' },
       { type: 'stage', text: 'Exeunt Ghost and Hamlet.' },
       { type: 'caption', text: 'Figure 1. Diagram of the solar system.' },
       { type: 'attribution', text: '— William Shakespeare' },

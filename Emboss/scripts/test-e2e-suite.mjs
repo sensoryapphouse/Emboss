@@ -255,24 +255,11 @@ async function runBrowserTests(browserType, browserName) {
     await page.waitForTimeout(400);
 
     // -------------------------------------------------------------------------
-    // TEST 8: Table of Contents (TOC) Toggle & Jump Links
+    // TEST 8: Table of Contents (TOC) Toggle Disabled & Hidden
     // -------------------------------------------------------------------------
-    console.log(`\n--- [8] Testing Table of Contents & Navigation ---`);
-    await page.click('#tocToggle');
-    await page.waitForTimeout(500);
-
-    const tocBox = await page.$('.print-toc-box');
-    recordTest('In-document Table of Contents box rendered in editor', tocBox !== null);
-
-    if (tocBox) {
-      const tocLinks = await page.$$('.print-toc-box a');
-      recordTest('TOC links generated for headings', tocLinks.length > 0, `${tocLinks.length} heading links`);
-      if (tocLinks.length > 0) {
-        await tocLinks[0].click();
-        await page.waitForTimeout(300);
-        recordTest('Clicking TOC heading link jumps to section', true);
-      }
-    }
+    console.log(`\n--- [8] Testing Table of Contents Toggle Disabled & Hidden ---`);
+    const isTocHidden = await page.$eval('#tocWrap', el => el.hidden || window.getComputedStyle(el).display === 'none');
+    recordTest('TOC checkbox is hidden and disabled', isTocHidden);
 
     // -------------------------------------------------------------------------
     // TEST 9: Tactile Symbol Library Modal, Search & Target Display Matrix

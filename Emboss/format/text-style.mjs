@@ -110,19 +110,49 @@ function translateWithBraillePreservation(text, tf, translate) {
   return out;
 }
 
+// Unicode whitespace & invisible control character normalizer.
+// Replaces non-standard spaces (NBSP, narrow NBSP, em/en/thin space) with standard
+// space and strips zero-width / bidirectional control characters (ZWJ, ZWNJ, ZWSP,
+// soft hyphen) to prevent liblouis from emitting raw hex escapes (e.g. \X200C).
+export function normalizeTextAndTypeform(text, tf) {
+  if (!text) return { text: '', tf };
+  if (!/[\u00A0\u202F\u2000-\u200A\u205F\u3000\u200B-\u200D\uFEFF\u00AD\u200E\u200F\u202A-\u202E\u2060-\u206F]/.test(text)) {
+    return { text, tf };
+  }
+  let cleanText = '';
+  const cleanTf = Array.isArray(tf) ? [] : tf;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const code = ch.charCodeAt(0);
+    if (code === 0x00a0 || code === 0x202f || (code >= 0x2000 && code <= 0x200a) || code === 0x205f || code === 0x3000) {
+      cleanText += ' ';
+      if (Array.isArray(tf)) cleanTf.push(tf[i] || 0);
+    } else if (
+      (code >= 0x200b && code <= 0x200d) ||
+      code === 0xfeff || code === 0x00ad ||
+      code === 0x200e || code === 0x200f ||
+      (code >= 0x202a && code <= 0x202e) ||
+      (code >= 0x2060 && code <= 0x206f)
+    ) {
+      continue;
+    } else {
+      cleanText += ch;
+      if (Array.isArray(tf)) cleanTf.push(tf[i] || 0);
+    }
+  }
+  return { text: cleanText, tf: cleanTf };
+}
+
 // Wrap a translate(text[, typeform])->braille function with the chosen house
 // style. Applies quote exchange (if requested) to baseline text, then resolves
 // any subscript / superscript markers. quoteStyle: 'faithful' (default) | 'exchange'.
-//
-// Optional `typeform` (a per-character emphasis array for bold/italic/underline)
-// is forwarded straight to the inner translate. Quote exchange is length-preserving
-// so the array stays aligned; script markers never co-occur with emphasis (they
-// come from docx, emphasis from the editor), so the typeform path bypasses
-// translateScripts. Passing no typeform keeps the exact previous behaviour.
 export function styledTranslate(translate, quoteStyle) {
   const base = quoteStyle === 'exchange'
     ? (t, tf) => translate(exchangeQuotes(t), tf)
     : translate;
   const withScripts = (t, tf) => (tf ? base(t, tf) : translateScripts(t, base));
-  return (t, tf) => translateWithBraillePreservation(t, tf, withScripts);
+  return (t, tf) => {
+    const { text: cleanT, tf: cleanTf } = normalizeTextAndTypeform(t, tf);
+    return translateWithBraillePreservation(cleanT, cleanTf, withScripts);
+  };
 }

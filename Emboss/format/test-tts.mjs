@@ -54,6 +54,62 @@ ok(listItems[0].unit === 0 && listItems[1].unit === 1, 'list items carry their u
 ok(items.some((it) => it.blockIdx === 4 && it.map && it.map.length === 0), 'indicator produces a (pause) item with no map');
 ok(mathItem && mathItem.srcStart === 8, 'math item carries srcStart (flat offset "area is " = 8)');
 
+// ---- Quadratic formula mixed text and math offset test ----
+const quadLatex = 'x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}';
+const quadModel = {
+  blocks: [
+    {
+      type: 'para',
+      segments: [
+        { type: 'text', text: 'The quadratic formula is ' },
+        { type: 'math', latex: quadLatex },
+        { type: 'text', text: ' where a, b, and c are constants.' }
+      ]
+    }
+  ]
+};
+const quadItems = buildSpokenItems(quadModel, speakMath);
+ok(quadItems.length === 3, `quadratic paragraph produces exactly 3 discrete speech items (got ${quadItems.length})`);
+ok(quadItems[0].text === 'The quadratic formula is ', 'first item is text before equation');
+ok(quadItems[0].map[0] === 0 && quadItems[0].map[quadItems[0].map.length - 1] === 24, 'text before equation has 0..24 map offsets');
+ok(quadItems[1].kind === 'math' && quadItems[1].srcStart === 25, 'math item srcStart is 25');
+const quadMathLen = (`$${quadLatex}$`).length; // 1 + 39 + 1 = 41
+const expectedAfterStart = 25 + quadMathLen; // 66
+ok(quadItems[2].srcStart === expectedAfterStart, `text after equation srcStart (${quadItems[2].srcStart}) matches 25 + mathLen (${expectedAfterStart})`);
+ok(quadItems[2].map[0] === expectedAfterStart, `text after equation map[0] (${quadItems[2].map[0]}) is ${expectedAfterStart}`);
+const whereWordOffset = quadItems[2].map[1]; // space at [0], "where" starts at [1]
+ok(whereWordOffset === expectedAfterStart + 1, `"where" word start offset in map is ${expectedAfterStart + 1}`);
+
+// ---- Multiple equations in a single paragraph ----
+const multiEqModel = {
+  blocks: [
+    {
+      type: 'para',
+      segments: [
+        { type: 'text', text: 'Let ' },
+        { type: 'math', latex: 'a = 1' },
+        { type: 'text', text: ' and ' },
+        { type: 'math', latex: 'b = 2' },
+        { type: 'text', text: ' then ' },
+        { type: 'math', latex: 'c = 3' },
+        { type: 'text', text: '.' }
+      ]
+    }
+  ]
+};
+const multiItems = buildSpokenItems(multiEqModel, speakMath);
+ok(multiItems.length === 7, `multi-equation paragraph produces 7 discrete speech items (got ${multiItems.length})`);
+ok(multiItems[0].text === 'Let ' && multiItems[0].srcStart === 0, 'first text item srcStart is 0');
+const eq1Len = '$a = 1$'.length; // 7
+ok(multiItems[1].kind === 'math' && multiItems[1].srcStart === 4, 'first math item srcStart is 4');
+const andStart = 4 + eq1Len; // 11
+ok(multiItems[2].srcStart === andStart && multiItems[2].map[0] === andStart, `second text item srcStart is ${andStart}`);
+const eq2Len = '$b = 2$'.length; // 7
+const eq2Start = andStart + ' and '.length; // 16
+ok(multiItems[3].kind === 'math' && multiItems[3].srcStart === eq2Start, `second math item srcStart is ${eq2Start}`);
+const thenStart = eq2Start + eq2Len; // 23
+ok(multiItems[4].srcStart === thenStart && multiItems[4].map[0] === thenStart, `third text item srcStart is ${thenStart}`);
+
 // ---- sliceItemsFrom: read from the caret WORD, not the line start ----
 // Whole doc from the very start is unchanged.
 ok(sliceItemsFrom(items, { block: 0, unit: 0, offset: 0 }).length === items.length, 'caret at very start → all items');

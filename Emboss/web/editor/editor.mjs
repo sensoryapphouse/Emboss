@@ -4,106 +4,317 @@
 // typeform emphasis, a braille-cell preview, and ARIA-toolbar a11y.
 import {
   createEditor, $getRoot, $getSelection, $isRangeSelection,
-  $createParagraphNode, $createTextNode, FORMAT_TEXT_COMMAND,
+  ParagraphNode, $createParagraphNode, $createTextNode, FORMAT_TEXT_COMMAND,
   DecoratorNode, ElementNode, $insertNodes, $getNodeByKey, $insertNodeToNearestRoot,
   registerRichText, HeadingNode, QuoteNode, $createHeadingNode, $isHeadingNode,
   ListNode, ListItemNode, INSERT_UNORDERED_LIST_COMMAND, INSERT_ORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND, registerList, $isListNode, $createListNode, $createListItemNode,
-  $setBlocksType, TextNode, ParagraphNode, $applyNodeReplacement,
+  $setBlocksType, TextNode,
 } from './vendor-lexical.mjs';
 
 const $isTextNode = (n) => n instanceof TextNode;
-const $isParagraphNode = (n) => n instanceof ParagraphNode;
 const $isElementNode = (n) => typeof n?.getChildren === 'function';
-import { formatDocument, formatVolumes } from '/format/document.mjs';
+const $isQuoteNode = (n) => n instanceof QuoteNode;
+const $isListItemNode = (n) => n instanceof ListItemNode;
+import { formatDocument, formatDocumentAsync, formatVolumes } from '/format/document.mjs?v=20260915_173000';
 import { formatStyleInspectorBadge, STYLE_DEFINITIONS, getStyleMargins } from '/format/styles.mjs';
+import { exportToNimasXml } from '/input/nimas-export.mjs?v=20260915_170500';
 import { makeZip } from '/web/zip.mjs';
 import { exportToDocxBlob } from '/web/docx-export.mjs';
-import { exportToNimasXml } from '/input/nimas-export.mjs';
-import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs';
+import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs?v=20260914_192000';
 import * as louis from '/engine/louis-browser.mjs';
-import { renderBraille, expandRowCells } from '/web/braille-render.mjs';
-import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs';
-import { parseFile, BINARY_EXTS } from '/input/parse.mjs';
-import { BRF64, brfToUnicodeBraille, unicodeBrailleToBrf } from '/engine/brf-ascii.mjs';
+import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs?v=20260915_102500';
+import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs?v=20260912_180700';
+import { parseFile, BINARY_EXTS } from '/input/parse.mjs?v=20260915_173000';
+import { BRF64, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
 import * as maths from '/engine/maths.mjs';
+import { mathmlToLatex } from '/engine/mathml-to-latex.mjs';
 import { styledTranslate, exchangeQuotes } from '/format/text-style.mjs';
 import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, isGraphicsSupported, effectiveMathCode } from '/web/settings.mjs';
 import { resolveTable, makeTranslators, UEB_TABLES } from '/web/braille-table.mjs';
 import { spoolToEmbosser, spoolToNetworkEmbosser, isWebSerialSupported, initEmbosserAutoDetect } from '/format/spooler.mjs';
-import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs';
-import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs';
+import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs?v=20260915_142000';
+import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs?v=20260915_142000';
 import { TACTILE_SVG_LIBRARY, TACTILE_SVG_CATEGORIES } from '/web/tactile-library.js';
 import { exportToPef } from '/format/pef.mjs';
 import { exportToEbraille } from '/format/ebraille.mjs';
-import { tactileDisplay, rasterizeSvgToDotPadCells, charToDotMask } from '/format/tactile-display.mjs';
+import { tactileDisplay, rasterizeSvgToDotPadCells, rasterizeSvgToMonarchCells, charToDotMask } from '/format/tactile-display.mjs?v=20260915_142000';
 import { openTactileSymbolBrowser } from '/web/tactile-browser.mjs';
 import { CODES } from '/Translate/braille-codes.mjs';
 import { describeUebMaths } from '/Translate/ueb-maths-to-latex.mjs';
 import { describeNemeth } from '/Translate/nemeth-symbols.mjs';
-import { uebHybrid, nemethHybrid } from '/Translate/maths-hybrid.mjs';
-import { nemethMathsToLatexV2 } from '/Translate/nemeth-rules.mjs';
-import { NEM_OPEN, NEM_CLOSE } from '/Translate/nemeth-switch.mjs';
 import { getAndClearHandoffDoc } from '/web/handoff-db.mjs';
-import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs';
+import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs?v=20260915_171500';
+
+if (typeof window !== 'undefined') {
+  window.parseFile = parseFile;
+  window.exportToNimasXml = exportToNimasXml;
+  window.exportCurrentDocumentXml = () => {
+    let currentDocModel = null;
+    editor.getEditorState().read(() => { currentDocModel = buildModel(); });
+    const doc = currentDocModel || lastModel || { title: 'Document', blocks: [] };
+    return exportToNimasXml(doc, { title: doc.title || 'Document' });
+  };
+  window.importFile = importFile;
+  window.showRuleInfo = showRuleInfo;
+  window.indentCurrentItem = indentCurrentItem;
+  window.outdentCurrentItem = outdentCurrentItem;
+}
 
 let settings = loadSettings();                 // standard / grade / geometry / quotes / lists / toc (shared with the converter)
-if (typeof window !== 'undefined') window.settings = settings;
 const $id = (id) => document.getElementById(id);
 const brailleEl = $id('braille');
-const brlStackEl = $id('brlStack');
-const brlInputEl = $id('brlInput');
 const editorEl = $id('editor');
 let currentStatusText = '';
-let lastCaretWordKey = '';
-let caretSyncTimer = null;
-export let isReconcilingBrailleToPrint = false;
-export let isRenderingPrintToBraille = false;
-export let activeSyncSource = null; // 'print' | 'braille' | null
-export let lastRenderedBrailleText = '';
-let brailleSyncTimer = null;
+function updateDocStatsVisibility() {
+  const ds = $id('docStats');
+  if (!ds) return;
+  if (!currentStatusText) {
+    ds.textContent = '';
+    ds.style.display = 'none';
+    return;
+  }
+  ds.textContent = currentStatusText;
+  ds.style.display = 'inline-block';
+}
 const setStatus = (m) => {
   currentStatusText = m || '';
-  const docStats = $id('docStats');
-  if (docStats) docStats.textContent = currentStatusText;
   const el = $id('status');
   if (el) el.textContent = currentStatusText;
+  updateDocStatsVisibility();
 };
+
+function getPrintPageForBlock(blockIdx) {
+  if (lastModel?.blocks && typeof blockIdx === 'number' && blockIdx >= 0) {
+    for (let i = Math.min(blockIdx, lastModel.blocks.length - 1); i >= 0; i--) {
+      const b = lastModel.blocks[i];
+      if (b && b.type === 'pagenum' && b.page != null) {
+        return String(b.page).trim();
+      }
+    }
+  }
+  const blockEl = editorEl?.querySelector(`[data-block-idx="${blockIdx}"]`);
+  if (blockEl) {
+    let curr = blockEl;
+    while (curr) {
+      if (curr.classList?.contains('doc-print-page') || curr.querySelector?.('.doc-print-page')) {
+        const pageEl = curr.classList?.contains('doc-print-page') ? curr : curr.querySelector('.doc-print-page');
+        const pInput = pageEl?.querySelector('input.print-page-input');
+        if (pInput && pInput.value) return pInput.value.trim();
+        if (pageEl?.dataset?.page) return pageEl.dataset.page.trim();
+      }
+      curr = curr.previousElementSibling;
+    }
+  }
+  return null;
+}
+
+function updateCaretLocation(blockIdx = null, rowIdx = null, colIdx = null) {
+  const bIdx = typeof blockIdx === 'number' && blockIdx >= 0 ? blockIdx : (lastKnownEditorBlockIndex ?? 0);
+  const printPage = getPrintPageForBlock(bIdx);
+  
+  const lpp = Number(settings.lines) || Number(settings.linesPerPage) || 25;
+  let rIdx = typeof rowIdx === 'number' && rowIdx >= 0 ? rowIdx : (activeCaretLine >= 0 ? activeCaretLine : -1);
+  if (rIdx < 0 && lastTrace?.rows && typeof bIdx === 'number') {
+    rIdx = lastTrace.rows.indexOf(bIdx);
+  }
+  
+  const bPage = rIdx >= 0 ? Math.floor(rIdx / lpp) + 1 : 1;
+  const bLine = rIdx >= 0 ? (rIdx % lpp) + 1 : 1;
+  const bCell = typeof colIdx === 'number' && colIdx >= 0 ? colIdx + 1 : (activeCaretCol >= 0 ? activeCaretCol + 1 : 1);
+  
+  const locStr = printPage
+    ? `(P:${printPage} · B${bPage}: L${bLine}, C${bCell})`
+    : `(B${bPage}: L${bLine}, C${bCell})`;
+    
+  setStatus(locStr);
+}
 const announce = (msg) => { const a = $id('announce'); if (!a) return; a.textContent = ''; setTimeout(() => { a.textContent = msg; }, 30); };
 const TF = louis.TYPEFORM;   // single source of truth (italic=1, underline=2, bold=4)
 
-// ---- BANA style extensions on ParagraphNode ----
-ParagraphNode.prototype.getBanaStyle = function() {
-  return this.getLatest().__banaStyle || null;
+// BANA / UKAAF style metadata prototype extensions on core Lexical nodes
+ParagraphNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
+ParagraphNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+const origParaClone = ParagraphNode.prototype.afterCloneFrom;
+ParagraphNode.prototype.afterCloneFrom = function(prev) {
+  if (origParaClone) origParaClone.call(this, prev);
+  this.__banaStyle = prev.__banaStyle || null;
 };
-ParagraphNode.prototype.setBanaStyle = function(s) {
-  const writable = this.getWritable();
-  writable.__banaStyle = s || null;
-  return this;
-};
-
-const origParagraphAfterCloneFrom = ParagraphNode.prototype.afterCloneFrom;
-ParagraphNode.prototype.afterCloneFrom = function(prevNode) {
-  origParagraphAfterCloneFrom.call(this, prevNode);
-  this.__banaStyle = prevNode.__banaStyle || null;
-};
-
-const origParagraphCreateDOM = ParagraphNode.prototype.createDOM;
+const origParaCreateDOM = ParagraphNode.prototype.createDOM;
 ParagraphNode.prototype.createDOM = function(config) {
-  const dom = origParagraphCreateDOM.call(this, config);
+  const dom = origParaCreateDOM ? origParaCreateDOM.call(this, config) : document.createElement('p');
   const style = this.getBanaStyle();
-  if (style) {
+  if (style && style !== 'body') {
     dom.classList.add(`bana-style-${style}`);
     dom.dataset.banaStyle = style;
   }
   return dom;
 };
-
-const origParagraphUpdateDOM = ParagraphNode.prototype.updateDOM;
+const origParaUpdateDOM = ParagraphNode.prototype.updateDOM;
 ParagraphNode.prototype.updateDOM = function(prevNode, dom, config) {
-  const res = origParagraphUpdateDOM.call(this, prevNode, dom, config);
-  const prevStyle = prevNode ? prevNode.__banaStyle || null : null;
-  const nextStyle = this.__banaStyle || null;
+  let updated = origParaUpdateDOM ? origParaUpdateDOM.call(this, prevNode, dom, config) : false;
+  const prevStyle = prevNode ? prevNode.getBanaStyle() : null;
+  const nextStyle = this.getBanaStyle();
+  if (prevStyle !== nextStyle) {
+    if (prevStyle && prevStyle !== 'body') dom.classList.remove(`bana-style-${prevStyle}`);
+    if (nextStyle && nextStyle !== 'body') {
+      dom.classList.add(`bana-style-${nextStyle}`);
+      dom.dataset.banaStyle = nextStyle;
+    } else {
+      delete dom.dataset.banaStyle;
+    }
+    updated = true;
+  }
+  return updated;
+};
+const origParaExportJSON = ParagraphNode.prototype.exportJSON;
+ParagraphNode.prototype.exportJSON = function() {
+  const json = origParaExportJSON ? origParaExportJSON.call(this) : {
+    children: [],
+    direction: this.getDirection(),
+    format: this.getFormatType(),
+    indent: this.getIndent(),
+    type: 'paragraph',
+    version: 1,
+    textFormat: this.getTextFormat(),
+    textStyle: this.getTextStyle(),
+  };
+  const style = this.getBanaStyle();
+  if (style) json.banaStyle = style;
+  return json;
+};
+const origParaUpdateFromJSON = ParagraphNode.prototype.updateFromJSON;
+ParagraphNode.prototype.updateFromJSON = function(serializedNode) {
+  const node = origParaUpdateFromJSON ? origParaUpdateFromJSON.call(this, serializedNode) : this;
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  return node;
+};
+const origParaImportJSON = ParagraphNode.importJSON;
+ParagraphNode.importJSON = function(serializedNode) {
+  const node = origParaImportJSON ? origParaImportJSON(serializedNode) : $createParagraphNode().updateFromJSON(serializedNode);
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  return node;
+};
+
+ListNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
+ListNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+ListNode.prototype.getListKind = function() { return this.getLatest().__listKind || null; };
+ListNode.prototype.setListKind = function(k) { this.getWritable().__listKind = k || null; return this; };
+const origListClone = ListNode.prototype.afterCloneFrom;
+ListNode.prototype.afterCloneFrom = function(prev) {
+  if (origListClone) origListClone.call(this, prev);
+  this.__banaStyle = prev.__banaStyle || null;
+  this.__listKind = prev.__listKind || null;
+};
+const origListCreateDOM = ListNode.prototype.createDOM;
+ListNode.prototype.createDOM = function(config) {
+  const dom = origListCreateDOM ? origListCreateDOM.call(this, config) : document.createElement(this.getListType() === 'number' ? 'ol' : 'ul');
+  const style = this.getListKind() || this.getBanaStyle();
+  if (style) {
+    dom.classList.add(`bana-style-${style}`);
+    if (style === 'plain' || style === 'toc' || style === 'glossary') dom.classList.add('emboss-plain-list');
+    dom.dataset.banaStyle = style;
+  }
+  return dom;
+};
+const origListUpdateDOM = ListNode.prototype.updateDOM;
+ListNode.prototype.updateDOM = function(prevNode, dom, config) {
+  let updated = origListUpdateDOM ? origListUpdateDOM.call(this, prevNode, dom, config) : false;
+  const prevStyle = prevNode ? (prevNode.getListKind() || prevNode.getBanaStyle()) : null;
+  const nextStyle = this.getListKind() || this.getBanaStyle();
+  if (prevStyle !== nextStyle) {
+    if (prevStyle) {
+      dom.classList.remove(`bana-style-${prevStyle}`);
+      dom.classList.remove('emboss-plain-list');
+    }
+    if (nextStyle) {
+      dom.classList.add(`bana-style-${nextStyle}`);
+      if (nextStyle === 'plain' || nextStyle === 'toc' || nextStyle === 'glossary') dom.classList.add('emboss-plain-list');
+      dom.dataset.banaStyle = nextStyle;
+    } else {
+      delete dom.dataset.banaStyle;
+    }
+    updated = true;
+  }
+  return updated;
+};
+const origListExportJSON = ListNode.prototype.exportJSON;
+ListNode.prototype.exportJSON = function() {
+  const json = origListExportJSON ? origListExportJSON.call(this) : {
+    children: [],
+    direction: this.getDirection(),
+    format: this.getFormatType(),
+    indent: this.getIndent(),
+    type: 'list',
+    version: 1,
+    listType: this.getListType(),
+    start: this.getStart(),
+    tag: this.getTag(),
+  };
+  const style = this.getBanaStyle();
+  if (style) json.banaStyle = style;
+  const kind = this.getListKind();
+  if (kind) json.listKind = kind;
+  return json;
+};
+const origListUpdateFromJSON = ListNode.prototype.updateFromJSON;
+ListNode.prototype.updateFromJSON = function(serializedNode) {
+  const node = origListUpdateFromJSON ? origListUpdateFromJSON.call(this, serializedNode) : this;
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.listKind) node.setListKind(serializedNode.listKind);
+  return node;
+};
+const origListImportJSON = ListNode.importJSON;
+ListNode.importJSON = function(serializedNode) {
+  const node = origListImportJSON ? origListImportJSON(serializedNode) : $createListNode(serializedNode?.listType, serializedNode?.start).updateFromJSON(serializedNode);
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.listKind) node.setListKind(serializedNode.listKind);
+  return node;
+};
+
+ListItemNode.prototype.getPage = function() { return this.getLatest().__page || null; };
+ListItemNode.prototype.setPage = function(p) { this.getWritable().__page = p || null; return this; };
+ListItemNode.prototype.getLevel = function() {
+  const latest = this.getLatest();
+  if (latest.__level != null) return latest.__level;
+  if (latest.__indent != null) return latest.__indent;
+  return 0;
+};
+ListItemNode.prototype.setLevel = function(lvl) {
+  const n = (lvl | 0) || 0;
+  const w = this.getWritable();
+  w.__level = n;
+  w.__indent = n;
+  return this;
+};
+ListItemNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
+ListItemNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+const origItemClone = ListItemNode.prototype.afterCloneFrom;
+ListItemNode.prototype.afterCloneFrom = function(prev) {
+  if (origItemClone) origItemClone.call(this, prev);
+  this.__banaStyle = prev.__banaStyle || null;
+  this.__page = prev.__page || null;
+  this.__level = prev.__level != null ? prev.__level : (prev.__indent != null ? prev.__indent : null);
+};
+const origItemCreateDOM = ListItemNode.prototype.createDOM;
+ListItemNode.prototype.createDOM = function(config) {
+  const dom = origItemCreateDOM ? origItemCreateDOM.call(this, config) : document.createElement('li');
+  const style = this.getBanaStyle();
+  if (style) {
+    dom.classList.add(`bana-style-${style}`);
+    dom.dataset.banaStyle = style;
+  }
+  const page = this.getPage();
+  if (page) dom.dataset.page = String(page);
+  const lvl = this.getLevel();
+  if (lvl) dom.dataset.level = String(lvl);
+  return dom;
+};
+const origItemUpdateDOM = ListItemNode.prototype.updateDOM;
+ListItemNode.prototype.updateDOM = function(prevNode, dom, config) {
+  let updated = origItemUpdateDOM ? origItemUpdateDOM.call(this, prevNode, dom, config) : false;
+  const prevStyle = prevNode ? prevNode.getBanaStyle() : null;
+  const nextStyle = this.getBanaStyle();
   if (prevStyle !== nextStyle) {
     if (prevStyle) dom.classList.remove(`bana-style-${prevStyle}`);
     if (nextStyle) {
@@ -112,8 +323,176 @@ ParagraphNode.prototype.updateDOM = function(prevNode, dom, config) {
     } else {
       delete dom.dataset.banaStyle;
     }
+    updated = true;
   }
-  return res;
+  const prevPage = prevNode ? prevNode.getPage() : null;
+  const nextPage = this.getPage();
+  if (prevPage !== nextPage) {
+    if (nextPage) dom.dataset.page = String(nextPage);
+    else delete dom.dataset.page;
+    updated = true;
+  }
+  const prevLvl = prevNode ? prevNode.getLevel() : null;
+  const nextLvl = this.getLevel();
+  if (prevLvl !== nextLvl) {
+    if (nextLvl) dom.dataset.level = String(nextLvl);
+    else delete dom.dataset.level;
+    updated = true;
+  }
+  return updated;
+};
+const origItemExportJSON = ListItemNode.prototype.exportJSON;
+ListItemNode.prototype.exportJSON = function() {
+  const json = origItemExportJSON ? origItemExportJSON.call(this) : {
+    children: [],
+    direction: this.getDirection(),
+    format: this.getFormatType(),
+    indent: this.getIndent(),
+    type: 'listitem',
+    version: 1,
+    checked: this.getChecked(),
+    value: this.getValue(),
+  };
+  const style = this.getBanaStyle();
+  if (style) json.banaStyle = style;
+  const page = this.getPage();
+  if (page != null) json.page = page;
+  const level = this.getLevel();
+  if (level != null && level !== 0) json.level = level;
+  return json;
+};
+const origItemUpdateFromJSON = ListItemNode.prototype.updateFromJSON;
+ListItemNode.prototype.updateFromJSON = function(serializedNode) {
+  const node = origItemUpdateFromJSON ? origItemUpdateFromJSON.call(this, serializedNode) : this;
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.level != null) node.setLevel(serializedNode.level);
+  return node;
+};
+const origItemImportJSON = ListItemNode.importJSON;
+ListItemNode.importJSON = function(serializedNode) {
+  const node = origItemImportJSON ? origItemImportJSON(serializedNode) : $createListItemNode(serializedNode?.checked).updateFromJSON(serializedNode);
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.level != null) node.setLevel(serializedNode.level);
+  return node;
+};
+
+HeadingNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
+HeadingNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+const origHeadingClone = HeadingNode.prototype.afterCloneFrom;
+HeadingNode.prototype.afterCloneFrom = function(prev) {
+  if (origHeadingClone) origHeadingClone.call(this, prev);
+  this.__banaStyle = prev.__banaStyle || null;
+};
+const origHeadingCreateDOM = HeadingNode.prototype.createDOM;
+HeadingNode.prototype.createDOM = function(config) {
+  const dom = origHeadingCreateDOM ? origHeadingCreateDOM.call(this, config) : document.createElement(this.getTag());
+  const style = this.getBanaStyle();
+  if (style && style !== 'body') {
+    dom.classList.add(`bana-style-${style}`);
+    dom.dataset.banaStyle = style;
+  }
+  return dom;
+};
+const origHeadingUpdateDOM = HeadingNode.prototype.updateDOM;
+HeadingNode.prototype.updateDOM = function(prevNode, dom, config) {
+  let updated = origHeadingUpdateDOM ? origHeadingUpdateDOM.call(this, prevNode, dom, config) : false;
+  const prevStyle = prevNode ? prevNode.getBanaStyle() : null;
+  const nextStyle = this.getBanaStyle();
+  if (prevStyle !== nextStyle) {
+    if (prevStyle && prevStyle !== 'body') dom.classList.remove(`bana-style-${prevStyle}`);
+    if (nextStyle && nextStyle !== 'body') {
+      dom.classList.add(`bana-style-${nextStyle}`);
+      dom.dataset.banaStyle = nextStyle;
+    } else {
+      delete dom.dataset.banaStyle;
+    }
+    updated = true;
+  }
+  return updated;
+};
+const origHeadingExportJSON = HeadingNode.prototype.exportJSON;
+HeadingNode.prototype.exportJSON = function() {
+  const json = origHeadingExportJSON ? origHeadingExportJSON.call(this) : {
+    children: [],
+    direction: this.getDirection(),
+    format: this.getFormatType(),
+    indent: this.getIndent(),
+    type: 'heading',
+    version: 1,
+    tag: this.getTag(),
+  };
+  const style = this.getBanaStyle();
+  if (style) json.banaStyle = style;
+  return json;
+};
+const origHeadingUpdateFromJSON = HeadingNode.prototype.updateFromJSON;
+HeadingNode.prototype.updateFromJSON = function(serializedNode) {
+  const node = origHeadingUpdateFromJSON ? origHeadingUpdateFromJSON.call(this, serializedNode) : this;
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  return node;
+};
+const origHeadingImportJSON = HeadingNode.importJSON;
+HeadingNode.importJSON = function(serializedNode) {
+  const node = origHeadingImportJSON ? origHeadingImportJSON(serializedNode) : $createHeadingNode(serializedNode?.tag || 'h1').updateFromJSON(serializedNode);
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  return node;
+};
+
+QuoteNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
+QuoteNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+const origQuoteClone = QuoteNode.prototype.afterCloneFrom;
+QuoteNode.prototype.afterCloneFrom = function(prev) {
+  if (origQuoteClone) origQuoteClone.call(this, prev);
+  this.__banaStyle = prev.__banaStyle || null;
+};
+const origQuoteCreateDOM = QuoteNode.prototype.createDOM;
+QuoteNode.prototype.createDOM = function(config) {
+  const dom = origQuoteCreateDOM ? origQuoteCreateDOM.call(this, config) : document.createElement('blockquote');
+  const style = this.getBanaStyle();
+  if (style && style !== 'body') {
+    dom.classList.add(`bana-style-${style}`);
+    dom.dataset.banaStyle = style;
+  }
+  return dom;
+};
+const origQuoteUpdateDOM = QuoteNode.prototype.updateDOM;
+QuoteNode.prototype.updateDOM = function(prevNode, dom, config) {
+  let updated = origQuoteUpdateDOM ? origQuoteUpdateDOM.call(this, prevNode, dom, config) : false;
+  const prevStyle = prevNode ? prevNode.getBanaStyle() : null;
+  const nextStyle = this.getBanaStyle();
+  if (prevStyle !== nextStyle) {
+    if (prevStyle && prevStyle !== 'body') dom.classList.remove(`bana-style-${prevStyle}`);
+    if (nextStyle && nextStyle !== 'body') {
+      dom.classList.add(`bana-style-${nextStyle}`);
+      dom.dataset.banaStyle = nextStyle;
+    } else {
+      delete dom.dataset.banaStyle;
+    }
+    updated = true;
+  }
+  return updated;
+};
+const origQuoteExportJSON = QuoteNode.prototype.exportJSON;
+QuoteNode.prototype.exportJSON = function() {
+  const json = origQuoteExportJSON ? origQuoteExportJSON.call(this) : {
+    children: [],
+    direction: this.getDirection(),
+    format: this.getFormatType(),
+    indent: this.getIndent(),
+    type: 'quote',
+    version: 1,
+  };
+  const style = this.getBanaStyle();
+  if (style) json.banaStyle = style;
+  return json;
+};
+const origQuoteUpdateFromJSON = QuoteNode.prototype.updateFromJSON;
+QuoteNode.prototype.updateFromJSON = function(serializedNode) {
+  const node = origQuoteUpdateFromJSON ? origQuoteUpdateFromJSON.call(this, serializedNode) : this;
+  if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  return node;
 };
 
 const $createBanaParagraphNode = (style) => {
@@ -121,225 +500,18 @@ const $createBanaParagraphNode = (style) => {
   if (style) p.setBanaStyle(style);
   return p;
 };
-const $isBanaParagraphNode = (n) => n instanceof ParagraphNode;
 
-// ---- BANA style extensions on ListNode and ListItemNode ----
-ListNode.prototype.getBanaStyle = function() {
-  return this.getLatest().__banaStyle || null;
-};
-ListNode.prototype.setBanaStyle = function(s) {
-  const writable = this.getWritable();
-  writable.__banaStyle = s || null;
-  return this;
-};
-ListNode.prototype.getListKind = function() {
-  return this.getLatest().__listKind || null;
-};
-ListNode.prototype.setListKind = function(k) {
-  const writable = this.getWritable();
-  writable.__listKind = k || null;
-  return this;
-};
-
-const origListAfterCloneFrom = ListNode.prototype.afterCloneFrom;
-ListNode.prototype.afterCloneFrom = function(prevNode) {
-  origListAfterCloneFrom.call(this, prevNode);
-  this.__banaStyle = prevNode.__banaStyle || null;
-  this.__listKind = prevNode.__listKind || null;
-};
-
-const origListCreateDOM = ListNode.prototype.createDOM;
-ListNode.prototype.createDOM = function(config) {
-  const dom = origListCreateDOM.call(this, config);
-  const style = this.getBanaStyle() || this.getListKind();
-  const listType = this.getListType();
-  if (listType === 'plain' || style === 'toc' || style === 'index' || style === 'plain') {
-    dom.classList.add('emboss-plain-list');
-  }
-  if (style) {
-    dom.classList.add(`bana-style-${style}`);
-    dom.dataset.banaStyle = style;
-  }
-  const kind = this.getListKind();
-  if (kind) {
-    dom.dataset.listKind = kind;
-  }
-  return dom;
-};
-
-const origListUpdateDOM = ListNode.prototype.updateDOM;
-ListNode.prototype.updateDOM = function(prevNode, dom, config) {
-  const res = origListUpdateDOM.call(this, prevNode, dom, config);
-  const prevStyle = (typeof prevNode.getBanaStyle === 'function' ? prevNode.getBanaStyle() : null) || prevNode.__listKind;
-  const nextStyle = this.getBanaStyle() || this.getListKind();
-  const listType = this.getListType();
-
-  if (listType === 'plain' || nextStyle === 'toc' || nextStyle === 'index' || nextStyle === 'plain') {
-    dom.classList.add('emboss-plain-list');
-  } else {
-    dom.classList.remove('emboss-plain-list');
-  }
-
-  if (prevStyle !== nextStyle) {
-    if (prevStyle) dom.classList.remove(`bana-style-${prevStyle}`);
-    if (nextStyle) {
-      dom.classList.add(`bana-style-${nextStyle}`);
-      dom.dataset.banaStyle = nextStyle;
-    } else {
-      delete dom.dataset.banaStyle;
-    }
-  }
-  const kind = this.getListKind();
-  if (kind) dom.dataset.listKind = kind;
-  else delete dom.dataset.listKind;
-  return res;
-};
-
-ListItemNode.prototype.getPage = function() {
-  return this.getLatest().__page || null;
-};
-ListItemNode.prototype.setPage = function(p) {
-  const writable = this.getWritable();
-  writable.__page = p || null;
-  return this;
-};
-ListItemNode.prototype.getLevel = function() {
-  const latest = this.getLatest();
-  if (latest.__level != null) return latest.__level;
-  return typeof this.getIndent === 'function' ? this.getIndent() : (latest.__indent || 0);
-};
-ListItemNode.prototype.setLevel = function(lvl) {
-  const writable = this.getWritable();
-  writable.__level = (lvl | 0) || 0;
-  return this;
-};
-ListItemNode.prototype.getBanaStyle = function() {
-  return this.getLatest().__banaStyle || null;
-};
-ListItemNode.prototype.setBanaStyle = function(s) {
-  const writable = this.getWritable();
-  writable.__banaStyle = s || null;
-  return this;
-};
-
-const origListItemAfterCloneFrom = ListItemNode.prototype.afterCloneFrom;
-ListItemNode.prototype.afterCloneFrom = function(prevNode) {
-  origListItemAfterCloneFrom.call(this, prevNode);
-  this.__banaStyle = prevNode.__banaStyle || null;
-  this.__page = prevNode.__page || null;
-  this.__level = prevNode.__level != null ? prevNode.__level : null;
-};
-
-const origListItemCreateDOM = ListItemNode.prototype.createDOM;
-ListItemNode.prototype.createDOM = function(config) {
-  const dom = origListItemCreateDOM.call(this, config);
-  const style = typeof this.getBanaStyle === 'function' ? this.getBanaStyle() : this.__banaStyle;
-  if (style) {
-    dom.classList.add(`bana-style-${style}`);
-    dom.dataset.banaStyle = style;
-  }
-  const page = typeof this.getPage === 'function' ? this.getPage() : this.__page;
-  if (page) {
-    dom.dataset.page = page;
-  }
-  const indent = typeof this.getLevel === 'function' ? this.getLevel() : (this.__level || 0);
-  if (indent > 0) {
-    dom.dataset.level = indent;
-  }
-  return dom;
-};
-
-const origListItemUpdateDOM = ListItemNode.prototype.updateDOM;
-ListItemNode.prototype.updateDOM = function(prevNode, dom, config) {
-  const res = origListItemUpdateDOM.call(this, prevNode, dom, config);
-  const prevStyle = typeof prevNode.getBanaStyle === 'function' ? prevNode.getBanaStyle() : prevNode.__banaStyle;
-  const nextStyle = typeof this.getBanaStyle === 'function' ? this.getBanaStyle() : this.__banaStyle;
-  if (prevStyle !== nextStyle) {
-    if (prevStyle) dom.classList.remove(`bana-style-${prevStyle}`);
-    if (nextStyle) {
-      dom.classList.add(`bana-style-${nextStyle}`);
-      dom.dataset.banaStyle = nextStyle;
-    } else {
-      delete dom.dataset.banaStyle;
-    }
-  }
-  const page = typeof this.getPage === 'function' ? this.getPage() : this.__page;
-  if (page) dom.dataset.page = page;
-  else delete dom.dataset.page;
-
-  const indent = typeof this.getLevel === 'function' ? this.getLevel() : (this.__level || 0);
-  if (indent > 0) dom.dataset.level = indent;
-  else delete dom.dataset.level;
-
-  return res;
-};
-
-const $createPlainListNode = (kind = 'toc') => {
-  const list = $createListNode('plain');
-  list.setBanaStyle(kind);
-  list.setListKind(kind);
-  return list;
-};
-
-class SidebarNode extends ElementNode {
-  static getType() { return 'emboss-sidebar'; }
-  static clone(n) { return new SidebarNode(n.__title, n.__key); }
-  constructor(title = '', key) {
-    super(key);
-    this.__title = title || '';
-    this.__banaStyle = 'sidebar';
-  }
-  createDOM(config) {
-    const aside = document.createElement('aside');
-    aside.className = 'emboss-sidebar-card bana-style-sidebar';
-    aside.dataset.banaStyle = 'sidebar';
-    if (this.__title) aside.dataset.title = this.__title;
-    return aside;
-  }
-  updateDOM(prevNode, dom, config) {
-    const nextTitle = this.getTitle();
-    const prevTitle = typeof prevNode.getTitle === 'function' ? prevNode.getTitle() : prevNode.__title;
-    if (nextTitle !== prevTitle) {
-      if (nextTitle) dom.dataset.title = nextTitle;
-      else delete dom.dataset.title;
-    }
-    return false;
-  }
-  afterCloneFrom(prevNode) {
-    super.afterCloneFrom(prevNode);
-    this.__title = prevNode.__title || '';
-    this.__banaStyle = prevNode.__banaStyle || 'sidebar';
-  }
-  getTitle() { return this.getLatest().__title || ''; }
-  setTitle(t) { this.getWritable().__title = t || ''; return this; }
-  getBanaStyle() { return 'sidebar'; }
-  setBanaStyle(s) { return this; }
-  exportJSON() {
-    return {
-      ...super.exportJSON(),
-      type: 'emboss-sidebar',
-      version: 1,
-      title: this.__title,
-      banaStyle: this.__banaStyle,
-    };
-  }
-  static importJSON(j) {
-    const n = new SidebarNode(j.title);
-    n.__banaStyle = j.banaStyle || 'sidebar';
-    return n;
-  }
-  canInsertBlockAfter() { return true; }
-  canIndent() { return false; }
-  collapseAtStart() { return true; }
-}
-const $createSidebarNode = (title = '') => $applyNodeReplacement ? $applyNodeReplacement(new SidebarNode(title)) : new SidebarNode(title);
-const $isSidebarNode = (n) => n instanceof SidebarNode;
-
+// ---- custom nodes ----
 class MathNode extends DecoratorNode {
   static getType() { return 'emboss-math'; }
   static clone(n) { return new MathNode(n.__latex, n.__key); }
   constructor(latex = '', key) { super(key); this.__latex = latex; }
-  createDOM() { const s = document.createElement('span'); s.className = 'math-embed'; return s; }
+  createDOM() {
+    const s = document.createElement('span');
+    s.className = 'math-embed';
+    if (this.__latex) s.setAttribute('data-latex', this.__latex);
+    return s;
+  }
   updateDOM() { return false; }
   setLatex(l) { this.getWritable().__latex = l; }
   getLatex() { return this.getLatest().__latex; }
@@ -353,16 +525,28 @@ const $createMathNode = (latex) => new MathNode(latex);
 const $isMathNode = (n) => n instanceof MathNode;
 
 class BreakNode extends DecoratorNode {
+  __kind = 'asterisks';
   static getType() { return 'emboss-break'; }
-  static clone(n) { return new BreakNode(n.__key); }
-  createDOM() { const d = document.createElement('div'); d.className = 'doc-break'; d.textContent = '∗ ∗ ∗'; return d; }
+  static clone(n) { return new BreakNode(n.__kind || 'asterisks', n.__key); }
+  constructor(kind = 'asterisks', key) {
+    super(key);
+    this.__kind = kind || 'asterisks';
+  }
+  getKind() { return this.getLatest().__kind || 'asterisks'; }
+  setKind(k) { this.getWritable().__kind = k || 'asterisks'; }
+  createDOM() {
+    const d = document.createElement('div');
+    d.className = 'doc-break';
+    d.textContent = this.__kind === 'line' ? '————————' : '∗ ∗ ∗';
+    return d;
+  }
   updateDOM() { return false; }
   decorate() { return null; }              // static content — nothing to mount
   isInline() { return false; }
-  exportJSON() { return { type: 'emboss-break', version: 1 }; }
-  static importJSON() { return new BreakNode(); }
+  exportJSON() { return { type: 'emboss-break', version: 1, kind: this.__kind }; }
+  static importJSON(j) { return new BreakNode(j?.kind || 'asterisks'); }
 }
-const $createBreakNode = () => new BreakNode();
+const $createBreakNode = (kind = 'asterisks') => new BreakNode(kind);
 const $isBreakNode = (n) => n instanceof BreakNode;
 
 class PrintPageNode extends DecoratorNode {
@@ -461,29 +645,22 @@ const $isGraphicNode = (n) => n instanceof GraphicNode;
 class TableNode extends DecoratorNode {
   __headers = [];
   __rows = [];
-  __format = 'auto';
-  __caption = '';
-  __tabletn = '';
+  __format = 'spatial';
 
   static getType() { return 'emboss-table'; }
   static clone(n) {
-    return new TableNode(
-      [...(n.__headers || [])],
-      (n.__rows || []).map(r => [...r]),
-      n.__format || 'auto',
-      n.__caption || '',
-      n.__tabletn || '',
-      n.__key
-    );
+    const node = new TableNode([...(n.__headers || [])], (n.__rows || []).map(r => [...r]), n.__key);
+    node.__format = n.__format || 'spatial';
+    return node;
   }
-  constructor(headers = [], rows = [], format = 'auto', caption = '', tabletn = '', key) {
+  constructor(headers = [], rows = [], key) {
     super(key);
     this.__headers = Array.isArray(headers) ? headers : [];
     this.__rows = Array.isArray(rows) ? rows : [];
-    this.__format = format || 'auto';
-    this.__caption = caption || '';
-    this.__tabletn = tabletn || '';
+    this.__format = 'spatial';
   }
+  getFormat() { return this.getLatest().__format || 'spatial'; }
+  setFormat(f) { this.getWritable().__format = f || 'spatial'; }
   createDOM() {
     const d = document.createElement('div');
     d.className = 'doc-table-block';
@@ -491,38 +668,36 @@ class TableNode extends DecoratorNode {
     d.setAttribute('aria-label', 'Table data block');
     return d;
   }
-  afterCloneFrom(prevNode) {
-    super.afterCloneFrom(prevNode);
-    this.__headers = [...(prevNode.__headers || [])];
-    this.__rows = (prevNode.__rows || []).map(r => [...r]);
-    this.__format = prevNode.__format || 'auto';
-    this.__caption = prevNode.__caption || '';
-    this.__tabletn = prevNode.__tabletn || '';
+  // Only recreate DOM when structural dimensions change (+Row / +Col / -Row / -Col).
+  // In-cell text edits return false so the active input is never destroyed and cursor focus is preserved.
+  updateDOM(prevNode) {
+    if (!prevNode) return true;
+    const prevHeaders = prevNode.__headers || [];
+    const nextHeaders = this.__headers || [];
+    const prevRows = prevNode.__rows || [];
+    const nextRows = this.__rows || [];
+    if (prevHeaders.length !== nextHeaders.length || prevRows.length !== nextRows.length) {
+      return true;
+    }
+    for (let i = 0; i < prevRows.length; i++) {
+      if ((prevRows[i] || []).length !== (nextRows[i] || []).length) return true;
+    }
+    if ((prevNode.__format || 'spatial') !== (this.__format || 'spatial')) return true;
+    return false;
   }
-  // See GraphicNode.updateDOM: "+ Row / + Col" changed the model (and the braille)
-  // while the visible grid and its "(N cols × M rows)" title stayed stale.
-  updateDOM() { return true; }
   decorate() {
     return {
       type: 'table',
       headers: this.__headers,
       rows: this.__rows,
-      format: this.__format,
-      caption: this.__caption,
-      tabletn: this.__tabletn,
+      format: this.__format || 'spatial',
     };
   }
   isInline() { return false; }
-  getHeaders() { return this.__headers || []; }
-  getRows() { return this.__rows || []; }
-  getFormat() { return this.__format || 'auto'; }
-  getCaption() { return this.__caption || ''; }
-  getTabletn() { return this.__tabletn || ''; }
+  getHeaders() { return this.getLatest().__headers; }
+  getRows() { return this.getLatest().__rows; }
   setHeaders(h) { this.getWritable().__headers = h; }
   setRows(r) { this.getWritable().__rows = r; }
-  setFormat(f) { this.getWritable().__format = f || 'auto'; }
-  setCaption(c) { this.getWritable().__caption = c || ''; }
-  setTabletn(tn) { this.getWritable().__tabletn = tn || ''; }
   setCell(ri, ci, val) {
     const w = this.getWritable();
     if (ri === -1) {
@@ -566,18 +741,78 @@ class TableNode extends DecoratorNode {
       version: 1,
       headers: this.__headers,
       rows: this.__rows,
-      format: this.__format,
-      caption: this.__caption,
-      tabletn: this.__tabletn,
+      format: this.__format || 'spatial',
     };
   }
   static importJSON(j) {
-    return new TableNode(j.headers || [], j.rows || [], j.format || 'auto', j.caption || '', j.tabletn || '');
+    const n = new TableNode(j.headers || [], j.rows || []);
+    if (j.format) n.__format = j.format;
+    return n;
   }
 }
-const $createTableNode = (headers, rows, format = 'auto', caption = '', tabletn = '') =>
-  $applyNodeReplacement ? $applyNodeReplacement(new TableNode(headers, rows, format, caption, tabletn)) : new TableNode(headers, rows, format, caption, tabletn);
+const $createTableNode = (headers, rows, format = 'spatial') => {
+  const t = new TableNode(headers, rows);
+  if (format) t.setFormat(format);
+  return t;
+};
 const $isTableNode = (n) => n instanceof TableNode;
+
+class SidebarNode extends ElementNode {
+  __title = '';
+  __banaStyle = 'sidebar';
+
+  static getType() { return 'emboss-sidebar'; }
+  static clone(n) { return new SidebarNode(n.__title, n.__key); }
+  constructor(title = '', key) {
+    super(key);
+    this.__title = title || '';
+    this.__banaStyle = 'sidebar';
+  }
+  createDOM() {
+    const aside = document.createElement('aside');
+    aside.className = 'emboss-sidebar-card bana-style-sidebar';
+    aside.dataset.banaStyle = 'sidebar';
+    if (this.__title) aside.dataset.title = this.__title;
+    return aside;
+  }
+  updateDOM(prevNode, dom) {
+    if (prevNode.__title !== this.__title) {
+      if (this.__title) dom.dataset.title = this.__title;
+      else delete dom.dataset.title;
+    }
+    return false;
+  }
+  afterCloneFrom(prevNode) {
+    if (super.afterCloneFrom) super.afterCloneFrom(prevNode);
+    this.__title = prevNode.__title || '';
+    this.__banaStyle = prevNode.__banaStyle || 'sidebar';
+  }
+  getTitle() { return this.getLatest().__title || ''; }
+  setTitle(t) { this.getWritable().__title = t || ''; return this; }
+  getBanaStyle() { return 'sidebar'; }
+  setBanaStyle() { return this; }
+  exportJSON() {
+    return {
+      ...super.exportJSON(),
+      type: 'emboss-sidebar',
+      version: 1,
+      title: this.__title,
+      banaStyle: this.__banaStyle,
+    };
+  }
+  updateFromJSON(serializedNode) {
+    if (super.updateFromJSON) super.updateFromJSON(serializedNode);
+    this.__title = serializedNode.title || '';
+    return this;
+  }
+  static importJSON(j) {
+    const node = new SidebarNode(j.title);
+    node.updateFromJSON(j);
+    return node;
+  }
+}
+const $createSidebarNode = (title) => new SidebarNode(title);
+const $isSidebarNode = (n) => n instanceof SidebarNode;
 
 // ---- editor ----
 const editor = createEditor({
@@ -585,12 +820,38 @@ const editor = createEditor({
   nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, BreakNode, GraphicNode, TableNode, PrintPageNode, SidebarNode],
   onError: (e) => { console.warn('Lexical non-fatal state warning:', e); },
   theme: { heading: { h1: 'ed-h1', h2: 'ed-h2', h3: 'ed-h3' }, list: { ul: 'ed-ul', ol: 'ed-ol' }, paragraph: 'ed-p',
-    text: { underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
+    text: { bold: 'ed-b', italic: 'ed-i', underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
 });
 editor.setRootElement($id('editor'));
 window.editor = editor;
 registerRichText(editor);
 registerList(editor);
+
+// ---- Document Dirty Tracking & Save State ----
+let lastSavedStateSignature = null;
+
+export function getEditorStateSignature() {
+  try {
+    return JSON.stringify(editor.getEditorState().toJSON());
+  } catch {
+    return '';
+  }
+}
+
+export function markDocumentClean() {
+  lastSavedStateSignature = getEditorStateSignature();
+}
+
+export function isDocumentDirty() {
+  if (!lastSavedStateSignature) return false;
+  return getEditorStateSignature() !== lastSavedStateSignature;
+}
+
+if (typeof window !== 'undefined') {
+  window.getEditorStateSignature = getEditorStateSignature;
+  window.markDocumentClean = markDocumentClean;
+  window.isDocumentDirty = isDocumentDirty;
+}
 
 // mount a MathLive <math-field> or Graphic preview into each node's DOM
 editor.registerDecoratorListener((decorators) => {
@@ -719,6 +980,14 @@ editor.registerDecoratorListener((decorators) => {
 
       el.appendChild(bar);
       el.appendChild(svgWrap);
+
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.graphic-preview-bar')) return;
+        const bIdx = el.dataset.blockIdx != null ? Number(el.dataset.blockIdx) : lastKeys.indexOf(key);
+        if (!Number.isNaN(bIdx) && bIdx >= 0) {
+          linkByBlock(bIdx, true);
+        }
+      });
       continue;
     }
 
@@ -733,6 +1002,10 @@ editor.registerDecoratorListener((decorators) => {
       const mf = document.createElement('math-field');
       mf.setAttribute('math-virtual-keyboard-policy', 'onfocus');
       mf.setAttribute('smart-mode', '');
+      if (val) {
+        mf.setAttribute('data-latex', val);
+        el.setAttribute('data-latex', val);
+      }
       mf.value = val;
 
       const btnPlot = document.createElement('button');
@@ -781,47 +1054,55 @@ editor.registerDecoratorListener((decorators) => {
 
     // Table decorator
     if (typeof val === 'object' && val.type === 'table') {
-      if (el.querySelector('.editor-table-widget')) continue;
+      const colCount = Math.max(val.headers?.length || 0, ...(val.rows?.map(r => r.length) || [0]), 1);
+      const rowCount = val.rows?.length || 0;
+      const headerCount = (val.headers && val.headers.length) || 0;
+
+      if (el.querySelector('.editor-table-widget')) {
+        const allInputs = el.querySelectorAll('input.table-cell-input');
+        allInputs.forEach((inp) => {
+          if (inp === document.activeElement) return;
+          const u = parseInt(inp.dataset.unit, 10);
+          if (isNaN(u)) return;
+          if (u < headerCount) {
+            const hVal = val.headers[u] || '';
+            if (inp.value !== hVal) inp.value = hVal;
+          } else {
+            const rowIdx = Math.floor((u - headerCount) / colCount);
+            const colIdx = (u - headerCount) % colCount;
+            const rVal = (val.rows[rowIdx] && val.rows[rowIdx][colIdx]) || '';
+            if (inp.value !== rVal) inp.value = rVal;
+          }
+        });
+        continue;
+      }
       el.innerHTML = '';
 
       const bar = document.createElement('div');
       bar.className = 'table-context-bar';
 
-      const colCount = Math.max(val.headers?.length || 0, ...(val.rows?.map(r => r.length) || [0]), 1);
-      const rowCount = val.rows?.length || 0;
-
+      const curFormat = val.format || 'spatial';
       const titleSpan = document.createElement('strong');
       titleSpan.textContent = `📊 Table (${colCount} cols × ${rowCount} rows)`;
       titleSpan.style.marginRight = 'auto';
       bar.appendChild(titleSpan);
 
-      // Table Format Mode Toggle Button
-      const btnMode = document.createElement('button');
-      btnMode.type = 'button';
-      btnMode.className = 'table-context-btn table-mode-btn';
-      const formatLabels = {
-        auto: '⚙ Format: Auto',
-        spatial: '📊 Format: Spatial',
-        listed: '📋 Format: Listed'
-      };
-      const currentFormat = val.format || 'auto';
-      btnMode.textContent = formatLabels[currentFormat] || '⚙ Format: Auto';
-      btnMode.title = 'Cycle table Braille layout: Auto (spatial if fits) -> Force Spatial -> Force Listed';
-      btnMode.addEventListener('click', (e) => {
+      const btnFormat = document.createElement('button');
+      btnFormat.type = 'button';
+      btnFormat.className = 'table-context-btn';
+      btnFormat.textContent = curFormat === 'listed' ? '📋 Listed' : '📊 Spatial';
+      btnFormat.title = `Format: ${curFormat === 'listed' ? 'Listed Table (click to switch to Spatial)' : 'Spatial Columnar (click to switch to Listed)'}`;
+      btnFormat.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) {
-            const nextMap = { auto: 'spatial', spatial: 'listed', listed: 'auto' };
-            const nextFormat = nextMap[n.getFormat()] || 'auto';
-            n.setFormat(nextFormat);
-            btnMode.textContent = formatLabels[nextFormat] || '⚙ Format: Auto';
+            const nextFmt = n.getFormat() === 'listed' ? 'spatial' : 'listed';
+            n.setFormat(nextFmt);
           }
         });
-        clearTranslationCache();
-        scheduleRender();
       });
-      bar.appendChild(btnMode);
+      bar.appendChild(btnFormat);
 
       const btnAddRow = document.createElement('button');
       btnAddRow.type = 'button';
@@ -834,8 +1115,6 @@ editor.registerDecoratorListener((decorators) => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) n.addRow();
         });
-        clearTranslationCache();
-        scheduleRender();
       });
       bar.appendChild(btnAddRow);
 
@@ -850,8 +1129,6 @@ editor.registerDecoratorListener((decorators) => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) n.addColumn();
         });
-        clearTranslationCache();
-        scheduleRender();
       });
       bar.appendChild(btnAddCol);
 
@@ -868,8 +1145,6 @@ editor.registerDecoratorListener((decorators) => {
             n.removeRow(n.getRows().length - 1);
           }
         });
-        clearTranslationCache();
-        scheduleRender();
       });
       bar.appendChild(btnDelRow);
 
@@ -887,8 +1162,6 @@ editor.registerDecoratorListener((decorators) => {
             if (cols > 1) n.removeColumn(cols - 1);
           }
         });
-        clearTranslationCache();
-        scheduleRender();
       });
       bar.appendChild(btnDelCol);
 
@@ -903,8 +1176,6 @@ editor.registerDecoratorListener((decorators) => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) n.remove();
         });
-        clearTranslationCache();
-        scheduleRender();
       });
       bar.appendChild(btnDelete);
 
@@ -912,44 +1183,6 @@ editor.registerDecoratorListener((decorators) => {
 
       const table = document.createElement('table');
       table.className = 'editor-table-widget';
-
-      // Cell keyboard handler
-      const setupCellKeyboard = (input, rIdx, cIdx, totalRows, totalCols) => {
-        input.addEventListener('pointerdown', (e) => e.stopPropagation());
-        input.addEventListener('click', (e) => e.stopPropagation());
-        input.addEventListener('keydown', (e) => {
-          e.stopPropagation();
-          if (e.key === 'Tab' && !e.shiftKey) {
-            const nextInput = table.querySelector(`input[data-ri="${rIdx}"][data-ci="${cIdx + 1}"]`) ||
-                              table.querySelector(`input[data-ri="${rIdx + 1}"][data-ci="0"]`);
-            if (nextInput) {
-              e.preventDefault();
-              nextInput.focus();
-            } else if (rIdx === totalRows - 1 && cIdx === totalCols - 1) {
-              e.preventDefault();
-              editor.update(() => {
-                const n = $getNodeByKey(key);
-                if ($isTableNode(n)) n.addRow();
-              });
-              clearTranslationCache();
-              scheduleRender();
-            }
-          } else if (e.key === 'Tab' && e.shiftKey) {
-            const prevInput = table.querySelector(`input[data-ri="${rIdx}"][data-ci="${cIdx - 1}"]`) ||
-                              table.querySelector(`input[data-ri="${rIdx - 1}"][data-ci="${totalCols - 1}"]`);
-            if (prevInput) {
-              e.preventDefault();
-              prevInput.focus();
-            }
-          } else if (e.key === 'Enter') {
-            const belowInput = table.querySelector(`input[data-ri="${rIdx + 1}"][data-ci="${cIdx}"]`);
-            if (belowInput) {
-              e.preventDefault();
-              belowInput.focus();
-            }
-          }
-        });
-      };
 
       if (val.headers && val.headers.length > 0) {
         const thead = document.createElement('thead');
@@ -959,18 +1192,39 @@ editor.registerDecoratorListener((decorators) => {
           const input = document.createElement('input');
           input.type = 'text';
           input.className = 'table-cell-input table-header-input';
-          input.dataset.ri = '-1';
-          input.dataset.ci = String(ci);
           input.value = h;
           input.placeholder = `Header ${ci + 1}`;
-          setupCellKeyboard(input, -1, ci, rowCount, colCount);
+          input.dataset.unit = String(ci);
           input.addEventListener('input', () => {
             editor.update(() => {
               const n = $getNodeByKey(key);
               if ($isTableNode(n)) n.setCell(-1, ci, input.value);
             });
-            clearTranslationCache();
-            scheduleRender();
+            handleTableCellEvent(input, ci);
+          });
+          input.addEventListener('pointerup', () => handleTableCellEvent(input, ci));
+          input.addEventListener('keyup', () => handleTableCellEvent(input, ci));
+          input.addEventListener('focus', () => {
+            lastActiveTableCellInput = input;
+            handleTableCellEvent(input, ci);
+          });
+          input.addEventListener('mousedown', () => {
+            lastActiveTableCellInput = input;
+          });
+          input.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+              const k = e.key.toLowerCase();
+              if (k === 'b') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'bold');
+              } else if (k === 'i') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'italic');
+              } else if (k === 'u') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'underline');
+              }
+            }
           });
           th.appendChild(input);
           tr.appendChild(th);
@@ -987,18 +1241,40 @@ editor.registerDecoratorListener((decorators) => {
           const input = document.createElement('input');
           input.type = 'text';
           input.className = 'table-cell-input';
-          input.dataset.ri = String(ri);
-          input.dataset.ci = String(ci);
           input.value = row[ci] || '';
           input.placeholder = '...';
-          setupCellKeyboard(input, ri, ci, rowCount, colCount);
+          const unit = headerCount + ri * colCount + ci;
+          input.dataset.unit = String(unit);
           input.addEventListener('input', () => {
             editor.update(() => {
               const n = $getNodeByKey(key);
               if ($isTableNode(n)) n.setCell(ri, ci, input.value);
             });
-            clearTranslationCache();
-            scheduleRender();
+            handleTableCellEvent(input, unit);
+          });
+          input.addEventListener('pointerup', () => handleTableCellEvent(input, unit));
+          input.addEventListener('keyup', () => handleTableCellEvent(input, unit));
+          input.addEventListener('focus', () => {
+            lastActiveTableCellInput = input;
+            handleTableCellEvent(input, unit);
+          });
+          input.addEventListener('mousedown', () => {
+            lastActiveTableCellInput = input;
+          });
+          input.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+              const k = e.key.toLowerCase();
+              if (k === 'b') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'bold');
+              } else if (k === 'i') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'italic');
+              } else if (k === 'u') {
+                e.preventDefault();
+                applyFormattingToInput(input, 'underline');
+              }
+            }
           });
           td.appendChild(input);
           tr.appendChild(td);
@@ -1066,41 +1342,44 @@ editor.registerDecoratorListener((decorators) => {
 function applyBlockStyle(v) {
   try {
     const norm = (v === 'ul') ? 'bullet' : (v === 'ol') ? 'number' : (v === 'body' ? 'p' : (v || 'p'));
-    if (norm === 'bullet' || norm === 'number' || norm === 'plain' || norm === 'toc' || norm === 'exercise') {
-      if (norm === 'toc' || norm === 'plain') {
-        editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-        editor.update(() => {
-          const sel = $getSelection();
-          if ($isRangeSelection(sel)) {
-            const nodes = sel.getNodes();
-            for (const n of nodes) {
-              const top = n.getTopLevelElement();
-              if (top && $isListNode(top)) {
-                top.setListType('plain');
-                if (typeof top.setListKind === 'function') top.setListKind(norm === 'toc' ? 'toc' : 'plain');
-                if (typeof top.setBanaStyle === 'function') top.setBanaStyle(norm === 'toc' ? 'toc' : 'plain');
-              }
+    if (norm === 'bullet' || norm === 'number') {
+      editor.dispatchCommand(norm === 'bullet' ? INSERT_UNORDERED_LIST_COMMAND : INSERT_ORDERED_LIST_COMMAND, undefined);
+      editor.update(() => {
+        const sel = $getSelection();
+        if ($isRangeSelection(sel)) {
+          let targetNode = sel.anchor.getNode();
+          let listNode = null;
+          while (targetNode && targetNode !== $getRoot()) {
+            if ($isListNode(targetNode)) { listNode = targetNode; break; }
+            targetNode = targetNode.getParent ? targetNode.getParent() : null;
+          }
+          if (listNode) {
+            listNode.setListKind(null);
+            listNode.setBanaStyle(null);
+          }
+        }
+      });
+    } else if (norm === 'toc' || norm === 'exercise' || norm === 'index' || norm === 'plain') {
+      editor.dispatchCommand(norm === 'exercise' ? INSERT_ORDERED_LIST_COMMAND : INSERT_UNORDERED_LIST_COMMAND, undefined);
+      editor.update(() => {
+        const sel = $getSelection();
+        if ($isRangeSelection(sel)) {
+          let targetNode = sel.anchor.getNode();
+          let listNode = null;
+          while (targetNode && targetNode !== $getRoot()) {
+            if ($isListNode(targetNode)) { listNode = targetNode; break; }
+            targetNode = targetNode.getParent ? targetNode.getParent() : null;
+          }
+          if (listNode) {
+            const lKind = (norm === 'plain' ? 'index' : norm);
+            listNode.setListKind(lKind);
+            listNode.setBanaStyle(lKind);
+            if (norm === 'index' || norm === 'plain') {
+              if (typeof listNode.setListType === 'function') listNode.setListType('plain');
             }
           }
-        });
-      } else if (norm === 'exercise') {
-        editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-        editor.update(() => {
-          const sel = $getSelection();
-          if ($isRangeSelection(sel)) {
-            const nodes = sel.getNodes();
-            for (const n of nodes) {
-              const top = n.getTopLevelElement();
-              if (top && $isListNode(top)) {
-                if (typeof top.setListKind === 'function') top.setListKind('exercise');
-                if (typeof top.setBanaStyle === 'function') top.setBanaStyle('exercise');
-              }
-            }
-          }
-        });
-      } else {
-        editor.dispatchCommand(norm === 'bullet' ? INSERT_UNORDERED_LIST_COMMAND : INSERT_ORDERED_LIST_COMMAND, undefined);
-      }
+        }
+      });
     } else if (norm === 'h1' || norm === 'h2' || norm === 'h3') {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       editor.update(() => {
@@ -1109,26 +1388,72 @@ function applyBlockStyle(v) {
           $setBlocksType(sel, () => $createHeadingNode(norm));
         }
       });
-    } else if (norm === 'quote') {
+    } else if (['dialogue', 'stage', 'poem', 'caption', 'attribution', 'footnote', 'note', 'quote'].includes(norm)) {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       editor.update(() => {
         const sel = $getSelection();
         if ($isRangeSelection(sel)) {
-          $setBlocksType(sel, () => {
-            const p = $createParagraphNode();
-            p.setBanaStyle('quote');
-            return p;
-          });
+          $setBlocksType(sel, () => $createBanaParagraphNode(norm));
         }
       });
+    } else if (norm === 'sidebar') {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      insertSidebar();
+    } else if (norm === 'table-spatial' || norm === 'table-listed') {
+      const targetFmt = norm === 'table-listed' ? 'listed' : 'spatial';
+      let switchedExisting = false;
+      const activeInput = document.activeElement;
+      const activeCell = (activeInput && activeInput.classList?.contains('table-cell-input')) ? activeInput : lastActiveTableCellInput;
+      if (activeCell && editorEl.contains(activeCell)) {
+        const be = activeCell.closest('[data-block-idx]');
+        const bi = be ? Number(be.dataset.blockIdx) : NaN;
+        if (!Number.isNaN(bi)) {
+          editor.update(() => {
+            const root = $getRoot();
+            const children = root.getChildren();
+            let count = 0;
+            for (const child of children) {
+              if ($isTableNode(child)) {
+                if (count === bi) {
+                  child.setFormat(targetFmt);
+                  switchedExisting = true;
+                  break;
+                }
+              }
+              count++;
+            }
+          });
+        }
+      }
+      if (!switchedExisting) {
+        editor.update(() => {
+          const sel = $getSelection();
+          if ($isRangeSelection(sel)) {
+            let n = sel.anchor.getNode();
+            while (n && n !== $getRoot()) {
+              if ($isTableNode(n)) {
+                n.setFormat(targetFmt);
+                switchedExisting = true;
+                break;
+              }
+              n = n.getParent ? n.getParent() : null;
+            }
+          }
+        });
+      }
+      if (!switchedExisting) {
+        editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+        insertTable(3, 3, targetFmt);
+      } else {
+        announce(`Table format changed to ${targetFmt}`);
+      }
     } else {
-      // Paragraph with optional BANA style (dialogue, stage, poem, caption, footnote, note, or null for body)
-      const banaStyle = (norm === 'p' || norm === 'body') ? null : norm;
+      // Default to paragraph for 'p' or any unrecognized style
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       editor.update(() => {
         const sel = $getSelection();
         if ($isRangeSelection(sel)) {
-          $setBlocksType(sel, () => $createBanaParagraphNode(banaStyle));
+          $setBlocksType(sel, () => $createParagraphNode());
         }
       });
     }
@@ -1143,41 +1468,28 @@ function applyBlockStyle(v) {
     } catch {}
   }
   editor.focus();
+  refreshToolbar();
   const selectEl = $id('blockStyle');
-  const label = selectEl?.selectedOptions[0]?.text || v;
+  const label = selectEl?.selectedOptions[0]?.getAttribute('data-full') || selectEl?.selectedOptions[0]?.text || v;
   announce(label);
 }
-window.applyBlockStyle = applyBlockStyle;
-window.setBlockStyle = setBlockStyle;
-window.updateStyleInspector = updateStyleInspector;
-window.formatStyleInspectorBadge = formatStyleInspectorBadge;
 $id('blockStyle')?.addEventListener('change', (e) => applyBlockStyle(e.target.value));
-
-// ---- toolbar: emphasis ----
-function fmtBtn(id, format, label) {
-  $id(id).addEventListener('click', () => {
-    editor.dispatchCommand(FORMAT_TEXT_COMMAND, format); editor.focus();
-    editor.getEditorState().read(() => {
-      const s = $getSelection();
-      announce(label + (($isRangeSelection(s) && s.hasFormat(format)) ? ' on' : ' off'));
-    });
-  });
-}
-fmtBtn('btnBold', 'bold', 'Bold'); fmtBtn('btnItalic', 'italic', 'Italic'); fmtBtn('btnUnderline', 'underline', 'Underline');
-
-// ---- toolbar: maths / break / TOC ----
-// Keep the editor's selection alive when a toolbar BUTTON is pressed (mousedown
-['btnBold', 'btnItalic', 'btnUnderline', 'btnMath', 'btnFormula', 'btnTable', 'btnGraphic', 'btnBreak'].forEach((id) =>
-  $id(id)?.addEventListener('mousedown', (e) => e.preventDefault()));
 
 let savedLexicalBlockKey = null;
 let lastKnownEditorBlockIndex = null;
+let lastActiveEditorSelection = null;
 
 function saveCurrentLexicalBlock() {
   try {
     editor.getEditorState().read(() => {
       const sel = $getSelection();
       if ($isRangeSelection(sel) && sel.anchor.key !== 'root') {
+        lastActiveEditorSelection = {
+          anchorKey: sel.anchor.key,
+          anchorOffset: sel.anchor.offset,
+          focusKey: sel.focus.key,
+          focusOffset: sel.focus.offset,
+        };
         const target = sel.anchor.getNode();
         const top = target.getTopLevelElement();
         if (top) {
@@ -1210,15 +1522,21 @@ editorEl.addEventListener('pointerdown', updateEditorBlockIndex, { passive: true
 editorEl.addEventListener('pointerup', () => {
   updateEditorBlockIndex();
   syncCaretWithBraille();
+  refreshToolbar();
 }, { passive: true });
 editorEl.addEventListener('keyup', (e) => {
   updateEditorBlockIndex();
   syncCaretWithBraille();
+  refreshToolbar();
 }, { passive: true });
-editorEl.addEventListener('click', updateEditorBlockIndex, { passive: true });
+editorEl.addEventListener('click', () => {
+  updateEditorBlockIndex();
+  refreshToolbar();
+}, { passive: true });
 document.addEventListener('selectionchange', () => {
   updateEditorBlockIndex();
   syncCaretWithBraille();
+  refreshToolbar();
 }, { passive: true });
 
 function insertMathEquation(latex = '', label = 'Equation inserted — type the maths') {
@@ -1300,6 +1618,17 @@ function toggleInsertMenu() {
   insertDropdown.hidden = !willShow;
   insertMenuBtn?.setAttribute('aria-expanded', String(willShow));
   if (willShow) {
+    if (insertMenuWrap) {
+      const rect = insertMenuWrap.getBoundingClientRect();
+      const dropWidth = 240;
+      if (rect.left + dropWidth > window.innerWidth - 8) {
+        insertDropdown.style.left = 'auto';
+        insertDropdown.style.right = '0';
+      } else {
+        insertDropdown.style.left = '0';
+        insertDropdown.style.right = 'auto';
+      }
+    }
     const firstItem = insertDropdown.querySelector('.insert-item:not([style*="display: none"])');
     firstItem?.focus({ preventScroll: true });
   }
@@ -1307,12 +1636,6 @@ function toggleInsertMenu() {
 
 function closeAllDropdownMenus() {
   closeInsertMenu();
-  const saveMenu = $id('saveMenu');
-  const saveBtn = $id('saveDocBtn');
-  if (saveMenu && !saveMenu.hidden) {
-    saveMenu.hidden = true;
-    saveBtn?.setAttribute('aria-expanded', 'false');
-  }
   const dlMenu = $id('downloadMenu');
   const dlBtn = $id('downloadBtn');
   if (dlMenu && !dlMenu.hidden) {
@@ -1333,7 +1656,7 @@ insertDropdown?.querySelectorAll('.insert-item').forEach((item) => {
 });
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('#insertMenuWrap') && !e.target.closest('#saveMenuWrap') && !e.target.closest('#downloadMenuWrap')) {
+  if (!e.target.closest('#insertMenuWrap') && !e.target.closest('#downloadMenuWrap')) {
     closeAllDropdownMenus();
   }
 });
@@ -1355,6 +1678,8 @@ $id('btnBreak')?.addEventListener('click', () => {
   });
   announce('Document break inserted');
 });
+
+$id('btnSidebar')?.addEventListener('click', () => insertSidebar());
 
 function insertPrintPage(pageVal) {
   let p = pageVal;
@@ -1389,6 +1714,217 @@ $id('tocToggle')?.addEventListener('change', (e) => {
   announce('Table of contents ' + (e.target.checked ? 'on' : 'off'));
   render();
 });
+
+let lastActiveTableCellInput = null;
+
+function applyFormattingToInput(input, format) {
+  if (!input) return;
+  const start = input.selectionStart ?? 0;
+  const end = input.selectionEnd ?? 0;
+  const val = input.value || '';
+  const marker = format === 'bold' ? '**' : (format === 'italic' ? '*' : (format === 'underline' ? '<u>' : ''));
+  const closeMarker = format === 'underline' ? '</u>' : marker;
+  if (!marker) return;
+
+  const mLen = marker.length;
+  const cLen = closeMarker.length;
+  let newVal, newStart, newEnd;
+
+  if (start !== end) {
+    const selected = val.slice(start, end);
+    if (selected.startsWith(marker) && selected.endsWith(closeMarker) && selected.length >= (mLen + cLen)) {
+      const unwrapped = selected.slice(mLen, selected.length - cLen);
+      newVal = val.slice(0, start) + unwrapped + val.slice(end);
+      newStart = start;
+      newEnd = start + unwrapped.length;
+    } else if (start >= mLen && end <= val.length - cLen && val.slice(start - mLen, start) === marker && val.slice(end, end + cLen) === closeMarker) {
+      newVal = val.slice(0, start - mLen) + selected + val.slice(end + cLen);
+      newStart = start - mLen;
+      newEnd = newStart + selected.length;
+    } else {
+      newVal = val.slice(0, start) + marker + selected + closeMarker + val.slice(end);
+      newStart = start + mLen;
+      newEnd = end + mLen;
+    }
+  } else {
+    let wStart = start, wEnd = start;
+    while (wStart > 0 && /[\w'-]/.test(val[wStart - 1])) wStart--;
+    while (wEnd < val.length && /[\w'-]/.test(val[wEnd])) wEnd++;
+    if (wEnd > wStart) {
+      const word = val.slice(wStart, wEnd);
+      newVal = val.slice(0, wStart) + marker + word + closeMarker + val.slice(wEnd);
+      newStart = wStart + mLen;
+      newEnd = wEnd + mLen;
+    } else {
+      newVal = val.slice(0, start) + marker + closeMarker + val.slice(end);
+      newStart = start + mLen;
+      newEnd = newStart;
+    }
+  }
+
+  input.value = newVal;
+  input.setSelectionRange(newStart, newEnd);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.focus();
+}
+
+// ---- toolbar: emphasis ----
+function fmtBtn(id, format, label) {
+  $id(id).addEventListener('click', () => {
+    const active = document.activeElement;
+    if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
+      applyFormattingToInput(active, format);
+      announce(label + ' toggled');
+      return;
+    }
+    if (lastActiveTableCellInput && document.contains(lastActiveTableCellInput) && (lastActiveTableCellInput === document.activeElement || document.activeElement === $id(id))) {
+      applyFormattingToInput(lastActiveTableCellInput, format);
+      announce(label + ' toggled');
+      return;
+    }
+    editor.update(() => {
+      let sel = $getSelection();
+      if (!sel && lastActiveEditorSelection?.anchorKey) {
+        const node = $getNodeByKey(lastActiveEditorSelection.anchorKey);
+        if (node && $isTextNode(node)) {
+          sel = node.select(lastActiveEditorSelection.anchorOffset, lastActiveEditorSelection.focusOffset);
+        }
+      }
+      if ($isRangeSelection(sel) && sel.isCollapsed()) {
+        let anchorNode = sel.anchor.getNode();
+        let offset = sel.anchor.offset;
+        if (sel.anchor.type === 'element' && anchorNode && typeof anchorNode.getChildren === 'function') {
+          const children = anchorNode.getChildren();
+          const childIdx = Math.min(offset, Math.max(0, children.length - 1));
+          const child = children[childIdx] || children[0];
+          if (child && $isTextNode(child)) {
+            anchorNode = child;
+            offset = 0;
+          }
+        }
+        if (anchorNode && $isTextNode(anchorNode)) {
+          const text = anchorNode.getTextContent();
+          let start = Math.min(offset, text.length), end = start;
+          while (start > 0 && /[\w'-]/.test(text[start - 1])) start--;
+          while (end < text.length && /[\w'-]/.test(text[end])) end++;
+          if (end > start) {
+            sel.setTextNodeRange(anchorNode, start, anchorNode, end);
+          }
+        }
+      }
+    });
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
+    editor.focus();
+    refreshToolbar();
+    editor.getEditorState().read(() => {
+      const s = $getSelection();
+      announce(label + (($isRangeSelection(s) && s.hasFormat(format)) ? ' on' : ' off'));
+    });
+  });
+}
+fmtBtn('btnBold', 'bold', 'Bold'); fmtBtn('btnItalic', 'italic', 'Italic'); fmtBtn('btnUnderline', 'underline', 'Underline');
+
+export function indentCurrentItem() {
+  let changed = false;
+  let newLevelAnnounce = null;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel)) return;
+    const listItems = new Set();
+    let aNode = sel.anchor.getNode();
+    while (aNode && aNode !== $getRoot()) {
+      if ($isListItemNode(aNode)) { listItems.add(aNode); break; }
+      aNode = aNode.getParent ? aNode.getParent() : null;
+    }
+    let fNode = sel.focus.getNode();
+    while (fNode && fNode !== $getRoot()) {
+      if ($isListItemNode(fNode)) { listItems.add(fNode); break; }
+      fNode = fNode.getParent ? fNode.getParent() : null;
+    }
+    for (const node of sel.getNodes()) {
+      if ($isListItemNode(node)) {
+        listItems.add(node);
+      } else {
+        let p = node.getParent ? node.getParent() : null;
+        while (p && p !== $getRoot()) {
+          if ($isListItemNode(p)) { listItems.add(p); break; }
+          p = p.getParent ? p.getParent() : null;
+        }
+      }
+    }
+    for (const li of listItems) {
+      const cur = li.getLevel() || 0;
+      if (cur < 4) {
+        const next = cur + 1;
+        li.setLevel(next);
+        changed = true;
+        newLevelAnnounce = next;
+      }
+    }
+  });
+  if (changed) {
+    editor.focus();
+    refreshToolbar();
+    const lvlNames = ['1 (main)', '2 (sub-item a, b, c)', '3 (sub-item i, ii, iii)', '4 (sub-item A, B, C)', '5'];
+    announce(`List item indented to level ${lvlNames[newLevelAnnounce] || newLevelAnnounce + 1}`);
+  }
+  return changed;
+}
+
+export function outdentCurrentItem() {
+  let changed = false;
+  let newLevelAnnounce = null;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel)) return;
+    const listItems = new Set();
+    let aNode = sel.anchor.getNode();
+    while (aNode && aNode !== $getRoot()) {
+      if ($isListItemNode(aNode)) { listItems.add(aNode); break; }
+      aNode = aNode.getParent ? aNode.getParent() : null;
+    }
+    let fNode = sel.focus.getNode();
+    while (fNode && fNode !== $getRoot()) {
+      if ($isListItemNode(fNode)) { listItems.add(fNode); break; }
+      fNode = fNode.getParent ? fNode.getParent() : null;
+    }
+    for (const node of sel.getNodes()) {
+      if ($isListItemNode(node)) {
+        listItems.add(node);
+      } else {
+        let p = node.getParent ? node.getParent() : null;
+        while (p && p !== $getRoot()) {
+          if ($isListItemNode(p)) { listItems.add(p); break; }
+          p = p.getParent ? p.getParent() : null;
+        }
+      }
+    }
+    for (const li of listItems) {
+      const cur = li.getLevel() || 0;
+      if (cur > 0) {
+        const next = cur - 1;
+        li.setLevel(next);
+        changed = true;
+        newLevelAnnounce = next;
+      }
+    }
+  });
+  if (changed) {
+    editor.focus();
+    refreshToolbar();
+    const lvlNames = ['1 (main)', '2 (sub-item a, b, c)', '3 (sub-item i, ii, iii)', '4 (sub-item A, B, C)', '5'];
+    announce(`List item outdented to level ${lvlNames[newLevelAnnounce] || newLevelAnnounce + 1}`);
+  }
+  return changed;
+}
+
+$id('btnIndent')?.addEventListener('click', () => indentCurrentItem());
+$id('btnOutdent')?.addEventListener('click', () => outdentCurrentItem());
+
+// ---- toolbar: maths / break / TOC / sidebar / table / lists ----
+// Keep the editor's selection alive when a toolbar BUTTON is pressed (mousedown)
+['btnBold', 'btnItalic', 'btnUnderline', 'btnOutdent', 'btnIndent', 'btnMath', 'btnFormula', 'btnTable', 'btnGraphic', 'btnSidebar', 'btnBreak', 'btnInsertPrintPage'].forEach((id) =>
+  $id(id)?.addEventListener('mousedown', (e) => e.preventDefault()));
 
 // ---- Lexical document → Emboss block model ----
 // Walk a paragraph / list-item's children into runs: text runs carry their liblouis
@@ -1427,27 +1963,25 @@ function nodeToRuns(node) {
       }
       continue;
     }
-    const text = child.getTextContent();
+    const rawText = child.getTextContent();
+    if (!rawText) continue;
+    const text = rawText.replace(/\s+/g, ' ');
     if (!text) continue;
     let tf = 0;
-    let uncontracted = false;
     if (typeof child.hasFormat === 'function') {
       if (child.hasFormat('bold')) tf |= TF.bold;
       if (child.hasFormat('italic')) tf |= TF.italic;
       if (child.hasFormat('underline')) tf |= TF.underline;
-      if (child.hasFormat('code')) uncontracted = true;
     }
-    if (tf || uncontracted) hasEmph = true;
-    const run = { type: 'text', text, tf };
-    if (uncontracted) run.uncontracted = true;
-    runs.push(run);
+    if (tf) hasEmph = true;
+    runs.push({ type: 'text', text, tf });
   }
   return { runs, hasEmph, hasMath };
 }
 function paraBlock(node) {
   const { runs, hasEmph, hasMath } = nodeToRuns(node);
   if (!runs.length) return null;
-  const banaStyle = (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null) || node.__banaStyle || null;
+  const banaStyle = typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null;
   const block = (hasMath || hasEmph) ? { type: 'para', segments: runs }
     : { type: 'para', text: node.getTextContent().replace(/\s+/g, ' ').trim() };
   if (banaStyle && banaStyle !== 'body') {
@@ -1456,68 +1990,13 @@ function paraBlock(node) {
     else if (banaStyle === 'caption') block.type = 'caption';
     else if (banaStyle === 'footnote') block.type = 'footnote';
     else if (banaStyle === 'attribution') block.type = 'attribution';
-    else if (banaStyle === 'stage') block.type = 'stage';
-    else if (banaStyle === 'dialogue') block.type = 'play';
-    else if (banaStyle === 'verse' || banaStyle === 'poem') { block.type = 'play'; block.subtype = 'verse'; }
+    else if (banaStyle === 'stage' || banaStyle === 'play-stage') block.type = 'stage';
+    else if (banaStyle === 'dialogue' || banaStyle === 'play-speaker' || banaStyle === 'speaker') { block.type = 'play'; block.subtype = 'prose'; }
+    else if (banaStyle === 'verse' || banaStyle === 'poem' || banaStyle === 'play-verse') { block.type = 'play'; block.subtype = 'verse'; }
+    else if (banaStyle === 'quote') { block.type = 'para'; block.style = 'quote'; }
   }
   return block;
 }
-function extractListBlock(node) {
-  const listType = typeof node.getListType === 'function' ? node.getListType() : null;
-  const listKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) ||
-                   (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
-  const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
-  const isExercise = listKind === 'exercise' || (typeof node.getBanaStyle === 'function' && node.getBanaStyle() === 'exercise');
-  const isOrdered = listType === 'number' || (isExercise && !isPlain);
-
-  const items = [];
-  let n = 0;
-  for (const li of node.getChildren()) {
-    const { runs, hasEmph, hasMath } = nodeToRuns(li);        // keep list-item emphasis + inline maths
-    const textContent = li.getTextContent().replace(/\s+/g, ' ').trim();
-    if (!runs.length && !textContent) continue;
-    n++;
-    const item = (hasEmph || hasMath) ? { segments: runs, text: textContent } : { text: textContent };
-
-    if (isOrdered && !isPlain) {
-      const val = typeof li.getValue === 'function' ? li.getValue() : null;
-      item.marker = `${val && val > 0 ? val : n}.`;
-    }
-
-    const page = (typeof li.getPage === 'function' ? li.getPage() : null) || li.__page;
-    if (page) {
-      item.page = page;
-    } else if (isPlain || listKind === 'toc') {
-      const m = textContent.match(/\s+(\d+|[ivxlcdm]+)$/i);
-      if (m) {
-        item.page = m[1];
-        item.text = textContent.slice(0, m.index).trim();
-      }
-    }
-
-    const lvl = typeof li.getLevel === 'function' ? li.getLevel() : (li.__level || 0);
-    if (lvl > 0) item.level = lvl;
-
-    const itemStyle = typeof li.getBanaStyle === 'function' ? li.getBanaStyle() : li.__banaStyle;
-    if (itemStyle) item.style = itemStyle;
-
-    items.push(item);
-  }
-
-  if (items.length) {
-    const block = { type: 'list', items };
-    if (listKind) {
-      block.kind = listKind;
-      block.style = listKind;
-    } else if (isPlain) {
-      block.kind = 'toc';
-      block.style = 'toc';
-    }
-    return block;
-  }
-  return null;
-}
-
 function buildModel() {
   const blocks = [];
   const keys = [];                                     // parallel: the Lexical node key that produced blocks[i]
@@ -1525,25 +2004,83 @@ function buildModel() {
     const before = blocks.length;
     const nodeKey = node.getKey();
     if ($isBreakNode(node)) {
-      blocks.push({ type: 'indicator', kind: 'asterisks', _key: nodeKey });
+      blocks.push({ type: 'indicator', kind: typeof node.getKind === 'function' ? node.getKind() : 'asterisks', _key: nodeKey });
     } else if ($isPrintPageNode(node)) {
       blocks.push({ type: 'pagenum', page: node.getPage(), _key: nodeKey });
+    } else if ($isSidebarNode(node)) {
+      const innerBlocks = [];
+      for (const child of node.getChildren()) {
+        const cKey = child.getKey();
+        if ($isHeadingNode(child)) {
+          const { runs, hasEmph, hasMath } = nodeToRuns(child);
+          const text = child.getTextContent().replace(/\s+/g, ' ').trim();
+          if (runs.length && (hasEmph || hasMath)) {
+            innerBlocks.push({ type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), segments: runs, text, _key: cKey });
+          } else if (text) {
+            innerBlocks.push({ type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), text, _key: cKey });
+          }
+        } else if ($isListNode(child)) {
+          const listType = typeof child.getListType === 'function' ? child.getListType() : null;
+          const listKind = (typeof child.getListKind === 'function' ? child.getListKind() : null) || (typeof child.getBanaStyle === 'function' ? child.getBanaStyle() : null);
+          const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
+          const isExercise = listKind === 'exercise' || (typeof child.getBanaStyle === 'function' && child.getBanaStyle() === 'exercise');
+          const ordered = listType === 'number' || (isExercise && !isPlain);
+          const items = [];
+          const counters = [0, 0, 0, 0, 0];
+          for (const li of child.getChildren()) {
+            const { runs, hasEmph, hasMath } = nodeToRuns(li);
+            if (!runs.length) continue;
+            const lvl = Math.max(0, Math.min(4, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));
+            counters[lvl]++;
+            for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
+            const count = counters[lvl];
+            let marker = null;
+            if (ordered && !isPlain) {
+              if (lvl === 0) marker = `${count}.`;
+              else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
+              else if (lvl === 2) {
+                const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
+                marker = `${romans[count - 1] || count}.`;
+              } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
+              else marker = `(${count})`;
+            }
+            const item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
+            if (marker) item.marker = marker;
+            const page = typeof li.getPage === 'function' ? li.getPage() : null;
+            if (page) item.page = page;
+            if (lvl > 0) item.level = lvl;
+            items.push(item);
+          }
+          if (items.length) {
+            const blk = { type: 'list', items, _key: cKey };
+            if (listKind) { blk.kind = listKind; blk.style = listKind; }
+            innerBlocks.push(blk);
+          }
+        } else if ($isTableNode(child)) {
+          innerBlocks.push({ type: 'table', headers: child.getHeaders(), rows: child.getRows(), format: child.getFormat(), _key: cKey });
+        } else {
+          const b = paraBlock(child);
+          if (b) { b._key = cKey; innerBlocks.push(b); }
+        }
+      }
+      blocks.push({
+        type: 'box',
+        title: node.getTitle() || undefined,
+        blocks: innerBlocks.length ? innerBlocks : undefined,
+        _key: nodeKey
+      });
     } else if ($isTableNode(node)) {
+      const format = typeof node.getFormat === 'function' ? node.getFormat() : 'spatial';
       const tblBlock = {
         type: 'table',
         headers: node.getHeaders(),
         rows: node.getRows(),
         _key: nodeKey
       };
-      const fmt = node.getFormat();
-      if (fmt && fmt !== 'auto') {
-        tblBlock.format = fmt;
-        tblBlock.style = `table-${fmt}`;
+      if (format && format !== 'auto') {
+        tblBlock.format = format;
+        tblBlock.style = `table-${format}`;
       }
-      const cap = node.getCaption();
-      if (cap) tblBlock.caption = cap;
-      const tn = node.getTabletn();
-      if (tn) tblBlock.tabletn = tn;
       blocks.push(tblBlock);
     } else if ($isGraphicNode(node)) {
       const sz = node.getSize();
@@ -1561,61 +2098,52 @@ function buildModel() {
         _key: nodeKey
       });
     } else if ($isHeadingNode(node)) {
+      const { runs, hasEmph, hasMath } = nodeToRuns(node);
       const text = node.getTextContent().replace(/\s+/g, ' ').trim();
-      if (text) blocks.push({ type: 'heading', level: Math.min(3, Number(node.getTag().slice(1)) || 1), text, _key: nodeKey });
+      if (runs.length && (hasEmph || hasMath)) {
+        blocks.push({ type: 'heading', level: Math.min(3, Number(node.getTag().slice(1)) || 1), segments: runs, text, _key: nodeKey });
+      } else if (text) {
+        blocks.push({ type: 'heading', level: Math.min(3, Number(node.getTag().slice(1)) || 1), text, _key: nodeKey });
+      }
     } else if ($isListNode(node)) {
-      const block = extractListBlock(node);
-      if (block) {
-        block._key = nodeKey;
-        blocks.push(block);
-      }
-    } else if ($isSidebarNode(node)) {
-      const innerBlocks = [];
-      let boxTitle = node.getTitle() || null;
-      for (const child of node.getChildren()) {
-        if ($isHeadingNode(child)) {
-          const text = child.getTextContent().replace(/\s+/g, ' ').trim();
-          const { runs, hasEmph, hasMath } = nodeToRuns(child);
-          if (!boxTitle && innerBlocks.length === 0) {
-            boxTitle = text;
-          }
-          const hBlock = (hasEmph || hasMath) && runs.length
-            ? { type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), text, segments: runs }
-            : { type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), text };
-          innerBlocks.push(hBlock);
-        } else if ($isListNode(child)) {
-          const listBlock = extractListBlock(child);
-          if (listBlock) innerBlocks.push(listBlock);
-        } else if ($isTableNode(child)) {
-          const tblBlock = {
-            type: 'table',
-            headers: child.getHeaders(),
-            rows: child.getRows()
-          };
-          const fmt = child.getFormat();
-          if (fmt && fmt !== 'auto') {
-            tblBlock.format = fmt;
-            tblBlock.style = `table-${fmt}`;
-          }
-          const cap = child.getCaption();
-          if (cap) tblBlock.caption = cap;
-          const tn = child.getTabletn();
-          if (tn) tblBlock.tabletn = tn;
-          innerBlocks.push(tblBlock);
-        } else if ($isGraphicNode(child)) {
-          innerBlocks.push({ type: 'graphic', svg: child.getSvg(), alt: child.getAlt(), title: child.getTitle(), textures: child.getTextures(), brailleLabels: child.getBrailleLabels(), size: child.getSize() });
-        } else {
-          const p = paraBlock(child);
-          if (p) innerBlocks.push(p);
+      const listType = typeof node.getListType === 'function' ? node.getListType() : null;
+      const listKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) ||
+                       (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
+      const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
+      const isExercise = listKind === 'exercise' || (typeof node.getBanaStyle === 'function' && node.getBanaStyle() === 'exercise');
+      const ordered = listType === 'number' || (isExercise && !isPlain);
+      const items = [];
+      const counters = [0, 0, 0, 0, 0];
+      for (const li of node.getChildren()) {
+        const { runs, hasEmph, hasMath } = nodeToRuns(li);        // keep list-item emphasis + inline maths
+        if (!runs.length) continue;
+        const lvl = Math.max(0, Math.min(4, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));
+        counters[lvl]++;
+        for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
+        const count = counters[lvl];
+        let marker = null;
+        if (ordered && !isPlain) {
+          if (lvl === 0) marker = `${count}.`;
+          else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
+          else if (lvl === 2) {
+            const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
+            marker = `${romans[count - 1] || count}.`;
+          } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
+          else marker = `(${count})`;
         }
+        const item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
+        if (marker) item.marker = marker;
+        const page = typeof li.getPage === 'function' ? li.getPage() : null;
+        if (page) item.page = page;
+        if (lvl > 0) item.level = lvl;
+        items.push(item);
       }
-      const boxBlock = {
-        type: 'box',
-        _key: nodeKey
-      };
-      if (boxTitle) boxBlock.title = boxTitle;
-      if (innerBlocks.length) boxBlock.blocks = innerBlocks;
-      blocks.push(boxBlock);
+      if (items.length) {
+        const blk = { type: 'list', items, _key: nodeKey };
+        if (listKind) { blk.kind = listKind; blk.style = listKind; }
+        else if (isPlain) { blk.kind = 'toc'; blk.style = 'toc'; }
+        blocks.push(blk);
+      }
     } else {
       const b = paraBlock(node);
       if (b) {
@@ -1629,57 +2157,244 @@ function buildModel() {
   return { title: firstHeading ? firstHeading.text : null, blocks, keys };
 }
 
-// ---- toolbar state & style inspector ----
-function updateStyleInspector(block) {
-  const badge = $id('styleInspector');
-  if (!badge) return;
-  const profile = settings?.mode || 'bana';
-  const label = typeof formatStyleInspectorBadge === 'function'
-    ? formatStyleInspectorBadge(block, profile)
-    : `Style: ${block} | Profile: ${profile.toUpperCase()}`;
-  badge.textContent = label;
-  badge.title = `Active BANA Style: ${label}. Press Alt+Up/Down to cycle styles, or click to change.`;
-  badge.setAttribute('aria-label', `Active BANA Style: ${label}`);
-}
-
-function refreshToolbar(targetBlockIdx = null) {
+// ---- toolbar state ----
+function refreshToolbar(explicitTarget) {
   editor.getEditorState().read(() => {
     const sel = $getSelection();
     let block = 'p', b = false, i = false, u = false;
-    let top = null;
+
+    // 1. Unconditionally sync bold / italic / underline from Lexical selection
     if ($isRangeSelection(sel)) {
-      top = sel.anchor.getNode().getTopLevelElement();
-      b = sel.hasFormat('bold'); i = sel.hasFormat('italic'); u = sel.hasFormat('underline');
+      b = sel.hasFormat('bold');
+      i = sel.hasFormat('italic');
+      u = sel.hasFormat('underline');
+      if (sel.isCollapsed()) {
+        const anchorNode = sel.anchor.getNode();
+        if (anchorNode && $isTextNode(anchorNode)) {
+          b = anchorNode.hasFormat('bold');
+          i = anchorNode.hasFormat('italic');
+          u = anchorNode.hasFormat('underline');
+        }
+      }
+    } else if (lastActiveEditorSelection?.anchorKey) {
+      const node = $getNodeByKey(lastActiveEditorSelection.anchorKey);
+      if (node && $isTextNode(node)) {
+        b = node.hasFormat('bold');
+        i = node.hasFormat('italic');
+        u = node.hasFormat('underline');
+      }
     } else {
-      const root = $getRoot();
-      const children = root.getChildren();
-      const idx = (typeof targetBlockIdx === 'number' && targetBlockIdx >= 0) ? targetBlockIdx : 0;
-      top = children[idx] || children[0] || null;
+      const domSel = window.getSelection();
+      const activeDomNode = (explicitTarget && editorEl.contains(explicitTarget))
+        ? explicitTarget
+        : ((domSel && domSel.anchorNode && editorEl.contains(domSel.anchorNode))
+          ? (domSel.anchorNode.nodeType === 1 ? domSel.anchorNode : domSel.anchorNode.parentElement)
+          : ((document.activeElement && editorEl.contains(document.activeElement))
+            ? document.activeElement
+            : null));
+
+      // DOM fallback for bold/italic/underline ONLY when no Lexical selection available
+      if (activeDomNode) {
+        if (activeDomNode.closest('b, strong, .ed-b') || activeDomNode.style?.fontWeight === 'bold') b = true;
+        if (activeDomNode.closest('i, em, .ed-i') || activeDomNode.style?.fontStyle === 'italic') i = true;
+        if (activeDomNode.closest('u, ins, .ed-u') || activeDomNode.style?.textDecoration?.includes('underline')) u = true;
+      }
     }
-    if (top && $isHeadingNode(top)) {
-      block = top.getTag();
-    } else if (top && $isListNode(top)) {
-      const lt = top.getListType();
-      const kind = typeof top.getListKind === 'function' ? top.getListKind() : null;
-      block = (lt === 'plain' || kind === 'toc') ? 'toc' : (kind === 'exercise' ? 'exercise' : (lt === 'number' ? 'number' : 'bullet'));
-    } else if (top && $isSidebarNode(top)) {
-      block = 'sidebar';
-    } else if (top && typeof top.getBanaStyle === 'function') {
-      const bs = top.getBanaStyle();
-      if (bs) block = (bs === 'verse') ? 'poem' : bs;
+
+    const domSel = window.getSelection();
+    const activeDomNode = (explicitTarget && editorEl.contains(explicitTarget))
+      ? explicitTarget
+      : ((domSel && domSel.anchorNode && editorEl.contains(domSel.anchorNode))
+        ? (domSel.anchorNode.nodeType === 1 ? domSel.anchorNode : domSel.anchorNode.parentElement)
+        : ((document.activeElement && editorEl.contains(document.activeElement))
+          ? document.activeElement
+          : null));
+
+    // 2. Resolve block style: Innermost-first from Lexical AST if range selection available
+    let detectedBlock = null;
+    if ($isRangeSelection(sel)) {
+      let node = sel.anchor.getNode();
+      let hasContainer = false;
+      while (node && node !== $getRoot()) {
+        if ($isTableNode(node)) {
+          detectedBlock = (typeof node.getFormat === 'function' && node.getFormat() === 'listed') ? 'table-listed' : 'table-spatial';
+          break;
+        }
+        if ($isHeadingNode(node)) {
+          detectedBlock = node.getTag().toLowerCase();
+          break;
+        }
+        if ($isListNode(node)) {
+          const lKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) || (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
+          detectedBlock = lKind || node.getListType() || 'bullet';
+          break;
+        }
+        if ($isQuoteNode(node)) {
+          detectedBlock = 'quote';
+          break;
+        }
+        if ($isBreakNode(node)) {
+          detectedBlock = 'break';
+          break;
+        }
+        if ($isPrintPageNode(node)) {
+          detectedBlock = 'print-page';
+          break;
+        }
+        if (typeof node.getBanaStyle === 'function') {
+          const bs = node.getBanaStyle();
+          if (bs && bs !== 'body' && bs !== 'sidebar') {
+            detectedBlock = bs;
+            break;
+          }
+        }
+        if ($isSidebarNode(node)) {
+          hasContainer = true;
+        }
+        node = node.getParent ? node.getParent() : null;
+      }
+      if (!detectedBlock && hasContainer) {
+        detectedBlock = 'sidebar';
+      }
+    } else if (lastActiveEditorSelection?.anchorKey) {
+      let node = $getNodeByKey(lastActiveEditorSelection.anchorKey);
+      let hasContainer = false;
+      while (node && node !== $getRoot()) {
+        if ($isTableNode(node)) {
+          detectedBlock = (typeof node.getFormat === 'function' && node.getFormat() === 'listed') ? 'table-listed' : 'table-spatial';
+          break;
+        }
+        if ($isHeadingNode(node)) {
+          detectedBlock = node.getTag().toLowerCase();
+          break;
+        }
+        if ($isListNode(node)) {
+          const lKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) || (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
+          const rawType = (typeof node.getListType === 'function' ? node.getListType() : null);
+          const mappedKind = (lKind === 'plain' ? 'index' : lKind);
+          detectedBlock = mappedKind || (rawType === 'plain' ? 'index' : rawType) || 'bullet';
+          break;
+        }
+        if ($isQuoteNode(node)) {
+          detectedBlock = 'quote';
+          break;
+        }
+        if ($isBreakNode(node)) {
+          detectedBlock = 'break';
+          break;
+        }
+        if ($isPrintPageNode(node)) {
+          detectedBlock = 'print-page';
+          break;
+        }
+        if (typeof node.getBanaStyle === 'function') {
+          const bs = node.getBanaStyle();
+          if (bs && bs !== 'body' && bs !== 'sidebar') {
+            detectedBlock = (bs === 'plain' ? 'index' : bs);
+            break;
+          }
+        }
+        if ($isSidebarNode(node)) {
+          hasContainer = true;
+        }
+        node = node.getParent ? node.getParent() : null;
+      }
+      if (!detectedBlock && hasContainer) {
+        detectedBlock = 'sidebar';
+      }
     }
-    const selectEl = $id('blockStyle');
-    if (selectEl) {
-      const validOptions = Array.from(selectEl.options).map((o) => o.value);
-      selectEl.value = validOptions.includes(block) ? block : 'p';
+
+    // 3. If not detected from Lexical AST (e.g. focused on custom widget input), resolve from DOM innermost first
+    if (!detectedBlock && activeDomNode && editorEl.contains(activeDomNode) && activeDomNode !== editorEl) {
+      const tableEl = activeDomNode.closest('.doc-table-block, .emboss-table-card, .editor-table-widget, table') || (activeDomNode.classList.contains('table-cell-input') ? activeDomNode : null);
+      if (tableEl) {
+        const be = activeDomNode.closest('[data-block-idx]');
+        const bi = be ? Number(be.dataset.blockIdx) : NaN;
+        const bModel = !Number.isNaN(bi) ? lastModel?.blocks?.[bi] : null;
+        const format = bModel?.format || bModel?.style || 'spatial';
+        detectedBlock = (format === 'listed' || format === 'table-listed') ? 'table-listed' : 'table-spatial';
+      } else {
+        // Check innermost styled element first (excluding sidebar container)
+        const banaEl = activeDomNode.closest('[data-bana-style]:not(aside):not(.emboss-sidebar-card):not(.emboss-box-card)');
+        if (banaEl) {
+          const bs = banaEl.dataset.banaStyle;
+          detectedBlock = (bs === 'plain' ? 'index' : bs);
+        } else {
+          const hEl = activeDomNode.closest('h1, h2, h3, h4, h5, h6');
+          if (hEl) {
+            detectedBlock = hEl.tagName.toLowerCase();
+          } else {
+            const listEl = activeDomNode.closest('ul, ol');
+            if (listEl) {
+              const lk = listEl.dataset.listKind || listEl.dataset.banaStyle;
+              const mappedLk = (lk === 'plain' ? 'index' : lk);
+              const rawType = listEl.dataset.listType;
+              detectedBlock = mappedLk || (rawType === 'plain' ? 'index' : (listEl.tagName === 'OL' ? 'number' : 'bullet'));
+            } else if (activeDomNode.closest('blockquote')) {
+              detectedBlock = 'quote';
+            } else if (activeDomNode.closest('.doc-break')) {
+              detectedBlock = 'break';
+            } else if (activeDomNode.closest('.doc-print-page')) {
+              detectedBlock = 'print-page';
+            } else {
+              // If no inner style, check if inside sidebar container
+              const sidebarEl = activeDomNode.closest('aside, .emboss-sidebar-card, .emboss-box-card, [data-bana-style="sidebar"]');
+              if (sidebarEl) {
+                detectedBlock = 'sidebar';
+              }
+            }
+          }
+        }
+      }
     }
-    updateStyleInspector(block);
+
+    block = detectedBlock || 'p';
+
+    const bs = $id('blockStyle');
+    if (bs) {
+      const validOptions = Array.from(bs.options).map((o) => o.value);
+      if (validOptions.includes(block)) {
+        bs.value = block;
+      } else {
+        bs.value = 'p';
+      }
+    }
+    const si = $id('styleInspector');
+    if (si) {
+      si.textContent = formatStyleInspectorBadge(block, settings.profile || settings.mode || 'bana');
+    }
     $id('btnBold')?.setAttribute('aria-pressed', String(b));
     $id('btnItalic')?.setAttribute('aria-pressed', String(i));
     $id('btnUnderline')?.setAttribute('aria-pressed', String(u));
+
+    // Check if caret/selection is inside a list item to update Indent/Outdent buttons
+    let activeLi = null;
+    if ($isRangeSelection(sel)) {
+      let n = sel.anchor.getNode();
+      while (n && n !== $getRoot()) {
+        if ($isListItemNode(n)) { activeLi = n; break; }
+        n = n.getParent ? n.getParent() : null;
+      }
+    } else if (lastActiveEditorSelection?.anchorKey) {
+      let n = $getNodeByKey(lastActiveEditorSelection.anchorKey);
+      while (n && n !== $getRoot()) {
+        if ($isListItemNode(n)) { activeLi = n; break; }
+        n = n.getParent ? n.getParent() : null;
+      }
+    } else if (activeDomNode && editorEl.contains(activeDomNode)) {
+      const liEl = activeDomNode.closest('li');
+      if (liEl) {
+        const lvl = parseInt(liEl.dataset.level || '0', 10) || 0;
+        activeLi = { getLevel: () => lvl };
+      }
+    }
+    const curLevel = activeLi ? (activeLi.getLevel() || 0) : 0;
+    const btnIndent = $id('btnIndent');
+    const btnOutdent = $id('btnOutdent');
+    if (btnIndent) btnIndent.disabled = !activeLi || (curLevel >= 4);
+    if (btnOutdent) btnOutdent.disabled = !activeLi || (curLevel <= 0);
   });
 }
-
 
 // ---- live braille render (honours the shared settings) ----
 let lastBrf = '';
@@ -1754,20 +2469,27 @@ function currentFormatOpts() {
     };
 }
 async function render() {
+  if (timer) {
+    clearTimeout(timer);
+    timer = null;
+  }
   try {
     const model = editor.getEditorState().read(buildModel);
     const table = activeTable;
     const o = currentFormatOpts();
     const trace = {};
-    const brf = formatDocument(model, { ...o, trace });
+    const brf = await formatDocumentAsync(model, { ...o, trace });
     lastModel = model; lastFormatOpts = o;
     lastTrace = trace;
     lastBrf = brf;
     lastKeys = model.keys;
+    window.lastModel = lastModel;
+    window.lastFormatOpts = lastFormatOpts;
+    window.lastTrace = lastTrace;
+    window.lastBrf = lastBrf;
+    window.cellText = cellText;
     const getPrintTextForBlock = (b) => {
       if (!b) return '';
-      if (b.type === 'pagenum') return `Page ${b.page || ''}`;
-      if (b.type === 'indicator') return '∗ ∗ ∗';
       if (typeof b.text === 'string' && b.text) return b.text;
       if (Array.isArray(b.segments)) return b.segments.map((s) => (s.text != null ? s.text : (s.latex != null ? s.latex : ''))).join('');
       if (typeof b.latex === 'string') return b.latex;
@@ -1823,8 +2545,7 @@ async function render() {
         listItemIdx = 0;
       }
     }
-    const scrollTarget = brlStackEl || brailleEl;
-    const prevBrailleScroll = scrollTarget ? scrollTarget.scrollTop : 0;
+    const prevBrailleScroll = brailleEl.scrollTop;
     renderBraille(brailleEl, brf, {
       rows: trace.rows, rowCells: trace.rowCells, cells: (settings.cells | 0) || (EMBOSSER_PRESETS[settings.embosser]?.cells || 38),
       cellW: isManualZoom ? brailleCellW : undefined,   // Ctrl/⌘+Shift+= / − zoom; auto-fit otherwise
@@ -1834,23 +2555,8 @@ async function render() {
       embosser: settings.embosser,
       tactileGraphics: settings.tactileGraphics,
     });
-    if (brlInputEl && allBrfLines) {
-      const brailleText = settings.asciiBraille
-        ? allBrfLines.join('\n')
-        : allBrfLines.map(l => brfToUnicodeBraille(l)).join('\n');
-      lastRenderedBrailleText = brailleText;
-      if (!isReconcilingBrailleToPrint && brlInputEl.value !== brailleText) {
-        const hadFocus = document.activeElement === brlInputEl;
-        const selStart = brlInputEl.selectionStart;
-        const selEnd = brlInputEl.selectionEnd;
-        brlInputEl.value = brailleText;
-        if (hadFocus) {
-          brlInputEl.setSelectionRange(selStart, selEnd);
-        }
-      }
-    }
-    if (scrollTarget && (!reader || !reader.speaking)) {
-      scrollTarget.scrollTop = prevBrailleScroll;
+    if (!reader || !reader.speaking) {
+      brailleEl.scrollTop = prevBrailleScroll;
     }
     // A re-render mid-read (braille resize, settings, TOC toggle) rebuilds the braille
     // DOM and drops the karaoke classes. Keep playback going and re-tint the line being
@@ -1869,7 +2575,7 @@ async function render() {
     syncCaretWithBraille();                         // re-apply word/math highlights on freshly rendered DOM
     runProofread(model, table);                     // round-trip check → badge + flag lines to review
     const pages = brf ? brf.split('\f').length : 0;
-    setStatus(`${settings.mode.toUpperCase()} · G${settings.grade === 'g1' ? 1 : 2} · ${settings.cells}×${settings.lines} · ${model.blocks.length} block(s) · ${pages} page(s)${settings.toc ? ' · TOC' : ''}`);
+    updateCaretLocation();
     const graphicMap = new Map();
     if (model.blocks && trace.rows) {
       for (let bi = 0; bi < model.blocks.length; bi++) {
@@ -1878,14 +2584,20 @@ async function render() {
           const lineIdx = trace.rows.findIndex(rBi => rBi === bi);
           const startLine = lineIdx >= 0 ? lineIdx : 0;
           const matrix = await rasterizeSvgToDotPadCells(b.svg);
+          const monarchMatrix = await rasterizeSvgToMonarchCells(b.svg);
           const m = String(b.svg).match(/data-braille-line=["']([^"']+)["']/);
           const title = (m && m[1]) || (b.title || b.alt || 'Graphic');
           const uebTitle = (m && m[1]) ? m[1] : (defaultBrailleTranslator ? defaultBrailleTranslator(title).slice(0, 20).padEnd(20, '⠀') : title.slice(0, 20));
-          graphicMap.set(startLine, { matrix, title: uebTitle });
+          graphicMap.set(startLine, { matrix, monarchMatrix, title: uebTitle });
         }
       }
     }
     await tactileDisplay.updateBraille(allBrfLines, null, graphicMap);
+    if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
+      drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+    } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
+      drawDotPadEmulator(tactileDisplay.getDotPadActiveFrame());
+    }
   } catch (e) {
     console.error(e);
     const msg = String((e && e.message) || e);       // tolerate a non-Error throw (no .message)
@@ -1895,7 +2607,7 @@ async function render() {
   }
 }
 const scheduleRender = () => { clearTimeout(timer); timer = setTimeout(render, 200); };
-editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves, tags }) => {
+editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves }) => {
   refreshToolbar();
   linkCursor();
   try {
@@ -1911,17 +2623,6 @@ editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves, tags }
       }
     });
   } catch (_) {}
-
-  const isFromBraille = (tags && tags.has('braille-sync')) || isReconcilingBrailleToPrint;
-  if (isFromBraille) {
-    editorState.read(() => {
-      lastModel = buildModel();
-    });
-    tagPrintBlocks(lastModel?.keys);
-    buildCellText(lastModel);
-    return;
-  }
-
   // Only re-render when the CONTENT changed. A selection-only update (clicking to
   // place the caret) must NOT re-render — that rebuilds the braille DOM and would
   // wipe a just-made word/cell link highlight (it flashed then vanished before).
@@ -1939,12 +2640,49 @@ let lastKeys = [];
 function tagPrintBlocks(keys) {
   lastKeys = keys || [];
   editorEl.querySelectorAll('[data-block-idx]').forEach((el) => el.removeAttribute('data-block-idx'));
-  const children = Array.from(editorEl.children);
-  (keys || []).forEach((key, i) => {
-    let el = editor.getElementByKey(key);
-    if (!el && children[i]) el = children[i];
-    if (el) el.dataset.blockIdx = String(i);
+  editorEl.querySelectorAll('[data-unit-idx]').forEach((el) => {
+    el.removeAttribute('data-unit-idx');
+    el.removeAttribute('data-parent-block-idx');
   });
+  if (keys && keys.length) {
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const el = key ? editor.getElementByKey(key) : null;
+      if (el) {
+        el.dataset.blockIdx = String(i);
+        const b = lastModel?.blocks?.[i];
+        if (b && (b.type === 'box' || b.type === 'sidebar') && Array.isArray(b.blocks)) {
+          const sideChildren = Array.from(el.children);
+          b.blocks.forEach((cb, u) => {
+            const childEl = (cb && cb._key ? editor.getElementByKey(cb._key) : null) || sideChildren[u];
+            if (childEl) {
+              childEl.dataset.unitIdx = String(u);
+              childEl.dataset.parentBlockIdx = String(i);
+            }
+          });
+        }
+      }
+    }
+  } else {
+    const children = Array.from(editorEl.children);
+    for (let i = 0; i < children.length; i++) {
+      const el = children[i];
+      if (el) {
+        el.dataset.blockIdx = String(i);
+        const b = lastModel?.blocks?.[i];
+        if (b && (b.type === 'box' || b.type === 'sidebar') && Array.isArray(b.blocks)) {
+          const sideChildren = Array.from(el.children);
+          b.blocks.forEach((cb, u) => {
+            const childEl = sideChildren[u];
+            if (childEl) {
+              childEl.dataset.unitIdx = String(u);
+              childEl.dataset.parentBlockIdx = String(i);
+            }
+          });
+        }
+      }
+    }
+  }
 }
 function clearLink() {
   if (brailleEl._virtualBraille?.isVirtualized()) {
@@ -1997,6 +2735,22 @@ function linkByBlock(idx, autoScroll = false) {
     pe.classList.add('print-linked');
     if (autoScroll && !isElementVisibleIn(pe, editorEl)) {
       pe.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // Synchronize tactile displays (Monarch / DotPad)
+  let lineIdx = -1;
+  if (lastTrace?.rows) lineIdx = lastTrace.rows.indexOf(idx);
+  if (lineIdx < 0 && brailleEl._virtualBraille?.isVirtualized()) {
+    const it = brailleEl._virtualBraille.getItems().find(item => item.block === idx);
+    if (it && typeof it.rowIndex === 'number') lineIdx = it.rowIndex;
+  }
+  if (lineIdx >= 0 && typeof tactileDisplay !== 'undefined') {
+    tactileDisplay.scrollToLine(lineIdx);
+    if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
+      drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+    } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
+      drawDotPadEmulator(tactileDisplay.getDotPadActiveFrame());
     }
   }
 }
@@ -2054,46 +2808,74 @@ function editorTopBlock() {
   }
 
   const best = children[foundIdx] || children[0];
-  const bestOffset = best.offsetTop - targetY;
+  const blockH = Math.max(1, best.offsetHeight || 20);
+  const scrolledInsideBlock = Math.max(0, Math.min(blockH, targetY - best.offsetTop));
+  const fraction = scrolledInsideBlock / blockH;
   const idx = Number(best.getAttribute('data-block-idx') ?? best.dataset?.blockIdx ?? foundIdx);
-  return Number.isNaN(idx) ? { idx: foundIdx, offset: 0 } : { idx, offset: bestOffset };
+  return Number.isNaN(idx) ? { idx: foundIdx, fraction: 0 } : { idx, fraction };
 }
 
 function brailleTopBlock() {
   if (isModalOpen()) return null;
-  const container = brlStackEl || brailleEl;
   if (brailleEl._virtualBraille?.isVirtualized()) {
-    const idx = brailleEl._virtualBraille.getVisibleBlock();
-    if (idx == null) return null;
-    const off = (brailleEl._virtualBraille.getBlockOffset(idx) ?? container.scrollTop) - container.scrollTop;
-    return { idx, offset: off };
+    const sTop = brailleEl.scrollTop;
+    const items = brailleEl._virtualBraille.getItems();
+    let low = 0, high = items.length - 1, foundIdx = 0;
+    while (low <= high) {
+      const mid = (low + high) >> 1;
+      if (items[mid].top <= sTop + 20) {
+        foundIdx = mid;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    const it = items[foundIdx] || items[0];
+    if (it.block == null) return null;
+    const blockIdx = it.block;
+    const blockTop = brailleEl._virtualBraille.getBlockOffset(blockIdx) ?? it.top;
+    const blockH = brailleEl._virtualBraille.getBlockHeight(blockIdx) || 20;
+    const fraction = Math.max(0, Math.min(1, (sTop - blockTop) / blockH));
+    return { idx: blockIdx, fraction };
   }
-  const cTop = container.getBoundingClientRect().top;
+  const cTop = brailleEl.getBoundingClientRect().top;
+  const rows = Array.from(brailleEl.querySelectorAll('.brl-row[data-block]'));
+  if (!rows.length) return null;
   let best = null, bestScore = Infinity;
-  brailleEl.querySelectorAll('.brl-row[data-block]').forEach((el) => {
+  rows.forEach((el) => {
     const d = el.getBoundingClientRect().top - cTop;
     const score = d >= -1 ? d : 1e6 - d;
     if (score < bestScore) { bestScore = score; best = el; }
   });
   if (!best) return null;
   const idx = Number(best.getAttribute('data-block'));
-  return Number.isNaN(idx) ? null : { idx, offset: best.getBoundingClientRect().top - cTop };
+  if (Number.isNaN(idx)) return null;
+  const blockRows = rows.filter(r => Number(r.getAttribute('data-block')) === idx);
+  const firstRow = blockRows[0];
+  const lastRow = blockRows[blockRows.length - 1];
+  const totalH = Math.max(1, (lastRow.offsetTop + lastRow.offsetHeight) - firstRow.offsetTop);
+  const fraction = Math.max(0, Math.min(1, (brailleEl.scrollTop - firstRow.offsetTop) / totalH));
+  return { idx, fraction };
 }
 
 function syncBrailleToEditor() {
   if (isModalOpen()) return;
   const anchor = editorTopBlock();
   if (!anchor) return;
-  const container = brlStackEl || brailleEl;
   if (brailleEl._virtualBraille?.isVirtualized()) {
-    brailleEl._virtualBraille.scrollToBlock(anchor.idx, anchor.offset);
+    brailleEl._virtualBraille.scrollToBlock(anchor.idx, anchor.fraction);
   } else {
-    const el = brailleEl.querySelector(`.brl-row[data-block="${anchor.idx}"]`);
-    if (!el) return;
-    const delta = (el.getBoundingClientRect().top - container.getBoundingClientRect().top) - anchor.offset;
-    if (Math.abs(delta) >= 1) container.scrollTop += delta;
+    const rows = Array.from(brailleEl.querySelectorAll(`.brl-row[data-block="${anchor.idx}"]`));
+    if (!rows.length) return;
+    const firstRow = rows[0];
+    const lastRow = rows[rows.length - 1];
+    const totalBrailleH = (lastRow.offsetTop + lastRow.offsetHeight) - firstRow.offsetTop;
+    const targetScroll = firstRow.offsetTop + (anchor.fraction * totalBrailleH);
+    if (Math.abs(brailleEl.scrollTop - targetScroll) >= 1) {
+      brailleEl.scrollTop = targetScroll;
+    }
   }
-  if (currentBrailleTab === 'dotpad' && typeof tactileDisplay !== 'undefined') {
+  if ((currentBrailleTab === 'dotpad' || currentBrailleTab === 'monarch') && typeof tactileDisplay !== 'undefined') {
     let lineIdx = -1;
     if (lastTrace?.rows) lineIdx = lastTrace.rows.indexOf(anchor.idx);
     if (lineIdx < 0 && brailleEl._virtualBraille?.isVirtualized()) {
@@ -2102,7 +2884,9 @@ function syncBrailleToEditor() {
     }
     if (lineIdx >= 0) {
       tactileDisplay.scrollToLine(lineIdx);
-      if (typeof drawDotPadEmulator === 'function') {
+      if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
+        drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+      } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
         drawDotPadEmulator(tactileDisplay.getDotPadActiveFrame());
       }
     }
@@ -2116,7 +2900,8 @@ function syncEditorToBraille() {
   const el = editorEl.children[anchor.idx] || editorEl.querySelector(`[data-block-idx="${anchor.idx}"]`);
   if (!el) return;
   const edTop = editorEl.offsetTop;
-  const targetTop = el.offsetTop - edTop - anchor.offset;
+  const blockH = el.offsetHeight || 20;
+  const targetTop = (el.offsetTop - edTop) + (anchor.fraction * blockH);
   if (Math.abs(editorEl.scrollTop - targetTop) >= 2) {
     editorEl.scrollTop = Math.max(0, targetTop);
   }
@@ -2132,12 +2917,9 @@ function recordUserInteraction() {
 editorEl.addEventListener('wheel', recordUserInteraction, { passive: true });
 editorEl.addEventListener('pointerdown', recordUserInteraction, { passive: true });
 editorEl.addEventListener('touchstart', recordUserInteraction, { passive: true });
-const brailleScrollEl = brlStackEl || brailleEl;
-if (brailleScrollEl) {
-  brailleScrollEl.addEventListener('wheel', recordUserInteraction, { passive: true });
-  brailleScrollEl.addEventListener('pointerdown', recordUserInteraction, { passive: true });
-  brailleScrollEl.addEventListener('touchstart', recordUserInteraction, { passive: true });
-}
+brailleEl.addEventListener('wheel', recordUserInteraction, { passive: true });
+brailleEl.addEventListener('pointerdown', recordUserInteraction, { passive: true });
+brailleEl.addEventListener('touchstart', recordUserInteraction, { passive: true });
 
 function onPaneScroll(from, fn) {
   if (isModalOpen() || (reader && reader.speaking)) return;
@@ -2153,9 +2935,7 @@ function onPaneScroll(from, fn) {
   });
 }
 editorEl.addEventListener('scroll', () => onPaneScroll('editor', syncBrailleToEditor), { passive: true });
-if (brailleScrollEl) {
-  brailleScrollEl.addEventListener('scroll', () => onPaneScroll('braille', syncEditorToBraille), { passive: true });
-}
+brailleEl.addEventListener('scroll', () => onPaneScroll('braille', syncEditorToBraille), { passive: true });
 
 // ---- audio feedback (self-voicing oscillator chime) ----
 let dingCtx = null;
@@ -2188,20 +2968,150 @@ function flatSegText(segments) {
 }
 function buildCellText(model) {
   cellText = {};
+  window.cellText = cellText;
   clearWordLink();                                 // stale Range/highlights point at the pre-render DOM
   (model.blocks || []).forEach((b, i) => {
     if (!b) return;
-    if (b.type === 'heading' || b.type === 'para' || b.type === 'note' || b.type === 'footnote' || b.type === 'caption' || b.type === 'attribution' || b.type === 'stage' || b.type === 'play') cellText[`${i}:0`] = b.segments ? flatSegText(b.segments) : (b.text || '');
-    else if (b.type === 'list') (b.items || []).forEach((it, u) => { cellText[`${i}:${u}`] = it.segments ? flatSegText(it.segments) : (it.text || ''); });
+    if (b.type === 'list') {
+      (b.items || []).forEach((it, u) => { cellText[`${i}:${u}`] = it.segments ? flatSegText(it.segments) : (it.text || ''); });
+    } else if (b.type === 'table') {
+      const rawHeaders = Array.isArray(b.headers) ? b.headers : [];
+      const rawRows = (Array.isArray(b.rows) ? b.rows : []).map((r) => (Array.isArray(r) ? r : (r == null ? [] : [r])));
+      const colCount = Math.max(rawHeaders.length, ...rawRows.map((r) => r.length));
+      const headerCount = rawHeaders.length;
+      for (let ci = 0; ci < headerCount; ci++) {
+        cellText[`${i}:${ci}`] = rawHeaders[ci] != null ? String(rawHeaders[ci]) : '';
+      }
+      rawRows.forEach((r, ri) => {
+        for (let ci = 0; ci < colCount; ci++) {
+          const unit = headerCount + ri * colCount + ci;
+          cellText[`${i}:${unit}`] = (r && r[ci] != null) ? String(r[ci]) : '';
+        }
+      });
+      if (headerCount === 0 && rawRows.length === 0 && (b.title || b.caption)) {
+        cellText[`${i}:0`] = String(b.title || b.caption);
+      }
+    } else if (b.type === 'box' || b.type === 'sidebar') {
+      if (Array.isArray(b.blocks) && b.blocks.length) {
+        b.blocks.forEach((cb, u) => {
+          if (cb.type === 'list' && Array.isArray(cb.items)) {
+            cb.items.forEach((it, liIdx) => {
+              const itemUnit = u * 1000 + liIdx;
+              cellText[`${i}:${itemUnit}`] = it.segments ? flatSegText(it.segments) : (it.text || '');
+            });
+            cellText[`${i}:${u}`] = cb.items.map(it => (it.segments ? flatSegText(it.segments) : (it.text || ''))).join(' ');
+          } else {
+            cellText[`${i}:${u}`] = cb.segments ? flatSegText(cb.segments) : (cb.text || '');
+          }
+        });
+      } else {
+        cellText[`${i}:0`] = b.segments ? flatSegText(b.segments) : (b.text || b.title || '');
+      }
+    } else {
+      cellText[`${i}:0`] = b.segments ? flatSegText(b.segments) : (b.text || '');
+    }
   });
   updatePrintToc();
 }
-// The print element for a (block, unit): the block, or its unit-th <li> for a list.
+// The print element for a (block, unit): the block, its unit-th <li> for a list, or its unit-th <input> for a table.
 function printUnitEl(block, unit) {
   const be = editorEl.querySelector(`[data-block-idx="${block}"]`);
   if (!be) return null;
   const lis = be.querySelectorAll('li');
-  return lis.length ? (lis[unit] || be) : be;
+  if (be.tagName !== 'ASIDE' && !be.classList.contains('emboss-sidebar-card') && lis.length) return lis[unit] || be;
+  const tableInputs = be.querySelectorAll('input.table-cell-input');
+  if (tableInputs.length) return tableInputs[unit] || be;
+  if (be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card')) {
+    if (unit >= 1000) {
+      const childIdx = Math.floor(unit / 1000);
+      const liIdx = unit % 1000;
+      const childEl = be.children[childIdx];
+      if (childEl) {
+        const nestedLis = childEl.querySelectorAll('li');
+        if (nestedLis[liIdx]) return nestedLis[liIdx];
+      }
+    }
+    const b = lastModel?.blocks?.[block];
+    if (b && Array.isArray(b.blocks) && b.blocks[unit]) {
+      const cb = b.blocks[unit];
+      if (cb && cb._key) {
+        const childEl = editor.getElementByKey(cb._key);
+        if (childEl) return childEl;
+      }
+    }
+    const unitEl = be.querySelector(`[data-unit-idx="${unit}"]`);
+    if (unitEl) return unitEl;
+    if (be.children.length) return be.children[unit] || be;
+  }
+  return be;
+}
+function resolveBlockUnit(target) {
+  if (!target) return null;
+  const rawStart = target.nodeType === 1 ? target : target.parentElement;
+  const start = rawStart ? (rawStart.nodeType === 1 ? rawStart : rawStart.parentElement) : null;
+  if (!start) return null;
+  const be = start.closest('[data-block-idx]') || start.closest('#editor > *');
+  if (!be) return null;
+  const block = be.dataset?.blockIdx != null ? Number(be.dataset.blockIdx) : Array.from(editorEl.children).indexOf(be);
+  if (Number.isNaN(block) || block < 0) return null;
+
+  const li = start.closest('li');
+  let unit = 0, unitEl = be;
+  if (li && be.contains(li)) {
+    if (be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card')) {
+      const child = li.closest('.emboss-sidebar-card > *') || (li.parentElement?.closest('.emboss-sidebar-card > *'));
+      const childIdx = child ? Math.max(0, [...be.children].indexOf(child)) : 0;
+      const listEl = li.closest('ul, ol') || child;
+      const liIdx = listEl ? Math.max(0, [...listEl.querySelectorAll('li')].indexOf(li)) : 0;
+      unit = childIdx * 1000 + liIdx;
+      unitEl = li;
+    } else {
+      unit = Math.max(0, [...be.querySelectorAll('li')].indexOf(li));
+      unitEl = li;
+    }
+  } else if (be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card')) {
+    const child = start.closest('.emboss-sidebar-card > *') || (start.parentElement === be ? start : null);
+    if (child && be.contains(child)) {
+      if (child.dataset.unitIdx != null) {
+        unit = Number(child.dataset.unitIdx);
+      } else {
+        const b = lastModel?.blocks?.[block];
+        if (b && Array.isArray(b.blocks) && b.blocks.length > 0) {
+          const matchIdx = b.blocks.findIndex(cb => cb && cb._key && editor.getElementByKey(cb._key) === child);
+          unit = matchIdx >= 0 ? matchIdx : Math.max(0, [...be.children].indexOf(child));
+        } else {
+          unit = Math.max(0, [...be.children].indexOf(child));
+        }
+      }
+      unitEl = child;
+    }
+  }
+  return { block, unit, unitEl, be };
+}
+function handleTableCellEvent(input, unit) {
+  if (!input) return;
+  const be = input.closest('[data-block-idx]');
+  if (!be) return;
+  const block = Number(be.dataset.blockIdx);
+  if (Number.isNaN(block)) return;
+
+  refreshToolbar();
+  const text = input.value || '';
+  const caretPos = (typeof input.selectionStart === 'number') ? input.selectionStart : 0;
+  if (!text.trim()) {
+    clearWordLink();
+    linkByBlock(block, false);
+    input.classList.add('table-cell-hl');
+    lastCaretWordKey = `${block}:${unit}:empty`;
+    return;
+  }
+  const [s, en] = wordRangeAt(text, caretPos);
+  const wordKey = `${block}:${unit}:${s}:${en}:${caretPos}`;
+  if (wordKey === lastCaretWordKey && input.classList.contains('table-cell-hl')) return;
+  lastCaretWordKey = wordKey;
+  highlightWord(block, unit, s, en, caretPos, 'editor');
+  input.classList.add('table-cell-hl');
+  showRuleInfo(text.slice(s, en));
 }
 function wordRangeAt(text, pos) {                   // [start,end) of the whitespace-delimited word at pos
   pos = Math.max(0, Math.min(pos, text.length - 1));
@@ -2231,9 +3141,12 @@ function wordRangeAt(text, pos) {                   // [start,end) of the whites
 }
 
 function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s,e) of the element's text
+  if (!el || s >= e) return null;
   let acc = 0, range = null;
+  let lastTextNode = null;
   function walk(node) {
     if (node.nodeType === Node.TEXT_NODE) {
+      lastTextNode = node;
       const L = node.nodeValue.length;
       if (!range && s < acc + L) {
         range = document.createRange();
@@ -2247,7 +3160,7 @@ function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD') {
         const mf = node.querySelector?.('math-field') || (node.tagName === 'MATH-FIELD' ? node : null);
-        const latex = mf?.value || '';
+        const latex = node.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
         const mathLen = (latex ? `$${latex}$` : '⟨equation⟩').length;
         acc += mathLen;
       } else {
@@ -2258,7 +3171,14 @@ function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s
     }
     return false;
   }
-  walk(el);
+  const done = walk(el);
+  if (range && !done && lastTextNode) {
+    try {
+      if (range.collapsed || e > acc) {
+        range.setEnd(lastTextNode, lastTextNode.nodeValue.length);
+      }
+    } catch {}
+  }
   return range;
 }
 const SVGNS = 'http://www.w3.org/2000/svg';
@@ -2273,8 +3193,7 @@ function showIdleStatus() {
         (currentStatusText ? `<span class="doc-stats" id="docStats">${escapeHtml(currentStatusText)}</span>` : `<span class="doc-stats" id="docStats"></span>`);
     }
   }
-  const ds = $id('docStats');
-  if (ds) ds.textContent = currentStatusText || '';
+  updateDocStatsVisibility();
 }
 
 let activeCaretLine = -1;
@@ -2283,17 +3202,21 @@ let activeWordHighlight = null;
 
 function clearWordLink() {
   activeWordHighlight = null;
+  window.activeWordHighlight = null;
   if (brailleEl._virtualBraille?.isVirtualized()) {
     brailleEl._virtualBraille.clearWordHighlight();
   }
   brailleEl.querySelectorAll('.bcell.cell-hl').forEach((c) => c.classList.remove('cell-hl'));
   brailleEl.querySelectorAll('rect.cell-box').forEach((r) => r.remove());
   editorEl.querySelectorAll('.math-hl').forEach((m) => m.classList.remove('math-hl'));
+  editorEl.querySelectorAll('input.table-cell-hl').forEach((inp) => inp.classList.remove('table-cell-hl'));
   if (HL_API) CSS.highlights.delete('link-word');
   showIdleStatus();
   activeCaretLine = -1;
   activeCaretCol = -1;
-  if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
+  if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
+    drawMonarchEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getMonarchActiveFrame() : null);
+  } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
     drawDotPadEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getDotPadActiveFrame() : null);
   }
 }
@@ -2304,6 +3227,7 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
   programmaticScrollUntil = performance.now() + 1000;
   cancelScrollSync();
   activeWordHighlight = { block, unit, s, e };
+  window.activeWordHighlight = activeWordHighlight;
   lastLinkedBlock = block;
   linkByBlock(block, false);
   const cw = brailleCellW, ch = brailleCellW * 1.5;
@@ -2328,7 +3252,7 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
   }
 
   if (brailleEl._virtualBraille?.isVirtualized()) {
-    brailleEl._virtualBraille.setWordHighlight({ block, unit, s, e, cw, ch });
+    brailleEl._virtualBraille.setWordHighlight({ block, unit, s, e, cw, ch, rowIdx: wordRowIdx });
     if (wordRowIdx >= 0) {
       brailleEl._virtualBraille.scrollToRow(wordRowIdx);
     } else {
@@ -2341,6 +3265,8 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
     let matchingCaretCell = null;
 
     rows.forEach((r) => {
+      const rIdx = Number(r.dataset.row);
+      if (wordRowIdx >= 0 && !isNaN(rIdx) && rIdx !== wordRowIdx) return;
       r.querySelectorAll('.bcell[data-char]').forEach((c) => {
         if (Number(c.dataset.unit) !== unit) return;
         const n = +c.dataset.char; if (n < s || n >= e) return;
@@ -2389,47 +3315,49 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
   } else {
     activeCaretCol = -1;
   }
+  updateCaretLocation(block, wordRowIdx, activeCaretCol);
 
-  if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
+  if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
+    drawMonarchEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getMonarchActiveFrame() : null);
+  } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
     drawDotPadEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getDotPadActiveFrame() : null);
-  }
-
-  if (brlInputEl && wordRowIdx >= 0 && source !== 'braille') {
-    const lines = brlInputEl.value.split('\n');
-    let targetPos = 0;
-    for (let r = 0; r < wordRowIdx && r < lines.length; r++) {
-      targetPos += lines[r].length + 1;
-    }
-    if (activeCaretCol >= 0) {
-      targetPos += Math.min(activeCaretCol, lines[wordRowIdx]?.length || 0);
-    }
-    if (document.activeElement !== brlInputEl) {
-      brlInputEl.setSelectionRange(targetPos, targetPos);
-    }
   }
 
   const pe = printUnitEl(block, unit) || editorEl.querySelector(`[data-block-idx="${block}"]`);
   if (pe) {
-    let wordRange = null;
-    try {
-      wordRange = charRangeInEl(pe, s, e);
-    } catch { wordRange = null; }
-
-    if (wordRange && HL_API) {
-      CSS.highlights.set('link-word', new Highlight(wordRange));
-    }
-
-    if (wordRange) {
-      const rRect = wordRange.getBoundingClientRect();
-      const cRect = editorEl.getBoundingClientRect();
-      const isVisibleInEditor = (rRect.top >= cRect.top + 15) && (rRect.bottom <= cRect.bottom - 15);
-      if (!isVisibleInEditor && rRect.height > 0) {
-        const wordDocTop = editorEl.scrollTop + (rRect.top - cRect.top);
-        const targetScrollTop = Math.max(0, wordDocTop - (editorEl.clientHeight / 2) + (rRect.height / 2));
-        editorEl.scrollTop = targetScrollTop;
+    if (pe.tagName === 'INPUT') {
+      pe.classList.add('table-cell-hl');
+      if (source === 'braille') {
+        try {
+          pe.focus();
+          pe.setSelectionRange(s, e);
+        } catch {}
       }
-    } else if (pe && !isElementVisibleIn(pe, editorEl, 40)) {
-      pe.scrollIntoView({ behavior: 'auto', block: 'center' });
+      if (!isElementVisibleIn(pe, editorEl, 40)) {
+        pe.scrollIntoView({ behavior: 'auto', block: 'center' });
+      }
+    } else {
+      let wordRange = null;
+      try {
+        wordRange = charRangeInEl(pe, s, e);
+      } catch { wordRange = null; }
+
+      if (wordRange && HL_API) {
+        CSS.highlights.set('link-word', new Highlight(wordRange));
+      }
+
+      if (wordRange) {
+        const rRect = wordRange.getBoundingClientRect();
+        const cRect = editorEl.getBoundingClientRect();
+        const isVisibleInEditor = (rRect.top >= cRect.top + 15) && (rRect.bottom <= cRect.bottom - 15);
+        if (!isVisibleInEditor && rRect.height > 0) {
+          const wordDocTop = editorEl.scrollTop + (rRect.top - cRect.top);
+          const targetScrollTop = Math.max(0, wordDocTop - (editorEl.clientHeight / 2) + (rRect.height / 2));
+          editorEl.scrollTop = targetScrollTop;
+        }
+      } else if (pe && !isElementVisibleIn(pe, editorEl, 40)) {
+        pe.scrollIntoView({ behavior: 'auto', block: 'center' });
+      }
     }
 
     const b = lastModel?.blocks?.[block];
@@ -2465,30 +3393,61 @@ const SEG_COLOURS = 7;
 
 function alignWord(brl, text, table) {
   let res = null;
-  const tG1 = louis.TABLES.uebG1;
-  for (const tbl of [table, tG1]) {
-    if (!tbl) continue;
+  const tbl = table || (louis.TABLES ? louis.TABLES.uebG2 : null);
+  const tG1 = louis.TABLES ? louis.TABLES.uebG1 : null;
+  for (const t of [tbl, tG1]) {
+    if (!t) continue;
     try {
-      const r = louis.translatePos(text, tbl);
-      if (r && r.braille === brl) { res = r; break; }
+      const tr = makeTranslators(louis, t);
+      const r = tr.translatePos ? tr.translatePos(text) : louis.translatePos(text, t);
+      if (r && (r.braille === brl || !brl)) { res = r; break; }
     } catch { /* ignore */ }
   }
-  if (!res) return null;
-  const pos = res.inputPos;
-  const n = brl.length;
-  if (!pos || pos.length < n) return null;
-  const segs = [];
-  let j = 0;
-  while (j < n) {
-    const start = pos[j];
-    let k = j;
-    while (k + 1 < n && pos[k + 1] === start) k++;
-    const nextStart = (k + 1 < n) ? pos[k + 1] : text.length;
-    if (!(nextStart >= start)) return null;
-    segs.push({ cells: brl.slice(j, k + 1), chars: text.slice(start, nextStart) });
-    j = k + 1;
+  
+  if (res && res.inputPos && res.braille) {
+    const pos = res.inputPos;
+    const b = res.braille;
+    const n = b.length;
+    if (pos.length >= n && n > 0) {
+      const segs = [];
+      let j = 0;
+      let ok = true;
+      while (j < n) {
+        const start = pos[j];
+        let k = j;
+        while (k + 1 < n && pos[k + 1] === start) k++;
+        let nextStart = text.length;
+        if (k + 1 < n) {
+          nextStart = pos[k + 1];
+        }
+        if (nextStart < start) {
+          ok = false;
+          break;
+        }
+        segs.push({ cells: b.slice(j, k + 1), chars: text.slice(start, nextStart) });
+        j = k + 1;
+      }
+      if (ok && segs.length > 0) return segs;
+    }
   }
-  return segs;
+
+  // Fallback 1: Spelt-out 1-to-1 letter mapping
+  const uni = brfToUnicodeBraille(brl || '');
+  const cleanUni = [...uni.replace(/\s/g, '')];
+  if (cleanUni.length === text.length && text.length > 0) {
+    const segs = [];
+    for (let i = 0; i < text.length; i++) {
+      segs.push({ cells: brl[i] || '', chars: text[i] });
+    }
+    return segs;
+  }
+
+  // Fallback 2: Single chunk with full word and braille
+  if (text.length > 0) {
+    return [{ cells: brl || '', chars: text }];
+  }
+
+  return null;
 }
 
 const COMMON_CONTRACTIONS = {
@@ -2500,7 +3459,7 @@ const COMMON_CONTRACTIONS = {
   '⠐⠓': 'here', '⠐⠅': 'know', '⠐⠇': 'lord', '⠐⠍': 'mother', '⠐⠝': 'name',
   '⠐⠕': 'one', '⠐⠏': 'part', '⠐⠟': 'question', '⠐⠗': 'right', '⠐⠎': 'some',
   '⠐⠞': 'time', '⠐⠥': 'under', '⠐⠺': 'work', '⠐⠽': 'young', '⠐⠉': 'character',
-  '⠐⠹': 'through', '⠐⠱': 'where', '⠐⠪': 'ought'
+  '⠐⠹': 'through', '⠐⠱': 'where', '⠐⠪': 'ought', '⠰⠝': 'tion'
 };
 
 function getPartSpeech(p) {
@@ -2613,8 +3572,7 @@ function showRuleInfo(word) {
     } else {
       el.innerHTML = mathOutput + (currentStatusText ? `<span class="doc-stats" id="docStats">${escapeHtml(currentStatusText)}</span>` : '');
     }
-    const ds = $id('docStats');
-    if (ds) ds.textContent = currentStatusText || '';
+    updateDocStatsVisibility();
     return;
   }
 
@@ -2669,8 +3627,7 @@ function showRuleInfo(word) {
   } else {
     el.innerHTML = wordOutput + (currentStatusText ? `<span class="doc-stats" id="docStats">${escapeHtml(currentStatusText)}</span>` : '');
   }
-  const ds = $id('docStats');
-  if (ds) ds.textContent = currentStatusText || '';
+  updateDocStatsVisibility();
 }
 
 // Resizing the explanation bar via drag grab or arrow keys (matching Translate)
@@ -2681,6 +3638,7 @@ function applyStatusScale(next) {
   document.documentElement.style.setProperty('--sb-scale', statusScale.toFixed(3));
   const targetH = Math.min(220, Math.round(44 * statusScale));
   document.documentElement.style.setProperty('--sb-h', targetH + 'px');
+  updateDocStatsVisibility();
   return statusScale;
 }
 (function wireStatusGrab() {
@@ -2723,6 +3681,17 @@ function applyStatusScale(next) {
     announce(statusScale === 1 ? 'Explanation bar, normal size' : `Explanation bar, ${Math.round(statusScale * 100)} per cent`);
   });
 })();
+if (typeof ResizeObserver !== 'undefined' && brailleEl) {
+  new ResizeObserver(() => {
+    if (brailleEl && !isManualZoom) {
+      autoFitBraille(brailleEl, (settings?.cells | 0) || 38);
+    }
+  }).observe(brailleEl);
+}
+if (typeof ResizeObserver !== 'undefined' && $id('statusBar')) {
+  new ResizeObserver(() => updateDocStatsVisibility()).observe($id('statusBar'));
+}
+window.addEventListener('resize', updateDocStatsVisibility);
 function domOffsetOfNode(el, targetNode, targetOffset) {
   if (!el || !targetNode) return 0;
   let acc = 0;
@@ -2745,7 +3714,7 @@ function domOffsetOfNode(el, targetNode, targetOffset) {
           else if (c.nodeType === Node.ELEMENT_NODE) {
             if (c.classList?.contains('math-embed') || c.tagName === 'MATH-FIELD') {
               const mf = c.querySelector?.('math-field') || (c.tagName === 'MATH-FIELD' ? c : null);
-              const latex = mf?.value || '';
+              const latex = c.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
               childAcc += (latex ? `$${latex}$` : '⟨equation⟩').length;
             } else {
               childAcc += c.textContent.length;
@@ -2762,7 +3731,7 @@ function domOffsetOfNode(el, targetNode, targetOffset) {
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD') {
         const mf = node.querySelector?.('math-field') || (node.tagName === 'MATH-FIELD' ? node : null);
-        const latex = mf?.value || '';
+        const latex = node.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
         acc += (latex ? `$${latex}$` : '⟨equation⟩').length;
       } else {
         for (const child of node.childNodes) {
@@ -2824,7 +3793,9 @@ brailleEl.addEventListener('click', (e) => {
     }
   }
   if (cell && cellRow) {
-    const block = Number(cellRow.dataset.block), unit = Number(cell.dataset.unit);
+    const block = Number(cellRow.dataset.block);
+    const rawUnit = cell.dataset.unit;
+    const unit = (rawUnit !== undefined && rawUnit !== '' && !isNaN(Number(rawUnit))) ? Number(rawUnit) : 0;
     const text = cellText[`${block}:${unit}`];
     if (text != null) {
       const [s, en] = wordRangeAt(text, +cell.dataset.char);
@@ -2833,2498 +3804,32 @@ brailleEl.addEventListener('click', (e) => {
       return;
     }
   }
-  const row = e.target.closest('.brl-row');      // fallback: block-level (decoration/maths cells)
+  const row = e.target.closest('.brl-row[data-block]');      // fallback: block-level (decoration/maths cells)
   if (row) {
     clearWordLink();
-    let bIdx = row.dataset.block != null && Number(row.dataset.block) >= 0 ? Number(row.dataset.block) : 0;
+    const bIdx = Number(row.dataset.block);
     linkByBlock(bIdx, true);
     const text = cellText[`${bIdx}:0`];
     if (text) showRuleInfo(text.split(/\s+/)[0] || text);
-    const pe = editorEl.querySelector(`[data-block-idx="${bIdx}"]`);
+    const pe = editorEl.querySelector(`[data-block-idx="${row.dataset.block}"]`);
     if (pe && !isElementVisibleIn(pe, editorEl)) {
       pe.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     return;
   }
 });
-
-function onBrlInputCaretMove() {
-  if (!brlInputEl) return;
-  if (typeof updateBrlPositionUI === 'function') updateBrlPositionUI();
-  const pos = brlInputEl.selectionStart;
-  const val = brlInputEl.value;
-  const linesBefore = val.slice(0, pos).split('\n');
-  const rowIndex = linesBefore.length - 1;
-  const colIndex = linesBefore[linesBefore.length - 1].length;
-
-  const rows = brailleEl ? Array.from(brailleEl.querySelectorAll('.brl-row')) : [];
-  const cellRow = rows[rowIndex];
-  if (cellRow) expandRowCells(cellRow);
-
-  if (lastTrace?.rows) {
-    const block = lastTrace.rows[rowIndex];
-    if (block != null && block >= 0) {
-      const rowCells = lastTrace.rowCells?.[rowIndex];
-      const cell = rowCells ? (rowCells[colIndex] || (colIndex > 0 ? rowCells[colIndex - 1] : null)) : null;
-      if (cell) {
-        const unit = Number(cell.u);
-        const text = cellText[`${block}:${unit}`];
-        if (text != null) {
-          const [s, en] = wordRangeAt(text, +cell.c);
-          highlightWord(block, unit, s, en, +cell.c, 'braille');
-          showRuleInfo(text.slice(s, en));
-          return;
-        }
-      }
-      clearWordLink();
-      linkByBlock(block, true);
-      const text = cellText[`${block}:0`];
-      if (text) showRuleInfo(text.split(/\s+/)[0] || text);
-      const pe = editorEl.querySelector(`[data-block-idx="${block}"]`);
-      if (pe && !isElementVisibleIn(pe, editorEl)) {
-        pe.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-  }
-}
-
-// ---- BANA Margin Presets & Direct Braille Controller ----
-export let brlActiveMarginStyle = 'body';
-export let brlOverwriteMode = false;
-
-export function getBrlActiveStyle() {
-  if (brlActiveMarginStyle && STYLE_DEFINITIONS[brlActiveMarginStyle]) {
-    return brlActiveMarginStyle;
-  }
-  return 'body';
-}
-
-export function getMarginIndent(styleId = 'body', isFirstLine = true) {
-  const profile = settings?.mode === 'bana' ? 'bana' : 'ukaaf';
-  const margins = getStyleMargins(styleId, profile);
-  const spaces = isFirstLine ? margins.first : margins.runover;
-  return ' '.repeat(Math.max(0, spaces));
-}
-export const getBanaMarginIndent = getMarginIndent;
-
-export function centerBrailleText(text, lineWidth) {
-  const width = lineWidth != null ? Number(lineWidth) : ((settings?.cells | 0) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38));
-  const trimmed = text.trim();
-  if (!trimmed) return '';
-  const len = [...trimmed].length;
-  if (len >= width - 6) return '   ' + trimmed;
-  const padLeft = Math.floor((width - len) / 2);
-  return ' '.repeat(padLeft) + trimmed;
-}
-
-export function applyBrlWordWrap(inputEl, maxCells = (Number(settings?.cells) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38))) {
-  if (!inputEl) return false;
-  let wrappedAny = false;
-  let guard = 0;
-  while (guard++ < 200) {
-    const pos = inputEl.selectionStart;
-    const val = inputEl.value;
-    const lineStart = val.lastIndexOf('\n', Math.max(0, pos - 1)) + 1;
-    let lineEnd = val.indexOf('\n', pos);
-    if (lineEnd === -1) lineEnd = val.length;
-    const currentLine = val.slice(lineStart, lineEnd);
-
-    if (currentLine.length <= maxCells) break;
-
-    const activeStyle = getBrlActiveStyle();
-    const runoverIndent = getMarginIndent(activeStyle, false);
-    const firstNonSpace = currentLine.search(/\S/);
-    const lastSpace = currentLine.lastIndexOf(' ', maxCells);
-
-    if (firstNonSpace !== -1 && lastSpace > firstNonSpace) {
-      const breakIdx = lineStart + lastSpace;
-      const before = val.slice(0, breakIdx);
-      const after = val.slice(breakIdx + 1);
-      inputEl.value = before + '\n' + runoverIndent + after;
-      const newPos = pos > breakIdx ? pos + runoverIndent.length : pos;
-      inputEl.setSelectionRange(newPos, newPos);
-      wrappedAny = true;
-    } else {
-      const breakIdx = lineStart + maxCells;
-      const before = val.slice(0, breakIdx);
-      const after = val.slice(breakIdx);
-      inputEl.value = before + '\n' + runoverIndent + after;
-      const newPos = pos >= breakIdx ? pos + 1 + runoverIndent.length : pos;
-      inputEl.setSelectionRange(newPos, newPos);
-      wrappedAny = true;
-    }
-  }
-  return wrappedAny;
-}
-
-export function toggleBrlSixKey(forcedState) {
-  const isCurrentlyOn = settings?.sixKeyInput !== false;
-  const nextState = forcedState != null ? !!forcedState : !isCurrentlyOn;
-  settings = saveSettings({ sixKeyInput: nextState });
-  const btn = $id('btnBrlSixKey');
-  if (btn) {
-    btn.setAttribute('aria-pressed', String(nextState));
-    if (nextState) btn.classList.add('active');
-    else btn.classList.remove('active');
-  }
-  announce(nextState ? 'Braille editor Perkins 6-key input enabled.' : 'Braille editor Perkins 6-key input disabled.');
-}
-
-export function updateBrlAsciiUI() {
-  const isAscii = !!settings?.asciiBraille;
-  const btn = $id('btnBrlAscii');
-  if (btn) {
-    btn.textContent = 'BRF';
-    btn.setAttribute('aria-pressed', String(isAscii));
-    if (isAscii) btn.classList.add('active');
-    else btn.classList.remove('active');
-  }
-  if ($id('set-asciiBraille')) {
-    $id('set-asciiBraille').checked = isAscii;
-  }
-  if (brlInputEl) {
-    if (isAscii) {
-      brlInputEl.style.fontFamily = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
-    } else {
-      brlInputEl.style.fontFamily = '"APHfont", "Apple Braille", "Segoe UI Symbol", monospace';
-    }
-  }
-}
-
-export function toggleBrlAscii(forcedState) {
-  const nextState = forcedState != null ? !!forcedState : !settings?.asciiBraille;
-  settings = saveSettings({ asciiBraille: nextState });
-  updateBrlAsciiUI();
-  if (brlInputEl) {
-    if (nextState) {
-      brlInputEl.value = unicodeBrailleToBrf(brlInputEl.value);
-    } else {
-      brlInputEl.value = brfToUnicodeBraille(brlInputEl.value);
-    }
-  }
-  render();
-  announce(nextState ? 'Switched to BRF ASCII braille display.' : 'Switched to Unicode braille display.');
-}
-
-export function updateBrlInsertModeUI() {
-  const btn = $id('btnBrlInsertMode');
-  if (btn) {
-    btn.textContent = brlOverwriteMode ? 'OVR' : 'INS';
-    btn.setAttribute('aria-pressed', String(brlOverwriteMode));
-    if (brlOverwriteMode) btn.classList.add('active');
-    else btn.classList.remove('active');
-  }
-}
-
-export function toggleBrlInsertMode(forcedState) {
-  brlOverwriteMode = forcedState != null ? !!forcedState : !brlOverwriteMode;
-  updateBrlInsertModeUI();
-  announce(brlOverwriteMode ? 'Braille editor: Overwrite mode.' : 'Braille editor: Insert mode.');
-}
-
-export function updateBrlMarginDropdownUI() {
-  const sel = $id('selBrlMargin');
-  if (!sel) return;
-  const isUkaaf = settings?.mode !== 'bana';
-  const currentVal = sel.value || brlActiveMarginStyle || 'body';
-  
-  sel.innerHTML = `
-    <option value="body">3-1 Paragraph</option>
-    <option value="h1">Centered Heading</option>
-    <option value="h2">5-5 Subheading</option>
-    <option value="h3">${isUkaaf ? '5-5 Heading 3' : '7-7 Heading 3'}</option>
-    <option value="list-bullet">1-3 List</option>
-    <option value="exercise">1-5 Exercise</option>
-  `;
-  sel.value = currentVal;
-  const profileName = isUkaaf ? 'UKAAF' : 'BANA';
-  sel.title = `${profileName} Margin Preset`;
-  sel.setAttribute('aria-label', `${profileName} Margin Preset`);
-}
-
-export function centerCurrentBrailleLine() {
-  if (!brlInputEl) return;
-  const pos = brlInputEl.selectionStart;
-  const val = brlInputEl.value;
-  const lineStart = val.lastIndexOf('\n', Math.max(0, pos - 1)) + 1;
-  let lineEnd = val.indexOf('\n', pos);
-  if (lineEnd === -1) lineEnd = val.length;
-  const currentLine = val.slice(lineStart, lineEnd);
-  const width = (settings?.cells | 0) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38);
-  const centered = centerBrailleText(currentLine, width);
-  brlInputEl.value = val.slice(0, lineStart) + centered + val.slice(lineEnd);
-  const newPos = lineStart + centered.length;
-  brlInputEl.setSelectionRange(newPos, newPos);
-  brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-  onBrlInputCaretMove();
-  announce('Line centered.');
-}
-
-// ---- Direct Braille Editor Diagnostics & Status Badges (Stage 3C) ----
-export function updateBrlPositionUI() {
-  const badge = $id('brlPosBadge');
-  if (!badge || !brlInputEl) return;
-  const pos = brlInputEl.selectionStart ?? 0;
-  const val = brlInputEl.value || '';
-  const linesBefore = val.slice(0, pos).split('\n');
-  const lineNum = linesBefore.length;
-  const currentLineText = linesBefore[linesBefore.length - 1] || '';
-  const cellNum = currentLineText.length + 1;
-  const maxCells = (settings?.cells | 0) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38);
-
-  const label = `L${lineNum}, C${cellNum}/${maxCells}`;
-  badge.textContent = label;
-
-  if (currentLineText.length > maxCells) {
-    badge.classList.add('brl-pos-overflow');
-    badge.title = `Line ${lineNum} exceeds maximum width (${currentLineText.length}/${maxCells} cells)`;
-  } else {
-    badge.classList.remove('brl-pos-overflow');
-    badge.title = `Cursor Line ${lineNum}, Cell ${cellNum} of ${maxCells}`;
-  }
-}
-
-export let brlCurrentSyncStatus = 'synced'; // 'synced' | 'editing' | 'syncing'
-
-export function updateBrlSyncStatus(status = 'synced') {
-  brlCurrentSyncStatus = status;
-  const badge = $id('brlSyncStatus');
-  if (!badge) return;
-
-  badge.className = `brl-sync-status ${status}`;
-  const labelEl = badge.querySelector('.sync-label');
-
-  if (status === 'editing') {
-    if (labelEl) labelEl.textContent = 'Editing...';
-    badge.title = 'Braille changes pending reverse synchronization';
-  } else if (status === 'syncing') {
-    if (labelEl) labelEl.textContent = 'Syncing...';
-    badge.title = 'Synchronizing Braille into Print document...';
-  } else {
-    if (labelEl) labelEl.textContent = 'Synced';
-    badge.title = 'Print and Braille are in full synchronization';
-  }
-}
-
-export function validateBrailleDocument(rawBraille, customSettings = settings) {
-  if (typeof rawBraille !== 'string') rawBraille = brlInputEl ? brlInputEl.value : '';
-  const currentSettings = customSettings || settings;
-  const maxCells = (currentSettings?.cells | 0) || (EMBOSSER_PRESETS[currentSettings?.embosser]?.cells || 38);
-  const isAscii = !!currentSettings?.asciiBraille;
-  const lines = rawBraille.split('\n');
-  const issues = [];
-
-  let inNemeth = false;
-  let nemethOpenLine = null;
-  let inBox = false;
-  let boxOpenLine = null;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const lineNum = i + 1;
-    const trimmed = line.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-
-    // 1. Line overflow check
-    if (line.length > maxCells) {
-      issues.push({
-        type: 'line-overflow',
-        line: lineNum,
-        col: line.length,
-        message: `Line ${lineNum} exceeds ${maxCells} cells (${line.length} cells)`,
-      });
-    }
-
-    // 2. Boxline tracking
-    const isTopBox = isAscii
-      ? /^3{3,}/.test(trimmed)
-      : /^[⠒]{3,}/.test(trimmed);
-    const isBottomBox = isAscii
-      ? /^[37]{3,}$/.test(trimmed)
-      : /^[⠒⠶]{3,}$/.test(trimmed);
-
-    if (isTopBox && !inBox) {
-      inBox = true;
-      boxOpenLine = lineNum;
-    } else if (inBox && (isBottomBox || (isTopBox && lineNum > boxOpenLine))) {
-      inBox = false;
-      boxOpenLine = null;
-    }
-
-    // 3. Nemeth switch tracking
-    const nemOpen = isAscii ? '_%' : '⠸⠩';
-    const nemClose = isAscii ? '_:' : '⠸⠱';
-
-    let searchIdx = 0;
-    while (searchIdx < line.length) {
-      if (!inNemeth) {
-        const nextOpen = line.indexOf(nemOpen, searchIdx);
-        const nextClose = line.indexOf(nemClose, searchIdx);
-        if (nextClose !== -1 && (nextOpen === -1 || nextClose < nextOpen)) {
-          issues.push({
-            type: 'unmatched-nemeth-close',
-            line: lineNum,
-            col: nextClose + 1,
-            message: `Closing Nemeth switch without matching opening indicator on line ${lineNum}`,
-          });
-          searchIdx = nextClose + nemClose.length;
-          continue;
-        }
-        if (nextOpen !== -1) {
-          inNemeth = true;
-          nemethOpenLine = lineNum;
-          searchIdx = nextOpen + nemOpen.length;
-        } else {
-          break;
-        }
-      } else {
-        const nextClose = line.indexOf(nemClose, searchIdx);
-        if (nextClose !== -1) {
-          inNemeth = false;
-          nemethOpenLine = null;
-          searchIdx = nextClose + nemClose.length;
-        } else {
-          break;
-        }
-      }
-    }
-  }
-
-  if (inNemeth && nemethOpenLine !== null) {
-    issues.push({
-      type: 'unclosed-nemeth',
-      line: nemethOpenLine,
-      message: `Unclosed Nemeth switch opened on line ${nemethOpenLine}`,
-    });
-  }
-
-  if (inBox && boxOpenLine !== null) {
-    issues.push({
-      type: 'unclosed-box',
-      line: boxOpenLine,
-      message: `Unclosed sidebar boxline opened on line ${boxOpenLine}`,
-    });
-  }
-
-  return {
-    valid: issues.length === 0,
-    issues,
-    issueCount: issues.length,
-  };
-}
-
-export function runBrailleValidation() {
-  const badge = $id('brlValidationBadge');
-  if (!badge) return null;
-
-  const text = brlInputEl ? brlInputEl.value : '';
-  const result = validateBrailleDocument(text, settings);
-
-  if (result.valid) {
-    badge.className = 'tb-btn brl-val-badge valid';
-    badge.textContent = '✓ Valid';
-    badge.title = 'Braille document structure is valid';
-  } else {
-    const isError = result.issues.some(i => i.type.startsWith('unclosed') || i.type.startsWith('unmatched'));
-    badge.className = `tb-btn brl-val-badge ${isError ? 'error' : 'warn'}`;
-    badge.textContent = `⚠ ${result.issueCount} issue${result.issueCount > 1 ? 's' : ''}`;
-    badge.title = `${result.issues.map(i => `• ${i.message}`).join('\n')}\nClick to jump to first issue.`;
-  }
-  return result;
-}
-
-export function jumpToBrailleIssue() {
-  if (!brlInputEl) return;
-  const result = validateBrailleDocument(brlInputEl.value, settings);
-  if (!result.valid && result.issues.length > 0) {
-    const first = result.issues[0];
-    const targetLine = Math.max(1, first.line);
-    const lines = brlInputEl.value.split('\n');
-    let charPos = 0;
-    for (let i = 0; i < targetLine - 1 && i < lines.length; i++) {
-      charPos += lines[i].length + 1;
-    }
-    if (first.col) {
-      charPos += Math.min(lines[targetLine - 1]?.length || 0, first.col - 1);
-    }
-    brlInputEl.focus();
-    brlInputEl.setSelectionRange(charPos, charPos);
-    onBrlInputCaretMove();
-    announce(`Navigated to ${first.message}`);
-  }
-}
-
-if (typeof window !== 'undefined') {
-  window.setBrlMarginStyle = (styleId) => {
-    if (STYLE_DEFINITIONS[styleId]) {
-      brlActiveMarginStyle = styleId;
-      if ($id('selBrlMargin')) $id('selBrlMargin').value = styleId;
-    }
-  };
-  window.getBrlMarginStyle = () => brlActiveMarginStyle;
-  window.getMarginIndent = getMarginIndent;
-  window.getBanaMarginIndent = getMarginIndent;
-  window.centerBrailleText = centerBrailleText;
-  window.applyBrlWordWrap = (el, maxCells) => applyBrlWordWrap(el || brlInputEl, maxCells);
-  window.toggleBrlSixKey = toggleBrlSixKey;
-  window.toggleBrlAscii = toggleBrlAscii;
-  window.toggleBrlInsertMode = toggleBrlInsertMode;
-  window.centerCurrentBrailleLine = centerCurrentBrailleLine;
-  window.updateBrlMarginDropdownUI = updateBrlMarginDropdownUI;
-  window.updateBrlPositionUI = updateBrlPositionUI;
-  window.updateBrlSyncStatus = updateBrlSyncStatus;
-  window.validateBrailleDocument = validateBrailleDocument;
-  window.runBrailleValidation = runBrailleValidation;
-  window.jumpToBrailleIssue = jumpToBrailleIssue;
-  window.getBrlSyncStatus = () => brlCurrentSyncStatus;
-  window.detectBrailleBufferChanges = detectBrailleBufferChanges;
-  window.reconcileBrailleChangeToPrint = reconcileBrailleChangeToPrint;
-  window.scheduleBrailleToPrintSync = scheduleBrailleToPrintSync;
-  window.backTranslateBrailleText = backTranslateBrailleText;
-  window.backTranslateBrailleRuns = backTranslateBrailleRuns;
-  window.parseBrailleBlockSegments = parseBrailleBlockSegments;
-  window.extractPrintPageNumber = extractPrintPageNumber;
-  window.detectBrailleBlockStyle = detectBrailleBlockStyle;
-  window.stripTranscriberNoteIndicators = stripTranscriberNoteIndicators;
-  window.stripFootnoteIndicators = stripFootnoteIndicators;
-  window.stripStageIndicators = stripStageIndicators;
-  window.stripPoemIndicators = stripPoemIndicators;
-  window.stripDialogueIndicators = stripDialogueIndicators;
-  window.stripAttributionIndicators = stripAttributionIndicators;
-  window.stripCaptionIndicators = stripCaptionIndicators;
-  window.stripQuoteIndicators = stripQuoteIndicators;
-  window.isTableSeparatorLine = isTableSeparatorLine;
-  window.extractColumnsFromSeparator = extractColumnsFromSeparator;
-  window.parseBrailleSpatialTable = parseBrailleSpatialTable;
-  window.parseBrailleListedTable = parseBrailleListedTable;
-  window.parseBrailleTable = parseBrailleTable;
-  window.detectBrailleTable = detectBrailleTable;
-  window.detectBrailleGraphic = detectBrailleGraphic;
-  window.parseBrailleGraphicBlock = parseBrailleGraphicBlock;
-  window.refreshToolbar = refreshToolbar;
-  window.isReconcilingBrailleToPrint = () => isReconcilingBrailleToPrint;
-  window.getLastRenderedBrailleText = () => lastRenderedBrailleText;
-  window.getLastTrace = () => lastTrace;
-  window.modelToLexical = modelToLexical;
-  window.buildModel = () => editor.getEditorState().read(buildModel);
-  window.unicodeBrailleToBrf = unicodeBrailleToBrf;
-  window.brfToUnicodeBraille = brfToUnicodeBraille;
-}
-
-// ---- Bidirectional Sync & Change Detection (Braille -> Print) ----
-export function backTranslateBrailleText(brailleText, customSettings = settings) {
-  if (!brailleText || !brailleText.trim()) return '';
-  const brf = /[\u2800-\u28FF]/.test(brailleText) ? unicodeBrailleToBrf(brailleText) : brailleText;
-  const table = resolveTable(customSettings || settings);
-  const translators = makeTranslators(louis, table);
-  try {
-    const raw = translators.backTranslate(brf);
-    return (raw || '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
-  } catch (err) {
-    console.warn('backTranslateBrailleText error:', err);
-    return '';
-  }
-}
-
-export function backTranslateBrailleRuns(brailleText, customSettings = settings) {
-  if (!brailleText || !brailleText.trim()) return [];
-  const brf = /[\u2800-\u28FF]/.test(brailleText) ? unicodeBrailleToBrf(brailleText) : brailleText;
-  const table = resolveTable(customSettings || settings);
-  const translators = makeTranslators(louis, table);
-  try {
-    if (typeof translators.backTranslateRuns === 'function') {
-      const res = translators.backTranslateRuns(brf);
-      if (res && res.runs && res.runs.length > 0) {
-        return res.runs.map(r => ({
-          type: 'text',
-          text: (r.text || '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''),
-          tf: r.tf || 0,
-        })).filter(r => r.text);
-      }
-    }
-    const plain = translators.backTranslate(brf);
-    return plain ? [{ type: 'text', text: plain.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''), tf: 0 }] : [];
-  } catch (err) {
-    console.warn('backTranslateBrailleRuns error:', err);
-    return [];
-  }
-}
-
-export function parseBrailleBlockSegments(rawBraille, customSettings = settings) {
-  if (!rawBraille || !rawBraille.trim()) return [];
-  const currentSettings = customSettings || settings;
-  const isNemeth = effectiveMathCode(currentSettings) === 'nemeth';
-
-  // 1. Normalize Unicode Braille representation if input is BRF ASCII
-  const uniBrl = /[\u2800-\u28FF]/.test(rawBraille) ? rawBraille : brfToUnicodeBraille(rawBraille);
-
-  // 2. Check for Nemeth Switches: ⠸⠩ (NEM_OPEN) and ⠸⠱ (NEM_CLOSE)
-  if (uniBrl.includes(NEM_OPEN)) {
-    const segments = [];
-    let idx = 0;
-    while (idx < uniBrl.length) {
-      const openIdx = uniBrl.indexOf(NEM_OPEN, idx);
-      if (openIdx === -1) {
-        const textPart = uniBrl.slice(idx);
-        if (textPart.trim()) {
-          const runs = backTranslateBrailleRuns(textPart, currentSettings);
-          if (runs.length) segments.push(...runs);
-        }
-        break;
-      }
-
-      if (openIdx > idx) {
-        const textPart = uniBrl.slice(idx, openIdx);
-        if (textPart.trim()) {
-          const runs = backTranslateBrailleRuns(textPart, currentSettings);
-          if (runs.length) segments.push(...runs);
-        }
-      }
-
-      const closeIdx = uniBrl.indexOf(NEM_CLOSE, openIdx + NEM_OPEN.length);
-      const mathBrl = closeIdx !== -1
-        ? uniBrl.slice(openIdx + NEM_OPEN.length, closeIdx)
-        : uniBrl.slice(openIdx + NEM_OPEN.length);
-
-      let mathLatex = null;
-      try {
-        if (typeof globalThis !== 'undefined' && globalThis.NemethToLatex && typeof nemethHybrid === 'function') {
-          const mathRes = nemethHybrid(mathBrl);
-          if (mathRes && mathRes.latex) mathLatex = mathRes.latex;
-        }
-        if (!mathLatex && typeof nemethMathsToLatexV2 === 'function') {
-          const v2Res = nemethMathsToLatexV2(mathBrl);
-          if (v2Res && v2Res.latex) mathLatex = v2Res.latex;
-        }
-      } catch (e) {
-        try {
-          if (typeof nemethMathsToLatexV2 === 'function') {
-            const v2Res = nemethMathsToLatexV2(mathBrl);
-            if (v2Res && v2Res.latex) mathLatex = v2Res.latex;
-          }
-        } catch (_) {}
-      }
-
-      if (mathLatex) {
-        segments.push({ type: 'math', latex: mathLatex });
-      } else if (mathBrl.trim()) {
-        const runs = backTranslateBrailleRuns(mathBrl, currentSettings);
-        if (runs.length) segments.push(...runs);
-      }
-
-      if (closeIdx === -1) break;
-      idx = closeIdx + NEM_CLOSE.length;
-    }
-    return segments;
-  }
-
-  // 3. Check for UEB Math Indicators or Expressions
-  // Indicators: ⠰⠰⠰ (passage), ⠰⠰ (word), ⠰ (symbol)
-  // Operators: ⠐⠖ (+), ⠐⠤ (-), ⠐⠶ (=), ⠐⠦ (×), ⠨⠌ (/), ⠰⠔ (^), ⠰⠩ (sqrt), ⠰⠷ (frac), ⠨⠏ (pi)
-  const isUebMathPattern = /⠰[⠔⠢⠩⠷⠻]|⠐[⠖⠤⠶⠦]|⠨[⠌⠏]|⠼[⠁-⠚]+[⠐⠨⠰]/.test(uniBrl);
-  if (isUebMathPattern) {
-    try {
-      const uebRes = uebHybrid(uniBrl);
-      if (uebRes && uebRes.latex && (!uebRes.badCells || uebRes.badCells.length === 0)) {
-        return [{ type: 'math', latex: uebRes.latex }];
-      }
-    } catch (_) {}
-  }
-
-  // 4. Standalone Nemeth Math (ONLY when string has NO spaces and contains explicit Nemeth operators/digits)
-  if (isNemeth && !uniBrl.includes(' ') && !uniBrl.includes('⠀') && /[⠂⠆⠒⠲⠢⠖⠶⠦⠔⠴]/.test(uniBrl)) {
-    try {
-      const mathRes = nemethMathsToLatexV2 ? nemethMathsToLatexV2(uniBrl) : null;
-      if (mathRes && mathRes.latex && (!mathRes.badCells || mathRes.badCells.length === 0)) {
-        return [{ type: 'math', latex: mathRes.latex }];
-      }
-    } catch (_) {}
-  }
-
-  // 5. Default: Standard Literary Text with Typeform Runs (Bold, Italic, Underline)
-  return backTranslateBrailleRuns(rawBraille, currentSettings);
-}
-
-export function extractPrintPageNumber(rawPageToken, customSettings = settings) {
-  if (!rawPageToken) return '1';
-  let token = rawPageToken.trim();
-
-  // 1. If standard ASCII digits / letters / Roman numerals
-  if (/^[a-zA-Z0-9\-]+$/.test(token)) {
-    // Check if ASCII BRF number format like #A or #B or #AB
-    if (token.startsWith('#')) {
-      const numPart = token.slice(1).toUpperCase();
-      const digitMap = { A: '1', B: '2', C: '3', D: '4', E: '5', F: '6', G: '7', H: '8', I: '9', J: '0' };
-      const converted = [...numPart].map(ch => digitMap[ch] || ch).join('');
-      if (/^\d+$/.test(converted)) return converted;
-    }
-    return token;
-  }
-
-  // 2. If Unicode Braille number with number prefix ⠼
-  if (token.startsWith('⠼')) {
-    const numPart = token.slice(1);
-    const digitMap = { '⠁': '1', '⠃': '2', '⠉': '3', '⠙': '4', '⠑': '5', '⠋': '6', '⠛': '7', '⠓': '8', '⠊': '9', '⠚': '0' };
-    const converted = [...numPart].map(ch => digitMap[ch] || ch).join('');
-    if (/^\d+$/.test(converted)) return converted;
-  }
-
-  // 3. If Lowered braille digits (UKAAF lowered numbers ⠂ ⠆ ⠒ ⠲ ⠢ ⠖ ⠶ ⠦ ⠔ ⠴)
-  const loweredMap = { '⠂': '1', '⠆': '2', '⠒': '3', '⠲': '4', '⠢': '5', '⠖': '6', '⠶': '7', '⠦': '8', '⠔': '9', '⠴': '0' };
-  if ([...token].every(ch => loweredMap[ch])) {
-    return [...token].map(ch => loweredMap[ch]).join('');
-  }
-
-  // 4. If UEB letter page numbers (e.g. ⠁ for 1/a, ⠊ for i, ⠊⠊ for ii, etc.)
-  const letterMap = { '⠁': 'a', '⠃': 'b', '⠉': 'c', '⠙': 'd', '⠑': 'e', '⠋': 'f', '⠛': 'g', '⠓': 'h', '⠊': 'i', '⠚': 'j', '⠧': 'v', '⠭': 'x' };
-  if ([...token].every(ch => letterMap[ch])) {
-    const letters = [...token].map(ch => letterMap[ch]).join('');
-    return letters;
-  }
-
-  // 5. Back-translation fallback
-  if (typeof backTranslateBrailleText === 'function') {
-    const bt = backTranslateBrailleText(token, customSettings);
-    if (bt) return bt.trim();
-  }
-
-  return token;
-}
-
-export function stripTranscriberNoteIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  // Strip Unicode TN indicators ⠈⠨⠣ ... ⠈⠨⠜
-  s = s.replace(/^⠈⠨⠣[ \t\u2800]*/, '').replace(/[ \t\u2800]*⠈⠨⠜$/, '');
-  // Strip ASCII TN indicators @.< ... @.>
-  s = s.replace(/^@\.<[ \t]*/, '').replace(/[ \t]*@\.\>$/, '');
-  // Strip legacy Unicode ⠐⠇ ... ⠐⠂ / ⠐⠇
-  s = s.replace(/^⠐⠇[ \t\u2800]*/, '').replace(/[ \t\u2800]*(?:⠐⠂|⠐⠇)$/, '');
-  // Strip legacy ASCII ,' ... 7 / ,'
-  s = s.replace(/^,\'[ \t]*/, '').replace(/[ \t]*(?:7|,\')$/, '');
-  // Strip [TN: ...] or [transcriber's note: ...]
-  s = s.replace(/^\[(?:tn:?|transcriber(?:'s)?\s*note:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  return s.trim();
-}
-
-export function stripFootnoteIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  // Strip [fn: ...] or [footnote: ...]
-  s = s.replace(/^\[(?:fn:?|footnote:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  // Strip leading Footnote: or ⠠⠋⠕⠕⠞⠝⠕⠞⠑ / ⠠⠿⠕⠕⠞⠝⠕⠞⠑
-  s = s.replace(/^(?:footnote:?|⠠?[⠋⠿]⠕⠕⠞⠝⠕⠞⠑:?)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripStageIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:stage\s*direction:?|stage:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^\((?:stage\s*direction:?|stage:?)[ \t]*/i, '').replace(/[ \t]*\)$/, '');
-  s = s.replace(/^(?:⠠⠎⠞⠁⠛⠑\s*⠙⠊⠗⠑⠉⠞⠊⠕⠝:|⠠⠎⠞⠁⠛⠑:|stage\s*direction:|stage:)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripPoemIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:poem:?|verse:?|stanza:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^(?:⠠⠏⠕⠑⠍:|⠠⠧⠑⠗⠎⠑:|poem:|verse:)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripDialogueIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:dialogue:?|play:?|speaker:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^(?:⠠⠙⠊⠁⠇⠕⠛⠥⠑:|dialogue:)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripAttributionIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:attribution:?|source:?|credit:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^(?:⠠⠁⠞⠞⠗⠊⠃⠥⠞⠊⠕⠝:|attribution:|source:)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripCaptionIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:caption:?|figure:?|image\s*caption:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^(?:caption:|figure\s*\d+:|fig\.\s*\d+:|⠠⠉⠁⠏⠞⠊⠕⠝:|⠠⠿⠊⠛⠥⠗⠑\s*⠼[⠁-⠚]+:)[ \t\u2800]*/i, '');
-  return s.trim();
-}
-
-export function stripQuoteIndicators(brl) {
-  if (!brl || typeof brl !== 'string') return '';
-  let s = brl.trim();
-  s = s.replace(/^\[(?:quote:?|blockquote:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-  s = s.replace(/^>[ \t]*/, '');
-  return s.trim();
-}
-
-export function isTableSeparatorLine(line) {
-  if (!line || typeof line !== 'string') return false;
-  const trimmed = line.trim();
-  if (!trimmed) return false;
-  return /^[ \t\u2800]*[⠒⠤\-3—]{2,}(?:[ \t\u2800]+[⠒⠤\-3—]{2,})+[ \t\u2800]*$/.test(line);
-}
-
-export function extractColumnsFromSeparator(sepLine) {
-  const cols = [];
-  const re = /([⠒⠤\-3—]{2,})/g;
-  let m;
-  while ((m = re.exec(sepLine)) !== null) {
-    cols.push({ start: m.index, end: m.index + m[0].length });
-  }
-  return cols;
-}
-
-export function parseBrailleSpatialTable(blockLines, customSettings = settings, existingHeaders = []) {
-  if (!blockLines || !blockLines.length) return { headers: [], rows: [], format: 'spatial' };
-
-  let caption = '';
-  let tabletn = '';
-  const cleanLines = [];
-
-  for (let l of blockLines) {
-    const trimmed = l.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-    if (!trimmed) continue;
-    if (/^\[\/?(?:table|table-spatial|table-listed)(?::\s*.*)?\]$/i.test(trimmed)) continue;
-
-    // Ignore standalone embosser page numbers (e.g. ⠼⠁, #A, 1, Page 1)
-    if (/^(?:⠼[⠁-⠚]+|#\s*[a-zA-Z0-9]+|\d+|page\s*\d+)$/i.test(trimmed)) continue;
-
-    if (/^(@\.<|⠈⠨⠣|,'|⠐⠇|\[(?:tn:?|transcriber(?:'s)?\s*note:?|tabletn:?))/i.test(trimmed)) {
-      const tnBrl = stripTranscriberNoteIndicators(trimmed);
-      tabletn = backTranslateBrailleText(tnBrl, customSettings);
-      continue;
-    }
-
-    if (/^\[(?:caption:?|title:?)[ \t]*/i.test(trimmed)) {
-      const capBrl = trimmed.replace(/^\[(?:caption:?|title:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-      caption = backTranslateBrailleText(capBrl, customSettings);
-      continue;
-    }
-
-    cleanLines.push(l);
-  }
-
-  if (cleanLines.length === 0) {
-    return { headers: [], rows: [], format: 'spatial', caption, tabletn };
-  }
-
-  let sepIdx = -1;
-  for (let i = 0; i < cleanLines.length; i++) {
-    if (isTableSeparatorLine(cleanLines[i])) {
-      sepIdx = i;
-      break;
-    }
-  }
-
-  let headers = [];
-  const rows = [];
-
-  if (sepIdx !== -1) {
-    const sepLine = cleanLines[sepIdx];
-    const colSpans = extractColumnsFromSeparator(sepLine);
-    const colCount = colSpans.length;
-
-    const sliceRow = (line) => {
-      const chunks = line.split(/[ \t\u2800]{2,}/).map(c => c.trim()).filter(Boolean);
-      if (chunks.length === colCount) {
-        return chunks.map(rawCell => {
-          if (!rawCell || /^[⠒⠤\-3—]{2,}$/.test(rawCell)) return '';
-          return backTranslateBrailleText(rawCell, customSettings);
-        });
-      }
-
-      const cells = [];
-      for (let ci = 0; ci < colCount; ci++) {
-        const cStart = ci === 0 ? 0 : colSpans[ci].start;
-        const cEnd = ci === colCount - 1 ? line.length : (colSpans[ci + 1] ? colSpans[ci + 1].start : line.length);
-        const rawCell = line.slice(cStart, cEnd).trim();
-        if (!rawCell || /^[⠒⠤\-3—]{2,}$/.test(rawCell)) {
-          cells.push('');
-        } else {
-          cells.push(backTranslateBrailleText(rawCell, customSettings));
-        }
-      }
-      return cells;
-    };
-
-    const headerLines = cleanLines.slice(0, sepIdx);
-    if (headerLines.length > 0) {
-      if (headerLines.length > 1 && !caption) {
-        const first = headerLines[0].trim();
-        const leadingSpaces = (headerLines[0].match(/^[ \t\u2800]*/) || [''])[0].length;
-        if (leadingSpaces >= 4 && !first.includes('  ')) {
-          caption = backTranslateBrailleText(first, customSettings);
-          headerLines.shift();
-        }
-      }
-      if (headerLines.length > 0) {
-        headers = sliceRow(headerLines[headerLines.length - 1]);
-      }
-    }
-
-    if ((!headers || headers.length === 0) && existingHeaders && existingHeaders.length > 0) {
-      headers = existingHeaders;
-    }
-
-    const dataLines = cleanLines.slice(sepIdx + 1);
-    for (const dl of dataLines) {
-      const r = sliceRow(dl);
-      if (r.some(c => c !== '')) rows.push(r);
-    }
-  } else {
-    for (let i = 0; i < cleanLines.length; i++) {
-      const line = cleanLines[i].trim();
-      if (!line) continue;
-      const rawCols = line.split(/[ \t\u2800]{2,}/);
-      const row = rawCols.map(c => {
-        const tr = c.trim();
-        if (!tr || /^[⠒⠤\-3—]{2,}$/.test(tr)) return '';
-        return backTranslateBrailleText(tr, customSettings);
-      });
-      if (i === 0 && (existingHeaders.length > 0 || cleanLines.length > 1)) {
-        headers = row;
-      } else {
-        rows.push(row);
-      }
-    }
-  }
-
-  if ((!headers || headers.length === 0) && existingHeaders && existingHeaders.length > 0) {
-    headers = existingHeaders;
-  }
-
-  return { headers, rows, format: 'spatial', caption, tabletn };
-}
-
-export function parseBrailleListedTable(blockLines, customSettings = settings, existingHeaders = []) {
-  if (!blockLines || !blockLines.length) return { headers: [], rows: [], format: 'listed' };
-
-  let caption = '';
-  let tabletn = '';
-  const rows = [];
-  const headersSet = new Set(existingHeaders.slice(1));
-  let currentRow = null;
-
-  for (let line of blockLines) {
-    const trimmed = line.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-    if (!trimmed) {
-      if (currentRow) {
-        rows.push(currentRow);
-        currentRow = null;
-      }
-      continue;
-    }
-
-    if (/^\[\/?(?:table|table-spatial|table-listed)(?::\s*.*)?\]$/i.test(trimmed)) continue;
-
-    // Ignore standalone embosser page numbers (e.g. ⠼⠁, #A, 1, Page 1)
-    if (/^(?:⠼[⠁-⠚]+|#\s*[a-zA-Z0-9]+|\d+|page\s*\d+)$/i.test(trimmed)) continue;
-
-    if (/^(@\.<|⠈⠨⠣|,'|⠐⠇|\[(?:tn:?|transcriber(?:'s)?\s*note:?|tabletn:?))/i.test(trimmed)) {
-      const tnBrl = stripTranscriberNoteIndicators(trimmed);
-      tabletn = backTranslateBrailleText(tnBrl, customSettings);
-      continue;
-    }
-
-    if (/^\[(?:caption:?|title:?)[ \t]*/i.test(trimmed)) {
-      const capBrl = trimmed.replace(/^\[(?:caption:?|title:?)[ \t]*/i, '').replace(/[ \t]*\]$/, '');
-      caption = backTranslateBrailleText(capBrl, customSettings);
-      continue;
-    }
-
-    const leadingSpaces = (line.match(/^[ \t\u2800]*/) || [''])[0].length;
-
-    if (rows.length === 0 && !currentRow && leadingSpaces >= 4 && !caption && !line.includes(':')) {
-      caption = backTranslateBrailleText(trimmed, customSettings);
-      continue;
-    }
-
-    if (leadingSpaces === 0) {
-      if (currentRow) rows.push(currentRow);
-      currentRow = {
-        label: backTranslateBrailleText(trimmed, customSettings),
-        cols: {}
-      };
-    } else {
-      if (!currentRow) {
-        currentRow = { label: '', cols: {} };
-      }
-      const fullText = backTranslateBrailleText(trimmed, customSettings);
-      let colonIdx = fullText.indexOf(':');
-      if (colonIdx !== -1) {
-        const hdr = fullText.slice(0, colonIdx).trim();
-        let val = fullText.slice(colonIdx + 1).trim();
-        if (val === '---' || val === '——' || val === '–' || /^[⠒⠤\-3—]{2,}$/.test(val)) val = '';
-        if (hdr) {
-          headersSet.add(hdr);
-          currentRow.cols[hdr] = val;
-        }
-      }
-    }
-  }
-
-  if (currentRow) rows.push(currentRow);
-
-  const col1Headers = Array.from(headersSet);
-  const headers = [existingHeaders[0] || 'Item', ...col1Headers];
-  const tableRows = rows.map(r => {
-    return [r.label, ...col1Headers.map(h => r.cols[h] || '')];
-  });
-
-  return { headers, rows: tableRows, format: 'listed', caption, tabletn };
-}
-
-export function parseBrailleTable(blockLines, customSettings = settings, existingHeaders = []) {
-  if (!blockLines || !blockLines.length) return { headers: [], rows: [], format: 'auto' };
-
-  const isListed = blockLines.some(l => {
-    const tr = l.trim();
-    if (/\[table-listed\]/i.test(tr)) return true;
-    if (/@\.<.*(?:table:\s*listed|listed\s*table|,LI\/\$)/i.test(tr) || /⠈⠨⠣.*(?:⠠⠞⠁⠃⠇⠑:.*⠠⠇⠊⠎⠞⠑⠙|⠠⠇⠊⠎⠞⠑⠙.*⠠⠞⠁⠃⠇⠑)/i.test(tr)) return true;
-    if (/^(@\.<|⠈⠨⠣|,'|⠐⠇|\[(?:tn:?|transcriber(?:'s)?\s*note:?|tabletn:?))/i.test(tr)) {
-      const tnText = backTranslateBrailleText(stripTranscriberNoteIndicators(tr), customSettings);
-      if (/(?:table:\s*listed|listed\s*table)/i.test(tnText)) return true;
-    }
-    return false;
-  });
-
-  if (isListed) {
-    return parseBrailleListedTable(blockLines, customSettings, existingHeaders);
-  }
-
-  return parseBrailleSpatialTable(blockLines, customSettings, existingHeaders);
-}
-
-export function parseBrailleGraphicBlock(blockLines, customSettings = settings, existingData = {}) {
-  if (!blockLines || !blockLines.length) {
-    return {
-      title: existingData.title || 'Tactile diagram',
-      alt: existingData.alt || 'Tactile diagram',
-      size: existingData.size || 'half',
-      caption: existingData.caption || '',
-      labels: existingData.labels || []
-    };
-  }
-
-  let title = '';
-  let alt = '';
-  let size = existingData.size || 'half';
-  let caption = existingData.caption || '';
-  const labels = [];
-
-  const textLines = blockLines.map(l => l.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '')).filter(Boolean);
-
-  for (const line of textLines) {
-    // 1. Explicit bracket marker: [graphic: Title], [graphic size="full": Title], [tactile graphic: Title — Alt], [diagram: Title]
-    const bracketMatch = line.match(/^\[(?:graphic|tactile(?:\s*graphic)?|diagram)(?:\s+size=["']?(compact|half|full)["']?)?(?::|\s+)?\s*(.*?)\]$/i);
-    if (bracketMatch) {
-      if (bracketMatch[1]) size = bracketMatch[1].toLowerCase();
-      const payload = bracketMatch[2].trim();
-      if (payload) {
-        const parts = payload.split(/\s+[—\-]\s+/);
-        let rawTitle = parts[0] || '';
-        let rawAlt = parts[1] || rawTitle;
-
-        if (/[\u2800-\u28FF]/.test(rawTitle)) {
-          title = backTranslateBrailleText(rawTitle, customSettings);
-        } else {
-          title = rawTitle;
-        }
-
-        if (/[\u2800-\u28FF]/.test(rawAlt)) {
-          alt = backTranslateBrailleText(rawAlt, customSettings);
-        } else {
-          alt = rawAlt;
-        }
-      }
-      continue;
-    }
-
-    // Size tag: [size: full] or [size: compact]
-    const sizeMatch = line.match(/^\[size:\s*(compact|half|full)\]$/i);
-    if (sizeMatch) {
-      size = sizeMatch[1].toLowerCase();
-      continue;
-    }
-
-    // TN graphic line: [Transcriber's Note: Tactile diagram — Title]
-    const tnMatch = line.match(/^\[(?:Transcriber(?:'s)?\s*Note:\s*)?(?:Tactile\s*diagram|Graphic)\s*[—\-]\s*(.*?)\]$/i);
-    if (tnMatch) {
-      const payload = tnMatch[1].trim();
-      if (/[\u2800-\u28FF]/.test(payload)) {
-        title = backTranslateBrailleText(payload, customSettings);
-      } else {
-        title = payload;
-      }
-      if (!alt) alt = title;
-      continue;
-    }
-
-    // Unicode Braille graphic label line
-    if (/[\u2800-\u28FF]/.test(line)) {
-      const back = backTranslateBrailleText(line, customSettings);
-      const backMatch = back.match(/^(?:\[)?(?:Tactile\s*graphic|Graphic|Diagram)(?::|\s*[—\-])\s*(.*?)(?:\])?$/i);
-      if (backMatch) {
-        title = backMatch[1].trim();
-        if (!alt) alt = title;
-        continue;
-      }
-    }
-
-    // Caption line
-    const capMatch = line.match(/^(?:\[(?:caption:?)|caption:)\s*(.*?)\]?$/i);
-    if (capMatch) {
-      let rawCap = capMatch[1].trim();
-      if (/[\u2800-\u28FF]/.test(rawCap)) {
-        caption = backTranslateBrailleText(rawCap, customSettings);
-      } else {
-        caption = rawCap;
-      }
-      continue;
-    }
-
-    // Label line
-    const labelMatch = line.match(/^(?:\[(?:label|key):?|(?:label|key):)\s*(.*?)\]?$/i);
-    if (labelMatch) {
-      let rawLbl = labelMatch[1].trim();
-      if (/[\u2800-\u28FF]/.test(rawLbl)) {
-        labels.push(backTranslateBrailleText(rawLbl, customSettings));
-      } else {
-        labels.push(rawLbl);
-      }
-      continue;
-    }
-  }
-
-  if (!title) title = existingData.title || existingData.alt || 'Tactile diagram';
-  if (!alt) alt = existingData.alt || title || 'Tactile diagram';
-
-  return { title, alt, size, caption, labels };
-}
-
-export function detectBrailleGraphic(blockLines, customSettings = settings) {
-  if (!blockLines || !blockLines.length) return { isGraphic: false };
-  const firstLine = blockLines[0] || '';
-  const trimmed = firstLine.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-  if (!trimmed) return { isGraphic: false };
-
-  const isGraphicMarker = /^(\[(?:graphic:?|tactile(?:\s*graphic)?:?|diagram:?)|\[(?:graphic|tactile|diagram)\]|⠠⠞⠁⠉⠞⠊⠇⠑\s*⠠?⠛⠗⠁⠏⠓⠊⠉:|⠠⠛⠗⠁⠏⠓⠊⠉:|⠠⠙⠊⠁⠛⠗⠁⠍:|\[(?:Transcriber(?:'s)?\s*Note:\s*)?(?:Tactile\s*diagram|Graphic)\s*[—\-])/i.test(trimmed);
-  if (isGraphicMarker) {
-    const parsed = parseBrailleGraphicBlock(blockLines, customSettings);
-    return { isGraphic: true, style: 'graphic', ...parsed };
-  }
-  return { isGraphic: false };
-}
-
-export function detectBrailleTable(blockLines, customSettings = settings) {
-  if (!blockLines || !blockLines.length) return { isTable: false };
-  const firstLine = blockLines[0] || '';
-  const trimmed = firstLine.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-
-  const hasTableMarker = blockLines.some(l => /^\[\/?(?:table|table-spatial|table-listed)(?::\s*.*)?\]$/i.test(l.trim()));
-  const hasListedTn = blockLines.some(l => {
-    const tr = l.trim();
-    if (/@\.<.*(?:table:\s*listed|listed\s*table|,LI\/\$)/i.test(tr) || /⠈⠨⠣.*(?:⠠⠞⠁⠃⠇⠑:.*⠠⠇⠊⠎⠞⠑⠙|⠠⠇⠊⠎⠞⠑⠙.*⠠⠞⠁⠃⠇⠑)/i.test(tr)) return true;
-    if (/^(@\.<|⠈⠨⠣|,'|⠐⠇|\[(?:tn:?|transcriber(?:'s)?\s*note:?|tabletn:?))/i.test(tr)) {
-      const tnText = backTranslateBrailleText(stripTranscriberNoteIndicators(tr), customSettings);
-      if (/(?:table:\s*listed|listed\s*table)/i.test(tnText)) return true;
-    }
-    return false;
-  });
-  const hasSeparator = blockLines.some(l => isTableSeparatorLine(l));
-
-  if (hasTableMarker || hasListedTn || hasSeparator) {
-    const isListed = hasListedTn || blockLines.some(l => /\[table-listed\]/i.test(l.trim()));
-    return { isTable: true, format: isListed ? 'listed' : 'spatial' };
-  }
-  return { isTable: false };
-}
-
-export function detectBrailleBlockStyle(blockLines, customSettings = settings) {
-  if (!blockLines || blockLines.length === 0) return { style: 'body', headingLevel: null, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false, isTable: false };
-  const firstLine = blockLines[0] || '';
-  const trimmed = firstLine.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-  if (!trimmed) return { style: 'body', headingLevel: null, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false, isTable: false };
-
-  const currentSettings = customSettings || settings;
-  const lineWidth = (currentSettings?.cells | 0) || (EMBOSSER_PRESETS[currentSettings?.embosser]?.cells || 38);
-  const leadingSpaces = (firstLine.match(/^[ \t\u2800]*/) || [''])[0].length;
-
-  // 1. Check for Document Section Break (* * *, ***, ∗ ∗ ∗, "9 "9 "9, ⠐⠔ ⠐⠔ ⠐⠔, ⠐ ⠐ ⠐)
-  const breakMatch = trimmed.match(/^(?:(?:"9|⠐⠔)[ \t\u2800]+(?:"9|⠐⠔)[ \t\u2800]+(?:"9|⠐⠔)|(?:"9|⠐⠔){3}|\*(?:[ \t\u2800]*\*){2,}|∗(?:[ \t\u2800]*∗){2,}|⠐(?:[ \t\u2800]+⠐){2,})$/);
-  if (breakMatch) {
-    return { style: 'break', isBreak: true, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isNote: false, isFootnote: false, isTable: false };
-  }
-
-  // 2. Check for Print Page Indicator
-  // 2a. BANA / UKAAF Braille Page Indicator lines ("3------- 1 or ⠐⠒⠤⠤⠤⠤ ⠼⠁ or centred "31 / ⠐⠒⠁)
-  const braillePageMatch = trimmed.match(/^(?:"3|⠐⠒)[ \t\u2800\-\⠤]*(?:Page|PAGE|⠠⠏⠁⠛⠑)?[ \t\u2800]*([a-zA-Z0-9ivxlcdm\u2800-\u28FF\-#]+)$/i);
-  if (braillePageMatch) {
-    const pageToken = braillePageMatch[1];
-    const pageNum = extractPrintPageNumber(pageToken, currentSettings);
-    return { style: 'print-page', isPrintPage: true, page: pageNum, isHeading: false, isList: false, isSidebar: false, isBreak: false, isNote: false, isFootnote: false, isTable: false };
-  }
-
-  // 2b. Direct / Slash Print Page marker (e.g. "--- Page 1 ---" or "Page 1" or "⠠⠏⠁⠛⠑ ⠼⠁")
-  const directPageMatch = trimmed.match(/^(?:---|⠒{3,}|⠐{3,})?[ \t\u2800]*(?:Page|PAGE|⠠⠏⠁⠛⠑|⠏⠁⠛⠑)[ \t\u2800]+([a-zA-Z0-9ivxlcdm\u2800-\u28FF\-#]+)[ \t\u2800]*(?:---|⠒{3,}|⠐{3,})?$/i);
-  if (directPageMatch) {
-    const pageToken = directPageMatch[1];
-    const pageNum = extractPrintPageNumber(pageToken, currentSettings);
-    return { style: 'print-page', isPrintPage: true, page: pageNum, isHeading: false, isList: false, isSidebar: false, isBreak: false, isNote: false, isFootnote: false, isTable: false };
-  }
-
-  // 3. Check for Sidebar Boxlines (top border dots 2-5: ⠒ in Unicode, 3 in ASCII)
-  const boxlineMatch = trimmed.match(/^([⠒3]{3,})[ \t\u2800]*(.*?)[ \t\u2800]*([⠒3]*)$/);
-  if (boxlineMatch && (boxlineMatch[1].length >= 3 || (boxlineMatch[1].length + (boxlineMatch[3]?.length || 0) >= 4))) {
-    let titleBrl = boxlineMatch[2] ? boxlineMatch[2].replace(/[⠒3]+$/g, '').replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '') : '';
-    let title = '';
-    if (titleBrl) {
-      title = backTranslateBrailleText(titleBrl, currentSettings);
-    }
-    return { style: 'sidebar', isContainer: true, title, isSidebar: true, isHeading: false, isList: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false, isTable: false };
-  }
-
-  // 4. Check for Table (Spatial Columnar or Listed Format)
-  const tableInfo = detectBrailleTable(blockLines, currentSettings);
-  if (tableInfo.isTable) {
-    return { style: 'table', isTable: true, format: tableInfo.format, isNote: false, isFootnote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isGraphic: false };
-  }
-
-  // 5. Check for Tactile Graphic
-  const graphicInfo = detectBrailleGraphic(blockLines, currentSettings);
-  if (graphicInfo.isGraphic) {
-    return { style: 'graphic', isGraphic: true, isTable: false, isNote: false, isFootnote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, ...graphicInfo };
-  }
-
-  // 6. Check for Transcriber's Note (TN)
-  // BANA TN indicators: @.< ... @.> (BRF), ⠈⠨⠣ ... ⠈⠨⠜ (Unicode), legacy ,' ... 7 or ,' ... ,', ⠐⠇ ... ⠐⠂
-  // Direct/Slash markers: [tn: ...], [transcriber's note: ...]
-  const lastLine = blockLines[blockLines.length - 1] || '';
-  const trimmedLast = lastLine.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-  const joinedBlock = blockLines.map(l => l.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '')).join(' ');
-
-  const hasTnOpen = /^(@\.<|⠈⠨⠣|,'|⠐⠇|\[(?:tn:?|transcriber(?:'s)?\s*note:?))/i.test(trimmed);
-  const hasTnClose = /(@\.>|⠈⠨⠜|,'|7|⠐⠂|\])$/.test(trimmedLast);
-  const hasTnMarkers = /(@\.<|⠈⠨⠣|,'|⠐⠇)/.test(joinedBlock);
-
-  if (hasTnOpen || (hasTnClose && hasTnMarkers)) {
-    return { style: 'note', isNote: true, isFootnote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 5. Check for Footnote
-  // Markers: [fn: ...], [footnote: ...], Footnote: ..., ⠠⠋⠕⠕⠞⠝⠕⠞⠑ / ⠠⠿⠕⠕⠞⠝⠕⠞⠑ ...
-  const hasFnMarker = /^(\[(?:fn:?|footnote:?)|footnote:|⠠?[⠋⠿]⠕⠕⠞⠝⠕⠞⠑)/i.test(trimmed);
-  if (hasFnMarker) {
-    return { style: 'footnote', isFootnote: true, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 6. Check for Stage Direction
-  const isStageMarker = /^(\[(?:stage:?|stage\s*direction:?)|\[stage\]|\(stage\s*direction:?\)|⠠⠎⠞⠁⠛⠑:)/i.test(trimmed);
-  const isStageIndentParenthetical = (leadingSpaces === 6 && ((trimmed.startsWith('(') && trimmed.endsWith(')')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))));
-  if (isStageMarker || isStageIndentParenthetical) {
-    return { style: 'stage', isStage: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 7. Check for Play Dialogue
-  const isDialogueMarker = /^(\[(?:dialogue:?|play:?|speaker:?)|\[dialogue\]|\[play\]|⠠⠙⠊⠁⠇⠕⠛⠥⠑:)/i.test(trimmed);
-  const isDialogueSpeaker = /^((?:⠠[⠁-⠵]){2,20}⠒|\b[A-Z]{2,20}:)[ \t\u2800]/.test(trimmed);
-  if (isDialogueMarker || isDialogueSpeaker) {
-    return { style: 'dialogue', isDialogue: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 8. Check for Poetry / Verse
-  const isPoemMarker = /^(\[(?:poem:?|verse:?|stanza:?)|\[poem\]|\[verse\]|⠠⠏⠕⠑⠍:|⠠⠧⠑⠗⠎⠑:)/i.test(trimmed);
-  if (isPoemMarker) {
-    return { style: 'poem', isPoem: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 9. Check for Caption
-  const isCaptionMarker = /^(\[(?:caption:?|image\s*caption:?)|\[caption\]|caption:|⠠⠉⠁⠏⠞⠊⠕⠝:|figure\s*\d+:|fig\.\s*\d+:|⠠⠿⠊⠛⠥⠗⠑\s*⠼[⠁-⠚]+:)/i.test(trimmed);
-  if (isCaptionMarker) {
-    return { style: 'caption', isCaption: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 10. Check for Attribution
-  const isAttributionMarker = /^(\[(?:attribution:?|source:?|credit:?)|\[attribution\]|⠠⠁⠞⠞⠗⠊⠃⠥⠞⠊⠕⠝:|(?:—|---|--|⠠⠤⠤|⠤⠤)[ \t\u2800]+[A-Za-z0-9\u2800-\u28FF])/i.test(trimmed);
-  if (isAttributionMarker) {
-    return { style: 'attribution', isAttribution: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 11. Check for Quote
-  const isQuoteMarker = /^(\[(?:quote:?|blockquote:?)|\[quote\]|>)[ \t\u2800]*/i.test(trimmed);
-  if (isQuoteMarker) {
-    return { style: 'quote', isQuote: true, isFootnote: false, isNote: false, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false };
-  }
-
-  // 6. Check for Bullet List Item (⠸⠲ in Unicode, _4 in ASCII, •, *, -)
-  const bulletMatch = trimmed.match(/^([⠸_][⠲4]|•|\*|-)[ \t\u2800]+(.*)$/);
-  if (bulletMatch) {
-    return { style: 'list-bullet', listType: 'bullet', isList: true, isHeading: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false, marker: 'bullet', itemBraille: bulletMatch[2] };
-  }
-
-  // 7. Check for Numbered List Item (⠼[⠁-⠚]+[⠄\.] or ASCII #A. / 1. or (a) or (1))
-  const numMatch = trimmed.match(/^((?:⠼[⠁-⠚]+[⠄\.]|\d+[\.\)]|\([a-zA-Z0-9]+\)))[ \t\u2800]+(.*)$/);
-  if (numMatch) {
-    return { style: 'list-number', listType: 'number', isList: true, isHeading: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false, marker: numMatch[1], itemBraille: numMatch[2] };
-  }
-
-  // 8. Check for TOC List Item (dot leaders ⠐⠐⠐... or """... connecting to page number)
-  if (/[⠐"]{2,}[ \t\u2800]*(?:⠼?[⠁-⠚]+|\d+|[a-zA-Z0-9\-_]+)$/i.test(trimmed)) {
-    return { style: 'toc', listType: 'plain', isList: true, listKind: 'toc', isHeading: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-  }
-
-  // 9. Check for Centered Heading 1 (h1)
-  if (leadingSpaces >= 3) {
-    const expectedPad = Math.floor((lineWidth - trimmed.length) / 2);
-    const rightMargin = lineWidth - (leadingSpaces + trimmed.length);
-    if (Math.abs(leadingSpaces - expectedPad) <= 2 && rightMargin >= 2) {
-      return { style: 'h1', headingLevel: 1, isHeading: true, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-    }
-  }
-
-  // 10. Check for Cell 7 Heading (h3) - 6 spaces
-  if (leadingSpaces === 6) {
-    return { style: 'h3', headingLevel: 3, isHeading: true, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-  }
-
-  // 11. Check for Cell 5 Heading (h2) - 4 spaces
-  if (leadingSpaces === 4) {
-    return { style: 'h2', headingLevel: 2, isHeading: true, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-  }
-
-  // 12. Check for Cell 3 Paragraph (3-1 body) - 2 spaces
-  if (leadingSpaces === 2) {
-    return { style: 'body', headingLevel: null, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-  }
-
-  // Default: Body / Flush-Left
-  return { style: 'body', headingLevel: null, isHeading: false, isList: false, isSidebar: false, isPrintPage: false, isBreak: false, isNote: false, isFootnote: false };
-}
-
-export function detectBrailleBufferChanges() {
-  if (!brlInputEl) return { hasChanges: false };
-  const currentVal = brlInputEl.value;
-  if (currentVal === lastRenderedBrailleText) return { hasChanges: false };
-
-  const currentLines = currentVal.split('\n');
-  const oldLines = (lastRenderedBrailleText || '').split('\n');
-
-  let startLine = 0;
-  while (startLine < currentLines.length && startLine < oldLines.length && currentLines[startLine] === oldLines[startLine]) {
-    startLine++;
-  }
-
-  let endLineCurrent = currentLines.length - 1;
-  let endLineOld = oldLines.length - 1;
-  while (endLineCurrent >= startLine && endLineOld >= startLine && currentLines[endLineCurrent] === oldLines[endLineOld]) {
-    endLineCurrent--;
-    endLineOld--;
-  }
-
-  let targetBlockIndex = lastTrace?.rows ? (lastTrace.rows[startLine] ?? 0) : 0;
-  if (targetBlockIndex < 0 && lastTrace?.rows) {
-    for (let i = startLine; i < lastTrace.rows.length; i++) {
-      if (lastTrace.rows[i] >= 0) {
-        targetBlockIndex = lastTrace.rows[i];
-        break;
-      }
-    }
-  }
-  if (targetBlockIndex < 0) targetBlockIndex = 0;
-
-  return {
-    hasChanges: true,
-    startLine,
-    endLineCurrent,
-    endLineOld,
-    targetBlockIndex,
-    changedLines: currentLines.slice(startLine, endLineCurrent + 1),
-    currentLines,
-    oldLines,
-    currentValue: currentVal,
-    previousValue: lastRenderedBrailleText,
-    isAscii: !!settings?.asciiBraille,
-  };
-}
-
-export function reconcileBrailleChangeToPrint() {
-  if (isReconcilingBrailleToPrint) return null;
-  const changes = detectBrailleBufferChanges();
-  if (!changes.hasChanges) {
-    if (typeof updateBrlSyncStatus === 'function') updateBrlSyncStatus('synced');
-    return null;
-  }
-
-  isReconcilingBrailleToPrint = true;
-  activeSyncSource = 'braille';
-  if (typeof updateBrlSyncStatus === 'function') updateBrlSyncStatus('syncing');
-
-  try {
-    // 1. Gather all braille lines belonging to targetBlockIndex
-    let blockBrailleLines = [];
-    const blockRows = [];
-    if (lastTrace?.rows) {
-      for (let r = 0; r < lastTrace.rows.length; r++) {
-        if (lastTrace.rows[r] === changes.targetBlockIndex) blockRows.push(r);
-      }
-    }
-
-    if (blockRows.length > 0 && blockRows[0] < changes.currentLines.length) {
-      const minRow = blockRows[0];
-      const maxRow = blockRows[blockRows.length - 1];
-      const lineDelta = changes.currentLines.length - changes.oldLines.length;
-      let nextBlockRow = null;
-      for (let r = maxRow + 1; r < lastTrace.rows.length; r++) {
-        if (lastTrace.rows[r] > changes.targetBlockIndex) {
-          nextBlockRow = r;
-          break;
-        }
-      }
-      const endSlice = nextBlockRow !== null
-        ? Math.min(changes.currentLines.length, nextBlockRow + lineDelta)
-        : changes.currentLines.length;
-      const sliceStart = Math.min(minRow, changes.startLine);
-      let sliceEnd = Math.max(sliceStart + 1, endSlice);
-
-      const currentBlockText = changes.currentLines.slice(sliceStart, sliceEnd).join('\n');
-      const markerMatch = currentBlockText.match(/\[(table|table-spatial|table-listed|sidebar|poem|stage|dialogue|quote|graphic|tactile|diagram)[^\]]*\]/i);
-      if (markerMatch) {
-        const tag = markerMatch[1].toLowerCase().split('-')[0];
-        const closeTagRe = new RegExp(`\\[\\/${tag}[^\\]]*\\]`, 'i');
-        let closeIdx = -1;
-        for (let i = sliceStart; i < changes.currentLines.length; i++) {
-          if (closeTagRe.test(changes.currentLines[i])) {
-            closeIdx = i;
-            break;
-          }
-        }
-        if (closeIdx !== -1 && closeIdx >= sliceEnd) {
-          sliceEnd = closeIdx + 1;
-        }
-      }
-
-      blockBrailleLines = changes.currentLines.slice(sliceStart, sliceEnd);
-    }
-
-    if (!blockBrailleLines || blockBrailleLines.length === 0) {
-      blockBrailleLines = changes.changedLines;
-    }
-
-    // 2. Detect block structural style from braille indentation & markers
-    const blockStyleInfo = detectBrailleBlockStyle(blockBrailleLines, settings);
-
-    // If target node is an existing Footnote paragraph, editing numbered text preserves footnote
-    if (lastModel?.blocks?.[changes.targetBlockIndex]) {
-      const tb = lastModel.blocks[changes.targetBlockIndex];
-      if ((tb.type === 'footnote' || tb.style === 'footnote') && blockStyleInfo.style === 'list-number') {
-        blockStyleInfo.isList = false;
-        blockStyleInfo.isFootnote = true;
-        blockStyleInfo.style = 'footnote';
-      }
-    }
-
-    // Handle Table (Spatial Columnar or Listed Format)
-    const isExistingTable = (lastModel?.blocks?.[changes.targetBlockIndex]?.type === 'table');
-    if (blockStyleInfo.isTable || isExistingTable) {
-      const existingHeaders = (isExistingTable && lastModel.blocks[changes.targetBlockIndex].headers)
-        ? lastModel.blocks[changes.targetBlockIndex].headers
-        : [];
-      const parsedTable = parseBrailleTable(blockBrailleLines, settings, existingHeaders);
-      const targetFormat = parsedTable.format || (blockStyleInfo.format && blockStyleInfo.format !== 'auto' ? blockStyleInfo.format : null) || 'auto';
-
-      editor.update(() => {
-        const key = lastModel?.keys ? lastModel.keys[changes.targetBlockIndex] : null;
-        let targetNode = key ? $getNodeByKey(key) : null;
-        if (!targetNode) {
-          const root = $getRoot();
-          const children = root.getChildren();
-          targetNode = children[changes.targetBlockIndex] || null;
-        }
-
-        const finalHeaders = (parsedTable.headers && parsedTable.headers.length > 0)
-          ? parsedTable.headers
-          : (targetNode && $isTableNode(targetNode) ? targetNode.getHeaders() : existingHeaders || []);
-        const finalRows = (parsedTable.rows && parsedTable.rows.length > 0)
-          ? parsedTable.rows
-          : (targetNode && $isTableNode(targetNode) ? targetNode.getRows() : []);
-        const finalCaption = (parsedTable.caption !== undefined && parsedTable.caption !== null && parsedTable.caption !== '')
-          ? parsedTable.caption
-          : (targetNode && $isTableNode(targetNode) ? targetNode.getCaption() : '');
-        const finalTabletn = (parsedTable.tabletn !== undefined && parsedTable.tabletn !== null && parsedTable.tabletn !== '')
-          ? parsedTable.tabletn
-          : (targetNode && $isTableNode(targetNode) ? targetNode.getTabletn() : '');
-
-        const tblNode = $createTableNode(
-          finalHeaders,
-          finalRows,
-          targetFormat,
-          finalCaption,
-          finalTabletn
-        );
-        if (targetNode) {
-          targetNode.replace(tblNode);
-          targetNode = tblNode;
-        } else {
-          $getRoot().append(tblNode);
-          targetNode = tblNode;
-        }
-        lastModel = buildModel();
-      }, { tag: 'braille-sync' });
-
-      if (lastModel) {
-        tagPrintBlocks(lastModel.keys);
-        buildCellText(lastModel);
-      }
-      if (typeof refreshToolbar === 'function') {
-        refreshToolbar(changes.targetBlockIndex);
-      }
-
-      lastRenderedBrailleText = brlInputEl ? brlInputEl.value : '';
-      return { ...changes, blockStyleInfo, parsedTable };
-    }
-
-    // Handle Tactile Graphic Block
-    const isExistingGraphic = (lastModel?.blocks?.[changes.targetBlockIndex]?.type === 'graphic' || lastModel?.blocks?.[changes.targetBlockIndex]?.type === 'tactile');
-    if (blockStyleInfo.isGraphic || isExistingGraphic) {
-      const existingNodeData = (isExistingGraphic && lastModel.blocks[changes.targetBlockIndex])
-        ? lastModel.blocks[changes.targetBlockIndex]
-        : {};
-      const parsedGraphic = parseBrailleGraphicBlock(blockBrailleLines, settings, existingNodeData);
-
-      editor.update(() => {
-        const key = lastModel?.keys ? lastModel.keys[changes.targetBlockIndex] : null;
-        let targetNode = key ? $getNodeByKey(key) : null;
-        if (!targetNode) {
-          const root = $getRoot();
-          const children = root.getChildren();
-          targetNode = children[changes.targetBlockIndex] || null;
-        }
-
-        const finalTitle = parsedGraphic.title || (targetNode && $isGraphicNode(targetNode) ? targetNode.getTitle() : 'Tactile diagram');
-        const finalAlt = parsedGraphic.alt || (targetNode && $isGraphicNode(targetNode) ? targetNode.getAlt() : finalTitle);
-        const finalSize = parsedGraphic.size || (targetNode && $isGraphicNode(targetNode) ? targetNode.getSize() : 'half');
-        const existingSvg = (targetNode && $isGraphicNode(targetNode)) ? targetNode.getSvg() : (existingNodeData.svg || '');
-        const finalSvg = existingSvg || '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect x="10" y="10" width="380" height="280" fill="none" stroke="#000" stroke-width="3"/><circle cx="200" cy="150" r="80" fill="none" stroke="#000" stroke-width="3"/></svg>';
-        const textures = (targetNode && $isGraphicNode(targetNode)) ? targetNode.getTextures() : true;
-        const brailleLabels = (targetNode && $isGraphicNode(targetNode)) ? targetNode.getBrailleLabels() : true;
-
-        const gNode = $createGraphicNode(
-          finalSvg,
-          finalAlt,
-          finalTitle,
-          textures,
-          brailleLabels,
-          finalSize
-        );
-        if (targetNode) {
-          targetNode.replace(gNode);
-          targetNode = gNode;
-        } else {
-          $getRoot().append(gNode);
-          targetNode = gNode;
-        }
-        lastModel = buildModel();
-      }, { tag: 'braille-sync' });
-
-      if (lastModel) {
-        tagPrintBlocks(lastModel.keys);
-        buildCellText(lastModel);
-      }
-      if (typeof refreshToolbar === 'function') {
-        refreshToolbar(changes.targetBlockIndex);
-      }
-
-      lastRenderedBrailleText = brlInputEl ? brlInputEl.value : '';
-      return { ...changes, blockStyleInfo, parsedGraphic };
-    }
-
-    // 3. Strip leading whitespace/margins/markers and join lines into continuous braille stream
-    let rawBraille = '';
-    if (blockStyleInfo.isSidebar) {
-      const contentLines = blockBrailleLines.filter(l => {
-        const tr = l.replace(/^[ \t\u2800]+|[ \t\u2800]+$/g, '');
-        return !/^[ \t\u2800⠒37⠶]{3,}$/.test(tr) && !/^([⠒3]{3,})/.test(tr);
-      });
-      rawBraille = contentLines.map(l => l.replace(/^[ \t\u2800]+/, '')).filter(Boolean).join(' ');
-      if (!rawBraille && blockStyleInfo.title) rawBraille = blockStyleInfo.title;
-    } else if (blockStyleInfo.isList && blockStyleInfo.itemBraille) {
-      const rest = blockBrailleLines.slice(1);
-      rawBraille = [blockStyleInfo.itemBraille, ...rest].map(l => l.replace(/^[ \t\u2800]+/, '')).filter(Boolean).join(' ');
-    } else {
-      rawBraille = blockBrailleLines.map(l => l.replace(/^[ \t\u2800]+/, '')).filter(Boolean).join(' ');
-    }
-
-    if (blockStyleInfo.isNote || blockStyleInfo.style === 'note') {
-      rawBraille = stripTranscriberNoteIndicators(rawBraille);
-    } else if (blockStyleInfo.isFootnote || blockStyleInfo.style === 'footnote') {
-      rawBraille = stripFootnoteIndicators(rawBraille);
-    } else if (blockStyleInfo.isStage || blockStyleInfo.style === 'stage') {
-      rawBraille = stripStageIndicators(rawBraille);
-    } else if (blockStyleInfo.isPoem || blockStyleInfo.style === 'poem') {
-      rawBraille = stripPoemIndicators(rawBraille);
-    } else if (blockStyleInfo.isDialogue || blockStyleInfo.style === 'dialogue') {
-      rawBraille = stripDialogueIndicators(rawBraille);
-    } else if (blockStyleInfo.isAttribution || blockStyleInfo.style === 'attribution') {
-      rawBraille = stripAttributionIndicators(rawBraille);
-    } else if (blockStyleInfo.isCaption || blockStyleInfo.style === 'caption') {
-      rawBraille = stripCaptionIndicators(rawBraille);
-    } else if (blockStyleInfo.isQuote || blockStyleInfo.style === 'quote') {
-      rawBraille = stripQuoteIndicators(rawBraille);
-    }
-
-    // 4. Parse into text and math segments
-    const segments = parseBrailleBlockSegments(rawBraille, settings);
-    const printText = segments.map(s => s.type === 'math' ? `$${s.latex}$` : s.text).join('');
-
-    // 5. Update the Lexical node with tagged update
-    editor.update(() => {
-      const key = lastModel?.keys ? lastModel.keys[changes.targetBlockIndex] : null;
-      let targetNode = key ? $getNodeByKey(key) : null;
-      if (!targetNode) {
-        const root = $getRoot();
-        const children = root.getChildren();
-        targetNode = children[changes.targetBlockIndex] || null;
-      }
-
-      const appendSegments = (node) => {
-        if (typeof node.getChildren === 'function') {
-          node.getChildren().forEach(c => c.remove());
-        }
-        if (!segments || segments.length === 0) {
-          node.append($createTextNode(''));
-        } else {
-          for (const seg of segments) {
-            if (seg.type === 'math' && seg.latex) {
-              node.append($createMathNode(seg.latex));
-            } else if (seg.type === 'text' && seg.text) {
-              const textNode = $createTextNode(seg.text);
-              if (seg.tf) {
-                applyEmphasis(textNode, seg.tf, seg.uncontracted);
-              }
-              node.append(textNode);
-            }
-          }
-        }
-      };
-
-      if (targetNode) {
-        if (blockStyleInfo.isPrintPage) {
-          if ($isPrintPageNode(targetNode)) {
-            targetNode.setPage(blockStyleInfo.page || '1');
-          } else {
-            const printPageNode = $createPrintPageNode(blockStyleInfo.page || '1');
-            targetNode.replace(printPageNode);
-            targetNode = printPageNode;
-          }
-        } else if (blockStyleInfo.isBreak) {
-          if ($isBreakNode(targetNode)) {
-            // Already BreakNode
-          } else {
-            const breakNode = $createBreakNode();
-            targetNode.replace(breakNode);
-            targetNode = breakNode;
-          }
-        } else if (blockStyleInfo.isList) {
-          const listType = blockStyleInfo.listType || 'bullet';
-          const listKind = blockStyleInfo.listKind || (blockStyleInfo.style !== 'list-bullet' && blockStyleInfo.style !== 'list-number' ? blockStyleInfo.style : null);
-          const targetBana = (typeof targetNode.getBanaStyle === 'function' ? targetNode.getBanaStyle() : null) || targetNode.__banaStyle || null;
-          if (targetBana === 'footnote' && blockStyleInfo.style === 'list-number') {
-            // Target is an existing Footnote paragraph, editing numbered text preserves footnote
-            appendSegments(targetNode);
-          } else if ($isListNode(targetNode) && targetNode.getListType() === listType) {
-            if (listKind && typeof targetNode.setListKind === 'function') {
-              targetNode.setListKind(listKind);
-              targetNode.setBanaStyle(listKind);
-            }
-            const items = targetNode.getChildren();
-            let li = items[0];
-            if (!li) {
-              li = $createListItemNode();
-              targetNode.append(li);
-            }
-            if (blockStyleInfo.style === 'toc' && typeof li.setBanaStyle === 'function') {
-              li.setBanaStyle('toc-entry');
-            }
-            appendSegments(li);
-          } else {
-            const listNode = $createListNode(listType);
-            if (listKind && typeof listNode.setListKind === 'function') {
-              listNode.setListKind(listKind);
-              listNode.setBanaStyle(listKind);
-            }
-            const li = $createListItemNode();
-            if (blockStyleInfo.style === 'toc' && typeof li.setBanaStyle === 'function') {
-              li.setBanaStyle('toc-entry');
-            }
-            appendSegments(li);
-            listNode.append(li);
-            targetNode.replace(listNode);
-            targetNode = listNode;
-          }
-        } else if (blockStyleInfo.isSidebar) {
-          if ($isSidebarNode(targetNode)) {
-            if (blockStyleInfo.title && typeof targetNode.setTitle === 'function') {
-              targetNode.setTitle(blockStyleInfo.title);
-            }
-            const children = targetNode.getChildren();
-            let inner = children[0];
-            if (!inner) {
-              inner = $createParagraphNode();
-              targetNode.append(inner);
-            }
-            appendSegments(inner);
-          } else {
-            const sidebarNode = $createSidebarNode(blockStyleInfo.title || '');
-            const inner = $createParagraphNode();
-            appendSegments(inner);
-            sidebarNode.append(inner);
-            targetNode.replace(sidebarNode);
-            targetNode = sidebarNode;
-          }
-        } else if (blockStyleInfo.isHeading) {
-          const headingTag = blockStyleInfo.style; // 'h1', 'h2', 'h3'
-          if ($isHeadingNode(targetNode) && targetNode.getTag() === headingTag) {
-            appendSegments(targetNode);
-          } else {
-            const headingNode = $createHeadingNode(headingTag);
-            appendSegments(headingNode);
-            targetNode.replace(headingNode);
-            targetNode = headingNode;
-          }
-        } else {
-          // Paragraph / Body / Note / Footnote / BANA Paragraph Styles
-          const existingStyle = (typeof targetNode.getBanaStyle === 'function' ? targetNode.getBanaStyle() : null) || targetNode.__banaStyle || null;
-          const effectiveStyle = blockStyleInfo.style !== 'body'
-            ? blockStyleInfo.style
-            : (existingStyle && existingStyle !== 'note' ? existingStyle : null);
-
-          if ($isHeadingNode(targetNode) || $isListNode(targetNode) || $isSidebarNode(targetNode) || $isPrintPageNode(targetNode) || $isBreakNode(targetNode) || !$isParagraphNode(targetNode)) {
-            const paraNode = $createBanaParagraphNode(effectiveStyle);
-            appendSegments(paraNode);
-            targetNode.replace(paraNode);
-            targetNode = paraNode;
-          } else {
-            if (typeof targetNode.setBanaStyle === 'function') {
-              targetNode.setBanaStyle(effectiveStyle);
-            }
-            appendSegments(targetNode);
-          }
-        }
-      } else {
-        const root = $getRoot();
-        let newNode;
-        if (blockStyleInfo.isPrintPage) {
-          newNode = $createPrintPageNode(blockStyleInfo.page || '1');
-        } else if (blockStyleInfo.isBreak) {
-          newNode = $createBreakNode();
-        } else if (blockStyleInfo.isList) {
-          const listType = blockStyleInfo.listType || 'bullet';
-          newNode = $createListNode(listType);
-          const li = $createListItemNode();
-          appendSegments(li);
-          newNode.append(li);
-        } else if (blockStyleInfo.isSidebar) {
-          newNode = $createSidebarNode(blockStyleInfo.title || '');
-          const inner = $createParagraphNode();
-          appendSegments(inner);
-          newNode.append(inner);
-        } else if (blockStyleInfo.isHeading) {
-          newNode = $createHeadingNode(blockStyleInfo.style);
-          appendSegments(newNode);
-        } else {
-          const effectiveStyle = blockStyleInfo.style !== 'body' ? blockStyleInfo.style : null;
-          newNode = $createBanaParagraphNode(effectiveStyle);
-          appendSegments(newNode);
-        }
-        root.append(newNode);
-      }
-      lastModel = buildModel();
-    }, { tag: 'braille-sync' });
-
-    // 6. Keep model, toolbar, and cell text in sync
-    if (lastModel) {
-      tagPrintBlocks(lastModel.keys);
-      buildCellText(lastModel);
-    }
-    if (typeof refreshToolbar === 'function') {
-      refreshToolbar(changes.targetBlockIndex);
-    }
-
-    lastRenderedBrailleText = brlInputEl ? brlInputEl.value : '';
-    return { ...changes, blockStyleInfo, segments, printText };
-  } catch (err) {
-    console.warn('reconcileBrailleChangeToPrint error:', err);
-    return null;
-  } finally {
-    isReconcilingBrailleToPrint = false;
-    activeSyncSource = null;
-    if (typeof updateBrlSyncStatus === 'function') updateBrlSyncStatus('synced');
-    if (typeof updateBrlPositionUI === 'function') updateBrlPositionUI();
-    if (typeof runBrailleValidation === 'function') runBrailleValidation();
-  }
-}
-
-export function scheduleBrailleToPrintSync(delayMs = 250) {
-  if (typeof updateBrlSyncStatus === 'function') updateBrlSyncStatus('editing');
-  if (brailleSyncTimer) clearTimeout(brailleSyncTimer);
-  brailleSyncTimer = setTimeout(() => {
-    reconcileBrailleChangeToPrint();
-  }, delayMs);
-}
-
-// ---- Direct Braille & Perkins 6-Key Chord Engine on #brlInput ----
-const BRL_DOTS = { KeyF: 0x01, KeyD: 0x02, KeyS: 0x04, KeyJ: 0x08, KeyK: 0x10, KeyL: 0x20 };
-const BRL_CELL_REGEX = /[\u2800-\u28FF\r\n\t ]/;
-function brlToCells(s) {
-  if (settings?.asciiBraille) {
-    let out = '';
-    for (const ch of s) {
-      if (ch === '\r' || ch === '\n' || ch === '\t' || ch === ' ') { out += ch; continue; }
-      const cp = ch.codePointAt(0);
-      if (cp >= 0x2800 && cp <= 0x28ff) {
-        out += BRF64[cp & 0x3f];
-      } else if (BRF64.includes(ch.toUpperCase())) {
-        out += ch.toUpperCase();
-      }
-    }
-    return out;
-  }
-  let out = '';
-  for (const ch of s) {
-    if (BRL_CELL_REGEX.test(ch)) { out += ch; continue; }
-    const c = brfToUnicodeBraille(ch.toUpperCase());
-    if (c && BRL_CELL_REGEX.test(c)) out += c;
-  }
-  return out;
-}
-
-function renderBrlInputToBraillePane() {
-  if (!brailleEl || !brlInputEl) return;
-  const val = brlInputEl.value;
-  const brf = settings?.asciiBraille ? val : unicodeBrailleToBrf(val);
-  lastBrf = brf;
-  const numCells = (settings?.cells | 0) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38);
-  renderBraille(brailleEl, brf, {
-    rows: lastTrace?.rows,
-    rowCells: lastTrace?.rowCells,
-    cells: numCells,
-    asciiBraille: settings?.asciiBraille,
-  });
-}
-
-const heldKeys = new Set();
-let activeChord = 0;
-let chordSelection = null;
-
-// ---- Braille Slash Command Palette for #brlInput ----
-export const BRL_SLASH_COMMANDS = [
-  {
-    id: 'slash',
-    title: 'Insert "/"',
-    desc: 'Type a literal slash character (Dots 3-4)',
-    icon: '/',
-    keywords: ['slash', '/', 'symbol', 'literal', '⠌'],
-    action: () => insertBrailleTextAtCaret(settings?.asciiBraille ? '/' : '⠌'),
-  },
-  {
-    id: 'p',
-    title: 'Paragraph (3-1)',
-    desc: 'Standard body paragraph (Cell 3 indent, Cell 1 runover)',
-    icon: '¶',
-    keywords: ['p', 'para', 'paragraph', 'body', 'text', 'standard', '3-1', '⠏'],
-    action: () => {
-      setBrlMarginStyle('body');
-      applyBrlParagraphIndent();
-    },
-  },
-  {
-    id: 'center',
-    title: 'Centered Heading',
-    desc: 'Center text on current braille line',
-    icon: '≡',
-    keywords: ['center', 'centered', 'heading', 'h1', 'title', 'middle', '⠉'],
-    action: () => {
-      centerCurrentBrailleLine();
-    },
-  },
-  {
-    id: 'h2',
-    title: 'Subheading (5-5)',
-    desc: 'Section heading (Cell 5 indent, Cell 5 runover)',
-    icon: 'H2',
-    keywords: ['h2', 'subheading', 'heading 2', 'section', '5-5', '⠓'],
-    action: () => {
-      setBrlMarginStyle('h2');
-      applyBrlHeadingIndent('h2');
-    },
-  },
-  {
-    id: 'h3',
-    title: 'Minor Heading (5-5 / 7-7)',
-    desc: 'Subsection heading (UKAAF 5-5 / BANA 7-7)',
-    icon: 'H3',
-    keywords: ['h3', 'minor', 'heading 3', 'subsection', '7-7', '5-5'],
-    action: () => {
-      setBrlMarginStyle('h3');
-      applyBrlHeadingIndent('h3');
-    },
-  },
-  {
-    id: 'list',
-    title: 'List Item (1-3)',
-    desc: 'List item (Cell 1 first line, Cell 3 runover)',
-    icon: '•',
-    keywords: ['list', 'ul', 'bullet', 'item', '1-3', '⠇'],
-    action: () => {
-      setBrlMarginStyle('list-bullet');
-    },
-  },
-  {
-    id: 'ex',
-    title: 'Exercise Question (1-5)',
-    desc: 'Numbered exercise (Cell 1 question, Cell 5 runover)',
-    icon: '❓',
-    keywords: ['exercise', 'ex', 'question', 'problem', '1-5', '⠑'],
-    action: () => {
-      setBrlMarginStyle('exercise');
-    },
-  },
-  {
-    id: 'box',
-    title: 'Boxline Container',
-    desc: 'Full-width decorative border boxline',
-    icon: '📦',
-    keywords: ['box', 'boxline', 'border', 'container', 'line', 'divider', '⠃'],
-    action: () => {
-      insertBrlBoxline();
-    },
-  },
-  {
-    id: 'page',
-    title: 'Page Break',
-    desc: 'Insert braille page break (form feed)',
-    icon: '📄',
-    keywords: ['page', 'break', 'formfeed', 'pagebreak', 'new page', '⠏'],
-    action: () => {
-      insertBrailleTextAtCaret('\f\n');
-    },
-  },
-  {
-    id: 'graphic',
-    title: 'Tactile Graphic',
-    desc: 'Insert a tactile graphic diagram block',
-    icon: '📊',
-    keywords: ['graphic', 'diagram', 'tactile', 'image', 'figure', 'chart', 'plot', '⠙', '⠛'],
-    action: () => {
-      insertBrailleTextAtCaret('[Tactile graphic: Diagram]\n');
-    },
-  },
-  {
-    id: 'tn',
-    title: "Transcriber's Note (7-5)",
-    desc: "Transcriber's note with BANA/UKAAF indicators",
-    icon: '📋',
-    keywords: ['tn', 'transcriber', 'note', 'comment', '7-5', '⠞'],
-    action: () => {
-      insertBrlTranscribersNote();
-    },
-  },
-  {
-    id: 'brf',
-    title: 'Toggle BRF / Unicode',
-    desc: 'Switch between Unicode Braille and BRF ASCII display',
-    icon: '🔤',
-    keywords: ['brf', 'ascii', 'unicode', 'view', 'display', 'mode', '⠃'],
-    action: () => {
-      toggleBrlAscii();
-    },
-  },
-  {
-    id: '6key',
-    title: 'Toggle Perkins 6-Key',
-    desc: 'Switch Perkins 6-key chording (S D F J K L) on/off',
-    icon: '⠼',
-    keywords: ['6key', 'sixkey', 'perkins', 'chord', 'chording', 'keyboard', '⠋'],
-    action: () => {
-      toggleBrlSixKey();
-    },
-  },
-  {
-    id: 'ins',
-    title: 'Toggle Insert / Overwrite',
-    desc: 'Switch between Insert (INS) and Overwrite (OVR) typing mode',
-    icon: '⇄',
-    keywords: ['ins', 'ovr', 'insert', 'overwrite', 'mode', 'typeover', '⠊'],
-    action: () => {
-      toggleBrlInsertMode();
-    },
-  },
-];
-
-export function insertBrailleTextAtCaret(text) {
-  if (!brlInputEl) return;
-  const selA = brlInputEl.selectionStart;
-  const selB = brlInputEl.selectionEnd;
-  brlInputEl.setRangeText(text, selA, selB, 'end');
-  brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-  onBrlInputCaretMove();
-}
-
-export function applyBrlParagraphIndent() {
-  if (!brlInputEl) return;
-  const pos = brlInputEl.selectionStart;
-  const val = brlInputEl.value;
-  const lineStart = val.lastIndexOf('\n', Math.max(0, pos - 1)) + 1;
-  let lineEnd = val.indexOf('\n', pos);
-  if (lineEnd === -1) lineEnd = val.length;
-  const lineText = val.slice(lineStart, lineEnd);
-  if (/^\s*$/.test(lineText)) {
-    const indent = getMarginIndent('body', true);
-    brlInputEl.value = val.slice(0, lineStart) + indent + val.slice(lineEnd);
-    const newPos = lineStart + indent.length;
-    brlInputEl.setSelectionRange(newPos, newPos);
-    brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-    onBrlInputCaretMove();
-  }
-}
-
-export function applyBrlHeadingIndent(styleId) {
-  if (!brlInputEl) return;
-  const pos = brlInputEl.selectionStart;
-  const val = brlInputEl.value;
-  const lineStart = val.lastIndexOf('\n', Math.max(0, pos - 1)) + 1;
-  let lineEnd = val.indexOf('\n', pos);
-  if (lineEnd === -1) lineEnd = val.length;
-  const lineText = val.slice(lineStart, lineEnd);
-  if (/^\s*$/.test(lineText)) {
-    const indent = getMarginIndent(styleId, true);
-    brlInputEl.value = val.slice(0, lineStart) + indent + val.slice(lineEnd);
-    const newPos = lineStart + indent.length;
-    brlInputEl.setSelectionRange(newPos, newPos);
-    brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-    onBrlInputCaretMove();
-  }
-}
-
-export function insertBrlBoxline() {
-  if (!brlInputEl) return;
-  const numCells = (settings?.cells | 0) || (EMBOSSER_PRESETS[settings?.embosser]?.cells || 38);
-  const isAscii = settings?.asciiBraille;
-  const cellChar = isAscii ? '-' : '⠒';
-  const boxline = cellChar.repeat(numCells) + '\n';
-  insertBrailleTextAtCaret(boxline);
-}
-
-export function insertBrlTranscribersNote() {
-  if (!brlInputEl) return;
-  setBrlMarginStyle('note');
-  const isAscii = settings?.asciiBraille;
-  const prefix = '      ' + (isAscii ? '__ ' : '⠸⠸ ');
-  const suffix = (isAscii ? " _'" : ' ⠸⠄') + '\n';
-  const selA = brlInputEl.selectionStart;
-  const selB = brlInputEl.selectionEnd;
-  const insertion = prefix + suffix;
-  brlInputEl.setRangeText(insertion, selA, selB, 'preserve');
-  const midPos = selA + prefix.length;
-  brlInputEl.setSelectionRange(midPos, midPos);
-  brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-  onBrlInputCaretMove();
-}
-
-let isBrlSlashMenuOpen = false;
-let brlSlashFilteredCommands = [];
-let brlSlashSelectedIndex = 0;
-let brlSlashActiveQuery = '';
-
-export function isBrlSlashOpen() {
-  return isBrlSlashMenuOpen;
-}
-
-export function initBrlSlashMenu() {
-  const menuEl = $id('brlSlashMenu');
-  const listEl = $id('brlSlashList');
-  if (!menuEl || !listEl || !brlInputEl) return;
-
-  function hideSlashMenu() {
-    isBrlSlashMenuOpen = false;
-    menuEl.hidden = true;
-    menuEl.style.display = 'none';
-    brlSlashActiveQuery = '';
-    brlSlashFilteredCommands = [];
-    brlSlashSelectedIndex = 0;
-  }
-
-  function showSlashMenu() {
-    isBrlSlashMenuOpen = true;
-    menuEl.hidden = false;
-    menuEl.style.display = 'block';
-  }
-
-  function renderSlashList() {
-    listEl.innerHTML = '';
-    brlSlashFilteredCommands.forEach((cmd, idx) => {
-      const item = document.createElement('div');
-      item.className = 'slash-item';
-      item.role = 'option';
-      item.id = `brl-slash-opt-${cmd.id}`;
-      item.setAttribute('aria-selected', String(idx === brlSlashSelectedIndex));
-
-      const ico = document.createElement('span');
-      ico.className = 'slash-ico';
-      ico.textContent = cmd.icon;
-
-      const info = document.createElement('div');
-      info.className = 'slash-info';
-
-      const title = document.createElement('span');
-      title.className = 'slash-title';
-      title.textContent = cmd.title;
-
-      const desc = document.createElement('span');
-      desc.className = 'slash-desc';
-      desc.textContent = cmd.desc;
-
-      info.appendChild(title);
-      info.appendChild(desc);
-      item.appendChild(ico);
-      item.appendChild(info);
-
-      item.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        executeCommand(cmd);
-      });
-
-      listEl.appendChild(item);
-    });
-
-    const activeItem = listEl.children[brlSlashSelectedIndex];
-    if (activeItem) {
-      activeItem.scrollIntoView({ block: 'nearest' });
-      menuEl.setAttribute('aria-activedescendant', activeItem.id);
-    }
-  }
-
-  function updateSlashQuery(rawQuery) {
-    brlSlashActiveQuery = (rawQuery || '').trim();
-    const qAscii = unicodeBrailleToBrf(brlSlashActiveQuery).toLowerCase().trim();
-    const qUni = brfToUnicodeBraille(brlSlashActiveQuery).trim();
-
-    if (!qAscii && !qUni) {
-      brlSlashFilteredCommands = BRL_SLASH_COMMANDS.slice();
-    } else {
-      const scored = [];
-      for (const cmd of BRL_SLASH_COMMANDS) {
-        let score = 0;
-        const idLower = cmd.id.toLowerCase();
-        const titleLower = cmd.title.toLowerCase();
-        const words = titleLower.split(/[\s\(\)\/\-]+/).filter(Boolean);
-        const kwList = cmd.keywords.map((k) => k.toLowerCase());
-
-        if (idLower === qAscii || (qUni && cmd.keywords.includes(qUni))) {
-          score += 100;
-        } else if (kwList.includes(qAscii)) {
-          score += 80;
-        } else if (idLower.startsWith(qAscii)) {
-          score += 60;
-        } else if (qAscii.length > 1 && words.some((w) => w === qAscii)) {
-          score += 50;
-        } else if (qAscii.length > 1 && words.some((w) => w.startsWith(qAscii))) {
-          score += 40;
-        } else if (qAscii.length > 1 && kwList.some((k) => k.startsWith(qAscii))) {
-          score += 30;
-        } else if (qAscii.length > 1 && titleLower.includes(qAscii)) {
-          score += 10;
-        } else if (qAscii.length > 1 && kwList.some((k) => k.includes(qAscii))) {
-          score += 5;
-        }
-
-        if (score > 0) {
-          scored.push({ cmd, score });
-        }
-      }
-
-      scored.sort((a, b) => b.score - a.score);
-      brlSlashFilteredCommands = scored.map((s) => s.cmd);
-    }
-
-    if (!brlSlashFilteredCommands.length) {
-      hideSlashMenu();
-      return;
-    }
-
-    brlSlashSelectedIndex = 0;
-    renderSlashList();
-    showSlashMenu();
-    const cur = brlSlashFilteredCommands[0];
-    if (cur) announce(`${cur.title}, ${cur.desc} (1 of ${brlSlashFilteredCommands.length})`);
-  }
-
-  function positionSlashMenu() {
-    if (!brlInputEl || !menuEl) return;
-    const pos = brlInputEl.selectionStart;
-    const val = brlInputEl.value;
-    const linesBefore = val.slice(0, pos).split('\n');
-    const rowIndex = linesBefore.length - 1;
-    const colIndex = linesBefore[linesBefore.length - 1].length;
-
-    const pane = brlInputEl.closest('.pane');
-    if (!pane) return;
-    const paneRect = pane.getBoundingClientRect();
-    const rows = brailleEl ? Array.from(brailleEl.querySelectorAll('.brl-row')) : [];
-    const cellRow = rows[rowIndex];
-
-    const menuHeight = 280;
-    const menuWidth = 280;
-
-    let targetTop = 100;
-    let targetLeft = 20;
-
-    if (cellRow) {
-      const rowRect = cellRow.getBoundingClientRect();
-      const cells = Array.from(cellRow.querySelectorAll('.bcell'));
-      const activeCell = cells[colIndex] || cells[colIndex - 1];
-
-      if (activeCell) {
-        const cellRect = activeCell.getBoundingClientRect();
-        targetTop = cellRect.bottom - paneRect.top + 6;
-        targetLeft = cellRect.left - paneRect.left;
-      } else {
-        const cellWidth = 12.6;
-        targetTop = rowRect.bottom - paneRect.top + 6;
-        targetLeft = (rowRect.left - paneRect.left) + (colIndex * cellWidth);
-      }
-
-      const spaceBelow = paneRect.bottom - (rowRect.bottom || rowRect.top);
-      if (spaceBelow < menuHeight && (rowRect.top - paneRect.top) > menuHeight) {
-        targetTop = Math.max(10, rowRect.top - paneRect.top - menuHeight - 6);
-      }
-    } else {
-      const inputRect = brlInputEl.getBoundingClientRect();
-      targetTop = inputRect.top - paneRect.top + 40;
-      targetLeft = inputRect.left - paneRect.left + 20;
-    }
-
-    const maxLeft = Math.max(10, paneRect.width - menuWidth - 10);
-    const left = Math.min(Math.max(10, targetLeft), maxLeft);
-    const top = Math.max(10, targetTop);
-
-    menuEl.style.top = `${top}px`;
-    menuEl.style.left = `${left}px`;
-  }
-
-  function removeSlashQueryText(activeQueryLen) {
-    if (!brlInputEl) return;
-    try {
-      const pos = brlInputEl.selectionStart;
-      const totalToRemove = activeQueryLen + 1;
-      const start = Math.max(0, pos - totalToRemove);
-      brlInputEl.setRangeText('', start, pos, 'end');
-      brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-      onBrlInputCaretMove();
-    } catch (e) {
-      console.warn('removeBrlSlashQueryText safely recovered:', e);
-    }
-  }
-
-  function executeCommand(cmd) {
-    if (!cmd || typeof cmd.action !== 'function') {
-      hideSlashMenu();
-      return;
-    }
-    removeSlashQueryText(brlSlashActiveQuery.length);
-    hideSlashMenu();
-    setTimeout(() => {
-      try {
-        cmd.action();
-        announce(`Applied ${cmd.title}`);
-      } catch (err) {
-        console.warn(`Safe recovery: Braille slash command "${cmd.title}" encountered an error:`, err);
-      }
-    }, 10);
-  }
-
-  function checkBrlSlashTrigger() {
-    if (!brlInputEl) return;
-    const pos = brlInputEl.selectionStart;
-    const val = brlInputEl.value;
-    const beforeCaret = val.slice(0, pos);
-    const match = beforeCaret.match(/(?:^|\s)([\/⠌])([a-zA-Z0-9\u2800-\u28FF]*)$/);
-    if (match) {
-      updateSlashQuery(match[2]);
-      positionSlashMenu();
-      return;
-    }
-    hideSlashMenu();
-  }
-
-  window.checkBrlSlashTrigger = checkBrlSlashTrigger;
-  window.hideBrlSlashMenu = hideSlashMenu;
-  window.showBrlSlashMenu = showSlashMenu;
-  window.executeBrlSlashCommand = executeCommand;
-  window.isBrlSlashMenuOpen = () => isBrlSlashMenuOpen;
-  window.getBrlSlashFilteredCommands = () => brlSlashFilteredCommands;
-  window.getBrlSlashSelectedIndex = () => brlSlashSelectedIndex;
-
-  document.addEventListener('mousedown', (e) => {
-    if (isBrlSlashMenuOpen && !menuEl.contains(e.target) && e.target !== brlInputEl) {
-      hideSlashMenu();
-    }
-  });
-}
-
-if (typeof window !== 'undefined') {
-  window.BRL_SLASH_COMMANDS = BRL_SLASH_COMMANDS;
-  window.initBrlSlashMenu = initBrlSlashMenu;
-}
-
-if (brlInputEl) {
-  brlInputEl.addEventListener('click', () => {
-    onBrlInputCaretMove();
-    if (typeof window.checkBrlSlashTrigger === 'function') window.checkBrlSlashTrigger();
-  });
-
-  brlInputEl.addEventListener('keydown', (e) => {
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-    // Handle Slash Menu Navigation & Actions if menu is open
-    if (isBrlSlashMenuOpen && brlSlashFilteredCommands.length > 0) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        brlSlashSelectedIndex = (brlSlashSelectedIndex + 1) % brlSlashFilteredCommands.length;
-        const menuEl = $id('brlSlashMenu');
-        const listEl = $id('brlSlashList');
-        if (listEl) {
-          Array.from(listEl.children).forEach((child, idx) => {
-            child.setAttribute('aria-selected', String(idx === brlSlashSelectedIndex));
-          });
-          const activeItem = listEl.children[brlSlashSelectedIndex];
-          if (activeItem) {
-            activeItem.scrollIntoView({ block: 'nearest' });
-            if (menuEl) menuEl.setAttribute('aria-activedescendant', activeItem.id);
-          }
-        }
-        const cur = brlSlashFilteredCommands[brlSlashSelectedIndex];
-        if (cur) announce(`${cur.title}, ${cur.desc} (${brlSlashSelectedIndex + 1} of ${brlSlashFilteredCommands.length})`);
-        return;
-      }
-
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        brlSlashSelectedIndex = (brlSlashSelectedIndex - 1 + brlSlashFilteredCommands.length) % brlSlashFilteredCommands.length;
-        const menuEl = $id('brlSlashMenu');
-        const listEl = $id('brlSlashList');
-        if (listEl) {
-          Array.from(listEl.children).forEach((child, idx) => {
-            child.setAttribute('aria-selected', String(idx === brlSlashSelectedIndex));
-          });
-          const activeItem = listEl.children[brlSlashSelectedIndex];
-          if (activeItem) {
-            activeItem.scrollIntoView({ block: 'nearest' });
-            if (menuEl) menuEl.setAttribute('aria-activedescendant', activeItem.id);
-          }
-        }
-        const cur = brlSlashFilteredCommands[brlSlashSelectedIndex];
-        if (cur) announce(`${cur.title}, ${cur.desc} (${brlSlashSelectedIndex + 1} of ${brlSlashFilteredCommands.length})`);
-        return;
-      }
-
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        e.preventDefault();
-        const cmd = brlSlashFilteredCommands[brlSlashSelectedIndex];
-        if (cmd) {
-          if (typeof window.executeBrlSlashCommand === 'function') window.executeBrlSlashCommand(cmd);
-        }
-        return;
-      }
-
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        if (typeof window.hideBrlSlashMenu === 'function') window.hideBrlSlashMenu();
-        announce('Braille command menu closed');
-        return;
-      }
-    }
-
-    // Enter key with BANA margin auto-indentation:
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const activeStyle = getBrlActiveStyle();
-      const isFirstLine = !e.shiftKey;
-      let indent = '';
-      if (activeStyle === 'h1') {
-        brlActiveMarginStyle = 'body';
-        if ($id('selBrlMargin')) $id('selBrlMargin').value = 'body';
-        indent = getBanaMarginIndent('body', true);
-      } else {
-        indent = getBanaMarginIndent(activeStyle, isFirstLine);
-      }
-      const insertion = '\n' + indent;
-      const selA = brlInputEl.selectionStart;
-      const selB = brlInputEl.selectionEnd;
-      brlInputEl.setRangeText(insertion, selA, selB, 'end');
-      brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-      onBrlInputCaretMove();
-      return;
-    }
-
-    const isSixKey = settings?.sixKeyInput !== false && settings?.sixKey !== false;
-    
-    // Universal Overwrite mode handling for direct (non-chord) keystrokes:
-    if (brlOverwriteMode && !e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1 && e.key !== 'Enter') {
-      const bit = isSixKey ? BRL_DOTS[e.code] : null;
-      if (!bit) {
-        const selA = brlInputEl.selectionStart;
-        const selB = brlInputEl.selectionEnd;
-        if (selA === selB && selA < brlInputEl.value.length && brlInputEl.value.charAt(selA) !== '\n') {
-          brlInputEl.setSelectionRange(selA, selA + 1);
-        }
-      }
-    }
-
-    if (isSixKey) {
-      const bit = BRL_DOTS[e.code];
-      if (bit) {
-        e.preventDefault();
-        if (heldKeys.size === 0) {
-          chordSelection = { a: brlInputEl.selectionStart, b: brlInputEl.selectionEnd };
-          activeChord = 0;
-        }
-        heldKeys.add(e.code);
-        activeChord |= bit;
-        return;
-      }
-
-      // Six-key exclusivity guard:
-      // When six-key is ON, printable keys other than chord keys (S D F J K L)
-      // are swallowed so accidental QWERTY keystrokes don't corrupt the braille buffer,
-      // EXCEPT for Space, Slash (/), and direct Unicode Braille cells (from refreshable braille displays / IMEs).
-      // Also allow alphanumeric keys when the slash menu is open so users can type query filters.
-      if (!isBrlSlashMenuOpen && e.key.length === 1 && e.key !== ' ' && e.key !== '/' && !(e.key.charCodeAt(0) >= 0x2800 && e.key.charCodeAt(0) <= 0x28FF)) {
-        e.preventDefault();
-        return;
-      }
-    }
-  });
-
-  brlInputEl.addEventListener('keyup', (e) => {
-    const bit = BRL_DOTS[e.code];
-    if (bit) {
-      e.preventDefault();
-      heldKeys.delete(e.code);
-
-      if (heldKeys.size === 0 && activeChord > 0) {
-        const brailleChar = settings?.asciiBraille
-          ? (BRF64[activeChord & 0x3F] || ' ')
-          : String.fromCodePoint(0x2800 + (activeChord & 0x3F));
-        const selA = chordSelection ? chordSelection.a : brlInputEl.selectionStart;
-        const selB = chordSelection ? chordSelection.b : brlInputEl.selectionEnd;
-        chordSelection = null;
-        activeChord = 0;
-
-        const isOvr = brlOverwriteMode && selA === selB && selA < brlInputEl.value.length && brlInputEl.value.charAt(selA) !== '\n';
-        const replaceEnd = isOvr ? selA + 1 : selB;
-
-        brlInputEl.setRangeText(brailleChar, selA, replaceEnd, 'end');
-        brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-        onBrlInputCaretMove();
-        if (typeof window.checkBrlSlashTrigger === 'function') window.checkBrlSlashTrigger();
-      }
-      return;
-    }
-
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
-      onBrlInputCaretMove();
-      if (!isBrlSlashMenuOpen && typeof window.checkBrlSlashTrigger === 'function') {
-        window.checkBrlSlashTrigger();
-      }
-    }
-  });
-
-  brlInputEl.addEventListener('input', () => {
-    const rawVal = brlInputEl.value;
-    const converted = brlToCells(rawVal);
-    if (converted !== rawVal) {
-      const selStart = brlInputEl.selectionStart;
-      const prefix = brlToCells(rawVal.slice(0, selStart));
-      brlInputEl.value = converted;
-      brlInputEl.setSelectionRange(prefix.length, prefix.length);
-    }
-    applyBrlWordWrap(brlInputEl);
-    renderBrlInputToBraillePane();
-    onBrlInputCaretMove();
-    runBrailleValidation();
-    if (typeof window.checkBrlSlashTrigger === 'function') window.checkBrlSlashTrigger();
-    scheduleBrailleToPrintSync();
-  });
-
-  brlInputEl.addEventListener('paste', (e) => {
-    const text = (e.clipboardData || window.clipboardData)?.getData('text/plain') ?? '';
-    if (!text) return;
-    const converted = brlToCells(text);
-    if (converted) {
-      e.preventDefault();
-      const selA = brlInputEl.selectionStart;
-      const selB = brlInputEl.selectionEnd;
-      brlInputEl.setRangeText(converted, selA, selB, 'end');
-      brlInputEl.dispatchEvent(new Event('input', { bubbles: true }));
-      if (typeof window.checkBrlSlashTrigger === 'function') window.checkBrlSlashTrigger();
-    }
-  });
-
-  brlInputEl.addEventListener('blur', () => {
-    heldKeys.clear();
-    activeChord = 0;
-    chordSelection = null;
-  });
-
-  document.addEventListener('selectionchange', () => {
-    if (document.activeElement === brlInputEl) {
-      onBrlInputCaretMove();
-    }
-  });
-
-  $id('btnBrlSixKey')?.addEventListener('click', () => toggleBrlSixKey());
-  $id('btnBrlAscii')?.addEventListener('click', () => toggleBrlAscii());
-  $id('btnBrlInsertMode')?.addEventListener('click', () => toggleBrlInsertMode());
-  $id('btnBrlCenter')?.addEventListener('click', () => centerCurrentBrailleLine());
-  $id('brlValidationBadge')?.addEventListener('click', () => jumpToBrailleIssue());
-  $id('selBrlMargin')?.addEventListener('change', (e) => {
-    const val = e.target.value;
-    brlActiveMarginStyle = val;
-    if (val === 'h1' || val === 'center') {
-      centerCurrentBrailleLine();
-    }
-    announce(`Braille margin preset set to ${e.target.options[e.target.selectedIndex]?.text || val}.`);
-  });
-
-  // Initialize UI states
-  $id('btnBrlSixKey')?.setAttribute('aria-pressed', String(settings?.sixKeyInput !== false));
-  updateBrlAsciiUI();
-  updateBrlInsertModeUI();
-  updateBrlPositionUI();
-  updateBrlSyncStatus('synced');
-  runBrailleValidation();
-}
 function handleMathFieldSelect(mf) {
   if (!mf) return false;
   try { if (typeof mf.focus === 'function' && document.activeElement !== mf) mf.focus(); } catch {}
-  const be = mf.closest('[data-block-idx]');
-  if (!be) return false;
-  const block = Number(be.dataset.blockIdx);
-  const li = mf.closest('li');
-  let unit = 0, unitEl = be;
-  if (li && be.contains(li)) { unit = Math.max(0, [...be.querySelectorAll('li')].indexOf(li)); unitEl = li; }
+  const resolved = resolveBlockUnit(mf);
+  if (!resolved) return false;
+  const { block, unit, unitEl } = resolved;
   const b = lastModel?.blocks?.[block];
   let segs = b?.segments;
   if (b?.type === 'list') segs = b?.items?.[unit]?.segments;
+  else if ((b?.type === 'box' || b?.type === 'sidebar') && Array.isArray(b?.blocks)) {
+    segs = b.blocks[unit]?.segments;
+  }
   const mathEmbeds = Array.from(unitEl.querySelectorAll('.math-embed, math-field'));
   const distinctEmbeds = mathEmbeds.filter(m => m.classList.contains('math-embed') || !m.closest('.math-embed'));
   const clickedIdx = distinctEmbeds.findIndex(m => m === mf || m.contains(mf) || (mf.contains && mf.contains(m)));
@@ -5340,6 +3845,7 @@ function handleMathFieldSelect(mf) {
           mf.classList.add('math-hl');
           const wrap = mf.closest('.math-embed');
           if (wrap) wrap.classList.add('math-hl');
+          refreshToolbar();
           return true;
         }
         mIdx++;
@@ -5357,35 +3863,47 @@ function handleMathFieldSelect(mf) {
   if (wrap) wrap.classList.add('math-hl');
   const val = mf.value || b?.latex || (mf.getValue ? mf.getValue() : '');
   if (val) showRuleInfo(`$${val}$`);
+  refreshToolbar();
   return true;
 }
 
 // click a print word or math equation → highlight its braille cells
 editorEl.addEventListener('click', (e) => {
   const mf = e.target.closest('math-field') || e.target.closest('.math-embed')?.querySelector('math-field') || (e.composedPath && e.composedPath().find(el => el.tagName === 'MATH-FIELD'));
-  if (mf && handleMathFieldSelect(mf)) return;
+  if (mf && handleMathFieldSelect(mf)) {
+    refreshToolbar(e.target);
+    return;
+  }
 
-  const be = e.target.closest('[data-block-idx]');
-  if (!be) return;
-  const block = Number(be.dataset.blockIdx);
-  const li = e.target.closest('li');
-  let unit = 0, unitEl = be;
-  if (li && be.contains(li)) { unit = Math.max(0, [...be.querySelectorAll('li')].indexOf(li)); unitEl = li; }
+  const resolved = resolveBlockUnit(e.target);
+  if (!resolved) {
+    refreshToolbar(e.target);
+    return;
+  }
+  const { block, unit, unitEl } = resolved;
   const text = cellText[`${block}:${unit}`];
   if (text == null || !text.trim()) {
     clearWordLink();
     linkByBlock(block);
+    refreshToolbar(e.target);
     return;
   }
 
-  const [s, en] = wordRangeAt(text, caretOffsetInEl(unitEl, e));
-  highlightWord(block, unit, s, en, caretOffsetInEl(unitEl, e), 'editor');
+  const offset = caretOffsetInEl(unitEl, e);
+  const [s, en] = wordRangeAt(text, offset);
+  highlightWord(block, unit, s, en, offset, 'editor');
   showRuleInfo(text.slice(s, en));
+  refreshToolbar(e.target);
+});
+
+editorEl.addEventListener('pointerup', (e) => {
+  refreshToolbar(e.target);
 });
 
 editorEl.addEventListener('focusin', (e) => {
   const mf = e.target.closest('math-field') || e.target.closest('.math-embed')?.querySelector('math-field') || (e.composedPath && e.composedPath().find(el => el.tagName === 'MATH-FIELD'));
   if (mf) handleMathFieldSelect(mf);
+  refreshToolbar(e.target);
 });
 
 // ---- Table of Contents print preview in editor (Expandable / Collapsible) ----
@@ -5394,10 +3912,6 @@ let isTocBoxCollapsed = localStorage.getItem('emboss-toc-box-collapsed') === 'tr
 function updatePrintToc() {
   const container = $id('printTocContainer');
   if (!container) return;
-  if (!settings.toc) {
-    container.innerHTML = '';
-    return;
-  }
   const headings = [];
   (lastModel?.blocks || []).forEach((b, idx) => {
     if (b.type === 'heading' && b.text) headings.push({ text: b.text, level: b.level || 1, blockIdx: idx });
@@ -5449,7 +3963,7 @@ function updatePrintToc() {
       const target = editorEl.querySelector(`[data-block-idx="${bIdx}"]`);
       if (target) {
         target.scrollIntoView({ block: 'center' });
-        linkByBlock(bIdx);
+        linkByBlock(bIdx, true);
       }
     });
   });
@@ -5461,13 +3975,20 @@ function domOffsetInEl(el, node, offset) {
   return domOffsetOfNode(el, node, offset);
 }
 
-function syncCaretWithBraille() {
-  if (caretSyncTimer) cancelAnimationFrame(caretSyncTimer);
-  caretSyncTimer = requestAnimationFrame(() => {
+let lastCaretWordKey = '';
+let caretSyncTimer = null;
+
+function syncCaretWithBraille(immediate = false) {
+  const doSync = () => {
     const active = document.activeElement;
     if (active && (active.tagName === 'MATH-FIELD' || active.closest?.('math-field'))) {
       const mf = active.tagName === 'MATH-FIELD' ? active : active.closest('math-field');
       handleMathFieldSelect(mf);
+      return;
+    }
+    if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
+      const unit = Number(active.dataset.unit || 0);
+      handleTableCellEvent(active, unit);
       return;
     }
     if (lastCaretWordKey && lastCaretWordKey.endsWith(':math')) {
@@ -5481,18 +4002,15 @@ function syncCaretWithBraille() {
     if (node.nodeType === 1 && typeof sel.anchorOffset === 'number' && sel.anchorOffset < node.childNodes.length) {
       targetChild = node.childNodes[sel.anchorOffset];
     }
-    const start = targetChild || (node.nodeType === 1 ? node : node.parentElement);
-    const mf = start && (start.closest?.('math-field') || start.closest?.('.math-embed')?.querySelector('math-field') || (start.classList?.contains('math-embed') ? start.querySelector('math-field') : null) || (start.tagName === 'MATH-FIELD' ? start : null));
+    const target = targetChild || node;
+    const mf = (target.nodeType === 1 ? target : target.parentElement)?.closest?.('math-field') || (target.nodeType === 1 ? target : target.parentElement)?.closest?.('.math-embed')?.querySelector('math-field') || (target.tagName === 'MATH-FIELD' ? target : null);
     if (mf) {
       handleMathFieldSelect(mf);
       return;
     }
-    const be = start && start.closest('[data-block-idx]');
-    if (!be) return;
-    const block = Number(be.dataset.blockIdx);
-    const li = start.closest('li');
-    let unit = 0, unitEl = be;
-    if (li && be.contains(li)) { unit = Math.max(0, [...be.querySelectorAll('li')].indexOf(li)); unitEl = li; }
+    const resolved = resolveBlockUnit(target);
+    if (!resolved) return;
+    const { block, unit, unitEl } = resolved;
     const text = cellText[`${block}:${unit}`];
     if (text == null || !text.trim()) {
       clearWordLink();
@@ -5507,19 +4025,40 @@ function syncCaretWithBraille() {
     lastCaretWordKey = wordKey;
     highlightWord(block, unit, s, en, offset, 'caret');
     showRuleInfo(text.slice(s, en));
-  });
+  };
+
+  if (caretSyncTimer) cancelAnimationFrame(caretSyncTimer);
+  if (immediate) {
+    doSync();
+  } else {
+    caretSyncTimer = requestAnimationFrame(doSync);
+  }
 }
+window.syncCaretWithBraille = syncCaretWithBraille;
 
 function describeCaretWord() {
+  const active = document.activeElement;
+  if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
+    const unit = Number(active.dataset.unit || 0);
+    handleTableCellEvent(active, unit);
+    const be = active.closest('[data-block-idx]');
+    const block = be ? Number(be.dataset.blockIdx) : 0;
+    const text = cellText[`${block}:${unit}`] || active.value || '';
+    const [s, en] = wordRangeAt(text, active.selectionStart || 0);
+    announce(lastRuleSpoken || text.slice(s, en));
+    return;
+  }
   const sel = window.getSelection();
   const node = sel && sel.anchorNode;
-  const start = node && (node.nodeType === 1 ? node : node.parentElement);
-  const be = start && start.closest('[data-block-idx]');
-  if (!be) { announce('Place the caret in the text first.'); return; }
-  const block = Number(be.dataset.blockIdx);
-  const li = start.closest('li');
-  let unit = 0, unitEl = be;
-  if (li && be.contains(li)) { unit = Math.max(0, [...be.querySelectorAll('li')].indexOf(li)); unitEl = li; }
+  if (!node || !editorEl.contains(node)) { announce('Place the caret in the text first.'); return; }
+  let targetChild = null;
+  if (node.nodeType === 1 && typeof sel.anchorOffset === 'number' && sel.anchorOffset < node.childNodes.length) {
+    targetChild = node.childNodes[sel.anchorOffset];
+  }
+  const target = targetChild || node;
+  const resolved = resolveBlockUnit(target);
+  if (!resolved) { announce('Place the caret in the text first.'); return; }
+  const { block, unit, unitEl } = resolved;
   const text = cellText[`${block}:${unit}`];
   if (text == null) { announce('No braille mapping for this line.'); return; }
   const [s, en] = wordRangeAt(text, domOffsetInEl(unitEl, node, sel.anchorOffset));
@@ -5587,11 +4126,32 @@ function runProofread(model, table) {
         if (!entry.text || !entry.text.trim()) continue;
         checked++;
         try {
-          const cacheKey = `${entry.text}|${table}`;
+          const hasSeg = entry.segments && entry.segments.some((seg) => seg.uncontracted || seg.tf);
+          const cacheKey = `${entry.text}|${table}|${hasSeg ? 'seg' : 'plain'}`;
           let res = proofreadCache.get(cacheKey);
           if (!res) {
             const tr = makeTranslators(louis, table);
-            res = roundTrip(entry.text, (s) => tr.translate(s), (s) => tr.backTranslate(s));
+            const trG1 = /en-ueb/.test(table) ? (s) => makeTranslators(louis, UEB_TABLES.g1).translate(s) : null;
+            const translateEntry = (s) => {
+              if (hasSeg) {
+                let out = '';
+                for (const seg of entry.segments) {
+                  const t = String(seg.text ?? '');
+                  if (!t) continue;
+                  if (seg.uncontracted) {
+                    const g1 = trG1 ? trG1(t) : tr.translate(t);
+                    out += t.includes(' ') ? `;;;${g1};'` : `;;${g1}`;
+                  } else if (seg.tf) {
+                    out += tr.translate(t, Array(t.length).fill(seg.tf));
+                  } else {
+                    out += tr.translate(t);
+                  }
+                }
+                return out;
+              }
+              return tr.translate(s);
+            };
+            res = roundTrip(entry.text, translateEntry, (s) => tr.backTranslate(s));
             proofreadCache.set(cacheKey, res);
           }
           if (!res.ok && res.wordIssues && res.wordIssues.length > 0) {
@@ -5624,7 +4184,7 @@ function runProofread(model, table) {
         if (badge) badge.hidden = true;
       } else {
         if (badge) badge.hidden = false;
-        setProofBadge('warn', `⚠ ${issues.length} to review`, `${issues.length} word discrepancy(s) found during round-trip back-translation. Click to jump to the first.`);
+        setProofBadge('warn', t('proofread.badge_warn', { count: issues.length }) || `⚠ ${issues.length} to review`, t('proofread.badge_title', { count: issues.length }) || `${issues.length} word discrepancy(s) found during round-trip back-translation. Click to jump to the first.`);
       }
     }
   }
@@ -5712,12 +4272,6 @@ function toggleSixKey(on) {
   if (want && settings.sixKeyInput === false) { announce('SDF JKL braille input is turned off in Settings.'); return; }
   sixKeyOn = want;
   $id('btnSixKey')?.setAttribute('aria-pressed', String(sixKeyOn));
-  const perkinsHeaderBtn = $id('btnPerkinsHeader');
-  if (perkinsHeaderBtn) {
-    perkinsHeaderBtn.setAttribute('aria-pressed', String(sixKeyOn));
-    if (sixKeyOn) perkinsHeaderBtn.classList.add('active');
-    else perkinsHeaderBtn.classList.remove('active');
-  }
   skHeld.clear(); skChord = 0;
   if (sixKeyOn) { skUpdatePending(); editorEl.focus(); announce('Braille direct input on. Type chords with S D F and J K L.'); }
   else { skUpdatePending(); announce('Braille direct input off.'); }
@@ -5729,7 +4283,6 @@ function toggleSixKey(on) {
 // their own device does not want the editor grabbing those keys.
 function applySixKeyInput(on) {
   const btn = $id('btnSixKey'); if (btn) btn.style.display = on ? '' : 'none';
-  const headerBtn = $id('btnPerkinsHeader'); if (headerBtn) headerBtn.style.display = on ? '' : 'none';
   if (!on && sixKeyOn) toggleSixKey(false);
 }
 editorEl.addEventListener('keydown', skKeydown, true);
@@ -5744,14 +4297,6 @@ editorEl.addEventListener('focusout', (e) => {
   skUpdatePending();
 });
 $id('btnSixKey')?.addEventListener('click', () => toggleSixKey());
-$id('btnPerkinsHeader')?.addEventListener('click', () => toggleSixKey());
-
-window.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && (e.key === '6' || e.code === 'Digit6')) {
-    e.preventDefault();
-    toggleSixKey();
-  }
-});
 
 // ---- read aloud (TTS) with karaoke highlight ----
 // speakMath: plain spoken text (fallback). mathSpeech: SumIt's engine →
@@ -5795,7 +4340,8 @@ function computeWordCharRanges(text) {
 }
 function startEqOverlay(item) {
   clearEqOverlay();                                   // defensive: never leave a previous overlay/hidden field behind
-  const mf = editorEl.querySelectorAll(`[data-block-idx="${item.blockIdx}"] math-field`)[item.mathIndex || 0];
+  const pe = printUnitEl(item.blockIdx, item.unit || 0) || editorEl.querySelector(`[data-block-idx="${item.blockIdx}"]`);
+  const mf = (pe ? pe.querySelectorAll('math-field') : editorEl.querySelectorAll(`[data-block-idx="${item.blockIdx}"] math-field`))[item.mathIndex || 0];
   if (!mf || !item.wrappedLatex || !globalThis.MathLive?.convertLatexToMarkup) return;
   const embed = mf.closest('.math-embed') || mf.parentElement;
   if (!embed) return;
@@ -5914,13 +4460,13 @@ const reader = new Reader({
 function updateReadButtons() {                       // one button: ▶ play (from caret) ⇄ ⏹ stop
   const r = $id('btnRead'); if (!r) return;
   if (reader.speaking) {
-    r.innerHTML = '⏹ <span class="btn-lbl">Stop</span>';
+    r.innerHTML = `⏹ <span class="btn-lbl" data-i18n="toolbar.stop_reading">${t('toolbar.stop_reading') || 'Stop'}</span>`;
     r.setAttribute('aria-pressed', 'true');
-    r.title = 'Stop reading';
+    r.title = t('toolbar.stop_reading') || 'Stop reading';
   } else {
-    r.innerHTML = '▶ <span class="btn-lbl">Read</span>';
+    r.innerHTML = `▶ <span class="btn-lbl" data-i18n="toolbar.read_aloud">${t('toolbar.read_aloud') || 'Read'}</span>`;
     r.setAttribute('aria-pressed', 'false');
-    r.title = 'Read aloud, starting at the caret';
+    r.title = t('toolbar.read_aloud') || 'Read aloud, starting at the caret';
   }
 }
 // Where Play starts: the caret's block, its unit (list item), AND its char offset
@@ -5944,18 +4490,6 @@ function caretPos() {
         let cnt = 0;
         for (const k of top.getChildren()) {
           if (k.getKey() === li.getKey()) { unit = cnt; container = k; break; }
-          if (k.getTextContent().replace(/\s+/g, ' ').trim()) cnt++;
-        }
-      }
-    } else if ($isSidebarNode(top)) {
-      let childOfSidebar = anchorNode;
-      while (childOfSidebar && childOfSidebar.getParent && childOfSidebar.getParent().getKey() !== top.getKey()) {
-        childOfSidebar = childOfSidebar.getParent();
-      }
-      if (childOfSidebar) {
-        let cnt = 0;
-        for (const k of top.getChildren()) {
-          if (k.getKey() === childOfSidebar.getKey()) { unit = cnt; container = k; break; }
           if (k.getTextContent().replace(/\s+/g, ' ').trim()) cnt++;
         }
       }
@@ -6120,69 +4654,86 @@ function initToolbar() {
     const next = (cur + (e.key === 'ArrowRight' ? 1 : -1) + list.length) % list.length;
     list[cur].tabIndex = -1; list[next].tabIndex = 0; list[next].focus();
   });
+  initResponsiveTextToolbar();
 }
 
-// ---- BANA style cycling & keyboard navigation ----
-const BANA_STYLE_CYCLE_ORDER = [
-  'p', 'h1', 'h2', 'h3', 'bullet', 'number', 'toc',
-  'dialogue', 'stage', 'poem', 'exercise', 'caption',
-  'footnote', 'note', 'quote'
-];
+// ---- Responsive Text Toolbar & Style Select labels ----
+function initResponsiveTextToolbar() {
+  const header = $id('editorHeader');
+  const pane = header?.closest('.pane-editor');
+  const selectEl = $id('blockStyle');
+  if (!header || !selectEl) return;
 
-document.addEventListener('keydown', (e) => {
-  if (document.querySelector('dialog[open]')) return;
+  function getStyleLabels() {
+    return {
+      p:        { full: `¶ ${t('styles.body') || 'Body Text'}`,            short: '¶ Text',      mini: '¶' },
+      h1:       { full: `${t('styles.h1') || 'H1 Heading'}`,               short: 'H1',          mini: 'H1' },
+      h2:       { full: `${t('styles.h2') || 'H2 Subheading'}`,            short: 'H2',          mini: 'H2' },
+      h3:       { full: `${t('styles.h3') || 'H3 Sub-subheading'}`,        short: 'H3',          mini: 'H3' },
+      bullet:   { full: `• ${t('styles.bullet_list') || 'Bullet List'}`,    short: '• List',      mini: '•' },
+      number:   { full: `1. ${t('styles.number_list') || 'Numbered List'}`, short: '1. List',     mini: '1.' },
+      toc:      { full: `📑 ${t('styles.toc_entry') || 'TOC Entry'}`,      short: 'TOC',         mini: 'TOC' },
+      dialogue: { full: `🎭 ${t('styles.dialogue') || 'Play Dialogue'}`,    short: 'Play',        mini: 'Play' },
+      stage:    { full: `🎬 ${t('styles.stage') || 'Stage Direction'}`,    short: 'Stage',       mini: 'Stage' },
+      poem:     { full: `📜 ${t('styles.poem') || 'Poetry / Verse'}`,      short: 'Poem',        mini: 'Poem' },
+      exercise: { full: `❓ ${t('styles.exercise') || 'Exercise Question'}`, short: 'Exercise',   mini: 'Ex' },
+      caption:  { full: `💬 ${t('styles.caption') || 'Caption'}`,          short: 'Caption',     mini: 'Cap' },
+      footnote: { full: `📝 ${t('styles.footnote') || 'Footnote'}`,        short: 'Footnote',    mini: 'Fn' },
+      note:     { full: `📋 ${t('styles.note') || "Transcriber's Note"}`,   short: 'Note',        mini: 'TN' },
+      quote:    { full: `“ ${t('styles.quote') || 'Blockquote'}`,          short: 'Quote',       mini: 'Quote' }
+    };
+  }
 
-  // Alt+S: Focus Block Style dropdown
-  if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 's' || e.key === 'S')) {
-    e.preventDefault();
-    const sel = $id('blockStyle');
-    if (sel) {
-      sel.focus();
-      if (typeof sel.showPicker === 'function') {
-        try { sel.showPicker(); } catch (_) {}
+  let currentMode = 'full';
+
+  function updateSelectLabels(mode, force = false) {
+    if (mode === currentMode && !force) return;
+    currentMode = mode;
+    const styleLabels = getStyleLabels();
+    for (const opt of selectEl.options) {
+      const def = styleLabels[opt.value];
+      if (def) {
+        opt.textContent = def[mode] || def.full;
       }
     }
-    return;
   }
 
-  // Alt+ArrowUp / Alt+ArrowDown: Cycle block styles on active paragraph/element
-  if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
-    const isEditorActive = editorEl?.contains(document.activeElement) ||
-      document.activeElement === $id('blockStyle') ||
-      document.activeElement === $id('styleInspector');
-    if (isEditorActive) {
-      e.preventDefault();
-      const currentVal = $id('blockStyle')?.value || 'p';
-      const curIdx = BANA_STYLE_CYCLE_ORDER.indexOf(currentVal);
-      const idx = curIdx >= 0 ? curIdx : 0;
-      const step = (e.key === 'ArrowDown') ? 1 : -1;
-      const nextIdx = (idx + step + BANA_STYLE_CYCLE_ORDER.length) % BANA_STYLE_CYCLE_ORDER.length;
-      const nextStyle = BANA_STYLE_CYCLE_ORDER[nextIdx];
-      setBlockStyle(nextStyle);
-      const profile = settings?.mode || 'bana';
-      const badgeText = typeof formatStyleInspectorBadge === 'function'
-        ? formatStyleInspectorBadge(nextStyle, profile)
-        : `Style: ${nextStyle}`;
-      announce(`Changed style to ${badgeText}`);
-    }
-  }
-});
+  window.addEventListener('i18n:localechange', () => {
+    updateSelectLabels(currentMode, true);
+  });
 
-$id('styleInspector')?.addEventListener('click', () => {
-  const sel = $id('blockStyle');
-  if (sel) {
-    sel.focus();
-    if (typeof sel.showPicker === 'function') {
-      try { sel.showPicker(); } catch (_) {}
+  function checkDimensions(width) {
+    const w = width ?? header.getBoundingClientRect().width;
+    if (w < 390) {
+      pane?.classList.add('pane-ultra-compact');
+      pane?.classList.remove('pane-compact');
+      updateSelectLabels('mini');
+    } else if (w < 540) {
+      pane?.classList.add('pane-compact');
+      pane?.classList.remove('pane-ultra-compact');
+      updateSelectLabels('short');
+    } else {
+      pane?.classList.remove('pane-compact', 'pane-ultra-compact');
+      updateSelectLabels('full');
     }
   }
-});
-$id('styleInspector')?.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    $id('blockStyle')?.focus();
+
+  let rafId = null;
+  if (typeof ResizeObserver !== 'undefined') {
+    const ro = new ResizeObserver((entries) => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        for (const entry of entries) {
+          checkDimensions(entry.contentRect.width);
+        }
+      });
+    });
+    ro.observe(header);
+  } else {
+    window.addEventListener('resize', () => checkDimensions());
   }
-});
+  checkDimensions();
+}
 
 // ---- Slash command popover menu for keyboard & screen reader accessibility ----
 function setBlockStyle(val) {
@@ -6201,7 +4752,6 @@ function setSetting(id, val) {
     el.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
-
 
 function insertTextAtCaret(text) {
   if (typeof text !== 'string') return;
@@ -6479,9 +5029,9 @@ function initFormulaDialog() {
     const allBtn = document.createElement('button');
     allBtn.type = 'button';
     allBtn.className = 'formula-cat-btn' + (activeCat === null ? ' active' : '');
-    allBtn.textContent = 'All';
+    allBtn.textContent = t('common.all') || 'All';
     allBtn.setAttribute('aria-pressed', String(activeCat === null));
-    allBtn.setAttribute('aria-label', 'All categories');
+    allBtn.setAttribute('aria-label', `${t('common.all') || 'All'} categories`);
     allBtn.addEventListener('click', () => {
       activeCat = null;
       renderCategories();
@@ -6494,9 +5044,10 @@ function initFormulaDialog() {
       btn.type = 'button';
       const isActive = activeCat === c.id;
       btn.className = 'formula-cat-btn' + (isActive ? ' active' : '');
-      btn.textContent = c.label;
+      const catLabel = t(`formulas.cat_${c.id}`) || c.label;
+      btn.textContent = catLabel;
       btn.setAttribute('aria-pressed', String(isActive));
-      btn.setAttribute('aria-label', `${c.label} category`);
+      btn.setAttribute('aria-label', `${catLabel} category`);
       btn.addEventListener('click', () => {
         activeCat = c.id;
         renderCategories();
@@ -6762,7 +5313,7 @@ function initGraphicDialog() {
     const allBtn = document.createElement('button');
     allBtn.type = 'button';
     allBtn.className = 'formula-cat-btn' + (activeCat === null ? ' active' : '');
-    allBtn.textContent = 'All';
+    allBtn.textContent = t('common.all') || 'All';
     allBtn.addEventListener('click', () => {
       activeCat = null;
       renderCategories();
@@ -6775,7 +5326,7 @@ function initGraphicDialog() {
       btn.type = 'button';
       const isActive = activeCat === c.id;
       btn.className = 'formula-cat-btn' + (isActive ? ' active' : '');
-      btn.textContent = c.name;
+      btn.textContent = t(`tactile.category_${c.id}`) || c.name;
       btn.addEventListener('click', () => {
         activeCat = c.id;
         renderCategories();
@@ -6801,7 +5352,7 @@ function initGraphicDialog() {
       empty.style.padding = '20px';
       empty.style.textAlign = 'center';
       empty.style.color = 'var(--muted)';
-      empty.textContent = 'No matching diagrams found.';
+      empty.textContent = t('tactile.no_diagrams') || 'No matching diagrams found.';
       listEl.appendChild(empty);
       return;
     }
@@ -6956,41 +5507,57 @@ async function insertGraphicDiagram(rawSvg, meta = {}) {
 window.insertGraphicDiagram = insertGraphicDiagram;
 window.plotAndInsertGraph = plotAndInsertGraph;
 
-function insertSidebar(title = '') {
+function insertSidebar(title = 'Sidebar Title') {
+  let createdKey = null;
   editor.update(() => {
-    const sidebar = $createSidebarNode(title);
-    if (title) {
-      const h = $createHeadingNode('h2');
-      h.append($createTextNode(title));
-      sidebar.append(h);
-    }
+    const node = $createSidebarNode(title);
+    const h = $createHeadingNode('h2');
+    h.append($createTextNode(title));
     const p = $createParagraphNode();
-    sidebar.append(p);
+    p.append($createTextNode('Sidebar content paragraph.'));
+    node.append(h, p);
+
     const sel = $getSelection();
-    if ($isRangeSelection(sel)) {
-      $insertNodeToNearestRoot(sidebar);
-    } else {
-      $getRoot().append(sidebar);
-    }
-    p.select();
+    if ($isRangeSelection(sel)) $insertNodeToNearestRoot(node);
+    else $getRoot().append(node);
+    createdKey = node.getKey();
+    h.select(0, title.length);
   });
   announce('Inserted sidebar box');
-}
-function insertTable(cols = 3, rows = 3, format = 'auto') {
-  editor.update(() => {
-    const headers = Array.from({ length: cols }, (_, i) => `Col ${i + 1}`);
-    const tableRows = Array.from({ length: rows }, () => Array.from({ length: cols }, () => ''));
-    const table = $createTableNode(headers, tableRows, format);
-    const sel = $getSelection();
-    if ($isRangeSelection(sel)) {
-      $insertNodeToNearestRoot(table);
-    } else {
-      $getRoot().append(table);
-    }
-  });
-  announce('Inserted table');
+  const domEl = editor.getElementByKey(createdKey || '');
+  refreshToolbar(domEl);
 }
 window.insertSidebar = insertSidebar;
+
+function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
+  let createdKey = null;
+  editor.update(() => {
+    const headers = Array.from({ length: numCols }, (_, i) => `Header ${i + 1}`);
+    const rows = Array.from({ length: numRows }, (_, ri) =>
+      Array.from({ length: numCols }, (_, ci) => `Row ${ri + 1}, Col ${ci + 1}`)
+    );
+    const node = $createTableNode(headers, rows, format);
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) $insertNodeToNearestRoot(node);
+    else $getRoot().append(node);
+    createdKey = node.getKey();
+  });
+  announce(`Inserted ${format} table: ${numCols} columns by ${numRows} rows`);
+  const styleVal = (format === 'listed' || format === 'table-listed') ? 'table-listed' : 'table-spatial';
+  const bs = $id('blockStyle');
+  if (bs) bs.value = styleVal;
+  const si = $id('styleInspector');
+  if (si) si.textContent = formatStyleInspectorBadge(styleVal, settings.profile || settings.mode || 'bana');
+  setTimeout(() => {
+    const tables = editorEl.querySelectorAll('.doc-table-block');
+    const lastTable = tables[tables.length - 1];
+    const firstInput = lastTable?.querySelector('input.table-cell-input');
+    if (firstInput) {
+      firstInput.focus();
+      refreshToolbar(firstInput);
+    }
+  }, 80);
+}
 window.insertTable = insertTable;
 
 const SLASH_COMMANDS = [
@@ -7004,7 +5571,10 @@ const SLASH_COMMANDS = [
   { id: 'p', title: 'Paragraph (Body)', desc: 'Standard body paragraph (3-1)', icon: '¶', keywords: ['p', 'para', 'paragraph', 'body', 'text', 'standard'], action: () => setBlockStyle('p') },
   { id: 'ul', title: 'Bulleted List', desc: 'Create bulleted list items (1-3)', icon: '•', keywords: ['ul', 'bullet', 'bullets', 'list', 'unordered'], action: () => setBlockStyle('bullet') },
   { id: 'ol', title: 'Numbered List', desc: 'Create numbered list items (1-3)', icon: '1.', keywords: ['ol', 'number', 'numbered', 'list', 'ordered'], action: () => setBlockStyle('number') },
-  { id: 'toc', title: 'TOC Entry', desc: 'Table of Contents entry with dot leaders (1-3)', icon: '📑', keywords: ['toc', 'table of contents', 'contents', 'index', 'dot leaders', 'leader'], action: () => setBlockStyle('toc') },
+  { id: 'indent', title: 'Indent / Nest Sub-item', desc: 'Nest list item or exercise deeper (Tab)', icon: '⇥', keywords: ['indent', 'nest', 'subitem', 'subquestion', 'sub', 'tab', 'level'], action: () => indentCurrentItem() },
+  { id: 'outdent', title: 'Outdent / Promote Item', desc: 'Promote list item or exercise higher (Shift+Tab)', icon: '⇤', keywords: ['outdent', 'promote', 'unindent', 'unnest', 'shift-tab', 'back'], action: () => outdentCurrentItem() },
+  { id: 'index', title: 'Index Entry', desc: 'BANA Index entry (1-3 main, 3-5 subentry)', icon: '📇', keywords: ['index', 'entry', 'subentry', 'plain', 'skill', 'skills'], action: () => setBlockStyle('index') },
+  { id: 'toc', title: 'TOC Entry', desc: 'Table of Contents entry with dot leaders (1-3)', icon: '📑', keywords: ['toc', 'table of contents', 'contents', 'dot leaders', 'leader'], action: () => setBlockStyle('toc') },
   { id: 'dialogue', title: 'Play Dialogue', desc: 'Prose drama dialogue speaker line (1-3)', icon: '🎭', keywords: ['dialogue', 'play', 'drama', 'speaker', 'character', 'line', 'script', 'speech'], action: () => setBlockStyle('dialogue') },
   { id: 'stage', title: 'Stage Direction', desc: 'Drama stage direction indented (7-7)', icon: '🎬', keywords: ['stage', 'direction', 'play', 'drama', 'setting', 'action', 'parenthetical'], action: () => setBlockStyle('stage') },
   { id: 'poem', title: 'Poetry / Verse', desc: 'Poetic stanza verse line (1-3)', icon: '📜', keywords: ['poem', 'poetry', 'verse', 'stanza', 'rhyme', 'lines', 'lyric'], action: () => setBlockStyle('poem') },
@@ -7013,9 +5583,9 @@ const SLASH_COMMANDS = [
   { id: 'footnote', title: 'Footnote', desc: 'Footnote note text (1-3)', icon: '📝', keywords: ['footnote', 'note', 'reference', 'citation', 'annotation', 'fn'], action: () => setBlockStyle('footnote') },
   { id: 'note', title: "Transcriber's Note", desc: "Transcriber's note with BANA indicators (7-5)", icon: '📋', keywords: ['note', 'transcriber', 'transcriber note', 'tn', 'prodnote', 'comment', 'remark'], action: () => setBlockStyle('note') },
   { id: 'quote', title: 'Blockquote', desc: 'Indented quotation block (3-1)', icon: '“', keywords: ['quote', 'blockquote', 'quotation', 'citation', 'excerpt', 'indent'], action: () => setBlockStyle('quote') },
-  { id: 'sidebar', title: 'Sidebar Box', desc: 'Container card with BANA boxlines', icon: '📦', keywords: ['sidebar', 'box', 'callout', 'aside', 'container', 'panel', 'boxline'], action: () => insertSidebar() },
+  { id: 'sidebar', title: 'Sidebar Box', desc: 'Insert callout box with BANA boxlines', icon: '📦', keywords: ['sidebar', 'box', 'callout', 'panel', 'aside'], action: () => insertSidebar() },
   { id: 'table', title: 'Spatial Braille Table', desc: 'Insert 3×3 columnar data table', icon: '📊', keywords: ['table', 'grid', 'column', 'row', 'spatial', 'data'], action: () => insertTable(3, 3, 'spatial') },
-  { id: 'listedtable', title: 'BANA Listed Table', desc: 'Insert structured listed table (Header: Value)', icon: '📋', keywords: ['listedtable', 'listed', 'table', 'bana', 'data', 'card', 'key value', 'key-value'], action: () => insertTable(3, 3, 'listed') },
+  { id: 'listedtable', title: 'Listed Table', desc: 'Insert BANA listed linear table format', icon: '📋', keywords: ['listedtable', 'table', 'listed', 'linear'], action: () => insertTable(3, 3, 'listed') },
   { id: 'matrix', title: 'Math Matrix (2×2 / 3×3)', desc: 'Insert 2×2 or 3×3 visual MathLive matrix', icon: '🔢', keywords: ['matrix', 'pmatrix', 'bmatrix', 'linalg', 'array', 'grid', 'vector'], action: () => insertMathEquation('\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', 'Matrix equation inserted') },
   { id: 'math', title: 'Insert Equation', desc: 'MathLive visual equation (UEB/Nemeth)', icon: '∑', keywords: ['math', 'maths', 'equation', 'latex', 'formula'], action: () => $id('btnMath')?.click() },
   { id: 'formula', title: 'Formula Templates...', desc: 'Browse 340+ math formulas, matrices & equations', icon: '🧮', keywords: ['formula', 'template', 'math', 'equation', 'matrix', 'table', 'algebra', 'calculus', 'frac', 'sqrt'], action: () => openFormulaDialog() },
@@ -7028,7 +5598,6 @@ const SLASH_COMMANDS = [
   { id: 'page', title: 'Print Page Number', desc: 'Insert source print page break indicator', icon: '📄', keywords: ['page', 'printpage', 'pagenum', 'break', 'number', 'pagination'], action: () => insertPrintPage() },
   { id: 'code', title: 'Computer Code', desc: 'Insert Code block with UEB indicators', icon: '💻', keywords: ['code', 'python', 'html', 'js', 'programming', 'script'], action: () => insertTextAtCaret('```\n\n```') },
 ];
-window.SLASH_COMMANDS = SLASH_COMMANDS;
 
 function initSlashMenu() {
   const menuEl = $id('slashMenu');
@@ -7073,11 +5642,13 @@ function initSlashMenu() {
 
       const title = document.createElement('span');
       title.className = 'slash-title';
-      title.textContent = cmd.title;
+      const transTitle = t(`slash.${cmd.id}_title`);
+      title.textContent = (transTitle && transTitle !== `slash.${cmd.id}_title`) ? transTitle : cmd.title;
 
       const desc = document.createElement('span');
       desc.className = 'slash-desc';
-      desc.textContent = cmd.desc;
+      const transDesc = t(`slash.${cmd.id}_desc`);
+      desc.textContent = (transDesc && transDesc !== `slash.${cmd.id}_desc`) ? transDesc : cmd.desc;
 
       info.appendChild(title);
       info.appendChild(desc);
@@ -7238,157 +5809,51 @@ function initSlashMenu() {
   }, true);
 }
 
-// ---- Markdown Shortcut Triggers (Auto-formatting on Line-Start Input) ----
-function applyMarkdownShortcut(node) {
-  if (!$isParagraphNode(node)) return null;
-  const firstChild = node.getFirstChild();
-  if (!$isTextNode(firstChild)) return null;
-
-  const text = firstChild.getTextContent();
-
-  // 1. Heading 1-3: # , ## , ### 
-  const headingMatch = text.match(/^(#{1,3})\s(.*)$/s);
-  if (headingMatch) {
-    const level = headingMatch[1].length;
-    const tag = `h${level}`;
-    const restText = headingMatch[2];
-    const heading = $createHeadingNode(tag);
-    if (restText) heading.append($createTextNode(restText));
-    node.replace(heading);
-    return { type: 'heading', level, node: heading };
+// ---- Keyboard Tab / Shift+Tab & Bracket Shortcut Handler for List Item Indent / Outdent ----
+editorEl.addEventListener('keydown', (e) => {
+  // Support Ctrl+] / Cmd+] (Indent) and Ctrl+[ / Cmd+[ (Outdent)
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === ']' || e.code === 'BracketRight') {
+      e.preventDefault();
+      e.stopPropagation();
+      indentCurrentItem();
+      return;
+    }
+    if (e.key === '[' || e.code === 'BracketLeft') {
+      e.preventDefault();
+      e.stopPropagation();
+      outdentCurrentItem();
+      return;
+    }
   }
 
-  // 2. Blockquote: > 
-  const quoteMatch = text.match(/^>\s(.*)$/s);
-  if (quoteMatch) {
-    const restText = quoteMatch[1];
-    const p = $createParagraphNode();
-    p.setBanaStyle('quote');
-    if (restText) p.append($createTextNode(restText));
-    node.replace(p);
-    return { type: 'quote', node: p };
-  }
-
-  // 3. Bullet list: * , - , + 
-  const bulletMatch = text.match(/^([*\-+])\s(.*)$/s);
-  if (bulletMatch) {
-    const restText = bulletMatch[2];
-    const list = $createListNode('bullet');
-    const li = $createListItemNode();
-    if (restText) li.append($createTextNode(restText));
-    list.append(li);
-    node.replace(list);
-    return { type: 'list-bullet', node: list };
-  }
-
-  // 4. Numbered list: 1. , 1) 
-  const numberMatch = text.match(/^1[.)]\s(.*)$/s);
-  if (numberMatch) {
-    const restText = numberMatch[1];
-    const list = $createListNode('number');
-    const li = $createListItemNode();
-    if (restText) li.append($createTextNode(restText));
-    list.append(li);
-    node.replace(list);
-    return { type: 'list-number', node: list };
-  }
-
-  // 5. Exercise question: Q1. , Ex1. 
-  const exMatch = text.match(/^(?:Q\d+|Ex\d*|Exercise\s*\d*)[.)]\s(.*)$/is);
-  if (exMatch) {
-    const restText = exMatch[1];
-    const list = $createListNode('number');
-    list.setListKind('exercise');
-    list.setBanaStyle('exercise');
-    const li = $createListItemNode();
-    if (restText) li.append($createTextNode(restText));
-    list.append(li);
-    node.replace(list);
-    return { type: 'exercise', node: list };
-  }
-
-  // 6. Transcriber's Note: [TN , [tn , [TN: , [tn: , @.< 
-  const tnMatch = text.match(/^(?:\[tn:?|\[transcriber(?:'s)?\s*note:?|@\.<)\s*(.*?)(?:\]|@\.>)?$/is);
-  if (tnMatch) {
-    const restText = tnMatch[1];
-    const p = $createBanaParagraphNode('note');
-    if (restText) p.append($createTextNode(restText));
-    node.replace(p);
-    return { type: 'note', node: p };
-  }
-
-  // 7. Horizontal Divider Break: ---, ***, ___
-  const hrMatch = text.match(/^(\-{3,}|\*{3,}|_{3,})$/);
-  if (hrMatch) {
-    const brk = $createBreakNode();
-    const nextP = $createParagraphNode();
-    node.replace(brk);
-    brk.insertAfter(nextP);
-    return { type: 'break', node: brk, nextNode: nextP };
-  }
-
-  // 8. Drama Dialogue: Speaker name with colon (e.g. HAMLET: or DOCTOR:)
-  const dialogueMatch = text.match(/^([A-Z][A-Z0-9_\s]{1,20}):\s(.*)$/s);
-  if (dialogueMatch && !node.getBanaStyle()) {
-    node.setBanaStyle('dialogue');
-    return { type: 'dialogue', node };
-  }
-
-  return null;
-}
-window.applyMarkdownShortcut = applyMarkdownShortcut;
-
-function initMarkdownShortcuts() {
-  editor.registerUpdateListener(() => {
+  // Contextual Tab: Only trap Tab when inside a list item or exercise so screen reader users can Tab out freely from body text
+  if (e.key === 'Tab') {
+    let isInsideList = false;
     editor.getEditorState().read(() => {
       const sel = $getSelection();
-      if (!$isRangeSelection(sel) || !sel.isCollapsed()) return;
-      const anchor = sel.anchor;
-      const node = anchor.getNode();
-      if (!$isTextNode(node)) return;
-
-      const parent = node.getParent();
-      if (!parent || !$isParagraphNode(parent)) return;
-      if (parent.getFirstChild() !== node) return;
-
-      const text = node.getTextContent();
-      const offset = anchor.offset;
-      const textBefore = text.slice(0, offset);
-
-      const isTrigger = /^(?:#{1,3}|>|[*\-+]|1[.)]|\[tn:?|@\.<)\s$/i.test(textBefore) ||
-                        /^(?:Q\d+|Ex\d*|Exercise\s*\d*)[.)]\s$/i.test(textBefore) ||
-                        /^(\-{3,}|\*{3,}|_{3,})$/.test(textBefore) ||
-                        /^([A-Z][A-Z0-9_\s]{1,20}):\s$/.test(textBefore);
-
-      if (!isTrigger) return;
-
-      setTimeout(() => {
-        try {
-          editor.update(() => {
-            const currentSel = $getSelection();
-            if (!$isRangeSelection(currentSel)) return;
-            const currentAnchor = currentSel.anchor;
-            const currentNode = currentAnchor.getNode();
-            const currentParent = currentNode?.getParent();
-            if (!currentParent || !$isParagraphNode(currentParent)) return;
-
-            const res = applyMarkdownShortcut(currentParent);
-            if (res) {
-              if (res.node && typeof res.node.select === 'function') {
-                res.node.select(0, 0);
-              } else if (res.nextNode) {
-                res.nextNode.select();
-              }
-              announce(`Converted to ${res.type}`);
-            }
-          });
-        } catch (e) {
-          console.warn('Markdown shortcut safe recovery:', e);
+      if ($isRangeSelection(sel)) {
+        let node = sel.anchor.getNode();
+        while (node && node !== $getRoot()) {
+          if ($isListItemNode(node) || $isListNode(node)) {
+            isInsideList = true;
+            break;
+          }
+          node = node.getParent ? node.getParent() : null;
         }
-      }, 0);
+      }
     });
-  });
-}
+    if (isInsideList) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.shiftKey) {
+        outdentCurrentItem();
+      } else {
+        indentCurrentItem();
+      }
+    }
+  }
+});
 
 // ---- seed demo content ----
 function seed() {
@@ -7412,25 +5877,44 @@ function seed() {
     const ul = $createListNode('bullet');
     ['First item', 'Second item', 'Third item'].forEach((s) => { const li = $createListItemNode(); li.append($createTextNode(s)); ul.append(li); });
     root.append(h1, p1, $createBreakNode(), p2, p3, h2, ul);
-  });
+  }, { discrete: true });
 }
 
 // ---- drag-and-drop import (parse a document into the editor) ----
 // Reuses the converter's parsers (parseFile → the same block model the formatter
 // eats) and rebuilds it as Lexical nodes. Structure + inline maths from LaTeX
 // sources import fully; docx/OMML equations (MathML, no LaTeX) come in as a marker.
-function applyEmphasis(node, tf, uncontracted = false) {
+function applyEmphasis(node, tf) {
   if (tf & TF.bold) node.toggleFormat('bold');
   if (tf & TF.italic) node.toggleFormat('italic');
   if (tf & TF.underline) node.toggleFormat('underline');
-  if (uncontracted) node.toggleFormat('code');
   return node;
 }
 function fillFromBlock(parent, b) {
+  if (!b) return;
   if (b.segments) {
     for (const s of b.segments) {
-      if (s.type === 'math') { if (s.latex) parent.append($createMathNode(s.latex)); else if (s.mathml) parent.append($createTextNode('⟨equation⟩')); }
-      else if (s.text) parent.append(applyEmphasis($createTextNode(s.text), s.tf || 0, s.uncontracted));
+      if (s.type === 'math') {
+        const latex = s.latex || (s.mathml ? mathmlToLatex(s.mathml) : '');
+        if (latex) parent.append($createMathNode(latex));
+        else parent.append($createTextNode('⟨equation⟩'));
+      }
+      else if (s.text) parent.append(applyEmphasis($createTextNode(s.text.replace(/\s+/g, ' ')), s.tf || 0));
+    }
+  } else if (Array.isArray(b.lines) && b.lines.length > 0) {
+    b.lines.forEach((l, idx) => {
+      if (idx > 0) parent.append($createLineBreakNode());
+      parent.append($createTextNode(String(l)));
+    });
+  } else if (b.speaker || b.speech) {
+    const speakerText = b.speaker ? `${b.speaker}: ` : '';
+    const speechText = b.speech || '';
+    if (speakerText) {
+      const strong = applyEmphasis($createTextNode(speakerText), 4);
+      parent.append(strong);
+    }
+    if (speechText) {
+      parent.append($createTextNode(speechText));
     }
   } else if ((b.text ?? '').trim()) {
     parent.append($createTextNode(b.text.replace(/\s+/g, ' ').trim()));
@@ -7454,70 +5938,32 @@ function stripLeadingListBullet(it) {
   return it;
 }
 
-function getBlockBanaStyle(b) {
+export function getBlockBanaStyle(b) {
   if (!b) return null;
-  if (b.style) return b.style;
+  if (b.style) {
+    if (b.style === 'play-speaker' || b.style === 'speaker' || b.style === 'play' || b.style === 'dialogue' || b.style === 'play-dialogue') return 'dialogue';
+    if (b.style === 'play-stage') return 'stage';
+    if (b.style === 'play-verse' || b.style === 'verse' || b.style === 'poem' || b.style === 'poetry') return 'poem';
+    return b.style;
+  }
   if (b.type === 'note' || b.kind === 'tabletn' || b.kind === 'image') return 'note';
   if (b.type === 'caption') return 'caption';
   if (b.type === 'footnote') return 'footnote';
   if (b.type === 'attribution') return 'attribution';
   if (b.type === 'stage') return 'stage';
+  if (b.type === 'verse' || b.type === 'poem' || b.type === 'poetry') return 'poem';
+  if (b.type === 'dialogue' || b.type === 'speaker' || b.type === 'play-dialogue') return 'dialogue';
   if (b.type === 'play') return b.subtype === 'verse' ? 'poem' : 'dialogue';
   return null;
 }
 
-function createListFromBlock(b) {
-  const kind = b.kind || b.style || null;
-  const isToc = kind === 'toc';
-  const isPlain = kind === 'plain' || kind === 'index' || isToc;
-  const isExercise = kind === 'exercise';
-  const isOrdered = b.ordered || (b.items && b.items.some((it) => it.marker));
-
-  let listType = 'bullet';
-  if (isPlain) listType = 'plain';
-  else if (isExercise || isOrdered) listType = 'number';
-
-  const list = $createListNode(listType);
-  if (kind) {
-    if (typeof list.setListKind === 'function') list.setListKind(kind);
-    if (typeof list.setBanaStyle === 'function') list.setBanaStyle(kind);
-  }
-
-  for (const it of (b.items || [])) {
-    const li = $createListItemNode();
-    if (isToc) {
-      li.setBanaStyle('toc-entry');
-    } else if (isExercise) {
-      li.setBanaStyle(it.level && it.level > 0 ? 'exercise-sub' : 'exercise');
-    } else if (it.style) {
-      li.setBanaStyle(it.style);
-    }
-    if (it.page && typeof li.setPage === 'function') {
-      li.setPage(it.page);
-    }
-    if (it.level != null) {
-      if (typeof li.setLevel === 'function') li.setLevel(it.level);
-      else if (typeof li.setIndent === 'function') li.setIndent(it.level);
-    }
-    if (it.marker && typeof li.setValue === 'function') {
-      const mNum = parseInt(it.marker, 10);
-      if (!isNaN(mNum)) li.setValue(mNum);
-    }
-
-    const cleanItem = stripLeadingListBullet(it);
-    fillFromBlock(li, cleanItem);
-    if (li.getChildrenSize()) list.append(li);
-  }
-  return list;
-}
-
 function modelToLexical(model) {
   window.modelToLexical = modelToLexical;
+  clearTranslationCache();
   editor.update(() => {
     const root = $getRoot();
     root.clear();
-    const blocks = Array.isArray(model) ? model : (model?.blocks || []);
-    for (const b of blocks) {
+    for (const b of (model.blocks || [])) {
       if (!b) continue;
       if (b.type === 'heading' || b.type === 'title') {
         const lvl = b.type === 'title' ? 1 : Math.min(3, b.level || 1);
@@ -7525,51 +5971,62 @@ function modelToLexical(model) {
         fillFromBlock(h, b);
         root.append(h);
       } else if (b.type === 'list') {
-        const list = createListFromBlock(b);
+        const listKind = b.kind || b.style || (b.ordered ? 'number' : null);
+        const isPlain = listKind === 'toc' || listKind === 'index' || listKind === 'plain' || b.kind === 'plain';
+        const isOrdered = b.ordered || listKind === 'number' || (b.items && b.items.some((it) => it.marker));
+        const listType = isPlain ? 'plain' : (isOrdered ? 'number' : 'bullet');
+        const list = $createListNode(listType);
+        const effectiveKind = (listKind === 'plain' ? 'index' : listKind) || (isPlain ? 'index' : null);
+        if (effectiveKind) {
+          list.setListKind(effectiveKind);
+          list.setBanaStyle(effectiveKind);
+        }
+        for (const it of (b.items || [])) {
+          const li = $createListItemNode();
+          const cleanItem = stripLeadingListBullet(it);
+          fillFromBlock(li, cleanItem);
+          if (it.page) li.setPage(it.page);
+          if (it.level != null) li.setLevel(it.level);
+          if (effectiveKind) li.setBanaStyle(effectiveKind);
+          if (li.getChildrenSize()) list.append(li);
+        }
         if (list.getChildrenSize()) root.append(list);
-      } else if (b.type === 'indicator') {
-        root.append($createBreakNode());
+      } else if (b.type === 'indicator' || b.type === 'break') {
+        root.append($createBreakNode(b.kind || 'asterisks'));
       } else if (b.type === 'pagenum') {
         root.append($createPrintPageNode(b.page || b.text || '1'));
       } else if (b.type === 'graphic') {
         if (b.svg) {
           const transpiled = transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });
-          root.append($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true, b.size || 'half'));
+          root.append($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true));
         } else {
-          const p = $createBanaParagraphNode(null);
+          const p = $createParagraphNode();
           p.append($createTextNode(`[Tactile graphic: ${b.alt || 'Diagram'}]`));
           root.append(p);
         }
       } else if (b.type === 'box' || b.type === 'sidebar') {
         const sidebar = $createSidebarNode(b.title || '');
-        let titleBlockHandled = false;
-        if (Array.isArray(b.blocks) && b.blocks.length > 0) {
-          for (let i = 0; i < b.blocks.length; i++) {
-            const cb = b.blocks[i];
-            if (i === 0 && (cb.type === 'heading' || cb.type === 'title')) {
-              const h = $createHeadingNode('h' + Math.min(3, cb.level || 2));
-              fillFromBlock(h, cb);
-              sidebar.append(h);
-              titleBlockHandled = true;
-            } else if (cb.type === 'heading' || cb.type === 'title') {
+        if (Array.isArray(b.blocks) && b.blocks.length) {
+          for (const cb of b.blocks) {
+            if (cb.type === 'heading' || cb.type === 'title') {
               const h = $createHeadingNode('h' + Math.min(3, cb.level || 2));
               fillFromBlock(h, cb);
               sidebar.append(h);
             } else if (cb.type === 'list') {
-              const list = createListFromBlock(cb);
+              const isOrdered = cb.ordered || (cb.items && cb.items.some((it) => it.marker));
+              const list = $createListNode(isOrdered ? 'number' : 'bullet');
+              if (cb.kind) list.setListKind(cb.kind);
+              for (const it of (cb.items || [])) {
+                const li = $createListItemNode();
+                const cleanItem = stripLeadingListBullet(it);
+                fillFromBlock(li, cleanItem);
+                if (it.page) li.setPage(it.page);
+                if (it.level != null) li.setLevel(it.level);
+                if (li.getChildrenSize()) list.append(li);
+              }
               if (list.getChildrenSize()) sidebar.append(list);
             } else if (cb.type === 'table') {
-              const fmt = cb.format || (cb.style === 'table-listed' ? 'listed' : (cb.style === 'table-spatial' ? 'spatial' : 'auto'));
-              sidebar.append($createTableNode(cb.headers || [], cb.rows || [], fmt, cb.caption || cb.title || '', cb.tabletn || ''));
-            } else if (cb.type === 'graphic') {
-              if (cb.svg) {
-                const transpiled = transpileTactileSvg(cb.svg, { brailleCode: settings.brailleCode });
-                sidebar.append($createGraphicNode(transpiled.svg || cb.svg, cb.alt || 'Tactile diagram', cb.title || cb.alt || 'Tactile diagram', true, true, cb.size || 'half'));
-              } else {
-                const p = $createBanaParagraphNode(null);
-                p.append($createTextNode(`[Tactile graphic: ${cb.alt || 'Diagram'}]`));
-                sidebar.append(p);
-              }
+              sidebar.append($createTableNode(cb.headers || [], cb.rows || [], cb.format || 'spatial'));
             } else {
               const style = getBlockBanaStyle(cb);
               const p = $createBanaParagraphNode(style);
@@ -7577,24 +6034,26 @@ function modelToLexical(model) {
               if (p.getChildrenSize()) sidebar.append(p);
             }
           }
-        }
-        if (!titleBlockHandled && b.title) {
-          const h = $createHeadingNode('h2');
-          h.append($createTextNode(b.title));
-          sidebar.append(h);
-        }
-        if (!b.blocks?.length && b.text) {
-          const style = getBlockBanaStyle(b);
-          const p = $createBanaParagraphNode(style);
+        } else if (b.text) {
+          const p = $createParagraphNode();
           fillFromBlock(p, b);
           if (p.getChildrenSize()) sidebar.append(p);
         }
         if (sidebar.getChildrenSize()) root.append(sidebar);
       } else if (b.type === 'table') {
-        const fmt = b.format || (b.style === 'table-listed' ? 'listed' : (b.style === 'table-spatial' ? 'spatial' : 'auto'));
-        root.append($createTableNode(b.headers || [], b.rows || [], fmt, b.caption || b.title || '', b.tabletn || ''));
+        root.append($createTableNode(b.headers || [], b.rows || [], b.format || 'spatial'));
       } else if (b.type === 'math') {
-        const p = $createBanaParagraphNode(null); if (b.latex) p.append($createMathNode(b.latex)); else p.append($createTextNode('⟨equation⟩')); root.append(p);
+        const latex = b.latex || (b.mathml ? mathmlToLatex(b.mathml) : '');
+        const p = $createParagraphNode();
+        if (latex) p.append($createMathNode(latex));
+        else p.append($createTextNode('⟨equation⟩'));
+        root.append(p);
+      } else if ((b.type === 'verse' || b.style === 'verse' || b.style === 'poem' || b.type === 'poem' || b.type === 'poetry') && Array.isArray(b.lines) && b.lines.length > 0) {
+        for (const line of b.lines) {
+          const p = $createBanaParagraphNode('poem');
+          p.append($createTextNode(String(line)));
+          root.append(p);
+        }
       } else {
         const style = getBlockBanaStyle(b);
         const p = $createBanaParagraphNode(style);
@@ -7602,42 +6061,130 @@ function modelToLexical(model) {
         root.append(p);
       }
     }
-    if (!root.getFirstChild()) root.append($createBanaParagraphNode(null));
-  });
+    if (!root.getFirstChild()) root.append($createParagraphNode());
+  }, { discrete: true });
 }
 window.modelToLexical = modelToLexical;
 window.render = render;
+window.importFile = importFile;
+function setLoadingProgress(pct, msg, title) {
+  const pctEl = $id('loadingPercent');
+  const msgEl = $id('loadingMsg');
+  const titleEl = $id('loadingTitle');
+  const rounded = Math.min(100, Math.max(0, Math.round(pct)));
+  if (pctEl) pctEl.textContent = `${rounded}%`;
+  if (msg && msgEl) msgEl.textContent = msg;
+  if (title && titleEl) titleEl.textContent = title;
+}
+
+function showLoading(title, msg) {
+  const ov = $id('loadingOverlay');
+  if (ov) {
+    setLoadingProgress(10, msg || 'Reading document file…', title || 'Loading document…');
+    ov.hidden = false;
+  }
+  if (editorEl) editorEl.setAttribute('aria-busy', 'true');
+}
+
+function hideLoading() {
+  const ov = $id('loadingOverlay');
+  if (ov) ov.hidden = true;
+  if (editorEl) editorEl.removeAttribute('aria-busy');
+}
+
 let importing = false;
 async function importFile(file) {
-  if (importing) return;                             // a second drop while one is still parsing would clobber it
+  if (!file || importing) return;                             // a second drop while one is still parsing would clobber it
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (ext !== 'svg' && isDocumentDirty()) {
+    const ok = window.confirm(t('messages.unsaved_load', 'You have unsaved changes. Loading a new file will replace your current document. Continue?'));
+    if (!ok) return;
+  }
   importing = true;
+  
+  // Calculate equal step duration based on file size:
+  // e.g. 50KB -> 500ms total (~50ms/step), 1.5MB -> 2000ms total (~200ms/step)
+  const fileSize = (file && file.size) || 50000;
+  const stepMs = Math.max(50, Math.min(220, Math.round(fileSize / 7000)));
+  
+  showLoading(t('loading.title') || `Loading ${file.name}…`, t('loading.reading_file') || 'Reading document file…');
+  setLoadingProgress(10, t('loading.reading_file') || 'Reading document file…', t('loading.title') || `Loading ${file.name}…`);
+  
+  let currentPct = 10;
+  let active = true;
+  
+  // Steady periodic timer that ticks in exact equal intervals:
+  const timerId = setInterval(() => {
+    if (!active) return;
+    if (currentPct < 90) {
+      currentPct += 10;
+      let msg = t('loading.processing_elements') || 'Processing document…';
+      if (currentPct <= 20) msg = t('loading.reading_payload') || 'Reading file payload…';
+      else if (currentPct <= 40) msg = t('loading.parsing_structure') || 'Parsing document structure…';
+      else if (currentPct <= 60) msg = t('loading.building_editor') || 'Building editor document…';
+      else if (currentPct <= 80) msg = t('loading.translating_braille') || 'Translating & formatting braille…';
+      else if (currentPct <= 90) msg = t('loading.finalizing') || 'Finalizing braille pages…';
+      setLoadingProgress(currentPct, msg);
+    }
+  }, stepMs);
+
   try {
     if (reader.speaking) reader.stop();
     hideParseWarning();
-    const ext = (file.name.split('.').pop() || '').toLowerCase();
     setStatus(`Importing ${file.name}…`);
+    
     if (ext === 'svg') {
       const svgText = await file.text();
       insertGraphicDiagram(svgText, { title: file.name.replace(/\.svg$/i, '') });
+      active = false;
+      clearInterval(timerId);
+      setLoadingProgress(100, t('common.done') || 'Done');
       announce(`Imported tactile SVG: ${file.name}`);
+      await new Promise((r) => setTimeout(r, 200));
       return;
     }
+    
+    // Read file payload
     const payload = BINARY_EXTS.has(ext) ? await file.arrayBuffer() : await file.text();
+    await new Promise((r) => setTimeout(r, 10));
+    
+    // Parse file
     const model = await parseFile(file.name, payload);
     if (!model || !(model.blocks || []).length) throw new Error('No readable content found in this file');
+    await new Promise((r) => setTimeout(r, 10));
+    
+    // Build Lexical editor model
     modelToLexical(model);
+    await new Promise((r) => setTimeout(r, 10));
+    
+    // Format to braille and render
+    clearTimeout(timer);
+    await render();
+    
+    // Stop the timer and complete cleanly
+    active = false;
+    clearInterval(timerId);
+    setLoadingProgress(100, t('loading.complete') || 'Formatting complete!');
+    markDocumentClean();
     announce(`Imported ${file.name}.`);
     if (model.warnings && model.warnings.length) {
       showParseWarning(`Notice: ${model.warnings.join('; ')}`);
     }
+    // Hold at 100% for 200ms so user clearly sees 100% complete
+    await new Promise((resolve) => setTimeout(resolve, 200));
   } catch (err) {
+    active = false;
+    clearInterval(timerId);
     console.error(err);
     const msg = String((err && err.message) || err);
     setStatus('Import notice: ' + msg);
     showParseWarning(`Could not fully parse structure for "${file.name}": ${msg}. You can continue editing or typing below.`);
     announce('Import notice: ' + msg);
   } finally {
+    active = false;
+    clearInterval(timerId);
     importing = false;
+    hideLoading();
   }
 }
 window.addEventListener('dragover', (e) => { if ([...(e.dataTransfer?.types || [])].includes('Files')) { e.preventDefault(); document.body.classList.add('dropping'); } });
@@ -7714,30 +6261,24 @@ function populateLanguageDropdown() {
   }
   const topCodes = recentList.slice(0, 5);
 
-  const uiLoc = (settings.uiLanguage || (typeof navigator !== 'undefined' ? navigator.language : 'en') || 'en').split('-');
-  const sysLang = (uiLoc[0] || 'en').toLowerCase();
+  const loc = (navigator.language || 'en').split('-');
+  const sysLang = (loc[0] || 'en').toLowerCase();
 
   // Rank:
   // 0-4: Up to 5 recently chosen codes (PINNED AT THE VERY TOP!)
-  // 10: Current UI / system locale language codes (if different from en, es, fr)
-  // 11: English language codes ('en')
-  // 12: Spanish language codes ('es')
-  // 13: French language codes ('fr')
+  // 10: System locale language codes (e.g. English for en-GB)
   // 20: All other languages
   const rank = (c) => {
     const idx = topCodes.indexOf(c.id);
     if (idx !== -1) return idx;
-    if (c.lang === sysLang && sysLang !== 'en' && sysLang !== 'es' && sysLang !== 'fr') return 10;
-    if (c.lang === 'en') return 11;
-    if (c.lang === 'es') return 12;
-    if (c.lang === 'fr') return 13;
+    if (c.lang === sysLang) return 10;
     return 20;
   };
 
   const near = CODES.filter((c) => rank(c) < 20);
   const base = codesExpanded || !near.length ? CODES : near;
 
-  // Sort by rank first (Top 5 & Local top & en/es/fr), then alphabetically by Display Name
+  // Sort by rank first (Top 5 & Local top), then alphabetically by Display Name
   const shownCodes = base.slice().sort((a, b) => {
     const rA = rank(a), rB = rank(b);
     if (rA !== rB) return rA - rB;
@@ -7762,9 +6303,200 @@ function populateLanguageDropdown() {
   }
 }
 
-// ---- Braille View / DotPad Tab Management & Emulator ----
+// ---- Braille View / Monarch / DotPad Tab Management & Emulators ----
 let currentBrailleTab = 'braille';
 let dotpadInvertDisplay = false;
+let monarchInvertDisplay = false;
+
+function drawMonarchCanvas(canvas, activeFrame) {
+  if (!canvas || !activeFrame) return 0;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width || 680;
+  const height = canvas.height || 260;
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(0, 0, width, height);
+
+  const isGraphic = Boolean(activeFrame.isGraphic && activeFrame.graphicMatrix);
+  const startLine = activeFrame.startLine || 0;
+  let raisedCount = 0;
+
+  if (isGraphic) {
+    // Continuous 64x40 Tactile Pin Grid for Graphics Mode (320 cells x 8 bits = 2560 pins)
+    const cols = 64; // 32 cells * 2 pins
+    const rows = 40; // 10 lines * 4 pins
+    const marginX = 14;
+    const marginY = 12;
+    const gridW = width - (marginX * 2);
+    const gridH = height - (marginY * 2);
+    const stepX = gridW / (cols - 1);
+    const stepY = gridH / (rows - 1);
+    const matrix = activeFrame.graphicMatrix;
+
+    for (let r = 0; r < rows; r++) {
+      const cellRow = Math.floor(r / 4); // 0..9
+      const bitInCell = r % 4;           // 0..3
+
+      for (let c = 0; c < cols; c++) {
+        const cellCol = Math.floor(c / 2); // 0..31
+        const isRightCol = (c % 2) === 1;
+        const cellIdx = (cellRow * 32) + cellCol;
+        let isRaised = false;
+
+        if (matrix && cellIdx < matrix.length) {
+          const mask = matrix[cellIdx];
+          const bit = isRightCol
+            ? (bitInCell === 0 ? 0x08 : (bitInCell === 1 ? 0x10 : (bitInCell === 2 ? 0x20 : 0x80)))
+            : (bitInCell === 0 ? 0x01 : (bitInCell === 1 ? 0x02 : (bitInCell === 2 ? 0x04 : 0x40)));
+          isRaised = Boolean(mask & bit);
+        }
+
+        if (monarchInvertDisplay) isRaised = !isRaised;
+
+        const px = marginX + (c * stepX);
+        const py = marginY + (r * stepY);
+
+        if (isRaised) {
+          raisedCount++;
+          ctx.beginPath();
+          ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#38bdf8';
+          ctx.shadowColor = '#0284c7';
+          ctx.shadowBlur = 4;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.beginPath();
+          ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+          ctx.fillStyle = '#1e293b';
+          ctx.fill();
+        }
+      }
+    }
+  } else {
+    // Discrete 32 cells x 10 lines Braille Mode with inter-cell gaps and word highlighting
+    const numCols = 32;
+    const numLines = 10;
+    const bRows = 4;
+    const marginX = 14;
+    const marginY = 12;
+    const gridW = width - (marginX * 2);
+    const gridH = height - (marginY * 2);
+
+    const cellStepX = gridW / numCols;
+    const lineStepY = gridH / numLines;
+    const dotStepX = (cellStepX * 0.44) / 1;
+    const dotStepY = (lineStepY * 0.65) / (bRows - 1);
+
+    // Pre-calculate highlighted cells per line (0..9) directly from trace & activeWordHighlight
+    const lineHighlightCols = [];
+    for (let lr = 0; lr < numLines; lr++) {
+      const docLine = startLine + lr;
+      const hlCols = new Set();
+      const rBlock = lastTrace?.rows ? lastTrace.rows[docLine] : null;
+      const rCells = lastTrace?.rowCells ? lastTrace.rowCells[docLine] : null;
+      if (activeWordHighlight && rBlock === activeWordHighlight.block && rCells) {
+        const { unit, s, e } = activeWordHighlight;
+        for (let ci = 0; ci < rCells.length; ci++) {
+          const src = rCells[ci];
+          if (src && Number(src.u) === unit && src.c >= s && src.c < e) {
+            hlCols.add(ci);
+          }
+        }
+      }
+      lineHighlightCols.push(hlCols);
+
+      for (const colIdx of hlCols) {
+        if (colIdx >= 0 && colIdx < numCols) {
+          const px0 = marginX + (colIdx * cellStepX) + 1;
+          const bw = cellStepX - 2;
+          const py0 = marginY + (lr * lineStepY) + 1;
+          const bh = lineStepY - 2;
+          ctx.fillStyle = 'rgba(245, 158, 11, 0.24)';
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(px0, py0, bw, bh, 3);
+          else ctx.rect(px0, py0, bw, bh);
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (let lr = 0; lr < numLines; lr++) {
+      const hlSet = lineHighlightCols[lr];
+      const rowBytes = activeFrame.viewportLines ? activeFrame.viewportLines[lr] : null;
+      const textRow = activeFrame.textRows ? activeFrame.textRows[lr] : null;
+      const docLine = startLine + lr;
+
+      for (let cIdx = 0; cIdx < numCols; cIdx++) {
+        let mask = 0;
+        if (rowBytes && rowBytes[cIdx] != null) {
+          mask = rowBytes[cIdx];
+        } else if (textRow && cIdx < textRow.length) {
+          const char = textRow[cIdx];
+          mask = (typeof char === 'number') ? char : charToDotMask(char);
+        }
+
+        const isCellHighlighted = hlSet && hlSet.has(cIdx);
+        const cellLeftX = marginX + (cIdx * cellStepX) + (cellStepX * 0.28);
+        const cellTopY = marginY + (lr * lineStepY) + (lineStepY * 0.16);
+
+        for (let br = 0; br < bRows; br++) {
+          for (let col = 0; col < 2; col++) {
+            const isRight = (col === 1);
+            const bit = isRight
+              ? (br === 0 ? 0x08 : (br === 1 ? 0x10 : (br === 2 ? 0x20 : 0x80)))
+              : (br === 0 ? 0x01 : (br === 1 ? 0x02 : (br === 2 ? 0x04 : 0x40)));
+            let isRaised = Boolean(mask & bit);
+
+            if (docLine === activeCaretLine && cIdx === activeCaretCol && br === 3) {
+              isRaised = true;
+            }
+
+            if (monarchInvertDisplay) isRaised = !isRaised;
+
+            const px = cellLeftX + (col * dotStepX);
+            const py = cellTopY + (br * dotStepY);
+
+            if (isRaised) {
+              raisedCount++;
+              ctx.beginPath();
+              ctx.arc(px, py, 2.2, 0, Math.PI * 2);
+              const pinColor = isCellHighlighted ? '#fbbf24' : '#38bdf8';
+              const shadowColor = isCellHighlighted ? '#f59e0b' : '#38bdf8';
+              ctx.fillStyle = pinColor;
+              ctx.shadowColor = shadowColor;
+              ctx.shadowBlur = 3;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            } else {
+              ctx.beginPath();
+              ctx.arc(px, py, 1.1, 0, Math.PI * 2);
+              ctx.fillStyle = isCellHighlighted ? '#78350f' : '#1e293b';
+              ctx.fill();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return raisedCount;
+}
+
+function drawMonarchEmulator(activeFrame) {
+  if (!activeFrame && typeof tactileDisplay !== 'undefined') activeFrame = tactileDisplay.getMonarchActiveFrame();
+  if (!activeFrame) return;
+
+  drawMonarchCanvas($id('monarchPanelCanvas'), activeFrame);
+
+  const startLine = activeFrame.startLine || 0;
+  const endLine = Math.min(activeFrame.totalLines || 1, startLine + 10);
+  const subtitle = `Lines ${startLine + 1}–${endLine} of ${activeFrame.totalLines || 1} (Page ${activeFrame.pageNumber || 1} of ${activeFrame.totalPages || 1})`;
+
+  if ($id('monarchPanelSubtitle')) $id('monarchPanelSubtitle').textContent = subtitle;
+}
 
 function drawDotPadUpperCanvas(canvas, activeFrame) {
   if (!canvas || !activeFrame) return 0;
@@ -8021,22 +6753,44 @@ function switchBrailleTab(tab) {
   cancelScrollSync();
   const tabViewBraille = $id('tabViewBraille');
   const tabViewDotPad = $id('tabViewDotPad');
+  const tabViewMonarch = $id('tabViewMonarch');
   const braillePane = $id('braille');
-  const brlStack = $id('brlStack');
-  const brlToolbar = $id('brailleToolbar');
   const dotpadPanel = $id('dotpadPanel');
+  const monarchPanel = $id('monarchPanel');
 
-  if (tab === 'dotpad') {
-    tabViewDotPad?.classList.add('active');
-    tabViewDotPad?.setAttribute('aria-selected', 'true');
-    tabViewBraille?.classList.remove('active');
-    tabViewBraille?.setAttribute('aria-selected', 'false');
-    if (brlToolbar) brlToolbar.style.display = 'none';
-    if (brlStack) brlStack.style.display = 'none';
+  tabViewBraille?.classList.remove('active');
+  tabViewBraille?.setAttribute('aria-selected', 'false');
+  tabViewDotPad?.classList.remove('active');
+  tabViewDotPad?.setAttribute('aria-selected', 'false');
+  tabViewMonarch?.classList.remove('active');
+  tabViewMonarch?.setAttribute('aria-selected', 'false');
+
+  if (tab === 'monarch') {
+    if (typeof tactileDisplay !== 'undefined' && tactileDisplay.setDeviceProfile) {
+      tactileDisplay.setDeviceProfile('monarch');
+    }
+    tabViewMonarch?.classList.add('active');
+    tabViewMonarch?.setAttribute('aria-selected', 'true');
     if (braillePane) {
       braillePane._savedScrollTop = braillePane.scrollTop;
       braillePane.style.display = 'none';
     }
+    if (dotpadPanel) dotpadPanel.style.display = 'none';
+    if (monarchPanel) {
+      monarchPanel.style.display = 'flex';
+      drawMonarchEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getMonarchActiveFrame() : null);
+    }
+  } else if (tab === 'dotpad') {
+    if (typeof tactileDisplay !== 'undefined' && tactileDisplay.setDeviceProfile) {
+      tactileDisplay.setDeviceProfile('dotpad');
+    }
+    tabViewDotPad?.classList.add('active');
+    tabViewDotPad?.setAttribute('aria-selected', 'true');
+    if (braillePane) {
+      braillePane._savedScrollTop = braillePane.scrollTop;
+      braillePane.style.display = 'none';
+    }
+    if (monarchPanel) monarchPanel.style.display = 'none';
     if (dotpadPanel) {
       dotpadPanel.style.display = 'flex';
       drawDotPadEmulator(typeof tactileDisplay !== 'undefined' ? tactileDisplay.getDotPadActiveFrame() : null);
@@ -8044,10 +6798,8 @@ function switchBrailleTab(tab) {
   } else {
     tabViewBraille?.classList.add('active');
     tabViewBraille?.setAttribute('aria-selected', 'true');
-    tabViewDotPad?.classList.remove('active');
-    tabViewDotPad?.setAttribute('aria-selected', 'false');
-    if (brlToolbar) brlToolbar.style.display = 'inline-flex';
-    if (brlStack) brlStack.style.display = '';
+    if (dotpadPanel) dotpadPanel.style.display = 'none';
+    if (monarchPanel) monarchPanel.style.display = 'none';
     if (braillePane) {
       braillePane.style.display = 'block';
       if (activeWordHighlight && activeCaretLine >= 0) {
@@ -8067,24 +6819,34 @@ function switchBrailleTab(tab) {
         braillePane._virtualBraille.refresh();
       }
     }
-    if (dotpadPanel) dotpadPanel.style.display = 'none';
   }
 }
 
 export function updateBrailleTabsVisibility(autoSwitch = false) {
   const embosserVal = $id('set-embosser')?.value || settings.embosser;
   const isConn = (typeof tactileDisplay !== 'undefined') && tactileDisplay.isConnected && tactileDisplay.isConnected();
-  const isDotPad = (embosserVal === 'dotpad') || (settings.embosser === 'dotpad') || isConn;
+  const isDotPad = (embosserVal === 'dotpad') || (settings.embosser === 'dotpad') || (isConn && tactileDisplay.deviceProfile?.id === 'dotpad');
+  const isMonarch = (embosserVal === 'monarch') || (settings.embosser === 'monarch') || (isConn && tactileDisplay.deviceProfile?.id === 'monarch');
+
   const tabViewDotPad = $id('tabViewDotPad');
   if (tabViewDotPad) {
     tabViewDotPad.style.display = isDotPad ? 'inline-flex' : 'none';
   }
+  const tabViewMonarch = $id('tabViewMonarch');
+  if (tabViewMonarch) {
+    tabViewMonarch.style.display = isMonarch ? 'inline-flex' : 'none';
+  }
+
   if (autoSwitch) {
-    if (isDotPad) {
+    if (isMonarch) {
+      switchBrailleTab('monarch');
+    } else if (isDotPad) {
       switchBrailleTab('dotpad');
     } else {
       switchBrailleTab('braille');
     }
+  } else if (!isMonarch && currentBrailleTab === 'monarch') {
+    switchBrailleTab('braille');
   } else if (!isDotPad && currentBrailleTab === 'dotpad') {
     switchBrailleTab('braille');
   }
@@ -8092,9 +6854,9 @@ export function updateBrailleTabsVisibility(autoSwitch = false) {
 
 // ---- settings dialog, Simple-mode switch, BRF download (shared settings) ----
 function applySettingsToUI(autoSwitch = false) {
-  $id('tocToggle').checked = !!settings.toc;
-  populateUiLanguageDropdown();
+  if ($id('tocToggle')) $id('tocToggle').checked = !!settings.toc;
   for (const k of ['embosser', 'tableFormat', 'quoteStyle', 'listStyle', 'paragraphStyle', 'connectionType']) if ($id('set-' + k)) $id('set-' + k).value = settings[k] || (k === 'embosser' ? 'generic' : (k === 'tableFormat' ? 'auto' : (k === 'paragraphStyle' ? 'indented' : (k === 'connectionType' ? 'serial' : ''))));
+  populateUiLanguageDropdown();
   populateLanguageDropdown();
   if ($id('set-mathCode')) $id('set-mathCode').value = settings.mathCode || 'auto';
   if ($id('set-mode')) $id('set-mode').value = settings.mode || 'ukaaf';
@@ -8111,15 +6873,11 @@ function applySettingsToUI(autoSwitch = false) {
   if ($id('set-tactileGraphics')) $id('set-tactileGraphics').checked = settings.tactileGraphics !== false;
   applySixKeyInput(settings.sixKeyInput !== false);
 
-  const conn = settings.connectionType || 'serial';
-  if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = conn === 'network' ? 'block' : 'none';
-  if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = conn === 'serial' ? 'block' : 'none';
-  if ($id('bleSettingsGroup')) $id('bleSettingsGroup').style.display = conn === 'ble' ? 'block' : 'none';
-  if ($id('hidSettingsGroup')) $id('hidSettingsGroup').style.display = conn === 'hid' ? 'block' : 'none';
+  const isNet = settings.connectionType === 'network';
+  if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = isNet ? 'block' : 'none';
+  if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = isNet ? 'none' : 'block';
   updateGraphicsSupportUI();
   updateBrailleTabsVisibility(autoSwitch);
-  updateBrlMarginDropdownUI();
-  updateBrlAsciiUI();
 }
 
 export function updateGraphicsSupportUI() {
@@ -8133,10 +6891,29 @@ export function updateGraphicsSupportUI() {
 }
 
 function wireControls() {
-  $id('backToSimple')?.addEventListener('click', () => { saveSettings({ simpleMode: true }); location.href = '/web/index.html'; });
+  window.addEventListener('beforeunload', (e) => {
+    if (isDocumentDirty()) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    }
+  });
+
+  $id('backToSimple')?.addEventListener('click', (e) => {
+    if (isDocumentDirty()) {
+      const ok = window.confirm(t('messages.unsaved_changes', 'You have unsaved changes. Are you sure you want to exit without saving?'));
+      if (!ok) {
+        e.preventDefault();
+        return;
+      }
+    }
+    saveSettings({ simpleMode: true });
+    location.href = '/web/index.html';
+  });
   $id('settingsBtn')?.addEventListener('click', () => {
     cancelScrollSync();
     applySettingsToUI();
+    translateDOM($id('settingsDialog'));
     $id('settingsDialog')?.showModal();
   });
   $id('settingsDialog')?.addEventListener('close', () => {
@@ -8146,6 +6923,7 @@ function wireControls() {
   });
   $id('helpBtn')?.addEventListener('click', () => {
     cancelScrollSync();
+    translateDOM($id('helpDialog'));
     $id('helpDialog')?.showModal();
   });
   $id('helpClose')?.addEventListener('click', () => {
@@ -8177,11 +6955,9 @@ function wireControls() {
   });
 
   $id('set-connectionType')?.addEventListener('change', () => {
-    const conn = $id('set-connectionType').value;
-    if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = conn === 'network' ? 'block' : 'none';
-    if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = conn === 'serial' ? 'block' : 'none';
-    if ($id('bleSettingsGroup')) $id('bleSettingsGroup').style.display = conn === 'ble' ? 'block' : 'none';
-    if ($id('hidSettingsGroup')) $id('hidSettingsGroup').style.display = conn === 'hid' ? 'block' : 'none';
+    const isNet = $id('set-connectionType').value === 'network';
+    if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = isNet ? 'block' : 'none';
+    if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = 'none';
     onSet();
   });
 
@@ -8251,6 +7027,7 @@ function wireControls() {
       $id(id)?.addEventListener('input', onSet);
     }
   });
+  $id('set-tactileGraphics')?.addEventListener('change', onSet);
   $id('set-uiLanguage')?.addEventListener('change', async (e) => {
     const newLang = e.target.value;
     settings = saveSettings({ uiLanguage: newLang });
@@ -8259,7 +7036,6 @@ function wireControls() {
     populateLanguageDropdown();
     announce(t('aria.language_changed', { language: newLang }));
   });
-  $id('set-tactileGraphics')?.addEventListener('change', onSet);
   $id('set-sixkey')?.addEventListener('change', () => {
     settings = saveSettings({ sixKeyInput: $id('set-sixkey').checked });
     applySixKeyInput(settings.sixKeyInput);           // input-only: the braille output is unaffected
@@ -8289,33 +7065,54 @@ function wireControls() {
   const handleEmbossPrint = async () => {
     if (!lastBrf) return;
 
-    const conn = settings.connectionType || 'serial';
-    try {
-      const modeLabel = conn === 'ble' ? 'Bluetooth' : (conn === 'hid' ? 'USB HID' : (conn === 'network' ? 'Network' : 'USB Serial'));
-      announce(`Connecting to ${modeLabel} embosser…`);
-      setStatus(`Connecting to ${modeLabel} embosser…`);
+    if (settings.connectionType === 'network') {
+      try {
+        announce(`Sending braille to network embosser at ${settings.networkHost || '192.168.1.150'}…`);
+        setStatus(`Sending braille to network embosser at ${settings.networkHost || '192.168.1.150'}…`);
+        const res = await spoolToNetworkEmbosser(lastBrf, {
+          host: settings.networkHost || '192.168.1.150',
+          port: settings.networkPort || 9100,
+          embosser: settings.embosser || 'generic',
+          duplex: settings.embosserDuplex || 'double',
+          width: settings.cells || 38,
+          depth: settings.lines || 25,
+          onStatus: (msg) => { setStatus(msg); announce(msg); },
+        });
+        if (res.message) {
+          setStatus(res.message);
+          announce(res.message);
+        }
+      } catch (err) {
+        console.warn('Network embosser error:', err);
+        setStatus(`Network error: ${err.message}`);
+        announce(`Network error: ${err.message}`);
+      }
+      return;
+    }
 
+    if (!isWebSerialSupported()) {
+      const msg = 'Direct serial spooling requires a browser with WebSerial (Chrome, Edge, Opera). You can download the .brf file to emboss with your print manager, or use Network (Port 9100) mode in Settings.';
+      setStatus(msg);
+      announce(msg);
+      return;
+    }
+    try {
+      announce('Connecting to embosser…');
+      setStatus('Connecting to embosser…');
       const res = await spoolToEmbosser(lastBrf, {
-        connectionType: conn,
         embosser: settings.embosser || 'generic',
         duplex: settings.embosserDuplex || 'double',
         width: settings.cells || 38,
         depth: settings.lines || 25,
         baudRate: settings.baudRate || 9600,
-        networkHost: settings.networkHost || '192.168.1.150',
-        networkPort: settings.networkPort || 9100,
         onStatus: (msg) => { setStatus(msg); announce(msg); },
       });
-
       if (res.success) {
         setStatus(res.message);
         announce(res.message);
       } else if (res.method === 'cancelled') {
-        setStatus('Embosser selection cancelled.');
-        announce('Embosser selection cancelled.');
-      } else if (res.message) {
-        setStatus(res.message);
-        announce(res.message);
+        setStatus('Embosser port selection cancelled.');
+        announce('Embosser port selection cancelled.');
       }
     } catch (err) {
       console.warn('Embosser hardware communication error:', err);
@@ -8369,13 +7166,108 @@ function wireControls() {
 
   const tabViewBraille = $id('tabViewBraille');
   const tabViewDotPad = $id('tabViewDotPad');
+  const tabViewMonarch = $id('tabViewMonarch');
   const braillePane = $id('braille');
   const dotpadPanel = $id('dotpadPanel');
+  const monarchPanel = $id('monarchPanel');
 
   tabViewBraille?.addEventListener('click', () => switchBrailleTab('braille'));
   tabViewDotPad?.addEventListener('click', () => switchBrailleTab('dotpad'));
+  tabViewMonarch?.addEventListener('click', () => switchBrailleTab('monarch'));
 
-  // Hardware button handlers
+  // Monarch Canvas wheel navigation (scroll through 10-line frames)
+  $id('monarchPanelCanvas')?.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY > 0) {
+      tactileDisplay.nextPage();
+    } else if (e.deltaY < 0) {
+      tactileDisplay.prevPage();
+    }
+    drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+  }, { passive: false });
+
+  // Monarch Canvas click interaction for bidirectional caret & word synchronization
+  $id('monarchPanelCanvas')?.addEventListener('click', (e) => {
+    const canvas = $id('monarchPanelCanvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const cx = x * scaleX;
+    const cy = y * scaleY;
+
+    const activeFrame = tactileDisplay.getMonarchActiveFrame();
+    if (!activeFrame) return;
+
+    const marginX = 14, marginY = 12;
+    const gridW = canvas.width - (marginX * 2);
+    const gridH = canvas.height - (marginY * 2);
+    const cellRow = Math.max(0, Math.min(9, Math.floor((cy - marginY) / (gridH / 10))));
+    const cellCol = Math.max(0, Math.min(31, Math.floor((cx - marginX) / (gridW / 32))));
+
+    const docLineIdx = (activeFrame.startLine || 0) + cellRow;
+    tactileDisplay.activeLineIndex = docLineIdx;
+
+    let targetBlock = lastTrace?.rows ? lastTrace.rows[docLineIdx] : null;
+    if (targetBlock == null || targetBlock < 0) {
+      if (brailleEl._virtualBraille?.isVirtualized()) {
+        const it = brailleEl._virtualBraille.getItems()[docLineIdx];
+        if (it && it.block != null) targetBlock = it.block;
+      } else {
+        const row = brailleEl.querySelectorAll('.brl-row')[docLineIdx];
+        if (row && row.dataset.block != null) targetBlock = Number(row.dataset.block);
+      }
+    }
+
+    let targetUnit = 0;
+    let targetChar = -1;
+
+    const rCells = lastTrace?.rowCells ? lastTrace.rowCells[docLineIdx] : null;
+    if (rCells && rCells.length > 0) {
+      let src = rCells[cellCol];
+      if (!src) {
+        let closestSrc = null, minDiff = Infinity;
+        for (let ci = 0; ci < rCells.length; ci++) {
+          if (rCells[ci] && typeof rCells[ci].c === 'number') {
+            const diff = Math.abs(ci - cellCol);
+            if (diff < minDiff) { minDiff = diff; closestSrc = rCells[ci]; }
+          }
+        }
+        if (minDiff <= 3) src = closestSrc;
+      }
+      if (src && typeof src.c === 'number') {
+        targetUnit = src.u || 0;
+        targetChar = src.c;
+      }
+    }
+
+    if (targetChar >= 0 && targetBlock != null && targetBlock >= 0) {
+      const text = cellText[`${targetBlock}:${targetUnit}`];
+      if (text != null && text.length > 0) {
+        const [s, en] = wordRangeAt(text, targetChar);
+        highlightWord(targetBlock, targetUnit, s, en, null, 'monarch');
+        showRuleInfo(text.slice(s, en));
+        drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+        return;
+      }
+    }
+
+    if (targetBlock != null && !isNaN(targetBlock) && targetBlock >= 0) {
+      clearWordLink();
+      linkByBlock(targetBlock, true);
+      const text = cellText[`${targetBlock}:0`];
+      if (text) showRuleInfo(text.split(/\s+/)[0] || text);
+      const pe = editorEl.querySelector(`[data-block-idx="${targetBlock}"]`);
+      if (pe && !isElementVisibleIn(pe, editorEl)) {
+        pe.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
+    }
+  });
+
+  // DotPad Hardware button handlers
   $id('dotpadBtnLP')?.addEventListener('click', () => tactileDisplay.prevPage());
   $id('dotpadBtnRP')?.addEventListener('click', () => tactileDisplay.nextPage());
   $id('dotpadBtnF1')?.addEventListener('click', () => onReadClick());
@@ -8570,8 +7462,13 @@ function wireControls() {
   tactileDisplay.subscribe((event, data) => {
     if (event === 'connect' || event === 'disconnect' || event === 'viewport') {
       updateTactileDisplayUI();
-      const frame = data?.activeFrame || tactileDisplay.getDotPadActiveFrame();
-      drawDotPadEmulator(frame);
+      if (currentBrailleTab === 'monarch') {
+        const frame = data?.activeFrame || tactileDisplay.getMonarchActiveFrame();
+        drawMonarchEmulator(frame);
+      } else {
+        const frame = data?.activeFrame || tactileDisplay.getDotPadActiveFrame();
+        drawDotPadEmulator(frame);
+      }
     }
     if (event === 'connect') {
       scheduleRender();
@@ -8679,7 +7576,7 @@ function wireControls() {
       if (last && JSON.stringify(last.state) === JSON.stringify(json)) return;
       historyStack.push({ state: json, desc: description });
       if (historyStack.length > 80) historyStack.shift();
-      else historyIndex = historyStack.length - 1;
+      historyIndex = historyStack.length - 1;
       updateUndoRedoUI();
     } catch (e) {
       console.warn('recordHistoryState recovery:', e);
@@ -8691,11 +7588,9 @@ function wireControls() {
     const btnRedo = $id('btnRedo');
     if (btnUndo) {
       btnUndo.disabled = historyIndex <= 0;
-      btnUndo.style.opacity = historyIndex <= 0 ? '0.45' : '1';
     }
     if (btnRedo) {
       btnRedo.disabled = historyIndex >= historyStack.length - 1;
-      btnRedo.style.opacity = historyIndex >= historyStack.length - 1 ? '0.45' : '1';
     }
   }
 
@@ -8747,6 +7642,10 @@ function wireControls() {
   $id('btnRedo')?.addEventListener('click', () => performRedo());
 
   $id('btnClear')?.addEventListener('click', () => {
+    if (isDocumentDirty()) {
+      const ok = window.confirm(t('messages.unsaved_clear', 'You have unsaved changes. Are you sure you want to clear the document?'));
+      if (!ok) return;
+    }
     recordHistoryState('before clear');
     editor.update(() => {
       const root = $getRoot();
@@ -8812,11 +7711,12 @@ function wireControls() {
     const inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.tagName === 'MATH-FIELD' || (t.closest && t.closest('math-field, dialog[open]')));
     if (inField) return;
     if (mod && !e.altKey) {
-      if (e.key.toLowerCase() === 's') {
+      if (e.key.toLowerCase() === "s") {
         e.preventDefault();
-        exportTextDocument('xml');
+        exportTextDocument("xml");
         return;
-      } else if (e.key.toLowerCase() === 'z' && !e.shiftKey) {
+      }
+      if (e.key.toLowerCase() === 'z' && !e.shiftKey) {
         e.preventDefault();
         performUndo();
       } else if ((e.key.toLowerCase() === 'z' && e.shiftKey) || e.key.toLowerCase() === 'y') {
@@ -8831,17 +7731,17 @@ function wireControls() {
   });
 
   // ---- Save / Export Text Document ----
-  function exportTextDocument(format = 'xml') {
-    const title = (lastModel?.title || 'document').trim();
-    const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'document';
-    if (format === 'xml' || format === 'nimas') {
+  function exportTextDocument(format) {
+    const title = (lastModel?.title || "document").trim();
+    const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
+    if (format === "xml" || format === "nimas") {
       let currentDocModel = null;
       editor.getEditorState().read(() => {
         currentDocModel = buildModel();
       });
       const doc = currentDocModel || lastModel || { title, blocks: [] };
       const xmlString = exportToNimasXml(doc, { title: doc.title || title });
-      saveBlob(new Blob([xmlString], { type: 'application/xml;charset=utf-8' }), `${baseName}.xml`);
+      saveBlob(new Blob([xmlString], { type: "application/xml;charset=utf-8" }), `${baseName}.xml`);
       announce(`Saved ${baseName}.xml`);
       setStatus(`Saved ${baseName}.xml NIMAS project document.`);
       return;
@@ -8898,18 +7798,6 @@ function wireControls() {
           lines.push('* * *\n');
         } else if (b.type === 'note') {
           lines.push(`> ${b.text || ''}\n`);
-        } else if (b.type === 'footnote') {
-          lines.push(`[^fn]: ${b.text || ''}\n`);
-        } else if (b.type === 'stage' || b.style === 'stage') {
-          lines.push(`*(${b.text || ''})*\n`);
-        } else if (b.type === 'caption' || b.style === 'caption') {
-          lines.push(`*${b.text || ''}*\n`);
-        } else if (b.type === 'attribution' || b.style === 'attribution') {
-          lines.push(`— *${b.text || ''}*\n`);
-        } else if (b.type === 'play' || b.style === 'dialogue' || b.style === 'poem') {
-          lines.push(`${b.text || ''}\n`);
-        } else if (b.style === 'quote') {
-          lines.push(`> ${b.text || ''}\n`);
         } else if (b.type === 'math') {
           lines.push(`$$\n${b.latex || ''}\n$$\n`);
         } else if (b.type === 'graphic') {
@@ -8940,12 +7828,6 @@ function wireControls() {
           lines.push('');
         } else if (b.type === 'indicator') lines.push('\n* * *\n');
         else if (b.type === 'note') lines.push(`\n[Note: ${b.text || ''}]\n`);
-        else if (b.type === 'footnote') lines.push(`\n[Footnote: ${b.text || ''}]\n`);
-        else if (b.type === 'stage' || b.style === 'stage') lines.push(`\n[Stage direction: ${b.text || ''}]\n`);
-        else if (b.type === 'caption' || b.style === 'caption') lines.push(`\n[Caption: ${b.text || ''}]\n`);
-        else if (b.type === 'attribution' || b.style === 'attribution') lines.push(`\n[Attribution: ${b.text || ''}]\n`);
-        else if (b.type === 'play' || b.style === 'dialogue' || b.style === 'poem') lines.push(`${b.text || ''}\n`);
-        else if (b.style === 'quote') lines.push(`\n"${b.text || ''}"\n`);
       });
       saveBlob(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }), `${baseName}.txt`);
       announce(`Saved ${baseName}.txt`);
@@ -8993,27 +7875,13 @@ function wireControls() {
           htmlBody.push('<hr />');
         } else if (b.type === 'note') {
           htmlBody.push(`<aside class="transcriber-note"><p>${escapeHtml(b.text || '')}</p></aside>`);
-        } else if (b.type === 'footnote') {
-          htmlBody.push(`<aside class="footnote" role="doc-footnote"><p>${escapeHtml(b.text || '')}</p></aside>`);
-        } else if (b.type === 'stage' || b.style === 'stage') {
-          htmlBody.push(`<p class="stage-direction"><em>${escapeHtml(b.text || '')}</em></p>`);
-        } else if (b.type === 'caption' || b.style === 'caption') {
-          htmlBody.push(`<p class="caption"><em>${escapeHtml(b.text || '')}</em></p>`);
-        } else if (b.type === 'attribution' || b.style === 'attribution') {
-          htmlBody.push(`<p class="attribution"><cite>${escapeHtml(b.text || '')}</cite></p>`);
-        } else if (b.type === 'play' || b.style === 'dialogue') {
-          htmlBody.push(`<p class="dialogue">${b.segments ? segToHtml(b.segments) : escapeHtml(b.text || '')}</p>`);
-        } else if (b.type === 'play' || b.style === 'poem') {
-          htmlBody.push(`<p class="verse-line">${b.segments ? segToHtml(b.segments) : escapeHtml(b.text || '')}</p>`);
-        } else if (b.style === 'quote') {
-          htmlBody.push(`<blockquote><p>${b.segments ? segToHtml(b.segments) : escapeHtml(b.text || '')}</p></blockquote>`);
         } else if (b.type === 'math') {
           htmlBody.push(`<div class="math-block">${b.mathml || `<math display="block"><mrow><mtext>${escapeHtml(b.latex || '')}</mtext></mrow></math>`}</div>`);
         } else if (b.type === 'graphic') {
           htmlBody.push(`<figure role="doc-graphic">${b.svg ? sanitizeSvgMarkup(b.svg) : `<svg viewBox="0 0 100 100"><text x="10" y="50">${escapeHtml(b.alt || 'Graphic')}</text></svg>`}<figcaption>${escapeHtml(b.caption || b.alt || '')}</figcaption></figure>`);
         }
       });
-      const docHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:800px;margin:2rem auto;line-height:1.6;padding:0 1rem;}table{border-collapse:collapse;width:100%;margin:1rem 0;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;}.transcriber-note{background:#f8f9fa;border-left:4px solid #0284c7;padding:8px 16px;margin:1rem 0;}.footnote{border-top:1px solid #ccc;padding:8px 0;margin:1rem 0;font-size:0.9em;color:#555;}</style></head><body>${htmlBody.join('\n')}</body></html>`;
+      const docHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:800px;margin:2rem auto;line-height:1.6;padding:0 1rem;}table{border-collapse:collapse;width:100%;margin:1rem 0;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;}.transcriber-note{background:#f8f9fa;border-left:4px solid #0284c7;padding:8px 16px;margin:1rem 0;}</style></head><body>${htmlBody.join('\n')}</body></html>`;
       saveBlob(new Blob([docHtml], { type: 'text/html;charset=utf-8' }), `${baseName}.html`);
       announce(`Saved ${baseName}.html`);
       setStatus(`Exported ${baseName}.html document.`);
@@ -9022,55 +7890,17 @@ function wireControls() {
   }
 
   const saveBlob = (blob, name) => {
-    if (typeof window !== 'undefined' && typeof window.saveBlob === 'function' && window.saveBlob !== saveBlob) {
-      window.saveBlob(blob, name);
-      return;
-    }
     const url = URL.createObjectURL(blob); const a = document.createElement('a');
     a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    markDocumentClean();
   };
 
-  const saveMenuBtn = $id('saveDocBtn');
-  const saveMenu = $id('saveMenu');
-  saveMenuBtn?.addEventListener('click', (e) => {
+  const saveDocBtn = $id('saveDocBtn');
+  saveDocBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!saveMenu) return;
-    const willShow = saveMenu.hidden;
-    closeAllDropdownMenus();
-    saveMenu.hidden = !willShow;
-    saveMenuBtn.setAttribute('aria-expanded', String(willShow));
-    if (willShow) {
-      saveMenu.querySelector('.menu-dropdown-item')?.focus({ preventScroll: true });
-    }
-  });
-  $id('saveXmlItem')?.addEventListener('click', () => {
     closeAllDropdownMenus();
     exportTextDocument('xml');
   });
-  $id('saveDocxItem')?.addEventListener('click', () => {
-    closeAllDropdownMenus();
-    exportTextDocument('docx');
-  });
-  $id('saveMdItem')?.addEventListener('click', () => {
-    closeAllDropdownMenus();
-    exportTextDocument('md');
-  });
-  $id('saveJsonItem')?.addEventListener('click', () => {
-    closeAllDropdownMenus();
-    exportTextDocument('json');
-  });
-  $id('saveTxtItem')?.addEventListener('click', () => {
-    closeAllDropdownMenus();
-    exportTextDocument('txt');
-  });
-  $id('saveHtmlItem')?.addEventListener('click', () => {
-    closeAllDropdownMenus();
-    exportTextDocument('html');
-  });
-
-  window.exportTextDocument = exportTextDocument;
-  window.triggerDownloadFormat = triggerDownloadFormat;
-  window.saveBlob = saveBlob;
 
   const downloadMenuBtn = $id('downloadBtn');
   const downloadMenu = $id('downloadMenu');
@@ -9082,6 +7912,17 @@ function wireControls() {
     downloadMenu.hidden = !willShow;
     downloadMenuBtn.setAttribute('aria-expanded', String(willShow));
     if (willShow) {
+      const wrap = $id('downloadMenuWrap') || downloadMenuBtn.parentElement;
+      if (wrap) {
+        const rect = wrap.getBoundingClientRect();
+        if (rect.right < 210) {
+          downloadMenu.style.right = 'auto';
+          downloadMenu.style.left = '0';
+        } else {
+          downloadMenu.style.right = '0';
+          downloadMenu.style.left = 'auto';
+        }
+      }
       downloadMenu.querySelector('.menu-dropdown-item')?.focus({ preventScroll: true });
     }
   });
@@ -9091,13 +7932,11 @@ function wireControls() {
     if (!lastBrf) return;
     const title = (lastModel?.title || document.querySelector('#editor h1, #editor h2, #editor [data-block-type="heading"]')?.textContent || 'document').trim();
     const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'document';
-    const currentVolPages = window.settings?.volumePages !== undefined ? window.settings.volumePages : settings.volumePages;
-    const maxV = Math.max(0, Number(currentVolPages) || 0);
     const opts = {
       ...(lastFormatOpts || currentFormatOpts()),
       suppressHeader: false,
       mode: settings.mode, width: settings.cells, depth: settings.lines,
-      volumePages: maxV, includeCovers: settings.includeCovers,
+      volumePages: settings.volumePages, includeCovers: settings.includeCovers,
       duplex: settings.embosserDuplex,
     };
     if (format === 'pef') {
@@ -9107,29 +7946,25 @@ function wireControls() {
       setStatus(`Exported ${baseName}.pef XML document.`);
       return;
     }
-    if (format === 'ebrl' || format === 'ebraille' || format === 'ebrf') {
+    if (format === 'ebrl' || format === 'ebrf') {
       const bytes = exportToEbraille(lastModel || { title: 'Document', blocks: [] },
-        { ...opts, language: (typeof navigator !== 'undefined' && navigator.language) || 'en' });
-      saveBlob(new Blob([bytes], { type: 'application/epub+zip' }), `${baseName}.ebraille`);
-      announce(`Saved ${baseName}.ebraille`);
-      setStatus(`Exported ${baseName}.ebraille eBraille publication.`);
+        { ...opts, language: (navigator.language || 'en') });
+      saveBlob(new Blob([bytes], { type: 'application/epub+zip' }), `${baseName}.ebrl`);
+      announce(`Saved ${baseName}.ebrl`);
+      setStatus(`Exported ${baseName}.ebrl eBraille 1.0 publication.`);
       return;
     }
+    const maxV = Math.max(0, Number(settings.volumePages) || 0);
     const vols = (lastModel && lastFormatOpts) ? formatVolumes(lastModel, { ...lastFormatOpts, suppressHeader: false, volumePages: maxV }) : [{ volume: 1, of: 1, brf: lastBrf || '' }];
-    if (vols.length <= 1) {
-      saveBlob(new Blob([vols[0].brf || ''], { type: 'application/octet-stream' }), `${baseName}.brf`);
-      announce(`Saved ${baseName}.brf`);
-      setStatus(`Exported ${baseName}.brf formatted braille.`);
-      return;
-    }
+    if (vols.length <= 1) { saveBlob(new Blob([vols[0].brf || ''], { type: 'application/octet-stream' }), `${baseName}.brf`); return; }
     const files = vols.map((v) => ({ name: `${baseName}-v${v.volume}-of-${v.of}.brf`, text: v.brf }));
     saveBlob(makeZip(files), `${baseName}-braille-volumes.zip`);
     announce(`Downloaded ${vols.length} braille volumes as a zip.`);
   }
 
-  $id('downloadEbrlItem')?.addEventListener('click', () => triggerDownloadFormat('ebraille'));
   $id('downloadBrfItem')?.addEventListener('click', () => triggerDownloadFormat('brf'));
   $id('downloadPefItem')?.addEventListener('click', () => triggerDownloadFormat('pef'));
+  $id('downloadEbrlItem')?.addEventListener('click', () => triggerDownloadFormat('ebrl'));
   const resize = (delta) => {
     isManualZoom = true;
     brailleCellW = Math.max(9, Math.min(40, getEffectiveCellW() + delta));
@@ -9147,7 +7982,7 @@ function wireControls() {
       if (pe) {
         pe.scrollIntoView({ behavior: 'smooth', block: 'center' });
         highlightWord(issue.idx, issue.itemIdx || 0, issue.start, issue.end);
-        announce(`Review issue ${proofIssueIdx} of ${lastProofIssues.length}: ${issue.text || ''}`);
+        announce(`Review issue ${proofIssueIdx} of ${lastProofIssues.length}: ${issue.word || issue.src || ''}`);
       }
     }
   });
@@ -9172,9 +8007,8 @@ function wireControls() {
     window.getLocaleInfo = getLocaleInfo;
     window.getSupportedLocales = getSupportedLocales;
     window.translateDOM = translateDOM;
-    window.registerLocale = registerLocale;
   }
-  applySettingsToUI(true);
+  applySettingsToUI();
   wireControls();
   wireReadingControls();
   updateReadButtons();
@@ -9197,8 +8031,6 @@ function wireControls() {
   }
   initToolbar();
   initSlashMenu();
-  initBrlSlashMenu();
-  initMarkdownShortcuts();
   initFormulaDialog();
   initGraphicDialog();
   // A document uploaded in Quick Mode is handed over via IndexedDB / sessionStorage — load it here
@@ -9214,6 +8046,7 @@ function wireControls() {
   clearTranslationCache();
   render();
   refreshToolbar();
+  markDocumentClean();
   // once MathCAT and MathLive are ready, re-render so the seeded equation transcribes
   Promise.resolve(maths.initMaths()).then(() => {
     clearTranslationCache();

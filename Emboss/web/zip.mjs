@@ -1,40 +1,100 @@
-// Minimal STORE-only ZIP builder (no compression) for packaging multi-volume BRF
-// downloads in the browser — no external library. File contents and names are
-// UTF-8 encoded (BRF is ASCII today, but this stays correct if any non-ASCII cell
-// ever reaches the output). Good enough for a handful of small text files.
-function crc32(bytes) {
-  let c = ~0 >>> 0;
-  for (let i = 0; i < bytes.length; i++) {
-    c ^= bytes[i];
-    for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xEDB88320 & -(c & 1));
-  }
-  return (~c) >>> 0;
+// Minimal STORE-only ZIP builder (no compression) for packaging multi-volume BRF,
+// docx, and eBraille downloads in the browser — no external library.
+const CRC32_TABLE = new Uint32Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i;
+  for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+  CRC32_TABLE[i] = c;
 }
-const u16 = (n) => new Uint8Array([n & 0xff, (n >> 8) & 0xff]);
-const u32 = (n) => new Uint8Array([n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >>> 24) & 0xff]);
-const cat = (arrs) => { const len = arrs.reduce((s, a) => s + a.length, 0); const out = new Uint8Array(len); let o = 0; for (const a of arrs) { out.set(a, o); o += a.length; } return out; };
 
-// files: [{ name, text }] → Blob (application/zip)
+function crc32(bytes) {
+  let c = 0 ^ (-1);
+  for (let i = 0; i < bytes.length; i++) {
+    c = (c >>> 8) ^ CRC32_TABLE[(c ^ bytes[i]) & 0xFF];
+  }
+  return (c ^ (-1)) >>> 0;
+}
+
+// files: [{ name, text | data }] → Blob (application/zip)
 export function makeZip(files) {
   const enc = new TextEncoder();
-  const parts = [];
-  const records = [];
-  let offset = 0;
-  const push = (arr) => { parts.push(arr); offset += arr.length; };
+  const encodedFiles = [];
+  let totalDataSize = 0;
+  let cdSize = 0;
+
   for (const f of files) {
     const nameB = enc.encode(f.name);
-    const dataB = enc.encode(f.text ?? '');          // UTF-8, not a lossy 1-byte truncation
+    const dataB = f.data instanceof Uint8Array ? f.data : enc.encode(f.text ?? '');
     const crc = crc32(dataB);
-    const localOffset = offset;
-    // general-purpose bit flag = 0x0800 → filename/content are UTF-8 (bit 11)
-    push(cat([u32(0x04034b50), u16(20), u16(0x0800), u16(0), u16(0), u16(0), u32(crc), u32(dataB.length), u32(dataB.length), u16(nameB.length), u16(0), nameB, dataB]));
-    records.push({ nameB, crc, size: dataB.length, localOffset });
+    encodedFiles.push({ nameB, dataB, crc });
+    totalDataSize += 30 + nameB.length + dataB.length;
+    cdSize += 46 + nameB.length;
   }
+
+  const endRecordSize = 22;
+  const out = new Uint8Array(totalDataSize + cdSize + endRecordSize);
+  const view = new DataView(out.buffer);
+
+  let offset = 0;
+  const records = [];
+
+  for (const f of encodedFiles) {
+    const localOffset = offset;
+    view.setUint32(offset, 0x04034b50, true);
+    view.setUint16(offset + 4, 20, true);
+    view.setUint16(offset + 6, 0x0800, true); // UTF-8 filename flag
+    view.setUint16(offset + 8, 0, true); // store (no compression)
+    view.setUint16(offset + 10, 0, true);
+    view.setUint16(offset + 12, 0, true);
+    view.setUint32(offset + 14, f.crc, true);
+    view.setUint32(offset + 18, f.dataB.length, true);
+    view.setUint32(offset + 22, f.dataB.length, true);
+    view.setUint16(offset + 26, f.nameB.length, true);
+    view.setUint16(offset + 28, 0, true);
+    offset += 30;
+
+    out.set(f.nameB, offset);
+    offset += f.nameB.length;
+    out.set(f.dataB, offset);
+    offset += f.dataB.length;
+
+    records.push({ nameB: f.nameB, crc: f.crc, size: f.dataB.length, localOffset });
+  }
+
   const cdStart = offset;
   for (const r of records) {
-    push(cat([u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0), u16(0), u16(0), u32(r.crc), u32(r.size), u32(r.size), u16(r.nameB.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(r.localOffset), r.nameB]));
+    view.setUint32(offset, 0x02014b50, true);
+    view.setUint16(offset + 4, 20, true);
+    view.setUint16(offset + 6, 20, true);
+    view.setUint16(offset + 8, 0x0800, true);
+    view.setUint16(offset + 10, 0, true);
+    view.setUint16(offset + 12, 0, true);
+    view.setUint16(offset + 14, 0, true);
+    view.setUint32(offset + 16, r.crc, true);
+    view.setUint32(offset + 20, r.size, true);
+    view.setUint32(offset + 24, r.size, true);
+    view.setUint16(offset + 28, r.nameB.length, true);
+    view.setUint16(offset + 30, 0, true);
+    view.setUint16(offset + 32, 0, true);
+    view.setUint16(offset + 34, 0, true);
+    view.setUint16(offset + 36, 0, true);
+    view.setUint32(offset + 38, 0, true);
+    view.setUint32(offset + 42, r.localOffset, true);
+    offset += 46;
+
+    out.set(r.nameB, offset);
+    offset += r.nameB.length;
   }
-  const cdSize = offset - cdStart;
-  push(cat([u32(0x06054b50), u16(0), u16(0), u16(records.length), u16(records.length), u32(cdSize), u32(cdStart), u16(0)]));
-  return new Blob([cat(parts)], { type: 'application/zip' });
+
+  const actualCdSize = offset - cdStart;
+  view.setUint32(offset, 0x06054b50, true);
+  view.setUint16(offset + 4, 0, true);
+  view.setUint16(offset + 6, 0, true);
+  view.setUint16(offset + 8, records.length, true);
+  view.setUint16(offset + 10, records.length, true);
+  view.setUint32(offset + 12, actualCdSize, true);
+  view.setUint32(offset + 16, cdStart, true);
+  view.setUint16(offset + 20, 0, true);
+
+  return new Blob([out], { type: 'application/zip' });
 }

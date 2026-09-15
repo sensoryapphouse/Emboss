@@ -99,6 +99,19 @@ export const STYLE_DEFINITIONS = {
     blankAfter: false,
     description: 'Ordered numbered list with 1-3 margin.',
   },
+  index: {
+    id: 'index',
+    name: 'Index Entry',
+    category: 'list',
+    xmlTag: 'list',
+    xmlType: 'pl',
+    xmlClass: 'bai-index',
+    firstCell: 1,
+    runoverCell: 3,
+    blankBefore: false,
+    blankAfter: false,
+    description: 'Index entry with 1-3 margin for main entries and 3-5 for subentries per BANA §18.',
+  },
   dialogue: {
     id: 'dialogue',
     name: 'Play Dialogue',
@@ -192,6 +205,28 @@ export const STYLE_DEFINITIONS = {
     blankBefore: false,
     blankAfter: false,
     description: 'Image or figure caption with BANA 7-5 margin.',
+  },
+  attribution: {
+    id: 'attribution',
+    name: 'Attribution / Byline',
+    category: 'text',
+    xmlTag: 'byline',
+    firstCell: 5,
+    runoverCell: 5,
+    blankBefore: true,
+    blankAfter: false,
+    description: 'Source or author attribution indented 4 spaces (Cell 5) with blank line before.',
+  },
+  glossary: {
+    id: 'glossary',
+    name: 'Glossary Definition',
+    category: 'list',
+    xmlTag: 'dl',
+    firstCell: 1,
+    runoverCell: 3,
+    blankBefore: true,
+    blankAfter: true,
+    description: 'Glossary definition list with 1-3 margin.',
   },
   sidebar: {
     id: 'sidebar',
@@ -297,7 +332,7 @@ export function getStyleMargins(styleId, profile = 'bana') {
  */
 export function isListStyle(styleId) {
   const def = STYLE_DEFINITIONS[styleId];
-  return def?.category === 'list' || styleId.startsWith('list') || styleId.startsWith('exercise') || styleId === 'toc';
+  return def?.category === 'list' || styleId.startsWith('list') || styleId.startsWith('exercise') || styleId === 'toc' || styleId === 'glossary' || styleId === 'index';
 }
 
 /**
@@ -314,23 +349,28 @@ export function resolveStyleFromXml(tagName, className = '') {
   if (tag === 'h2' || (tag.startsWith('level') && tag.endsWith('2')) || tag === 'bridgehead') return 'h2';
   if (tag === 'h3' || (tag.startsWith('level') && tag.endsWith('3'))) return 'h3';
 
-  if (cls.includes('bai-play') || cls.includes('dialogue')) return 'dialogue';
-  if (cls.includes('bai-stage') || cls.includes('stage')) return 'stage';
+  if (cls.includes('bai-play') || cls.includes('dialogue') || tag === 'speaker' || cls.includes('speaker')) return 'dialogue';
+  if (cls.includes('bai-stage') || cls.includes('stage') || tag === 'stage') return 'stage';
   if (cls.includes('bai-exercise-sub')) return 'exercise-sub';
   if (cls.includes('bai-exercise') || cls.includes('exercise')) return 'exercise';
-  if (cls.includes('toc-entry') || cls.includes('bai-toc')) return 'toc';
+  if (cls.includes('toc-entry') || cls.includes('bai-toc') || cls.includes('toc')) return 'toc';
+  if (cls.includes('bai-index') || cls.includes('index')) return 'index';
   if (cls.includes('footnote') || tag === 'footnote') return 'footnote';
+  if (cls.includes('quote') || tag === 'blockquote') return 'quote';
+  if (tag === 'byline' || tag === 'author') return 'attribution';
+  if (tag === 'dl' || cls.includes('glossary')) return 'glossary';
 
   if (tag === 'sidebar') return 'sidebar';
   if (tag === 'prodnote') return 'note';
-  if (tag === 'caption' || tag === 'figcaption' || tag === 'byline') return 'caption';
-  if (tag === 'poem' || tag === 'stanza') return 'poem';
+  if (tag === 'caption' || tag === 'figcaption') return 'caption';
+  if (tag === 'poem' || tag === 'stanza' || tag === 'linegroup' || tag === 'line' || cls.includes('verse')) return 'poem';
   if (tag === 'table') return cls.includes('listed') ? 'table-listed' : 'table-spatial';
   if (tag === 'pagenum' || tag === 'print-page') return 'print-page';
   if (tag === 'hr') return 'break';
 
   if (tag === 'list' || tag === 'ul' || tag === 'ol') {
     if (cls.includes('toc')) return 'toc';
+    if (cls.includes('index')) return 'index';
     if (tag === 'ol') return 'list-number';
     return 'list-bullet';
   }
@@ -350,8 +390,15 @@ export function formatStyleInspectorBadge(styleId, profile = 'bana') {
     : (styleId === 'bullet' || styleId === 'ul') ? 'list-bullet'
     : (styleId === 'number' || styleId === 'ol') ? 'list-number'
     : (styleId === 'verse') ? 'poem'
+    : (styleId === 'index') ? 'index'
     : (styleId === 'plain') ? 'toc'
     : (styleId === 'table') ? 'table-spatial'
+    : (styleId === 'indicator') ? 'break'
+    : (styleId === 'play') ? 'dialogue'
+    : (styleId === 'box') ? 'sidebar'
+    : (styleId === 'graphic') ? 'caption'
+    : (styleId === 'math') ? 'body'
+    : (styleId === 'pagenum') ? 'print-page'
     : (styleId || 'body');
 
   const def = STYLE_DEFINITIONS[normId] || STYLE_DEFINITIONS.body;

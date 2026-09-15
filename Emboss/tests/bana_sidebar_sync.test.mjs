@@ -227,6 +227,18 @@ function modelToLexicalInEditor(ed, model) {
               sb.append($createTableNode(cb.headers || [], cb.rows || []));
             } else if (cb.type === 'graphic') {
               sb.append($createGraphicNode(cb.svg || '', cb.alt || '', cb.title || '', cb.textures, cb.brailleLabels, cb.size));
+            } else if (cb.type === 'box' || cb.type === 'sidebar') {
+              const nestedSb = $createSidebarNode(cb.title || '');
+              if (Array.isArray(cb.blocks)) {
+                for (const ncb of cb.blocks) {
+                  const p = $createParagraphNode();
+                  const style = ncb.style || ncb.type;
+                  if (style && style !== 'para') p.setBanaStyle(style);
+                  fillNode(p, ncb);
+                  if (p.getChildrenSize()) nestedSb.append(p);
+                }
+              }
+              if (nestedSb.getChildrenSize()) sb.append(nestedSb);
             } else {
               const p = $createParagraphNode();
               const style = cb.style || cb.type;
@@ -308,6 +320,13 @@ function buildModelFromEditor(ed) {
             innerBlocks.push({ type: 'table', headers: child.getHeaders(), rows: child.getRows() });
           } else if ($isGraphicNode(child)) {
             innerBlocks.push({ type: 'graphic', svg: child.getSvg(), alt: child.getAlt(), title: child.getTitle(), textures: child.getTextures(), brailleLabels: child.getBrailleLabels(), size: child.getSize() });
+          } else if ($isSidebarNode(child)) {
+            const nestedInner = [];
+            for (const nChild of child.getChildren()) {
+              const text = nChild.getTextContent().replace(/\s+/g, ' ').trim();
+              if (text) nestedInner.push({ type: 'para', text });
+            }
+            innerBlocks.push({ type: 'box', title: child.getTitle() || null, blocks: nestedInner });
           } else {
             const text = child.getTextContent().replace(/\s+/g, ' ').trim();
             if (text) {

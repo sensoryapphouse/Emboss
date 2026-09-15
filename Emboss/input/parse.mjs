@@ -8,6 +8,7 @@
 // for a paragraph with inline maths mixed into running text.
 import { ommlElementToMathML, MATH_NS } from './omml.mjs';
 import { SCRIPT_MARKS } from '../format/text-style.mjs';
+import { mathmlToLatex } from '../engine/mathml-to-latex.mjs';
 
 // ---------- $-delimited LaTeX (shared by parseText / parseMarkdown) ----------
 //
@@ -122,8 +123,15 @@ export function parseText(str) {
 // (available in both browsers and @xmldom/xmldom) over outerHTML, since
 // outerHTML on an HTML-parsed <math> island may not be well-formed XML.
 function mathOuterXml(el) {
+  if (!el) return '';
   if (typeof XMLSerializer !== 'undefined') {
     try { return new XMLSerializer().serializeToString(el); } catch { /* fall through */ }
+  }
+  if (typeof el.toString === 'function') {
+    try {
+      const s = el.toString();
+      if (s && s !== '[object Object]' && s !== '[object Element]') return s;
+    } catch { /* fall through */ }
   }
   return el.outerHTML || '';
 }
@@ -163,7 +171,11 @@ function htmlParagraphSegments(p) {
         const tag = (child.tagName || child.localName || '').toLowerCase();
         if (tag === 'math') {
           flushText();
-          segments.push({ type: 'math', mathml: mathOuterXml(child) });
+          const mathml = mathOuterXml(child);
+          const latex = mathmlToLatex(mathml);
+          const seg = { type: 'math', mathml };
+          if (latex) seg.latex = latex;
+          segments.push(seg);
         } else if (tag === 'br') {
           text += ' ';
         } else if (tag === 'sub' || tag === 'sup') {
@@ -193,7 +205,9 @@ function htmlParagraphSegments(p) {
 export function parseHtml(str) {
   const raw = str ?? '';
   const htmlToParse = (raw.includes('<html') || raw.includes('<body')) ? raw : `<body>${raw}</body>`;
-  const doc = new DOMParser().parseFromString(htmlToParse, 'text/html');
+  const Parser = typeof DOMParser !== 'undefined' ? DOMParser : globalThis.DOMParser;
+  if (!Parser) throw new Error('No DOMParser available');
+  const doc = new Parser().parseFromString(htmlToParse, 'text/html');
   const titleEl = (doc.querySelector ? doc.querySelector('title') : doc.getElementsByTagName('title')[0])
     || (doc.querySelector ? doc.querySelector('h1') : doc.getElementsByTagName('h1')[0]);
   const title = (titleEl?.textContent || '').trim() || null;
@@ -211,7 +225,11 @@ export function parseHtml(str) {
       if (tag === 'head' || tag === 'title' || tag === 'script' || tag === 'style' || tag === 'meta' || tag === 'link' || tag === 'template') continue;
       const text = node.textContent.replace(/\s+/g, ' ').trim();
       if (tag === 'math') {                // block-level <math> (not inside a <p>/etc)
-        blocks.push({ type: 'math', mathml: mathOuterXml(node) });
+        const mathml = mathOuterXml(node);
+        const latex = mathmlToLatex(mathml);
+        const blk = { type: 'math', mathml };
+        if (latex) blk.latex = latex;
+        blocks.push(blk);
       } else if (/^h[1-6]$/.test(tag)) {
         if (!text) continue;
         if (hasInlineElements(node)) {
@@ -303,34 +321,48 @@ export function parseHtml(str) {
         if (items.length) blocks.push({ type: 'list', items });
       } else if (tag === 'dl') {
         const items = [];
+        let curTerm = null;
+        let curTermSegs = null;
         for (const child of node.childNodes || []) {
           if (child.nodeType !== 1) continue;
           const cTag = (child.tagName || child.localName || '').toLowerCase();
-          if (cTag !== 'dt' && cTag !== 'dd') continue;
-          let itemText = '';
-          for (const c of child.childNodes || []) {
-            if (c.nodeType === 3) itemText += c.textContent;
-            else if (c.nodeType === 1) {
-              const cTagInner = (c.tagName || c.localName || '').toLowerCase();
-              if (cTagInner === 'br') itemText += ' ';
-              else itemText += c.textContent;
+          if (cTag === 'dt' || cTag === 'dfn') {
+            if (curTerm) {
+              const item = { term: curTerm, def: '', text: curTerm };
+              if (curTermSegs?.length) { item.termSegments = curTermSegs; item.segments = curTermSegs; }
+              items.push(item);
+            }
+            curTerm = child.textContent.replace(/\s+/g, ' ').trim();
+            curTermSegs = hasInlineElements(child) ? htmlParagraphSegments(child) : null;
+          } else if (cTag === 'dd') {
+            const defText = child.textContent.replace(/\s+/g, ' ').trim();
+            const defSegs = hasInlineElements(child) ? htmlParagraphSegments(child) : null;
+            if (curTerm || defText) {
+              const item = {
+                term: curTerm || '',
+                def: defText || '',
+                text: curTerm ? `${curTerm} — ${defText}` : defText
+              };
+              if (curTermSegs?.length) item.termSegments = curTermSegs;
+              if (defSegs?.length) item.defSegments = defSegs;
+              if (curTermSegs?.length || defSegs?.length) {
+                item.segments = [...(curTermSegs || [{ type: 'text', text: curTerm || '' }]), { type: 'text', text: ' — ' }, ...(defSegs || [{ type: 'text', text: defText || '' }])];
+              }
+              items.push(item);
+              curTerm = null;
+              curTermSegs = null;
             }
           }
-          itemText = itemText.replace(/\s+/g, ' ').trim();
-          if (!itemText) continue;
-          let item;
-          if (hasInlineElements(child)) {
-            const segments = htmlParagraphSegments(child);
-            const hasEmphOrMath = segments.some((s) => s.type === 'math' || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
-            item = hasEmphOrMath ? { segments, text: itemText } : { text: itemText };
-          } else {
-            item = { text: itemText };
-          }
-          item.level = cTag === 'dt' ? 0 : 1;
+        }
+        if (curTerm) {
+          const item = { term: curTerm, def: '', text: curTerm };
+          if (curTermSegs?.length) { item.termSegments = curTermSegs; item.segments = curTermSegs; }
           items.push(item);
         }
-        if (items.length) blocks.push({ type: 'list', items });
+        if (items.length) blocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items });
       } else if (tag === 'table') {
+        const captionEl = node.getElementsByTagName ? node.getElementsByTagName('caption')[0] : null;
+        const captionText = captionEl ? captionEl.textContent.replace(/\s+/g, ' ').trim() : null;
         const rows = node.querySelectorAll ? [...node.querySelectorAll('tr')]
           : [...(node.getElementsByTagName ? node.getElementsByTagName('tr') : [])];
         const headers = [];
@@ -364,8 +396,12 @@ export function parseHtml(str) {
             if (rowCells.some(Boolean)) tableRows.push(rowCells);
           }
         }
+        if (captionText) {
+          blocks.push({ type: 'caption', text: captionText });
+        }
         if (headers.length || tableRows.length) {
-          blocks.push({ type: 'table', headers, rows: tableRows });
+          const tbl = { type: 'table', headers, rows: tableRows };
+          blocks.push(tbl);
         }
       } else if (tag === 'tbody' || tag === 'thead' || tag === 'tfoot') {
         walk(node);
@@ -396,8 +432,12 @@ async function inflateRaw(bytes) {
 
 // Minimal ZIP: read the central directory to locate & extract one entry.
 async function unzipEntry(buf, wanted) {
-  const dv = new DataView(buf);
-  const u8 = new Uint8Array(buf);
+  let ab = buf;
+  if (buf && buf.buffer instanceof ArrayBuffer && !(buf instanceof ArrayBuffer)) {
+    ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+  }
+  const dv = new DataView(ab);
+  const u8 = new Uint8Array(ab);
   // find End Of Central Directory (sig 0x06054b50), scanning back
   let eocd = -1;
   for (let i = u8.length - 22; i >= 0; i--) {
@@ -530,7 +570,11 @@ function paragraphSegments(p, W) {
     if (node.nodeType !== 1) continue;
     if (node.namespaceURI === MATH_NS && node.localName === 'oMath') {
       flushText(); curTf = 0;
-      segments.push({ type: 'math', mathml: ommlElementToMathML(node) });
+      const mathml = ommlElementToMathML(node);
+      const latex = mathmlToLatex(mathml);
+      const seg = { type: 'math', mathml };
+      if (latex) seg.latex = latex;
+      segments.push(seg);
       continue;
     }
     if (node.localName === 'hyperlink') {
@@ -593,7 +637,8 @@ function sanitizeXmlEntities(xml) {
 function parseXml(xml) {
   const Parser = typeof DOMParser !== 'undefined' ? DOMParser : globalThis.DOMParser;
   if (!Parser) throw new Error('No DOMParser available');
-  let cleanXml = sanitizeXmlEntities(xml ?? '');
+  let cleanXml = (xml ?? '').replace(/^\uFEFF/, '').trim();
+  cleanXml = sanitizeXmlEntities(cleanXml);
   let doc = new Parser().parseFromString(cleanXml, 'application/xml');
   let err = doc.getElementsByTagName('parsererror')[0]
     || (doc.documentElement && doc.documentElement.nodeName === 'parsererror' ? doc.documentElement : null);
@@ -701,7 +746,13 @@ export async function parseDocx(arrayBuffer) {
   let title = null;
   let pendingList = null;
   const flushList = () => { if (pendingList) { blocks.push(pendingList); pendingList = null; } };
-  const pushMath = (omEl) => blocks.push({ type: 'math', mathml: ommlElementToMathML(omEl) });
+  const pushMath = (omEl) => {
+    const mathml = ommlElementToMathML(omEl);
+    const latex = mathmlToLatex(mathml);
+    const blk = { type: 'math', mathml };
+    if (latex) blk.latex = latex;
+    blocks.push(blk);
+  };
 
   // Walk the body's children in document order so equations land in place.
   for (const el of body.children) {
@@ -1323,15 +1374,21 @@ export function parseDtbook(xmlStr) {
   const blocks = [];
 
   if (rootTag === 'math' || rootTag.endsWith(':math')) {
-    blocks.push({ type: 'math', mathml: mathOuterXml(root) });
+    const mathml = mathOuterXml(root);
+    const latex = mathmlToLatex(mathml);
+    const blk = { type: 'math', mathml };
+    if (latex) blk.latex = latex;
+    blocks.push(blk);
     return { title: null, blocks };
   }
 
   const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4;
 
-  const BLOCK_TAGS = new Set(['p', 'div', 'li', 'lic', 'tr', 'td', 'th', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'sidebar', 'note', 'caption', 'prodnote']);
-  function getCleanText(el) {
+  const BLOCK_TAGS = new Set(['p', 'div', 'li', 'lic', 'tr', 'td', 'th', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'sidebar', 'note', 'caption', 'prodnote', 'dt', 'dd', 'line', 'ln', 'speaker', 'stage', 'blockquote', 'byline', 'author', 'cite', 'attrib']);
+  const LIST_TAGS = new Set(['list', 'ul', 'ol']);
+  function getCleanText(el, excludeTags = null) {
     if (!el) return '';
+    const hasExclude = excludeTags && typeof excludeTags.has === 'function';
     let text = '';
     function collect(node) {
       for (let child = node.firstChild; child; child = child.nextSibling) {
@@ -1339,6 +1396,9 @@ export function parseDtbook(xmlStr) {
           text += child.nodeValue || '';
         } else if (child.nodeType === 1) {
           const tag = (child.localName || child.tagName || '').toLowerCase();
+          if (hasExclude && excludeTags.has(tag)) continue;
+          const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+          if (tag === 'brl' || tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) continue;
           const isBlock = BLOCK_TAGS.has(tag);
           if (isBlock) text += ' ';
           collect(child);
@@ -1350,7 +1410,55 @@ export function parseDtbook(xmlStr) {
     return text.replace(/\s+/g, ' ').trim();
   }
 
-  function inlineSegments(el) {
+  const PHONETIC_KEY_REGEX = /\(([a-zA-Z\u0080-\u02FF\u0300-\u036F\u0400-\u04FF\s\u00B4\u0060\-\/]+)\)/g;
+  function isPhoneticKey(inner) {
+    if (!inner || !inner.includes('-')) return false;
+    return /[\u00B4\u0060\u02C8\u02CC\u0300-\u036F\u04D0-\u04D9\u0100-\u024F\u0250-\u02AFāăēĕīĭōŏūŭəәǝ]/i.test(inner);
+  }
+
+  function splitPhoneticSegments(segs) {
+    const result = [];
+    for (const seg of segs) {
+      if (!seg || seg.type !== 'text' || seg.uncontracted || !seg.text) {
+        result.push(seg);
+        continue;
+      }
+      const str = seg.text;
+      PHONETIC_KEY_REGEX.lastIndex = 0;
+      let match;
+      let lastIdx = 0;
+      let hasPhonetic = false;
+      while ((match = PHONETIC_KEY_REGEX.exec(str)) !== null) {
+        if (isPhoneticKey(match[1])) {
+          hasPhonetic = true;
+          const before = str.slice(lastIdx, match.index);
+          if (before) {
+            const s = { type: 'text', text: before };
+            if (seg.tf) s.tf = seg.tf;
+            result.push(s);
+          }
+          const pSeg = { type: 'text', text: match[0], uncontracted: true };
+          if (seg.tf) pSeg.tf = seg.tf;
+          result.push(pSeg);
+          lastIdx = match.index + match[0].length;
+        }
+      }
+      if (hasPhonetic) {
+        const after = str.slice(lastIdx);
+        if (after) {
+          const s = { type: 'text', text: after };
+          if (seg.tf) s.tf = seg.tf;
+          result.push(s);
+        }
+      } else {
+        result.push(seg);
+      }
+    }
+    return result;
+  }
+
+  function inlineSegments(el, skipLists = false, excludeTags = null) {
+    const hasExclude = excludeTags && typeof excludeTags.has === 'function';
     const segments = [];
     let text = '';
     let curTf = 0;
@@ -1371,19 +1479,28 @@ export function parseDtbook(xmlStr) {
         if (child.nodeType === 3) {
           let val = child.nodeValue;
           if (val) {
+            val = val.replace(/\s+/g, ' ');
             if (parentTf !== curTf || parentUnc !== curUnc) {
               flush();
               curTf = parentTf;
               curUnc = parentUnc;
+            }
+            if (text.endsWith(' ') && val.startsWith(' ')) {
+              val = val.slice(1);
             }
             text += val;
           }
         } else if (child.nodeType === 1) {
           const tag = (child.localName || child.tagName || '').toLowerCase();
           const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
-          if (tag === 'list' || tag === 'ul' || tag === 'ol' || tag === 'table' || tag === 'sidebar') continue;
+          if (tag === 'table' || tag === 'sidebar' || tag === 'brl' || (skipLists && (tag === 'list' || tag === 'ul' || tag === 'ol'))) continue;
+          if (hasExclude && excludeTags.has(tag)) continue;
           let nextTf = parentTf;
           let nextUnc = parentUnc;
+
+          if (tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) {
+            continue;
+          }
 
           if (tag === 'lic' && text && !text.endsWith(' ')) {
             flush();
@@ -1393,7 +1510,7 @@ export function parseDtbook(xmlStr) {
           if (tag === 'b' || tag === 'strong') nextTf |= TF_BOLD;
           else if (tag === 'i' || tag === 'em') nextTf |= TF_ITALIC;
           else if (tag === 'u' || cls.includes('underline')) nextTf |= TF_UNDERLINE;
-          else if (tag === 'code' || cls.includes('uncontracted') || cls.includes('bai-trans4')) nextUnc = true;
+          else if (tag === 'code' || cls.includes('uncontracted') || cls.includes('bai-trans4') || cls.includes('phonetic') || cls.includes('pronunciation') || cls.includes('pron') || cls.includes('ipa')) nextUnc = true;
           else if (tag === 'br') {
             flush();
             text += '\n';
@@ -1406,6 +1523,7 @@ export function parseDtbook(xmlStr) {
             const ann = child.getElementsByTagName ? [...child.getElementsByTagName('annotation'), ...child.getElementsByTagName('m:annotation')] : [];
             const texAnn = ann.find(a => (a.getAttribute ? (a.getAttribute('encoding') || '') : '').includes('tex'));
             if (texAnn && texAnn.textContent) latex = texAnn.textContent.trim();
+            if (!latex && mathml) latex = mathmlToLatex(mathml);
             const mathSeg = { type: 'math', mathml };
             if (latex) mathSeg.latex = latex;
             segments.push(mathSeg);
@@ -1418,7 +1536,37 @@ export function parseDtbook(xmlStr) {
 
     walkInline(el, 0, false);
     flush();
-    return segments;
+    const split = splitPhoneticSegments(segments);
+    for (const seg of split) {
+      if (seg.type === 'text' && seg.text) {
+        seg.text = seg.text.replace(/[^\S\r\n]+/g, ' ');
+      }
+    }
+    while (split.length > 0 && split[0].type === 'text' && !split[0].tf && !split[0].uncontracted && /^\s*$/.test(split[0].text || '')) {
+      split.shift();
+    }
+    if (split.length > 0 && split[0].type === 'text' && split[0].text) {
+      split[0].text = split[0].text.replace(/^\s+/, '');
+      if (!split[0].text) split.shift();
+    }
+    while (split.length > 0 && split[split.length - 1].type === 'text' && !split[split.length - 1].tf && !split[split.length - 1].uncontracted && /^\s*$/.test(split[split.length - 1].text || '')) {
+      split.pop();
+    }
+    if (split.length > 0 && split[split.length - 1].type === 'text' && split[split.length - 1].text) {
+      split[split.length - 1].text = split[split.length - 1].text.replace(/\s+$/, '');
+      if (!split[split.length - 1].text) split.pop();
+    }
+    return split;
+  }
+
+  function getElementLevel(node) {
+    if (!node || !node.getAttribute) return 0;
+    const cls = (node.getAttribute('class') || '').toLowerCase();
+    const match = cls.match(/\blevel-(\d+)\b/) || cls.match(/\btoc-level-(\d+)\b/);
+    if (match) return parseInt(match[1], 10) || 0;
+    const attr = node.getAttribute('level');
+    if (attr) return parseInt(attr, 10) || 0;
+    return 0;
   }
 
   function parseSingleList(child, listLvl = 0, targetBlocks = blocks) {
@@ -1426,11 +1574,62 @@ export function parseDtbook(xmlStr) {
     const listTypeAttr = (child.getAttribute ? child.getAttribute('type') : '') || '';
     const isOl = listTypeAttr.toLowerCase() === 'ordered' || listTypeAttr.toLowerCase() === 'ol' || (child.getAttribute && child.getAttribute('enum') != null);
     
-    const isToc = listClass.toLowerCase().includes('toc');
+    // Check for child <hd> / heading inside <list> and emit it as a preceding heading
+    for (let c = child.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType !== 1) continue;
+      const cTag = (c.localName || c.tagName || '').toLowerCase();
+      if (cTag === 'hd' || cTag === 'title' || /^h[1-6]$/.test(cTag)) {
+        const t = getCleanText(c);
+        if (t && targetBlocks) {
+          const segs = inlineSegments(c);
+          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+          targetBlocks.push(hasEmph && segs.length ? { type: 'heading', level: 3, text: t, segments: segs } : { type: 'heading', level: 3, text: t });
+        }
+      }
+    }
+    
+    let isToc = listClass.toLowerCase().includes('toc') || (child.getAttribute && (child.getAttribute('id') || '').toLowerCase().includes('toc'));
+    let isIndex = listClass.toLowerCase().includes('index') || (child.getAttribute && (child.getAttribute('id') || '').toLowerCase().includes('index'));
+    if (!isToc && !isIndex) {
+      // Check parent container (e.g., <level1 class="toc"> or <sidebar id="toc"> or previous sibling heading)
+      let p = child.parentNode;
+      while (p && p.nodeType === 1) {
+        const pCls = (p.getAttribute ? (p.getAttribute('class') || '') : '').toLowerCase();
+        const pId = (p.getAttribute ? (p.getAttribute('id') || '') : '').toLowerCase();
+        if (pCls.includes('toc') || pId.includes('toc')) {
+          isToc = true;
+          break;
+        }
+        if (pCls.includes('index') || pId.includes('index')) {
+          isIndex = true;
+          break;
+        }
+        const pTag = (p.localName || p.tagName || '').toLowerCase();
+        if (/^level[1-6]$/.test(pTag) || pTag === 'sidebar' || pTag === 'div' || pTag === 'section') {
+          // Check preceding sibling headings inside the container
+          for (let sib = child.previousSibling; sib; sib = sib.previousSibling) {
+            if (sib.nodeType === 1) {
+              const sTag = (sib.localName || sib.tagName || '').toLowerCase();
+              if (sTag === 'hd' || /^h[1-6]$/.test(sTag)) {
+                const hdText = (sib.textContent || '').toLowerCase().trim();
+                if (/^index\b/i.test(hdText)) isIndex = true;
+                if (/^(table of contents|contents|toc)$/i.test(hdText) || /^contents\b/i.test(hdText)) isToc = true;
+                break;
+              }
+            }
+          }
+          break;
+        }
+        p = p.parentNode;
+      }
+    }
     const items = [];
     let counter = 1;
-    let detectedKind = isToc ? 'toc' : null;
+    let detectedKind = isToc ? 'toc' : (isIndex ? 'index' : (listTypeAttr.toLowerCase() === 'pl' ? 'plain' : null));
     let lastTopItem = null;
+
+    const NUMBER_PREFIX_RE = /^\s*(\d+|[a-zA-Z]|[ivxlcdm]+)[\.\)]\s+/;
+    const BULLET_PREFIX_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7]+\s+/;
 
     for (let li = child.firstChild; li; li = li.nextSibling) {
       if (li.nodeType !== 1) continue;
@@ -1438,28 +1637,8 @@ export function parseDtbook(xmlStr) {
       if (liTag !== 'li' && liTag !== 'item') continue;
 
       const liClass = (li.getAttribute ? li.getAttribute('class') : '') || '';
-      const liLevelAttr = li.getAttribute ? li.getAttribute('level') : null;
-      const liLevel = liLevelAttr != null ? parseInt(liLevelAttr, 10) || 0 : 0;
+      const liLevel = getElementLevel(li);
       const effLevel = liLevel || listLvl;
-
-      if (liClass.includes('bai-toc-center')) {
-        const t = getCleanText(li);
-        if (t) targetBlocks.push({ type: 'heading', level: 1, text: t });
-        continue;
-      }
-
-      if (liClass.includes('toc-page') || liClass.includes('bai-toc-page')) {
-        detectedKind = 'toc';
-        const pVal = getCleanText(li);
-        if (pVal) {
-          if (lastTopItem) {
-            lastTopItem.page = pVal;
-          } else if (items.length > 0) {
-            items[items.length - 1].page = pVal;
-          }
-        }
-        continue;
-      }
 
       const childLists = [];
       for (let c = li.firstChild; c; c = c.nextSibling) {
@@ -1468,34 +1647,92 @@ export function parseDtbook(xmlStr) {
         }
       }
 
-      if (liClass.includes('toc-entry') || liClass.includes('bai-toc-entry') || isToc) {
+      const lics = li.getElementsByTagName ? [...li.getElementsByTagName('lic')] : [];
+      const hasLics = lics.length > 0;
+      const isLiToc = isToc || liClass.includes('toc-entry') || liClass.includes('bai-toc-entry') || hasLics;
+
+      if (liClass.includes('bai-toc-center')) {
+        const t = getCleanText(li, LIST_TAGS);
+        if (t && targetBlocks) targetBlocks.push({ type: 'heading', level: 1, text: t });
+        continue;
+      }
+
+      if (liClass.includes('toc-page') || liClass.includes('bai-toc-page')) {
+        detectedKind = 'toc';
+        const pVal = getCleanText(li, LIST_TAGS);
+        if (pVal) {
+          if (lastTopItem) {
+            lastTopItem.page = pVal;
+          } else if (items.length > 0) {
+            items[items.length - 1].page = pVal;
+          }
+        }
+        for (const cl of childLists) {
+          const subItems = parseSingleList(cl, effLevel + 1, null);
+          items.push(...subItems);
+        }
+        continue;
+      }
+
+      if (isLiToc) {
         detectedKind = 'toc';
         let itemText = '';
         let pageVal = null;
         let textTargetNode = li;
         let textEl = null;
-        
-        if (li.getElementsByTagName) {
-          const lics = [...li.getElementsByTagName('lic')];
-          textEl = lics.find(l => ((l.getAttribute && l.getAttribute('class')) || '').includes('toc-text') || ((l.getAttribute && l.getAttribute('class')) || '').includes('bai-toc-text'));
-          const pageEl = lics.find(l => ((l.getAttribute && l.getAttribute('class')) || '').includes('toc-page') || ((l.getAttribute && l.getAttribute('class')) || '').includes('bai-toc-page'));
+        let pageEl = null;
+        const TOC_EXCLUDE = new Set(['list', 'ul', 'ol', 'pagenum', 'print-page', 'sidebar', 'table', 'prodnote']);
+
+        if (hasLics) {
+          textEl = lics.find(l => {
+            const cls = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
+            return cls.includes('toc-text') || cls.includes('bai-toc-text') || cls.includes('entry') || cls.includes('title');
+          });
+          pageEl = lics.find(l => {
+            const cls = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
+            const hasPageTag = l.getElementsByTagName ? (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0) : false;
+            return cls.includes('toc-page') || cls.includes('bai-toc-page') || cls.includes('page') || cls.includes('pagenum') || hasPageTag;
+          });
+          if (!textEl && !pageEl) {
+            if (lics.length >= 2) {
+              textEl = lics[0];
+              pageEl = lics[lics.length - 1];
+            } else if (lics.length === 1) {
+              textEl = lics[0];
+            }
+          } else if (!textEl && lics.length >= 2 && pageEl) {
+            textEl = lics.find(l => l !== pageEl);
+          } else if (!pageEl && lics.length >= 2 && textEl) {
+            pageEl = lics.find(l => l !== textEl);
+          }
+
           if (textEl) {
-            itemText = getCleanText(textEl);
+            itemText = getCleanText(textEl, TOC_EXCLUDE);
             textTargetNode = textEl;
           }
-          if (pageEl) pageVal = getCleanText(pageEl);
+          if (pageEl) {
+            pageVal = getCleanText(pageEl, TOC_EXCLUDE);
+          }
         }
 
-        const segs = inlineSegments(textTargetNode);
+        const directPageNode = li.getElementsByTagName ? (li.getElementsByTagName('pagenum')[0] || li.getElementsByTagName('print-page')[0]) : null;
+        if (!pageVal && directPageNode) {
+          pageVal = (directPageNode.textContent || '').trim();
+          if (!textEl) {
+            itemText = getCleanText(li, TOC_EXCLUDE);
+          }
+        }
+
+        const segs = inlineSegments(textTargetNode, true, directPageNode && !textEl ? TOC_EXCLUDE : null);
         
         if (!itemText) {
           const directText = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim();
           const pageMatch = directText.match(/\s+(\d+|[ivxlcdm]+)$/i);
           if (pageMatch) {
             itemText = directText.slice(0, pageMatch.index).trim();
-            pageVal = pageMatch[1];
+            if (!pageVal) pageVal = pageMatch[1];
           } else {
-            itemText = directText || getCleanText(li);
+            itemText = directText || getCleanText(li, TOC_EXCLUDE);
           }
         }
 
@@ -1509,10 +1746,11 @@ export function parseDtbook(xmlStr) {
             }
           }
         }
+        const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
         const item = { text: itemText };
         if (pageVal) item.page = pageVal;
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (segs.length && hasEmphOrMath) item.segments = segs;
         items.push(item);
         lastTopItem = item;
 
@@ -1525,8 +1763,8 @@ export function parseDtbook(xmlStr) {
 
       if (liClass.includes('bai-exercise')) {
         detectedKind = 'exercise';
-        const segs = inlineSegments(li);
-        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li);
+        const segs = inlineSegments(li, true);
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
         if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
@@ -1542,8 +1780,8 @@ export function parseDtbook(xmlStr) {
 
       if (liClass.includes('bai-index')) {
         detectedKind = 'index';
-        const segs = inlineSegments(li);
-        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li);
+        const segs = inlineSegments(li, true);
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
         if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
@@ -1557,17 +1795,38 @@ export function parseDtbook(xmlStr) {
         continue;
       }
 
-      const segs = inlineSegments(li);
+      const segs = inlineSegments(li, true);
       let directText = segs.map(s => s.text || (s.latex ? s.latex : (s.mathml ? s.mathml.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : ''))).join('').replace(/\s+/g, ' ').trim();
       if (!directText) directText = getCleanText(li);
+
+      let itemMarker = null;
+      if (isOl) {
+        const match = directText.match(NUMBER_PREFIX_RE);
+        if (match) {
+          itemMarker = match[0].trim();
+          directText = directText.slice(match[0].length).trim();
+          if (segs.length && segs[0].text) {
+            segs[0].text = segs[0].text.replace(NUMBER_PREFIX_RE, '');
+          }
+        } else {
+          itemMarker = `${counter}.`;
+        }
+        counter++;
+      } else if (detectedKind !== 'plain' && !isToc) {
+        const match = directText.match(BULLET_PREFIX_RE);
+        if (match) {
+          itemMarker = '•';
+          directText = directText.slice(match[0].length).trim();
+          if (segs.length && segs[0].text) {
+            segs[0].text = segs[0].text.replace(BULLET_PREFIX_RE, '');
+          }
+        }
+      }
 
       const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
       if (directText) {
         const item = (hasEmphOrMath && segs.length > 0 && childLists.length === 0) ? { segments: segs, text: directText } : { text: directText };
-        if (isOl) {
-          item.marker = `${counter}.`;
-          counter++;
-        }
+        if (itemMarker) item.marker = itemMarker;
         if (effLevel > 0) item.level = effLevel;
         items.push(item);
         lastTopItem = item;
@@ -1581,15 +1840,230 @@ export function parseDtbook(xmlStr) {
 
     if (items.length && targetBlocks) {
       const listBlock = { type: 'list', items };
-      if (detectedKind) listBlock.kind = detectedKind;
+      if (detectedKind) {
+        listBlock.kind = detectedKind;
+        listBlock.style = detectedKind;
+      }
+      if (isOl) listBlock.ordered = true;
       targetBlocks.push(listBlock);
     }
     return items;
   }
 
+  function parseDefinitionList(dlEl, targetBlocks = blocks) {
+    const items = [];
+    let curTerm = null;
+    let curTermSegs = null;
+    for (let c = dlEl.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType !== 1) continue;
+      const cTag = (c.localName || c.tagName || '').toLowerCase();
+      if (cTag === 'brl') continue;
+      if (cTag === 'dt' || cTag === 'dfn') {
+        if (curTerm) {
+          const item = {
+            term: curTerm,
+            def: '',
+            text: curTerm
+          };
+          if (curTermSegs?.length) {
+            item.termSegments = curTermSegs;
+            item.segments = curTermSegs;
+          }
+          items.push(item);
+        }
+        curTerm = getCleanText(c);
+        curTermSegs = inlineSegments(c);
+      } else if (cTag === 'dd') {
+        const defText = getCleanText(c);
+        const defSegs = inlineSegments(c);
+        if (curTerm || defText) {
+          const item = {
+            term: curTerm || '',
+            def: defText || '',
+            text: curTerm ? `${curTerm} — ${defText}` : defText
+          };
+          if (curTermSegs?.length) item.termSegments = curTermSegs;
+          if (defSegs?.length) item.defSegments = defSegs;
+          if (curTermSegs?.length || defSegs?.length) {
+            item.segments = [...(curTermSegs || [{ type: 'text', text: curTerm || '' }]), { type: 'text', text: ' — ' }, ...(defSegs || [{ type: 'text', text: defText || '' }])];
+          }
+          items.push(item);
+          curTerm = null;
+          curTermSegs = null;
+        }
+      }
+    }
+    if (curTerm) {
+      const item = {
+        term: curTerm,
+        def: '',
+        text: curTerm
+      };
+      if (curTermSegs?.length) {
+        item.termSegments = curTermSegs;
+        item.segments = curTermSegs;
+      }
+      items.push(item);
+    }
+    if (items.length && targetBlocks) {
+      targetBlocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items });
+    }
+  }
+
+  function parsePoem(poemEl, targetBlocks = blocks) {
+    let pendingLinenum = '';
+    for (let c = poemEl.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType !== 1) continue;
+      const cTag = (c.localName || c.tagName || '').toLowerCase();
+      const cCls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
+
+      if (cTag === 'title' || cTag === 'hd' || /^h[1-6]$/.test(cTag)) {
+        const t = getCleanText(c);
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : (/^h[1-6]$/.test(cTag) ? parseInt(cTag.slice(1), 10) : 2);
+        const segs = inlineSegments(c);
+        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        if (t && targetBlocks) targetBlocks.push(hasEmph && segs.length ? { type: 'heading', level: lvl, text: t, segments: segs } : { type: 'heading', level: lvl, text: t });
+      } else if (cTag === 'pagenum') {
+        const pageVal = (c.textContent || '').trim();
+        if (pageVal && targetBlocks) targetBlocks.push({ type: 'pagenum', text: pageVal });
+      } else if (cTag === 'byline' || cTag === 'author' || cTag === 'cite' || cTag === 'attrib') {
+        const segs = inlineSegments(c);
+        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (t && targetBlocks) {
+          targetBlocks.push(hasEmph && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
+        }
+      } else if (cTag === 'linegroup' || cTag === 'stanza' || (cTag === 'div' && (cCls.includes('stanza') || cCls.includes('linegroup') || cCls.includes('line-group') || cCls.includes('verse') || cCls.includes('poem')))) {
+        let stanzaLinenum = '';
+        let hasLinesInGroup = false;
+        for (let ln = c.firstChild; ln; ln = ln.nextSibling) {
+          if (ln.nodeType !== 1) continue;
+          const lnTag = (ln.localName || ln.tagName || '').toLowerCase();
+          const lnCls = (ln.getAttribute ? (ln.getAttribute('class') || '') : '').toLowerCase();
+          if (lnTag === 'pagenum') {
+            const pageVal = (ln.textContent || '').trim();
+            if (pageVal && targetBlocks) targetBlocks.push({ type: 'pagenum', text: pageVal });
+          } else if (lnTag === 'linenum' || lnCls.includes('linenum')) {
+            stanzaLinenum = (ln.textContent || '').trim();
+          } else if (lnTag === 'title' || lnTag === 'hd' || /^h[1-6]$/.test(lnTag)) {
+            const t = getCleanText(ln);
+            if (t && targetBlocks) targetBlocks.push({ type: 'heading', level: 3, text: t });
+          } else if (lnTag === 'line' || lnTag === 'ln' || lnTag === 'p') {
+            if (lnCls.includes('bai-stanza-break') || lnCls.includes('stanza-break')) {
+              if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
+            } else {
+              const lvlAttr = ln.getAttribute ? ln.getAttribute('level') : null;
+              const lnLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+              let segs = inlineSegments(ln);
+              let t = getCleanText(ln);
+              let innerLinenum = '';
+              if (ln.getElementsByTagName) {
+                const numNode = ln.getElementsByTagName('linenum')[0] || (ln.getElementsByClassName ? ln.getElementsByClassName('linenum')[0] : null);
+                if (numNode) innerLinenum = (numNode.textContent || '').trim();
+              }
+              if (innerLinenum || stanzaLinenum) {
+                const numPrefix = (innerLinenum || stanzaLinenum) + ' ';
+                t = numPrefix + t;
+                if (segs.length > 0) {
+                  segs = [{ type: 'text', text: numPrefix }, ...segs];
+                }
+                stanzaLinenum = '';
+              }
+              if (t && targetBlocks) {
+                const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+                const blk = hasEmph && segs.length
+                  ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
+                  : { type: 'play', subtype: 'verse', style: 'verse', text: t };
+                if (lnLvl > 0) blk.level = lnLvl;
+                targetBlocks.push(blk);
+                hasLinesInGroup = true;
+              }
+            }
+          } else if (lnTag === 'byline' || lnTag === 'author' || lnTag === 'cite' || lnTag === 'attrib' || lnCls.includes('attribution') || lnCls.includes('byline')) {
+            const segs = inlineSegments(ln);
+            const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+            const t = getCleanText(ln);
+            if (t && targetBlocks) {
+              targetBlocks.push(hasEmph && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
+            }
+          } else if (lnTag === 'note' || lnTag === 'prodnote') {
+            const t = getCleanText(ln);
+            if (t && targetBlocks) targetBlocks.push({ type: 'note', text: t });
+          }
+        }
+        let nextSibling = c.nextSibling;
+        let hasMoreStanzas = false;
+        while (nextSibling) {
+          if (nextSibling.nodeType === 1) {
+            const nsTag = (nextSibling.localName || nextSibling.tagName || '').toLowerCase();
+            const nsCls = (nextSibling.getAttribute ? (nextSibling.getAttribute('class') || '') : '').toLowerCase();
+            if (nsTag === 'linegroup' || nsTag === 'stanza' || (nsTag === 'div' && (nsCls.includes('stanza') || nsCls.includes('linegroup') || nsCls.includes('verse')))) {
+              hasMoreStanzas = true;
+              break;
+            }
+          }
+          nextSibling = nextSibling.nextSibling;
+        }
+        if (hasLinesInGroup && hasMoreStanzas && targetBlocks) {
+          targetBlocks.push({ type: 'indicator', kind: 'line' });
+        }
+      } else if (cTag === 'line' || cTag === 'ln') {
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lnLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        let segs = inlineSegments(c);
+        let t = getCleanText(c);
+        let innerLinenum = '';
+        if (c.getElementsByTagName) {
+          const numNode = c.getElementsByTagName('linenum')[0] || (c.getElementsByClassName ? c.getElementsByClassName('linenum')[0] : null);
+          if (numNode) innerLinenum = (numNode.textContent || '').trim();
+        }
+        if (innerLinenum || pendingLinenum) {
+          const numPrefix = (innerLinenum || pendingLinenum) + ' ';
+          t = numPrefix + t;
+          if (segs.length > 0) {
+            segs = [{ type: 'text', text: numPrefix }, ...segs];
+          }
+          pendingLinenum = '';
+        }
+        if (t && targetBlocks) {
+          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+          const blk = hasEmph && segs.length
+            ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
+            : { type: 'play', subtype: 'verse', style: 'verse', text: t };
+          if (lnLvl > 0) blk.level = lnLvl;
+          targetBlocks.push(blk);
+        }
+      } else if (cTag === 'linenum' || cCls.includes('linenum')) {
+        pendingLinenum = (c.textContent || '').trim();
+      } else if (cTag === 'p') {
+        if (cCls.includes('bai-stanza-break') || cCls.includes('stanza-break')) {
+          if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
+        } else {
+          const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+          const pLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+          const segs = inlineSegments(c);
+          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+          const t = getCleanText(c);
+          if (t && targetBlocks) {
+            const blk = hasEmph && segs.length
+              ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
+              : { type: 'play', subtype: 'verse', style: 'verse', text: t };
+            if (pLvl > 0) blk.level = pLvl;
+            targetBlocks.push(blk);
+          }
+        }
+      } else if (cTag === 'sidebar') {
+        parseSidebar(c, targetBlocks);
+      }
+    }
+  }
+
   function parseSidebar(sidebarEl, targetBlocks = blocks) {
     let boxTitle = null;
     const innerBlocks = [];
+    const id = sidebarEl.getAttribute ? sidebarEl.getAttribute('id') : null;
+    const render = sidebarEl.getAttribute ? sidebarEl.getAttribute('render') : null;
 
     for (let c = sidebarEl.firstChild; c; c = c.nextSibling) {
       if (c.nodeType !== 1) continue;
@@ -1599,27 +2073,162 @@ export function parseDtbook(xmlStr) {
         if (!boxTitle) {
           boxTitle = hdText;
         }
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : (/^h[1-6]$/.test(cTag) ? parseInt(cTag.slice(1), 10) : 2);
         const segs = inlineSegments(c);
         const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        innerBlocks.push(hasEmph && segs.length ? { type: 'heading', level: 2, text: hdText, segments: segs } : { type: 'heading', level: 2, text: hdText });
-      } else if (cTag === 'p' || cTag === 'line') {
+        innerBlocks.push(hasEmph && segs.length ? { type: 'heading', level: lvl, text: hdText, segments: segs } : { type: 'heading', level: lvl, text: hdText });
+      } else if (cTag === 'p') {
+        const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
+        const pLevel = getElementLevel(c);
         const segs = inlineSegments(c);
-        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker')) {
+          innerBlocks.push({ type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem')) {
+          innerBlocks.push({ type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage')) {
+          innerBlocks.push({ type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+          innerBlocks.push({ type: 'indicator', kind: 'line' });
+        } else if (cls.includes('bana-break-asterisks')) {
+          innerBlocks.push({ type: 'break', kind: 'asterisks' });
+        } else if (cls.includes('bana-break-dot2s')) {
+          innerBlocks.push({ type: 'break', kind: 'dot2s' });
+        } else if (t) {
+          innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t });
+        }
+      } else if (cTag === 'speaker') {
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        const segs = inlineSegments(c);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
         const t = getCleanText(c);
         if (t) {
-          innerBlocks.push(hasEmph && segs.length ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t });
+          const blk = (hasEmphOrMath && segs.length)
+            ? { type: 'play', subtype: 'prose', style: 'play-speaker', text: t, segments: segs }
+            : { type: 'play', subtype: 'prose', style: 'play-speaker', text: t };
+          if (lvl > 0) blk.level = lvl;
+          innerBlocks.push(blk);
         }
-      } else if (cTag === 'list') {
+      } else if (cTag === 'stage') {
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        const segs = inlineSegments(c);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (t) {
+          const blk = (hasEmphOrMath && segs.length)
+            ? { type: 'stage', style: 'play-stage', text: t, segments: segs }
+            : { type: 'stage', style: 'play-stage', text: t };
+          if (lvl > 0) blk.level = lvl;
+          innerBlocks.push(blk);
+        }
+      } else if (cTag === 'poem' || cTag === 'linegroup') {
+        parsePoem(c, innerBlocks);
+      } else if (cTag === 'line' || cTag === 'ln') {
+        const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        const segs = inlineSegments(c);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (t) {
+          const blk = (hasEmphOrMath && segs.length)
+            ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
+            : { type: 'play', subtype: 'verse', style: 'verse', text: t };
+          if (lvl > 0) blk.level = lvl;
+          innerBlocks.push(blk);
+        }
+      } else if (cTag === 'list' || cTag === 'ul' || cTag === 'ol') {
         parseSingleList(c, 0, innerBlocks);
+      } else if (cTag === 'dl') {
+        parseDefinitionList(c, innerBlocks);
       } else if (cTag === 'table') {
         parseTable(c, innerBlocks);
-      } else if (cTag === 'note' || cTag === 'blockquote') {
+      } else if (cTag === 'caption') {
         const t = getCleanText(c);
-        if (t) innerBlocks.push({ type: 'note', text: t });
+        if (t) innerBlocks.push({ type: 'caption', text: t });
+      } else if (cTag === 'note' || cTag === 'prodnote' || cTag === 'annotation') {
+        const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
+        const t = getCleanText(c);
+        if (t) {
+          if (cls.includes('footnote')) innerBlocks.push({ type: 'footnote', text: t });
+          else if (cls.includes('tabletn')) innerBlocks.push({ type: 'note', kind: 'tabletn', text: t });
+          else innerBlocks.push({ type: 'note', text: t });
+        }
+      } else if (cTag === 'byline' || cTag === 'author' || cTag === 'cite' || cTag === 'attrib') {
+        const segs = inlineSegments(c);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(c);
+        if (t) {
+          innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
+        }
+      } else if (cTag === 'sidebar' || (cTag === 'div' && (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase().includes('sidebar'))) {
+        parseSidebar(c, innerBlocks);
+      } else if (cTag === 'math' || cTag.endsWith(':math')) {
+        const mathml = mathOuterXml(c);
+        const alttext = c.getAttribute ? c.getAttribute('alttext') : null;
+        let latex = alttext || null;
+        const ann = c.getElementsByTagName ? [...c.getElementsByTagName('annotation'), ...c.getElementsByTagName('m:annotation')] : [];
+        const texAnn = ann.find(a => (a.getAttribute ? (a.getAttribute('encoding') || '') : '').includes('tex'));
+        if (texAnn && texAnn.textContent) latex = texAnn.textContent.trim();
+        if (!latex && mathml) latex = mathmlToLatex(mathml);
+        const mathBlock = { type: 'math', mathml };
+        if (latex) mathBlock.latex = latex;
+        innerBlocks.push(mathBlock);
+      } else if (cTag === 'imggroup') {
+        const img = c.getElementsByTagName ? (c.getElementsByTagName('img')[0] || c.getElementsByTagName('image')[0]) : null;
+        const alt = (img?.getAttribute ? img.getAttribute('alt') : '') || (c.getAttribute ? c.getAttribute('alt') : '') || '';
+        const caption = c.getElementsByTagName ? (c.getElementsByTagName('caption')[0] || c.getElementsByTagName('prodnote')[0]) : null;
+        const capText = caption ? getCleanText(caption) : '';
+        const noteText = alt ? ('Image: ' + alt + (capText ? ' - ' + capText : '')) : (capText ? 'Image: ' + capText : 'Image');
+        innerBlocks.push({ type: 'note', kind: 'image', text: noteText });
+        if (img) {
+          const src = (img.getAttribute ? img.getAttribute('src') : '') || '';
+          innerBlocks.push({ type: 'graphic', src, alt });
+        }
+      } else if (cTag === 'img' || cTag === 'image' || cTag === 'graphic') {
+        const src = (c.getAttribute ? c.getAttribute('src') : '') || '';
+        const alt = (c.getAttribute ? c.getAttribute('alt') : '') || '';
+        innerBlocks.push({ type: 'graphic', src, alt });
+      } else if (cTag === 'blockquote') {
+        const hasElements = Array.from(c.childNodes || []).some((childNode) => childNode.nodeType === 1);
+        if (hasElements) {
+          for (let bcn = c.firstChild; bcn; bcn = bcn.nextSibling) {
+            if (bcn.nodeType !== 1) continue;
+            const bcnTag = (bcn.localName || bcn.tagName || '').toLowerCase();
+            const bcnText = getCleanText(bcn);
+            if (!bcnText) continue;
+            const bcnSegs = inlineSegments(bcn);
+            const bcnHasEmph = bcnSegs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+            if (bcnTag === 'byline' || bcnTag === 'author' || bcnTag === 'cite' || bcnTag === 'attrib') {
+              innerBlocks.push(bcnHasEmph && bcnSegs.length ? { type: 'attribution', text: bcnText, segments: bcnSegs } : { type: 'attribution', text: bcnText });
+            } else {
+              innerBlocks.push(bcnHasEmph && bcnSegs.length ? { type: 'para', style: 'quote', text: bcnText, segments: bcnSegs } : { type: 'para', style: 'quote', text: bcnText });
+            }
+          }
+        } else {
+          const segs = inlineSegments(c);
+          const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+          const t = getCleanText(c);
+          if (t) innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t });
+        }
+      } else if (cTag === 'pagenum' || cTag === 'print-page') {
+        const pVal = getCleanText(c) || (c.getAttribute ? c.getAttribute('page') : '') || '';
+        if (pVal) innerBlocks.push({ type: 'pagenum', text: pVal });
+      } else if (cTag === 'hr' || cTag === 'break') {
+        const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
+        if (cls.includes('stanza')) innerBlocks.push({ type: 'indicator', kind: 'line' });
+        else if (cls.includes('asterisks')) innerBlocks.push({ type: 'break', kind: 'asterisks' });
+        else if (cls.includes('dot2s')) innerBlocks.push({ type: 'break', kind: 'dot2s' });
+        else innerBlocks.push({ type: 'break', kind: 'line' });
       }
     }
 
     const box = { type: 'box' };
+    if (id) box.id = id;
+    if (render) box.render = render;
     if (boxTitle) box.title = boxTitle;
     if (innerBlocks.length) box.blocks = innerBlocks;
     else {
@@ -1717,6 +2326,7 @@ export function parseDtbook(xmlStr) {
     for (let child = node.firstChild; child; child = child.nextSibling) {
       if (child.nodeType !== 1) continue;
       const tag = (child.localName || child.tagName || '').toLowerCase();
+      const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
       if (tag === 'doctitle' || tag === 'docauthor' || tag === 'head') continue;
       
       if (/^h[1-6]$/.test(tag) || tag === 'hd' || tag === 'bridgehead') {
@@ -1728,9 +2338,6 @@ export function parseDtbook(xmlStr) {
           if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'heading', level: lvl, segments: segs, text: t });
           else blocks.push({ type: 'heading', level: lvl, text: t });
         }
-      } else if (tag === 'byline') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'attribution', text: t });
       } else if (tag === 'caption' || tag === 'figcaption') {
         const t = getCleanText(child);
         if (t) blocks.push({ type: 'caption', text: t });
@@ -1741,6 +2348,63 @@ export function parseDtbook(xmlStr) {
         parseSidebar(child);
       } else if (tag === 'table') {
         parseTable(child);
+      } else if (tag === 'dl') {
+        parseDefinitionList(child);
+      } else if (tag === 'poem' || tag === 'linegroup' || tag === 'stanza' || (tag === 'div' && (cls.includes('poem') || cls.includes('verse') || cls.includes('stanza')))) {
+        parsePoem(child);
+      } else if (tag === 'speaker') {
+        const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(child);
+        if (t) {
+          const blk = (hasEmphOrMath && segs.length > 0)
+            ? { type: 'play', subtype: 'prose', style: 'play-speaker', text: t, segments: segs }
+            : { type: 'play', subtype: 'prose', style: 'play-speaker', text: t };
+          if (lvl > 0) blk.level = lvl;
+          blocks.push(blk);
+        }
+      } else if (tag === 'stage') {
+        const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(child);
+        if (t) {
+          const blk = (hasEmphOrMath && segs.length > 0)
+            ? { type: 'stage', style: 'play-stage', text: t, segments: segs }
+            : { type: 'stage', style: 'play-stage', text: t };
+          if (lvl > 0) blk.level = lvl;
+          blocks.push(blk);
+        }
+      } else if (tag === 'blockquote') {
+        const hasElements = Array.from(child.childNodes || []).some((c) => c.nodeType === 1);
+        if (hasElements) {
+          walk(child);
+        } else {
+          const segs = inlineSegments(child);
+          const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+          const t = getCleanText(child);
+          if (t) {
+            if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', style: 'quote', segments: segs, text: t });
+            else blocks.push({ type: 'para', style: 'quote', text: t });
+          }
+        }
+      } else if (tag === 'dt' || tag === 'dfn') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'para', style: 'dt', text: t });
+      } else if (tag === 'dd') {
+        const t = getCleanText(child);
+        if (t) blocks.push({ type: 'para', style: 'dd', text: t });
+      } else if (tag === 'byline' || tag === 'author' || tag === 'cite' || tag === 'attrib') {
+        const segs = inlineSegments(child);
+        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const t = getCleanText(child);
+        if (t) {
+          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'attribution', text: t, segments: segs });
+          else blocks.push({ type: 'attribution', text: t });
+        }
       } else if (tag === 'math' || tag.endsWith(':math')) {
         const mathml = mathOuterXml(child);
         const alttext = child.getAttribute ? child.getAttribute('alttext') : null;
@@ -1748,16 +2412,22 @@ export function parseDtbook(xmlStr) {
         const ann = child.getElementsByTagName ? [...child.getElementsByTagName('annotation'), ...child.getElementsByTagName('m:annotation')] : [];
         const texAnn = ann.find(a => (a.getAttribute ? (a.getAttribute('encoding') || '') : '').includes('tex'));
         if (texAnn && texAnn.textContent) latex = texAnn.textContent.trim();
+        if (!latex && mathml) latex = mathmlToLatex(mathml);
         const mathBlock = { type: 'math', mathml };
         if (latex) mathBlock.latex = latex;
         blocks.push(mathBlock);
       } else if (tag === 'line' || tag === 'ln') {
+        const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
+        const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
         const segs = inlineSegments(child);
         const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
         const t = getCleanText(child);
         if (t) {
-          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', segments: segs, text: t });
-          else blocks.push({ type: 'para', text: t });
+          const blk = (hasEmphOrMath && segs.length > 0)
+            ? { type: 'play', subtype: 'verse', style: 'verse', segments: segs, text: t }
+            : { type: 'play', subtype: 'verse', style: 'verse', text: t };
+          if (lvl > 0) blk.level = lvl;
+          blocks.push(blk);
         }
       } else if (tag === 'imggroup') {
         const img = child.getElementsByTagName ? (child.getElementsByTagName('img')[0] || child.getElementsByTagName('image')[0]) : null;
@@ -1776,8 +2446,8 @@ export function parseDtbook(xmlStr) {
         blocks.push({ type: 'graphic', src, alt });
       } else if (tag === 'p') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
-        const levelAttr = child.getAttribute ? child.getAttribute('level') : null;
-        const pLevel = levelAttr != null ? parseInt(levelAttr, 10) || 0 : 0;
+        const pLevel = getElementLevel(child);
+        const isInsideQuote = child.parentNode && (child.parentNode.localName || child.parentNode.tagName || '').toLowerCase() === 'blockquote';
         
         const imgs = child.getElementsByTagName ? [...child.getElementsByTagName('img'), ...child.getElementsByTagName('image')] : [];
         for (const im of imgs) {
@@ -1786,29 +2456,38 @@ export function parseDtbook(xmlStr) {
           blocks.push({ type: 'graphic', src, alt });
         }
 
-        let directPText = '';
-        for (let cn = child.firstChild; cn; cn = cn.nextSibling) {
-          if (cn.nodeType === 3) directPText += cn.nodeValue;
-          else if (cn.nodeType === 1) {
-            const cnTag = (cn.localName || cn.tagName || '').toLowerCase();
-            if (cnTag === 'img' || cnTag === 'image') continue;
-            directPText += cn.textContent;
-          }
-        }
-        directPText = directPText.replace(/\s+/g, ' ').trim();
+        const directPText = getCleanText(child);
 
         const segs = inlineSegments(child);
         const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        if (cls.includes('bai-play')) {
-          blocks.push({ type: 'play', subtype: 'prose', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-verse')) {
-          blocks.push({ type: 'play', subtype: 'verse', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-stage')) {
-          blocks.push({ type: 'stage', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        const hasSpeakerChild = (child.getElementsByTagName ? child.getElementsByTagName('speaker').length > 0 : false) || (child.getElementsByClassName ? child.getElementsByClassName('speaker').length > 0 : false);
+        const hasStageChild = (child.getElementsByTagName ? child.getElementsByTagName('stage').length > 0 : false) || (child.getElementsByClassName ? child.getElementsByClassName('stage').length > 0 : false);
+        if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker') || hasSpeakerChild) {
+          blocks.push({ type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem') || cls.includes('line')) {
+          blocks.push({ type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage') || hasStageChild) {
+          blocks.push({ type: 'stage', style: 'play-stage', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('byline') || cls.includes('attribution') || cls.includes('author')) {
+          blocks.push({ type: 'attribution', text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('quote') || cls.includes('blockquote') || cls.includes('extract') || isInsideQuote) {
+          blocks.push({ type: 'para', style: 'quote', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
+        } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+          blocks.push({ type: 'indicator', kind: 'line' });
+        } else if (cls.includes('bana-break-asterisks') || cls.includes('doc-break') || cls === 'break' || directPText === '⁂ ⁂ ⁂' || directPText === '* * *' || directPText === '∗ ∗ ∗') {
+          blocks.push({ type: 'break', kind: 'asterisks' });
+        } else if (cls.includes('bana-break-dot2s')) {
+          blocks.push({ type: 'break', kind: 'dot2s' });
         } else if (directPText) {
           if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', segments: segs, text: directPText });
           else blocks.push({ type: 'para', text: directPText });
         }
+      } else if (tag === 'hr' || tag === 'break') {
+        const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+        if (cls.includes('stanza')) blocks.push({ type: 'indicator', kind: 'line' });
+        else if (cls.includes('asterisks')) blocks.push({ type: 'break', kind: 'asterisks' });
+        else if (cls.includes('dot2s')) blocks.push({ type: 'break', kind: 'dot2s' });
+        else blocks.push({ type: 'break', kind: 'line' });
       } else if (tag === 'list') {
         parseSingleList(child);
       } else if (tag === 'note') {
@@ -1821,7 +2500,7 @@ export function parseDtbook(xmlStr) {
             blocks.push({ type: 'note', text: t });
           }
         }
-      } else if (tag === 'blockquote' || tag === 'annotation' || tag === 'prodnote') {
+      } else if (tag === 'annotation' || tag === 'prodnote') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
         const t = getCleanText(child);
         if (t) {

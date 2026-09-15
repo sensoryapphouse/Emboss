@@ -622,9 +622,11 @@ if (fs.existsSync(xmlPath)) {
     'math': ['math', 'matrix', 'formula'],
     'note': ['note'],
     'caption': ['caption'],
+    'attribution': ['caption', 'quote'],
     'footnote': ['footnote'],
     'play': ['dialogue', 'stage', 'poem'],
-    'stage': ['stage']
+    'stage': ['stage'],
+    'indicator': ['break']
   };
 
   let allCovered = true;
