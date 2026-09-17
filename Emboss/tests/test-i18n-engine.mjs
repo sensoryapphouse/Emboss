@@ -1,6 +1,6 @@
 // Emboss Global Localization & Multi-Language Test Suite
 // Covers:
-// Part 1: Node ESM Unit Tests (All 112 Liblouis languages, pinned ordering, key lookup, interpolation, fallback, metadata, schema integrity)
+// Part 1: Node ESM Unit Tests (every offered locale, pinned ordering, key lookup, interpolation, fallback, metadata, schema integrity)
 // Part 2: Headless Chrome Browser Integration (DOM translation, dynamic language dropdown, pinned options, dir=rtl, ARIA)
 
 import fs from 'node:fs';
@@ -29,9 +29,9 @@ function ok(name, cond, detail = '') {
 }
 
 // =========================================================================
-// Part 1: Core i18n Engine & All 112 Liblouis Locales Unit Tests
+// Part 1: Core i18n Engine & Offered Locales Unit Tests
 // =========================================================================
-console.log('\nPart 1: Core i18n Engine & All 112 Liblouis Locales Unit Tests');
+console.log('\nPart 1: Core i18n Engine & Offered Locales Unit Tests');
 
 // 1. Check en.json dictionary
 ok('en.json exists on disk', fs.existsSync(EN_PATH));
@@ -49,9 +49,11 @@ for (const ns of requiredNamespaces) {
   ok(`en.json contains namespace '${ns}'`, enDict && typeof enDict[ns] === 'object' && Object.keys(enDict[ns]).length > 0);
 }
 
-// 2. Check all 112 locales in SUPPORTED_LOCALES
+// 2. The offered languages are exactly the translated locale files on disk (D3, Paul 16 Sep:
+//    English copies are not offered; the count is whatever has a real translation — 78 today).
 const supportedLocales = getSupportedLocales();
-ok('SUPPORTED_LOCALES contains all 112 Liblouis languages', supportedLocales.length === 112, `Found ${supportedLocales.length}`);
+const localeFiles = fs.readdirSync(LOCALES_DIR).filter((f) => f.endsWith('.json'));
+ok('SUPPORTED_LOCALES matches the locale files on disk', supportedLocales.length === localeFiles.length && supportedLocales.length >= 8, `Found ${supportedLocales.length}, files ${localeFiles.length}`);
 
 // Verify all 112 locale JSON files exist on disk and parse as valid JSON with required namespaces
 let validLocaleFilesCount = 0;
@@ -66,7 +68,7 @@ for (const loc of supportedLocales) {
     } catch (_) {}
   }
 }
-ok('All 112 locale JSON files exist and have valid structure', validLocaleFilesCount === 112, `Valid files: ${validLocaleFilesCount}`);
+ok('Every offered locale has a valid JSON file', validLocaleFilesCount === supportedLocales.length, `Valid files: ${validLocaleFilesCount} of ${supportedLocales.length}`);
 
 // 3. Test getOrderedLocales() Pinned Ordering
 // Requirement: English ('en'), current locale (if not en, es, fr), Spanish ('es'), French ('fr') at the top.
@@ -194,7 +196,7 @@ try {
   });
 
   ok('set-uiLanguage dropdown exists', langDropdownCheck.exists);
-  ok('set-uiLanguage dropdown contains 112 options', langDropdownCheck.count === 112, langDropdownCheck.count);
+  ok('set-uiLanguage dropdown lists every offered locale', langDropdownCheck.count === supportedLocales.length, `${langDropdownCheck.count} vs ${supportedLocales.length}`);
   ok('set-uiLanguage top option 0 is English (en)', langDropdownCheck.topOptions[0]?.value === 'en', langDropdownCheck.topOptions[0]);
   ok('set-uiLanguage top option 1 is Spanish (es)', langDropdownCheck.topOptions[1]?.value === 'es', langDropdownCheck.topOptions[1]);
   ok('set-uiLanguage top option 2 is French (fr)', langDropdownCheck.topOptions[2]?.value === 'fr', langDropdownCheck.topOptions[2]);
