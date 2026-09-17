@@ -1,0 +1,53 @@
+{
+  "id": "example-6-1",
+  "title": "Photograph with Caption",
+  "pdfPages": [
+    146
+  ],
+  "textLines": [
+    4411,
+    4419
+  ],
+  "illustrates": {
+    "rule": "6.2.2",
+    "quote": "Use 7-5 margins for print captions and transcriber-generated descriptions. a. Do not insert blank lines before or after captions or descriptions unless required by other formats, e.g., headings, lists, etc. b. If the original print copy does not identify an illustration, insert a label in a transcriber’s note (e.g., photograph, figure, etc.) followed by the text of the caption on the same line. No punctuation is needed between the identifier and the text because the transcriber's note indicators provide sufficient separation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "photo",
+          "description": "a beardless Abraham Lincoln",
+          "labels": []
+        },
+        "description": null
+      },
+      {
+        "kind": "caption",
+        "text": "*The Earliest Known Photograph of Abraham Lincoln* This is a rare view of a beardless Abraham Lincoln. The photograph was taken around 1846 or 1847 by Nicholas Shepherd. Mr. Lincoln would have been 46 or 47 years old in this Daguerreotype.",
+        "features": "The first phrase 'The Earliest Known Photograph of Abraham Lincoln' is italicized and appears on its own line in print."
+      }
+    ],
+    "notes": "The caption starts with a title-like first phrase in italics on its own line in print, but is combined into a single braille paragraph with no punctuation separating it from the rest (per 6.2.2b, no punctuation is needed between the label and the caption). The braille excerpt truncates the caption with an ellipsis '444' after 'beardless Abraham Lincoln.' — the rest of the caption print ('The photograph was taken...') has no braille counterpart in this excerpt. print.blocks[0].figure.description is documentation only (what the photo depicts): that exact phrase already sits, verbatim, inside the caption sentence itself, so it is never built as a separate line.",
+    "surroundingText": null,
+    "printFeatures": "A photograph accompanied by a caption below it."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,photograph@.> .7,! ,e>lie/",
+      "    ,\"kn ,photograph ( ,abraham",
+      "    ,l9coln.' ,? is a r>e view ( a",
+      "    be>d.s ,abraham ,l9coln4 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 is indented to cell 7 (6 spaces) with a cell-5 runover (4 spaces) per 6.2.2. The transcriber's note '[photograph]' precedes the caption in the same paragraph (6.2.2b — print does not itself identify the photo, so a label is inserted). The italicized title is wrapped in UEB italic passage indicators '.7' / '.''. The caption is truncated with '444' (the book's own excerpt marker, not print content)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille margins: A indents every line 8 cells too far (14/12 leading spaces) — a stripping defect confirmed against source-6.txt (the raw .txt's own fixed 8-space line-number margin was left in by A for this file); B's 6/4 margins are correct (BANA 6.2.2's 7-5 caption margins, matching Emboss's own imageMargins first:6/runover:4). Caption emphasis: neither run recorded a features/markup field for the italic phrase; forward-translating the caption text with the first 49 characters ('The Earliest Known Photograph of Abraham Lincoln') marked italic reproduces the agreed braille exactly, confirming the correction added here (*italic* cell-markup plus a features note). figure.description: B's fuller phrasing ('a beardless Abraham Lincoln') kept as documentation; not consumed by buildModel6 since it duplicates caption text already present. See differences.md and standards-findings.md F-225 (the transcriber's-note label word Emboss emits is hard-coded to 'Illustration', never the print-appropriate word BANA 6.2.2b calls for — here 'photograph' per the agreed braille's own '[Photograph]' label): this file is expected to mismatch on that one word."
+}

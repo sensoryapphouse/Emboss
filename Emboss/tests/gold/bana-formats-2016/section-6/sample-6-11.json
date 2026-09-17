@@ -1,0 +1,122 @@
+{
+  "id": "sample-6-11",
+  "title": "Simple Shared Date Timeline",
+  "pdfPages": [
+    173
+  ],
+  "textLines": [
+    5077,
+    5099
+  ],
+  "illustrates": {
+    "rule": "6.10.5",
+    "quote": "Use list format (1-3) for timelines that have a shared date and individual events."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "MAYA ANGELOU"
+      },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "A timeline stretching across the bottom of pages 476 and 477 of the source book. A central horizontal axis carries years; above the axis ('Her Life') are personal biographical events, below it ('Her Times') are historical events.",
+          "labels": [
+            "1925",
+            "1928",
+            "Is born in St. Louis on April 4",
+            "1929",
+            "Great Depression begins.",
+            "1931",
+            "Moves to Stamps, Arkansas",
+            "1933",
+            "FDR launches the New Deal.",
+            "1940",
+            "Moves to San Francisco",
+            "1941",
+            "United States enters World War II."
+          ]
+        },
+        "description": "The following timeline is across the bottom of pages 476-477. The timeline is in two sections. HER LIFE events are italicized. HER TIMES events are not emphasized."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "1925"
+          },
+          {
+            "text": "1928 *Is born in St. Louis on April 4*",
+            "features": "Italicized (Her Life event)."
+          },
+          {
+            "text": "1929 Great Depression begins.",
+            "features": "Not emphasized (Her Times event)."
+          },
+          {
+            "text": "1931 *Moves to Stamps, Arkansas*",
+            "features": "Italicized (Her Life event)."
+          },
+          {
+            "text": "1933 FDR launches the New Deal.",
+            "features": "Not emphasized (Her Times event)."
+          }
+        ]
+      },
+      {
+        "kind": "pagenum",
+        "text": "477"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "1940 *Moves to San Francisco*",
+            "features": "Italicized (Her Life event)."
+          },
+          {
+            "text": "1941 United States enters World War II.",
+            "features": "Not emphasized (Her Times event)."
+          }
+        ]
+      }
+    ],
+    "notes": "The heading 'Maya Angelou' does not appear in the cropped print image either run worked from, but is present in the agreed braille as an all-caps centred heading, confirmed by exact forward translation ('MAYA ANGELOU' reproduces ',,maya ,,angel\\' exactly, including the double-cap word signs) — kept as real content, not discarded, since the braille itself is the primary evidence here. The dashed line ending in a page number (source-6.txt line 5096, '------...#dgg') is BANA 1.11.3's ordinary mid-braille-page print-page-change indicator (dots-36 repeated, ending in the new page's numeral-sign number, 477) — modelled with the same {kind:'pagenum'} block already proven by the section-1/section-3 gold precedents (formatPageNum). Two Copyrighted-Image placeholder boxes named in both runs' figure.labels correspond to redacted photographs on the source page and, like example-6-2's placeholder, are not reflected anywhere in the agreed braille — not built. The book's own excerpt ends with an ellipsis (444) after the 1941 entry — more of the timeline continues in the source but is not transcribed here.",
+    "surroundingText": null,
+    "printFeatures": "Graphical timeline with dates on a central axis, with events branching off above and below the line, spanning a two-page spread."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "            ,,maya ,,angel\\",
+      "",
+      "      @.<,! foll[+ \"tl9e is acr ! bottom",
+      "    ( pages #dgf-#dgg4 ,! \"tl9e is 9 two",
+      "    sec;ns4 ,,h] ,,life ev5ts >e",
+      "    italiciz$4 ,,h] ,,\"ts ev5ts >e n",
+      "    emphasiz$4@.>",
+      "",
+      "#aibe",
+      "#aibh .7,is born 9 ,st4 ,l\\is on ,april",
+      "  #d.'",
+      "#aibi ,grt ,depres.n 2g9s4",
+      "#aica .7,moves to ,/amps1 ,>kansas.'",
+      "#aicc ,,fdr laun*es ! ,new ,d1l4",
+      "------------------------------------#dgg",
+      "#aidj .7,moves to ,san ,francisco.'",
+      "#aida ,unit$ ,/ates 5t]s ,_w ,w> ,,ii4",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Flat 1-3 list (cell 1 / cell 3 runover); the italic passage markers ('.7'/'.'') wrap each 'Her Life' event only. 444 marks the book's own excerpt ellipsis at the very end — not print content."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages: B's 173 (printed 6-29 + 144) is correct, matching the mapping used throughout this section, confirmed by the page footer sequence ('...6-28' immediately preceding this sample's own heading); A's 174 is one page off. figure.labels: B corrects A's off-by-one array shift for the 1940/1941 pair but its own array is corrupted at the tail ('Uni', 'ato' — truncated garbage, not usable); neither is used directly — the actual list content was rebuilt from the agreed braille itself (dates decoded from the braille number-letters, e.g. #aibh = 1-9-2-8 = 1928) and cross-checked by exact forward-translation of every date/event line, all of which match exactly. Both runs also dropped the book's own final '444' ellipsis line, restored here from source-6.txt line 5099. Neither run modelled the mid-excerpt print-page-change indicator ('------...477') as a page-number block, or split the timeline into two list blocks around it — done here using the same {kind:'pagenum'} construct already proven correct by the section-1/section-3 gold precedents."
+}

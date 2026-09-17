@@ -1,0 +1,38 @@
+{
+  "id": "BANA Example 15-2",
+  "title": "Example 15-2: Rhyme Scheme in Right Margin",
+  "pdfPages": [],
+  "textLines": [11938, 11948],
+  "illustrates": {
+    "rule": "15.7.2",
+    "quote": "Poetry with Line-Lettered Rhyme Scheme. a. Use poetry format. (See Formats, §13, Poetry and Song Lyrics.) b. Line-lettered text cannot appear on any line with a print or braille page number. c. Use line number format (see Formats, §15.5) when rhyme scheme letters are printed in either the left or right margin. d. Place each letter, preceded by the grade 1 indicator as required, at the right margin of the braille line on which the lettered line begins. e. Omit font attributes. f. Do not repeat the letter when a print line requires more than one braille line. g. End all lines in this format so that at least two blank cells are left before the rhyme scheme letters."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "verse", "text": "He is that fallen lance that lies as hurled,", "letter": "a" },
+      { "kind": "verse", "text": "That lies unlifted now, come dew, come rust,", "letter": "b", "features": "This one print line is long enough to wrap across two braille lines; per 15.7.2f the rhyme letter is NOT repeated on the wrapped continuation row." },
+      { "kind": "verse", "text": "But still lies pointed as it plowed the dust.", "letter": "b" },
+      { "kind": "verse", "text": "If we who sight along it round the world", "letter": "a" },
+      { "kind": "verse", "text": "See nothing worthy to have been its mark,", "letter": "c" }
+    ],
+    "notes": "No print image exists for this example either (prose running text introducing a poem, not a boxed worked sample) — both runs correctly left this empty and flagged 'print incomplete'. Per this reconciliation's brief the print text was rebuilt entirely from the already-verified braille: back-translated with Emboss's own translator (Emboss/engine/louis.mjs backTranslate, uebG2) then forward-translated again and checked character-for-character against the target. Every word and every rhyme letter matches exactly (15.7.2e explicitly says 'Omit font attributes', so unlike Example 15-1 no emphasis markup is needed here — plain o.translate() of each line already reproduces the given cells exactly, letter included). The five poem lines are Robert Frost's 'The Lesson for Today' (identification not load-bearing; not independently verified beyond the forward-translation match, and not reproduced further here per copyright practice).",
+    "surroundingText": [],
+    "printFeatures": "A single-stanza, single-indentation-level (\"level 0\") poem quoted for its own sake, each line's own rhyme letter shown at the right margin (15.7.2d) — this is the genuine <poem> 'poetry format' case (15.7.2a), unlike Example 15-1's plain-paragraph rhyme scheme."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",he is t fall5 l.e t lies z hurl$1     a",
+      ",t lies unlift$ n[1 come dew1 come    ;b",
+      "  ru/1",
+      ",b / lies po9t$ z x pl[$ ! du/4       ;b",
+      ",if we :o si<t al;g x r.d ! _w         a",
+      ",see no?+ wor?y to h be5 xs m>k1      ;c"
+    ],
+    "pageBreaks": [],
+    "notes": "CORRECTED during reconciliation: both A and B's own line text was byte-identical to the source's raw text extraction, but that raw extraction right-justifies the rhyme letter far past column 40 (lines up to 65 characters long) even though this file's own declared braille.width is 40 and every OTHER file in this section right-justifies its own right-margin marker at exactly column 40. Re-derived directly: with this poem's widest marker ';b' (2 cells) and BANA's own 2-blank-cell minimum (15.7.2g), the correct gap is exactly `40 - textLength - 2`, which the ORIGINAL extraction overshoots by roughly 26 extra blank cells on every numbered row — a text-extraction artifact (the source PDF's copyable text layer apparently right-justifies these particular rows against the page's own physical margin rather than the 40-cell braille measure), not a genuine part of the braille. Each line's own text and letter are unchanged; only the padding between them was reduced so every line is exactly 40 cells, matching this file's declared width and every other file in this section."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille: A and B agreed on every character but both preserved a raw text-extraction artifact (rhyme letters right-justified far past the declared 40-cell width); re-justified to column 40 during this reconciliation (see braille.notes). Print side rebuilt from scratch per the task brief (both runs left it empty) — back-translated then forward-verified word-for-word and letter-for-letter against the given braille. Modeled by buildModel15 as a genuine poem (kind:'verse'); expect F-182 (parsePoem folds the rhyme letter to the LEFT margin as literal text instead of the right margin the real book shows) to be this file's own mismatch cause."
+}

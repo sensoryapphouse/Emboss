@@ -1,0 +1,84 @@
+{
+  "id": "sample-6-16",
+  "title": "Slide Presentation",
+  "pdfPages": [
+    182
+  ],
+  "textLines": [
+    5302,
+    5338
+  ],
+  "illustrates": {
+    "rule": "6.13.1",
+    "quote": "Slide presentations created in Microsoft PowerPoint, Corel Presentations, Keynote, etc., are often requested in braille, especially in a school environment. a. Each slide number is treated as the print page number. b. As text on slides may be informally structured, it is necessary to determine a format for best readability. Most text is formatted using headings, indented/blocked paragraphs, and lists. c. Enclose any transcriber-generated descriptions in transcriber’s note indicators. d. If speaker’s notes are included, use 7-5 margins. Begin a note with the identifier “Note,” enclosed in transcriber’s note indicators. Continue the note on the same line."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Screen Reader", "features": "Slide title; the agreed braille also carries the slide number (3) as a print-page-type indicator at the far right of this same line (6.13.1a) — Emboss has no construct for that (F-171); not built." },
+      { "kind": "paragraph", "text": "Screen Reader", "features": "Flush sub-heading repeating the slide title, introducing the bulleted list below." },
+      { "kind": "list", "items": [
+        { "marker": "-", "text": "reads elements on a computer screen" },
+        { "marker": "-", "text": "is necessary to navigate and operate a computer" },
+        { "marker": "-", "text": "uses text to speech to read text on the screen" }
+      ] },
+      { "kind": "paragraph", "text": "TTS is a text reader" },
+      { "kind": "paragraph", "text": "Text Reader ≠ Screen Reader", "features": "The ≠ symbol is rendered in the agreed braille via a devised symbol plus a bracketed transcriber's note '[not equal]' — not built (F-222-class devised-symbol gap)." },
+      { "kind": "note", "text": "The computer's ability as a text reader is often confused with a screen reader. A screen reader will read all the elements on a computer screen and is necessary to navigate and operate a computer. A screen reader uses the text to speech engine to speak text. Text to speech is a text reader and a text reader by itself cannot navigate and operate a computer. It is important to understand that text reader is not a screen reader.", "features": "Speaker's note (6.13.1d); the agreed braille truncates it with the book's own ellipsis (444) after '...often confused with a screen'." },
+      { "kind": "pagenum", "text": "4" },
+      { "kind": "heading", "level": 1, "text": "Windows XP – Speech Properties" },
+      {
+        "kind": "figure",
+        "figure": { "type": "photo", "description": "Screenshot of Speech Properties and Text to Speech dialog. Language is set to Microsoft English (U.S.) v6.1 Recognizer; Recognition Profiles: Sandy is checked.", "labels": [] },
+        "description": "Screenshot: Speech Properties and Text to Speech dialog. Language is set to Microsoft English (U.S.) v6.1 Recognizer. Recognition Profiles: *Sandy* is checked."
+      },
+      { "kind": "note", "text": "Text to speech settings for computers with Windows operating systems can be found in the control panel. If you are using Windows XP,", "features": "Speaker's note (6.13.1d); the agreed braille truncates it with the book's own ellipsis (444) after '...using Windows XP,'." }
+    ],
+    "notes": "Slide numbers 3 and 4 appear at the bottom right of each slide's content (6.13.1a) — not built (F-171). Each speaker's note (6.13.1d, 'Note,' in TN indicators, 7-5 margins) is truncated by the book's own excerpt ellipsis (444); the untruncated wording both source runs supplied is kept for documentation but the ellipsis point itself has no print-side text to build from, matching the excerpt-truncation convention used throughout this gold corpus. The mid-excerpt braille-page turn (source-6.txt's own dashed print-page-change line, then a real braille-page turn) is modelled with the same {kind:'pagenum'} construct proven by the section-1/section-3 precedents, though the exact lettered-continuation numbering scheme here ('#,-' then 'a#d') is not itself reproduced (F-171/page-numbering mechanics, out of scope for this schema).",
+    "surroundingText": null,
+    "printFeatures": "Two slides shown with speaker notes below them."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,scre5 ,r1d]            #c",
+      "",
+      ",scre5 ,r1d]",
+      "  ,- r1ds ele;ts on a comput] scre5",
+      "  ,- is nec to navigate & op]ate a",
+      "    comput]",
+      "  ,- uses text to spee* to r1d text on !",
+      "    scre5",
+      "",
+      ",,tts is a text r1d]",
+      "  ,text ,r1d] \"7@: @.<n equal@.> ,scre5",
+      "    ,r1d]",
+      "",
+      "      @.<,note@.> ,! comput]'s abil;y z",
+      "    a text r1d] is (t5 3fus$ ) a scre5",
+      "    r1d]4 444",
+      "--------------------------------------#d",
+      "",
+      "    ,w9d[s ,,xp ,- ,spee* ,prop]ties",
+      "",
+      "      @.<,scre5%ot3 ,spee* ,prop]ties &",
+      "    ,text ,to ,spee* dialog4 ,language",
+      "    is set = ,micros(t ,5gli% \"<,u4,s4\">",
+      "    v#f4a ,recogniz]2 ,recogni;n",
+      "    ,pr(iles3 .1,s&y is *eck$@.>     #,-",
+      "      @.<,note@.> ,text to spee*      a#d",
+      "    sett+s = comput]s ) ,w9d[s op]at+",
+      "    sy/ems c 2 f.d 9 ! 3trol panel4",
+      "      ,if y >e us+ ,w9d[s ,,xp1 444"
+    ],
+    "pageBreaks": [26],
+    "notes": "Margins throughout are 2 cells deeper than either source run gave (both runs' own stripping was short by 2 cells here, confirmed against source-6.txt lines 5309-5338 directly). The book's own text extract marks a real braille-page turn between the Windows-XP slide's description and its own speaker's note ('—New Braille Page—', an extraction artifact, not braille content) — recorded as pageBreaks:[26]."
+  },
+  "uncertain": [
+    "The '≠' (not-equal) symbol's exact braille construction ('\"7@:' plus a bracketed '[not equal]' note) was not fully decoded — not investigated further since F-171/F-222 already make this file's speaker-note and slide-number mechanics not representable regardless."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs' margins are 2 cells short of the raw source throughout this file (confirmed directly against source-6.txt lines 5309-5338, decoded the same way as every other file in this reconciliation); corrected here. Both runs already preserved this file's two embedded '444' ellipses correctly (they sit inside otherwise non-blank lines, so the session-wide all-digit-line blanking bug did not remove them here — see differences.md for the files it did affect). print.blocks were reorganised to include a {kind:'pagenum'} block for the mid-excerpt braille-page turn and {kind:'note'} blocks for the two speaker's notes (6.13.1d), which neither run modelled as notes at all (both used a plain, untruncated paragraph); this file is expected to be substantially not-representable regardless of these fixes, per F-171 (no semantic slide/speaker-note support at all in Emboss)."
+}

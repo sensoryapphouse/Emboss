@@ -1,0 +1,75 @@
+{
+  "id": "sample-6-2",
+  "title": "Concept Map",
+  "pdfPages": [
+    158
+  ],
+  "textLines": [
+    4801,
+    4820
+  ],
+  "illustrates": {
+    "rule": "6.5.1",
+    "quote": "Concept maps have a central idea with rays branching out to subordinate ideas. Whenever possible, concept maps are done as a tactile graphic. When a request is made for a text-based format, use a nested list (1-5, 3-5; 1-7, 3-7, 5-7; etc.) to indicate the individual elements of the web. The central idea of the concept map is the first level in the nested list. Other elements are listed in the appropriate level in a logical order, e.g., top to bottom, right to left, etc. A careful reading of the concept map may dictate another placement order. Use three dot 5s to indicate blank elements. Explain this usage in a transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "Concept map with central idea PRIDE and four branching ideas in ovals.",
+          "labels": [
+            "PRIDE",
+            "I covered my brother's newspaper route while he recovered from a broken leg.",
+            "I won the citywide spelling bee.",
+            "At the Meet of Champions, I swam the fastest race of my life.",
+            "Mom was nominated to run the PTA in our district."
+          ]
+        },
+        "description": "Concept Map: a central concept written in bold print is shown inside an oval. Secondary concepts are shown in regular print inside circles and ovals which are linked to the central figure by straight lines."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "PRIDE", "level": 1 },
+          { "text": "I covered my brother's newspaper route while he recovered from a broken leg.", "level": 2 },
+          { "text": "I won the citywide spelling bee.", "level": 2 },
+          { "text": "At the Meet of Champions, I swam the fastest race of my life.", "level": 2 },
+          { "text": "Mom was nominated to run the PTA in our district.", "level": 2 }
+        ]
+      }
+    ],
+    "notes": "Neither run captured the actual transcriber's-note explanatory text (print.blocks[0].description here) at all — both left it out of print.blocks entirely, recording only a short documentation gloss (figure.description) that does not match what is actually built. The real note text was recovered by liblouis back-translation of the agreed braille (engine/louis.mjs backTranslate) and confirmed by an exact forward-translation round trip (see resolution). It has no caption paired with it (no kind:'caption' block follows), so it is built as a standalone transcriber's note, not through the image/caption label mechanism — see README 'buildModel6' for why this matters (no spurious '[Illustration]' label is added). The 'Sample 6-2: Concept Map' page heading (present on the print page as a bold heading, and in both A/B's print.blocks) is the section's own worked-example title, not part of the excerpted braille (which starts directly at the transcriber's note) — omitted here, matching the convention used throughout this section (see README).",
+    "surroundingText": null,
+    "printFeatures": "A concept-map diagram: a central oval labelled PRIDE, with four branching ovals of supporting print text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,3cept ,map3 a c5tral 3cept",
+      "    writt5 9 bold pr9t is %[n 9side an",
+      "    oval4 ,second>y 3cepts >e %[n 9",
+      "    regul> pr9t 9side circles & ovals :",
+      "    >e l9k$ to ! c5tral figure by /rai<t",
+      "    l9es4@.>",
+      "",
+      ",,pride",
+      "  ,i cov]$ my bro!r's newspap] r\\te :ile",
+      "    he recov]$ f a brok5 leg4",
+      "  ,i won ! c;ywide spell+ bee4",
+      "  ,at ! ,meet ( ,*ampions1 ,i swam !",
+      "    fa/e/ race ( my life4",
+      "  ,mom 0 nom9at$ to run ! ,,pta 9 \\r",
+      "    4trict4"
+    ],
+    "pageBreaks": [],
+    "notes": "The transcriber's note (7-5 margins) precedes the list, with a blank line separating them. 'PRIDE' (the central idea, level 1 of the nested list, 6.5.1) sits flush at cell 1; the four secondary ideas (level 2) use 3-5 margins (first cell 3 / runover cell 5) per 6.5.1's '1-5, 3-5' nested-list pairing — Emboss's own nestedMargins gives exactly this (runover fixed at the deepest level in the list, first-line margin increasing by 2 cells per level)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "B's braille.lines match the raw source exactly (decoded independently via engine/brf-ascii.mjs's unicodeBrailleToBrf on source-6.txt lines 4806-4820, each carrying the book's own per-line numbering prefix); A's list-item margins are wrong (0/2 instead of the correct 2/4 for the four secondary items) — a genuine indentation defect in A, not caught by comparing the runs to each other since B alone is correct. The transcriber's-note text itself was recovered by liblouis back-translation (neither run recorded it) and confirmed with an exact forward-translation round trip: translating 'Concept Map: a central concept written in bold print is shown inside an oval. Secondary concepts are shown in regular print inside circles and ovals which are linked to the central figure by straight lines.' reproduces the agreed braille exactly (the apparent ':' with no following space at the cell-40 wrap point is the one-cell UEB contraction for 'which', confirmed the same way — back-translating in isolation, 'ovals : are linked' -> 'ovals which are linked'; naively reading it as a literal colon or semicolon does not reproduce the braille). print.blocks[0].figure.description is documentation only; print.blocks[0].description is what buildModel6 actually builds, as a standalone note (no caption follows this figure, so the image-label mechanism — and F-225 — do not apply to this file)."
+}

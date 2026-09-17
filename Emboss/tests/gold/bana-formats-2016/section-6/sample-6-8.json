@@ -1,0 +1,71 @@
+{
+  "id": "sample-6-8",
+  "title": "Organizational Chart",
+  "pdfPages": [
+    170
+  ],
+  "textLines": [
+    5006,
+    5020
+  ],
+  "illustrates": {
+    "rule": "6.9.1",
+    "quote": "For our purposes, an organizational chart is a diagram of the structure and/or personnel of an organization. The principal parts or functions are represented by blocks connected by lines to show hierarchical rank or interrelationships. Transcribe such material using a nested list format (1-5, 3-5; 1-7, 3-7, 5-7; etc.)."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "Organizational chart of military ranks: a General at the top, two Colonels beneath, three Captains beneath them, two Sergeants and two Privates further down.",
+          "labels": [
+            "General", "Colonel A", "Colonel B", "Captain A", "Captain B", "Captain C",
+            "Sergeant A", "Sergeant B", "Private A", "Private B"
+          ]
+        }
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "General", "level": 1 },
+          { "text": "Colonel A", "level": 2 },
+          { "text": "Colonel B", "level": 2 },
+          { "text": "Captain A", "level": 3 },
+          { "text": "Sergeant A", "level": 4 },
+          { "text": "Sergeant B", "level": 4 },
+          { "text": "Private A", "level": 5 },
+          { "text": "Private B", "level": 5 },
+          { "text": "Captain B", "level": 3 },
+          { "text": "Captain C", "level": 3 }
+        ]
+      }
+    ],
+    "notes": "The 'Sample 6-8: Organizational Chart' page heading (present in both runs' print.blocks) is not part of the excerpted braille (which starts directly at 'General') and is dropped, matching the across-the-section convention (see README). This sample has no transcriber's note and no figure caption/description beyond the chart itself. Every level is a single line (no runover anywhere), and no marriage/devised symbols or scripts are involved — unlike sample-6-5/6-6/6-7, this file is expected to be fully buildable.",
+    "surroundingText": null,
+    "printFeatures": "A hierarchical organizational chart of boxes connected by lines."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",g5]al",
+      "  ,colonel ,a",
+      "  ,colonel ;,b",
+      "    ,capta9 ,a",
+      "      ,s]g1nt ,a",
+      "      ,s]g1nt ;,b",
+      "        ,private ,a",
+      "        ,private ;,b",
+      "    ,capta9 ;,b",
+      "    ,capta9 ;,c"
+    ],
+    "pageBreaks": [],
+    "notes": "5-level nested list (1-3, 3-5, 5-7, 7-9, 9-11 margins per 6.9.1's nested-list convention), every item a single line. 'B' and 'C' each carry UEB's letter indicator (';') since a standalone lowercase 'b'/'c' would otherwise read as the whole-word contractions 'but'/'can'; 'A' needs none, since 'a' is not one of UEB's single-letter word signs — confirmed this is automatic in Emboss's own translator, not something print.blocks needs to encode."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "B's braille.lines (margins stripped by 5 extra columns relative to A) match the raw source exactly (source-6.txt lines 5011-5020, decoded directly); A's margins are short by 2 cells at every level. The 'Sample 6-8: Organizational Chart' heading block both runs included is dropped (not part of the excerpted braille, matching the across-the-section convention); the empty figure `text`/`features` fields both runs left blank are removed as noise. print.blocks[1] built as a plain 5-level nested list directly from the chart's own hierarchy (General -> Colonel A/B -> Captain A/B/C -> Sergeant A/B -> Private A/B), reconstructed from the given indentation and figure.labels together, since neither run supplied the list structure itself (only the flat figure.labels array)."
+}

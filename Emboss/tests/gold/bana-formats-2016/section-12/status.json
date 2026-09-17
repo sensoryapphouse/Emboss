@@ -1,0 +1,30 @@
+{
+  "sample-12-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-12-2": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-12-3": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"        ,CRITICAL ,?9K+ ,SKILLS     #CHJ\" vs actual \"        ,CRITICAL ,?9K+ ,SKILLS\". line count differs by +29 (expected 31, actual 60). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Practice and assess key skills with Skillbuilder Interactive Workbook, Level 2.\""
+  },
+  "sample-12-4": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-12-5": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-12-6": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-12-7": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"            ,USE ,VOCABUL>Y         ,C#GH\" vs actual \"           ,*APT] #F ,REVIEW\". line count differs by +45 (expected 19, actual 64). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"C78\""
+  }
+}

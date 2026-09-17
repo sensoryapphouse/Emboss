@@ -1,0 +1,143 @@
+{
+  "id": "sample-6-5",
+  "title": "Genealogical Chart",
+  "pdfPages": [
+    164
+  ],
+  "textLines": [
+    4900,
+    4925
+  ],
+  "illustrates": {
+    "rule": "6.8.1",
+    "quote": "a. Transcribe descendants’ genealogical charts using a nested list format (1-5, 3-5; 1-7, 3-7, 5-7; etc.). b. Begin descendant charts with the ancestors, and descend to the most current generation. c. Follow print for symbols used for marriage or other types of relationships (e.g., twins). Note: if line symbols are used, the line terminator may be required."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Abbreviated Genealogy of James I"
+      },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "Genealogical chart of James I and his descendants, laid out as boxes joined by lines; spouse pairs are joined by a double horizontal line.",
+          "labels": [
+            "James I 1566 - 1625",
+            "Charles I 1600 - 1649",
+            "Elizabeth 1596 - 1662",
+            "Frederick",
+            "Charles II 1630 - 1685",
+            "Mary 1631 - 1660",
+            "William of Orange",
+            "James II 1633 - 1701",
+            "Anne",
+            "Sophie 1630 - 1714",
+            "Elector of Hanover",
+            "William III 1650 - 1702",
+            "Mary II 1662 - 1694",
+            "Anne 1658 - 1718",
+            "Mary II 1662 - 1694",
+            "William III 1650 - 1702",
+            "George I 1660 - 1727"
+          ]
+        },
+        "description": "The symbol indicates marriage."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "James I 1566-1625",
+            "level": 1
+          },
+          {
+            "text": "Charles I 1600-1649",
+            "level": 2
+          },
+          {
+            "text": "Charles II 1630-1685",
+            "level": 3
+          },
+          {
+            "text": "Mary 1631-1660 William of Orange",
+            "level": 3,
+            "features": "Print joins 'Mary 1631-1660' and 'William of Orange' with a devised marriage-line symbol between them (not built — see notes)."
+          },
+          {
+            "text": "William III 1650-1702 Mary II 1662-1694",
+            "level": 4,
+            "features": "Devised marriage symbol between the two names, not built."
+          },
+          {
+            "text": "James II 1633-1701 Anne",
+            "level": 3,
+            "features": "Devised marriage symbol between the two names, not built."
+          },
+          {
+            "text": "Anne 1658-1718",
+            "level": 4
+          },
+          {
+            "text": "Mary II 1662-1694 William III 1650-1702",
+            "level": 4,
+            "features": "Devised marriage symbol between the two names, not built."
+          },
+          {
+            "text": "Elizabeth 1596-1662 Frederick",
+            "level": 2,
+            "features": "Devised marriage symbol between the two names, not built."
+          },
+          {
+            "text": "Sophie 1630-1714 Elector of Hanover",
+            "level": 3,
+            "features": "Devised marriage symbol between the two names, not built."
+          },
+          {
+            "text": "George I 1660-1727",
+            "level": 4
+          }
+        ]
+      }
+    ],
+    "notes": "illustrates.rule/quote in run A was wrong (copy-pasted rule 6.13.1, Slide Presentations, into a genealogical-chart sample); B's 6.8.1 is correct and used here. The print diagram (confirmed against PDF p.164, printed 6-20) is a family tree of boxes joined by lines, spouse pairs joined by a double horizontal line — that double line is a purely graphical connector with no print text of its own; braille represents it with a transcriber-devised symbol (explained by the transcriber's note at the head of the sample), which Emboss has no facility to author outside its one hardcoded case (F-222, an asterism symbol) — every list item that originally carried this symbol is built as plain text with the symbol omitted, and the resulting narrow mismatch (missing symbol cells only) is expected, not investigated further. The nested-list structure/levels (1-5,3-5,5-7,7-9 per 6.8.1a) was reconstructed directly from the agreed braille's own margins (levels 1-4, i.e. Emboss's 0-based 0-3, runover fixed at the deepest level throughout, matching nestedMargins) and cross-checked against the print image's own box/line layout — it matches known Stuart-dynasty genealogy exactly (James I -> Charles I & Elizabeth; Charles I -> Charles II, Mary, James II; Elizabeth -> (m. Frederick) Sophie -> George I; Mary (m. William of Orange) -> William III (m. Mary II, James II's daughter)), which neither run's flat figure.labels array made explicit.",
+    "surroundingText": null,
+    "printFeatures": "A family tree diagram showing marriages and descendants. Boxes are connected by lines; spouse boxes are joined by a double line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,a2reviat$ ,g51logy ( ,james ,i",
+      "",
+      "      @.<,! symbol .=\"377 9dicates",
+      "    m>riage4@.>",
+      "",
+      ",james ,i #aeff-#afbe",
+      "  ,*>les ,i #afjj-#afdi",
+      "    ,*>les ,,ii #afcj-#afhe",
+      "    ,m>y #afca-#affj\"377',william (",
+      "        ,orange",
+      "      ,william ,,iii",
+      "        #afej-#agjb\"377',m>y ,,ii",
+      "        #affb-#afid",
+      "    ,james ,,ii #afcc-#agja\"377',anne",
+      "      ,anne #afeh-#agah",
+      "      ,m>y ,,ii #affb-#afid\"377',william",
+      "        ,,iii #afej-#agjb",
+      "  ,elizabe? #aeif-#affb\"377',fr$]ick",
+      "    ,sophie #afcj-#agad\"377',elector (",
+      "        ,hanov]",
+      "      ,george ,i #affj-#agbg"
+    ],
+    "pageBreaks": [],
+    "notes": "Heading is centred (level 1). The nested list runs 4 levels deep (James I at cell 1; Charles I/Elizabeth at cell 3; their children at cell 5; grandchildren at cell 7); runover is fixed at cell 9 throughout the whole list (the deepest level anywhere in it), per 6.8.1a's 1-5,3-5,5-7,7-9-style nested nesting. 'Anne 1658-1718': B has this date right; A misreads it as 'Anne 1658 - 1714' (confirmed 1718 by decoding the braille number letters #agah = a-g-a-h = 1-7-1-8 directly)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "B's braille margins match the raw source exactly (independently decoded via source-6.txt + engine/brf-ascii.mjs); A's margins are wrong on nearly every line (not a uniform offset, effectively per-line noise) — including, notably, agreeing with B's own summary.md's flagged worry that 'Elizabeth' might wrongly sit at cell 1: A does exactly that (0 leading spaces), which B's own FINAL json in fact avoids (2 spaces, cell 3, matching the source) — B's summary.md prose describing this as a residual concern was stale/overtaken by its own corrected data. A also mis-transcribes Anne's second date (1714 for 1718). illustrates.rule was wrong in A (a different rule's text entirely) and correct in B. Heading level: neither run gave a level (both null); centring the translated heading text (31 cells on a 40-cell page, indent 4) exactly matches the agreed braille's own 4-space indent, so level 1 is used here. The nested nested-list structure, including which pairs share a devised marriage-symbol connector, was reconstructed from the agreed braille's own margins and content plus the print image (p.164) directly, since neither run's flat figure.labels array recorded the tree's real parent/child/spouse relationships explicitly enough to build from."
+}

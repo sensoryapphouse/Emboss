@@ -1,0 +1,53 @@
+{
+  "id": "BANA Sample 15-9",
+  "title": "Sample 15-9: Marginal Numbers Indicating Words Read",
+  "pdfPages": [427],
+  "textLines": [12262, 12282],
+  "illustrates": {
+    "rule": "15.8.1",
+    "quote": "15.8.1 Word counts are used for timed readings and typing tests. The numbers fall at the end of the print line. a. Treat counted words as line-numbered text, leaving three spaces at the end of each line of text. b. Insert a transcriber’s note explaining the use of the three blank cells, and that the number refers to the end of the print line. Sample: Three blank cells indicate the end of a print line. The numbers in the right margin are the number of words read at the point of the three blank cells. c. Insert a blank line between the transcriber’s note and the beginning of the line-numbered material."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "other", "text": "7", "features": "A large reversed-out (white-on-black) block containing the numeral 7, printed beside the title — both runs agree this is omitted from the braille transcription; not modeled." },
+      { "kind": "heading", "level": 1, "text": "The Rat That Had a Fast Rate" },
+      { "kind": "numbered", "text": "Sandy had a rat that ate fast. She said, “That rat eats too", "number": "13", "printVisible": true, "newPara": true },
+      { "kind": "numbered", "text": "much. I must make the rat slow down.”", "number": "21", "printVisible": true },
+      { "kind": "numbered", "text": "Sandy went to the store and got ten packs of gum. She said,", "number": "34", "printVisible": true, "newPara": true },
+      { "kind": "numbered", "text": "“I will smear the gum on the oats.” Then she gave the oats to", "number": "48", "printVisible": true },
+      { "kind": "numbered", "text": "the rat. “Here are some oats,” she said. “You will have fun", "number": "60", "printVisible": true, "features": "The word 'fun' is underlined in print (omitted here — not modeled by buildModel15, no other file in this section carries emphasis on numbered-text words)." },
+      { "kind": "numbered", "text": "eating them.”", "number": "62", "printVisible": true }
+    ],
+    "notes": "This rule's numbers are cumulative WORD counts (words read so far), not sequential print-line numbers — confirmed both by the print image (every line prints its own running count) and by direct decode of the given braille's own right-margin digits (13, 21, 34, 48, 60, 62), which already match exactly what both runs originally supplied; unlike every other file in this section, no interpolation was needed here since print itself already numbers every single line. No explicit transcriber's-note print.blocks entry is modeled (see the same reasoning as Sample 15-3's own README/notes): the note in the gold braille below is 15.8.1b's own suggested wording, used here to test Emboss's automatic line-numbered-text note against the book's own worked illustration of the correct wording.",
+    "surroundingText": ["7"],
+    "printFeatures": "Word counts printed in the right margin at the end of every line, representing the total words read so far (a timed-reading/typing-test passage, 15.8.1)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "      @.<,?ree blank cells 9dicate ! 5d",
+      "    ( a pr9t l9e4 ,! numb]s 9 ! \"r m>g9",
+      "    >e ! numb] ( ^ws r1d at ! po9t ( !",
+      "    ?ree blank cells4@.>",
+      "",
+      "      ,! ,rat ,t ,_h a ,fa/ ,rate",
+      "",
+      "  ,s&y _h a rat t ate fa/4 ,%e sd1",
+      "8,t rat eats too   m*4 ,i m/ make ! #ac",
+      "rat sl[ d[n40                        #ba",
+      "  ,s&y w5t to ! /ore & got t5 packs",
+      "( gum4 ,%e sd1   8,i w sme> ! gum    #cd",
+      "on ! oats40 ,!n %e gave ! oats to    #dh",
+      "! rat4 8,\"h >e \"s oats10 %e sd4 8,y",
+      "w h _1fun                            #fj",
+      "eat+ !m40                            #fb"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Right-margin word counts #ac=13, #ba=21, #cd=34, #dh=48, #fj=60, #fb=62 confirmed by direct decode."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs already agreed on wording and every word-count number; no numeric correction needed. The transcriber's-note text is NOT modeled as a print.blocks entry (matching Sample 15-3's own reasoning) so that Emboss's own automatic line-numbered-text note is what gets compared against 15.8.1b's own worked example. Modeled by buildModel15 the same way as Sample 15-2/15-3/15-4 (a genuine linenum segment per print line feeding wrapNumbered); per standards-findings.md F-208, wrapNumbered hardcodes a 2-cell minimum gap for every caller with no parameter for 15.8.1a's own required 3-cell gap, so this file's own mismatch cause is expected to be F-208 (and, if the note-wording mismatch found for Sample 15-3 is confirmed as a genuine new gap, that same finding applies here too)."
+}

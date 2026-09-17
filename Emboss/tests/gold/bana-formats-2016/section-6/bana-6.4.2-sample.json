@@ -1,0 +1,40 @@
+{
+  "id": "bana-6.4.2-sample",
+  "title": "Figure 6.4 TNDiagram is omitted.TN",
+  "pdfPages": [
+    149
+  ],
+  "textLines": [
+    4526,
+    4526
+  ],
+  "illustrates": {
+    "rule": "6.4.2",
+    "quote": "Insert a transcriber’s note at each point of omission when only some of the images are not included. This is especially important when some numbered illustrations are not included. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Figure 6.4 TNDiagram is omitted.TN",
+        "features": "illustrative wording for a transcriber's note"
+      }
+    ],
+    "notes": "'TN' here renders the print original's small-caps transcriber's-note begin/end markers around 'Diagram is omitted.' (confirmed against the PDF page image, page 149); this is illustrative print wording, not braille.",
+    "surroundingText": null,
+    "printFeatures": "transcriber's note wording"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille array is given because this sample provides only illustrative print wording for a transcriber-generated note."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte. Verified directly against the PDF page image (p.149, printed 6-5): print literally typesets the transcriber's-note open/close markers as the small-caps letters 'TN' around 'Diagram is omitted.', confirming both runs' identical rendering. No changes made."
+}

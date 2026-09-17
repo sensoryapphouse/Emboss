@@ -1,0 +1,77 @@
+{
+  "id": "sample-12-5",
+  "title": "Sample 12-5: Sidebar with Student Activity (Print Only)",
+  "pdfPages": [349],
+  "textLines": [10158, 10163],
+  "illustrates": {
+    "rule": "12.3.1f",
+    "quote": "Add box lines for clarity if the content of the sidebar interrupts the flow of text. (See Formats, §7, Boxed Material.) (Sample 12-5: Sidebar with Student Activity on page 12-9 and Sample 12-6: Sidebars at Beginning of a Lesson on page 12-10.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "other", "text": "Copyrighted Image", "features": "Image placeholder in the top-left corner." },
+      { "kind": "paragraph", "text": "Figure 25.26 After developing in the cocoon for two to three weeks, a young earthworm hatches.", "features": "Caption below the image placeholder, introduced by a small square bullet; 'Figure 25.26' is bold." },
+      {
+        "kind": "sidebar",
+        "title": "Foldables",
+        "features": "Small boxed callout below the image caption, orange background, white logo-style title.",
+        "blocks": [
+          { "kind": "paragraph", "text": "Incorporate information from this section into your Foldable." }
+        ]
+      },
+      { "kind": "other", "text": "(Formats: Possible Locations)", "features": "Instructional callout with two arrows, one pointing up-right into the running text near 'Earthworms and their relatives', the other pointing down into the MiniLab sidebar below." },
+      { "kind": "paragraph", "text": "Reproduction Annelids can reproduce both sexually and asexually. Most annelids have separate sexes, but some, such as earthworms and leeches, are hermaphrodites. Sperm are passed between two worms near segments called the clitellum. Refer back to Figure 25.23 and notice that the clitellum is a thickened band of segments. It produces a cocoon from which young earthworms hatch, as shown in Figure 25.26. Sperm and eggs pass into the cocoon as it slips forward off the body of the worm. After fertilization, the young are protected in the cocoon as they develop. Some annelids reproduce asexually by fragmentation. If a worm breaks apart, the missing parts can be regenerated.", "features": "'Reproduction' is a bold red run-in heading; 'Figure 25.23', 'clitellum', and 'Figure 25.26' are bold." },
+      { "kind": "other", "text": "Barry Runk/Stan Schoenberger/Grant Heilman Photography", "features": "Small photo-credit text running vertically down the right margin beside this paragraph." },
+      { "kind": "heading", "level": 1, "text": "Diversity of Annelids", "features": "Bold blue heading, larger font." },
+      { "kind": "paragraph", "text": "The phylum Annelida is divided into three classes: class Oligochaeta (ohl ih goh KEE tuh)—the earthworms and their relatives, class Polychaeta (pah lih KEE tuh)—the bristleworms and their relatives, and class Hirudinea (hur uh DIN ee uh)—the leeches." },
+      { "kind": "paragraph", "text": "Earthworms and their relatives Earthworms probably are the best-known annelids. They are used as bait for fishing and are found in garden soil. An earthworm can eat its own mass in soil every day. Earthworms ingest soil to extract nutrients. In this way, earthworms aerate the soil—they break up the soil to allow air and water to move through it.", "features": "'Earthworms and their relatives' is a bold brownish-red run-in heading." },
+      { "kind": "paragraph", "text": "In addition to earthworms, class Oligochaeta—the oligochaetes (AH lee goh keetz)—includes tubifex worms and lumbriculid worms. Tubifex worms are small, threadlike aquatic annelids that are common in areas of high pollution. Lumbriculid (lum BRIH kyuh lid) worms are freshwater oligochaetes that are about 6 cm long and live at the edges of lakes and ponds. You can observe a feature common to oligochaetes in MiniLab 25.2.", "features": "'MiniLab 25.2' is bold." },
+      {
+        "kind": "sidebar",
+        "features": "Large boxed sidebar spanning the bottom of the page, teal/blue gradient banners.",
+        "blocks": [
+          { "kind": "heading", "level": 2, "text": "MiniLab 25.2", "features": "Yellow text on a dark blue gradient banner." },
+          { "kind": "heading", "level": 3, "text": "Observe Blood Flow in a Segmented Worm", "features": "Dark blue text on a light blue gradient banner." },
+          { "kind": "paragraph", "text": "How does blood flow in a segmented worm? The California blackworm has a closed circulatory system and a transparent body. Its blood can be viewed as it flows along the dorsal blood vessel." },
+          { "kind": "heading", "level": 4, "text": "Procedure", "features": "Bold dark blue text, accompanied by four small safety icons." },
+          {
+            "kind": "list",
+            "features": "Numbered list; 'stereomicroscope' and 'stopwatch' are bold.",
+            "items": [
+              { "marker": "1.", "text": "Read and complete the lab safety form." },
+              { "marker": "2.", "text": "Moisten a piece of filter paper with spring water and place it in a Petri dish." },
+              { "marker": "3.", "text": "Examine a blackworm on the moist paper using a stereomicroscope." },
+              { "marker": "4.", "text": "Locate the dorsal blood vessel in a segment near the midpoint of the worm. Observe how blood flows in each segment." },
+              { "marker": "5.", "text": "Use a stopwatch to record how many pulses of blood occur per minute. Repeat this for two more segments, one near the head and one near the tail of the worm. Record your data in a table." }
+            ]
+          },
+          { "kind": "heading", "level": 4, "text": "Analysis", "features": "Bold dark blue text." },
+          {
+            "kind": "list",
+            "features": "Numbered list; the first word of each item is bold.",
+            "items": [
+              { "marker": "1.", "text": "Summarize how blood moves through each segment, including the direction of blood flow." },
+              { "marker": "2.", "text": "Compare and contrast the rate of blood flow near the head, at the midpoint, and near the tail of the worm." }
+            ]
+          }
+        ]
+      },
+      { "kind": "other", "text": "748 Chapter 25 • Worms and Mollusks", "features": "Page footer (running head + print page number)." }
+    ],
+    "notes": "This is a science-textbook page with two sidebars: a small 'Foldables' study-aid callout and a large 'MiniLab' boxed student-activity sidebar, both flagged by a single '(Formats: Possible Locations)' callout with two arrows pointing to where they might be relocated relative to the running text.",
+    "surroundingText": null,
+    "printFeatures": "Multi-column science-textbook layout: an image placeholder with caption and a small 'Foldables' box at top left; the main running text (with a vertical photo-credit strip) and headed subsections at centre/right; a large 'MiniLab' sidebar spanning the full width at the bottom."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source -- no braille transcription exists for this sample."
+  },
+  "uncertain": [
+    "Whether 'filter paper' and 'Petri dish' (Procedure step 2) are bold in the original print is slightly ambiguous at normal resolution; interpreted as non-bold here, matching run A.",
+    "The exact wording of the small vertical photo-credit text ('Barry Runk/Stan Schoenberger/Grant Heilman Photography') was hard to resolve at normal resolution in run B's own working notes; confirmed against the page image here."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Run A's print.blocks are far more complete and structurally faithful (proper heading levels, a real image placeholder block, the vertical photo credit, nested list items) and were used as the base, cross-checked against the PDF page image (p.349). Run B collapsed both sidebars into single opaque text blobs (mixing the '(Formats: Possible Locations)' callout directly into the 'Foldables' box's own text, and flattening the entire MiniLab sidebar -- heading, sub-heading, both numbered lists -- into one string) and used non-schema block kinds ('credit', 'caption', 'footer'); B's own content matches A's wording throughout, so nothing new was recovered from it, but its structural collapse was not used. List items are given as proper 'items' arrays per this task's schema (matching the section-7/8 precedent), rather than either run's own single-string-with-newlines convention."
+}

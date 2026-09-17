@@ -8718,3 +8718,113 @@ exercise is shown as pictures" case — no code inserts a transcriber's-note ind
 the word "Pictures" or closes one after a run of all-picture entries.
 
 **Classification:** not done (covers BANA 10.11.1 and 10.11.3).
+
+---
+
+# Standards findings — Sidebars (BANA §12; gold-reconciled 17 Sep 2026, section-12)
+
+## F-230: A sidebar's box lines are unconditional — Emboss cannot produce a border-less sidebar
+
+**Rules:** BANA 12.3.1e ("Insert a blank line before and after a sidebar"), 12.3.1f ("Add
+box lines for clarity **if** the content of the sidebar interrupts the flow of text" —
+conditional wording, not "always"), 12.3.1g (a sidebar "necessary for the understanding of a
+particular text" is simply inserted before that text, with no box-line requirement stated at
+all).
+
+**What Emboss does:** Every `type:'box'`/`type:'sidebar'` document-model block is formatted by
+the single shared `formatBox` (`Emboss/format/document.mjs:948`), via `boxBorders`
+(`document.mjs:932`), which unconditionally emits a full-width top and bottom border line
+(`7`.../`G`... , or `=`.../`=`... for an exterior box wrapping a nested one) around every box's
+content. There is no flag, field, or code path anywhere in `formatBox`/`boxBorders` to omit
+the border and fall back to a plain blank-line-delimited insertion.
+
+**What the standard requires (evidence):** BANA Braille Formats 2016, Sample 12-7 ("Word List
+in a Sidebar", `references/bana/braille-formats-2016.pdf` p.353, `references/_text/
+braille-formats-2016.txt` lines 10188-10206) transcribes its own vocabulary-word-list sidebar
+with NO box border at all: the source shows only a blank line, the eight flush-left word/
+page-reference lines, and a further blank line — no `7777...7`/`gggg...g` anywhere around
+them (confirmed directly against both the source `.txt` and the rendered PDF page image, which
+carries the excerpt's own line numbers 1-13). This is consistent with 12.3.1g's own wording
+(a sidebar inserted "before the related text" purely for reading-order reasons, with no
+mention of box lines) as distinct from 12.3.1f's conditional "for clarity" box-line rule —
+BANA's own Sample 12-3 (same section, `Emboss/tests/gold/bana-formats-2016/section-12/
+sample-12-3.json`), by contrast, DOES box its own sidebar (a genuinely inserted, flow-
+interrupting list), confirming the two sample sidebars are deliberately transcribed
+differently, not that one of them is in error.
+
+**Reproduction:** build a `{type:'box', blocks:[{type:'list', kind:'list', items:[{text:'assault, C45'}, ...]}]}` document (or run
+`node Emboss/scripts/gold-run.mjs --section section-12 --sample sample-12-7`) and observe that
+`formatBox` always adds a 40-cell `7777...7` line immediately before the list and a `gggg...g`
+line immediately after it — lines the real Sample 12-7 braille (`Emboss/tests/gold/
+bana-formats-2016/section-12/sample-12-7.json`, `braille.lines`) does not have.
+
+**Classification:** bug / not done.
+
+**Test that would prove a fix:** a test asserting that a sidebar/box block, when flagged
+(however the fix chooses to signal it — e.g. a `boxed:false` field defaulting to today's
+always-on behaviour for backward compatibility) as not requiring box lines, formats as plain
+blank-line-delimited content with no `7`/`G`/`=` border row, while an unflagged sidebar/box
+keeps today's unconditional border. See `Emboss/tests/gold_bana_section12.test.mjs` and
+`Emboss/tests/gold/bana-formats-2016/section-12/README.md` for the full worked-example
+evidence trail.
+
+---
+
+# Standards findings — Illustrative Materials (BANA §6; assessed 17 Sep 2026, gold reconciliation)
+
+## F-231 — The transcriber's-note label word for an unidentified illustration is hard-coded to "Illustration", never the print-appropriate word BANA 6.2.2b calls for
+
+**Rules:** BANA 6.2.2b
+
+> "If the original print copy does not identify an illustration, insert a label in a transcriber's note (e.g., photograph, figure, etc.) followed by the text of the caption on the same line." (BANA 6.2.2b)
+
+**What Emboss does:** `traceOrFormatPrintImage` (`Emboss/format/document.mjs`, ~line 1969) decides whether a caption needs a label (`!parts.caption || !IDENTIFIED_RE.test(parts.caption)`) but, when one is needed, always emits the literal English word "Illustration" (`tn('Illustration')`), regardless of what kind of picture it is or what word the source transcription actually uses.
+
+**What the standard requires (evidence):** every one of this section's own worked examples that needs a label uses a picture-appropriate word, never "Illustration": Example 6-1 ("Photograph with Caption") uses `[Photograph]` (`references/bana/braille-formats-2016.pdf` p.146, confirmed by forward-translating the caption text and diffing against the agreed braille — `Emboss/tests/gold/bana-formats-2016/section-6/example-6-1.json`); Example 6-3 uses `[Photograph]` again (p.148, `example-6-3.json`); Sample 6-12's own Ming-dynasty figure uses `[Picture]` (p.174, `sample-6-12.json`). Running `node Emboss/scripts/gold-run.mjs --section section-6 --sample example-6-1` shows Emboss producing `@.<,ILLU/RA;N@.>` where the standard has `@.<,PHOTOGRAPH@.>` — otherwise the two outputs are identical.
+
+**Classification:** bug / not done (the document model has no field to carry the label word at all — `figure.type`/`figure.figure.type` in this gold corpus's own schema records it as documentation only, since nothing in `document.mjs` consumes it).
+
+**Test that would prove a fix:** `Emboss/tests/gold_bana_section6.test.mjs` — `example-6-1`, `example-6-3`, and `sample-6-12` all currently mismatch/are recorded not-representable on exactly this one word; a fix (e.g. reading a `block.figureType`/`block.label` field into the "Illustration" slot) should make the affected lines match. `Emboss/tests/gold/bana-formats-2016/section-6/README.md` has the full worked-example evidence trail.
+
+## F-232 — liblouis's UEB Grade-2 table adds a letter-sign before a single-letter print abbreviation immediately followed by a period, contrary to at least one BANA worked example
+
+**Rules:** none specific — a general UEB Grade-2 translation-fidelity gap surfaced by BANA 6.10.1's own worked timeline example.
+
+**What Emboss does:** `Emboss/engine/louis.mjs`'s `translate()` (the `en-ueb-g2.ctb` table), given the plain text `"c. 1100 Incas settle in Cuzco."`, produces a leading UEB letter-indicator (`;`) before the lone letter `c`: `;C4 #AAJJ...`. This reproduces regardless of surrounding context (tested standalone, mid-sentence, and as the very first word of a longer passage — `Emboss/tests/gold/bana-formats-2016/section-6/sample-6-10.json`'s own `uncertain` entry records the exact experiments).
+
+**What the standard requires (evidence):** BANA Braille Formats 2016, Sample 6-10 ("Timeline with Multiple Events", `references/bana/braille-formats-2016.pdf` p.172, printed page 6-28) transcribes "c. 1100 Incas settle in Cuzco." with NO letter-indicator before the abbreviation: `c4#aajj ,9cas settle 9 ,cuzco4` (confirmed directly against the source `.txt`, `references/_text/braille-formats-2016.txt` line 5063, and the rendered page image).
+
+**Classification:** gap / not done — this is inside the third-party liblouis UEB table Emboss ships, not `document.mjs`'s own document-model code, so a fix (if any) is upstream; recorded here because it makes an otherwise-perfect Emboss reproduction of Sample 6-10 mismatch on this one word.
+
+**Test that would prove a fix:** `Emboss/tests/gold_bana_section6.test.mjs`'s `sample-6-10` case; a fix would make its currently-recorded `mismatch` become `match`.
+
+## F-233 — No construct exists for a second, independent inline "hyperlink" indicator distinct from bold/italic/underline
+
+**Rules:** BANA 6.12.3.b(3)
+
+> "Indicate hyperlinks, which are a word, phrase, or image that can be clicked on to jump to a different location." (BANA 6.12.3.b(3))
+
+**What Emboss does:** `Emboss/format/cell-markup.mjs`'s inline markup DSL, and `document.mjs`'s segment `tf` bitmask (`TF_ITALIC`/`TF_UNDERLINE`/`TF_BOLD`), support exactly three overlapping emphasis types. There is no fourth kind of inline span, and no way to nest two independent indicators (one for print emphasis, a second for "this is a hyperlink") around the same text.
+
+**What the standard requires (evidence):** BANA Braille Formats 2016, Sample 6-15 ("Screenshot", `references/bana/braille-formats-2016.pdf` p.180, "Screenshot for Web Page Layout" box) wraps each hyperlinked phrase in a hyperlink-boundary indicator pair (`@#7`...`@#'`) that is layered ON TOP OF the phrase's own bold passage indicator (`^7`...`^'`) — e.g. `@#7,sci;e3 ,a/ronomy3 ,sol> ,sy/em3 ,planets3 ,m>s3 ^7,life on ,m>s8^'@#'` (confirmed directly against the source `.txt`, lines 5287-5289, and cross-checked against the same phrase's simpler, non-hyperlink-boxed rendering two screenshots earlier on the same page, which has the bold markers alone). Emboss's own model (`Emboss/tests/gold/bana-formats-2016/section-6/sample-6-15.json`) can build the bold span but has nothing for the second wrapper.
+
+**Classification:** not done (feature absent).
+
+**Test that would prove a fix:** a test asserting a paragraph/caption segment carrying both a `tf` bitmask AND a new "hyperlink" flag produces two independently-nested indicator pairs around the same text; `Emboss/tests/gold_bana_section6.test.mjs`'s `sample-6-15` case (currently `mismatch`) would be one worked check of it, though not the only remaining cause of that file's mismatch (see also F-231, F-222).
+
+# Standards findings — line-numbered and line-lettered text, gold-run confirmation (BANA §15) (assessed 17 Sep 2026)
+
+## F-234 — The automatic §15.4.1d line-numbered-prose transcriber's note uses fixed, generic wording and adds no blank line before the text that follows, unlike the section's own worked illustration
+
+**Rules:** BANA 15.4.1d, 15.8.1b/c
+
+> "Insert a transcriber's note before the text when the three blank cells is used in only one section. Sample: Three blank cells occurring within a braille line indicate the beginning of a new print line." (15.4.1d)
+> "b. Insert a transcriber's note explaining the use of the three blank cells... c. Insert a blank line between the transcriber's note and the beginning of the line-numbered material." (15.8.1b/c)
+
+**What Emboss does:** `lineNumberNote`/`LINE_NUMBER_NOTE` (`Emboss/format/document.mjs:735-742`) is a single hard-coded English sentence ("Line numbers are shown at the right margin where print numbers a line. Three blank cells within a braille line show where that print line begins.") inserted, verbatim and unconditionally, before the first block `lineNumberInfo` finds carrying a `linenum` segment — with no way to supply the source's own note wording instead, and with no blank line inserted between the note and the numbered text that follows (`formatSegmentedPara` simply prepends `[...note, ...lines]`, `document.mjs:774-786`, with no separating `''`).
+
+**What the standard requires (evidence):** BANA Braille Formats 2016 Sample 15-3 ("Line-Numbered Prose with Transcriber's Note", `references/bana/braille-formats-2016.pdf` p.420, printed page 15-10) is this section's own worked illustration of the rule, and its own note reads "Three blank cells occurring within a braille line indicate the beginning of a new print line." — different wording from Emboss's fixed text — and is followed by a genuine BLANK braille line before the numbered prose begins (`Emboss/tests/gold/bana-formats-2016/section-15/sample-15-3.json`'s own gold `braille.lines`, row 5 of 15, confirmed directly against the source text). Sample 15-9 ("Marginal Numbers Indicating Words Read", p.427) independently confirms the same blank-line requirement for the closely-related §15.8.1b/c "counted words" note. Running `node Emboss/scripts/gold-run.mjs --section section-15 --sample "BANA Sample 15-3"` shows Emboss's own automatic note differing from the book's in wording AND omitting the blank line that follows it in the source, on an otherwise line-for-line-matching passage.
+
+**Classification:** bug / not done — the document model has no field to carry the source's own preferred note wording (LINE_NUMBER_NOTE is not parameterised at all), and `lineNumberNote`'s own output never adds the trailing blank line 15.8.1c explicitly requires (and Sample 15-3's own worked illustration of 15.4.1d shows too, though 15.4.1d's own rule text does not say so as explicitly).
+
+**Test that would prove a fix:** a document whose first line-numbered block is preceded by a source-supplied note wording renders that exact wording (not the hard-coded English sentence), followed by one blank braille line before the numbered text begins; `Emboss/tests/gold_bana_section15.test.mjs`'s `sample-15-3` and `sample-15-9` cases are the worked checks (both currently `mismatch`/`not-representable` partly on this cause).

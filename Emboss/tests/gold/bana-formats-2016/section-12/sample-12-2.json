@@ -1,0 +1,114 @@
+{
+  "id": "sample-12-2",
+  "title": "Sample 12-2: Boxed Sidebar within Text (Print Only)",
+  "pdfPages": [345],
+  "textLines": [10093, 10098],
+  "illustrates": {
+    "rule": "12.2.1",
+    "quote": "The purpose of this section is to help the transcriber identify sidebars. The use of sidebars, a publishing term for information placed adjacent to text, is one of the design elements that can create confusion. A sidebar is detached from the main text and found in a section either off to one side of it, or above or below it, on the same page. Sidebars may or may not be linked or related to the adjacent text, and the reading order of sidebars and text is not always obvious. Sidebars have a different function than cross-references (see Formats, §9.6, Cross-References and Incidental Notes) and are formatted according to their text layout, e.g., with headings, paragraphs, lists, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "★ BIOGRAPHY ★",
+        "features": "Decorative ribbon graphic at the top of the page, white text on a blue banner with stars -- page furniture, not a document heading."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Qin Shi Huangdi",
+        "features": "Large red title, drop-cap 'Q' begins the first paragraph below it."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "259 B.C.–210 B.C.",
+        "features": "Black text, centred directly under the main title -- the article's own date-range subtitle."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Qin Shi Huangdi (CHIN SHEE hwang dee) became the ruler of the kingdom of Qin in China in 238 B.C. He began expanding his power immediately. By 221 B.C. he had conquered all of China. As emperor, he proclaimed that his dynasty would rule for 10,000 generations.",
+        "features": "Opens with a large red drop-cap 'Q'; the pronunciation guide 'CHIN SHEE' is set in small caps."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Shi Huangdi was a great builder. He ordered the building of three highways to reach all parts of his empire. He used these roads to personally oversee the empire. In 214 B.C. work began on the Great Wall."
+      },
+      {
+        "kind": "paragraph",
+        "text": "The emperor had many achievements, but he was a harsh and strict ruler. For example, his building projects needed the forced labor of hundreds of thousands of his people. Many of them died while working. He also was not open to criticism. He ordered that all books except those about medicine, farming, and his own rule be burned. When some scholars objected to this, legend says that Shi Huangdi had many of them buried alive."
+      },
+      {
+        "kind": "other",
+        "text": "Copyrighted Image",
+        "features": "Large rectangular image placeholder on the right side of the page, roughly level with the second and third paragraphs."
+      },
+      {
+        "kind": "other",
+        "text": "British Museum",
+        "features": "Small photo-credit caption below the image placeholder."
+      },
+      {
+        "kind": "sidebar",
+        "title": "Biofact",
+        "features": "Small boxed sidebar with a solid blue vertical banner (rotated title) embedded in the left side of the text column; an arrow points from its bottom edge to the paragraph beginning 'After his death'.",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "No two warrior statues found in the emperor's tomb are alike. This one kneels before the emperor.",
+            "features": "Italicized."
+          },
+          {
+            "kind": "other",
+            "text": "Copyrighted Image",
+            "features": "Small image placeholder inside the sidebar."
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "(Formats: Suggested Location)",
+        "features": "Instructional callout, with an arrow pointing from the 'Biofact' sidebar to the space directly before the following paragraph."
+      },
+      {
+        "kind": "paragraph",
+        "text": "After his death, Shi Huangdi was buried in an elaborate tomb carved into the side of a mountain. Guarding his body was an “army” of more than 6,000 life-sized warrior statues. In the walls were arrows ready to be released if anyone tried to enter the tomb."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Learn from Biographies",
+        "features": "Red bold text -- a secondary heading introducing the article's own closing discussion question, smaller than the main 'Qin Shi Huangdi' title."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Rebellions began soon after Shi Huangdi's death and his empire fell about four years later. What aspects of the emperor's style of rule may have been responsible for the fall of his empire?"
+      },
+      {
+        "kind": "sidebar",
+        "features": "Small rounded box at the bottom right corner, with a computer-monitor icon.",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "For more information, go online to Meet the People at www.sfsocialstudies.com."
+          }
+        ]
+      }
+    ],
+    "notes": "This sample is captioned '(Print Only)' in the source -- no braille transcription exists for it. The whole point of the sample is that the 'Biofact' sidebar sits physically embedded within the main text column (rather than off to one side, as in Sample 12-1); an arrow with the caption '(Formats: Suggested Location)' shows where a transcriber might relocate it relative to the running paragraphs.",
+    "surroundingText": null,
+    "printFeatures": "Several floating elements on one page: a decorative masthead ribbon, a large title with drop cap, a large image placeholder with photo credit, a small boxed sidebar embedded mid-column with a rotated banner title, a second small cornered sidebar box, and an instructional arrow/caption."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source -- no braille transcription exists for this sample."
+  },
+  "uncertain": [
+    "'Learn from Biographies' is given level 2 (a secondary heading under the article's own main title) on the strength of its visual size relative to 'Qin Shi Huangdi' in the page image; there is no braille to confirm this against."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Both runs transcribe essentially identical wording; the only real differences are classification choices with no braille to arbitrate them (this sample is Print Only), resolved here by direct reference to the PDF page image (p.345): the '★ BIOGRAPHY ★' ribbon and the 'British Museum'/'Copyrighted Image' captions are page furniture, not running headings or paragraphs, so kept as 'other' (matching run B); the 'BIOFACT' sidebar's own banner is modelled as the sidebar's `title` (matching this task's box/sidebar convention, rather than run A's or run B's nested heading child); 'Learn from Biographies' is given level 2 (matching run B) rather than level 1 (run A), since 'Qin Shi Huangdi' -- already level 1 -- is unambiguously the page's own top heading and 'Learn from Biographies' is visibly smaller in the image. Quotation marks around “army” are typographic curly quotes, matching the page image and run B (run A used straight ASCII quotes)."
+}

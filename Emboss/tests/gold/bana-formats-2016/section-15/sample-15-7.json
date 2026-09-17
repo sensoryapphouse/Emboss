@@ -1,0 +1,75 @@
+{
+  "id": "BANA Sample 15-7",
+  "title": "Sample 15-7: Mixed Prose and Poetry",
+  "pdfPages": [424, 425],
+  "textLines": [12190, 12226],
+  "illustrates": {
+    "rule": "15.6.1",
+    "quote": "15.6.1 Each prose and verse section is formatted according to the guidelines for indention patterns for that format. a. Prose. Every print line is numbered. b. Verse. Use only the line numbers shown in print. (See Sample 15-7: Mixed Prose and Poetry on page 15-14.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "other", "text": "–107–", "features": "Print page number, centred above the excerpt." },
+      { "kind": "numbered", "text": "SECOND CITIZEN. Truly, Sir, all that I live by is with the awl; I meddle with", "number": "21", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "no tradesman's matters, nor women's matters, but with awl.", "number": "22", "printVisible": false },
+      { "kind": "numbered", "text": "I am indeed, sir, a surgeon to old shoes; when they are in", "number": "23", "printVisible": false },
+      { "kind": "numbered", "text": "great danger, I re-cover them. As proper men as ever trod upon", "number": "24", "printVisible": false },
+      { "kind": "numbered", "text": "neat's-leather have gone upon my handiwork", "number": "25", "printVisible": true },
+      { "kind": "dialogue", "text": "FLAVIUS. But wherefore art not in thy shop today?", "level": 0 },
+      { "kind": "dialogue", "text": "Why dost thou lead these men about the streets?", "level": 0 },
+      { "kind": "numbered", "text": "SECOND CITIZEN. Truly, sir, to wear out their shoes to get myself into more", "number": "28", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "work. But indeed, sir, we make holiday to see Caesar and to", "number": "29", "printVisible": false },
+      { "kind": "numbered", "text": "rejoice in his triumph", "number": "30", "printVisible": true },
+      { "kind": "dialogue", "text": "MARULLUS. Wherefore rejoice? What conquest brings he home?", "level": 0 },
+      { "kind": "dialogue", "text": "What tributaries follow him to Rome,", "level": 0 },
+      { "kind": "dialogue", "text": "To grace in captive bonds his chariot wheels?", "level": 0 },
+      { "kind": "dialogue", "text": "You blocks, you stones, you worse than senseless things!", "level": 0 },
+      { "kind": "dialogue", "text": "O you hard hearts, you cruel men of Rome,", "level": 0, "number": "35" },
+      { "kind": "dialogue", "text": "Knew you not Pompey? Many a time and oft", "level": 0 }
+    ],
+    "notes": "CORRECTED during reconciliation: both A and B modeled each speaker's name (\"SECOND CITIZEN.\", \"FLAVIUS.\", \"MARULLUS.\") as its OWN separate print.blocks entry, standing before the dialogue that follows. The given, already-verified braille shows otherwise: every speaker name in this sample shares its own FIRST braille line with the opening words of that speech/verse (e.g. row 2, 'SECOND CITIZ54 ,TRULY1...' = 'Second Citizen. Truly...' on one row; row 11 (0-indexed), 'FLAVIUS4 ,B ...' = 'Flavius. But wherefore...' on one row; row 18, 'M>ULLUS4 ,\":=E RJC8...' = 'Marullus. Wherefore rejoice...' on one row) — confirmed directly against the source text, matching Sample 15-6's own established speaker+dialogue-on-one-line convention. This reconciliation merges each speaker name into its own first content block instead of a separate heading-like block. A also wrongly modeled the whole sample as uniform 'line' kind with no prose/verse distinction and wrongly included the sample's own citation title ('Sample 15-7: Mixed Prose and Poetry') as a print.blocks heading (no other file in this section does this — the title lives in the 'title'/'id' fields only); B correctly split prose (SECOND CITIZEN, a cobbler speaking in PROSE — confirmed against the PDF page image, whose lines visibly wrap to fill the column width rather than breaking at fixed metrical points) from verse (FLAVIUS and MARULLUS, Roman tribunes speaking in VERSE — confirmed by the image's own short, unwrapped, metrically even lines) and did not include a spurious title block; B's split and rule id (15.6.1, matching standards-map.md's own already-reconciled table exactly, replacing A's non-existent placeholder '15.10') are used here. Print-visible numbers 25, 30 and 35 (confirmed against the PDF page image) are unchanged from both runs; the intervening prose numbers (21-24, 28-29) were computed sequentially and confirmed against the given braille's own right-margin digits, per 15.6.1a ('every print line [of prose] is numbered'). The verse lines carry NO invented numbers beyond what print shows (15.6.1b), per both runs' own agreement.",
+    "surroundingText": [],
+    "printFeatures": "A Julius Caesar (Act 1, Scene 1) excerpt mixing a cobbler's PROSE speech (numbered every line, 15.6.1a) with two tribunes' VERSE speeches (numbered only where print shows a number, 15.6.1b); confirmed against the PDF page image (references/bana/braille-formats-2016.pdf, page 424)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                    #ajg",
+      ",second ,citiz54 ,truly1 ,sir1 all   #ba",
+      "  t ,i live by is ) ! awl2 ,i m$dle",
+      "  )   no tradesman's matt]s1 nor     #bb",
+      "  wom5's matt]s1 b ) awl4   ,i am    #bc",
+      "  9de$1 sir1 a surgeon to old %oes2",
+      "  :5 !y >e 9   grt dang]1 ,i         #bd",
+      "  re-cov] !m4 ,z prop] m5 z \"e trod",
+      "  ^u   n1t's-l1!r h g\"o ^u my        #be",
+      "  h&i\"w",
+      ",flavius4 ,b \":=e >t n 9 ?y %op td8",
+      "  ,:y do/ ?\\ l1d ^! m5 ab ! /reets8",
+      ",second ,citiz54 ,truly1 sir1 to     #bh",
+      "  we> \\ _! %oes to get myf 9to m",
+      "  \"w4 ,b 9de$1 sir1 we make holi\"d   #bi",
+      "  to see ,caes> & to   rjc 9 8       #cj",
+      "  triumph",
+      ",m>ullus4 ,\":=e rjc8 ,:at 3que/",
+      "    br+s he home8",
+      "  ,:at tribut>ies foll[ hm to",
+      "    ,rome1",
+      "  ,to grace 9 captive bonds 8 *>iot",
+      "    :eels8",
+      "  ,y blocks1 y /\"os1 y worse ?an",
+      "    s5se.s ?+s6",
+      "                                   a#ajg",
+      "  ,o y h>d he>ts1 y cruel m5 (       #ce",
+      "    ,rome1",
+      "  ,knew y n ,pompey8 ,_m a \"t & (t   #cf"
+    ],
+    "pageBreaks": [25],
+    "notes": "CORRECTED during reconciliation: A's own array prepended a spurious first line ('Line-Numbered and Line-Lettered Text', the page's own running head) that does not appear anywhere in the source's numbered listing (references/_text/braille-formats-2016.txt: the excerpt's own line 1 is the page-number row '#ajg', with no running-head text before it — running heads are book-layout furniture, never part of the braille transcription itself). B's 29-line array (no running head) is verbatim from the source and is used here. Right-margin numbers decode as: #ba=21, #bb=22, #bc=23, #bd=24, #be=25 (first speech); #bh=28, #bi=29, #cj=30 (second speech); #ce=35 (Marullus's fifth verse line). One trailing token, #cf on the array's LAST row ('Knew you not Pompey...'), decodes arithmetically to 36 — but the PDF page image shows no print number anywhere near this line (only 35, on the line above), and neither transcription run's own print.blocks independently proposed a number there either. Left UNRESOLVED (see 'uncertain' below and differences.md) rather than built into the model as a fabricated fourth verse anchor; a plausible alternative reading is that #cf is not a line number at all but the volume's own running braille-page count for this short, four-row second braille page (a#ajg on the row above, at the top of the new page, already carries the ordinary print-page-continuation number 107a, per the same convention documented for the book's own numbered listing)."
+  },
+  "uncertain": [
+    "The trailing '#cf' (36) on the braille's own last row ('Knew you not Pompey? Many a time and oft') could not be confirmed as a genuine verse line number — the print page shows no number there, and neither original transcription run proposed one. Not built into buildModel15's model; if it IS a genuine 15.6.1b verse number, this file's own 'verse: only print-shown numbers' data would need a fifth entry."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Braille: B's 29-line array (no spurious running-head line) is correct per direct re-reading of the source; A's 30-line version is wrong. Print: B's prose/verse split and rule id (15.6.1) are correct, matching standards-map.md's own table and the PDF page image's own visible typography; A's uniform 'line' kind and invented '15.10' rule id are wrong. This reconciliation additionally merges each speaker name into its own first line of dialogue (both runs wrongly kept them as separate blocks) and computes the intervening sequential prose numbers per 15.6.1a. Modeled by buildModel15 as: the prose portion (SECOND CITIZEN) via the same genuine-linenum/wrapNumbered mechanism as Sample 15-2/15-3/15-4 (expected to work, per the 'done' findings); the verse portion (FLAVIUS/MARULLUS) as play/verse dialogue with a genuine linenum segment on the two numbered lines, expected to hit F-181 (silently dropped, not merely misplaced) exactly as Sample 15-6."
+}

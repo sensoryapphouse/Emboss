@@ -1,0 +1,51 @@
+{
+  "id": "example-6-4",
+  "title": "Samples of Concept Map Outlines (Print Only)",
+  "pdfPages": [
+    150
+  ],
+  "textLines": [
+    4542,
+    4542
+  ],
+  "illustrates": {
+    "rule": "6.5.1",
+    "quote": "Concept maps have a central idea with rays branching out to subordinate ideas. Whenever possible, concept maps are done as a tactile graphic. When a request is made for a text-based format, use a nested list (1-5, 3-5; 1-7, 3-7, 5-7; etc.) to indicate the individual elements of the web. The central idea of the concept map is the first level in the nested list. Other elements are listed in the appropriate level in a logical order, e.g., top to bottom, right to left, etc. A careful reading of the concept map may dictate another placement order. Use three dot 5s to indicate blank elements. Explain this usage in a transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "Three examples of blank concept map outlines: a circular web, an angular flowchart-style web, and a top-down hierarchical web.",
+          "labels": []
+        },
+        "level": null,
+        "text": null,
+        "features": "Diagrams enclosed in a rectangular box."
+      },
+      {
+        "kind": "paragraph",
+        "text": "(See Sample 6-2: Concept Map on page 6-14.)",
+        "level": null,
+        "features": "Regular text placed below the box."
+      }
+    ],
+    "notes": "This example provides visual samples of concept map outlines in print only; the source explicitly labels it '(Print Only)'.",
+    "surroundingText": null,
+    "printFeatures": "Three unlabelled line diagrams of concept maps within a rectangular border."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "The source explicitly labels this 'Print Only'; confirmed against the PDF page image (page 150, printed 6-6), which shows the three outline diagrams with no accompanying braille."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages: BOTH runs gave [6] — a shared error the task instructions specifically warn agreement cannot catch. Verified against the PDF page image (p.150, printed 6-6, footer '6-6 Section 6'): the three diagrams match both runs' own (identical) figure.description exactly. Corrected to pdfPages [150] (printed 6-6 + 144). illustrates.quote: A's copy embeds a raw page-turn artifact from the source .txt ('6-5 Section 6 Illustrative Materials' spliced mid-sentence) and a spurious space in 'text- based'; B's is clean and matches source-6.txt once the running header/footer is stripped and the line-wrap hyphen in 'text-based' is closed up — B used throughout."
+}

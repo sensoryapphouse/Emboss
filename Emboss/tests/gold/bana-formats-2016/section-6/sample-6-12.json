@@ -1,0 +1,77 @@
+{
+  "id": "sample-6-12",
+  "title": "Complex Shared Timeline",
+  "pdfPages": [
+    174
+  ],
+  "textLines": [
+    5107,
+    5145
+  ],
+  "illustrates": {
+    "rule": "6.10.6",
+    "quote": "Complex Shared Date Timelines. Use a nested list format (1-5, 3-5; 1-7, 3-7, 5-7; etc.) when print shows several major topics with the timeline. Another option may be to list the events after a cell-5 heading. (See Sample 6-12: Complex Shared Timeline on page 6-30.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 2, "text": "POLITICS AND GOVERNMENT" },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "1347 Black Death strikes Europe" },
+          { "text": "1368 Ming dynasty established in China" }
+        ]
+      },
+      {
+        "kind": "figure",
+        "figure": { "type": "photo", "description": "Ivory statue of a Daoist figure carved during the Ming dynasty", "labels": ["Copyrighted Image"] }
+      },
+      { "kind": "caption", "text": "Ivory statue of a Daoist figure carved during the Ming dynasty" },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "1492 Christopher Columbus reaches the Americas" },
+          { "text": "1525" }
+        ]
+      },
+      { "kind": "heading", "level": 2, "text": "SOCIETY AND CULTURE" },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "1375" },
+          { "text": "1508 Michelangelo begins painting Sistine Chapel" }
+        ]
+      }
+    ],
+    "notes": "The book shows this same print timeline transcribed TWO valid ways per 6.10.6 ('Option 1: Nested List' and 'Option 2: Heading with List') — both option labels are the book's own print captions, not braille content, and are dropped here (matching the across-the-section convention for such labels). Only Option 2 (cell-5 heading + flat 1-3 list, structurally the simpler of the two) is modelled in this file's print.blocks/braille.lines; Option 1 (each topic as a nested-list level-0 item, its events at level 1) is an equally valid alternative the source itself offers but is not separately tested here, to keep one file per original sample matching the task's file count. The book's own excerpt transcribes only the first two of the print's three topic sections (Politics and Government; Society and Culture) and omits the third (Science and Technology, whose figure.labels are recorded here for documentation but never transcribed into braille at all) — confirmed by print.notes in both source runs. Two 'Copyrighted Image' placeholder photos are named in the print; only the first (the Ming-dynasty ivory statue) gets a transcriber's-note description in the braille excerpt (labelled 'Picture', not 'Illustration' — F-225 will still mismatch on this file's own image-label word)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,,,politics & gov]n;t,'",
+      "#acdg ,black ,d1? /rikes ,europe",
+      "#acfh ,m+ dyna/y e/abli%$ 9 ,*9a",
+      "      @.<,picture@.> ,ivory /atue ( a",
+      "    ,daoi/ figure c>v$ dur+ ! ,m+ dyna/y",
+      "#adib ,*ri/oph] ,columbus r1*es !",
+      "  ,am]icas",
+      "#aebe",
+      "",
+      "    ,,,society & culture,'",
+      "#acge",
+      "#aejh ,mi*elangelo 2g9s pa9t+ ,si/9e",
+      "  ,*apel",
+      "",
+      "444",
+      "#aebe"
+    ],
+    "pageBreaks": [],
+    "notes": "This is Option 2's own braille only (cell-5 heading at indent 4 for each topic name; flat 1-3 list beneath, first cell 1 / runover cell 3; the embedded figure description keeps the ordinary 6/4 image margins). 444 marks the book's own excerpt ellipsis before the final 1525 tick — not print content. Option 1 (source-6.txt lines 5115-5128, a nested-list rendering of the same content) is not included in this file's own comparison target."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs conflated the book's own 'Option 1'/'Option 2' print captions into braille.lines as literal English text (A dropped them entirely instead, along with BOTH of the book's own '444' excerpt-ellipsis lines) — neither is usable directly; this file's braille.lines were rebuilt from source-6.txt (lines 5130-5145, Option 2 only) directly, decoded with the same script used throughout this reconciliation, and every event/date line confirmed by exact forward-translation (e.g. '1347 Black Death strikes Europe', 'Ivory statue of a Daoist figure carved during the Ming dynasty' both reproduce their braille lines exactly). print.blocks (cell-5 heading + list + embedded figure-description + list, repeated per topic) was built from scratch, since neither run supplied a buildable structure, only a flat figure.labels array covering all three topic sections (including the untranscribed third one, Science and Technology, kept here as documentation only per print.notes)."
+}

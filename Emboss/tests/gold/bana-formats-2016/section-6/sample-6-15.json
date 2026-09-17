@@ -1,0 +1,105 @@
+{
+  "id": "sample-6-15",
+  "title": "Screenshot",
+  "pdfPages": [
+    180
+  ],
+  "textLines": [
+    5245,
+    5294
+  ],
+  "illustrates": {
+    "rule": "6.12.3",
+    "quote": "Descriptive Screenshots. These screenshots are used to teach website design. a. A tactile graphic is frequently the best option if the purpose of the screenshot is to show the page design. b. A complete and detailed description of the screenshot is provided when a tactile graphic is not possible. Include the following: (1) Divide the web page into sections, e.g., navigation panel on the left, the tool bar on the top, the content area, the footer, etc. (2) Describe text placement as needed. (3) Indicate hyperlinks, which are a word, phrase, or image that can be clicked on to jump to a different location."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "box",
+        "title": "Screenshot for Information Only",
+        "blocks": [
+          { "kind": "paragraph", "text": "Search" },
+          { "kind": "note", "text": "Toolbar" },
+          { "kind": "paragraph", "text": "back forward home reload stop print" },
+          { "kind": "paragraph", "text": "Address http://search.com/search?p=%22life+on+mars%22", "features": "The %22 (URL-encoded quote) pair around 'life on mars' is rendered in the agreed braille as a devised symbol pair ('#bb...#bb'), not literal punctuation — not built (no print-side words to build it from; a devised-symbol gap, F-222)." },
+          { "kind": "note", "text": "Hyperlinks" },
+          { "kind": "paragraph", "text": "Science: Astronomy: Solar System: Planets: Mars: **Life on Mars?**", "features": "'Life on Mars?' is bold (a hyperlink)." },
+          { "kind": "paragraph", "text": "Science Magazine: **Life on Mars** Special", "features": "'Life on Mars' is bold (a hyperlink)." },
+          { "kind": "paragraph", "text": "Is there **Life on Mars?** an interview with top scientists", "features": "'Life on Mars?' is bold (a hyperlink)." }
+        ]
+      },
+      {
+        "kind": "box",
+        "title": "Screenshot for Web Page Layout",
+        "blocks": [
+          { "kind": "note", "text": "Top: Title" },
+          { "kind": "paragraph", "text": "Search" },
+          { "kind": "note", "text": "Left margin: Toolbar" },
+          { "kind": "paragraph", "text": "back forward home reload stop print" },
+          { "kind": "note", "text": "Left margin: URL field" },
+          { "kind": "paragraph", "text": "Address http://search.com/search?p=%22life+on+mars%22", "features": "Devised-symbol quote pair, not built (see box 1)." },
+          { "kind": "note", "text": "Left margin" },
+          { "kind": "paragraph", "text": "Science: Astronomy: Solar System: Planets: Mars: **Life on Mars?**", "features": "'Life on Mars?' is bold; the whole hyperlinked phrase is additionally wrapped in a separate hyperlink-boundary indicator pair ('@#7'/'@#'') in the agreed braille — Emboss has no such construct (not italic/bold/underline/code); not built, and the resulting mismatch on this indicator is expected." },
+          { "kind": "paragraph", "text": "Science Magazine: **Life on Mars** Special", "features": "Same hyperlink-boundary indicator, not built." },
+          { "kind": "paragraph", "text": "Is there **Life on Mars?** an interview with top scientists", "features": "Same hyperlink-boundary indicator, not built." }
+        ]
+      }
+    ],
+    "notes": "Per 6.12.1a, screenshots are enclosed in box lines (BANA §7) — both boxes' own top rule lines were dropped by the session-wide all-digit-line blanking bug in both source runs (see differences.md) and are restored here directly from source-6.txt. The first box ('Screenshot for Information Only', 6.12.2) simply describes the toolbar and hyperlinked search-result text; the second ('Screenshot for Web Page Layout', this sample's own cited rule, 6.12.3) additionally divides the page into labelled sections (6.12.3.b.1, modelled as standalone transcriber's-note labels: 'Top: Title', 'Left margin: Toolbar', etc.) and marks each hyperlink's own boundary with a second, distinct indicator pair Emboss has no equivalent for at all.",
+    "surroundingText": null,
+    "printFeatures": "Two boxed screenshots of a web browser search page, one plain and one divided into labelled layout sections with marked hyperlinks."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "     screenshot for information only",
+      "7777777777777777777777777777777777777777",
+      "                 ,se>*",
+      "",
+      "      @.<,toolb>@.>",
+      "back =w>d home reload /op pr9t",
+      "",
+      ",address http3_/_/se>*4com_/se>*8p\"7.0\"",
+      "  #bblife\"6on\"6mars.0#bb",
+      "",
+      "      @.<,hyp]l9ks@.>",
+      ",sci;e3 ,a/ronomy3 ,sol> ,sy/em3",
+      "    ,planets3 ,m>s3 ^7,life on ,m>s8^'",
+      "  ,sci;e ,magaz9e3 ^7,life on ,m>s^'",
+      "    ,special",
+      "  ,is \"! ^7life on ,m>s8^' an 9t]view )",
+      "    top sci5ti/s",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "     screenshot for web page layout",
+      "7777777777777777777777777777777777777777",
+      "      @.<,top3 ,title@.>",
+      "                 ,se>*",
+      "",
+      "      @.<,left m>g93 ,toolb>@.>",
+      "back =w>d home reload /op pr9t",
+      "",
+      "      @.<,left m>g93 ,,url field@.>",
+      ",address http3_/_/se>*4com_/se>*8p\"7.0\"",
+      "  #bblife\"6on\"6mars.0#bb",
+      "",
+      "      @.<,left m>g9@.>",
+      "@#7,sci;e3 ,a/ronomy3 ,sol> ,sy/em3",
+      "    ,planets3 ,m>s3 ^7,life on",
+      "    ,m>s8^'@#'",
+      "  @#7,sci;e ,magaz9e3 ^7,life on ,m>s^'",
+      "    ,special@#'",
+      "  @#7,is \"! ^7life on ,m>s8^'@#' an",
+      "    9t]view ) top sci5ti/s",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "Both boxes' top rule lines (BRF ASCII '7' repeated 42 times) were dropped by the all-digit-line blanking bug in both source runs and are restored here from source-6.txt lines 5251 and 5275. Toolbar button labels ('back forward home reload stop print') are lowercase in the real braille — both runs had them capitalized, corrected here (confirmed by forward translation: capitalized text produces individual capital-word signs that are absent from the agreed braille)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "CORRECTION (session-wide): both box top-rule lines were victims of the all-digit-line blanking bug (see differences.md) and are restored directly from source-6.txt (lines 5251, 5275), matched exactly against the surviving bottom-rule lines both runs already had. The toolbar button row ('Back Forward Home Reload Stop Print') was capitalized in both runs; forward-translating that capitalized form does not reproduce the agreed braille (which has no capital-word signs at all on that line) while the plain lowercase form does — corrected. The 'Life on Mars(?)' hyperlink phrases were plain in both runs; forward-translating them with TF_BOLD (not italic, tested and ruled out the same way as example-6-3/sample-6-1) reproduces the agreed braille's '^7...^'' passage markers exactly — corrected to **bold** markup, with a features note recording each as a hyperlink. print.blocks were restructured into two explicit {kind:'box'} containers (matching the section-7/section-8 gold precedent's own box modelling) with the section-label transcriber's notes (Toolbar/Hyperlinks/Top: Title/etc.) built as standalone {kind:'note'} blocks, since neither run's flat figure.labels array carried any of this structure."
+}

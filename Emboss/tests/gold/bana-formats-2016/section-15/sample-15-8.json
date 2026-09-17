@@ -1,0 +1,57 @@
+{
+  "id": "BANA Sample 15-8",
+  "title": "Sample 15-8: Poem with Line Numbers and Rhyme Scheme",
+  "pdfPages": [426],
+  "textLines": [12233, 12254],
+  "illustrates": {
+    "rule": "15.7.3",
+    "quote": "Poetry with Line-Numbered Rhyme Scheme. Observe the following guidelines, in addition to the points outlined in Formats, §15.7.2: a. Use poetry format. (See Formats, §13, Poetry and Song Lyrics.) b. Follow print for line numbers. Do not add numbers that do not occur in print. c. Place line numbers, preceded by the numeric indicator, at the right margin. d. Position the letters of the rhyme scheme so that they end one cell before the longest line number on the braille page."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "verse", "text": "I wonder do you feel to-day", "level": 0, "letter": "a" },
+      { "kind": "verse", "text": "As I have felt since, hand in hand,", "level": 1, "letter": "b" },
+      { "kind": "verse", "text": "We sat down on the grass, to stray", "level": 0, "letter": "a" },
+      { "kind": "verse", "text": "In spirit better through the land,", "level": 1, "letter": "b" },
+      { "kind": "verse", "text": "This morn of Rome and May?", "level": 0, "letter": "a", "number": "5" },
+      { "kind": "stanzabreak" },
+      { "kind": "verse", "text": "For me, I touched a thought, I know,", "level": 0, "letter": "c" },
+      { "kind": "verse", "text": "Has tantalized me many times,", "level": 1, "letter": "d" },
+      { "kind": "verse", "text": "(Like turns of thread the spiders throw", "level": 0, "letter": "c" },
+      { "kind": "verse", "text": "Mocking across our path) for rhymes", "level": 1, "letter": "d" },
+      { "kind": "verse", "text": "To catch at and let go.", "level": 0, "letter": "c", "number": "10" }
+    ],
+    "notes": "Robert Browning, 'Two in the Campagna' (identification not load-bearing). CORRECTED during reconciliation: both A and B modeled the sample's own bold, centred citation title ('Sample 15-8: Poem with Line Numbers and Rhyme Scheme' — confirmed genuinely printed directly above the poem on the PDF page image) as a print.blocks heading; the given, already-verified braille excerpt below begins directly with the embedded transcriber's note (two blank lines then '@.<...'), with NO braille row for the title anywhere — matching every OTHER file in this section (and the section-13 gold precedent), whose own citation titles live only in the 'title'/'id' metadata fields, never as a print.blocks entry. Removed here for consistency; not itself in question otherwise — both runs agreed on wording, letters, and the two numbers (5, 10). This reconciliation independently re-measured 'level' from the given, already-verified braille (both lines of each two-line rhyme unit alternate flush/indented) instead of trusting either run's own 'flush left'/'indented' feature-text description directly, and separated the schema's 'letter' (right-margin rhyme scheme, present on every line) from 'number' (right-margin line count, present only every 5th line, standards-map.md/F-182's own 'BANA Sample 15-8's own construct' of two markers on one line).",
+    "surroundingText": [],
+    "printFeatures": "Poem with alternating indentation, a right-margin rhyme-scheme letter on every line, and a right-margin line number on every fifth line (both markers present together on lines 5 and 10)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "      @.<,! poem has l9e numb]s & a",
+      "    rhyme s*eme4 ,! l9e numb]s >e e fif?",
+      "    l9e & at ! \"r m>g94 ,! lr$ rhyme",
+      "    s*eme is on e l9e & appe>s 2f ! l9e",
+      "    numb]s4@.>",
+      "",
+      ",i wond] d y feel to-\"d            a",
+      "  ,z ,i h felt s9ce1 h& 9 h&1     ;b",
+      ",we sat d[n on ! grass1 to /ray    a",
+      "  ,9 _s bett] \"? ! l&1            ;b",
+      ",? morn ( ,rome & ,may8            a  #e",
+      "",
+      ",= me1 ,i t\\*$ a ?\"\\1 ,i \"k1      ;c",
+      "  ,has tantaliz$ me _m \"ts1       ;d",
+      "\"<,l turns ( ?r1d ! spid]s ?r[    ;c",
+      "  ,mock+ acr \\r pa?\"> = rhymes    ;d",
+      ",to cat* at & let g4              ;c #aj"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Every line's own rhyme letter ends exactly one cell before the numeral on lines 5 and 10 (15.7.3d), confirmed directly."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs wrongly included the sample's own citation title as a print.blocks heading — removed, since the given braille has no row for it (matching every other file in this section); wording/letters/numbers otherwise already agreed; levels re-measured directly from the braille. Modeled by buildModel15 as a genuine poem (kind:'verse') whose 'letter' field is folded into the line's own text as a literal prefix (matching parsePoem's real numPrefix behaviour, F-182) on EVERY line; the 'number' field on lines 5/10 is deliberately NOT built — per standards-map.md's own row for 15.7.3d and standards-findings.md F-182, parse.mjs's findLinenum returns only the FIRST <linenum> child of a poem line, so when a line carries both a letter and a number the second marker (the number) is silently dropped, not merely misplaced. This file's mismatch cause is F-182 twice over: left-margin placement of the letter, AND total loss of the line number on lines 5/10."
+}

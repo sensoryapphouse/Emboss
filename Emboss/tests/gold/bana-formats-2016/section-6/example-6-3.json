@@ -1,0 +1,61 @@
+{
+  "id": "example-6-3",
+  "title": "Illustration with Description and Caption",
+  "pdfPages": [
+    148
+  ],
+  "textLines": [
+    4469,
+    4480
+  ],
+  "illustrates": {
+    "rule": "6.3.1",
+    "quote": "Some images may require a description, which is enclosed in transcriber’s note indicators following the caption. Use appropriate vocabulary for the grade level and subject matter."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "photo",
+          "description": "A referee is separating two athletes who are arguing and pointing fingers at each other.",
+          "labels": []
+        },
+        "description": "A referee is separating two athletes who are arguing and pointing fingers at each other."
+      },
+      {
+        "kind": "caption",
+        "text": "**Views of anger** How would each of psychology's levels of analysis explain what's going on here?",
+        "features": "'Views of anger' is bold; the rest of the caption is plain."
+      },
+      {
+        "kind": "caption",
+        "text": "David Madison/Corbis",
+        "features": "Vertical photo-credit text running down the image's left edge."
+      }
+    ],
+    "notes": "The transcriber added a description of the photograph in a transcriber's note after the caption; here (unlike example-6-1/6-2) print.blocks[0].description IS built — it matches the second agreed transcriber's-note block word for word. The photo credit (second caption block) is ignored in the braille (BANA gives no source-citation mechanism Emboss implements; see F-168) and is not built.",
+    "surroundingText": null,
+    "printFeatures": "A photograph with a caption below it. A vertical photo credit is on the left side of the image."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,photograph@.> ^7,views (",
+      "    ang]^' ,h[ wd ea* ( psy*ology's",
+      "    levels ( analysis expla9 :at's go+",
+      "    on \"h8",
+      "      @.<,a ref]ee is sep>at+ two",
+      "    a?letes :o >e >gu+ & po9t+ f+]s at",
+      "    ea* o!r4@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "A transcriber's note '[photograph]' is added before the caption (print does not identify the illustration, 6.2.2b). 'Views of anger' is bold in print, wrapped in UEB bold passage indicators '^7'/'^''. The description of the photo is enclosed in transcriber's note indicators and placed after the caption (6.3.1), with no blank line before or after (6.2.2a)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte, but both shared the same omission: neither recorded that 'Views of anger' is bold (not plain). Confirmed two ways: (1) direct inspection of the PDF page image (p.148, printed 6-4) shows it visibly bolder than the rest of the caption; (2) forward-translation proof — marking the first 14 characters TF_BOLD reproduces the agreed braille exactly ('^7,views ( ang]^''...), while marking the same span TF_ITALIC instead produces '.1,views...' (wrong) — confirming bold, not italic. This is exactly the 'agreement is no evidence' risk the task instructions warn about: a shared model error that comparing the two runs against each other could never have surfaced. Correction: **bold** cell-markup added to the caption text, with a features field recording it. Also confirmed here (unlike example-6-1/6-2): figure.description IS separately rendered — forward-translating it alone reproduces the second agreed transcriber's-note block exactly, so it is consumed by buildModel6 for this file. The photo-credit caption is recorded as a limitation per F-168 (source citations/credits inside an imggroup are lost by Emboss)."
+}

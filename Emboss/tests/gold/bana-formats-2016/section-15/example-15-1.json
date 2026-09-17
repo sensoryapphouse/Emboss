@@ -1,0 +1,40 @@
+{
+  "id": "BANA Example 15-1",
+  "title": "Example 15-1: Poetic Rhyme Scheme within Body of Text",
+  "pdfPages": [],
+  "textLines": [11909, 11918],
+  "illustrates": {
+    "rule": "15.7.1",
+    "quote": "Paragraph Format. Follow print for spacing and capitalization when a rhyme scheme is indicated by a linear sequence of lowercase letters within the narrative body of text. Retain font attributes used for rhyme scheme letters. The rhyme scheme letter should be on a line with at least one word of the material to which it applies."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The rhyme scheme in these lines of Yeats *Resurrection* is abba. I saw a staring virgin stand *a* / Where holy Dionysus died, *b* / And tear the heart out of his side, *b* / And lay the heart upon her hand *a*",
+        "continuation": true,
+        "features": "Ordinary running prose (15.7.1's own 'Paragraph Format'), quoting four lines of verse inline with a '/' marking each original print line break and an italic single letter after each quoted line naming its rhyme (markup DSL '*...*' = italic, per Emboss/format/cell-markup.mjs, the same convention every other gold section uses for emphasis in print.blocks text). 'continuation:true' because the given braille begins flush at cell 1 with no paragraph indent — this excerpt continues directly from the rule's own preceding sentence, not a fresh paragraph. Not poetry-formatted braille — no <poem>/<line> structure, no linenum apparatus; this rule is entirely about retaining print's own font attribute on the letters, unrelated to the linenum findings (F-181/F-182/F-205) that govern every other file in this section."
+      }
+    ],
+    "notes": "No print image exists for this example (it is prose running text, not a boxed worked sample) — both transcription runs correctly left this empty and flagged 'print incomplete'. Per this reconciliation's brief, the print text was rebuilt from the braille (never independently sourced): back-translated word-by-word with Emboss's own translator (Emboss/engine/louis.mjs backTranslate, uebG2 table) from the already-verified braille.lines below, then the candidate wording was forward-translated (Emboss/engine/louis.mjs translate) and compared character-for-character against the target. The prose sentence and all five rhyme letters/positions verify EXACTLY: 'The rhyme scheme in these lines of Yeats ' -> ',! rhyme s*eme 9 ^! l9es ( ,y1ts' (NO possessive apostrophe — confirmed by forward-translation: 'Yeats'' with an apostrophe would add a trailing dot-3 the source does not have), an italic 'Resurrection' -> '.1,resurrec;n' (byte-for-byte), each italic rhyme letter 'a'/'b' -> '.2a'/'.2;b' (byte-for-byte, confirmed with Emboss's own typeform array convention, one italic-typeform code point per input character). One detail remains UNVERIFIED: plain (non-italic) 'abba' translates through uebG2 as contracted 'a2a' (the one-cell 'bb' sign), not literally as four separate letter cells 'abba' the way the source's braille reads; several candidate markups (grade-1 word/passage wrapping, each letter individually italicised, space- or hyphen-separated) were tried and none reproduced the source's literal 'abba4' exactly — see compare-gold-15/differences.md for the attempts. Recorded as an unresolved micro-detail in 'uncertain' below rather than guessed; it affects only this one four-letter word, not the sentence's structure or any other file.",
+    "surroundingText": [],
+    "printFeatures": "Ordinary paragraph prose; two font attributes used (italic title of the play the poem is from, italic single-letter rhyme labels)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! rhyme s*eme 9 ^! l9es ( ,y1ts",
+      ".1,resurrec;n is abba4 ,i saw a />+",
+      "virg9 /& .2a _/ ,\": holy ,dionysus",
+      "di$1 .2;b _/ ,& te> ! he>t \\ ( 8",
+      "side1 .2;b _/ ,& lay ! he>t ^u h] h& .2a"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; both verified verbatim against the source text in-session before this reconciliation began. Not itself in question — only the print side (above) needed rebuilding."
+  },
+  "uncertain": [
+    "The exact braille mechanism that would make the bare word 'abba' translate to four separate letter cells ('abba4', as the source shows) rather than uebG2's ordinary one-cell 'bb' contraction ('a2a') was not found by forward-translation (grade-1 word/passage wrapping and per-letter italics were both tried and both failed to reproduce the source exactly). Modeled as plain text; this affects only this one word."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side rebuilt from scratch by this reconciliation per the task brief (both runs left it empty) — back-translated then forward-verified against the given braille. Modeled by buildModel15 as an ordinary paragraph (kind:'paragraph' here means a plain prose paragraph with markup, distinct from the numbered-paragraph 'numbered' kind used elsewhere in this section) — rule 15.7.1 has no linenum apparatus and is unrelated to this section's own line-numbering findings (F-181/F-182/F-205); any mismatch here would trace to ordinary emphasis/contraction behaviour, not to this section's own findings."
+}

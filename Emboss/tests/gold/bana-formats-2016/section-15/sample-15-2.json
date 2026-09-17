@@ -1,0 +1,57 @@
+{
+  "id": "BANA Sample 15-2",
+  "title": "Sample 15-2: Prose Numbered Every Ten Lines",
+  "pdfPages": [419],
+  "textLines": [12057, 12077],
+  "illustrates": {
+    "rule": "15.4.1",
+    "quote": "15.4.1 Prose is ordinary speech or writing without rhyme or meter. Observe the following guidelines, in addition to the points outlined in Formats, §15.3: a. Follow print for indented or blocked paragraphing. b. Every print line of prose is numbered in braille, even when the lines are not numbered in print. c. Three blank cells precede a new print line when it begins in the middle of a braille line. Do not insert three blank cells before a new print line when it begins a new braille line."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "numbered", "text": "How often, in her waking hours and in her dreams,", "number": "279", "printVisible": false, "newPara": true, "features": "First line of an indented paragraph." },
+      { "kind": "numbered", "text": "had she started in wild horror and covered her face", "number": "280", "printVisible": true },
+      { "kind": "numbered", "text": "with her hands as she thought of her lover opening the", "number": "281", "printVisible": false },
+      { "kind": "numbered", "text": "door on the other side of which waited the cruel fangs", "number": "282", "printVisible": false },
+      { "kind": "numbered", "text": "of the tiger!", "number": "283", "printVisible": false },
+      { "kind": "numbered", "text": "But how much oftener had she seen him at the other", "number": "284", "printVisible": false, "newPara": true, "features": "First line of a second, indented paragraph." },
+      { "kind": "numbered", "text": "door! How in her grievous reveries had she gnashed", "number": "285", "printVisible": false },
+      { "kind": "numbered", "text": "her teeth and torn her hair, when she saw his start of", "number": "286", "printVisible": false },
+      { "kind": "numbered", "text": "rapturous delight as he opened the door of the lady!", "number": "287", "printVisible": false },
+      { "kind": "numbered", "text": "How her soul had burned in agony when she had seen", "number": "288", "printVisible": false },
+      { "kind": "numbered", "text": "him rush to meet that woman, with her flushing cheek", "number": "289", "printVisible": false },
+      { "kind": "numbered", "text": "and sparkling eye of triumph; when she had seen him", "number": "290", "printVisible": true }
+    ],
+    "notes": "Print itself numbers only every 10th line (280, 290 — the page image confirms these are the only two numerals actually printed); the other ten blocks' 'number' fields are the actual sequential print-line numbers, decoded directly from the given braille's own right-margin digits (#bgi=279 ... #bij=290, standard braille-ASCII numeral letters), per 15.4.1b's own requirement that EVERY print line of prose is numbered in braille regardless of what print itself shows. Both A and B already agreed on this file's wording and braille; this reconciliation's only change is populating the ten intervening numbers instead of leaving them null, so buildModel15 exercises per-line prose numbering (not just the two print-visible anchors).",
+    "surroundingText": [],
+    "printFeatures": "Prose broken into physical print lines for line-numbering, with two paragraph indents; the whole passage is ONE flowing numbered-prose run for wrapping purposes (per 15.4.1c's own three-blank-cell mid-line rule), split into two print PARAGRAPHS ('newPara' marks each one's own first line)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "  ,h[ (t51 9 h] wak+ h\\rs & 9 h]    #bgi",
+      "dr1ms1   _h %e />t$ 9 wild horror   #bhj",
+      "& cov]$ h] face   ) h] h&s z %e     #bha",
+      "?\"\\ ( h] lov] op5+ !   door on !    #bhb",
+      "o!r side ( : wait$ ! cruel fangs",
+      "( ! tig]6                           #bhc",
+      "  ,b h[ m* (t5] _h %e se5 hm at !   #bhd",
+      "o!r   door6 ,h[ 9 h] griev\\s        #bhe",
+      "r\"eies _h %e gna%$   h] tee? &      #bhf",
+      "torn h] hair1 :5 %e saw 8 />t (",
+      "raptur\\s deli<t z he op5$ ! door (  #bhg",
+      "! lady6   ,h[ h] s\\l _h burn$ 9     #bhh",
+      "agony :5 %e _h se5   hm ru% to      #bhi",
+      "meet t woman1 ) h] flu%+ *eek   &   #bij",
+      "sp>kl+ eye ( triumph2 :5 %e _h se5",
+      "hm"
+    ],
+    "pageBreaks": [],
+    "notes": "CORRECTED during reconciliation: both A and B's own line text was byte-identical to the source's raw text extraction, but that raw extraction right-justifies every number far past column 40 (lines up to 66 characters long) even though this file's own declared braille.width is 40 and every other file in this section right-justifies its own numbers at exactly column 40. Re-derived directly: with this passage's widest number '#bij'/290 (4 cells) and the wrapNumbered algorithm's own 2-blank-cell minimum, the correct gap is exactly `40 - textLength - 4`, which the ORIGINAL extraction overshoots by roughly 26 extra blank cells on every numbered row — a text-extraction artifact (the source PDF's copyable text layer apparently right-justifies these rows against the page's own physical margin, not the 40-cell braille measure), not a genuine part of the braille. Each line's own text and number are unchanged; only the padding was reduced so every numbered line is exactly 40 cells. Right-margin numbers 279-290 confirmed sequential by direct decode of every '#[a-j]+' token in this array."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille: A and B agreed on every character but both preserved a raw text-extraction artifact (numbers right-justified far past the declared 40-cell width); re-justified to column 40 during this reconciliation (see braille.notes). Print side: both runs agreed on wording and the two print-visible anchors (280, 290); this reconciliation adds the ten intervening sequential numbers, decoded directly from the gold braille's own right-margin digits, matching what 15.4.1b actually requires. Modeled by buildModel15 as ONE flowing numbered paragraph per print paragraph (both marked 'newPara'), with a genuine linenum segment before each print line's own text, feeding Emboss's wrapNumbered mechanism — per the standards-findings.md 'done' rows for 15.3-15.4 (wrapNumbered's own right-margin/three-blank-cell behaviour is not itself defective), this file is expected to be among the section's few genuine MATCHes."
+}

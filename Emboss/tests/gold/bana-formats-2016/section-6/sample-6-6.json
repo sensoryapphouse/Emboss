@@ -1,0 +1,102 @@
+{
+  "id": "sample-6-6",
+  "title": "Ancestral Tree",
+  "pdfPages": [
+    166
+  ],
+  "textLines": [
+    4931,
+    4959
+  ],
+  "illustrates": {
+    "rule": "6.8.2",
+    "quote": "a. Transcribe ancestral and pedigree charts as lists, using 1-3 margins. Begin with the most current item or person and move backward through the generations. Assign a number to each name or item in the chart, beginning with the most current. List them sequentially, moving back through each generation, in the same direction as the chart. Sequential numeric identification allows the ascending parentage to be followed without using a tactile graphic. b. Follow each item with any information specific to the item or individual, e.g., dates of birth/death, etc. Immediately follow this information with the two numbers from the list that represents the parent(s). Use a comma to separate the two numbers. Use three dot 5s to represent the missing connection if only one parent is listed. c. Insert a transcriber’s note about the parentage numbers. Sample: Each individual in the list is given an identifying number. The numbers following an individual’s name are the identifying numbers for the parents. Three dot 5s rather than a number are used for a missing parent."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "A radiating fan-chart diagram of boxes representing an ancestral tree.",
+          "labels": [
+            "Nelson Slater Smith 1827-1908",
+            "Daniel Smith 1775-1854",
+            "Susan Holmes 1786-1864",
+            "Samuel Smith 1742-1827",
+            "Abigail Wright 1748-1798",
+            "Thomas Holmes II 1756-1840",
+            "Tamar Harris",
+            "Jasiel Smith Sr. 1700-",
+            "Hannah Gachet -1755",
+            "John Wright",
+            "Mercy Mary Kellogg",
+            "Thomas Holmes I",
+            "Abigail Pike",
+            "Abner Harris Sr.",
+            "Deborah Marcy"
+          ]
+        },
+        "description": "Each individual in the ancestral tree below is given an identifying number. The numbers following an individual's name are the identifying numbers for the parents."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "marker": "1", "text": "Nelson Slater Smith 1827-1908 2, 3" },
+          { "marker": "2", "text": "Daniel Smith 1775-1854 4, 5" },
+          { "marker": "3", "text": "Susan Holmes 1786-1864 6, 7" },
+          { "marker": "4", "text": "Samuel Smith 1742-1827 8, 9" },
+          { "marker": "5", "text": "Abigail Wright 1748-1798 10, 11" },
+          { "marker": "6", "text": "Thomas Holmes II 1756-1840 12, 13" },
+          { "marker": "7", "text": "Tamar Harris 14, 15" },
+          { "marker": "8", "text": "Jasiel Smith Sr. 1700-" },
+          { "marker": "9", "text": "Hannah Gachet -1755" },
+          { "marker": "10", "text": "John Wright" },
+          { "marker": "11", "text": "Mercy Mary Kellogg" },
+          { "marker": "12", "text": "Thomas Holmes I" },
+          { "marker": "13", "text": "Abigail Pike" },
+          { "marker": "14", "text": "Abner Harris Sr." },
+          { "marker": "15", "text": "Deborah Marcy" }
+        ]
+      }
+    ],
+    "notes": "The print is a visual ancestral tree (fan-chart diagram) containing names and dates in boxes; the transcriber converts this to a flat, 1-3-margin numbered list (6.8.2a), assigning a unique number to each individual and following each with the identifying numbers of that person's two parents (6.8.2b) — numbers that do not exist in the original print at all, but are mandated transcriber additions and so are built here as real content. print.blocks[0].description is the transcriber's note explaining the numbering convention (6.8.2c) and is built as a standalone note (no caption follows this figure).",
+    "surroundingText": null,
+    "printFeatures": "diagram, fan-chart, boxes"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,ea* 9dividual 9 ! ance/ral",
+      "    tree 2l is giv5 an id5tify+ numb]4",
+      "    ,! numb]s foll[+ an 9dividual's \"n",
+      "    >e ! id5tify+ numb]s = ! p>5ts4@.>",
+      "",
+      "#a ,nelson ,slat] ,smi? #ahbg-#aijh #b1",
+      "  #c",
+      "#b ,daniel ,smi? #agge-#ahed #d1 #e",
+      "#c ,susan ,holmes #aghf-#ahfd #f1 #g",
+      "#d ,samuel ,smi? #agdb-#ahbg #h1 #i",
+      "#e ,abigail ,w\"r #agdh-#agih #aj1 #aa",
+      "#f ,?omas ,holmes ,,ii #agef-#ahdj #ab1",
+      "  #ac",
+      "#g ,tam> ,h>ris #ad1 #ae",
+      "#h ,jasiel ,smi? ,sr4 #agjj-",
+      "#i ,hannah ,ga*et -#agee",
+      "#aj ,john ,w\"r",
+      "#aa ,m]cy ,m>y ,kellogg",
+      "#ab ,?omas ,holmes ,i",
+      "#ac ,abigail ,pike",
+      "#ad ,abn] ,h>ris ,sr4",
+      "#ae ,deborah ,m>cy"
+    ],
+    "pageBreaks": [],
+    "notes": "The book's own text extract carries two running-head/page-furniture lines ahead of this sample ('6-22 Section 6' / 'Illustrative Materials'), excluded here as page furniture. This is a flat 1-3 list (first cell 1, runover cell 3) — no nesting, unlike 6.8.1's descendant charts."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte, but share three errors, all confirmed by decoding the raw source directly (source-6.txt lines 4938-4959) and cross-checked by forward translation: (1) item 1's death year is '#aijh' = 1908, not 1898 as both runs wrote (translating '...1827-1898...' does not reproduce '#aijh'; '...1827-1908...' does, exactly). (2) 'Abigail Weir'/'John Weir' (items 5 and 10) should be 'Abigail Wright'/'John Wright' — forward-translating 'Weir' gives ',WEIR' but the agreed braille reads ',w\"r', which only 'Wright' reproduces. (3) 'Hannah Gasset' (item 9) should be 'Hannah Gachet' — same test, 'Gasset' gives ',GASSET' but the agreed braille reads ',ga*et', which only 'Gachet' reproduces. The parent-reference numbers also need a space after the comma ('2, 3', not '2,3') to reproduce the agreed braille's own contraction pattern exactly. No braille-side changes were needed — A and B's braille.lines (after dropping the two running-head lines) already match the raw source exactly."
+}

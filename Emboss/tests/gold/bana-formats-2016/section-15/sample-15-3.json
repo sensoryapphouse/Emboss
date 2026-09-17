@@ -1,0 +1,49 @@
+{
+  "id": "BANA Sample 15-3",
+  "title": "Sample 15-3: Line-Numbered Prose with Transcriber’s Note",
+  "pdfPages": [420],
+  "textLines": [12085, 12103],
+  "illustrates": {
+    "rule": "15.4.1d",
+    "quote": "d. On the Transcriber’s Notes page, inform the reader about the function of the three blank cells when line-numbered prose occurs in more than one section in a volume. Insert a transcriber’s note before the text when the three blank cells is used in only one section. Sample: Three blank cells occurring within a braille line indicate the beginning of a new print line."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "numbered", "text": "It rained all afternoon in a single tone. In the uniform and peaceful", "number": "1", "printVisible": true, "newPara": true, "features": "Prose." },
+      { "kind": "numbered", "text": "intensity you could hear the water fall, the way it is when you travel all", "number": "2", "printVisible": false },
+      { "kind": "numbered", "text": "afternoon on a train. But without our noticing it, the rain was pene-", "number": "3", "printVisible": false },
+      { "kind": "numbered", "text": "trating too deeply into our senses. Early Monday morning, when we", "number": "4", "printVisible": false },
+      { "kind": "numbered", "text": "closed the door to avoid the cutting, icy draft that blew in from the", "number": "5", "printVisible": true },
+      { "kind": "numbered", "text": "courtyard, our senses had been filled with rain. And on Monday", "number": "6", "printVisible": false }
+    ],
+    "notes": "Print numbers only lines 1 and 5 in the left margin; the other four blocks' 'number' fields are the actual sequential print-line numbers, confirmed by direct decode of the given braille's own right-margin digits (#a=1 ... #f=6). No explicit transcriber's-note print.blocks entry is modeled here on purpose: the note shown in the gold braille below (\"Three blank cells occurring... new print line.\") is this rule's own SUGGESTED wording (15.4.1d's own 'Sample:' text), not a note this particular worked excerpt's own surrounding prose independently supplies — it exists ONLY because Emboss's pipeline is expected to insert ITS OWN automatic transcriber's note (document.mjs's hardcoded LINE_NUMBER_NOTE) before the first line-numbered block of any document. Leaving this file's print.blocks as prose-only (no manual note block) is what correctly tests that automatic mechanism against the book's own worked illustration of exactly what such a note should say.",
+    "surroundingText": [],
+    "printFeatures": "Line-numbered prose, one paragraph, six print lines."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "      @.<,?ree blank cells o3urr+    #,-",
+      "    )9 a brl l9e 9dicate ! 2g9n+ ( a new",
+      "    pr9t l9e4@.>",
+      "",
+      ",x ra9$ all afn 9 a s+le t\"o4 ,9 !    #a",
+      "uni=m & p1ce;l   9t5s;y y cd he> !    #b",
+      "wat] fall1 ! way x is :5 y travel",
+      "all   afn on a tra94 ,b )\\t \\r        #c",
+      "notic+ x1 ! ra9 0 p5e-   trat+ too    #d",
+      "deeply 9to \\r s5ses4 ,e>ly ,mon\"d",
+      "morn+1 :5 we   clos$ ! door to avoid #e",
+      "! cutt+1 icy draft t blew 9 f !",
+      "c\\rty>d1 \\r s5ses _h be5 fill$ )      #f",
+      "ra94 ,& on ,mon\"d"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Lines 3-5 are the book's own suggested §15.4.1d transcriber's note, wrapped 7-5 with a preceding page-number line (#,-); lines 7-16 are the numbered prose (right-margin numbers #a=1 through #f=6, confirmed sequential by direct decode)."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the two print-visible anchors (1, 5); this reconciliation adds the four intervening sequential numbers. The transcriber's note text itself is NOT modeled as a print.blocks entry (see 'notes' above) so that Emboss's own automatic §15.4.1d note (LINE_NUMBER_NOTE, document.mjs:737) is what gets compared against this rule's own worked example of the correct wording — expect a wording mismatch (Emboss's fixed text differs word-for-word from the book's own suggested text, though both convey the same three-blank-cell convention); if not already covered by an existing finding this reconciliation records it as a new one (see differences.md)."
+}

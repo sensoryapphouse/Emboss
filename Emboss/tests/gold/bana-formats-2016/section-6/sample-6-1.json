@@ -1,0 +1,67 @@
+{
+  "id": "sample-6-1",
+  "title": "Figure with Source Information",
+  "pdfPages": [
+    157
+  ],
+  "textLines": [
+    4778,
+    4793
+  ],
+  "illustrates": {
+    "rule": "6.2.2.c and 6.2.2.e",
+    "quote": "c. When an illustration has a source citation, place it immediately following the caption using 7-5 margins. If a description of the illustration is required, begin the source citation on the line following the description.\ne. When both a print caption and a transcriber-generated description are needed, begin the description (enclosed in transcriber’s note indicators) on the line following the caption."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "drawing",
+          "description": "A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask.",
+          "labels": [
+            "Copyrighted Image"
+          ]
+        },
+        "description": "A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask."
+      },
+      {
+        "kind": "caption",
+        "text": "Figure 7-1 **Diving's early history.** In the mid 1600s the extremely inventive Italian scientist Giovanni Borelli was the first to visualize a diver as a free-swimming frogman, complete with swim fins.",
+        "features": "'Diving's early history.' is bold; 'Figure 7-1' and the rest of the caption are plain."
+      },
+      {
+        "kind": "other",
+        "text": "Courtesy of Historical Diving Society, USA",
+        "features": "Source citation, printed above the placeholder box; braille places it after the description per 6.2.2c."
+      }
+    ],
+    "notes": "The photograph itself is copyrighted and replaced in print with a placeholder box reading 'Copyrighted Image' (figure.labels); the caption sits to its left, and the source citation sits above the box. The transcriber nonetheless supplies a description of what the (unreproduced) photo depicts, per 6.2.2e — unlike example-6-1/6-2's figure.description, this one IS built as a separate transcriber's-note block, confirmed by forward translation matching the agreed braille exactly.",
+    "surroundingText": null,
+    "printFeatures": "Figure with caption, transcriber's-note description, and a source citation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      ,figure #g-#a ^7,div+'s e>ly",
+      "    hi/ory4^' ,9 ! mid #afjjs !",
+      "    extremely 9v5tive ,italian sci5ti/",
+      "    ,giovanni ,borelli 0 ! f/ to",
+      "    visualize a div] z a free-swimm+",
+      "    frogman1 complete ) swim f9s4",
+      "      @.<,draw+3 ,a div] ) an air bag &",
+      "    a valve4 ,! div] is we>+ a full body",
+      "    div+ suit1 f9s1 cap1 & a mask4@.>",
+      "      ,c\\rtesy ( ,hi/orical ,div+",
+      "    ,society1 ,,usa"
+    ],
+    "pageBreaks": [],
+    "notes": "The caption starts in cell 7 (6 spaces) with runovers in cell 5 (4 spaces). The transcriber's note containing the description follows in the same 7-5 margins. The source citation follows, also in 7-5, per 6.2.2c. No transcriber's-note label is needed (or given) because the caption itself begins with the identifying word 'Figure' (6.2.2b)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte, but BOTH share the same margin defect (exactly the 'agreement is no evidence' risk flagged in the task): the caption's margins are given as 5/3 instead of 6/4, and the description's and citation's margins as 4/2 instead of 6/4. This was caught by decoding the raw source text directly (source-6.txt lines 4783-4793 carry the book's own per-line numbering, e.g. '4    ', '10   ', stripped here with a small script, engine/brf-ascii.mjs's unicodeBrailleToBrf used to decode the Unicode braille glyphs to BRF ASCII) rather than by trusting either run: every one of the three blocks' own first line in the raw source begins with exactly 6 Unicode braille-blank cells (U+2800) after its line-number prefix, and every runover with exactly 4, confirmed byte-for-byte. The print text content of all three blocks (caption, description, citation) was independently confirmed correct in both runs by forward-translating each verbatim through Emboss's translator and matching the corrected braille exactly, including the bold passage on 'Diving's early history.' (confirmed by forward-translating with that span marked TF_BOLD; neither run's caption text carried a features/markup field for it, corrected here). The citation ('Courtesy of Historical Diving Society, USA') is recorded as kind 'other' and is expected to be dropped by buildModel6, not built — matching F-168 (source citations/credits inside an imggroup are lost by Emboss)."
+}

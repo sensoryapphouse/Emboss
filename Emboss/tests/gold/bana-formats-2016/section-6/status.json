@@ -1,0 +1,94 @@
+{
+  "bana-6.10.4-sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "bana-6.4.2-sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "bana-6.8.2c-sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-6-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,PHOTOGRAPH@.> .7,! ,E>LIE/\" vs actual \"      @.<,ILLU/RA;N@.> .7,! ,E>LIE/ ,\\\"KN\". line count differs by +3 (expected 4, actual 7)."
+  },
+  "example-6-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-6-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,PHOTOGRAPH@.> ^7,VIEWS (\" vs actual \"      @.<,ILLU/RA;N@.> ^7,VIEWS ( ANG]^'\". line count differs by -1 (expected 7, actual 6). Input-model limitation: source citation/photo-credit caption \"David Madison/Corbis\" immediately follows an already-captioned figure — not built (F-168, source citations inside an imggroup are lost)."
+  },
+  "example-6-4": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-6-1": {
+    "status": "not-representable",
+    "note": "first differing line 7: expected \"      @.<,DRAW+3 ,A DIV] ) AN AIR BAG &\" vs actual \"      @.<,A DIV] ) AN AIR BAG & A VALVE4\". line count differs by -2 (expected 11, actual 9). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Courtesy of Historical Diving Society, USA\""
+  },
+  "sample-6-10": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"C4#AAJJ ,9CAS SETTLE 9 ,CUZCO4\" vs actual \";C4 #AAJJ ,9CAS SETTLE 9 ,CUZCO4\"."
+  },
+  "sample-6-11": {
+    "status": "mismatch",
+    "note": "first differing line 16: expected \"#AIDJ .7,MOVES TO ,SAN ,FRANCISCO.'\" vs actual \"\"."
+  },
+  "sample-6-12": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"      @.<,PICTURE@.> ,IVORY /ATUE ( A\" vs actual \"\". line count differs by -1 (expected 16, actual 15)."
+  },
+  "sample-6-13": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"      @.<,DATA F PR9T B> GRAPHS IS %[N 9\" vs actual \"      @.<,! DATA F PR9T B> GRAPHS IS %[N\". line count differs by +17 (expected 15, actual 32)."
+  },
+  "sample-6-14": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"    ,CRITICAL ,?9K+                  B#IG\" vs actual \"    ,CRITICAL ,?9K+\"."
+  },
+  "sample-6-15": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"     SCREENSHOT FOR INFORMATION ONLY\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -5 (expected 40, actual 35)."
+  },
+  "sample-6-16": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"              ,SCRE5 ,R1D]            #C\" vs actual \"              ,SCRE5 ,R1D]\". line count differs by +8 (expected 29, actual 37)."
+  },
+  "sample-6-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-6-3": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      ,FIVE ,WI%ES ,WALLET ,C>D\" vs actual \"       ,FIVE ,WI%ES ,WALLET ,C>D\". line count differs by -5 (expected 23, actual 18)."
+  },
+  "sample-6-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,ORD] ,=M\" vs actual \"               ,ORD] ,=M\". line count differs by +1 (expected 20, actual 21). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "sample-6-5": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"      @.<,! SYMBOL .=\\\"377 9DICATES\" vs actual \"      @.<,! SYMBOL 9DICATES M>RIAGE4@.>\". line count differs by -3 (expected 21, actual 18)."
+  },
+  "sample-6-6": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-6-7": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-6-8": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-6-9": {
+    "status": "mismatch",
+    "note": "first differing line 14: expected \"444\" vs actual \"#AGBE\". line count differs by -1 (expected 15, actual 14)."
+  }
+}

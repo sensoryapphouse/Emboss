@@ -1,0 +1,73 @@
+{
+  "id": "sample-6-3",
+  "title": "Print Form",
+  "pdfPages": [
+    160
+  ],
+  "textLines": [
+    4828,
+    4857
+  ],
+  "illustrates": {
+    "rule": "6.7.3",
+    "quote": "When a form is produced:\na. Give a brief description of the form first.\nb. Do not reproduce print forms spatially.\nc. Enclose the form in box lines if appropriate. Avoid boxes within boxes unless it is essential for understanding the layout of the form.\nd. Use a 1-3 list or 1-5, 3-5 nested list to present the items in the form.\ne. Use an underscore to represent a blank."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Five Wishes Wallet Card" },
+      { "kind": "paragraph", "text": "Important Notice to Medical Personnel:" },
+      { "kind": "paragraph", "text": "I have a Five Wishes Advance Directive." },
+      { "kind": "paragraph", "text": "Signature _" },
+      { "kind": "paragraph", "text": "Please consult this document and/or my Health Care Agent in an emergency. My Agent is:" },
+      { "kind": "paragraph", "text": "Name _" },
+      { "kind": "paragraph", "text": "Address _" },
+      { "kind": "paragraph", "text": "City/State/Zip _" },
+      { "kind": "paragraph", "text": "Phone _" },
+      { "kind": "paragraph", "text": "My primary care physician is:" },
+      { "kind": "paragraph", "text": "Name _" },
+      { "kind": "paragraph", "text": "Address _" },
+      { "kind": "paragraph", "text": "City/State/Zip _" },
+      { "kind": "paragraph", "text": "Phone _" },
+      { "kind": "paragraph", "text": "My document is located at: _" }
+    ],
+    "notes": "The print page displays a wallet card form with fields for emergency contact information. Emboss has no forms mechanism at all (F-169 — no 1-3-margin form-item support, no sample-response symbol, no box-line auto-enclosure) so the field grouping (blank line between each field/group, matching the given braille) and the box BANA 6.7.3c calls for are not reproduced by any block type available here; each field is modelled as its own flat paragraph and the mismatch is expected.",
+    "surroundingText": null,
+    "printFeatures": "form"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      ,five ,wi%es ,wallet ,c>d",
+      "",
+      ",important ,notice to ,m$ical ,p]sonnel3",
+      ",i h a ,five ,wi%es ,adv.e ,directive4",
+      "",
+      ",signature .-",
+      "",
+      ",pl1se 3sult ? docu;t &_/or my ,h1l?",
+      ",c>e ,ag5t 9 an em]g5cy4 ,my ,ag5t is3",
+      "",
+      ",\"n .-",
+      ",address .-",
+      ",c;y_/,/ate_/,zip .-",
+      ",ph\"o .-",
+      "",
+      ",my prim>y c>e physician is3",
+      "",
+      ",\"n .-",
+      ",address .-",
+      ",c;y_/,/ate_/,zip .-",
+      ",ph\"o .-",
+      "",
+      ",my docu;t is locat$ at3 .-"
+    ],
+    "pageBreaks": [],
+    "notes": "The book's own text extract carries two running-head/page-furniture lines ('6-16 Section 6' / 'Illustrative Materials', belonging to the previous braille page) ahead of this sample's own content; they are excluded here as page furniture, not sample content (matching how every other file in this section is built starting directly at its own content)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte, but both share two errors (again the 'agreement is no evidence' case): (1) 'IMPORTANT NOTICE TO MEDICAL PERSONNEL:' transcribed as all-caps print text, when forward-translating the TITLE-CASE form 'Important Notice to Medical Personnel:' is what reproduces the agreed braille exactly (',IMPORTANT ,NOTICE TO ,M$ICAL ,P]SONNEL3' — note lowercase 'to', impossible from genuine all-caps print, which capitalizes every word); the all-caps guess would instead produce a triple-caps passage indicator, which does not match. (2) Every blank-writing field was given as a run of 11 underscores ('___________'), which forward-translates to the underscore-fill symbol repeated 11 times ('.-.-.-.-.-.-.-.-.-.-.-'); the agreed braille shows the symbol exactly ONCE per field ('.-'), confirmed by forward-translating a single underscore — matching BANA 6.7.3e's own wording ('use AN underscore', singular, to represent a blank, not one underscore per print character). Both corrections verified by exact forward-translation of every field. The combined multi-line paragraph blocks used by A/B were also split into one paragraph per printed field/line, matching the blank-line-separated shape of the agreed braille as closely as this schema allows (see print.notes re F-169)."
+}

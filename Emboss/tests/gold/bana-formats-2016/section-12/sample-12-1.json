@@ -1,0 +1,94 @@
+{
+  "id": "sample-12-1",
+  "title": "Sample 12-1: Boxed Sidebar in Column (Print Only)",
+  "pdfPages": [344],
+  "textLines": [10081, 10086],
+  "illustrates": {
+    "rule": "12.2.1",
+    "quote": "The purpose of this section is to help the transcriber identify sidebars. The use of sidebars, a publishing term for information placed adjacent to text, is one of the design elements that can create confusion. A sidebar is detached from the main text and found in a section either off to one side of it, or above or below it, on the same page. Sidebars may or may not be linked or related to the adjacent text, and the reading order of sidebars and text is not always obvious. Sidebars have a different function than cross-references (see Formats, §9.6, Cross-References and Incidental Notes) and are formatted according to their text layout, e.g., with headings, paragraphs, lists, etc. (See Sample 12-1: Boxed Sidebar in Column on page 12-4, Sample 12-2: Boxed Sidebar within Text on page 12-5, and Sample 12-3: Arrow Leads Reader to Sidebar; Difference Between Sidebar and Cross-Reference on page 12-6.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "on the issue) and to back up your reasons with solid evidence, or proof. Appropriate factual evidence may consist of statistics, examples, and anecdotes (brief stories based on personal experience)—all of which can be verified by testing, by drawing on personal observations, or by consulting reliable sources. Expert testimony (statements by recognized authorities on the issue) also qualifies as evidence.",
+        "features": "Running body text in the right column, continuing from the previous page."
+      },
+      {
+        "kind": "sidebar",
+        "title": "Try It Out",
+        "features": "Shaded yellow boxed sidebar in the narrower left-hand column.",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "Identify the logical fallacy in each of the following sentences. Then revise the fallacy to make the statement logical."
+          },
+          {
+            "kind": "list",
+            "features": "Numbered list.",
+            "items": [
+              { "marker": "1.", "text": "The voting age should be lowered to sixteen because sixteen-year-olds are mature enough to vote." },
+              { "marker": "2.", "text": "Our school needs a dress code because a dress code is the solution to our problems." },
+              { "marker": "3.", "text": "Unless the state builds more prisons, the crime rate will continue to rise." }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "(Formats: Suggested Location)",
+        "features": "Caption on a diagonal arrow pointing from the bottom of the 'Try It Out' sidebar to the boundary between the running text and the red-banner sidebar."
+      },
+      {
+        "kind": "sidebar",
+        "title": "Strategies for Elaboration: Avoiding Fallacies",
+        "features": "Boxed sidebar spanning the wider right-hand column, white title text on a red banner.",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "In listing reasons for your position, take care to avoid these fallacies, or mistakes in logic."
+          },
+          {
+            "kind": "list",
+            "features": "Bulleted list; each fallacy's name is bold, each worked example italicized.",
+            "items": [
+              { "marker": "•", "text": "Hasty generalization—basing a conclusion on insufficient evidence or overlooking exceptions: No local merchants will suffer if the proposed chain store is approved." },
+              { "marker": "•", "text": "Attacking the person (in Latin, ad hominem, meaning “to the person”; informally, “name-calling”)—attacking people who support the issue: Hunters just enjoy killing animals." },
+              { "marker": "•", "text": "False authority—quoting an expert in one field as an authority in an unrelated field: According to former state Supreme Court Justice Eldon Bates, the state's annual vehicle inspections are a waste of taxpayers' time and money." },
+              { "marker": "•", "text": "Circular reasoning—offering as a reason a statement that's actually a restatement of an opinion: The City Council should build more bike paths because our community needs bike paths." },
+              { "marker": "•", "text": "Either-or reasoning—assuming that an issue has only two possible sides: Either we abolish the welfare system or we foster perpetual dependence on government handouts." },
+              { "marker": "•", "text": "Non sequitur (Latin for “It does not follow”)—presenting unrelated ideas as though one were the logical consequence of the other: Our city's rapid population growth demands a higher speed limit." }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "list",
+        "features": "Bulleted paragraph continuing the running text below the two sidebars, itself running on into an indented paragraph and a further numbered item.",
+        "items": [
+          { "marker": "•", "text": "Earn their trust. Ethical appeals invoke your readers' sense of fair play, establishing your credibility and character. Demonstrating that you're knowledgeable, reasonable, sincere, and trustworthy helps win respect for you and, in turn, for your ideas.\nOne way to establish your trustworthiness is to consider different sides of an issue, to acknowledge the most significant counterarguments (opposing points). By conceding, or accommodating, opposing points that do have merit, you establish common ground without sacrificing your principles. Then you can concentrate on refuting, or providing conclusive evidence against, those counterarguments that you consider invalid." },
+          { "marker": "6.", "text": "Coping with counterarguments. Once you've listed possible reasons in support of your position, get together with a partner or a small group to brainstorm for likely counterarguments. Think about the kinds of evidence that will convince your particular audience to rethink their counterarguments. You may find it helpful to chart the most significant counterarguments and possible refutations for them, as in the following example." }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "614 The Restoration and the Eighteenth Century",
+        "features": "Page footer (running head + print page number)."
+      }
+    ],
+    "notes": "The print original is a grey-background page split by a dotted vertical rule into a narrower left column and a wider right column. A diagonal arrow, captioned '(Formats: Suggested Location)', points from the bottom of the 'Try It Out' sidebar across to the boundary between the running text and the red-banner sidebar -- suggesting where a transcriber might relocate the sidebar relative to the running text (this whole sample is captioned '(Print Only)': BANA never worked this page through to an actual braille transcription).",
+    "surroundingText": null,
+    "printFeatures": "A grey-background page split by a dotted vertical rule into a narrower left zone (the running paragraph continuing from the previous page, then the yellow 'Try It Out' sidebar) and a wider right zone (the red-banner 'Strategies for Elaboration' sidebar, then the running text resuming below both sidebars)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source -- no braille transcription exists for this sample."
+  },
+  "uncertain": [
+    "The exact print reading order intended once the sidebars are removed for braille (whether 'Try It Out' or 'Strategies for Elaboration' is meant to come first) is only suggested by the '(Formats: Suggested Location)' arrow, and is not settled by any actual braille transcription -- this sample is Print Only."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Both runs' print.blocks agree on structure and wording almost exactly, with one factual disagreement: run A's 'Strategies for Elaboration' list gives the Non sequitur item as '(Latin for \"It does not follow\")' (capital I); run B gives 'it does not follow' (lowercase i). Since this sample has no braille to forward-translate, the PDF page image itself was read directly (references/bana/braille-formats-2016.pdf p.344, cropped and re-rendered at 400dpi) -- the print clearly reads 'It does not follow' with a capital I (the phrase opens its own quoted clause). Run A's capitalization is correct; run B's is a transcription slip. Structural difference: run A keeps the 'Earn their trust' bullet, its own run-on indented paragraph, and the numbered item 6 as three separate print.blocks entries; this reconciliation keeps them as a single 'list' block with two items (the bulleted item's own text carries an embedded paragraph break, matching how the print shows one bulleted entry running on into an indented continuation before the next, differently-marked, numbered entry) -- a documentation-only grouping choice with no braille to arbitrate it. Every other wording, box title, and caption matches between the two runs and against the page image."
+}

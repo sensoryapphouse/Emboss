@@ -1,0 +1,25 @@
+{
+  "id": "BANA 15.4.1d Sample",
+  "title": "Three blank cells occurring within a braille line indicate the beginning of a new print line.",
+  "pdfPages": [],
+  "textLines": [11860, 11861],
+  "illustrates": {
+    "rule": "15.4.1d",
+    "quote": "Three blank cells occurring within a braille line indicate the beginning of a new print line."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "An embedded, unnumbered suggested transcriber's-note wording quoted inline within rule 15.4.1d's own running text (\"Sample: Three blank cells...\") — not a full worked example with its own print image. No braille rendering follows it anywhere near its own citing location in the source.",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille anywhere near this citing location — braille array is empty by design, not omission, matching the section-3 gold precedent's own convention for this exact situation (embedded \"Sample:\" wordings under 3.3.3/3.4.1)."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B are byte-for-byte identical for this file (both correctly recognised there is no braille to transcribe here). No reconciliation needed."
+}

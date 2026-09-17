@@ -1,0 +1,63 @@
+{
+  "id": "BANA Sample 15-6",
+  "title": "Sample 15-6: Lines of Dialogue",
+  "pdfPages": [423],
+  "textLines": [12161, 12185],
+  "illustrates": {
+    "rule": "15.5.2",
+    "quote": "15.5.2 When a play is written in verse, observe the following guidelines: a. Use format outlined above in Formats, §15.5.1 a–c. b. Insert three blank spaces in braille when in print a significant blank space is left between the speaker’s name and the first word of the dialogue. A transcriber's note is required explaining this format."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "dialogue", "text": "CAESAR: Calpurnia!", "level": 0 },
+      { "kind": "dialogue", "text": "CASCA:           Peace, ho! Caesar speaks.", "level": 0, "features": "Significant blank space between speaker name and dialogue (stepped verse, 15.5.2b)." },
+      { "kind": "dialogue", "text": "CAESAR:                                  Calpurnia!", "level": 0, "features": "Significant blank space between speaker name and dialogue (stepped verse, 15.5.2b)." },
+      { "kind": "dialogue", "text": "CALPURNIA: Here, my lord.", "level": 0 },
+      { "kind": "dialogue", "text": "CAESAR: Stand you directly in Antonius' way,", "level": 0 },
+      { "kind": "dialogue", "text": "When he doth run his course. Antonius!", "level": 1, "features": "Continuation of Caesar's own speech, no speaker name repeated." },
+      { "kind": "dialogue", "text": "ANTONY: Caesar, my lord?", "level": 0, "number": "5" },
+      { "kind": "dialogue", "text": "CAESAR: Forget not, in your speed, Antonius,", "level": 0 },
+      { "kind": "dialogue", "text": "To touch Calpurnia; for our elders say,", "level": 1 },
+      { "kind": "dialogue", "text": "The barren, touched in this holy chase,", "level": 1 },
+      { "kind": "dialogue", "text": "Shake off their sterile curse.", "level": 1 },
+      { "kind": "dialogue", "text": "ANTONY:                   I shall remember:", "level": 0, "features": "Significant blank space between speaker name and dialogue (stepped verse, 15.5.2b)." },
+      { "kind": "dialogue", "text": "When Caesar says 'do this,' it is perform'd.", "level": 1, "number": "10" },
+      { "kind": "dialogue", "text": "CAESAR: Set on; and leave no ceremony out.", "level": 0 }
+    ],
+    "notes": "Fourteen lines of verse dialogue from Julius Caesar, Act 1 Scene 2 (Shakespeare). 'level' (0 = flush with a speaker name, 1 = a continuation line of the same speech with no speaker repeated) was independently re-measured from the given, already-verified braille (leading blank cells / 2) rather than taken from either run's own say-so; both runs already agreed on every line's own wording and on the two print-visible numbers (5, 10).",
+    "surroundingText": [],
+    "printFeatures": "Play script in verse with three 'stepped verse' lines (a shared metrical line split between two speakers, shown in print with a wide gap standing in for the first speaker's own share of the line) and right-margin line numbers every 5 lines."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      ",,caes>3 ,calpurnia6",
+      ",,casca3   ,p1ce1 ho6 ,caes> sp1ks4",
+      ",,caes>3   ,calpurnia6",
+      ",,calpurnia3 ,\"h1 my \"l4",
+      ",,caes>3 ,/& y directly 9",
+      "    ,antonius' way1",
+      "  ,:5 he do? run 8 c\\rse4",
+      "    ,antonius6",
+      ",,antony3 ,caes>1 my \"l8              #e",
+      ",,caes>3 ,=get n1 9 yr spe$1",
+      "    ,antonius1",
+      "  ,to t\\* ,calpurnia2 = \\r eld]s",
+      "    say1",
+      "  ,! b>r51 t\\*$ 9 ? holy *ase1",
+      "  ,%ake (f _! /]ile curse4",
+      ",,antony3   ,i % rememb]3",
+      "  ,:5 ,caes> says ,8d ?1,0 x is      #aj",
+      "    p]=m'd4",
+      ",,caes>3 ,set on2 & l1ve no c]emony",
+      "    \\4"
+    ],
+    "pageBreaks": [],
+    "notes": "CORRECTED during reconciliation: both A and B's own line text was byte-identical to the source's raw text extraction, but that raw extraction right-justifies each number far past column 40 (lines up to 70 characters long) even though this file's own declared braille.width is 40 and every other file in this section right-justifies its own numbers at exactly column 40 — the same text-extraction artifact found and fixed in Sample 15-2/Example 15-2 (see their own braille.notes for the full reasoning). Each line's own text and number are unchanged; only the padding was reduced so both numbered lines are exactly 40 cells (widest number '#aj'/10, 3 cells; 2-blank-cell minimum). Right-margin numbers #e=5 and #aj=10 confirmed by direct decode."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille: A and B agreed on every character but both preserved a raw text-extraction artifact (numbers right-justified far past the declared 40-cell width); re-justified to column 40 during this reconciliation (see braille.notes). Print side: both runs already agreed on wording, levels (by description) and the two numbers; no correction needed beyond independently re-verifying the levels against the braille. Modeled by buildModel15 as play/verse dialogue (type:'play', subtype:'verse', matching the ALREADY-established standards-map.md row for BANA 15.5.2a) with a GENUINE (not text-folded) linenum segment on the two numbered lines — per standards-map.md's own row for 15.5.2a and standards-findings.md F-181, formatPlay's segmentsToBraille call never passes lineNumbers:true on EITHER its prose or verse branch, so both numbers are expected to be silently dropped from the built output entirely (not merely misplaced): this file's mismatch cause is F-181."
+}

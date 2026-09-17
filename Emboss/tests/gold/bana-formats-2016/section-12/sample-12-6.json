@@ -1,0 +1,71 @@
+{
+  "id": "sample-12-6",
+  "title": "Sample 12-6: Sidebars at Beginning of a Lesson (Print Only)",
+  "pdfPages": [350],
+  "textLines": [10170, 10175],
+  "illustrates": {
+    "rule": "12.3.1f",
+    "quote": "Add box lines for clarity if the content of the sidebar interrupts the flow of text. (See Formats, §7, Boxed Material.) (Sample 12-5: Sidebar with Student Activity on page 12-9 and Sample 12-6: Sidebars at Beginning of a Lesson on page 12-10.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Lesson 1", "features": "Small heading on a yellow tab, above the main title." },
+      { "kind": "heading", "level": 1, "text": "Following the Dietary Guidelines", "features": "Large orange title, wraps to two print lines ('Following the' / 'Dietary Guidelines') purely for layout -- one heading." },
+      { "kind": "other", "text": "(Formats: Suggested Location)", "features": "Instructional callout with an arrow pointing from the space between the two sidebars to the start of the main paragraph, 'Think of an ideal day.'" },
+      {
+        "kind": "sidebar",
+        "title": "You will learn . . .",
+        "features": "Small boxed callout, cream background, red heading and bullets.",
+        "blocks": [
+          {
+            "kind": "list",
+            "features": "Bulleted list.",
+            "items": [
+              { "marker": "•", "text": "how to identify types and sources of nutrients." },
+              { "marker": "•", "text": "how to use the Dietary Guidelines." },
+              { "marker": "•", "text": "how to use the Food Guide Pyramid." },
+              { "marker": "•", "text": "how to distinguish between foods that are healthful and those that do not contain many nutrients." }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "sidebar",
+        "title": "Vocabulary",
+        "features": "Small boxed callout directly below 'You will learn . . .', cream background, red heading and bullets; each term is followed by its glossary page reference.",
+        "blocks": [
+          {
+            "kind": "list",
+            "features": "Bulleted list; each item is a term followed by a page reference.",
+            "items": [
+              { "marker": "•", "text": "calorie, B45" },
+              { "marker": "•", "text": "nutrient, B45" },
+              { "marker": "•", "text": "proteins, B45" },
+              { "marker": "•", "text": "carbohydrates, B45" },
+              { "marker": "•", "text": "saturated fat, B45" },
+              { "marker": "•", "text": "unsaturated fat, B45" },
+              { "marker": "•", "text": "vitamin, B45" },
+              { "marker": "•", "text": "mineral, B45" },
+              { "marker": "•", "text": "nutrition, B46" },
+              { "marker": "•", "text": "Dietary Guidelines for Americans, B46" }
+            ]
+          }
+        ]
+      },
+      { "kind": "paragraph", "text": "Think of an ideal day. You might read a few chapters of a book, go in-line skating, see a movie with a friend, and have dinner with your family. Such a day includes a balance of activities. You need balance in your diet as well. A wide variety of healthful choices in your diet enables you to look and feel your best.", "features": "Set in a large bold font, beside a photograph of a girl in rollerblading gear." },
+      { "kind": "other", "text": "B44", "features": "Page number, bottom left corner." }
+    ],
+    "notes": "The two stacked sidebars ('You will learn . . .' and 'Vocabulary') sit at the lower left of the page, below the lesson title and to the left of the large opening paragraph; a single '(Formats: Suggested Location)' callout and arrow point from between them to the start of that paragraph.",
+    "surroundingText": null,
+    "printFeatures": "Lesson-opener page: a small 'LESSON 1' tab, a large two-line title, two stacked boxed sidebars at lower left, a large-font opening paragraph at centre/right beside a full-height photograph, and the print page number 'B44' at bottom left."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source -- no braille transcription exists for this sample."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Both runs agree on wording throughout. Run B's pdfPages included both 350 and 351; run A's included only 350. Re-rendering the PDF page range directly (references/bana/braille-formats-2016.pdf, pp.350-351 at 400dpi) confirms p.351 (printed page 12-11) is a blank divider page with no content at all -- run A is correct; run B's own summary.md even says the same thing ('PDF page 351 ... is a blank divider ... pdfPages array was properly adjusted to reflect only the page with content'), so this was a slip in run B's actual JSON, not a genuine disagreement. List items are given as proper 'items' arrays per this task's schema (run B already did this for both lists; run A used a single newline-joined string, reconciled here to match)."
+}

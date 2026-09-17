@@ -1,0 +1,73 @@
+{
+  "id": "sample-6-10",
+  "title": "Timeline with Multiple Events",
+  "pdfPages": [
+    172
+  ],
+  "textLines": [
+    5055,
+    5069
+  ],
+  "illustrates": {
+    "rule": "6.10.3",
+    "quote": "Timelines with Multiple Events in the Same Year. Use a nested list format when a date has more than one event. Place the date at the left margin (cell 1). Use 3-5 margins for each following event. (See Sample 6-10: Timeline with Multiple Events on page 6-28.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "History of the Inca" },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "A timeline from 1050 to 1650 with events at various points; two events share the date 1438.",
+          "labels": [
+            "c. 1100 Incas settle in Cuzco.", "1050", "1200", "1438 Pachacuti becomes ruler.",
+            "1350", "1438 Incan Empire begins.", "1500", "1572 Incan Empire falls.",
+            "1532 Spanish invade Incan Empire.", "1650"
+          ]
+        }
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "1050" },
+          { "text": "c. 1100 Incas settle in Cuzco." },
+          { "text": "1438", "level": 1 },
+          { "text": "Pachacuti becomes ruler.", "level": 2 },
+          { "text": "Incan Empire begins.", "level": 2 },
+          { "text": "1532 Spanish invade Incan Empire." },
+          { "text": "1572 Incan Empire falls." },
+          { "text": "1650" }
+        ]
+      }
+    ],
+    "notes": "Per 6.10.3: the shared date 1438 sits alone at cell 1 (its own list item), with its two events nested at 3-5 margins below it (6.10.3's own worked example). '1050'/'1200'/'1350'/'1500'/'1650' are the timeline's own axis ticks (6.10.1c/d: only the first and last dates, plus every date with an associated event, are kept) — this excerpt only transcribes '1050' and '1650' of those (the middle ticks, and the 1200/1350/1500 axis marks with no event, are omitted by the book's own excerpt, not built).",
+    "surroundingText": null,
+    "printFeatures": "Timeline diagram: a horizontal line with dated callout boxes."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "            ,hi/ory ( ! ,9ca",
+      "",
+      "#ajej",
+      "c4#aajj ,9cas settle 9 ,cuzco4",
+      "#adch",
+      "  ,pa*acuti 2comes rul]4",
+      "  ,9can ,empire 2g9s4",
+      "#aecb ,spani% 9vade ,9can ,empire4",
+      "#aegb ,9can ,empire falls4",
+      "#afej"
+    ],
+    "pageBreaks": [],
+    "notes": "Date 1438 (cell 1) is followed by its two same-year events at 3-5 margins (cell 3), per 6.10.3."
+  },
+  "uncertain": [
+    "'c. 1100 Incas settle in Cuzco.': the agreed braille has no letter-indicator (';') before the abbreviation 'c.', but Emboss's own translator (the same liblouis en-ueb-g2 table gold-run.mjs itself uses) adds one when forward-translating a standalone 'c.' in isolation or with surrounding context tried here — confirmed by direct experiment, not assumed. This looks like a genuine liblouis UEB Grade-2 rule difference (single-letter abbreviation before a period not needing the letter sign) rather than a transcription error in either run, and is expected to produce a narrow, one-cell mismatch on this line specifically when gold-run.mjs is executed."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "B's braille margins (2-space runover for the two nested 1438 events, 12-space heading indent) match the raw source exactly (source-6.txt lines 5060-5069, decoded directly); A's runover is 1 space short and its heading indent 1 short. All dates/text confirmed by exact forward-translation except the 'c.' abbreviation noted above. print.blocks[2] (the actual buildable list, with the 1438/nested-events structure) was built here since neither run supplied one, only a flat, unordered figure.labels array."
+}

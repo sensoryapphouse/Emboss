@@ -1,0 +1,94 @@
+{
+  "id": "sample-6-7",
+  "title": "Pedigree Chart",
+  "pdfPages": [
+    168
+  ],
+  "textLines": [
+    4967,
+    4998
+  ],
+  "illustrates": {
+    "rule": "6.8.2",
+    "quote": "a. Transcribe ancestral and pedigree charts as lists, using 1-3 margins. Begin with the most current item or person and move backward through the generations. Assign a number to each name or item in the chart, beginning with the most current. List them sequentially, moving back through each generation, in the same direction as the chart. Sequential numeric identification allows the ascending parentage to be followed without using a tactile graphic. b. Follow each item with any information specific to the item or individual, e.g., dates of birth/death, etc. Immediately follow this information with the two numbers from the list that represents the parent(s). Use a comma to separate the two numbers. Use three dot 5s to represent the missing connection if only one parent is listed. c. Insert a transcriber’s note about the parentage numbers."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Pedigree of Santa\nCruz Sweetheart Orchid", "features": "Centered heading, printed on two lines." },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "A pedigree chart (tree diagram) showing the ancestry of the Santa Cruz Sweetheart Orchid branching from left to right.",
+          "labels": [
+            "Santa Cruz Sweetheart", "Nobby's Amy", "Dawn Treader", "Be Glad", "Rothschildiana",
+            "Dawn Promise", "Gladrose", "Swiss Miss", "Cassandra", "amabilis", "(missing)",
+            "Dawn Welcome", "stuartiana", "Melinda Rose", "Glad Melinda"
+          ]
+        },
+        "description": "Each type of orchid in the list is given an identifying number. The numbers following the orchid name are the identifying numbers for the \"parents\" of that orchid. Three dot 5s rather than a number are used for a missing parent."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "marker": "1", "text": "Santa Cruz Sweetheart 2, 3" },
+          { "marker": "2", "text": "Nobby's Amy 4, 5" },
+          { "marker": "3", "text": "Dawn Treader 6, 7" },
+          { "marker": "4", "text": "Be Glad 8, 9" },
+          { "marker": "5", "text": "Rothschildiana 10, 11" },
+          { "marker": "6", "text": "Dawn Promise 12, 13" },
+          { "marker": "7", "text": "Gladrose 14, 15" },
+          { "marker": "8", "text": "Swiss Miss" },
+          { "marker": "9", "text": "Cassandra" },
+          { "marker": "10", "text": "amabilis" },
+          { "marker": "11", "text": "⠐⠐⠐", "features": "The 6.8.2b 'three dot 5s' missing-parent marker — encoded here as three literal Unicode braille dot-5 cells (U+2810), which Emboss's translator passes through untranslated, exactly reproducing the agreed braille's own three-quote-mark rendering." },
+          { "marker": "12", "text": "Dawn Welcome" },
+          { "marker": "13", "text": "stuartiana" },
+          { "marker": "14", "text": "Melinda Rose" },
+          { "marker": "15", "text": "Glad Melinda" }
+        ]
+      }
+    ],
+    "notes": "illustrates.rule/quote in run A was wrong (the same copy-pasted rule 6.13.1, Slide Presentations, seen in sample-6-5); the correct rule is 6.8.2, matching sample-6-6's own rule text (this sample and 6-6 are the book's own two worked illustrations of the same rule, one descending/ancestral, one a pedigree chart — both flat 1-3 numbered lists, not nested). Item 11 has no name in print at all: it is the chart's own unknown/missing ancestor, represented in braille purely by the three-dot-5 symbol (6.8.2b) with no name following it.",
+    "surroundingText": null,
+    "printFeatures": "A pedigree tree diagram with text labels and lines/brackets connecting them to indicate ancestry."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,p$igree ( ,santa",
+      "        ,cruz ,sweethe>t ,or*id",
+      "",
+      "      @.<,ea* type ( or*id 9 ! li/ is",
+      "    giv5 an id5tify+ numb]4 ,! numb]s",
+      "    foll[+ ! or*id \"n >e ! id5tify+",
+      "    numb]s = ! 8p>5ts0 ( t or*id4 ,?ree",
+      "    dot #es r ?an a numb] >e us$ = a",
+      "    miss+ p>5t4@.>",
+      "",
+      "#a ,santa ,cruz ,sweethe>t #b1 #c",
+      "#b ,no2y's ,amy #d1 #e",
+      "#c ,dawn ,tr1d] #f1 #g",
+      "#d ,2 ,glad #h1 #i",
+      "#e ,ro?s*ildiana #aj1 #aa",
+      "#f ,dawn ,promise #ab1 #ac",
+      "#g ,gladrose #ad1 #ae",
+      "#h ,swiss ,miss",
+      "#i ,cass&ra",
+      "#aj amabilis",
+      "#aa \"\"\"",
+      "#ab ,dawn ,welcome",
+      "#ac /u>tiana",
+      "#ad ,mel9da ,rose",
+      "#ae ,glad ,mel9da"
+    ],
+    "pageBreaks": [],
+    "notes": "The book's own text extract carries two running-head/page-furniture lines ahead of this sample ('6-24 Section 6' / 'Illustrative Materials'), excluded here as page furniture. Heading centred on two lines (indents 11 and 8, matching (40-len)/2 for each line independently — confirming a real print line break between 'Santa' and 'Cruz', not a wrapped single line: the full unwrapped title is only 41 cells wide and would otherwise break after 'Sweetheart', not after 'Santa'). Flat 1-3 list (cell 1 / cell 3), no nesting, matching 6.8.2a (distinct from 6.8.1's true nested descendant-chart format used in sample-6-5)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule/quote corrected from A's wrong copy-pasted 6.13.1 text to 6.8.2 (matching B and sample-6-6's own citation). The heading's line break was confirmed real (not a wrapping artifact) by comparing the full title's own unwrapped translated length (41 cells) and natural greedy-wrap point (after 'Sweetheart', not after 'Santa') against the agreed braille's actual break and both lines' centred indents. Item 11's 'missing parent' marker (three dot 5s, 6.8.2b) was recovered directly from the raw source (three literal '\"' BRF-ASCII characters, source-6.txt line 4994) and reproduced by feeding Emboss's translator three raw Unicode braille dot-5 cells directly (confirmed by forward-translation: passing U+2810 three times through Emboss's translate() reproduces the exact agreed cell sequence, since untranslatable/already-braille input passes through unchanged). All 15 names/numbers verified by liblouis back-translation and forward-translation round trips — no other name or number errors found in this file, unlike sample-6-6."
+}

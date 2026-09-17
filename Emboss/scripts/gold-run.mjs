@@ -59,7 +59,22 @@
 //                      print.blocks[] of {kind:'heading'|'paragraph'|'note'|'list'|
 //                      'pagenum'|'other', ...} plus a top-level print.transcriberNote
 //                      documentation field; see buildModel3 and tests/gold/
-//                      bana-formats-2016/section-3/README.md).
+//                      bana-formats-2016/section-3/README.md), and "section-12"
+//                      (Sidebars — print.blocks[] of {kind:'heading'|'paragraph'|
+//                      'attribution'|'list'|'sidebar'|'other', ...}; a 'sidebar' block
+//                      carries its own nested blocks[] (and an optional title) and is
+//                      built identically to buildModel7's own 'box' — a print sidebar
+//                      IS a box in Emboss's document model; see buildModel12 and
+//                      tests/gold/bana-formats-2016/section-12/README.md), and
+//                      "section-6" (Illustrative Materials — print.blocks[] of
+//                      {kind:'heading'|'paragraph'|'note'|'list'|'table'|'box'|
+//                      'pagenum'|'figure'|'caption'|'other', ...}; a 'figure' block
+//                      is documentation-only except for an optional sibling
+//                      `description` string, built either merged into the very next
+//                      'caption' block as one document 'graphic' block (BANA 6.2.2's
+//                      caption+description image model) or, with no caption to pair
+//                      with, as a standalone transcriber's note; see buildModel6 and
+//                      tests/gold/bana-formats-2016/section-6/README.md).
 // --sample <id>       run just one gold file (e.g. --sample sample-11-06)
 // --update-status     write status.json next to the gold files with the current
 //                      match/mismatch/not-representable/no-braille truth
@@ -1496,7 +1511,385 @@ function buildModel3(sample) {
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
 
-const MODEL_BUILDERS = { 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13, 'section-3': buildModel3 };
+// ---------------------------------------------------------------------------
+// Model building for section-12 (Sidebars) — from sample.print.blocks ONLY.
+// ---------------------------------------------------------------------------
+// Section 12's gold schema (tests/gold/bana-formats-2016/section-12/README.md) reuses
+// buildBlocks7's own box logic wholesale for its own 'sidebar' kind — BANA 12's whole
+// subject is that a print sidebar IS, structurally, a box (document.mjs's formatBox
+// handles `type:'box'` and `type:'sidebar'` identically, `case 'sidebar': return
+// formatBox(block, o)`, document.mjs:2062) — plus this section's own 'attribution' kind
+// (reused from buildBlocks3 exactly: a fixed cell-5/cell-5 block, no ordinary paragraph
+// margin, for a "Directions:"-style line preceding a sidebar word list, sample-12-7).
+//   kind 'heading'     -> a document `heading` block, level 1/2/3/4 = centred/cell-5/
+//                         cell-7/cell-9 (this section's own worked examples nest one
+//                         level deeper than §7's boxes do — a sidebar's own inner
+//                         sub-heading, e.g. sample-12-5's "Procedure"/"Analysis" —
+//                         document.mjs's formatHeading supports any level; only 1-3 are
+//                         exercised anywhere else in this gold corpus).
+//   kind 'paragraph'   -> a document `para` block.
+//   kind 'attribution'  -> a document `attribution` block (BANA §9.4 formatAttribution,
+//                         reused via buildBlocks3's own precedent) for a fixed 4/4-margin
+//                         directions line (sample-12-7's "Choose the correct term...").
+//   kind 'list'        -> a document `list` block, reusing buildListItem exactly as
+//                         buildModel7/8 do.
+//   kind 'sidebar'     -> BANA §12's own subject matter: a NESTED { kind:'sidebar',
+//                         title?, blocks:[...] } container, built into a document
+//                         `{type:'box', title?, blocks:[...]}` block — IDENTICAL
+//                         treatment to buildBlocks7's own 'box' kind (a sidebar and a
+//                         box share one document-model formatter). `title` (present
+//                         only where the sidebar carries its own accompanying heading
+//                         at the top of the box, BANA 7.2.1e) is passed straight
+//                         through to `box.title`, exactly as buildBlocks7 does.
+//   kind 'box'         -> accepted as a plain synonym for 'sidebar' (same handling),
+//                         kept for robustness/consistency with buildBlocks7/8, though
+//                         no file in this section's own gold set currently uses it.
+//   kind 'other'       -> never modeled; recorded as a limitation exactly like every
+//                         other section's own 'other' — used in this section for
+//                         print-page-number badges, running-head footers, "(Formats:
+//                         ...Location)" instructional callouts (BANA furniture with no
+//                         document-model counterpart), and (sample-12-3) a
+//                         cross-reference box whose own braille margin matches neither
+//                         an ordinary paragraph nor a box.
+//
+// Two of this section's seven gold files (sample-12-3, sample-12-7) carry real braille;
+// both excerpts are shorter than their own full print content, marked in the source by
+// a literal '444' omission line at each cut point (sample-12-7's own 6-of-8 fill-in-the-
+// blank truncation is likewise '444'-marked) — per the section-3/section-7
+// (sample-3-01/sample-7-03) precedent, print.blocks records the FULL print content
+// regardless, and buildModel12 is expected to over-produce at each such point; this is a
+// documented book-excerpt limitation, not an Emboss defect (see each gold file's own
+// resolution note, and section-12/README.md).
+function buildBlocks12(printBlocks, limitations) {
+  const blocks = [];
+  for (const b of (printBlocks || [])) {
+    if (!b || typeof b !== 'object') continue;
+    const kind = b.kind;
+    if (kind === 'heading') {
+      if (b.level == null) {
+        limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`);
+        continue;
+      }
+      const tos = textOrSegments(b.text);
+      blocks.push({ type: 'heading', level: b.level, ...tos });
+    } else if (kind === 'paragraph') {
+      const tos = textOrSegments(b.text);
+      blocks.push({ type: 'para', ...tos });
+    } else if (kind === 'attribution') {
+      blocks.push({ type: 'attribution', ...textOrSegments(b.text) });
+    } else if (kind === 'list') {
+      const items = Array.isArray(b.items) ? b.items : [];
+      const built = items.map((it, i) => buildListItem(it, limitations, `list item ${i}`));
+      if (built.some((it) => it.blank)) {
+        limitations.push(`list has one or more blank-fill items — not representable.`);
+      }
+      blocks.push({ type: 'list', kind: 'list', items: built });
+    } else if (kind === 'sidebar' || kind === 'box') {
+      const inner = buildBlocks12(b.blocks, limitations);
+      const boxBlock = { type: 'box', blocks: inner };
+      if (b.title != null && String(b.title).trim()) {
+        boxBlock.title = esc(String(b.title).trim());
+      }
+      if (b.colorNote) {
+        limitations.push(`sidebar has print.blocks colorNote:${JSON.stringify(b.colorNote)} — Emboss has no colour/screened-box support at all (F-72); built with an ordinary, unmarked box line.`);
+      }
+      blocks.push(boxBlock);
+    } else if (kind === 'other') {
+      limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
+    } else {
+      limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
+    }
+  }
+  return blocks;
+}
+function buildModel12(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  const blocks = buildBlocks12(printBlocks, limitations);
+  const hasContent = blocks.length > 0;
+  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+}
+
+// ---------------------------------------------------------------------------
+// Model building for section-6 (Illustrative Materials) — from sample.print.blocks
+// ONLY. See tests/gold/bana-formats-2016/section-6/README.md for the full
+// evidence-based account of how this section's own gold files were reconciled;
+// this comment covers just the shape buildBlocks6/buildModel6 consume.
+//
+// print.blocks[] kinds:
+//   'heading'   -> a document `heading` block (level as given; no level -> not built).
+//   'paragraph' -> a document `para` block, textOrSegments()'d exactly like every
+//                  other section (Emboss's own *bold*/_italic_/`code` cell-markup DSL
+//                  where print itself shows emphasis — this section's own worked
+//                  examples need it for bold captions/passages, e.g. example-6-3's
+//                  "Views of anger", sample-6-1's "Diving's early history.").
+//   'list'      -> a document `list` block; items[] reuses buildListItem exactly as
+//                  the section-7/8/9/16 precedents do (numeric/ordinal markers for
+//                  BANA 6.8.2's ascending-ancestral numbered lists, `level` for
+//                  6.5.1/6.8.1/6.9.1/6.10.6's nested lists, '•' for 6.14-style
+//                  bulleted lists).
+//   'table'     -> a document `table` block (BANA 6.11's bar-graph-as-table option),
+//                  reusing buildTable7's own {headers, rows} shape.
+//   'box'       -> BANA 6.12.1a's boxed screenshot, reusing buildBlocks7's own nested
+//                  {kind:'box', blocks:[...], title?} recursion.
+//   'pagenum'   -> BANA 1.11.3's mid-braille-page print-page-change indicator,
+//                  reusing the section-1/3 gold precedent's own {type:'pagenum',
+//                  page} document block.
+//   'note'      -> a standalone document `{type:'note', text}` block (formatTranscriberNote,
+//                  document.mjs:819) — used for every transcriber's note in this section
+//                  that ISN'T paired with an image caption (6.5.1/6.7.3.c/6.8.1c/6.8.2c/
+//                  6.10.2/6.13.1c's own explanatory/methodology notes, and 6.6's/6.9's/
+//                  6.13's "Section N"/"Note,"-style embedded labels).
+//   'figure'    -> NEVER built directly by itself: `figure.figure` is pure documentation
+//                  (what the image depicts/its print labels — confirmed, across this
+//                  section's own reconciliation, to often NOT correspond to anything
+//                  actually rendered into the sample's own braille excerpt at all, e.g.
+//                  example-6-1/6-2's own `figure.description`). Only a top-level
+//                  `description` string directly on the figure block (sibling of
+//                  `figure`, not nested inside it) is ever built, and only:
+//                    - merged into ONE document `graphic` block together with the very
+//                      NEXT print.blocks entry if it is `kind:'caption'` (BANA 6.2.2's
+//                      caption+description image model: `{type:'graphic', caption,
+//                      captionSegments, description}`, dispatched by document.mjs's real
+//                      `traceOrFormatPrintImage`/`printImageParts` — the SAME image-label
+//                      mechanism that emits the transcriber's-note "[Illustration]" label
+//                      per BANA 6.2.2b when the caption doesn't itself identify the
+//                      picture; see F-225, this section's single biggest, systemic source
+//                      of mismatch, since that label word is hard-coded and never the
+//                      print-appropriate one — "photograph"/"picture"/etc. — the book's
+//                      own worked examples actually use);
+//                    - OR, when no `caption` block immediately follows, built ALONE as a
+//                      standalone `{type:'note', text: description}` block (matching
+//                      sample-6-2's own reconciliation finding: with no caption to
+//                      attach a label to, the real braille never carries an
+//                      "[Illustration]" line at all, only the bare transcriber's note —
+//                      going through the image-label path here would fabricate a line
+//                      the book's own braille never has).
+//                  A `caption` block with no preceding `figure` (or a SECOND `caption`
+//                  immediately after one already consumed — a photo credit/source line,
+//                  BANA 6.2.2c) is never built; recorded as a limitation citing F-168
+//                  (source citations/credits inside an imggroup are lost).
+//   'caption'   -> only ever consumed as part of a `figure` pairing (above); a
+//                  `caption` reached any other way is recorded as a limitation.
+//   'other'     -> never modeled; recorded as a limitation exactly like every other
+//                  section's own 'other'.
+function buildBlocks6(printBlocks, limitations) {
+  const blocks = [];
+  const list = Array.isArray(printBlocks) ? printBlocks : [];
+  for (let i = 0; i < list.length; i++) {
+    const b = list[i];
+    if (!b || typeof b !== 'object') continue;
+    const kind = b.kind;
+    if (kind === 'heading') {
+      if (b.level == null) {
+        limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`);
+        continue;
+      }
+      // A real print line break inside a heading (sample-6-7/6-13's own two-line
+      // titles) is built as separate CONSECUTIVE heading blocks at the same level,
+      // not one block with an embedded '\n': document.mjs's own HEADING_JOIN_TIERS
+      // (centred>centred, cell5>cell5, cell5>cell7) already suppresses the blank
+      // line between same-tier connected headings, so each print line is centred
+      // independently with no gap, exactly matching the book's own two-line title —
+      // whereas a literal '\n' left inside one heading's own text would instead be
+      // wrapped (or ignored) by the ordinary word-wrapper, not treated as authoritative.
+      const lines = String(b.text ?? '').split('\n');
+      for (const line of lines) blocks.push({ type: 'heading', level: b.level, ...textOrSegments(line) });
+    } else if (kind === 'paragraph') {
+      blocks.push({ type: 'para', ...textOrSegments(b.text) });
+    } else if (kind === 'note') {
+      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+    } else if (kind === 'pagenum') {
+      const page = b.text != null ? String(b.text).trim() : '';
+      if (!page) { limitations.push(`pagenum block has no text — not built.`); continue; }
+      blocks.push({ type: 'pagenum', page: esc(page) });
+    } else if (kind === 'list') {
+      const items = Array.isArray(b.items) ? b.items : [];
+      const built = items.map((it, idx) => (typeof it === 'string' ? { text: esc(it) } : buildListItem(it, limitations, `list item ${idx}`)));
+      blocks.push({ type: 'list', kind: 'list', items: built });
+    } else if (kind === 'table') {
+      blocks.push(buildTable7(b, limitations, 'table'));
+    } else if (kind === 'box') {
+      const inner = buildBlocks6(b.blocks, limitations);
+      const boxBlock = { type: 'box', blocks: inner };
+      if (b.title != null && String(b.title).trim()) boxBlock.title = esc(String(b.title).trim());
+      blocks.push(boxBlock);
+    } else if (kind === 'figure') {
+      const next = list[i + 1];
+      const hasDescription = b.description != null && String(b.description).trim();
+      if (next && typeof next === 'object' && next.kind === 'caption') {
+        const tos = textOrSegments(next.text);
+        const graphic = { type: 'graphic', caption: tos.text != null ? tos.text : String(next.text ?? '') };
+        if (tos.segments) graphic.captionSegments = tos.segments;
+        if (hasDescription) graphic.description = esc(String(b.description).trim());
+        blocks.push(graphic);
+        i++; // consume the paired caption
+        // A further immediate 'caption' (photo credit/source citation, BANA 6.2.2c) is
+        // never built — Emboss's imggroup parsing loses citations entirely (F-168).
+        const after = list[i + 1];
+        if (after && typeof after === 'object' && after.kind === 'caption') {
+          limitations.push(`source citation/photo-credit caption "${String(after.text ?? '').slice(0, 160)}" immediately follows an already-captioned figure — not built (F-168, source citations inside an imggroup are lost).`);
+          i++;
+        }
+      } else if (hasDescription) {
+        // No caption to pair with: build the description alone as a standalone
+        // transcriber's note (never through the image-label mechanism — see header
+        // comment above and sample-6-2's own README/differences.md finding).
+        blocks.push({ type: 'note', ...textOrSegments(b.description) });
+      }
+      // Otherwise: pure documentation (figure.figure.description/labels never rendered
+      // into this sample's own braille excerpt) — nothing to build, no limitation
+      // recorded (this is expected, not a gap).
+    } else if (kind === 'caption') {
+      limitations.push(`caption block "${String(b.text ?? '').slice(0, 160)}" has no preceding figure to pair with — not built (F-168).`);
+    } else if (kind === 'other') {
+      limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
+    } else {
+      limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
+    }
+  }
+  return blocks;
+}
+function buildModel6(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  const blocks = buildBlocks6(printBlocks, limitations);
+  const hasContent = blocks.length > 0;
+  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+}
+
+// ---------------------------------------------------------------------------
+// Model building for section-15 (Line-Numbered and Line-Lettered Text) — from
+// sample.print.blocks ONLY.
+// ---------------------------------------------------------------------------
+// This section's gold schema (tests/gold/bana-formats-2016/section-15/README.md) is a flat
+// print.blocks[] list, each {kind, text, level, number, letter, newPara, printVisible, features}:
+//   kind 'heading'     -> an ordinary document `heading` block (level as given), exactly as the
+//                         §4/§7/§8/§9/§13/§3 precedents.
+//   kind 'other'       -> never modelled (a print page number, a page-decoration block) —
+//                         recorded as a limitation exactly like every other section's own 'other'.
+//   kind 'stanzabreak' -> a `{type:'indicator', kind:'line'}` block between two runs of poem
+//                         lines, exactly the block buildModel13/parsePoem itself inserts between
+//                         two stanzas (rendered as a single blank line).
+//   kind 'paragraph'   -> an ordinary prose paragraph with NO linenum apparatus at all (§15.7.1's
+//                         own "Paragraph Format" rhyme scheme, Example 15-1 — a rhyme-scheme
+//                         letter shown with ordinary retained emphasis inline in running text,
+//                         not a line-numbering construct).
+//   kind 'numbered'    -> §15.2 margin-numbered paragraphs, §15.3/15.4/15.6.1a/15.8/15.9.3
+//                         line- or paragraph-numbered PROSE: a genuine `{type:'linenum'}` segment
+//                         (the real A30 model parse.mjs:1928-1933 builds from a source
+//                         <linenum>) is placed before the block's own first word whenever
+//                         `number` is non-null, feeding the SAME formatSegmentedPara/
+//                         wrapNumbered pipeline every one of this kind's rules actually shares
+//                         (document.mjs:719-742) — the number is drawn to the right margin (or,
+//                         for §15.2, WRONGLY drawn there too — F-205). Consecutive 'numbered'
+//                         blocks are MERGED into one flowing `para` block (one printed
+//                         paragraph's own several print lines, each with its own optional
+//                         linenum segment) so wrapNumbered sees the whole paragraph as one
+//                         continuous stream and can wrap a print line's own text across braille
+//                         rows exactly as the gold braille shows — UNLESS a block sets
+//                         `newPara:true`, which starts a fresh `para` block instead (a genuine
+//                         print paragraph break, BANA 15.4.1a "follow print for indented or
+//                         blocked paragraphing").
+//   kind 'verse'       -> §15.5.1/15.7.2/15.7.3/15.9.3-style STANDALONE POEM lines: a `{type:
+//                         'play', subtype:'verse', style:'verse', level}` block per line — the
+//                         SAME shape buildModel13 already uses for §13 poems — whose own
+//                         `number`/`letter` (a BANA line number or rhyme-scheme letter) is
+//                         folded into the line's own text as a literal "N " prefix, NOT built as
+//                         a genuine linenum segment, faithfully reproducing parse.mjs's real
+//                         parsePoem `numPrefix` behaviour (F-182) exactly as buildModel13 already
+//                         does for §13. Where a line carries BOTH a `letter` and a `number`
+//                         (BANA Sample 15-8's own construct — F-182's own "findLinenum returns
+//                         only the FIRST <linenum> child" defect), only `letter` is folded in;
+//                         `number` is deliberately never built, reproducing the second marker's
+//                         real, total loss.
+//   kind 'dialogue'    -> §15.5.2/15.6.1b-style PLAY DIALOGUE lines (a speaker's own turn, or a
+//                         continuation line of the same speech with no speaker repeated): a
+//                         `{type:'play', subtype:'verse', level}` block exactly like 'verse'
+//                         EXCEPT its `number` (where present) is kept as a genuine, UNFOLDED
+//                         `{type:'linenum'}` segment — matching standards-map.md's own row for
+//                         BANA 15.5.2a and standards-findings.md F-181: a play-dialogue line does
+//                         NOT go through parsePoem's numPrefix fold at all (there is no <poem>
+//                         here, just consecutive speaker/dialogue lines), so a real `<linenum>`
+//                         segment survives all the way to document.mjs's formatPlay, which then
+//                         silently drops it — segmentsToBraille is called without lineNumbers:
+//                         true on either of formatPlay's two (prose/verse) branches.
+//
+// This section's own five findings (already merged into standards-findings.md before this
+// reconciliation began):
+//   F-181 — play-dialogue line numbers dropped entirely (formatPlay never requests lineNumbers).
+//   F-182 — poem line numbers/letters folded to the LEFT margin (parsePoem's numPrefix) instead
+//           of built as a genuine right-margin linenum segment; also loses a SECOND <linenum>
+//           child on the same line (findLinenum returns only the first).
+//   F-205 — a paragraph-numbered (§15.2) block's number lands at the RIGHT margin instead of
+//           inline before the paragraph's own text, and drags in the (wrong) §15.4.1d note.
+//   F-207 — interspersed prose+verse (§15.6.1a) numbering relies entirely on the source already
+//           carrying a linenum on every actual print line; Emboss itself never computes a
+//           missing sequential number of its own.
+//   F-208 — counted-words text (§15.8.1a) needs a 3-cell gap before its numbers; wrapNumbered
+//           hardcodes a 2-cell minimum for every caller, with no parameter for the wider gap.
+function buildBlocks15(printBlocks, limitations) {
+  const blocks = [];
+  let pending = null;   // the 'numbered' run currently being merged into one flowing para block
+  const flushPending = () => { if (pending) { blocks.push(pending); pending = null; } };
+  for (const b of (printBlocks || [])) {
+    if (!b || typeof b !== 'object') continue;
+    const kind = b.kind;
+    const continuesNumbered = kind === 'numbered' && pending && !b.newPara;
+    if (!continuesNumbered) flushPending();
+    if (kind === 'heading') {
+      if (b.level == null) { limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`); continue; }
+      blocks.push({ type: 'heading', level: b.level, ...textOrSegments(b.text) });
+    } else if (kind === 'paragraph') {
+      const para = { type: 'para', ...textOrSegments(b.text) };
+      if (b.continuation) para.continuation = true;
+      blocks.push(para);
+    } else if (kind === 'stanzabreak') {
+      blocks.push({ type: 'indicator', kind: 'line' });
+    } else if (kind === 'numbered') {
+      const segs = [];
+      if (b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
+      segs.push(...parseCellMarkup(String(b.text ?? '')));
+      if (!pending) pending = { type: 'para', segments: [] };
+      pending.segments.push(...segs);
+    } else if (kind === 'verse' || kind === 'dialogue') {
+      let raw = String(b.text ?? '');
+      if (!raw.trim()) { limitations.push(`empty '${kind}' block skipped.`); continue; }
+      const blk = { type: 'play', subtype: 'verse', style: 'verse' };
+      const lvl = Number(b.level) || 0;
+      if (lvl > 0) blk.level = lvl;
+      if (kind === 'verse') {
+        // Poem line (F-182): fold the rhyme letter into the text as a literal prefix, exactly
+        // like buildModel13's own `ln.number` handling — a `number` alongside a `letter`
+        // (Sample 15-8) is deliberately dropped, matching findLinenum's own first-child-only bug.
+        const prefix = (b.letter != null && String(b.letter).trim()) ? String(b.letter).trim() : null;
+        Object.assign(blk, textOrSegments(prefix ? `${prefix} ${raw}` : raw));
+      } else {
+        // Dialogue line (F-181): keep a genuine, unfolded linenum segment — formatPlay drops it.
+        const segs = [];
+        if (b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
+        segs.push(...parseCellMarkup(raw));
+        blk.segments = segs;
+      }
+      blocks.push(blk);
+    } else if (kind === 'other') {
+      limitations.push(`print block kind 'other' (not modeled — page-number/decoration content with no braille-buildable counterpart in this schema): "${String(b.text ?? '').slice(0, 160)}"`);
+    } else {
+      limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
+    }
+  }
+  flushPending();
+  return blocks;
+}
+function buildModel15(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  const blocks = buildBlocks15(printBlocks, limitations);
+  const hasContent = blocks.length > 0;
+  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+}
+
+const MODEL_BUILDERS = { 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13, 'section-3': buildModel3, 'section-12': buildModel12, 'section-6': buildModel6, 'section-15': buildModel15 };
 function buildModel(sample) {
   const fn = MODEL_BUILDERS[SECTION];
   if (!fn) throw new Error(`No model builder registered for --section ${SECTION}`);
@@ -1673,7 +2066,7 @@ export function runOne(sample) {
   expected.lines = trimEnd(expected.lines);
   const diffOps = diffLines(expected.lines, actual.lines);
   const isMatch = expected.lines.length === actual.lines.length && expected.lines.every((l, i) => l === actual.lines[i]);
-  const coreUnrepresentable = (SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j' || SECTION === 'section-3')
+  const coreUnrepresentable = (SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j' || SECTION === 'section-3' || SECTION === 'section-6' || SECTION === 'section-15')
     // §4/§7/§8/§1/§16/b004-6-9/b004-11/§9/b004-appendix-g: any recorded limitation means
     // some real print content was left out of the model (a heading with no level, a
     // bullet/column/box/colour-note Emboss has no mechanism for, a block kind this flat

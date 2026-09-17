@@ -1,0 +1,40 @@
+{
+  "id": "bana-6.8.2c-sample",
+  "title": "Each individual in the list is given an identifying number. The numbers following an individual’s name are the identifying numbers for the parents. Three dot 5s rather than a number are used for a missing parent.",
+  "pdfPages": [
+    152
+  ],
+  "textLines": [
+    4621,
+    4624
+  ],
+  "illustrates": {
+    "rule": "6.8.2",
+    "quote": "Ascending Ancestral and Pedigree Charts a. Transcribe ancestral and pedigree charts as lists, using 1-3 margins. Begin with the most current item or person and move backward through the generations. Assign a number to each name or item in the chart, beginning with the most current. List them sequentially, moving back through each generation, in the same direction as the chart. Sequential numeric identification allows the ascending parentage to be followed without using a tactile graphic. b. Follow each item with any information specific to the item or individual, e.g., dates of birth/death, etc. Immediately follow this information with the two numbers from the list that represents the parent(s). Use a comma to separate the two numbers. Use three dot 5s to represent the missing connection if only one parent is listed. c. Insert a transcriber’s note about the parentage numbers. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Each individual in the list is given an identifying number. The numbers following an individual’s name are the identifying numbers for the parents. Three dot 5s rather than a number are used for a missing parent.",
+        "features": "Standard transcriber's note text provided by the rule."
+      }
+    ],
+    "notes": "Illustrates the standard wording for a transcriber's note about parentage numbers. The print original is the rule's sample text itself.",
+    "surroundingText": null,
+    "printFeatures": "Sample text indented in print, demonstrating transcriber's note wording."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "This sample provides illustrative print wording for a transcriber's note. No braille array is given because the source text contains only the English wording, not an actual braille transcription."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A left print.blocks empty (print.notes/printFeatures 'TODO', pdfPages []) and mistakenly placed the plain-English print wording into braille.lines instead of leaving it empty or building a real print model — a defect flagged in the task brief. B's print.blocks/pdfPages are used throughout, verified word-for-word against the PDF page image (p.152, printed 6-8), including 'Three dot 5s'. pdfPages 152 = printed page 6-8 + 144, confirmed by the page footer."
+}

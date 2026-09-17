@@ -1,0 +1,49 @@
+{
+  "id": "BANA Sample 15-5",
+  "title": "Sample 15-5: Poetry Line Numbers",
+  "pdfPages": [422],
+  "textLines": [12137, 12153],
+  "illustrates": {
+    "rule": "15.5.1",
+    "quote": "Poetry is typically written in meter or verse. Observe the following guidelines, in addition to the points outlined in Formats, §15.3: a. Use poetry format. (See Formats, §13, Poetry and Song Lyrics.) b. Follow print for line numbers. Do not add numbers that do not occur in print. c. Maintain the two-cell margin before print line numbers whether these numbers are implied or actually shown."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "other", "text": "", "features": "A braille page-number line (the running braille page count, not part of the poem or its line-numbering) — this is the mysterious right-margin '#,-' both transcription runs separately flagged; resolved by this reconciliation as the ordinary top-of-page braille page number, unrelated to 15.5's own line numbers. Not modeled (buildModel15 does not build page-number footers/headers)." },
+      { "kind": "verse", "text": "Dear, beauteous Death; the jewel of the just!", "level": 0 },
+      { "kind": "verse", "text": "Shining nowhere but in the dark;", "level": 1 },
+      { "kind": "verse", "text": "What mysteries do lie beyond thy dust,", "level": 0, "number": "20" },
+      { "kind": "verse", "text": "Could man outlook that mark!", "level": 2 },
+      { "kind": "stanzabreak" },
+      { "kind": "verse", "text": "He that hath found some fledged birdes nest may know", "level": 0 },
+      { "kind": "verse", "text": "At first sight if the bird be flown;", "level": 1 },
+      { "kind": "verse", "text": "But what fair dell or grove he sings in now,", "level": 0 },
+      { "kind": "verse", "text": "That is to him unknown", "level": 2, "number": "25" }
+    ],
+    "notes": "CORRECTED during reconciliation: both A and B agreed on which 9 verse lines exist, but disagreed on which one carries the print-visible number 25 — A attached it to the stanza's own LAST line ('That is to him unknown'), B attached it to the second-to-last line ('But what fair dell or grove he sings in now,'). Resolved by re-reading the source directly (references/_text/braille-formats-2016.txt lines 12137-12153): the source's own numbered line 12 is '    ,t is to hm un\"kn                #be' — the braille for 'That is to him unknown' ending in the numeral #be (25) — confirming A's placement (the stanza's LAST line) and B's own placement was a transcription error, corrected here. Indentation levels (0/1/2) were independently re-measured from the given, already-verified braille (leading blank cells / 2) rather than taken from either run's own say-so.",
+    "surroundingText": [],
+    "printFeatures": "Two four-line stanzas, three indentation levels, each stanza's own final line carrying the print-visible number."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                     #,-",
+      ",de>1 b1ute\\s ,d1?2 ! jewel ( ! j6",
+      "  ,%9+ no\": b 9 ! d>k2",
+      ",:at my/]ies d lie 2y ?y du/1        #bj",
+      "    ,cd man \\tlook t m>k6",
+      "",
+      ",he t ha? f.d \"s fl$g$ birdes ne/",
+      "      may \"k",
+      "  ,at f/ si<t if ! bird 2 fl[n2",
+      ",b :at fair dell or grove he s+s 9",
+      "      n[1",
+      "    ,t is to hm un\"kn                #be"
+    ],
+    "pageBreaks": [],
+    "notes": "CORRECTED during reconciliation: A's own braille array prepended two extra blank lines before the page-number row ('' '' '#,-' ...), which do not appear anywhere in the source (references/_text/braille-formats-2016.txt: the numbered listing for this sample begins directly at its own line 1, '#,-', with nothing blank before it). B's 12-line array (no leading blanks) is verbatim from the source and is used here. Right-margin numbers #bj=20 and #be=25 confirmed by direct decode; #be sits on the array's LAST row, confirming the print.blocks correction above."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille: B's line count (12, no spurious leading blanks) is correct per direct re-reading of the source; A's 14-line version (with 2 invented leading blanks) is wrong. Print: A's placement of line number 25 (on the stanza's own last line) is correct per the same source re-read; B's placement (one line earlier) is wrong. Modeled by buildModel15 as a genuine poem (kind:'verse', reusing buildModel13's poem-line convention: 'number' folded into the line's own text as a literal prefix); expect F-182 (parsePoem folds the number to the LEFT margin instead of the right the book shows) to be this file's mismatch cause."
+}

@@ -1,0 +1,78 @@
+{
+  "id": "sample-6-9",
+  "title": "Timeline with Bars",
+  "pdfPages": [
+    171
+  ],
+  "textLines": [
+    5028,
+    5047
+  ],
+  "illustrates": {
+    "rule": "6.10.2",
+    "quote": "Timeline with Bars. Insert the range of years when bars are used to indicate a span of time. Usually it is necessary to provide an estimate of the dates. Include a transcriber’s note to let the reader know all dates are approximate. Place the note on the Transcriber’s Notes page when these types of timelines are used throughout the volume."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "chart",
+          "description": "a timeline of historical events represented with horizontal bars and points across a time scale, axis ticks at 1600, 1625, 1650, 1675, 1700, 1725",
+          "labels": [
+            "1600", "1625", "1650", "1675", "1700", "1725",
+            "Rule by Cardinal Richelieu", "Reign of Louis XIV", "Frederick William the Great Elector",
+            "Peter the Great", "English, French, Dutch settle North America", "The Glorious Revolution",
+            "Official recognition of the Dutch Republic", "English Civil War", "Paintings of Rembrandt",
+            "John Locke, Two Treatises of Government", "Thomas Hobbes, Leviathan", "Plays of Racine"
+          ]
+        },
+        "description": "The dates in the timeline are approximate."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "text": "1600" },
+          { "text": "1615-1660 English, French, Dutch settle North America" },
+          { "text": "1620-1640 Rule by Cardinal Richelieu" },
+          { "text": "1625-1670 Paintings of Rembrandt" },
+          { "text": "1630-1645 English Civil War" },
+          { "text": "1640-1685 Frederick William the Great Elector" },
+          { "text": "1645 Official recognition of the Dutch Republic" },
+          { "text": "1725" }
+        ]
+      }
+    ],
+    "notes": "The full print timeline runs from 1600 to beyond 1725 with more events than this book excerpt transcribes (figure.labels lists several — Reign of Louis XIV, Peter the Great, The Glorious Revolution, John Locke/Hobbes/Racine — that this specific braille excerpt omits, marked with the book's own ellipsis, '444', between 'Official recognition of the Dutch Republic' and the final '1725' tick); there is no print-side input to build that ellipsis from, matching the same documented, non-defect excerpt-truncation convention used throughout this gold corpus (see e.g. section-4/section-8 READMEs). Entries are transcribed in chronological order by start year (6.10.1), not the print's own layout order. F-170 (BANA 6.10.1a's 'begin a timeline on a new braille page') is not itself exercised by this excerpt (it opens mid-page in the book's own worked example), but still applies generally to this rule area.",
+    "surroundingText": null,
+    "printFeatures": "A horizontal-bar timeline with a year axis (1600-1725ish) and labelled event bars/points."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! dates 9 ! \"tl9e >e",
+      "    approximate4@.>",
+      "",
+      "#afjj",
+      "#afae-#affj ,5gli%1 ,fr5*1 ,dut* settle",
+      "  ,nor? ,am]ica",
+      "#afbj-#afdj ,rule by ,c>d9al ,ri*elieu",
+      "#afbe-#afgj ,pa9t+s ( ,rembr&t",
+      "#afcj-#afde ,5gli% ,civil ,w>",
+      "#afdj-#afhe ,fr$]ick ,william ! ,grt",
+      "  ,elector",
+      "#afde ,(ficial recogni;n ( ! ,dut*",
+      "  ,republic",
+      "444",
+      "#agbe"
+    ],
+    "pageBreaks": [],
+    "notes": "Flat 1-3 list (cell 1 / cell 3 runover). 444 marks the book's own excerpt ellipsis between the last transcribed event and the final '1725' tick — not print content."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed byte-for-byte, but share two errors, both confirmed by decoding the raw source directly (source-6.txt lines 5033-5047): (1) the transcriber's note's own margins are given as 5/3, when the raw source shows exactly 6/4 (the standard BANA 7-5 note margins used consistently throughout this section); (2) both runs silently DROPPED the book's own '444' excerpt-ellipsis line between the Dutch-Republic entry and the final '1725' tick, replacing it with a blank line — restored here from the raw source. All bar-range dates and event text confirmed correct by exact forward-translation (e.g. '1615-1660 English, French, Dutch settle North America' and '1645 Official recognition of the Dutch Republic' both reproduce their braille lines exactly); print.blocks[1] (the actual transcribable list) was built here since neither run supplied one, only a flat, undated figure.labels array with no structure."
+}

@@ -1,0 +1,58 @@
+{
+  "BANA Example 15-1": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \".1,RESURREC;N IS ABBA4 ,I SAW A />+\" vs actual \".1,RESURREC;N IS A2A4 ,I SAW A />+ VIRG9\"."
+  },
+  "BANA Example 15-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",HE IS T FALL5 L.E T LIES Z HURL$1     A\" vs actual \"A ,HE IS T FALL5 L.E T LIES Z HURL$1\"."
+  },
+  "BANA Sample 15-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". line count differs by +5 (expected 13, actual 18)."
+  },
+  "BANA Sample 15-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                    #ADD\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". line count differs by +3 (expected 8, actual 11). Input-model limitation: print block kind 'other' (not modeled — page-number/decoration content with no braille-buildable counterpart in this schema): \"-144-\""
+  },
+  "BANA 15.4.1d Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 15.8.1b Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 15-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". line count differs by +3 (expected 17, actual 20)."
+  },
+  "BANA Sample 15-3": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". line count differs by -1 (expected 15, actual 14)."
+  },
+  "BANA Sample 15-4": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". line count differs by +2 (expected 15, actual 17)."
+  },
+  "BANA Sample 15-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                     #,-\" vs actual \",DE>1 B1UTE\\\\S ,D1?2 ! JEWEL ( ! J6\". line count differs by -3 (expected 12, actual 9). Input-model limitation: print block kind 'other' (not modeled — page-number/decoration content with no braille-buildable counterpart in this schema): \"\""
+  },
+  "BANA Sample 15-6": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \",,CAES>3 ,CALPURNIA6\". line count differs by -6 (expected 21, actual 15)."
+  },
+  "BANA Sample 15-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                    #AJG\" vs actual \"      @.<,L9E NUMB]S >E %[N AT ! \\\"R M>G9\". Input-model limitation: print block kind 'other' (not modeled — page-number/decoration content with no braille-buildable counterpart in this schema): \"–107–\""
+  },
+  "BANA Sample 15-8": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\" vs actual \"A ,I WOND] D Y FEEL TO-\\\"D\". line count differs by -7 (expected 18, actual 11)."
+  },
+  "BANA Sample 15-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual \"      ,! ,RAT ,T ,_H A ,FA/ ,RATE\". line count differs by -3 (expected 17, actual 14). Input-model limitation: print block kind 'other' (not modeled — page-number/decoration content with no braille-buildable counterpart in this schema): \"7\""
+  }
+}

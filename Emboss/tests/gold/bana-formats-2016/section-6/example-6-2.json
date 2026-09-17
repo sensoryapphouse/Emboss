@@ -1,0 +1,58 @@
+{
+  "id": "example-6-2",
+  "title": "Figure Number and Caption",
+  "pdfPages": [
+    147
+  ],
+  "textLines": [
+    4429,
+    4437
+  ],
+  "illustrates": {
+    "rule": "6.2.2",
+    "quote": "Use 7-5 margins for print captions and transcriber-generated descriptions. a. Do not insert blank lines before or after captions or descriptions unless required by other formats, e.g., headings, lists, etc. b. If the original print copy does not identify an illustration, insert a label in a transcriber’s note (e.g., photograph, figure, etc.) followed by the text of the caption on the same line. No punctuation is needed between the identifier and the text because the transcriber's note indicators provide sufficient separation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "photo",
+          "description": "A blank rectangular box representing a placeholder for a copyrighted image, printed with the words 'Copyrighted Image'.",
+          "labels": [
+            "Copyrighted Image"
+          ]
+        },
+        "description": null,
+        "features": "A large box with text 'Copyrighted Image' centered.",
+        "level": null
+      },
+      {
+        "kind": "caption",
+        "text": "FIGURE 20.1 The balloon and gondola used by Piccard and Jones during their successful attempt to circle the globe in March 1999.",
+        "features": "Caption text below the placeholder box.",
+        "level": null
+      }
+    ],
+    "notes": "The figure is a placeholder box literally printed with the words 'Copyrighted Image' (labels[0]); the copyright holder withheld the actual photograph. Neither figure.description nor figure.labels is built into the braille model: the agreed 4-line braille is the caption ONLY (forward-translation of the full caption text matches character-for-character with no extra transcriber's-note line), so both fields are documentation only for this file.",
+    "surroundingText": null,
+    "printFeatures": "figure placeholder, caption"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      ,,figure #bj4a ,! balloon &",
+      "    gondola us$ by ,pi3>d & ,j\"os dur+",
+      "    _! su3ess;l attempt to circle !",
+      "    globe 9 ,m>* #aiii4"
+    ],
+    "pageBreaks": [],
+    "notes": "The caption uses 7-5 margins: the first line begins in cell 7 (6 spaces), and runovers begin in cell 5 (4 spaces). No transcriber's-note label is needed (or given) because the caption itself begins with the identifying word 'FIGURE' (6.2.2b)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille margins: same 8-cell-too-far defect in A as example-6-1 (14/12 vs 6/4); B correct, confirmed against source-6.txt. figure.description: A's terse 'placeholder' vs B's fuller wording; verified against the PDF page image (p.147, printed 6-3) that the box is literally printed with 'Copyrighted Image' (captured by figure.labels, agreed by both runs) and that no separate description line exists anywhere in the agreed braille (which is the caption only) — B's fuller wording kept as documentation, neither field built. Since this caption starts with the identifying word 'FIGURE' (matching Emboss's own IDENTIFIED_RE), F-225 (hard-coded 'Illustration' label word) does not affect this file."
+}

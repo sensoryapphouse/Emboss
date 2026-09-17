@@ -1,0 +1,56 @@
+{
+  "id": "BANA Sample 15-4",
+  "title": "Sample 15-4: Short Numbered Lines",
+  "pdfPages": [421],
+  "textLines": [12111, 12129],
+  "illustrates": {
+    "rule": "15.4.1e",
+    "quote": "Two individually numbered print lines cannot start on the same braille line, as only one line number can be at the margin."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "numbered", "text": "and dangerous dive, as if trying to", "number": "212", "printVisible": false, "features": "Excerpt begins mid-paragraph (no paragraph indent on this, the excerpt's own first line)." },
+      { "kind": "numbered", "text": "escape Graves Registration, where", "number": "213", "printVisible": false },
+      { "kind": "numbered", "text": "he would be tagged and sent home", "number": "214", "printVisible": false },
+      { "kind": "numbered", "text": "under a flag, dead of a heart attack.", "number": "215", "printVisible": false },
+      { "kind": "numbered", "text": "“Shut up, . . . !” the soldier", "number": "216", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "hissed, but Paul Berlin could not", "number": "217", "printVisible": false },
+      { "kind": "numbered", "text": "stop giggling, remembering: scared", "number": "218", "printVisible": false },
+      { "kind": "numbered", "text": "to death.", "number": "219", "printVisible": false },
+      { "kind": "numbered", "text": "Later they waded in after him,", "number": "220", "printVisible": true, "newPara": true, "features": "Print shows the number 220 here." },
+      { "kind": "numbered", "text": "probing for Billy Boy with their", "number": "221", "printVisible": false },
+      { "kind": "numbered", "text": "rifle butts, elegantly and delicately", "number": "222", "printVisible": false },
+      { "kind": "numbered", "text": "probing for Billy Boy in the stinking", "number": "223", "printVisible": false },
+      { "kind": "numbered", "text": "paddy, singing—some of them—", "number": "224", "printVisible": false }
+    ],
+    "notes": "Print numbers only line 220 (the excerpt's own single print-visible anchor); the other twelve blocks' 'number' fields are the actual sequential print-line numbers, confirmed by direct decode of the given braille's own right-margin digits (#bab=212 ... #bbd=224). Thirteen short print lines across three paragraphs (the first begun before this excerpt starts, per its own unindented first line) is exactly this rule's own illustration: several of these short lines are barely wider than the numbered-text margin allows, so two of them are forced to wrap and the following numbered line is pushed to start mid-braille-line, needing the three-blank-cell separator (15.4.1e/c) rather than starting its own fresh braille row.",
+    "surroundingText": [],
+    "printFeatures": "Short prose lines from a novel (Tim O'Brien, Going After Cacciato), indented paragraph starts, one print-visible line number (220)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "                                     #,-",
+      "& dang]\\s dive1 z if try+ to        #bab",
+      "escape ,graves ,regi/ra;n1 \":       #bac",
+      "he wd 2 ta7$ & s5t home             #bad",
+      "\"u a flag1 d1d ( a he>t attack4     #bae",
+      "  8,%ut up1 44460 ! soldi]          #baf",
+      "hiss$1 b ,paul ,b]l9 cd n           #bag",
+      "/op gi7l+1 rememb]+3 sc>$           #bah",
+      "to d1?4                             #bai",
+      "  ,lat] !y wad$ 9 af hm1            #bbj",
+      "prob+ = ,billy ,boy ) _!            #bba",
+      "rifle butts1 elegantly &            #bbb",
+      "delicately   prob+ = ,billy ,boy 9 #bbc",
+      "! /9k+   paddy1 s++,-\"s ( !m,-      #bbd"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Line 3 carries a braille page number (#,-) with no line-numbered content on it (15.9.3f's own general 'no line-numbered text on a page-number line' rule, illustrated incidentally). Right-margin numbers 212-224 confirmed sequential by direct decode."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the single print-visible anchor (220); this reconciliation adds the twelve intervening sequential numbers. Modeled by buildModel15 the same way as Sample 15-2/15-3 (one flowing numbered paragraph per print paragraph); per the standards-findings.md 'done' rows for 15.4.1e (wrapNumbered already flushes the line before accepting a second number, keeping two numbered lines off one braille row), this file is expected to be a MATCH or very close to one."
+}

@@ -1,0 +1,38 @@
+{
+  "id": "BANA Sample 15-10",
+  "title": "Sample 15-10: Marginal Numbers Used for Verse Numbers",
+  "pdfPages": [428],
+  "textLines": [12290, 12302],
+  "illustrates": {
+    "rule": "15.9.3",
+    "quote": "15.9.3 When text is in verse format: a. Begin each verse on a new line using 3-1 margins. b. Place the verse number, including the numeric indicator, at the right margin of the first braille line in the verse. c. All lines of text in this format end so at least two blank cells are left before the beginning of the longest verse number on the braille page. d. Do not repeat the verse number if it is more than one line. e. All notes to the text are at the bottom of the print page. f. Do not place line-numbered text on any line with a print or braille page number. g. Note changes in print format on the Transcriber’s Notes page."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "other", "text": "-144-", "features": "Print page number, right-aligned above the verses." },
+      { "kind": "numbered", "text": "Thus did We show Abraham the kingdom of the heavens and the earth that he might be of those possessing certainty:", "number": "76", "printVisible": true, "newPara": true, "features": "Print shows '76.' (with a period) at the left margin, hanging-indented ahead of the verse text; the braille's own numeric indicator carries the bare number only, per 15.9.3b." },
+      { "kind": "numbered", "text": "When the night grew dark upon him he beheld a star. He said: This is my Lord. But when it set, he said: I love not things that set.", "number": "77", "printVisible": true, "newPara": true }
+    ],
+    "notes": "Confirmed directly against the PDF page image (references/bana/braille-formats-2016.pdf, page 428): print shows '76.' and '77.' (each with a trailing period) at the left margin in a hanging indent, one verse per paragraph (Quran 6:75-79, Abraham narrative; identification not load-bearing). B's own rule id (15.9.3, matching standards-map.md's own already-reconciled table) and 'verse' framing are used in preference to A's non-existent placeholder rule '15.10'; B's own stripped, period-less number ('76'/'77') is kept, matching braille's own numeric-indicator convention (a period is print-only typography, not part of the braille numeral).",
+    "surroundingText": [],
+    "printFeatures": "Two verse-numbered paragraphs, verse numbers with a trailing period at the left margin in print, 3-1 margins (BANA's ordinary 2-cell first-line/flush-runover paragraph indent already matches this)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                    #add",
+      "  ,?us did ,we %[ ,abraham ! k+dom   #gf",
+      "( ! h1v5s & ! e>? t he mi<t 2 ( ^?",
+      "possess+ c]ta9ty3",
+      "  ,:5 ! ni<t grew d>k ^u hm he       #gg",
+      "2held a />4 ,he sd3 ,? is my ,\"l4",
+      ",b :5 x set1 he sd3 ,i love n ?+s t",
+      "set4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Row 1 is a braille page-number line (#add=144); rows 2/5 carry the two verse numbers (#gf=76, #gg=77) at the right margin of each verse's own first braille line, per 15.9.3b/d (never repeated on a wrapped continuation row)."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: B's rule id (15.9.3) and print.blocks framing ('verse'/'other', period-less numbers) are correct, matching standards-map.md's own table and the PDF page image directly; A's placeholder rule '15.10' and its retained print period on the number are both replaced. Modeled by buildModel15 the same way as Sample 15-2/15-3/15-4/15-9 (a genuine linenum segment placed once, at the start of each verse-paragraph, feeding wrapNumbered) rather than the poem-fold mechanism, since 15.9.3b's own 'place...at the right margin of the first braille line' matches wrapNumbered's ordinary behaviour, not parsePoem's numPrefix fold; per the standards-findings.md 'done' rows this file is expected to be a MATCH or very close to one."
+}

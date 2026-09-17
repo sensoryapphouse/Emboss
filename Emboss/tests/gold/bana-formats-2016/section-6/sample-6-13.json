@@ -1,0 +1,113 @@
+{
+  "id": "sample-6-13",
+  "title": "Bar Graph",
+  "pdfPages": [
+    176
+  ],
+  "textLines": [
+    5153,
+    5195
+  ],
+  "illustrates": {
+    "rule": "6.11.3",
+    "quote": "A transcriber’s note provides information about how the information is presented."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Change in Distribution of the\nAmerican Workforce, 1870-1920"
+      },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "graph",
+          "description": "Two stacked bar graphs showing the distribution of the American workforce for the years 1870 and 1920. Each section of the bars represents a different industry, with a category label and percentage.",
+          "labels": [
+            "Miscellaneous 10.4%",
+            "Trade 6.8%",
+            "Professional, Clerical, Public Service 3.7%",
+            "Manufacturing/Transportation 26.1%",
+            "Agriculture 53.0%",
+            "1870",
+            "Miscellaneous 11.4%",
+            "Trade 7.3%",
+            "Professional, Clerical, Public Service 14.1%",
+            "Manufacturing/Transportation 40.2%",
+            "Agriculture 27.0%",
+            "1920"
+          ]
+        },
+        "description": "The data from print bar graphs is shown in a table. Numbers in the 1870 and 1920 columns are percentages."
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "1870",
+            "1920"
+          ]
+        ],
+        "rows": [
+          [
+            "Miscellaneous",
+            "10.4%",
+            "11.4%"
+          ],
+          [
+            "Trade",
+            "6.8%",
+            "7.3%"
+          ],
+          [
+            "Professional, Clerical, Public Service",
+            "3.7%",
+            "14.1%"
+          ],
+          [
+            "Manufacturing/Transportation",
+            "26.1%",
+            "40.2%"
+          ],
+          [
+            "Agriculture",
+            "53.0%",
+            "27.0%"
+          ]
+        ]
+      }
+    ],
+    "notes": "The book shows this same pair of bar graphs transcribed TWO valid ways per 6.11.3 ('Option 1: List Format' and 'Option 2: Table Format') — both option labels are the book's own print captions, not braille content, and are dropped here (matching the across-the-section convention). Only Option 2 (a genuine table, headers '1870'/'1920', one row per category) is modelled; Option 1 (a flat list per year, itself truncated after 'Trade' in the book's own excerpt with a '444' ellipsis — the remaining three categories are never shown for either year) is not separately tested here, to keep one file per original sample. Option 2's own row leader-dots (a proportional bar-length fill before each percentage, source-6.txt lines 5188-5195's own quote-mark/'3333' runs) are a graphical bar-length indicator with no plain-table equivalent — Emboss's table renderer has no bar-graph/proportional-fill mechanism at all (the tool's own header comment: 'a bar-graph derivation... is recorded per-sample instead of invented'); not built, and the resulting mismatch on those decorative cells is expected.",
+    "surroundingText": null,
+    "printFeatures": "Two stacked bar graphs, one per year, broken into labelled percentage segments."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "         ,*ange 9 ,4tribu;n ( !",
+      "      ,am]ican ,\"w=ce1 #ahgj-#aibj",
+      "",
+      "      @.<,data f pr9t b> graphs is %[n 9",
+      "    a table4 ,numb]s 9 ! #ahgj & #aibj",
+      "    columns >e p]c5tages4@.>",
+      "",
+      "                       #ahgj #aibj",
+      ",miscellane\\s #aj4d #aa4d",
+      ",trade #f4h    #g4c",
+      ",pr(es.nal1 ,cl]ical1",
+      "  ,public ,s]vice #c4g    #ad4a",
+      ",manufactur+_/",
+      "  ,transporta;n #bf4a #dj4b",
+      ",agriculture #ec4j #bg4j"
+    ],
+    "pageBreaks": [],
+    "notes": "Table header row indented to line up over the value columns; each row's category name starts at cell 1, with a continuation line (for two-word categories) at cell 3. Row leader-dot bar-length fills omitted here (see print.notes) — the underlying percentage values themselves are kept."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs conflated the book's own 'Option 1'/'Option 2' print captions and running-head furniture into braille.lines as literal English text, and both silently dropped the book's own '444' excerpt-ellipsis lines in Option 1 (source-6.txt lines 5168, 5173); this file's braille.lines were rebuilt from source-6.txt (lines 5179-5195, Option 2 only) directly, decoded with the same script used throughout this reconciliation. Every value/label confirmed by exact forward-translation (e.g. '10.4%' -> '#AJ4D.0', 'Professional, Clerical,' / 'Public Service', 'Manufacturing/' / 'Transportation' all reproduce their braille exactly, including the two-line wrap on the longer category names). print.blocks[2] (the actual table) was built here since neither run supplied one, only a flat figure.labels array with no row/column structure."
+}

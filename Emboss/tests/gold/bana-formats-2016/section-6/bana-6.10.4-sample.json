@@ -1,0 +1,40 @@
+{
+  "id": "bana-6.10.4-sample",
+  "title": "Timeline is across the bottom of pages 44–47.",
+  "pdfPages": [
+    153
+  ],
+  "textLines": [
+    4670,
+    4670
+  ],
+  "illustrates": {
+    "rule": "6.10.4",
+    "quote": "Multipage Timelines. (Note: this refers to timelines that appear on more than two consecutive pages.) Insert the timeline at the most appropriate location on the first page it appears. Precede the timeline with a transcriber’s note to indicate the range of pages. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Timeline is across the bottom of pages 44–47.",
+        "features": "Printed as an indented, standalone paragraph."
+      }
+    ],
+    "notes": "This sample only shows the wording of a transcriber's note; it does not provide the braille translation.",
+    "surroundingText": null,
+    "printFeatures": "Indented paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille is provided for this sample in the rulebook."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A left print.blocks/pdfPages empty (print.notes/printFeatures 'TODO') — the same defect pattern as bana-6.8.2c-sample. B's print.blocks/pdfPages are used throughout, verified word-for-word (including the en dash in '44–47') against the PDF page image (p.153, printed 6-9). pdfPages 153 = printed page 6-9 + 144, confirmed by the page footer."
+}

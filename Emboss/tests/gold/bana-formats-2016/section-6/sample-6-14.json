@@ -1,0 +1,188 @@
+{
+  "id": "sample-6-14",
+  "title": "Venn Diagram",
+  "pdfPages": [
+    178,
+    179
+  ],
+  "textLines": [
+    5203,
+    5240
+  ],
+  "illustrates": {
+    "rule": "6.11.3",
+    "quote": "A transcriber’s note provides information about how the information is presented."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Critical Thinking",
+        "features": "Box heading. In the agreed braille this heading is followed, far right on the same line, by an unmodelled page-reference token ('b#ig') — not built (see notes)."
+      },
+      {
+        "kind": "paragraph",
+        "text": "The Constitution established a detailed plan for the distribution of power between the federal and state governments. *What powers are shared by the national and state governments?*",
+        "features": "The second sentence is italicized; the book's own braille excerpt truncates the first sentence with an ellipsis after '...a detailed plan'."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Division of Federal and State Powers"
+      },
+      {
+        "kind": "figure",
+        "figure": {
+          "type": "diagram",
+          "description": "Venn diagram with two overlapping circles showing National and State powers.",
+          "labels": [
+            "NATIONAL GOVERNMENT",
+            "Regulate foreign and interstate commerce",
+            "Coin money",
+            "Provide an army and navy",
+            "Declare war",
+            "Establish federal courts below the Supreme Court",
+            "Conduct foreign relations",
+            "Exercise powers implied from the expressed powers",
+            "NATIONAL and STATE GOVERNMENTS",
+            "Levy taxes",
+            "Borrow money",
+            "Spend for general welfare",
+            "Establish courts",
+            "Enact and enforce laws",
+            "STATE GOVERNMENTS",
+            "Regulate intrastate commerce",
+            "Establish local government systems",
+            "Administer elections",
+            "Protect the public's health, welfare, and morals"
+          ]
+        },
+        "description": "Venn diagram: Information is shown in two overlapping ovals. The information in each oval is listed under a section heading."
+      },
+      {
+        "kind": "note",
+        "text": "Section 1"
+      },
+      {
+        "kind": "paragraph",
+        "text": "NATIONAL GOVERNMENT"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "•",
+            "text": "Regulate foreign and interstate commerce",
+            "level": 2
+          },
+          {
+            "marker": "•",
+            "text": "Coin money",
+            "level": 2
+          },
+          {
+            "marker": "•",
+            "text": "Establish federal courts below the Supreme Court",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Overlapping Section 2"
+      },
+      {
+        "kind": "paragraph",
+        "text": "NATIONAL and STATE GOVERNMENTS"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "•",
+            "text": "Levy taxes",
+            "level": 2
+          },
+          {
+            "marker": "•",
+            "text": "Borrow money",
+            "level": 2
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Section 3",
+        "features": "In the agreed braille this note is followed, far right on the same line, by an unmodelled page-reference token ('c#ig') — not built (see notes)."
+      },
+      {
+        "kind": "paragraph",
+        "text": "STATE GOVERNMENTS"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "•",
+            "text": "Regulate intrastate commerce",
+            "level": 2
+          },
+          {
+            "marker": "•",
+            "text": "Establish local government systems",
+            "level": 2
+          }
+        ]
+      }
+    ],
+    "notes": "Both runs mis-transcribed the diagram's own section labels as lettered ('Section A'/'Overlapping Section B'/'Section C') when the agreed braille uses NUMBERS ('#a'/'#b'/'#c' = 1/2/3, confirmed by forward translation — 'Section 1' reproduces ',sec;n #a' exactly, 'Section A' would instead give ',sec;n ,a' with no number sign). Both runs also placed the 'Division of...' heading BEFORE the 'Critical Thinking' box; the agreed braille places the Critical-Thinking box content FIRST (matching the book's own print layout note: the box sits at the bottom right of the diagram, transcribed at the point of encounter) — reordered here. Each section's own bullet ('_4' in the agreed braille) is Emboss's ordinary supported bullet, '•' (BANA 8.6.2a), confirmed by forward translation. Every one of the three sections' own bulleted lists is longer in print (figure.labels) than what this braille excerpt actually transcribes (each ends with the book's own ellipsis, 444, after 2-3 items) — not built, matching the excerpt-truncation convention used throughout this gold corpus. Two small elements are not modelled at all: the right-margin page-reference tokens trailing the 'Critical Thinking' and 'Section 3' lines ('b#ig'/'c#ig'), and the inter-braille-page continuation marker '#,-' on the line before the page break — Emboss has no construct for either (page-numbering/cross-reference mechanics outside this schema's scope).",
+    "surroundingText": null,
+    "printFeatures": "A Venn diagram showing National and State powers, with a box labeled Critical Thinking."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,critical ,?9k+                  b#ig",
+      ",! ,3/itu;n e/abli%$ a detail$ plan 444",
+      ".7,:at p[]s >e %>$ by ! na;nal & /ate",
+      "gov]n;ts8.'",
+      "",
+      "     ,divi.n ( ,f$]al & ,/ate ,p[]s",
+      "",
+      "      @.<,v5n diagram3 ,9=ma;n is %[n 9",
+      "    two ov]lapp+ ovals4 ,! 9=ma;n 9 ea*",
+      "    oval is li/$ \"u a sec;n h1d+4@.>",
+      "",
+      "    @.<,sec;n #a@.>",
+      ",,na;nal ,,gov]n;t",
+      "  _4 ,regulate =eign & 9t]/ate comm]ce",
+      "  _4 ,co9 m\"oy",
+      "  444",
+      "  _4 ,e/abli% f$]al c\\rts 2l ! ,supreme",
+      "    ,c\\rt",
+      "  444",
+      "",
+      "    @.<,ov]lapp+ ,sec;n #b@.>",
+      ",,na;nal & ,,/ate ,,gov]n;ts",
+      "  _4 ,levy taxes",
+      "  _4 ,borr[ m\"oy",
+      "  444                                 #,-",
+      "    @.<,sec;n #c@.>                        c#ig",
+      ",,/ate ,,gov]n;ts",
+      "  _4 ,regulate 9tra/ate comm]ce",
+      "  _4 ,e/abli% local gov]n;t sy/ems",
+      "  444"
+    ],
+    "pageBreaks": [
+      25
+    ],
+    "notes": "The book's own text extract marks a real braille-page turn between 'Borrow money' and 'Section 3' (source-6.txt's own '—New Braille Page—' annotation, itself an extraction artifact, not braille content — recorded here as pageBreaks:[25] instead). Every bulleted item is at 3-5 margins (cell 3 first, cell 5 runover) under its own flush ALL-CAPS category paragraph."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "CORRECTION (session-wide): the gold-6-A/gold-6-B braille arrays were produced by a script that wrongly blanked every all-digit braille line (it treated a line of only '4's or '7's as empty) — this cost both runs their '444' excerpt-ellipsis markers throughout this file (five of them: after 'Coin money', after the federal-courts item, after 'Borrow money', and after the two final items) and is the majority of this file's own reconciliation work; every one was restored by decoding source-6.txt directly (lines 5210-5240), not by trusting either run's blanked array. Beyond that restoration: both runs mis-transcribe the numbered section labels as lettered (Section A/B/C instead of 1/2/3, confirmed by forward translation) and reverse the Critical-Thinking-box/main-heading order relative to the agreed braille. print.blocks (the note/paragraph/list structure for each of the three sections) was built from scratch, since neither run supplied one, only a flat, unordered figure.labels array with no section grouping at all."
+}

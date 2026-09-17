@@ -1,0 +1,76 @@
+{
+  "id": "sample-6-4",
+  "title": "Print Form with Sample Responses",
+  "pdfPages": [
+    162
+  ],
+  "textLines": [
+    4865,
+    4892
+  ],
+  "illustrates": {
+    "rule": "6.7.3",
+    "quote": "g. Use script indicators to represent “written” responses indicating sample replies."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Order Form" },
+      { "kind": "paragraph", "text": "To order something from a catalog or a magazine, you can use an **Order** **Form**. Be sure to include all the information about the item and where to send it.", "features": "'Order' and 'Form' are bold single words within the sentence." },
+      {
+        "kind": "box",
+        "blocks": [
+          { "kind": "paragraph", "text": "Code Number C831" },
+          { "kind": "paragraph", "text": "Book Title (Please print clearly)", "features": "Handwritten/script responses follow in the fields below; 'Please print clearly' is a print instruction, not a response." },
+          { "kind": "paragraph", "text": "The Woman Who Outshone the Sun", "features": "Handwritten (script) response." },
+          { "kind": "paragraph", "text": "Send to Marcos Salazar", "features": "'Marcos' and 'Salazar' are handwritten (script) responses." },
+          { "kind": "paragraph", "text": "School Washington Jr. High", "features": "'Washington Jr. High' is a handwritten (script) response." },
+          { "kind": "other", "text": null, "features": "The book's own excerpt omits further address/school-detail fields here, marked with an ellipsis in braille (444) — no print-side content to build from." },
+          { "kind": "paragraph", "text": "Home Reading Club" },
+          { "kind": "paragraph", "text": "Date March 6, 2001", "features": "'March 6, 2001' is a handwritten (script) response." },
+          { "kind": "paragraph", "text": "Amount $6.95", "features": "'$6.95' is a handwritten (script) response." },
+          { "kind": "paragraph", "text": "Sales Tax $.50" },
+          { "kind": "paragraph", "text": "TOTAL $7.45" },
+          { "kind": "paragraph", "text": "P.O. Box 5812 McHenry, IL 65051" }
+        ]
+      }
+    ],
+    "notes": "The form fields are enclosed in BANA box lines in the actual braille (6.7.3c) — neither run recorded this; recovered directly from the source text (a full-width row of dot-2356 before the fields, dot-12356 after). Several handwritten/typed 'response' fields are wrapped in UEB script indicators in the real braille (6.7.3g, this sample's own illustrated rule) — Emboss's typeform model (engine/louis.mjs TYPEFORM: italic/underline/bold only) has no script indicator at all, so these are built as plain text and the mismatch on every such field is expected (F-169, which explicitly names 6.7.3g). Both A and B also invented specific address/teacher/room field values ('Address 248 Greenwood', 'Teacher Mrs. Lee Grade 6 Room 8', etc. — B only) where the book's own braille excerpt shows nothing but an ellipsis (444) — there is no print evidence for any such fields, and they are not included here.",
+    "surroundingText": null,
+    "printFeatures": "A boxed order form with printed field labels and handwritten (script) responses."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,ord] ,=m",
+      ",to ord] \"s?+ f a catalog or a magaz9e1",
+      "y c use an ^1ord] ^1=m4 ,2 sure to",
+      "9clude all ! 9=ma;n ab ! item & \": to",
+      "s5d x4",
+      "",
+      "7777777777777777777777777777777777777777",
+      ",code ,numb] @1,c#hca",
+      ",book ,title \"<,,,pl1se pr9t cle>ly,'\">",
+      "    @7,! ,woman ,:o ,\\t%\"o ! ,sun@'",
+      ",s5d ,to @1,m>cos @1,salaz>",
+      ",s*ool @7,wa%+ton ,jr4 ,hi<@'",
+      "444",
+      ",home ,r1d+ ,club",
+      "  ,date @7,m>* #f1 #bjja@'",
+      "  ,am.t @s@1#f4ie",
+      "  ,sales ,tax @s@1#4ej",
+      "  ,,total @s@1#g4de",
+      ",p4,o4 ,box #ehab ,mc,h5ry1 ,,il #fejea",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "The book's own text extract carries two running-head/page-furniture lines ahead of this sample ('6-18 Section 6' / 'Illustrative Materials'), excluded here as page furniture. The list following 'Home Reading Club' is indented 2 cells. 444 marks the book's own excerpt ellipsis (omitted address/school-detail fields), not print content."
+  },
+  "uncertain": [
+    "'Book Title (Please print clearly)': the exact capitalisation/typeform of '(please print clearly)' is not fully resolved — forward-translating '(PLEASE PRINT CLEARLY)' as a genuine all-caps passage does not reproduce the agreed braille's exact indicator placement (the passage-caps close marker sits BEFORE the closing parenthesis in the agreed braille, but AFTER it in Emboss's own output for that exact input, in isolation or with trailing context); liblouis back-translation instead suggests title case ('Please print clearly'). Not investigated further since this field's own script/box wrapping is already not representable (F-169) regardless of this residual capitalisation question."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "B correctly excludes the running-head lines and gets 'McHenry, IL 65051'/'March 6, 2001'/'Amount' right where A has 'McHenry, IL 60051'/'March 6, 2011'/'Amt' — all three of A's readings are wrong, confirmed by liblouis back-translation of the agreed braille (engine/louis.mjs backTranslate) and cross-checked by exact forward-translation round trips. B, however, invents an entire set of address/teacher/room field values with no support in the braille (which shows only an ellipsis, 444, at that point) — exactly the fabrication risk the task instructions warn about; those invented fields are dropped here, not kept as 'B's version'. Neither run recorded the box lines present in the raw source (7...7 / g...g rows bracketing the form fields, confirmed directly in source-6.txt) or the 6.7.3g script-indicator wrapping on the handwritten response fields (both are F-169). print.blocks[2] was restructured from a single multi-line text blob into a boxed sequence of one paragraph per field, the most faithful representation this schema allows."
+}

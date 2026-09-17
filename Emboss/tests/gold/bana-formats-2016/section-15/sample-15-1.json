@@ -1,0 +1,47 @@
+{
+  "id": "BANA Sample 15-1",
+  "title": "Sample 15-1: Margin-Numbered Paragraphs",
+  "pdfPages": [418],
+  "textLines": [12033, 12049],
+  "illustrates": {
+    "rule": "15.2.1",
+    "quote": "Margin-numbered print paragraphs may have numbers in the right or left margin that are typically used as a reference for discussion. a. Follow print for blocked or indented paragraphs. b. Insert the paragraph number before the beginning of the paragraph. c. Number every paragraph, even if only some paragraphs are numbered in print."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "numbered", "text": "Now, the wolf had put on the old lady's shawl and cap and slipped into the bed. Trying to imitate Grandma's quavering little voice, he replied: \"Open the latch and come in!\"", "number": "20", "printVisible": true, "newPara": true, "features": "Indented paragraph; print itself shows the number 20 in the right margin." },
+      { "kind": "numbered", "text": "\"What a deep voice you have,\" said the little girl in surprise.", "number": "21", "printVisible": false, "newPara": true, "features": "Indented paragraph; print shows no number here (only every 5th paragraph is print-numbered) but braille numbers every paragraph per 15.2.1c." },
+      { "kind": "numbered", "text": "\"The better to greet you with,\" said the wolf.", "number": "22", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "\"Goodness, what big eyes you have.\"", "number": "23", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "\"The better to see you with.\"", "number": "24", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "\"And what big hands you have!\" exclaimed Little Red Riding Hood, stepping over to the bed.", "number": "25", "printVisible": true, "newPara": true, "features": "Indented paragraph with right-margin number 25 shown in print." }
+    ],
+    "notes": "Print itself only numbers every 5th paragraph (20, 25); the reconciled 'number' field on every OTHER block (21-24) is not a print-visible number but the actual sequential paragraph number the gold braille below independently confirms every single paragraph carries (BANA 15.2.1c: 'Number every paragraph, even if only some paragraphs are numbered in print') — decoded directly from the given braille's own right-margin cells (#bj=20, #ba=21, #bb=22, #bc=23, #bd=24, #be=25, using the standard braille-ASCII numeral letters a=1..j=0) rather than left as the two runs' original sparse anchors-only data (which only supplied 20 and 25). Both A and B agreed on the print text and the two print-visible anchors; this reconciliation's only change is populating the four intervening, print-invisible sequential numbers so buildModel15 exercises the paragraph-numbering mechanism (F-205) uniformly across all six paragraphs instead of leaving four of them fortuitously unnumbered.",
+    "surroundingText": [],
+    "printFeatures": "Print only numbers every 5th paragraph; braille numbers every paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "  #bj ,n[1 ! wolf _h put on ! old lady's",
+      "%awl & cap & slipp$ 9to ! b$4 ,try+ to",
+      "imitate ,gr&ma's quav]+ ll voice1 he",
+      "repli$3 8,op5 ! lat* & come in60",
+      "  #ba 8,:at a deep voice y h10 sd ! ll",
+      "girl 9 surprise4",
+      "  #bb 8,! bett] to greet y )10 sd !",
+      "wolf4",
+      "  #bc 8,gd;s1 :at big eyes y h40",
+      "  #bd 8,! bett] to see y )40",
+      "  #be 8,& :at big h&s y h60 exclaim$ ,ll",
+      ",r$ ,rid+ ,hood1 /epp+ ov] to ! b$4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B; already verified verbatim against the source in-session. Each paragraph number (#bj=20 through #be=25) sits inline BEFORE the paragraph's own first word, at the paragraph's own 2-cell indent — not at the right margin."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the two print-visible anchors (20, 25); this reconciliation adds the four intervening sequential numbers (21-24), decoded directly from the gold braille's own right-margin digits, so the file records what BANA 15.2.1c actually requires (every paragraph numbered) rather than only what print itself happens to show. Modeled by buildModel15 as one numbered paragraph per block, each with a genuine linenum segment (matching F-205's own described code path: parse.mjs's <linenum>-at-paragraph-start becomes an ordinary line-numbered-prose marker); expect F-205 (number lands at the RIGHT margin, and drags in the wrong §15.4.1d transcriber's note, instead of sitting inline before the paragraph text) to be this file's mismatch cause for every block."
+}

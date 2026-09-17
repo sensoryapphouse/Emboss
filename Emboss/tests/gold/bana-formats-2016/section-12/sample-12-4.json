@@ -1,0 +1,52 @@
+{
+  "id": "sample-12-4",
+  "title": "Sample 12-4: Extraneous Information in Sidebar (Print Only)",
+  "pdfPages": [348],
+  "textLines": [10146, 10151],
+  "illustrates": {
+    "rule": "12.3.1c",
+    "quote": "Sidebars use the full width of the braille page. (See Sample 12-4: Extraneous Information in Sidebar on page 12-8.) Exception: Follow Formats, §2.10.2i, Table of Contents guidelines when sidebars appear within the table of contents."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "paragraph", "text": "By the mid-1700s, the relationship between Britain and the colonies had become, in fact if not in form, federal. This meant that the central government in London was responsible for colonial defense and for foreign affairs. It also provided a uniform system of money and credit and a common market for colonial trade. Beyond that, the colonies were allowed a fairly wide amount of self-rule. Little was taken from them in direct taxes to pay for the central government. The few regulations set by Parliament, mostly about trade, were largely ignored." },
+      { "kind": "paragraph", "text": "This was soon to change. Shortly after George III came to the throne in 1760, Britain began to deal more firmly with the colonies. Restrictive trading acts were expanded and enforced. New taxes were imposed, mostly to support British troops in North America." },
+      { "kind": "paragraph", "text": "Many colonists took strong exception to these moves. They objected to taxes imposed on them from afar. This arrangement, they claimed, was “taxation without representation.” They saw little need for the costly presence of British troops on North American soil, since the French had been defeated and their power broken in the French and Indian War (1754–1763)." },
+      { "kind": "paragraph", "text": "The colonists considered themselves British subjects loyal to the Crown. They refused, however, to accept Parliament's claim that it had a right to control their local affairs." },
+      { "kind": "paragraph", "text": "The king's ministers were poorly informed and stubborn. They pushed ahead with their policies, despite the resentments they stirred in America. Within a few years, the colonists faced a fateful choice: to submit or to revolt." },
+      { "kind": "heading", "level": 2, "text": "Growing Colonial Unity", "features": "Large red heading." },
+      { "kind": "paragraph", "text": "A decision to revolt was not one to be taken lightly—or alone. The colonies would need to learn to work together if they wanted to succeed. Indeed long before the 1770s, several attempts had been made to promote cooperation among the colonies." },
+      { "kind": "heading", "level": 3, "text": "Early Attempts", "features": "Smaller blue sub-heading." },
+      { "kind": "paragraph", "text": "In 1643 the Massachusetts Bay, Plymouth, New Haven, and Connecticut settlements formed the New England Confederation. A confederation is a joining of several groups for a common purpose. In the New England Confederation, the settlements formed a “league of friendship” for defense against the Native Americans. As the danger from Native Americans passed and friction among the settlements grew, the confederation lost importance and finally dissolved in 1684.", "features": "This paragraph wraps from the left print column across to the right column; the wrap is a page-layout artefact, not a real paragraph break." },
+      { "kind": "paragraph", "text": "In 1696 William Penn offered an elaborate plan for intercolonial cooperation, largely in trade, defense, and criminal matters. It received little attention and was soon forgotten." },
+      {
+        "kind": "sidebar",
+        "title": "Voices on Government",
+        "features": "Yellow-background boxed sidebar with a red banner title, positioned in the top-right of the page (level with 'Growing Colonial Unity'/'Early Attempts' in the left column).",
+        "blocks": [
+          { "kind": "paragraph", "text": "Benjamin Franklin dedicated years to public service, including time as a delegate to the Second Continental Congress, a commissioner to France during the War for Independence, and a member of the Constitutional Convention. Franklin proposed the Albany Plan of Union to provide for the defense of the American colonies. In his autobiography, he spoke of its defeat and defended his plan:" },
+          { "kind": "other", "text": "Copyrighted Image", "features": "Oval image placeholder to the right of the introductory paragraph." },
+          { "kind": "paragraph", "text": "“The different and contrary Reasons of dislike to my Plan, makes me suspect that it was really the true Medium; and I am still of Opinion it would have been happy for both Sides the Water if it had been adopted. The Colonies so united would have been sufficiently strong to have defended themselves; there would then have been no need of Troops from England; of course the subsequent Pretence for Taxing America, and the bloody Contest it occasioned, would have been avoided.”", "features": "Italicized block quotation from Franklin's autobiography, with large decorative quote marks; retains the quotation's own 18th-century capitalization of common nouns." },
+          { "kind": "heading", "level": 4, "text": "Evaluating the Quotation", "features": "Red sub-heading inside the sidebar." },
+          { "kind": "paragraph", "text": "What did Franklin see as the ultimate result of the failure to adopt the Albany Plan of Union? Do you think this was a reasonable conclusion?", "features": "Bold italic discussion question." }
+        ]
+      },
+      { "kind": "other", "text": "(Formats: Possible Location)", "features": "Instructional callout sitting directly below the sidebar's bottom edge, with an arrow curving down and left to point at the bold closing words 'Albany Plan of Union.' in the paragraph below." },
+      { "kind": "heading", "level": 3, "text": "The Albany Plan", "features": "Smaller blue sub-heading, same tier as 'Early Attempts'." },
+      { "kind": "paragraph", "text": "In 1754 the British Board of Trade called a meeting of seven of the northern colonies at Albany: Connecticut, Maryland, Massachusetts, New Hampshire, New York, Pennsylvania, and Rhode Island. The main purpose of the meeting was to discuss the problems of colonial trade and the danger of attacks by the French and their Native American allies. Here, Benjamin Franklin offered what came to be known as the Albany Plan of Union." },
+      { "kind": "other", "text": "Origins of American Government 35", "features": "Page footer (running head + print page number)." }
+    ],
+    "notes": "This sample illustrates rule 12.3.1c (a sidebar uses the full page width) via a sidebar that itself carries 'extraneous' supplemental information (BANA 12.3.1b): the 'Voices on Government' sidebar elaborates on the very topic ('the Albany Plan') that the running text right below it, 'The Albany Plan' section, already introduces. The '(Formats: Possible Location)' callout and its arrow mark a possible insertion point for the sidebar, immediately before that section, rather than a mandatory one -- unlike Samples 12-1/12-2/12-6, which all use the stronger wording '(Formats: Suggested Location)'.",
+    "surroundingText": null,
+    "printFeatures": "Two-column running text (paragraphs about Britain and the colonies, then 'Growing Colonial Unity'/'Early Attempts'/'The Albany Plan'), with the 'Voices on Government' sidebar occupying the top of the right column and a page footer at the bottom."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source -- no braille transcription exists for this sample."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "Both runs transcribe the same wording throughout; the disagreement was structural. Run A placed the '(Formats: Possible Location)' callout right after the opening five paragraphs (before 'Growing Colonial Unity') and moved the whole 'Voices on Government' sidebar to the very end of the page, after 'The Albany Plan' paragraph. Run B kept the sidebar in its own visual position (after the 'Early Attempts' section's two paragraphs) and placed the callout, followed by 'The Albany Plan' heading and paragraph, after it. The PDF page image (references/bana/braille-formats-2016.pdf p.348, re-rendered at 400dpi and cropped) settles this decisively: the callout's arrow visibly starts at '(Formats: Possible Location)', directly under the sidebar's own bottom edge, and curves down and left to point at the bold words 'Albany Plan of Union.' at the end of the paragraph in 'The Albany Plan' section -- run B's structure (and reading order) is correct; run A's is not. This sample is Print Only, so there is no braille to forward-translate; the correction rests entirely on the page image."
+}

@@ -1,0 +1,103 @@
+{
+  "id": "sample-12-3",
+  "title": "Sample 12-3: Arrow Leads Reader to Sidebar; Difference Between Sidebar and Cross-Reference",
+  "pdfPages": [346, 347],
+  "textLines": [10103, 10142],
+  "illustrates": {
+    "rule": "12.2.1",
+    "quote": "The purpose of this section is to help the transcriber identify sidebars. The use of sidebars, a publishing term for information placed adjacent to text, is one of the design elements that can create confusion. A sidebar is detached from the main text and found in a section either off to one side of it, or above or below it, on the same page. Sidebars may or may not be linked or related to the adjacent text, and the reading order of sidebars and text is not always obvious. Sidebars have a different function than cross-references (see Formats, §9.6, Cross-References and Incidental Notes) and are formatted according to their text layout, e.g., with headings, paragraphs, lists, etc. (See Sample 12-1: Boxed Sidebar in Column on page 12-4, Sample 12-2: Boxed Sidebar within Text on page 12-5, and Sample 12-3: Arrow Leads Reader to Sidebar; Difference Between Sidebar and Cross-Reference on page 12-6.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 1, "text": "Critical Thinking Skills", "features": "Red capital letters in a stylized top banner." },
+      { "kind": "heading", "level": 1, "text": "Synthesizing Information", "features": "Large green bold title." },
+      { "kind": "paragraph", "text": "Synthesizing information involves combining information from two or more sources. Information gained from one source often sheds new light upon other information.", "features": "Italicized." },
+      { "kind": "heading", "level": 2, "text": "Learning the Skill", "features": "Green all-caps text in print; ends with a transcriber's note in the braille ('embedded note' -- not representable, see resolution)." },
+      { "kind": "paragraph", "text": "To learn how to synthesize information, follow the steps listed on the left.", "features": "Ends with a yellow arrow pointing from this paragraph to the green sidebar at the left of the page." },
+      {
+        "kind": "sidebar",
+        "features": "Green-background boxed sidebar on the left side of the page; the arrow from 'follow the steps listed on the left' points into it, which is why the braille inserts it here rather than in its own left-column position.",
+        "blocks": [
+          {
+            "kind": "list",
+            "features": "Bulleted list.",
+            "items": [
+              { "marker": "•", "text": "Analyze each source separately to understand its meaning." },
+              { "marker": "•", "text": "Determine what information each source adds to the subject." },
+              { "marker": "•", "text": "Identify points of agreement and disagreement between the sources. Ask: Can Source A give me new information or new ways of thinking about Source B?" },
+              { "marker": "•", "text": "Find relationships between the information in the sources." }
+            ]
+          }
+        ]
+      },
+      { "kind": "heading", "level": 2, "text": "Practicing the Skill", "features": "Green all-caps text in print." },
+      { "kind": "paragraph", "text": "Study the sources below, then answer the questions." },
+      { "kind": "heading", "level": 3, "text": "Source A", "features": "Red bold text." },
+      { "kind": "paragraph", "text": "“At present 60% to 70% of all dollars in circulation are used abroad. Today Panama is the best-known country that is 'dollarized,' but 11 others use the U.S. dollar. The best route for the emerging market countries is to unilaterally dollarize. . . . [T]he dollar could serve as the linchpin of a new global financial architecture, one that would eliminate currency crises, lower interest rates, and stimulate growth.”\n—Forbes, May 3, 1999", "features": "Italicized blockquote with a large decorative opening quote mark, followed by a small-print attribution line." },
+      { "kind": "heading", "level": 3, "text": "Source B", "features": "Red bold text." },
+      { "kind": "paragraph", "text": "“When a country abandons its currency, it surrenders a central symbol of national identity. . . . We are courting trouble if many countries dollarize. They would blame us for their problems; and they would try to influence U.S. policies, pushing for either lower or higher interest rates.”\n—Newsweek, May 17, 1999", "features": "Italicized blockquote with a large decorative opening quote mark, followed by a small-print attribution line." },
+      {
+        "kind": "list",
+        "items": [
+          { "marker": "1.", "text": "What is the main subject of each source?" },
+          { "marker": "2.", "text": "Does Source B support or contradict Source A? Explain." },
+          { "marker": "3.", "text": "Summarize what you learned from both sources." }
+        ]
+      },
+      { "kind": "heading", "level": 2, "text": "Application Activity", "features": "Green all-caps text in print." },
+      { "kind": "paragraph", "text": "Find two sources of information on banking practices. What are the main ideas in the sources? How does each source add to your understanding of the topic?" },
+      {
+        "kind": "other",
+        "text": "Practice and assess key skills with Skillbuilder Interactive Workbook, Level 2.",
+        "features": "Small box with a CD-ROM icon at the bottom left of the page, acting as a cross-reference to outside material -- not itself a sidebar (BANA distinguishes a sidebar from a cross-reference, per this sample's own title); the braille gives it a distinct 6/4-cell margin rather than a box, which this schema has no dedicated block for (kept as 'other', not built)."
+      }
+    ],
+    "notes": "The whole point of this sample (rule 12.2.1) is that the sidebar's print position (off to the left of the page, roughly level with 'Learning the Skill'/'Practicing the Skill') is NOT where the braille places it: a yellow arrow leads from the end of the 'Learning the Skill' paragraph into the sidebar, and the braille transcriber followed that arrow, inserting the boxed sidebar immediately after that paragraph. The braille excerpt (source .txt lines 10111-10142, PDF pp.346-347) does not transcribe the whole page: two book-inserted '444' omission lines mark where print content was left out -- one right after the first heading (before 'Learning the Skill'), one right after the sidebar's own bottom box line (before 'Application Activity') -- so the 'Synthesizing Information' heading/paragraph and the entire 'Practicing the Skill' section (heading, both quoted sources, and the 3-item question list) have no braille counterpart in this excerpt at all. This print.blocks list nonetheless records the complete page content (confirmed against the PDF page image), per the section-7 sample-7-03 precedent for a print/braille length mismatch in the source corpus itself.",
+    "surroundingText": ["380"],
+    "printFeatures": "A complex page layout: a red top banner, a large green title, a green sidebar box on the left, and two right-hand subsections ('Learning the Skill', 'Practicing the Skill' with two pull-quotes) followed by a full-width 'Application Activity' section and a small CD-icon cross-reference box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,critical ,?9k+ ,skills     #chj",
+      "",
+      "444",
+      "",
+      "    ,le>n+ ! ,skill",
+      "  ,to le>n h[ to syn!size 9=ma;n1 foll[",
+      "! /eps li/$ on ! left4 @.<2l@.>",
+      "",
+      "7777777777777777777777777777777777777777",
+      "_4 ,analyze ea* s\\rce sep>ately to \"u/&",
+      "  xs m1n+4",
+      "_4 ,det]m9e :at 9=ma;n ea* s\\rce adds to",
+      "  ! subject4",
+      "_4 ,id5tify po9ts ( agree;t & 4agree;t",
+      "  2t ! s\\rces4 ,ask3 ,c ,s\\rce ,a give",
+      "  me new 9=ma;n or new ways ( ?9k+ ab",
+      "  ,s\\rce ;,b8",
+      "_4 ,f9d rela;n%ips 2t ! 9=ma;n 9 !",
+      "  s\\rces4",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "444",
+      "    ,applica;n ,activ;y             a#chj",
+      "  ,f9d two s\\rces ( 9=ma;n on bank+",
+      "practices4 ,:at >e ! ma9 id1s 9 !",
+      "s\\rces8 ,h[ does ea* s\\rce add to yr",
+      "\"u/&+ ( ! topic8",
+      "",
+      "      ^1,practice & ^1assess key skills",
+      "    ) .7,skillbuild] ,9t]active ,\"wbook1",
+      "    ,level #b4.'"
+    ],
+    "pageBreaks": [22],
+    "notes": "31 lines (source .txt lines 10111-10132 then 10134-10142, with the intervening '—New Braille Page—' marker at line 10133 excluded and recorded as pageBreaks:[22]). Both independent transcription runs recorded lines 3 and 22 (both literal '444' omission markers in the source) and line 9 (a full 40-cell '7' box-top line in the source) as blank -- all three corrected here directly against the source .txt and cross-checked against the rendered PDF page image (p.347), which shows the same three lines unambiguously (numbered lines 3, 9, and 22 in the page's own line-number margin). See resolution for the full evidence trail. Line 1 ends with the print page number '380' in braille (#chj = 3-8-0); line 22 (page 2, in the corrected numbering) likewise ends 'a#chj' -- neither is built by buildModel12 (no running-head/print-page-number field in this section's schema, matching the section-1 precedent's 'documentary only' treatment)."
+  },
+  "uncertain": [
+    "The transcriber's-note tail on line 6 ('@.<2l@.>', an embedded TN opened and closed on the same line as the paragraph text) is recorded verbatim but not decoded further; Emboss has no inline-note construct (F-107, reused) so this is expected not to build.",
+    "The exact wording of the print's own 'Learning the Skill'/'Practicing the Skill'/'Application Activity' headings -- transcribed here in Title Case to match the single-capital-sign pattern the actual braille shows (',le>n+ ! ,skill', two capital signs, not three/four) -- rather than the print's own decorative ALL-CAPS styling, confirmed directly by forward-translating 'Learning the Skill' and 'Application Activity' through Emboss's translator and matching byte-for-byte against the corrected braille lines 5 and 23."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "braille.lines were byte-identical between run A and run B, and both runs independently claimed to have verified them verbatim against the source -- but re-reading references/_text/braille-formats-2016.txt lines 10111-10142 directly (python, byte-exact) found THREE lines both runs recorded as blank that the source actually gives real content for: line 3 and line 22 are each a literal '444' omission marker (both runs silently dropped it), and line 9 is a full 40-cell '7777...7' box-TOP line (both runs dropped it, keeping only the box's bottom 'gggg...g' line at what is now line 20) -- confirmed against the rendered PDF page image (references/bana/braille-formats-2016.pdf p.347), which shows the same three lines with their own printed line numbers 3, 9, 22. This is exactly the failure mode this task warned about: two non-independent runs of the same model agreeing with each other is not evidence, even for content both claimed to verify. All three lines are corrected here; nothing else in braille.lines changed. Print.blocks structure: run A placed the sidebar immediately after the 'Learning the Skill' paragraph (matching the arrow and the corrected braille's own line 9 box-top position); run B placed it before the 'Learning the Skill' heading (matching the sidebar's own print position, off to the left of the page). The corrected braille settles this: box lines 9-20 sit between 'follow the steps listed on the left' (lines 5-7) and 'Application Activity' (line 23), so run A's placement is used. Both runs also agree the braille omits the entire 'Practicing the Skill' section; this reconciliation additionally found (from the corrected line 3 '444', confirmed against the page image) that the 'Synthesizing Information' heading and its own introductory paragraph are ALSO omitted from the braille excerpt -- neither run's own notes mention this second gap. Per the section-7 sample-7-03 precedent for a print/braille length mismatch in the source corpus itself, print.blocks records the FULL print content (both omitted sections included) rather than truncating to match the braille excerpt; buildModel12 is expected to over-produce relative to the given braille.lines at both '444' points, which is a documented excerpt limitation, not an Emboss defect. Heading text is given in Title Case, not the print's own decorative ALL-CAPS styling -- confirmed by forward-translating both 'Learning the Skill' and 'Application Activity' through Emboss's own uebG2 translator and getting an exact match against the corrected braille (Title Case produces the single capital-sign-per-word pattern the braille actually shows; literal ALL-CAPS would produce a double/triple capital-sign or passage-capitalization pattern it does not). The cross-reference CD box at the end is recorded as 'other' (not a sidebar/box): its own braille margin (a 6-cell first line, 4-cell runover) matches neither a plain paragraph nor formatBox's box-border convention, and BANA itself distinguishes a cross-reference from a sidebar in this very sample's title -- reproducing its exact margin was out of scope for buildModel12's sidebar-focused box logic."
+}
