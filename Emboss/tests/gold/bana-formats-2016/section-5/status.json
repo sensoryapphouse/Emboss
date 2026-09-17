@@ -1,0 +1,82 @@
+{
+  "example-5-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! SPELL+ H9T 8I 2F ;E1 EXCEPT AF ;C0\" vs actual \"  ,! SPELL+ H9T 8.2I 2F .2;E1 EXCEPT AF\". line count differs by +1 (expected 2, actual 3)."
+  },
+  "example-5-10": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"                  ;,G\" vs actual \"  ^1,GIFT ^1TAX ,A TAX ON A GIFT BY A\". line count differs by -1 (expected 6, actual 5). Input-model limitation: heading block \"G\" has no level in print.blocks — not built."
+  },
+  "example-5-11": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"     ,F .7,&REW ,M>VELL ,REVISIT$.'\" vs actual \"       ,F ,&REW ,M>VELL ,REVISIT$\". line count differs by -1 (expected 6, actual 5)."
+  },
+  "example-5-12": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"            .1F ,S1BISCUIT3\" vs actual \"   F ,S1BISCUIT3 ,AN ,AM]ICAN ,LEG5D\". line count differs by -2 (expected 7, actual 5)."
+  },
+  "example-5-13": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"  ,SOCIOLOGI/S REF] TO ? TR5D Z !\" vs actual \"  ,SOCIOLOGI/S REF] TO ! TR5D Z\"."
+  },
+  "example-5-14": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,SYMBOLS US$ 2L3\" vs actual \",USE A PLURAL V]B ) SUBJECTS JO9$ BY\". line count differs by -5 (expected 10, actual 5). Input-model limitation: print block kind 'other' (not modeled — braille-only content with no print-side counterpart in this schema, e.g. a transcriber's-note symbols key): \"\""
+  },
+  "example-5-15": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"_2,%E _2SELLS _2S1%ELLS BY ! _2S1%ORE4\" vs actual \"  _2,%E _2SELLS _2S1%ELLS BY ! _2S1%ORE4\"."
+  },
+  "example-5-16": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,EA* S5T;E IS %[N F/ )\\\\T\" vs actual \"  #A4 ,X IS SN[+ \\\\TSIDE4 ,! /REET IS\". line count differs by -3 (expected 10, actual 7). Input-model limitation: print block kind 'other' (not modeled — braille-only content with no print-side counterpart in this schema, e.g. a transcriber's-note symbols key): \"\""
+  },
+  "example-5-17": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,9 ! S5T;ES 2L1 \\\"S ^WS >E\" vs actual \"  ,BO/ON C 2 V HOT DUR+ ! SUMM] MON?S4\". line count differs by -11 (expected 12, actual 1). Input-model limitation: print block kind 'other' (not modeled — braille-only content with no print-side counterpart in this schema, e.g. a transcriber's-note symbols key): \"\""
+  },
+  "example-5-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"DIS-\" vs actual \"^1DIS-\". line count differs by +1 (expected 3, actual 4)."
+  },
+  "example-5-3": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"A3USE \\\"<UH-,,KUZ\\\"> ;V4 BLAME\" vs actual \"  ^1A3USE \\\"<UH-,,KUZ\\\"> .1;V4 BLAME\"."
+  },
+  "example-5-4": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"\" vs actual \"            ,,&REW ,,M>VELL\". line count differs by -1 (expected 5, actual 4)."
+  },
+  "example-5-5": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-5-6": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-5-7": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"#A4 FR FRIEND\" vs actual \"^1#A4 .1FR\". line count differs by +1 (expected 5, actual 6)."
+  },
+  "example-5-8": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"^1,KATIE \\\"<AMUS$\\\">4 ,BILL1 T MA*9E 0\" vs actual \"  ^1,KATIE \\\"<.1AMUS$.'\\\">4 ,BILL1 T MA*9E\". line count differs by +1 (expected 7, actual 8)."
+  },
+  "example-5-9": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"#A4 ,DID YR SPID] W1VE A WEB8\" vs actual \"^1#A4 ,DID YR SPID] W1VE A WEB8\". line count differs by +1 (expected 5, actual 6)."
+  },
+  "sample-5-01": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,SYMBOLS US$3\" vs actual \"  ^7,ON ,YR ,[N^'\". line count differs by -6 (expected 16, actual 10). Input-model limitation: print block kind 'other' (not modeled — braille-only content with no print-side counterpart in this schema, e.g. a transcriber's-note symbols key): \"\""
+  },
+  "sample-5-02": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"ISL& 9 :AT IS N[ CALL$ ! ^1,WE/\" vs actual \"ISL& 9 :AT IS N[ CALL$ ! ,WE/ ,9DIES4\". line count differs by -3 (expected 14, actual 11)."
+  },
+  "sample-5-03": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"       @.<,SYMBOLS US$ 2L3            #,-\" vs actual \"  ^7,MAT* ! COLORS = FACTS1 R1SONS1\". line count differs by -11 (expected 25, actual 14). Input-model limitation: print block kind 'other' (not modeled — braille-only content with no print-side counterpart in this schema, e.g. a transcriber's-note symbols key): \"\""
+  }
+}

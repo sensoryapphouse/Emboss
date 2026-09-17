@@ -1,0 +1,88 @@
+{
+  "id": "sample-5-02",
+  "title": "Ignoring Font Attribute in Quoted Matter",
+  "pdfPages": [
+    141
+  ],
+  "textLines": [
+    4284,
+    4302
+  ],
+  "illustrates": {
+    "rule": "5.3.10",
+    "quote": "Ignore font attributes used to indicate quoted material enclosed in quotation marks. Note: There may be situations when it is better to retain emphasis for the quoted text, and it is the transcriber’s responsibility to evaluate each situation for readability and clarity. (See Sample 5-2: Ignoring Font Attributes in Quoted Matter on page 5-15.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Columbus sailed from Spain on August 3, 1492. On October 12 he sighted land, an island in what is now called the West Indies. About two weeks later he sighted what he thought was Japan, also called Zipangu at the time.",
+        "features": "Plain body paragraph; the proper noun 'West Indies' is bold.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "<b><i>All my globes and maps seem to indicate that the island of Japan is in that vicinity, and I am sure that Cuba and Zipangu are close.</i></b>",
+        "features": "Indented pull-quote, set in bold italics on a tinted background — the decorative quotation styling that rule 5.3.10 says to ignore.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "By 1493 Columbus had completed three more expeditions.",
+        "features": "Plain body text, resumes after the quotation.",
+        "items": null
+      }
+    ],
+    "notes": "This numbered Sample begins at line 7 of the source (lines 1-6 of the braille numbering are absent from the excerpt given in the source text, not invented here — presumably an earlier part of the same encyclopedia-style passage this section of Formats does not reproduce).",
+    "surroundingText": "Cross-referenced from rule 5.3.10 ('See Sample 5-2: Ignoring Font Attributes in Quoted Matter on page 5-15').",
+    "printFeatures": "Boxed narrative excerpt with an indented, tinted, bold-italic pull-quote in the middle."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,columbus sail$ f ,spa9 on ,augu/ #c1",
+      "#adib4 ,on ,octob] #ab he si<t$ l&1 an",
+      "isl& 9 :at is n[ call$ ! ^1,we/",
+      "^1,9dies4 ,ab two weeks lat] he si<t$",
+      ":at he ?\"\\ 0 ,japan1 al call$ ,zipangu",
+      "at t \"t4",
+      "",
+      "  8,all my globes & _w maps seem to",
+      "  9dicate t ! isl& ( ,japan is 9 ?",
+      "  vic9;y & ,i am sure t ,cuba & ,zipangu",
+      "  >e \"o40",
+      "",
+      ",by #aejd ,columbus _h complet$ ?ree m",
+      "exp$i;ns4"
+    ],
+    "lineNumbers": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "pageBreaks": [],
+    "notes": "14 lines, numbered 7-20 in the source (lines 1-6 of this braille page precede the excerpt and are not reproduced — recorded as given, not invented). Field width 5 (2-digit max line number 20, +3). Lines 7-12 (indices 0-5) are the opening paragraph: only its first line (7) carries the ordinary 2-cell paragraph-opening indent, the rest run flush left as plain runover; a bold-word indicator ('^1') appears before 'West' and, separately, 'Indies' — confirming print's bold IS retained here (a proper-noun place name, not the quoted matter this sample is about); line 13 (index 6) blank; lines 14-17 (indices 7-10) the quotation, indented 2 cells on EVERY line (a block-quote convention, unlike the ordinary paragraph's first-line-only indent), opened with a bold-italic passage indicator ('8') before 'All' and closed with a terminator ('0') after 'close.' — no separate marker distinguishes bold vs. italic (both dropped as one combined 'double' attribute, per 5.1.5); line 18 (index 11) blank; lines 19-20 (indices 12-13) the closing paragraph, flush left throughout. Line 11 (index 10) has a stray backslash character ('\\>e \"o40') exactly as it appears in the source .txt, kept verbatim."
+  },
+  "uncertain": [
+    "Line 11's '\\>e \"o40' reads oddly (a literal backslash character); transcribed exactly as it appears in the source .txt and not independently re-derived from the PDF's braille dot pattern at pixel level to confirm this is not an extraction artefact of the .txt itself."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from .txt lines 4289-4302 (field width 5); matches run A's rendering, which correctly preserves the genuine 2-cell block-quote indent on every line of the quotation (run B stripped this on the quotation's own lines, the same section-wide indentation-stripping bug found elsewhere in this section). `lineNumbers` (7-20) adopted per run B's schema addition, matching the task brief's known fact that this Sample starts at line 7."
+}

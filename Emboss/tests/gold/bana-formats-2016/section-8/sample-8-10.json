@@ -1,0 +1,82 @@
+{
+  "id": "sample-8-10",
+  "title": "Nested List",
+  "pdfPages": [
+    219
+  ],
+  "textLines": [
+    6332,
+    6346
+  ],
+  "illustrates": {
+    "rule": "8.5.1.c",
+    "quote": "All items within the section with subentries are treated as a nested list, even if some items do not have a subentry. (See Sample 8-10: Nested List on page 8-23.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "An introductory sentence and a closing sentence, each standing alone with no subentries of their own, bracketing four indented items (one of which wraps to a second print line).",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Pay attention to the following features as you write your essay:"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Well-focused main points;"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Clear organization;"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Specific development of your ideas;"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Control of sentence structure, punctuation, grammar, word choice, and spelling."
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Your essay should be long enough to develop the topic adequately."
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain nested list; introductory and closing sentences flush left, four indented items between them, no bullets/numbers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",pay att5;n to ! foll[+ f1tures z y   #i",
+      "    write yr essay3",
+      "  ,well-focus$ ma9 po9ts2",
+      "  ,cle> organiza;n2",
+      "  ,specific develop;t ( yr id1s2",
+      "  ,3trol ( s5t;e /ructure1 punctua;n1",
+      "    gramm>1 ^w *oice1 & spell+4",
+      ",yr essay %d 2 l;g 5 to develop ! topic",
+      "    adequately4"
+    ],
+    "pageBreaks": [],
+    "notes": "Both the introductory sentence (line 1) and the closing sentence (line 8) are transcribed as main-entry-level items in cell 1 despite having no subentries of their own — per 8.5.1.c, all items within a section that has subentries are treated as part of the nested list, including these two; the four indented items (lines 2-7, one with a two-line runover at lines 6-7) begin in cell 3."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Only prose differed (both agree the intro/closing sentences and the four indented items form one nested list per 8.5.1.c) — A’s kept.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

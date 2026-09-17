@@ -1,0 +1,61 @@
+{
+  "id": "example-13-5",
+  "title": "Example 13-5: Diagrammed Scansion with Ictus (Slash) and X",
+  "pdfPages": [
+    361
+  ],
+  "textLines": [
+    10457,
+    10472
+  ],
+  "illustrates": {
+    "rule": "13.9.3e",
+    "quote": "Follow print when stress and meter symbols are placed above the affected words. The symbols are placed above the first letter of the syllable to which they apply. To accommodate room for one-letter syllables immediately followed by another syllable, it is permissible to place the stress or meter symbol over the space or capital indicator which precedes the word."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "x / x / x / x / x /\nBut SOFT! What LIGHT through YONder WINdow BREAKS?",
+        "features": "Two contracted-braille-free diagrammed lines from Romeo and Juliet, each shown twice: first with the stress diagram only (a row of 'x' and '/' ictus marks above a row of small caps for the stressed syllable of each foot), then repeated as ordinary running text with stress marks positioned above the affected letters."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "But soft! What light through yonder window breaks?",
+        "features": "Second writing of the same line, in ordinary mixed-case type with small stress marks (breve/acute-like ictus and x marks) placed above individual syllables rather than as a separate diagram row."
+      }
+    ],
+    "notes": "Picture on PDF p.361 (blue-highlighted box). The print diagram uses capitalised syllables (SOFT, LIGHT, YON, WIN, BREAKS) to mark ictus/stress rather than accent marks.",
+    "surroundingText": null,
+    "printFeatures": "Highlighted (pale blue) box; stress diagram in a monospaced font above the quotation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      ",b s(t6 ,:at li<t \"? yond] w9d[ br1ks8",
+      "",
+      "\"\"=;;; [Dot locator for “use” precedes grade 1 passage indicator standing alone. UEB, §3.14]",
+      "",
+      "   x        _/                x                _/             x",
+      "  ,but ,,soft6 ,what ,,light through",
+      "",
+      "      _/         x               _/          x              _/",
+      "    ,,yon,'der ,,win,'dow ,,breaks8;'",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10462-10472; no fixed-margin artifact (0 leading ASCII spaces once U+2800 blank-cell rows are converted to spaces). Lines 1, 3, 5, 8 and 11 are fully blank 40-cell rows. The 4th line (index into this array) is not braille dot content: it is a roman-font editorial annotation printed inside the box next to a short raw braille-cell demonstration ('\"\"=;;;'), explaining the dot-locator convention used before the line-1 grade-1-passage indicator; it is included here verbatim because it is one of the printed rows inside the illustrative box, but it is not part of the poem's own transcription.",
+    "variants": []
+  },
+  "uncertain": [
+    "Line 4 of braille.lines ('\"\"=;;; [Dot locator...]') mixes a short literal braille-cell sequence with an inline roman-font explanatory note; it is preserved verbatim as printed but is NOT itself a transcribed poem line, unlike every other entry in this array. Flagged so a byte-for-byte comparison run does not mistake it for poem content.",
+    "The exact semantics of the '_/' composite sign and the doubled ',,'/',' capitalisation signs were not decoded; reproduced verbatim only."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Same all-blank-row correction as example-13-4 (indices 0,2,4,7,10; .txt lines 10462/10464/10466/10469/10472, each 40 literal U+2800 characters, confirmed genuine diagrammed-scansion spacer rows, not page filler) -- run A's ASCII-space padding replaced with \"\", matching the run-B/repo-wide convention. Index 5 (.txt line 10467, the ictus/x mark row '⠀⠀⠀x        _/...') is kept as run A gave it (3 leading blank cells): counted directly against the source (three literal U+2800 characters precede the first 'x'), confirming run A and correcting run B's 2-space count (an undercount by one). Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. CORRECTION during buildModel13 integration: the first block (run A's own 'poem' kind, 2 stanzas-lines) is changed to 'other' here, matching run B's own judgement for this same content: this is a stress/ictus diagram with a mark row placed ABOVE a text row (F-P7 -- 'a diacritic placed above a specific letter cannot be represented at all'), not a real 2-level verse poem; modelling it as 'poem' would build fictitious verse-block content Emboss's own poem margins have no real bearing on. The file's overall 'not-representable' status is unaffected (the second writing was already an unbuildable 'other' block)."
+}

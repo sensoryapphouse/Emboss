@@ -1,0 +1,170 @@
+{
+  "id": "example-7-3",
+  "title": "Box Read Across Pages (Print Only)",
+  "pdfPages": [
+    189
+  ],
+  "textLines": [
+    5498,
+    5502
+  ],
+  "illustrates": {
+    "rule": "7.4.1.a",
+    "quote": "When a single box is shown across print pages and it is read as if it were on a single page, and there is no other text on either page, transcribe it as a single box. Use combined page numbers, e.g., 22-23, a22-23, etc. Box lines may be omitted if the content will fit on a single braille page without them. Option: Tables printed across facing print pages may be produced as facing braille pages, if all the material will fit on the two pages. (See Formats, §11.13, Wide Tables: Facing Pages.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "An open-book illustration: a table of verb tenses ('Indicative') split across facing print pages 22 (left) and 23 (right), joined by a curved arrow above the gutter pointing left-to-right to show the table is meant to be read as one continuous whole.",
+        "features": "Black silhouette open-book graphic with rounded page edges and a curved directional arrow above the spine; a schematic diagram illustrating the concept of a table spanning facing pages, not a literal textbook page excerpt."
+      },
+      {
+        "kind": "table",
+        "level": null,
+        "text": null,
+        "headers": [
+          [
+            "Indicative",
+            "I",
+            "you",
+            "he, she, it",
+            "we",
+            "you"
+          ]
+        ],
+        "rows": [
+          [
+            "simple present",
+            "play",
+            "play",
+            "plays (playeth)",
+            "play",
+            "play"
+          ],
+          [
+            "intensive present",
+            "do play",
+            "do play",
+            "does play (doth play)",
+            "do play",
+            "do play"
+          ],
+          [
+            "simple present progressive",
+            "am playing",
+            "are playing",
+            "is playing",
+            "are playing",
+            "are playing"
+          ],
+          [
+            "simple past",
+            "played",
+            "played",
+            "played",
+            "played",
+            "played"
+          ],
+          [
+            "intensive past",
+            "did play",
+            "did play",
+            "did play",
+            "did play",
+            "did play"
+          ],
+          [
+            "simple past progressive",
+            "was playing",
+            "were playing",
+            "was playing",
+            "were playing",
+            "were playing"
+          ],
+          [
+            "simple future",
+            "shall/will play",
+            "shall/will play",
+            "shall/will play",
+            "shall/will play",
+            "shall/will play"
+          ],
+          [
+            "simple future progressive",
+            "shall/will be playing",
+            "shall/will be playing",
+            "shall/will be playing",
+            "shall/will be playing",
+            "shall/will be playing"
+          ],
+          [
+            "present perfect",
+            "have played",
+            "have played",
+            "has played (hath played)",
+            "have played",
+            "have played"
+          ],
+          [
+            "present perfect progressive",
+            "have been playing",
+            "have been playing",
+            "have been playing (hath been playing)",
+            "have been playing",
+            "have been playing"
+          ],
+          [
+            "past perfect (pluperfect)",
+            "had played",
+            "had played",
+            "had played",
+            "had played",
+            "had played"
+          ],
+          [
+            "past perfect (pluperfect) progressive",
+            "had been playing",
+            "had been playing",
+            "had been playing",
+            "had been playing",
+            "had been playing"
+          ],
+          [
+            "future perfect",
+            "shall/will have played",
+            "shall/will have played",
+            "shall/will have played",
+            "shall/will have played",
+            "shall/will have played"
+          ],
+          [
+            "future perfect progressive",
+            "shall/will have been playing",
+            "shall/will have been playing",
+            "shall/will have been playing",
+            "shall/will have been playing",
+            "shall/will have been playing"
+          ]
+        ],
+        "features": "14-row x 6-column verb-conjugation table ('Indicative' mood): the tense-name column plus the 'I'/'you' columns fall on the left (page 22) half; 'he, she, it'/'we'/second 'you' columns fall on the right (page 23) half. Page numbers '22'/'23' are printed at the top corners of the respective halves. Confirmed directly against a 250dpi crop of the PDF page image (p.189, footer 7-5): the 'Indicative' header cell is shaded light purple/lavender; the remaining header cells on the right half are plain white."
+      }
+    ],
+    "notes": "Print-only illustrative figure captioned 'Example 7-3: Box Read Across Pages (Print Only)'. No braille transcription is given anywhere in the source for this example -- it exists solely to show print readers/transcribers the print layout situation that rule 7.4.1.a addresses (a single box/table split across facing pages with no other text on either page).",
+    "surroundingText": "Immediately follows rule 7.4.1.a in the running text (see illustrates.quote); the rule's own text is what this figure depicts.",
+    "printFeatures": "Full-width black-and-white open-book silhouette graphic with a curved directional arrow at the top; page numbers 22/23 printed inside the book corners; the table itself uses light shading to distinguish its header row."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given in the source -- the example is explicitly captioned '(Print Only)' and no braille transcription follows the caption anywhere in the extracted text (confirmed: nothing but four blank lines, 5499-5502, sit between the caption at line 5498 and the next content, rule 7.4.1.b at line 5503)."
+  },
+  "uncertain": [],
+  "resolution": "Content agreed identically between the two runs (table headers/rows byte-identical; both independently confirm print-only, no braille anywhere in the source). Corrected the header-cell shading colour: A recorded it as 'light-blue-tinted', B as 'light purple/lavender' -- confirmed directly against a 250dpi crop of the PDF page image (references/bana/braille-formats-2016.pdf, p.189) that the 'Indicative' cell is light purple/lavender, not blue; B's reading used.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

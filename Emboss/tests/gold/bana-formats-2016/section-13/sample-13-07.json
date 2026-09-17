@@ -1,0 +1,79 @@
+{
+  "id": "sample-13-07",
+  "title": "Sample 13-7: Prose Poem",
+  "pdfPages": [
+    375
+  ],
+  "textLines": [
+    10839,
+    10852
+  ],
+  "illustrates": {
+    "rule": "13.7.1 cross-reference",
+    "quote": "Follow print for paragraph indention. (See Sample 13-7: Prose Poem on page 13-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Tender Buttons [A Chair]",
+        "features": "Italic work-title, followed by the bracketed section title 'A Chair' in plain roman."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "by Gertrude Stein",
+        "features": "Byline below the title."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "A CHAIR.",
+        "features": "Small-caps section heading."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "A widow in a wise veil and more garments shows that shadows are even. It addresses no more, it shadows the stage and learning. A regular arrangement, the severest and the most preserved is that which has the arrangement not more than always authorised.",
+        "features": "First prose paragraph, ordinary indented paragraph format."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "A suitable establishment, well housed, practical, patient and staring, a suitable bedding, very suitable and not more particularly than complaining, anything suitable is so necessary.",
+        "features": "Second prose paragraph; print excerpt ends with an ellipsis, showing more text follows that is not included."
+      }
+    ],
+    "notes": "Picture on PDF p.375; this is an excerpt from Gertrude Stein's Tender Buttons prose-poem sequence, printed and transcribed as ordinary paragraphs (no poetic line breaks), matching this sample's title.",
+    "surroundingText": null,
+    "printFeatures": "Italic work title; small-caps section heading; ordinary indented prose paragraphs; trailing ellipsis showing the excerpt continues beyond what is shown."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    .1,t5d] .1,buttons .<,a ,*air.>",
+      "",
+      "            by ,g]trude ,/e9",
+      "",
+      ",a ,,*air4",
+      "",
+      ",a wid[ 9 a wise veil & m g>;ts %[s t",
+      "%ad[s >e ev54 ,x addresses no m1 x %ad[s",
+      "! /age & le>n+4 ,a regul> >range;t1 !",
+      "sev]e/ & ! mo/ pres]v$ is t : has !",
+      ">range;t n m ?an alw au?oris$4",
+      "",
+      ",a suitable e/abli%;t1 well h\\s$1 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10839-10851 (a genuine excerpt of a larger braille page: printed line numbers begin at 11), after stripping a 5-char line-number field (2-digit max line number 23, +3=5) and converting U+2800. Line 1 shows the italic work-title 'Tender Buttons' marked with italic-word indicators, followed by the bracketed '[A Chair]'. Paragraphs (lines 7-11 and 13) begin at cell 1 with no special paragraph indent, per print (rule 13.7.1.b) -- print itself does not indent its paragraphs beyond the block margin, so braille follows suit. The trailing '444' marks the excerpt's deliberate truncation, matching the print's own ellipsis.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines differ between runs at 2 of 13 lines (indices 0, 2 -- leading blank-cell counts); run A's counts (4 and 12) confirmed exactly against the source (.txt lines 10839 and 10841: 4 and 12 literal U+2800 characters respectively, after the reference-number field), correcting run B's counts (6 and 11). The remaining 11 lines were already identical between runs and independently confirmed correct."
+}

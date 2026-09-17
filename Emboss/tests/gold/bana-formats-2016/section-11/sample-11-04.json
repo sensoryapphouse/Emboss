@@ -1,0 +1,84 @@
+{
+  "id": "sample-11-04",
+  "title": "Column, Row, and Column Entry Runovers",
+  "pdfPages": [
+    310
+  ],
+  "textLines": [
+    9245,
+    9271
+  ],
+  "illustrates": {
+    "rule": "11.5.2",
+    "quote": "Long Row Headings a. All column entries begin on the same line on which the row heading ends. b. Guide dots are used, if necessary, after row heading runovers. (See Sample 11-4: Column, Row, and Column Entry Runovers on page 11-28.)"
+  },
+  "print": {
+    "caption": "Table 4. Minimum Viable Population Levels for Management Indicator Species for the Targhee National Forest",
+    "headers": [
+      [
+        "Species",
+        "Habitat Unit",
+        "Potential Population"
+      ]
+    ],
+    "rows": [
+      [
+        "Grizzly Bear",
+        "Variable",
+        "Undetermined"
+      ],
+      [
+        "Bald Eagle",
+        "500 ac/nest site",
+        "50 pairs"
+      ],
+      [
+        "Williamson's Sapsucker",
+        "20 ac/territory",
+        "23,350 pairs"
+      ],
+      [
+        "Pika",
+        "1 ac/territory",
+        "53,000 pairs"
+      ]
+    ],
+    "notes": "Several row headings and column entries are long enough to require runovers in braille (\"Williamson's Sapsucker\" as a two-line row heading; \"500 ac/nest site\", \"20 ac/territory\", \"1 ac/territory\" wrapping to a second line; \"23,350 pairs\"/\"53,000 pairs\" also wrapping).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; two-line bold centered title above the box; header row (\"Species\"/\"Habitat Unit\"/\"Potential Population\") bold with ruled line beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "               ,table #d4",
+      "   ,m9imum ,viable ,popula;n ,levels",
+      "     = ,manage;t ,9dicator ,species",
+      "        = ! ,t><ee ,na;nal ,=e/",
+      "",
+      "               ,habitat       ,pot5tial",
+      ",species       ,unit          ,popula;n",
+      "\"333333333333 \"333333333333 \"333333333",
+      ",grizzly ,be> ,v>iable \"\"\"\" ,undet]m9$",
+      ",bald ,eagle   #ejj ac_/ne/   #ej pairs",
+      "                 site",
+      ",williamson's",
+      "  ,sapsuck]    #bj ac_/       #bc1cej",
+      "                 t]ritory       pairs",
+      ",pika \"\"\"\"\"\"\" #a ac_/         #ec1jjj",
+      "                 t]ritory       pairs",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". Title (\"Table 4. Minimum Viable Population Levels for Management Indicator Species for the Targhee National Forest\") spans braille lines 4-7. Column headings \",habitat\"/\",pot5tial\" (line 9) runover to \",unit\"/\",popula;n\" (line 10) per the two-line heading rule. Row \"Bald Eagle\": entry \"#ejj ac_/ne/\" (500 ac/nest) on line 13 runs over with \"site\" alone on line 14 (indented, no guide dots since it's a column-entry runover, consistent with rule 11.6.1.g: no guide dots after a runover other than the first column). Row heading \"Williamson's Sapsucker\" itself wraps: \",williamson's\" (line 15) then \" ,sapsuck]\" (line 16), with the column entries beginning on the line the row heading ENDS (line 16), per rule 11.5.2.a; \"territory\"/\"pairs\" runovers appear on line 17. Similarly for Pika's \"1 ac/territory\"/\"53,000 pairs\" runover on line 19."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: run A dropped 2 leading indent spaces on 4 lines (14, 17, 18, 19); run B matches the source .txt exactly and is used."
+}

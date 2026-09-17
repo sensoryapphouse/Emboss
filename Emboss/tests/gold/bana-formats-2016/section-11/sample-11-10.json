@@ -1,0 +1,77 @@
+{
+  "id": "sample-11-10",
+  "title": "Blank Cells Indicating Answers to Be Inserted",
+  "pdfPages": [
+    317
+  ],
+  "textLines": [
+    9426,
+    9446
+  ],
+  "illustrates": {
+    "rule": "11.6.4",
+    "quote": "Use guide dots across the width of a column to indicate a blank space or a blank to be filled in. Explain the series of guide dots in a transcriber's note. Sample: A series of guide dots across the width of a column indicates a blank space. (See ... Sample 11-10: Blank Cells Indicating Answers to Be Inserted on page 11-35 ...)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Day",
+        "Temperature at 10:00"
+      ]
+    ],
+    "rows": [
+      [
+        "Monday",
+        ""
+      ],
+      [
+        "Tuesday",
+        ""
+      ],
+      [
+        "Wednesday",
+        ""
+      ],
+      [
+        "Thursday",
+        ""
+      ],
+      [
+        "Friday",
+        ""
+      ]
+    ],
+    "notes": "The right-hand column is entirely blank in print — a worksheet for the student/reader to fill in temperature readings.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, ruled lines between rows; header row bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,guide dots 9dicate a space =",
+      "    an answ]4@.>",
+      "",
+      ",\"d       ,temp]ature at #aj3#jj",
+      "\"3333333 \"333333333333333333333",
+      ",mon\"d    \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      ",tues\"d   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      ",w$nes\"d \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      ",?urs\"d   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      ",fri\"d    \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". A transcriber's note before the table (lines 4-5) explains: \"Guide dots indicate a space for an answer.\" Each day's row then shows a full run of dot-5 guide-dot filler characters across the width of the (otherwise blank) second column, shaded grey in the PDF sample image, matching the print blanks."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No content differences beyond header-schema normalization; both runs match the source exactly."
+}

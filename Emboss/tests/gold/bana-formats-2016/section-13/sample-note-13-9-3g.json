@@ -1,0 +1,46 @@
+{
+  "id": "sample-note-13-9-3g",
+  "title": "Sample transcriber's note (rule 13.9.3.g)",
+  "pdfPages": [
+    362
+  ],
+  "textLines": [
+    10478,
+    10491
+  ],
+  "illustrates": {
+    "rule": "13.9.3g",
+    "quote": "Explain the two writings on the Transcriber’s Notes page when there are multiple locations in the volume that use this technique. If the technique is used in a single location in the volume, explain the usage in a transcriber’s note before the text. Sample: The text is first shown without stress symbols, and then repeated with the appropriate symbols and no contractions. Stress symbols are inserted above the syllable to which they apply. Symbols used: .=_/ Stressed syllable .=x Unstressed syllable (See Sample 13-9: Lines of Poetry with Stress Marks on page 13-23.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "The text is first shown without stress symbols, and then repeated with the appropriate symbols and no contractions. Stress symbols are inserted above the syllable to which they apply. Symbols used:",
+        "features": "Displayed (indented) explanatory note, followed by a small key of two symbol/meaning pairs."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "′ = Stressed syllable   ˘ = Unstressed syllable",
+        "features": "Two-line symbols key (acute-accent mark for stressed syllable, breve mark for unstressed syllable), left-indented less than the note paragraph above it."
+      }
+    ],
+    "notes": "Not itself a worked print/braille example: rule 13.9.3.g offers plain-English note wording plus a symbols key; the note IS actually transcribed into braille as part of the worked Sample 13-9 (a separate item, sample-13-09.json), where its braille form appears verbatim.",
+    "surroundingText": "Given as sample wording (with symbols key) for a transcriber's note explaining the twice-shown stress-mark technique used in Sample 13-9.",
+    "printFeatures": "One explanatory paragraph plus a small two-row symbols key, all displayed/indented."
+  },
+  "braille": {
+    "width": null,
+    "lines": null,
+    "pageBreaks": [],
+    "notes": "This is the one embedded 'Sample:' note in §13 whose wording IS actually carried through into a worked braille example: Sample 13-9 (sample-13-09.json) opens with this exact note text transcribed into braille inside a grade-1 passage. No independent braille rendering exists at THIS point in the running rule text itself (only the print wording, per rule 13.9.3.g), so width/lines are left null here to avoid duplicating Sample 13-9's own braille.lines."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A leaves braille.width/lines null/empty (the rule's own citing text at .txt lines 10484-10489 is plain English prose describing the symbol key, not a braille rendering -- confirmed directly: no U+2800 or braille-ASCII cipher characters appear there at all). Run B instead populated braille.lines by copying the equivalent symbol-key braille that appears later, verbatim, as the opening two lines of the separate worked Sample 13-9 (.txt lines 10892-10893, confirmed genuine braille there: '.=^/ ,/ress$ syllable' / '.=@+ ,un/ress$ syllable'). Resolved in favour of run A's convention, for consistency with the other three sample-note files in this same family (13.6.2/13.6.3/13.6.4b), all of which likewise have no braille at their own citing location and are not filled in from braille appearing elsewhere in the book; duplicating Sample 13-9's own braille under a second file name here would also create a maintenance hazard (the two copies could silently drift). The equivalent real braille is recorded once only, in sample-13-09.json."
+}

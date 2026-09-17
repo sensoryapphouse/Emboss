@@ -1,0 +1,70 @@
+{
+  "id": "example-4-1",
+  "title": "Three Distinct Heading Levels (Print Only)",
+  "pdfPages": [
+    106
+  ],
+  "textLines": [
+    3180,
+    3180
+  ],
+  "illustrates": {
+    "rule": "4.2.1",
+    "quote": "As a general rule, centered headings are used to represent the print headings of major sections of the text, and cell-5 and cell-7 headings are used to represent the print headings for subsections shown within major sections. When there are more than three distinct heading levels in print, cell-7 headings are applied only to the lowest hierarchy level; the use of centered headings is extended to one or more subsection levels as necessary."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Absolutism in Western Europe",
+        "features": "Centered, bold serif display type, dark red, small diamond bullet to the left; the book's own callout arrow beside it reads \"Centered.\""
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "An examination of seventeenth-century absolutism must begin with western Europe since France during the reign of Louis XIV (1643-1715) has traditionally been regarded as the best example of the practice of absolute monarchy in the seventeenth century.",
+        "features": "Plain body text."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "France and Absolute Monarchy",
+        "features": "Left-aligned, bold italic serif, small decorative icon to the left; the book's callout arrow beside it reads \"Cell-5.\""
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "By the end of the seventeenth century, France had come to play a dominant role in European affairs. French culture, language, and manners influenced all levels of European society. French diplomacy and wars shaped the political affairs of western and central Europe. The court of Louis XIV seemed to be imitated everywhere in Europe. Of course, the stability of Louis's reign was magnified by the instability that had preceded it.",
+        "features": "Plain body text."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "FOUNDATIONS OF FRENCH ABSOLUTISM",
+        "features": "Left-aligned, full capitals, bold, small decorative icon to the left; the book's callout arrow beside it reads \"Cell-7.\""
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The history of France before the reign of Louis XIV was hardly the story of steady, unbroken progress toward the ideal of absolute monarchy that many historians have tended to portray. During the fifty years or so before Louis, royal and ministerial governments had to struggle to avoid the breakdown of the state. The line between order and anarchy was often a narrow one. The situation was especially complicated by the fact that both Louis XIII (1610-1643) and Louis XIV were only boys when they succeeded to the throne in 1610 and 1643, respectively,",
+        "features": "Plain body text, cut off at the bottom edge of the boxed illustration."
+      }
+    ],
+    "notes": "A boxed screenshot of a print textbook page illustrating the three heading levels of rule 4.2.1. Each heading has its own leader-line annotation reading \"Centered\", \"Cell-5\", \"Cell-7\" -- the guide's own caption naming which braille heading level each print style maps to. The worked braille counterpart is Sample 4-2.",
+    "surroundingText": "Immediately follows rule 4.2.1 and precedes rule 4.2.2, which introduces Sample 4-2: Heading Hierarchy as the braille counterpart.",
+    "printFeatures": "Boxed screenshot of a print textbook page (not braille), with three arrow-and-caption annotations reading \"Centered\", \"Cell-5\", \"Cell-7\" pointing at the three heading levels respectively."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Explicitly \"Print Only\" -- the source gives no braille rendering for this example; none is guessed."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on every substantive fact; only prose wording of `features`/`notes`/`printFeatures` differed (merged here) and the rule-id format (bare \"4.2.1\", no \"BANA\" prefix, matching the §11 precedent). `textLines` resolved to [3180,3180]: the source .txt at lines 3181-3184 is blank filler for the screenshot and 3185-3186 is the *next* page's running footer (\"4-2 / Section 4 / Headings\") -- neither belongs to this item's own content (run A's [3180,3186] wrongly included the footer; run B's [3180,3180] is correct). Verified directly against references/_text/braille-formats-2016.txt lines 3175-3190."
+}

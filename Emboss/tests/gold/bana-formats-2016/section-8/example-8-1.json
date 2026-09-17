@@ -1,0 +1,48 @@
+{
+  "id": "example-8-1",
+  "title": "Embedded List",
+  "pdfPages": [
+    198
+  ],
+  "textLines": [
+    5735,
+    5744
+  ],
+  "illustrates": {
+    "rule": "8.2",
+    "quote": "Paragraph lists consist of a series of short numbered or lettered items embedded within a paragraph. Retain the paragraph format and punctuation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "As the groups prepared for embarking on their journey, their thoughts included (a) would they travel well together, (b) would the journey be dangerous, and (c) would they see their loved ones again.",
+        "features": "Single paragraph of running prose inside a ruled box; (a), (b), (c) are inline lowercase-letter markers introducing three embedded clauses within one sentence, not set as a vertical list."
+      }
+    ],
+    "notes": null,
+    "surroundingText": "Directly illustrates rule 8.2, which immediately precedes it; 8.3 (Simple Vertical Lists) begins on the next line.",
+    "printFeatures": "Boxed paragraph, plain roman text, single justified paragraph of running prose, no bullets or numbering visible outside the inline (a)/(b)/(c)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,z ! gr\\ps prep>$ = emb>k+ on _!",
+      "j\\rney1 _! ?\"\\s 9clud$ \"<a\"> wd !y",
+      "travel well tgr1 \"<;b\"> wd ! j\\rney 2",
+      "dang]\\s1 & \"<;c\"> wd !y see _! lov$ \"os",
+      "ag4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin: 8 literal spaces stripped (this book's standard cell-1 running-text margin). No blank-cell padding to line width; this is unboxed paragraph text, not a boxed/ruled example. The (a)/(b)/(c) markers are retained inline exactly as print, per 8.1.4, each preceded by an opening-quote-style indicator and followed by a closing one (rendered as \" ... \" pairs) rather than literal parentheses, matching this book's convention for representing enclosing punctuation around inline letter markers."
+  },
+  "uncertain": [
+    "The exact braille rendering of the parenthesis-like punctuation around (a)/(b)/(c) (shown in the ascii as \"<a\"> etc.) was transcribed verbatim from the source but not independently decoded dot-by-dot against the print parentheses."
+  ],
+  "resolution": "braille.lines byte-identical between A and B; only free-text prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s wording kept (equally accurate, marginally more specific). A’s uncertain note (exact dot-pattern of the \"<a\"> style bracketing punctuation) kept; B recorded none.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

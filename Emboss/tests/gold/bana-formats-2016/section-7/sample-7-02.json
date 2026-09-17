@@ -1,0 +1,207 @@
+{
+  "id": "sample-7-02",
+  "title": "Screened Word Lists",
+  "pdfPages": [
+    194,
+    195
+  ],
+  "textLines": [
+    5615,
+    5645
+  ],
+  "illustrates": {
+    "rule": "7.5.2",
+    "quote": "Insert the name of the color, enclosed in transcriber’s note indicators, at the beginning of the opening box line. A blank cell separates the embedded transcriber’s note from the box line. (See Sample 7-2: Screened Word Lists on page 7-10.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "STUDY Say each word. Then read the meaning phrase.",
+        "features": "Small-caps 'STUDY' label followed, on the same print line, by a plain instruction sentence. Direct measurement against the source .txt (lines 5622-5623: 4 leading U+2800 cells on both the opening braille line and its wrapped continuation) shows this is set as a single cell-5 heading run in braille, not a heading-plus-separate-paragraph pair (which would give the continuation line a different margin)."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "#,- (a print-invisible right-margin running-head/reference code embedded at the end of the heading's braille line -- no print-side counterpart)",
+        "features": "Braille-only page-furniture artefact; not visible anywhere in the print page image."
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "colorNote": "yellow",
+        "features": "A pale-yellow screened (shaded, borderless) region containing a numbered word list, items 1-10 -- 'screened material shown by use of colour' per 7.1.1/7.5.1. Per 7.5.2 the braille names the colour ('yellow') in an embedded transcriber's note at the very start of the box's own top box line -- recorded here via the box's own `colorNote` field, since print itself shows colour only by shading, with no inline label of its own.",
+        "blocks": [
+          {
+            "kind": "list",
+            "level": null,
+            "text": null,
+            "items": [
+              {
+                "marker": "1.",
+                "level": null,
+                "text": "army an **army** trained for battle"
+              },
+              {
+                "marker": "2.",
+                "level": null,
+                "text": "starve **starve** without food to eat"
+              },
+              {
+                "marker": "3.",
+                "level": null,
+                "text": "scar a **scar** on his arm from a burn"
+              },
+              {
+                "marker": "4.",
+                "level": null,
+                "text": "garbage put **garbage** in the trash can"
+              },
+              {
+                "marker": "5.",
+                "level": null,
+                "text": "hamburger ate a **hamburger** with catsup"
+              },
+              {
+                "marker": "6.",
+                "level": null,
+                "text": "return before you **return** home"
+              },
+              {
+                "marker": "7.",
+                "level": null,
+                "text": "purpose the **purpose** of the lesson"
+              },
+              {
+                "marker": "8.",
+                "level": null,
+                "text": "surface painted the **surface** of the table"
+              },
+              {
+                "marker": "9.",
+                "level": null,
+                "text": "courage have **courage** to face danger"
+              },
+              {
+                "marker": "10.",
+                "level": null,
+                "text": "journal a **journal** entry about a vacation"
+              }
+            ],
+            "features": "Each item: a cursive vocabulary word (left column) followed by a plain usage sentence (right column) with the SAME word repeated in bold within it -- confirmed directly against the PDF page image (p.194, footer 7-10) that there is no punctuation of any kind between the word and the sentence (no em dash or colon); the two columns simply sit side by side. Item text here concatenates both columns in reading order, marking the sentence's own repeated word **bold** (matching the braille's own '^1' emphasis indicator before its second occurrence)."
+          }
+        ]
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "colorNote": "orange",
+        "features": "A pale tan/orange screened region, same list style, items 11-20, directly below the yellow region with no visible gap or rule in print -- the two colour regions are drawn as one continuous shaded panel that merely changes tint, yet braille transcribes them as two fully separate boxes with a blank line between (per 7.3.8), each carrying its own embedded colour-name note.",
+        "blocks": [
+          {
+            "kind": "list",
+            "level": null,
+            "text": null,
+            "items": [
+              {
+                "marker": "11.",
+                "level": null,
+                "text": "argue **argue** about which team is better"
+              },
+              {
+                "marker": "12.",
+                "level": null,
+                "text": "apartment an **apartment** in this building"
+              },
+              {
+                "marker": "13.",
+                "level": null,
+                "text": "guitar strummed the strings of a **guitar**"
+              },
+              {
+                "marker": "14.",
+                "level": null,
+                "text": "Arkansas the governor of **Arkansas**"
+              },
+              {
+                "marker": "15.",
+                "level": null,
+                "text": "curl cut a **curl** of hair"
+              },
+              {
+                "marker": "16.",
+                "level": null,
+                "text": "purse kept money in her **purse**"
+              },
+              {
+                "marker": "17.",
+                "level": null,
+                "text": "furniture chairs and other **furniture**"
+              },
+              {
+                "marker": "18.",
+                "level": null,
+                "text": "courtesy the **courtesy** of the helpful waiter"
+              },
+              {
+                "marker": "19.",
+                "level": null,
+                "text": "nourish milk to **nourish** the baby"
+              },
+              {
+                "marker": "20.",
+                "level": null,
+                "text": "journey a **journey** from Africa to America"
+              }
+            ],
+            "features": "Same list style as the yellow box's items 1-10; the braille excerpt gives only items 11 and 20 in full, with a '444' omission marker standing in for items 12-19 -- a genuine, asymmetric feature of the source excerpt (also documented in the braille's own notes), not smoothed over here."
+          }
+        ]
+      }
+    ],
+    "notes": "Print shows the yellow and orange regions as two directly-adjoining screened panels with no border, rule, or gap between them (a single visual block that changes background tint partway down) -- yet the braille treats them as two separate boxes, each with its own top/bottom box line and its own embedded colour-name transcriber's note, with a blank line between them (per 7.3.8) even though print itself has no such visual break. Recorded as observed, not smoothed over, since this is precisely the point rule 7.5 makes (a colour change, even without a drawn border, still needs to be marked).",
+    "surroundingText": null,
+    "printFeatures": "Two vertically-stacked screened (shaded-background, borderless) colour panels, pale yellow above pale tan/orange, each holding a numbered two-column list (cursive vocabulary word at left, plain usage sentence at right with the word repeated in bold, no punctuation between the two columns -- confirmed against the PDF page image, p.194, footer 7-10)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,,/udy ,say ea* ^w4 ,!n r1d !    #,-",
+      "    m1n+ phrase4",
+      "",
+      "@.<yell[@.> 7777777777777777777777777777",
+      "#a4 >my an ^1>my tra9$ = battle",
+      "#b4 />ve ^1/>ve )\\t food to eat",
+      "#c4 sc> a ^1sc> on 8 >m f a burn",
+      "#d4 g>bage put ^1g>bage 9 ! tra% c",
+      "#e4 hamburg] ate a ^1hamburg] ) catsup",
+      "#f4 return 2f y ^1return home",
+      "#g4 purpose ! ^1purpose ( ! lesson",
+      "#h4 surface pa9t$ ! ^1surface ( ! table",
+      "#i4 c\\rage h ^1c\\rage to face dang]",
+      "#aj4 j\\rnal a ^1j\\rnal 5try ab a vaca;n",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "@.<orange@.> 777777777777777777777777777",
+      "#aa4 >gue ^1>gue ab : t1m is bett]",
+      "444",
+      "#bj4 j\\rney a ^1j\\rney f ,africa to",
+      "  ,am]ica",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "23 numbered lines in the source (line-number field of width 5 stripped, along with a leading form-feed on the first numbered line, 5622). Lines 1-2: the 'STUDY / Say each word...' heading and instruction, cell-5 (4-cell) margin on both lines, with a right-margin running-head/page code '#,-' at the end of line 1. Line 3: blank, separating the instructions from the first box (per 7.2.1). Line 4: top box line for the yellow list, opened with the embedded transcriber's note '@.<yell[@.>' ('yellow', using the 'yell[' contraction) followed by a blank cell and then the (correspondingly shortened, 28-seven) box line, per 7.5.2. Lines 5-14: the ten numbered items of the yellow list (items 1-10), each giving the word plus its usage sentence with the target word doubled via the '^1' italics/emphasis marker before its second occurrence. Line 15: bottom box line for the yellow box (full 40 cells, no embedded note needed on a closing line). Line 16: the blank line rule 7.3.8 requires between adjoining boxes. Line 17: top box line for the orange list, embedded note '@.<orange@.>' followed by the (correspondingly shortened) box line. Line 18: item 11 ('argue'). Line 19: '444', a continuation-omission marker standing in for items 12-19 (not transcribed in this excerpt). Lines 20-21: item 20 ('journey'), wrapping onto a second line for 'America'. Line 22: bottom box line for the orange box (full 40 cells). Line 23: trailing blank line after the box."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Four points reconciled: (1) the opening 'STUDY...' line -- A split it into a `heading`+`paragraph` pair, B folded it into one `other` block; re-derived directly from the source .txt's own leading-blank-cell count (4 cells on both the heading line and its wrapped continuation) that this is genuinely a single cell-5 heading run, not two separate blocks nor an unmodelled 'other' blob -- neither run's original guess used as-is. (2) the boxed lists -- A nested each list inside `{kind:\"box\", blocks:[{kind:\"list\", items:[...]}]}`; B attached `items` directly to the box block with no nested `list` child. A's explicit nesting used, matching the section's own box->blocks[] convention (reused by buildModel7's recursive builder). (3) added a `{kind:\"other\"}` block for the braille-only '#,-' running-head/reference code trailing the heading's own opening line (neither run's own print.blocks captured it), matching the section-8 precedent's convention for such codes. (4) BOTH runs independently transcribed each list item's print text with a literal em dash between the vocabulary word and its usage sentence ('army — an army trained for battle'); confirmed directly against the PDF page image (p.194, footer 7-10) that print has NO em dash, colon, or any punctuation there at all -- it is simply two columns (cursive word, plain sentence) read left to right, with the word repeated in BOLD inside the sentence. Corrected to concatenate the two columns directly with the repeated word marked `**bold**` (matching the braille's own '^1' emphasis indicator before its second occurrence, e.g. line 5 '#A4 >MY AN ^1>MY TRA9$ = BATTLE' = '1. army an *army* trained for battle') -- neither run's own em-dash reading is used. The embedded colour-name transcriber's note (7.5.2, 'yellow'/'orange') has no field in either run's original schema; added a `colorNote` field on each box block here so the fact is recorded even though Emboss has no mechanism to build it into the braille (standards-findings.md F-72 -- no colour/screened-box support at all) -- expected mismatch/not-representable on both top box lines.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

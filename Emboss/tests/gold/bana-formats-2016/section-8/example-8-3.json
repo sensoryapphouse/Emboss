@@ -1,0 +1,81 @@
+{
+  "id": "example-8-3",
+  "title": "Cell-5 Heading Followed by a Simple List",
+  "pdfPages": [
+    200
+  ],
+  "textLines": [
+    5792,
+    5803
+  ],
+  "illustrates": {
+    "rule": "8.3.3.a",
+    "quote": "A list is not preceded by a blank line: a. When it follows a cell-5 or cell-7 heading."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Vocabulary Words",
+        "features": "Bold, indented heading (print cell-5 style) directly above the list, no blank line beneath it in print."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Five one-word vocabulary items, one per line, no bullets or numbers, plain roman lowercase.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "spider"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "suggest"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "boast"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "spilled"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "skeleton"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": "Rule 8.3.3.b (top box line) and 8.3.3.c (directions) follow, each cross-referencing Sample 8-4 and Example 8-4 respectively.",
+    "printFeatures": "Boxed illustration; bold indented heading immediately above five plain lowercase words, no rule line or extra spacing between heading and list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,vocabul>y ,^ws",
+      "spid]",
+      "su7e/",
+      "boa/",
+      "spill$",
+      "skeleton",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Heading ',vocabul>y ,^ws' (Vocabulary Words) begins 4 blank cells in (cell-5 indent, margin 0 stripped from the .txt since this example has no fixed left margin of literal spaces, unlike Examples 8-1/8-2); it is immediately followed by the list with no intervening blank line, illustrating 8.3.3.a; a blank line (line 7, all 40 cells blank) follows the list, matching the general 8.3.2.a rule for the list's own end."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: both A and B stored the raw cell-position \"5\"; re-derived directly from the source .txt (U+2800 count before \",vocabul>y ,^ws\", line 5797) = 4 leading blank cells, i.e. cell-5, matching Emboss’s own heading-level convention (1=centred/2=cell-5/3=cell-7, per the section-4 precedent) as level 2 — confirmed by the source’s own title \"Example 8-3: Cell-5 Heading Followed by a Simple List\".",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

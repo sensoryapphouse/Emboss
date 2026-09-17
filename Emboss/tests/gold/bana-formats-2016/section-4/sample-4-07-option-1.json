@@ -1,0 +1,116 @@
+{
+  "id": "sample-4-07-option-1",
+  "title": "Icon Headings with Descriptions (Option 1: icons expressed in words)",
+  "pdfPages": [
+    126
+  ],
+  "textLines": [
+    3776,
+    3783
+  ],
+  "illustrates": {
+    "rule": "4.9.2.a",
+    "quote": "Icon headings may be expressed in words. This may be a better option for earlier grades."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Full Text of Icon Descriptions in Front of Book",
+        "features": "Plain bold caption labelling the icon-key strip beneath it; this caption itself is never transcribed into either braille option (kind='other', excluded from the model)."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Eye Safety: Proper eye protection must be worn at all times by anyone performing or observing science activities.",
+        "features": "One of five icon-key entries (icon graphic + bold title + description), defining icons used throughout the book; kind='other' because this front-of-book key is never itself transcribed into either braille option for this sample."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Clothing Protection: This symbol appears when substances could stain or burn clothing.",
+        "features": "Icon-key entry (2 of 5); see above."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Animal Safety: This symbol appears when safety of animals and students must be ensured.",
+        "features": "Icon-key entry (3 of 5); see above."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Radioactivity: This symbol appears when radioactive materials are used.",
+        "features": "Icon-key entry (4 of 5); see above."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Handwashing: After the lab, wash hands with soap and water before removing goggles.",
+        "features": "Icon-key entry (5 of 5); see above."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Icon Use within Text",
+        "features": "Plain bold caption labelling the in-text example beneath it; also excluded from the model."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Procedure",
+        "features": "Bold heading on a shaded banner, followed immediately in print by three small icon graphics (Eye Safety, Clothing Protection, Handwashing) -- only 3 of the 5 defined icons are used for this particular lab procedure. THIS option spells the three icons out as words, per rule 4.9.2.a, each on its own braille line."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Eye Safety",
+        "features": "Icon graphic (1 of 3) expressed in words per 4.9.2.a, on its own line."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Clothing Protection",
+        "features": "Icon graphic (2 of 3) expressed in words."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Handwashing",
+        "features": "Icon graphic (3 of 3) expressed in words."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "1. Read and complete the lab safety form.",
+        "features": "Numbered procedure step beneath the Procedure banner."
+      }
+    ],
+    "notes": "Option 1 of 2: the three icon graphics following the 'Procedure' heading are expressed in braille as words, each on its own line, per rule 4.9.2.a ('a better option for earlier grades'). The five-icon front-of-book key strip is present in print (read from the PDF page image, p.126, since it did not survive the .txt extraction as text beyond its own caption) but is never itself transcribed into this sample's braille, so it is recorded with kind='other' and excluded from the model.",
+    "surroundingText": null,
+    "printFeatures": "A colored strip of five icon+caption+description entries (Eye Safety, Clothing Protection, Animal Safety, Radioactivity, Handwashing); below, a 'Procedure' heading followed by three small icon graphics and a numbered instruction step."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,proc$ure",
+      ",eye ,safety",
+      ",clo?+ ,protec;n",
+      ",h&wa%+",
+      "",
+      "#a4 ,r1d & complete ! lab safety =m4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-5 heading 'Procedure'; lines 3-5 the three icons spelled out in words, one per line, at column 1 (not the full defined set of five icons from the front-of-book key, only the three actually used on this banner); line 6 blank; line 7 the single numbered procedure step."
+  },
+  "uncertain": [
+    "Options 1 and 2 both derive the icons' word meanings ('Eye Safety', 'Clothing Protection', 'Handwashing') from the front-of-book icon key elsewhere on the same print page, since no words are printed at the icons' own location (only icon graphics) -- the mapping is unambiguous (confirmed against the PDF page image, p.126) but is not literally print TEXT at that spot."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "`illustrates.rule`/`quote` resolved to \"4.9.2.a\" (the specific lettered clause that names Option 1's own technique -- \"icon headings may be expressed in words... a better option for earlier grades\") rather than either run's \"4.9.2b\"/\"4.9.2.b\" (which is Option 2's clause, about shape codes on the Special Symbols page; see that file). `print.blocks` rebuilt directly from the PDF page image (p.126, read directly): kept run A's fuller icon-key descriptions (title+description text, not run B's title-only summary) but corrected `kind` to `other` for the whole icon-key strip and its caption (run A had tagged these `list-item`, which -- per this section's print.blocks-to-model mapping -- would incorrectly inject all five icon-key entries into the model; neither braille option ever transcribes them). `level` for \"Procedure\" resolved to 2 (cell-5), confirmed directly against .txt line 3778 (4 leading blank cells) -- contradicting run A's stated level 3 (cell-7)."
+}

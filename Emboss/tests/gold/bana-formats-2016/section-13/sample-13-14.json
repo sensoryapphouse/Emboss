@@ -1,0 +1,154 @@
+{
+  "id": "sample-13-14",
+  "title": "Sample 13-14: Song with Verses",
+  "pdfPages": [
+    383
+  ],
+  "textLines": [
+    11042,
+    11057
+  ],
+  "illustrates": {
+    "rule": "13.11.4e",
+    "quote": "Transcribe verse numbers as cell-5 headings."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "On Top of Old Smokey",
+        "features": "Bold display title above the musical staff notation."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Three systems of musical staff notation (guitar tab plus standard notation) with the first verse's lyrics printed under the notes."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Verse 1 shown with the music; verses 2 and 3 printed as plain numbered text below the staff, without music.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "On top of old Smokey,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "All covered with snow,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "I lost my true lover,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "By courtin’ too slow.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          },
+          {
+            "lines": [
+              {
+                "text": "2.",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Now, courtin’s a pleasure,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And parting is grief;",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "But a false-hearted lover,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Is worse than a thief.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          },
+          {
+            "lines": [
+              {
+                "text": "3.",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "A thief will just rob you",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And take all you have,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "But a false-hearted lover",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Will lead you to the grave.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.383; verses 2 and 3 are printed with an explicit leading verse number ('2.' / '3.'), which is what rule 13.11.4.a's cell-5 heading treatment is transcribing; verse 1 carries no printed number since it is given with the music instead.",
+    "surroundingText": null,
+    "printFeatures": "Bold title; musical staff notation for verse 1; verses 2-3 printed as plain numbered prose-style stanzas below the music."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,on ,top ( ,old ,smokey",
+      "",
+      ",on top ( old ,smokey1",
+      ",all cov]$ ) sn[1",
+      ",i lo/ my true lov]1",
+      ",by c\\rt9' too sl[4",
+      "",
+      "    #b4",
+      ",n[1 c\\rt9's a pl1sure1",
+      "444",
+      "",
+      "    #c4",
+      ",a ?ief w j rob y",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 11042-11055, after stripping a 5-char line-number field (2-digit max line number 14, +3=5) and converting U+2800. Title (line 1) is centred; verse 1 (lines 3-6) is transcribed with no verse-number heading (matching print, which gives it none). Verse numbers '2' and '3' (lines 8 and 12) are given as cell-5 headings ('#b4' = '2.', '#c4' = '3.', 4-cell/cell-5 indent), per rule 13.11.4.a; each verse's first line only is shown, followed by a '444' continuation marker showing the excerpt deliberately omits the remaining three lines of each verse (which the source's print does include in full).",
+    "variants": []
+  },
+  "uncertain": [
+    "Only the first line of verses 2 and 3 is transcribed in this excerpt (each followed by '444'), even though print shows all four lines of each verse; recorded as a deliberate excerpt (matching the source's own truncation), not a transcription gap."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Index 0 ('On Top of Old Smokey', ref '1', .txt line 11042) needed a NEW value neither run had: 8 leading blank cells (run A had 0, run B had 10) -- counted directly against the source (reference field 5 characters, 2-digit max '14' + 3; then 8 literal U+2800 characters before the text). The remaining 13 lines were already identical between runs and independently confirmed correct. CORRECTION during buildModel13 integration: run A recorded the verse numbers '2'/'3' as the `number` field on the FIRST line of stanzas 2/3 (implying they are folded into that line's own text, per BANA 13.11.4a/F-P3); run B recorded no number at all. The gold braille (.txt lines 11051/11055 region) settles this: '2.'/'3.' are each their OWN separate braille line ('    #b4' / '    #c4', 4 leading cells = level 2), printed BEFORE the stanza's first verse line (which itself carries no prefix at all, 0 leading cells) -- not folded into it. Modelled here as two synthetic poem lines ('2.' / '3.', indent 2) inserted ahead of stanzas 2/3, replacing the `number` field on their first real line. print text for these two lines otherwise kept as run A gave it (no comma after 'rob you', matching the braille's own lack of trailing punctuation there)."
+}

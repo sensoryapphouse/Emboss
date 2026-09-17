@@ -1,0 +1,42 @@
+{
+  "id": "b004-9-2",
+  "title": "Paragraphs -- Example 2 (Young Children and Learners)",
+  "pdfPages": [
+    8
+  ],
+  "textLines": [
+    242,
+    243
+  ],
+  "illustrates": {
+    "rule": "B004 §9",
+    "quote": "Guiding principles: Paragraphs must be easily identifiable and easily found with the fingers (when tracking the left-hand margin of a page). Producers may employ additional features to enable identification of paragraphs for young children and those learning braille."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Prose statement of an alternative paragraph format for young/learning readers: a blank line before each paragraph, in addition to cell-3/cell-1 margins. No print passage or braille rendering is given."
+      }
+    ]
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No worked print or braille excerpt is given for this item; it is a one-sentence prose statement of the alternative convention."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: prose-only, no braille. status: no-braille."
+}

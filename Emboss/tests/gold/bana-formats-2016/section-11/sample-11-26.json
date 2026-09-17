@@ -1,0 +1,93 @@
+{
+  "id": "sample-11-26",
+  "title": "Stairstep Table Format",
+  "pdfPages": [
+    336,
+    337
+  ],
+  "textLines": [
+    9910,
+    9947
+  ],
+  "illustrates": {
+    "rule": "11.18.1",
+    "quote": "Wide Tables: Stairstep Table Format. Limit this format to tables with four or fewer columns. For larger tables use the Listed Table Format in Formats, §11.16. (See Sample 11-26: Stairstep Table Format on page 11-54 and Sample 11-27: Subdivision Headings on page 11-56.)"
+  },
+  "print": {
+    "caption": "Vietnam War",
+    "headers": [
+      [
+        "Where were you during the Vietnam War?",
+        "How old were you during the war?",
+        "How did the war affect Americans?",
+        "What memories do you have?"
+      ]
+    ],
+    "rows": [
+      [
+        "I signed up for the Marines and served in Cambodia.",
+        "I was 18 when I signed up.",
+        "There was a lot of protesting against the war. It made everyone think about why the U.S. was involved in a war so far away.",
+        "There are some I don't want to talk about. But I remember my buddies and good times playing cards and wishing we'd get home soon."
+      ],
+      [
+        "Oklahoma City, Oklahoma",
+        "I was 10 when it ended.",
+        "I don't remember too much about it. I do remember my grandmother being worried that her two sons would be drafted.",
+        "I remember the news on TV almost every evening had something about the war."
+      ]
+    ],
+    "notes": "A four-column interview/survey table where each column heading is itself a full question, and every cell is a free-text, multi-sentence answer -- exactly the kind of table the stairstep format (four or fewer columns, per rule 11.18.1) is meant for.",
+    "surroundingText": null,
+    "printFeatures": "Bold centered title 'Vietnam War' in a larger font above a bordered box; bold header row (the four questions) with a ruled line beneath; ruled line between the two respondents' rows."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,vietnam ,w>           #bcc",
+      "7777777777777777777777777777777777777777",
+      "      @.<,table *ang$ z foll[s3",
+      "",
+      ",\": 7 y dur+ ! ,vietnam ,w>8",
+      "  ,h[ old 7 y dur+ ! w>8",
+      "    ,h[ did ! w> a6ect ,am]icans8",
+      "      ,:at memories d y h8@.>",
+      "",
+      ",i sign$ up = ! ,m>9es & s]v$ 9",
+      ",cambodia4",
+      "  ,i 0 #ah :5 ,i sign$ up4",
+      "    ,\"! 0 a lot ( prote/+ ag/ ! w>4 ,x",
+      "    made \"ey\"o ?9k ab :y ! ,u4,s4 0",
+      "    9volv$ 9 a w> s f> away4",
+      "      ,\"! >e \"s ,i don't want to talk",
+      "      ab4 ,b ,i rememb] my buddies & gd",
+      "      \"ts play+ c>ds & wi%+ we'd get",
+      "      home soon4",
+      ",oklahoma ,c;y1 ,oklahoma          a#bcc",
+      "  ,i 0 #aj :5 x 5d$4",
+      "    ,i don't rememb] too m* ab x4 ,i d",
+      "    rememb] my gr&\"m 2+ worri$ t h] two",
+      "    sons wd 2 draft$4",
+      "      ,i rememb] ! news on ,,tv alm e",
+      "      ev5+ _h \"s?+ ab ! w>4",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 19,
+        "type": "explicit",
+        "note": "Explicit —New Braille Page— marker in the source .txt immediately after braille line 19 (between .txt lines 9935 and 9938); the second respondent's answer begins a fresh numbering sequence at 1, though both halves happen to be printed on the same PDF page image (p. 337, printed 11-55)."
+      }
+    ],
+    "notes": "Title 'Vietnam War' (line 1) is right-blocked with a page-number-like token '#bcc' at the margin. A transcriber's note (lines 3-8) explains the stairstep change, quoting all four column-heading questions abbreviated ('Where were you during the Vietnam War?', 'How old were you during the war?', 'How did the war affect Americans?', 'What memories do you have?'). The first respondent's answer runs lines 10-19: first column-heading/answer blocked at cell 1 (rule e: 1-1 margin), second column's answer blocked two cells right (line 12, 3-3 margin), third blocked further right (line 13 onward, 5-5 margin) with a multi-line answer indented consistently (lines 13-15), fourth blocked further right still (line 16 onward, 7-7 margin) with its own multi-line answer (16-19) -- the characteristic 'stairstep' indentation increasing by two cells per column. An explicit New Braille Page marker separates the two respondents in the source; the second respondent's answer (new page, lines 1-7) repeats the same stairstep indentation pattern."
+  },
+  "uncertain": [
+    "The exact margins (1-1/3-3/5-5/7-7 cell positions) were inferred from the relative indentation levels visible in the extracted lines rather than independently counted cell-by-cell against a ruler on the dot image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines/rows/pageBreaks content already agreed between the two runs and match the source exactly, including the explicit '—New Braille Page—' marker after line 19; pageBreaks schema normalized to run B's object form."
+}

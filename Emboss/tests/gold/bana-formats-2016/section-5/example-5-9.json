@@ -1,0 +1,59 @@
+{
+  "id": "example-5-9",
+  "title": "Font Attribute Ignored for Bold Numbers",
+  "pdfPages": [
+    132
+  ],
+  "textLines": [
+    3996,
+    4006
+  ],
+  "illustrates": {
+    "rule": "5.3.9",
+    "quote": "Ignore font attributes for numbers/letters beginning exercise material, alphabetic divisions, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "What You Will Discover",
+        "features": "Bold, green heading, title case (not full capitals — the braille's own single capital sign before each word, not the doubled sign used for a genuinely all-caps heading elsewhere in this section, e.g. example-5-7's 'SPELLING WORDS').",
+        "items": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three numbered questions in plain black text; only the numerals (1., 2., 3.) are bold.",
+        "items": [
+          "**1.** Did your spider weave a web?",
+          "**2.** What time of day did your spider start to weave its web?",
+          "**3.** Did your spider build just one web?"
+        ]
+      }
+    ],
+    "notes": "Illustrates ignoring the bold attribute on the numerals that begin each exercise item, per rule 5.3.9; the green heading's own decorative bold/colour is separately ignored per rule 5.3.1.",
+    "surroundingText": "Follows rule 5.3.9 directly, on printed page 5-6, immediately after Example 5-8.",
+    "printFeatures": "Bold green heading over a numbered question list with bold numerals, plain question text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,:at ,y ,w ,4cov]",
+      "#a4 ,did yr spid] w1ve a web8",
+      "#b4 ,:at \"t ( \"d did yr spid] />t to",
+      "  w1ve xs web8",
+      "#c4 ,did yr spid] build j \"o web8"
+    ],
+    "pageBreaks": [],
+    "notes": "Six lines, margin 9 stripped. Line 1 is a full blank-cell filler line before the heading, kept as an empty string (same construct as Examples 5-4/5-7, both of which keep it). Line 2, the heading, sits at a fixed 4-cell indent — matching cell-5, not centered. Item 2 (lines 4-5) wraps to a 2-cell-indented runover. No bold indicator on the number signs ('#a4' etc.) or on the heading."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from .txt lines 4001-4006 (margin 9); matches run A's 6-line rendering (including the leading blank line and item 2's genuine runover indent) exactly. Run B's 5-line, flush-stripped rendering is rejected for the same reasons as example-5-7/5-8 (documented section-wide indentation-stripping bug). Heading level (2, cell-5) newly measured against the fixed-4-cell convention. The heading's own wording was NOT taken from either run's prose account (both offered plausible-sounding but unverified captions) — decoded directly, letter by letter, from the braille itself using UEB's single-letter whole-word contractions (',:at'=What, ',y'=You, ',w'=Will, '4cov]'=Discover, each preceded by an ordinary single capital sign, not the doubled sign used for a genuinely all-caps heading elsewhere in this section) to 'What You Will Discover'."
+}

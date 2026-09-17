@@ -1,0 +1,126 @@
+{
+  "id": "sample-13-12",
+  "title": "Sample 13-12: Lines of Poetry with Stress and Meter",
+  "pdfPages": [
+    380,
+    381
+  ],
+  "textLines": [
+    10963,
+    11011
+  ],
+  "illustrates": {
+    "rule": "Example 13-6 cross-reference",
+    "quote": "Transcribe a poem that contains stress, scansion, or meter marks twice. Place the two versions on a single braille page if possible. The first version should include the title and author or other attribution."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "William Blake",
+        "features": "Author name, top line."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The Piper (first two stanzas) (Trochaic)",
+        "features": "Italic work-title, parenthetical extent and meter note."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "First two stanzas of Blake's \"The Piper\" (from Songs of Innocence), each syllable's stress marked in print with a breve or acute accent above it; print excerpt is torn off after the fourth line, before further (unshown) stanza content.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Piping down the valleys wild,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Piping songs of pleasant glee,",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "On a cloud I saw a child,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And he laughing said to me:",
+                "indent": 1,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture spanning PDF pp.380-381 (title/rule text/first writing's transcriber's note on p.380, continuing to the first and second braille writings on p.381; the poem's braille content itself is entirely on p.381, matching the source's own page break falling between the two).",
+    "surroundingText": null,
+    "printFeatures": "Plain text author/title lines; breve/acute stress marks above individual syllables of each print line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "            ,william ,blake",
+      "              .1,! .1,pip]",
+      "     \"<f/ two /anzas\"> \"<,tro*aic\">",
+      "",
+      "      @.<,! text is f/ %[n )\\t /ress &",
+      "    met] symbols1 & !n rep1t$ ) !",
+      "    appropriate symbols & no 3trac;ns4",
+      "    ,/ress symbols >e 9s]t$ abv !",
+      "    syllable to : !y apply4 ,symbols",
+      "    us$3",
+      "",
+      ".=^/ ,/ress$ syllable",
+      ".=@+ ,un/ress$ syllable",
+      ".=_\\ ,v]tical l9e@.>",
+      "",
+      ",pip+ d[n ! valleys wild1",
+      "  ,pip+ s;gs ( pl1sant glee1",
+      ",on a cl\\d ,i saw a *1",
+      "  ,& he lau<+ sd to me3",
+      "",
+      "   ^/ @+     ^/   @+      ^/ @+",
+      "  ,piping _\\ down the _\\ valleys _\\",
+      "",
+      "      wild1",
+      "",
+      "     ^/ @+     ^/     @+    ^/  @+",
+      "    ,piping _\\ songs of _\\ pleasant _\\",
+      "",
+      "      glee1",
+      "",
+      "   ^/ @+   ^/     @+    ^/ @+",
+      "  ,on a _\\ cloud ,i _\\ saw a _\\ child1",
+      "",
+      "     ^/ @+     ^/    @+     ^/  @+",
+      "    ,and he _\\ laughing _\\ said to _\\",
+      "",
+      "      me3"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 19,
+        "type": "implicit",
+        "note": "The reference-line numbering restarts at 1 after braille line 19 (source ref '20', .txt line 10987, a full-blank stress-diagram spacer row -- genuine numbered content, not page filler) -- no explicit —New Braille Page— marker text in the source. The intervening page-bottom blank filler and the print page footer ('13-26' / 'Section 13', .txt lines 10988-10993) are excluded from braille.lines, matching this section's and section-16's own established convention for silent page breaks. The first (contracted) writing ends on printed page 13-26 (PDF 380); the second (uncontracted, stress/meter-marked) writing begins on 13-27 (PDF 381)."
+      }
+    ],
+    "notes": "Verbatim from .txt lines 10968-11010, after stripping a 5-char line-number field (2-digit max line number 19 on the first page / 17 on the continuation page, both +3=5) and converting U+2800. Lines 1-3 give author/title (centred); lines 5-10 and 12-14 are the transcriber's note plus symbols key (this page's line-number field spans the '13.14 .=_\\ ,v]tical l9e' key row that opens the CONTINUATION page in the source, i.e. the symbols key itself is split across the two physical braille pages, matching the mid-example page break called out in the task brief). Lines 16-19 are the FIRST writing (contracted, no stress marks). Lines 21-34 are the SECOND writing (uncontracted, meter-marked, each poetic line's own stress-symbol row directly above it, with its own blank line preceding and following it per rule 13.9.3.f).",
+    "variants": []
+  },
+  "uncertain": [
+    "Blank-line placement around the SECOND writing's four poetic lines (each shown here with a preceding blank row before its stress-symbol diagram) was read directly off the two source pages; the exact blank-line count immediately either side of the braille page break (between 'us$3' and the continuation) was not independently re-verified beyond what the .txt shows."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Every leading-space count independently re-derived character-by-character against the source (.txt lines 10968-10987 page 1, 10994-11010 page 2; both pages' reference-number field is 5 characters -- 2-digit max (17/19) + 3). Two lines needed a NEW value neither run had (index 0, 'William Blake' byline: 12 leading blank cells, centring a 16-character line in 40 cells -- both runs had 11; index 1, 'The Piper' title: 14 leading blank cells, centring a 12-character line in 40 cells -- run A had 10, run B had 13) and two more needed a value NEITHER run had (index 25: 5, both runs undercounted -- run A 3, run B 4; index 26: 4, run A 2, run B 3). Index 2 (caption line) matches run A's count (5); indices 33/34 match run B's counts (5/4, run A overcounted at 6/2). The page break was represented as a literal form-feed character prefixed to run B's resuming line (index 20) -- removed here since no gold file anywhere in this repository embeds a form-feed inside braille.lines; the established convention (section-9/11/16 precedent) is a separate braille.pageBreaks entry instead, added above. All other lines (29 of 37) were already identical between the two runs and independently confirmed correct against the source."
+}

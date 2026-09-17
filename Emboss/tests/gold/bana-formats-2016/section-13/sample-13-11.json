@@ -1,0 +1,71 @@
+{
+  "id": "sample-13-11",
+  "title": "Sample 13-11: Sentences with Foot and Caesura Symbols",
+  "pdfPages": [
+    379
+  ],
+  "textLines": [
+    10945,
+    10956
+  ],
+  "illustrates": {
+    "rule": "13.9.4 cross-reference",
+    "quote": "A line break may not occur within a foot, e.g., between the vertical lines."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Opening two lines of Poe's \"The Raven\", shown twice: first as ordinary verse, then repeated with vertical-pipe foot marks and a double-pipe caesura mark, syllables hyphenated for meter.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Ah, distinctly I remember it was in the bleak December;",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And each separate dying ember wrought its ghost upon the floor.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.379; foot marks are single vertical pipes, with a double pipe marking a caesura (long pause) after 'remember'.",
+    "surroundingText": null,
+    "printFeatures": "Plain verse lines; vertical-pipe (|) and double vertical-pipe (||) foot/caesura marks in the second writing, with hyphenated syllable breaks."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",ah1 4t9ctly ,i rememb] x 0 9 !       #,-",
+      "  bl1k ,decemb]2",
+      ",& ea* sep'rate dy+ emb] wr\"\\ xs <o/ ^u",
+      "  ! floor4",
+      "",
+      "  ;;;,ah1 dis _\\ -tinct-ly _\\ ,i re _\\",
+      "    -mem-ber _\\_\\ it was _\\ in the _\\",
+      "    bleak ,de _\\ -cem-ber2",
+      "  ,and each _\\ sep-'rate _\\ dy-ing _\\",
+      "    em-ber _\\_\\ wrought its _\\ ghost u",
+      "    _\\ -pon the _\\ floor4;'"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10945-10955, after stripping a 5-char line-number field (2-digit max line number 11, +3=5) and converting U+2800. Line 1 measures 41 cells (one more than the standard 40) because of a highlighted reference-style symbol at its far right end (see 'uncertain'; the same convention as the end of Sample 13-10's line 1, one cell wider here). Lines 6-11 are the second (uncontracted, grade-1-passage, cell-3-offset) writing; the double foot mark '_\\_\\' after 'remember'/'ember' represents the caesura, and per rule 13.9.4.d no line break occurs between its two component marks.",
+    "variants": []
+  },
+  "uncertain": [
+    "Line 1 is 41 cells wide (one cell over the standard 40-cell measure used everywhere else in this section), due to a highlighted symbol at its far right; not resolved whether this reflects a genuine 41st-cell convention for this reference mark or a source/extraction quirk. Reproduced verbatim as extracted rather than truncated or guessed."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

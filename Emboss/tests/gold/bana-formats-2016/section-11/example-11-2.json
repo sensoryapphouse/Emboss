@@ -1,0 +1,63 @@
+{
+  "id": "example-11-2",
+  "title": "Simple Table",
+  "pdfPages": [
+    285
+  ],
+  "textLines": [
+    8313,
+    8326
+  ],
+  "illustrates": {
+    "rule": "11.2.1-11.2.2 (no explicit \"See Example\" cross-reference; positioned immediately after Example 11-1 and before rule 11.2.3, illustrating ordinary table transcription and the General Format rules of 11.2.5 that follow later on the same/next page)",
+    "quote": "Tables are transcribed as they are in print if possible and alternate methods are used when that is not possible."
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Animal",
+        "Longest Life Span"
+      ]
+    ],
+    "rows": [
+      [
+        "mosquito",
+        "30 days"
+      ],
+      [
+        "gorilla",
+        "50 years"
+      ],
+      [
+        "elephant",
+        "65 years"
+      ]
+    ],
+    "notes": null,
+    "surroundingText": "11.2.4 (\"Related columns show a relationship between entries across a row of columns but no relationship between entries in one row with entries in another row.\") follows the example.",
+    "printFeatures": "Bordered box with a ruled line under the header row. Header row (\"Animal\", \"Longest Life Span\") is bold. Data rows alternate light-blue shading (mosquito, elephant rows shaded; gorilla row unshaded) — decorative, not meaningful."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      ",animal   ,l;ge/ ,life ,span",
+      "\"3333333 \"33333333333333333",
+      "mosquito #cj \"ds",
+      "gorilla   #ej ye>s",
+      "elephant #fe ye>s",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Blank braille-cell line before the top box line and after the bottom box line, matching Formats §11.2.5.d's blank-line-before/after-table rule even though this table is boxed. Column heading 'Longest Life Span' is abbreviated to 'life span' in braille with no transcriber's note (lowercased, per 11.7.1.c which permits uppercase-to-lowercase conversion without a note); guide dots (dot 5, rendered as \") pad each entry out to the separation-line width."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No content differences; header schema normalized to a list-of-lists. pdfPages/width agreed and were confirmed against the page-boundary map and box-rule length."
+}

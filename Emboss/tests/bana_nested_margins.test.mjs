@@ -122,7 +122,7 @@ test('BANA §2.10.6b: the generated contents page uses the nested pattern (1-5, 
   assert.equal(leading(tocPage[c2 + 1]), 4, `section runover in cell 5: ${JSON.stringify(tocPage)}`);
 });
 
-test('BANA §4.3.3 / §4.5.7 / §4.6.2: no blank line between adjacent headings; §4.4.1 centred heading keeps its blank before text', () => {
+test('BANA §4.5.7 / §4.6.2: no blank line between a cell-5 and cell-7 heading; §4.4.1/§4.5.1 a centred heading is still followed by a blank line before a cell-5 heading (F-26 — see heading_blank_lines.test.mjs for the full tier-pair table)', () => {
   const lines = formatDocument({ blocks: [
     { type: 'heading', level: 1, text: 'Chapter' },
     { type: 'heading', level: 2, text: 'Section' },
@@ -132,8 +132,13 @@ test('BANA §4.3.3 / §4.5.7 / §4.6.2: no blank line between adjacent headings;
     { type: 'para', text: 'More body text.' },
   ] }, opts('bana', { suppressHeader: true })).split('\f')[0].split(/\r?\n/);
   const at = (t) => lines.findIndex((l) => l.trim() === t);
-  assert.equal(at('SECTION'), at('CHAPTER') + 1, `centred → cell-5 with no blank: ${JSON.stringify(lines)}`);
-  assert.equal(at('TOPIC'), at('SECTION') + 1, `cell-5 → cell-7 with no blank: ${JSON.stringify(lines)}`);
+  // F-26: `joinsWithoutBlank` used to fire for ANY heading-to-heading pair, wrongly
+  // dropping the blank line BANA 4.4.1 (default) + 4.5.1 (unconditional) require between
+  // a centred heading and the cell-5 heading that follows it — not one of 4.4.1's three
+  // named exceptions. Fixed: the blank line is kept.
+  assert.equal(lines[at('CHAPTER') + 1], '', `centred → cell-5 keeps its blank line (§4.4.1/§4.5.1): ${JSON.stringify(lines)}`);
+  assert.equal(at('SECTION'), at('CHAPTER') + 2, `centred → cell-5 keeps its blank line (§4.4.1/§4.5.1): ${JSON.stringify(lines)}`);
+  assert.equal(at('TOPIC'), at('SECTION') + 1, `cell-5 → cell-7 with no blank (§4.5.7/§4.6.2, unaffected by F-26): ${JSON.stringify(lines)}`);
   assert.equal(lines[at('TOPIC') + 1].trim(), 'BODY TEXT.', 'cell-7 heading followed directly by its text');
   assert.equal(lines[at('PART TWO') - 1], '', 'centred heading preceded by a blank line');
   assert.equal(lines[at('PART TWO') + 1], '', 'centred heading followed by a blank line before ordinary text');

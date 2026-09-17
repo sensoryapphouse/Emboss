@@ -1,0 +1,89 @@
+{
+  "id": "sample-16-12",
+  "title": "Marginal Labels",
+  "pdfPages": [
+    460,
+    461
+  ],
+  "textLines": [
+    13253,
+    13293
+  ],
+  "illustrates": {
+    "rule": "16.11.1",
+    "quote": "Labels printed in the margin can be intrusive in braille and great care needs to be taken to not interrupt the flow of text any more than necessary. List the labels in a key before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "limitation",
+        "text": "print gives no field for this braille's own leading grouping-indicator transcriber's note (rule 16.11.1g's own boilerplate explanatory wording, listing the '.=<'/'.=>' symbols and the key-to-labels codes) -- the print page shows only the labelled essay/letter itself, not this TN's own text, which the transcriber supplies from the rule's own model wording, not from anything printed on this page; not representable (F-N14, §16.11 wholly unimplemented)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Although some people might prefer watching TV or napping, for me swimming is the best way to relax. First of all, swimming quiets my mind. After a few laps, all the day's worries just drain out of me. In addition, swimming energizes me. The deep breathing sends more oxygen to my brain and muscles. Afterwards, I'm wide awake and refreshed. If I have homework to do, I can concentrate better on it. Furthermore, I'm never sore after swimming, as I sometimes am after running and other kinds of exercise. Some people might say that swimming laps is boring because you're not really going anywhere, but for me it's a path to feeling good.",
+        "features": "A short opinion essay printed on a torn-paper-style background, annotated at the left with three bracketed callouts labeling ranges of the paragraph: 'Indent / Opinion statement', 'Supporting sentences', and 'Concluding sentence'; a boxed 'Copyrighted Image' placeholder sits to the right of the opening lines.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Cross-referenced from rule 16.11.1g, this is the sample's own specific worked application of the keying technique: the labels used here (in/os/ss/cs for Indent-Opinion-statement / Opinion statement / Supporting sentences / Concluding sentence) are particular to this sample, distinct from the generic ti/au/yb/dp/pu key shown in the rule text's own illustrative 'Sample:' passage. This sample's own braille excerpt begins mid-sequence at line 8 (a genuine excerpt, not from line 1), matching the page image.",
+    "printFeatures": "A print essay on a decorative torn-paper background with three labeled bracket-callouts in the left margin and a boxed copyrighted-image placeholder at the upper right."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! foll[+ p>agraph is m>k$ )",
+      "    labels 9 ! m>g94 ,9 brl1 ea* label",
+      "    is key$4 ,! label is 9s]t$ 2f !",
+      "    2g9n+ ( ! text to : x applies4",
+      "    ,label$ s5t;es >e 5clos$ 9 brl gr\\p+",
+      "    9dicators4",
+      "      ,symbols us$ 2l3",
+      "",
+      ".=< ,op5+ brl gr\\p+ 9dicator",
+      ".=> ,clos+ brl gr\\p+ 9dicator",
+      "",
+      "      ,key to labels3",
+      "",
+      "in ,9d5t",
+      "os ,op9ion /ate;t",
+      "ss ,support+ s5t;es",
+      "cs ,3clud+ s5t;e@.>",
+      "                                     #,-",
+      "777777777777777777777777777777777    a#,-",
+      "  in os ;<,al?\\< \"s p mi<t pref] wat*+",
+      ",,tv or napp+1 = me swimm+ is ! be/ way",
+      "to relax4;> ss ;<,fir/ ( all1 swimm+",
+      "quiets my m9d4 ,af a few laps1 all !",
+      "\"d's worries j dra9 \\ ( me4 ,9 addi;n1",
+      "swimm+ 5]gizes me4 ,! deep br1?+ s5ds m",
+      "oxyg5 to my bra9 & muscles4 ,afws1 ,i'm",
+      "wide awake & refre%$4 ,if ,i h home\"w to",
+      "d1 ,i c 3c5trate bett] on x4 ,fur!rmore1",
+      ",i'm n\"e sore af swimm+1 z ,i \"s\"ts am",
+      "af runn+ & o!r k9ds ( ex]cise4;>",
+      "cs ;<,\"s p mi<t say t swimm+ laps is",
+      "bor+ 2c y're n r1lly go+ any\":1 b = me",
+      "x's a pa? to feel+ good4;>",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 18,
+        "type": "implicit",
+        "note": "No explicit —New Braille Page— marker text in the source; detected because the line numbering restarts at 1 (with a fresh top box-rule line) after line 25 of the first braille page. The two boxes together make up this one sample: the first states the key definitions used (in/os/ss/cs), the second applies them to the essay paragraph."
+      }
+    ],
+    "notes": "Genuine excerpt starting at braille line 8 (not 1) on the first braille page, matching the page image -- no earlier lines invented. Line-number field width 5 (max line number 25, two digits, +3) used consistently across both braille pages. The essay paragraph on the second braille page is marked up with the keys 'in', 'os', 'ss', 'cs' inserted before each labeled span, each span enclosed in braille grouping indicators (;< ... ;>), per rule 16.11.1g."
+  },
+  "uncertain": [
+    "Lines 8-25 of the first braille page (the key/definitions box) sit under the same 'Sample 16-12' heading as the essay-paragraph box that follows; treated here as two halves of one continuous worked sample (per the shared heading and complementary content) rather than as two unrelated illustrations, though the source shows them as two visually distinct boxed screenshots on two separate printed pages (16-32, 16-33)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.11.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13275 (field width 5, digits(25)+3), stripped, is exactly 40 characters, right-justified to a page-change token '#,-' -- confirming Run B's extra leading spaces on this line over Run A's undercount. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

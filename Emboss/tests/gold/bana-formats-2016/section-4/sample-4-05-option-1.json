@@ -1,0 +1,60 @@
+{
+  "id": "sample-4-05-option-1",
+  "title": "Paragraph Headings Relocated (Option 1: both headings relocated, hierarchically -- cell-5 then cell-7)",
+  "pdfPages": [
+    124
+  ],
+  "textLines": [
+    3718,
+    3723
+  ],
+  "illustrates": {
+    "rule": "4.8.2",
+    "quote": "Changing Paragraph Headings to Cell-5 or Cell-7 Headings. A paragraph heading may provide better navigation for the braille reader when it is separated from the paragraph and changed to a cell-5 or cell-7 heading. (See Sample 4-5: Paragraph Headings Relocated on page 4-20 and Sample 4-6: Paragraph Heading Changed to Cell-5 Heading on page 4-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Connection to History",
+        "features": "Small bold banner label with a rolled-scroll icon, above the run-in heading."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "The tree of life",
+        "features": "Bold red run-in heading in print, immediately followed on the same print line by its paragraph text; relocated onto its own cell-7 line in THIS option, per rule 4.8.2/4.5.7 (hierarchical cell-5\u2192cell-7 pairing)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In his book *On the Origin of Species*, Charles Darwin used the analogy of a tree to suggest that all of the species",
+        "features": "Plain body text, run in immediately after the heading in print; cut off at the edge of the image."
+      }
+    ],
+    "notes": "Option 1 of 3: BOTH the banner label and the run-in heading are relocated out of the paragraph onto their own lines, and are given DIFFERENT levels -- cell-5 then cell-7 directly beneath it, per rule 4.5.7 -- rather than being left inline. (Earlier drafts of this reconciliation mischaracterized this option as \"kept as a run-in\"; that description belongs to Option 3, not Option 1 -- see resolution.)",
+    "surroundingText": null,
+    "printFeatures": "Small banner label above a paragraph whose first words are a bold run-in heading in print (relocated in this option's braille)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,3nec;n to ,hi/ory",
+      "      ,! tree ( life",
+      ",9 8 book .7,on ! ,orig9 ( ,species.'1",
+      ",*>les ,d>w9 us$ ! analogy ( a tree to",
+      "su7e/ t all ( ! species"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the cell-5 heading 'Connection to History' (4-cell indent); line 2 the cell-7 heading 'The tree of life' (6-cell indent) directly beneath, per 4.5.7; line 3 the paragraph begins at column 1."
+  },
+  "uncertain": [
+    "The Darwin paragraph directly follows the relocated heading(s) with no blank line; Emboss's formatPara still applies its ordinary 2-cell first-line indent rather than starting flush at column 1 as the gold braille does -- see standards-findings.md F-39. Expect a documented mismatch limited to this indent, not a content bug."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree between runs (independently re-derived a third time directly from .txt lines 3719-3723, confirming: line 2 has 6 leading blank cells). `textLines` resolved to [3718,3723] (run B's convention, matching how sample-4-05-option-2/3 already scope to their own \"Option N\" label -- both runs already agreed on that convention for options 2 and 3; option 1 should match it, not run A's inconsistent [3713,3723] which reaches back to the shared sample title line). CRITICAL correction to run A: its OWN print.blocks/notes for this file claim the heading is \"kept as an ordinary run-in (not relocated)\" -- this directly contradicts run A's own (correct) braille.lines array, which shows \"The tree of life\" on its own 6-cell-indented line, i.e. relocated to cell-7. That description actually matches Option 3 (see that file), not Option 1; run A appears to have mixed up which option does what while still transcribing each option's raw braille correctly. `level` for \"The tree of life\" resolved to 3 (cell-7, matching run B) not run A's null."
+}

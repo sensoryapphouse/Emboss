@@ -1,0 +1,112 @@
+{
+  "id": "sample-5-03",
+  "title": "Use of Color as Emphasis",
+  "pdfPages": [
+    142,
+    143
+  ],
+  "textLines": [
+    4310,
+    4341
+  ],
+  "illustrates": {
+    "rule": "5.5.3",
+    "quote": "The transcriber’s defined indicator(s) and termination indicator(s) are listed on the Special Symbols page, or in a transcriber’s note before the text. Sample: Symbols used in this volume: .=@#7 Double underline passage indicator .=@#' Double underline terminator .=^#1 Yellow highlighted word indicator"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Braille-only transcriber's note (opened/closed by '@.<'...'@.>') defining six colour passage-indicator/terminator pairs (blue, green, orange, pink, purple, violet); no counterpart in this Sample's own print excerpt. Also carries an unexplained trailing '#,-' marker (see uncertain).",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Match the colors for facts, reasons, examples, and explanations to see how details are arranged in the paragraph below.**",
+        "features": "A yellow 'tip' sticky-note icon sits to the left of this bold instructional sentence.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "{{td1: Yesterday our class had a special visitor.}} {{td2: His name is Charles Hoover. He was born in 1925, and he is 85 years old.}} {{td3: He came to explain what life was like here in Montgomery, Alabama, more than 80 years ago.}} {{td4: He talked about old-time cars, Negro baseball leagues, and games he played as a boy.}} {{td5: He could tell us a lot about the history of our state.}} {{td6: That's what we have been studying this month. Mr. Hoover was part of the Selma-to-Montgomery civil rights march in 1965.}}",
+        "features": "Six consecutive color-coded sentence-groups on a tinted background: td1=blue, td2=green, td3=orange, td4=purple, td5=pink/magenta, td6=dark violet (colors numbered in first-use order within this passage, which is NOT the Special-Symbols legend's own listed order — the legend lists pink before purple, but the passage uses purple before pink appears at all, see braille.notes). Only td1 (blue), td2 (green), td3 (orange), and the opening of td4 (purple, through 'He talked about') are confirmed against the braille, which truncates there; td4's remainder and td5/td6 are a best-effort read of the print image only, with no braille to check them against.",
+        "items": null
+      }
+    ],
+    "notes": "The caption 'Sample 5-3: Use of Color as Emphasis' and this print illustration (tip box + six-color paragraph) are on printed page 5-16 (PDF page 142); the 25 numbered braille lines transcribing it are on the following printed page, 5-17 (PDF page 143) — confirmed directly from the page images and from a form-feed page break in the source .txt between the caption and line 1, matching the task brief's known fact.",
+    "surroundingText": "Cross-referenced from rule 5.5.3's own Example 5-14 discussion ('See Sample 5-3: Use of Color as Emphasis on page 5-16').",
+    "printFeatures": "Tinted paragraph box with a 'tip' icon; six distinct print colors used across the paragraph's six sentence-groups."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "       @.<,symbols us$ 2l3            #,-",
+      "",
+      ".=@#7 ,blue passage 9dicator",
+      ".=@#' ,blue t]m9ator",
+      ".=^#7 ,gre5 passage 9dicator",
+      ".=^#' ,gre5 t]m9ator",
+      ".=_#7 ,orange passage 9dicator",
+      ".=_#' ,orange t]m9ator",
+      ".=\"#7 ,p9k passage 9dicator",
+      ".=\"#' ,p9k t]m9ator",
+      ".=.#7 ,purple passage 9dicator",
+      ".=.#' ,purple t]m9ator",
+      ".=@7 ,violet passage 9dicator",
+      ".=@' ,violet t]m9ator@.>",
+      "",
+      "    tip",
+      "    ,mat* ! colors = facts1 r1sons1",
+      "    examples1 & explana;ns to see h[",
+      "    details >e >rang$ 9 ! p>agraph 2l4",
+      "  @#7,ye/]\"d \\r class _h a special",
+      "visitor4@#' ^#7,8 \"n is ,*>les ,hoov]4",
+      ",he 0 born 9 #aibe1 & he is #he ye>s",
+      "old4^#' _#7,he came to expla9 :at life 0",
+      "l \"h 9 ,montgom]y1 ,alabama1 m ?an #hj",
+      "ye>s ago4_#' .#7,he talk$ ab 444     #,-"
+    ],
+    "lineNumbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+    ],
+    "pageBreaks": [],
+    "notes": "25 lines, field width 5 (2-digit max line number 25, +3). Lines 1-14 are a transcriber's-note symbols key ('@.<' ... '@.>') defining six colour passage-indicator/terminator pairs, in the LEGEND'S OWN listed order: blue ('@#7'/'@#''), green ('^#7'/'^#''), orange ('_#7'/'_#''), pink ('\"#7'/'\"#''), purple ('.#7'/'.#''), violet ('@7'/'@''). Line 1 also carries a 3-cell sequence '#,-' at the far right margin, repeated identically on line 25; its function is not established by any rule text in this section (see uncertain). Lines 16-19 the 'tip' callout text (4-cell indent). Lines 20-25 the coloured paragraph, in ACTUAL-USE order (differing from the legend's listed order): '@#7' opens 'Yesterday' and '@#'' closes after 'visitor.' (blue, 1st used); '^#7' opens 'His' and '^#'' closes after 'old.' (green, 2nd used); '_#7' opens 'He came' and '_#'' closes after 'ago.' (orange, 3rd used); '.#7' opens 'He talked' with no terminator before the excerpt truncates ('444' = ellipsis) — this is PURPLE (the legend's 5th-listed symbol), used as the 4th colour actually encountered; 'pink' (\"#7/\"#', the legend's 4th-listed symbol) never appears anywhere in the 25 given lines."
+  },
+  "uncertain": [
+    "The braille excerpt truncates ('444') partway through the 4th colour actually used (purple, '.#7'), after only 'He talked about'. The print's fuller paragraph (through '...civil rights march in 1965.') is not transcribed in this worked sample, so the exact wording and colour-to-sentence mapping for td4's remainder and for td5/td6 cannot be confirmed from the braille and rest on a best-effort visual read of the print image only — directly comparable to the precedented sample-4-01 truncation in the section-4 gold set, not an error introduced here.",
+    "The 3-cell sequence '#,-' appears at the same right-hand position on both line 1 and line 25 (identical each time). It does not decode as an ordinary braille-ASCII number or capitalized word, and no rule text quoted in this section explains it. A plausible but UNCONFIRMED reading is some form of print/braille page-boundary marker (this braille page is the second half of a two-page-spanning Sample, and a form-feed page break in the source .txt falls immediately before line 1); left uninterpreted and transcribed verbatim rather than guessed at."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille byte-for-byte (down to the truncation and the unexplained '#,-' marker) and on the underlying color facts once reconciled: run A's prose left the legend-vs-usage-order mismatch and the pink/purple substitution implicit and slightly vague; run B's account is more precise and directly matches this section's own independent re-derivation of the braille from .txt lines 4317-4341 (field width 5), so B's phrasing is used as the base for print.blocks and braille.notes here. `illustrates.rule`: A cited 5.5.2 (the 'if all... indicators are used, other typeform indicators may be used for color' rule, thematically closest to needing six colour symbols), B cited 5.5.3 (whose own text is the literal printed source of the cross-reference '(See Sample 5-3...)' immediately following Example 5-14). Resolved in favor of 5.5.3, matching this section's convention (also used for Sample 5-1/5-2) of citing the rule whose own text contains the explicit cross-reference to the Sample, while noting 5.5.2's relevance in `print.notes`. The '#,-' marker and the truncation are both left genuinely unresolved (not a disagreement between the runs — both flagged them identically as open questions in the primary source itself); see differences.md's unresolved list."
+}

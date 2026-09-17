@@ -1,0 +1,65 @@
+{
+  "id": "sample-9-03",
+  "title": "Displayed Word List in Columns",
+  "pdfPages": [240],
+  "textLines": [6937, 6954],
+  "illustrates": {
+    "rule": "9.2.5.a",
+    "quote": "Change word lists that do not fit on a single braille line to columns, listing the words from left to right."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Write a word that means the same as the underlined word in the sentence.",
+        "features": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Six words displayed in print as two rows of three; too long to fit one braille line, so arranged in columns left to right per 9.2.5a, with two blank cells between columns per 9.2.5b and no guide dots between the unrelated columns per 9.2.5c.",
+        "items": ["mailbox", "nearby", "into", "sometimes", "sunrise", "anything"]
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three numbered sentences, each with one target word underlined in print; item runovers indented 2 cells beyond the item's own start.",
+        "items": [
+          "Carmen and I will wake up to go fishing before dawn.",
+          "The bus driver asked, “Is there a gas station around?”",
+          "The campers went inside the tent."
+        ]
+      }
+    ],
+    "notes": "Direct worked example of 9.2.5a-c: the six-word list is too long for one braille line and is set in two columns.",
+    "surroundingText": null,
+    "printFeatures": "Plain (unboxed) worksheet text; the six list words are printed in two rows of three; one word is underlined in each of the three numbered sentences."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,write a ^w t m1ns ! same z ! \"ul9$",
+      "    ^w 9 ! s5t;e4",
+      "",
+      "mailbox ne>by     9to",
+      "\"s\"ts     sunrise any?+",
+      "",
+      "#a4 ,c>m5 & ,i w wake up to g fi%+ 2f",
+      "  _1dawn4",
+      "#b4 ,! bus driv] ask$1 8,is \"! a gas",
+      "  /a;n _1>.d80",
+      "#c4 ,! camp]s w5t _19side ! t5t4"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 6-16 (a genuine excerpt). Field width 5, stripped. Lines 1-2 (source 6-7): lead-in paragraph, cell 5. Line 3 (8): blank. Lines 4-5 (9-10): the word list in two columns -- the internal multiple-space gaps between 'nearby'/'into' and within line 10 are the source's own column alignment, preserved verbatim, not collapsed. Line 6 (11): blank. Lines 7-11 (12-16): the three numbered example sentences, each item at cell 1 with a 2-cell-indented runover ('dawn'/'around' underlined in print, kept as plain text here -- no braille underline indicator appears, since the braille excerpt truncates each sentence immediately at the underlined word with an underline-word indicator '_1', not italics)."
+  },
+  "uncertain": [
+    "The lead-in paragraph is transcribed at cell 5 (4-cell indent) rather than cell 1 or the cell-3 adjusted margin seen elsewhere in this section; no rule text explains this specific indent, so it is recorded as measured without a specific rule citation.",
+    "The exact column alignment of the multi-space gaps in the word-list lines is preserved verbatim from the source, but the precise number of blank cells intended between each column pair was not independently re-derived from a print column ruler."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6942-6952 after stripping the 5-character line-number field (the '(Return to Text)' line 6953 excluded). `illustrates.rule` narrowed to 9.2.5.a specifically (B quoted the whole of 9.2.5, a-d) since this sample's column layout is specifically clause a's own case. Second list's items: A included the underlined target word inline in parentheses (e.g. '(dawn underlined)'); B gave the plain sentence only. Resolved to B's plain text (matching what the braille itself actually contains -- an underline-word indicator on the target word, not a parenthetical annotation) with the underlining fact moved to `features` instead of into `text`."
+}

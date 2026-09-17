@@ -1,0 +1,278 @@
+{
+  "id": "sample-4-01",
+  "title": "Page with Multiple Heading Levels",
+  "pdfPages": [
+    118,
+    119,
+    120
+  ],
+  "textLines": [
+    3563,
+    3624
+  ],
+  "illustrates": {
+    "rule": "4.1.1",
+    "quote": "Print books use various methods to distinguish headings: different fonts and font sizes, color, placement on the page, etc. Just as print headings provide a hierarchy structure of levels, an effort should be made to achieve the same type of structure in braille. This is done after a careful examination of headings in the table of contents and the body of text. It is important to be consistent in the treatment of similar print headings throughout the entire transcription. (See Sample 4-1: Page with Multiple Heading Levels on page 4-14.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Section 37.2",
+        "features": "Bold white-on-red rounded banner label, top-left of the page."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Immune System",
+        "features": "Very large bold red/maroon serif title, spanning the width of the main (right) column."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Reading Preview",
+        "features": "Bold white-on-red banner heading, sidebar box title, left column."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Objectives",
+        "features": "Bold red sidebar sub-heading, inside the Reading Preview box."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Compare and contrast nonspecific and specific immunity.",
+        "features": "Bulleted sidebar list item (1 of 3).",
+        "marker": "•"
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Summarize the structure and function of the lymphatic system.",
+        "features": "Bulleted sidebar list item (2 of 3); this and the next item are present in print but the braille excerpt transcribes only item 1, replacing items 2-3 with a \"444\" continuation marker -- see uncertain.",
+        "marker": "•"
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "Distinguish between passive and active immunity.",
+        "features": "Bulleted sidebar list item (3 of 3); see uncertain.",
+        "marker": "•"
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Review Vocabulary",
+        "features": "Bold red sidebar sub-heading."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "white blood cells: large, nucleated blood cells that play a major role in protecting the body from foreign substances and microorganisms",
+        "features": "Glossary-style definition entry, bold term followed by definition."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "New Vocabulary",
+        "features": "Bold red sidebar sub-heading."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "complement protein",
+        "features": "Sidebar term list (1 of 9); the braille excerpt transcribes only the first term, replacing the rest with a \"444\" continuation marker -- see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "interferon",
+        "features": "Sidebar term list (2 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "lymphocyte",
+        "features": "Sidebar term list (3 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "antibody",
+        "features": "Sidebar term list (4 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "B cell",
+        "features": "Sidebar term list (5 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "helper T cell",
+        "features": "Sidebar term list (6 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "cytotoxic T cell",
+        "features": "Sidebar term list (7 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "memory cell",
+        "features": "Sidebar term list (8 of 9); see uncertain."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "immunization",
+        "features": "Sidebar term list (9 of 9); see uncertain."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "MAIN Idea",
+        "features": "Bold callout label inside a colored 'MAIN Idea' banner box, main column."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The immune system has two main components: nonspecific immunity and specific immunity.",
+        "features": "Bold summary sentence inside the Main Idea callout box."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "Real-World Reading Link",
+        "features": "Bold blue/teal callout label, main column, opening the second braille page; NOT centered despite its section-banner appearance -- braille gives it a 6-cell (cell-7) indent."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "We live with a number of potential pathogens such as bacteria and viruses that can cause disease.",
+        "features": "Plain callout body text, continues to \"444\" (truncated in this excerpt)."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Nonspecific Immunity",
+        "features": "Large bold black section subheading, main column; centered in braille despite being left-aligned in print."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "At the time of birth, the body has a number of defenses in the immune system that fight off pathogens.",
+        "features": "Plain body text, first of two paragraphs; truncated to '444' in this excerpt."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The nonspecific immunity provided by the body helps to prevent disease.",
+        "features": "Plain body text, second paragraph; truncated to '444' in this excerpt."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Barriers",
+        "features": "Bold black run-in heading, elevated to its own cell-5 line because its effect covers the whole passage below it (rule 4.8.3.b)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Like the strong walls of a fort, barriers are used by the body to protect against pathogens.",
+        "features": "Plain body text; truncated to '444' in this excerpt."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Skin barrier** One of the simplest ways that the body avoids infectious disease is by preventing foreign organisms from entering the body.",
+        "features": "Bold run-in (paragraph) sub-heading kept inline within its own paragraph (not elevated, since it covers only this one paragraph); truncated to '444'."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Chemical barriers** Saliva, tears, and nasal secretions contain the enzyme lysozyme.",
+        "features": "Bold run-in (paragraph) sub-heading kept inline, same treatment as 'Skin barrier'; truncated to '444'."
+      }
+    ],
+    "notes": "This is the print page Formats uses to show a real page with many simultaneous heading levels together: a section-number banner, a page title, a sidebar box with its own title and cell-5 sub-headings, a 'Main Idea' tab, and a cell-7 callout, followed on the second braille page by a centered section heading and two levels of run-in headings -- exercising centered/cell-5/cell-7 and paragraph-heading treatment side by side, illustrating rule 4.1.1's call for a consistent braille heading hierarchy. The braille excerpt does not reproduce every sidebar bullet or vocabulary-list entry in full -- only enough of each to show its heading treatment, using the '444' continuation marker where print's own list is longer than the excerpt transcribes.",
+    "surroundingText": "Cross-referenced from rule 4.1.1 (examine the table of contents and body to establish a consistent heading hierarchy); also relevant to rule 4.2.1 (extending centered headings to more than one level when there are more than three distinct print heading levels), though 4.2.1's own explicit cross-reference is to Example 4-1, not this sample.",
+    "printFeatures": "A two-column textbook page: a narrow tan sidebar (Reading Preview box) at left, a wide main column at right; heavy use of color-coded banners and labels to distinguish print heading levels, continuing onto a second print page for \"Real-World Reading Link\" and \"Nonspecific Immunity\" with their own run-in sub-headings."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,sec;n #cg4b         #ajhd",
+      "           ,! ,immune ,sy/em",
+      "",
+      "             ,r1d+ ,preview",
+      "",
+      "    ,objectives",
+      "_4 ^7,comp>e & 3tra/^' nonspecific &",
+      "  specific immun;y4",
+      "444",
+      "",
+      "    ,review ,vocabul>y",
+      "^7:ite blood cells3^' l>ge1 nucl1t$",
+      "  blood cells t play a major role 9",
+      "  protect+ ! body f =eign sub/.es &",
+      "  microorganisms",
+      "",
+      "    ,new ,vocabul>y",
+      "comple;t prote9",
+      "9t]f]on",
+      "444",
+      "",
+      "    ,,ma9 ,idea",
+      ",! immune sy/em has two ma9 compon5ts3",
+      "nonspecific immun;y & specific immun;y4",
+      "                                     #,-",
+      "      ,r1l-,_w ,r1d+ ,l9k          a#ajhd",
+      ",we live ) a numb] ( pot5tial pa?og5s s*",
+      "z bact]ia & viruses t c cause 41se4 444",
+      "",
+      "         ,nonspecific ,immun;y",
+      "",
+      ",at ! \"t ( bir?1 ! body has a numb] (",
+      "def5ses 9 ! immune sy/em t fi<t (f",
+      "pa?og5s4 444",
+      "  ,! nonspecific immun;y provid$ by !",
+      "body helps to prev5t 41se4 444",
+      "",
+      "    ,b>ri]s",
+      ",l ! /r;g walls ( a =t1 b>ri]s >e us$ by",
+      "! body to protect ag/ pa?og5s4 444",
+      "",
+      "^1,sk9 ^1b>ri] ,\"o ( ! simple/ ways t !",
+      "body avoids 9fecti\\s 41se is by prev5t+",
+      "=eign organisms f 5t]+ ! body4 444",
+      "",
+      "^1,*emical ^1b>ri]s ,saliva1 te>s1 &",
+      "nasal secre;ns 3ta9 ! 5zyme lysozyme4",
+      "444"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 25,
+        "type": "implicit",
+        "note": "The source's own line numbering silently restarts at 1 after line 25 (no explicit '—New Braille Page—' marker text): the boundary between the two braille pages transcribed for this one print page (printed page 4-15/PDF p.119 and printed page 4-16/PDF p.120). A coded running-head token at the end of line 1 of each half ('#ajhd' = 1084 on the first half, 'a#ajhd' = 1084a on the second) confirms both carry the same original textbook page number 1084 (matching the print image's own '1084' page footer)."
+      }
+    ],
+    "notes": "Two braille pages. Page 1 (lines 1-25): line 1 the centered heading 'Section 37.2' plus a running-head page-number code at the right margin; line 2 centered 'The Immune System'; line 4 centered 'Reading Preview'; line 6 cell-5 'Objectives' + line 7-9 its abbreviated list item, ending '444'; line 11 cell-5 'Review Vocabulary' + lines 12-15 its definition entry; line 17 cell-5 'New Vocabulary' + lines 18-20 its first entry, ending '444'; line 22 cell-5 'MAIN Idea' + lines 23-24 its lead sentence, with a trailing reference-mark code at the end of line 25. Page 2 (lines 26-48, source renumbers 1-23): line 26 the cell-7 heading 'Real-World Reading Link' (6 leading blank cells, NOT centered) plus its own running-head code; lines 27-28 its paragraph; line 30 the centered heading 'Nonspecific Immunity'; lines 32-36 its two paragraphs; line 38 the cell-5 heading 'Barriers'; lines 39-40 its paragraph; lines 42-44 the paragraph opening with the inline run-in heading 'Skin barrier' (bold typeform, not relocated); lines 46-48 likewise for 'Chemical barriers'."
+  },
+  "uncertain": [
+    "Whether 'Section 37.2' and 'Reading Preview' are properly rule-4.2 'centered headings', or are running-head/box-title material that merely happens to sit at a centered indent, was judged from the braille's own indent arithmetic (indent matches (40-length)/2 for both, exactly) rather than from an explicit statement in the rule text that a section-number banner or box title counts as a 'heading' for hierarchy purposes.",
+    "Print's full 'Objectives' (3 bullets), 'New Vocabulary' (9 terms) and 'Review Vocabulary' lists are given here in full (matching the print image, PDF p.118) even though the actual braille excerpt transcribes only the first item of each and replaces the rest with a '444' continuation marker; this print.blocks/braille divergence has no representation in this section's print-block schema (there is no 'more items omitted' block kind), so gold-run.mjs is expected to report a documented line-count mismatch here, not a bug.",
+    "Several right-margin coded tokens (e.g. line 1's '#ajhd', line 25's trailing reference mark, page-2 line 1's 'a#ajhd') are read as running-head/page-number/reference codes by their numeric form and position, not verified against a full braille transcriber's-code reference."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree byte-for-byte between runs (independently re-checked). print.blocks structure was substantially rebuilt from the PDF page image (p.118) directly, since the two runs disagreed extensively on block order/kind/level (84 raw diffs): run A omitted \"Reading Preview\" as a separate block (folding it into descriptive text) even though the braille gives it its own centered line; run B, conversely, is missing several blocks A has and mis-orders/mis-levels others. The image (references/bana/braille-formats-2016.pdf, p.118) was read directly to rebuild the full, correctly-ordered block list, and every heading's level was independently verified against the (agreed) braille.lines' own leading-blank-cell counts (see differences.md for the line-by-line indent table). `illustrates.rule` resolved to \"4.1.1\" only (run A), not run B's \"4.1.1 / 4.2.1\": rule 4.1.1's own text is what explicitly cross-references \"Sample 4-1\" (line ~3143 of the .txt); rule 4.2.1 cross-references Example 4-1 instead, and the §11 precedent's illustrates schema names one specific rule."
+}

@@ -1,0 +1,55 @@
+{
+  "id": "example-5-6",
+  "title": "Italics Ignored (Print Only)",
+  "pdfPages": [
+    131
+  ],
+  "textLines": [
+    3957,
+    3957
+  ],
+  "illustrates": {
+    "rule": "5.3.6",
+    "quote": "Ignore font attributes when they are used as a simple visual enhancement for print layout, e.g., a heavier font used for instructions, italics used for a dedication, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": null,
+        "text": "CONCLUSION",
+        "features": "Bold, full-capitals banner heading on a dark bar, followed by a row of small decorative ornaments used as a section divider.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "*The foundation stones for the building of Western civilization were laid by the Mesopotamians and the Egyptians. They developed cities and struggled with the problems of organized states. They developed writing to keep records and created literature. They constructed monumental architecture to please their gods, symbolize their power, and preserve their culture for all time. They developed new political, military, social, and religious structures to deal with the basic problems of human existence and organization. These first literate civilizations left detailed records that allow us to view how they grappled with three of the fundamental problems that humans have pondered: the nature of human relationships, the nature of the universe, and the role of divine forces in that cosmos. Although later peoples in Western civilization would provide different answers from those of the Mesopotamians and Egyptians, it was they who first posed the questions, gave answers, and wrote them down. Human memory begins with these two civilizations.*",
+        "features": "Entire two-column paragraph italicized throughout, as a simple visual/layout enhancement, per rule 5.3.6.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "*By the middle of the second millennium B.C., much of the creative impulse of the Mesopotamian and Egyptian civilizations was beginning to wane. The invasion of the Sea Peoples around 1200 B.C. ushered in a whole new pattern of petty states and new kingdoms that would lead to the largest empires the ancient Near East had seen.*",
+        "features": "Entire paragraph italicized, continuing the two-column layout; 'B.C.' set in small caps both times.",
+        "items": null
+      }
+    ],
+    "notes": "Explicitly '(Print Only)' — no braille rendering is given; illustrates italics used purely as decorative visual enhancement for an entire textbook passage, ignored entirely per rule 5.3.6.",
+    "surroundingText": "Follows rule 5.3.6 directly, immediately after Example 5-5, on printed page 5-5; rule 5.3.7 and Example 5-7 follow.",
+    "printFeatures": "Two-column textbook excerpt under a bold banner heading with a decorative ornament row; both body paragraphs entirely italic."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Print Only — the source shows no braille transcription for this example, only the caption 'Example 5-6: Italics Ignored (Print Only)' and the print picture; none is guessed."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree this is Print Only with no braille; print content (the two-paragraph textbook excerpt and its heading) synthesized from both runs' PDF reads (p.131, printed page 5-5), which agree on substance, only wording differed."
+}

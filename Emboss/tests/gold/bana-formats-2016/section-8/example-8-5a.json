@@ -1,0 +1,67 @@
+{
+  "id": "example-8-5a",
+  "title": "List with One Bulleted Item",
+  "pdfPages": [
+    204
+  ],
+  "textLines": [
+    5943,
+    5952
+  ],
+  "illustrates": {
+    "rule": "8.7.1.a",
+    "quote": "To indicate that only some items in the list have bullets or other print indicators, such as pictures: a. Follow print for the symbol used as a bullet. The bullet begins in cell 1 and is followed by a space. Symbols used must be listed in a transcriber’s note or placed on the Special Symbols page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three numbered items ('1.', '2.', '3.'), all-caps title text; item 2 alone carries a print bullet (a small solid round dot) before its number to flag it for special attention; items 1 and 3 have no bullet.",
+        "items": [
+          {
+            "marker": "1.",
+            "level": 1,
+            "text": "THE LIFE AND TIMES OF SHERLOCK HOLMES",
+            "features": null
+          },
+          {
+            "marker": "2.",
+            "level": 1,
+            "text": "MURDER ON THE SNIKREP CAMPUS",
+            "features": "preceded by a print bullet",
+            "bullet": "dot"
+          },
+          {
+            "marker": "3.",
+            "level": 1,
+            "text": "THE MARCH SKY",
+            "features": null
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": "Immediately follows rule 8.7.1.b; Example 8-5b on the same page shows the identical list with a different bullet symbol.",
+    "printFeatures": "Boxed list; numbered items 1-3, all-caps; item 2's bullet is a small solid round (filled) dot to its left."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "   #a4 ,,,! life & \"ts ( %]lock holmes,'",
+      "_4 #b4 ,,,murd] on ! snikrep campus,'",
+      "   #c4 ,,,! m>* sky,'",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Bullet symbol '_4' (the one-cell 'Dot' transcriber-defined bullet listed under 8.6.2.a) precedes item 2's number, occupying cell 1 followed by a space before '#b4'; items 1 and 3 have no bullet and begin directly with the number sign in cell 1, per 8.7.1.a-b. Shown lines are 5-9 of the braille page (line 5 and line 9 blank, lines 6-8 the three items)."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Print casing: confirmed ALL-CAPS directly against the PDF page image (p. 204) — A was right (\"THE LIFE AND TIMES OF SHERLOCK HOLMES\" etc.), B’s Title-Case retyping was wrong; A’s text kept. illustrates.quote: A’s was missing clause a’s final sentence (\"Symbols used must be listed…\") — restored from the source (lines 251-254); B had merged in clause b’s text too, which this example does not itself illustrate (no runover is shown), so rule stays \"8.7.1.a\" alone. Item 2 carries BOTH its ordinal marker (\"2.\") and a print bullet (round dot, \"•\", confirmed against the page image) — recorded as a separate `bullet:\"dot\"` field since Emboss’s list formatter has no way to combine an ordinal marker with a bullet indicator (F-33 extension); buildModel8 records this as a limitation rather than guessing a combined rendering.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

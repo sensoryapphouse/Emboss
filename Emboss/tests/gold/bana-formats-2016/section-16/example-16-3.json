@@ -1,0 +1,44 @@
+{
+  "id": "example-16-3",
+  "title": "Dagger Reference Mark with a Dash",
+  "pdfPages": [
+    431
+  ],
+  "textLines": [
+    12414,
+    12420
+  ],
+  "illustrates": {
+    "rule": "16.2.2.c",
+    "quote": "Asterisks, daggers, and double daggers that appear raised from the baseline are not considered to be in the superscript position. (See UEB, §3.3.1, Asterisk, Dagger, and Double Dagger.) Retain the superscript format for all other symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Now is the time for all brave men to fly to Mars[ref:†]—then come home.",
+        "features": "Single print sentence in serif type; a raised dagger symbol immediately follows \"Mars\", then an em dash introduces the rest of the sentence.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Third of the four reference-mark illustrations directly below rule 16.2.2c.",
+    "printFeatures": "Bordered box, one print sentence only, with a raised dagger (†) mark after \"Mars\" and an em dash before \"then come home\"."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      ",n[ is ! \"t = all brave m5 to fly to",
+      ",m>s@,?,-!n come home4"
+    ],
+    "pageBreaks": [],
+    "notes": "Wraps across two braille lines (no fixed page width is shown, this being an isolated symbol illustration). The dagger symbol is @,? (grade-1 indicator not required here since it directly follows a capitalized word already using dot 6); the em dash is the standard two-cell dash ,-."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: no page/line-number evidence; both runs agree, left null. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

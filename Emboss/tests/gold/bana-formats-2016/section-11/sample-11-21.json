@@ -1,0 +1,116 @@
+{
+  "id": "sample-11-21",
+  "title": "Wide Table on Facing Pages",
+  "pdfPages": [
+    328,
+    329
+  ],
+  "textLines": [
+    9734,
+    9769
+  ],
+  "illustrates": {
+    "rule": "11.13.1",
+    "quote": "Wide Tables: Facing Pages. Wide tables may be placed on facing pages in single-sided and interpoint production. Care must be taken to ensure that the first page is on the left-hand page. a. Use the full width of the two pages, usually 80 cells. (See Sample 11-21: Wide Table on Facing Pages on page 11-46.)"
+  },
+  "print": {
+    "caption": "Unionized Manual Workers",
+    "headers": [
+      [
+        "",
+        "1900",
+        "1910",
+        "1920",
+        "1930",
+        "1940",
+        "1950"
+      ]
+    ],
+    "rows": [
+      [
+        "Denmark",
+        "13.9",
+        "16.2",
+        "37.0",
+        "33.8",
+        "44.3",
+        "54.4"
+      ],
+      [
+        "Sweden",
+        "8.7",
+        "12.2",
+        "32.4",
+        "41.7",
+        "64.3",
+        "75.2"
+      ],
+      [
+        "Norway",
+        "10.3",
+        "14.6",
+        "35.9",
+        "43.2",
+        "67.9",
+        "77.3"
+      ],
+      [
+        "Finland",
+        "6.9",
+        "10.3",
+        "25.6",
+        "34.7",
+        "44.2",
+        "52.1"
+      ]
+    ],
+    "notes": "Six year-columns (1900-1950) are too wide for a single braille page, so the table is split across two facing braille pages: 1900-1930 on the left page, 1940-1950 on the right page.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, single header row (years) bold, ruled line beneath; row headings (country names) bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! table is r1d acr         #fj",
+      "    fac+ pages4@.>",
+      "",
+      "        ,unioniz$ ,manual ,\"w]s",
+      "7777777777777777777777777777777777777777",
+      "         #aijj #aiaj #aibj #aicj",
+      "         \"3333 \"3333 \"3333 \"333333333",
+      ",d5m>k   #ac4i #af4b #cg4j #cc4h \"\"\"\"",
+      ",sw$5     #h4g #ab4b #cb4d #da4g \"\"\"\"",
+      ",norway #aj4c #ad4f #ce4i #dc4b \"\"\"\"",
+      ",f9l&     #f4i #aj4c #be4f #cd4g \"\"\"\"",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "                                    a#fj",
+      "",
+      "",
+      "",
+      "7777777777777777777777777777777777777777",
+      "#aidj #aiej",
+      "\"3333 \"3333",
+      "#dd4c #ed4d",
+      "#fd4c #ge4b",
+      "#fg4i #gg4c",
+      "#dd4b #eb4a",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 12,
+        "type": "implicit",
+        "note": "No explicit New-Braille-Page marker text. The left-hand braille page (lines 1-12, PDF p. 328/printed 11-46) and the right-hand facing braille page (lines 1-12, PDF p. 329/printed 11-47) are two physically separate, independently-numbered braille pages in the source; detected from the line numbering silently restarting at 1 after the ordinary page footer, with no marker text between them."
+      }
+    ],
+    "notes": "Left-hand page: lines 1-2 are the transcriber's note explaining the format (the table is read across facing pages), with a page-number token at the right margin of line 1 per rule 11.13.1.e; the title (Unionized Manual Workers) is centered on this left page only (line 4) per rule g; the box (lines 5-12) shows columns for 1900/1910/1920/1930, with the last column's separation line and guide-dot filler extended to the right margin per rule j/k. Right-hand facing page: begins its own line 1 with a page-number token at the far right and no repeated title (per rule g), its own top/bottom box lines (5, 12), and the first column (1940 data) beginning in cell 1 per rule m, showing only 1940/1950."
+  },
+  "uncertain": [
+    "The precise page-number tokens (right margin of line 1 on each facing page) were transcribed literally; their numeric/lettering meaning (braille page-numbering scheme for facing pages) was not independently decoded."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers' first cell resolved to '' (blank above the country-name row headings in print, confirmed against the PDF image, p. 328), not a fabricated '(country)' placeholder. pageBreaks schema normalized to run B's object form; both runs already agreed on the facing-pages split itself (after line 12, implicit)."
+}

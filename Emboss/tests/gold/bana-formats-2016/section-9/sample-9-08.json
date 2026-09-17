@@ -1,0 +1,59 @@
+{
+  "id": "sample-9-08",
+  "title": "Copyright Information with Permission to Use",
+  "pdfPages": [245],
+  "textLines": [7062, 7080],
+  "illustrates": {
+    "rule": "9.5.5",
+    "quote": "Permission to Copy. Permission notes frequently appear at the bottom of the print page, but may be found elsewhere on the page. In braille, place the note on the line following the title/heading. Block the note in the fifth cell to the right of the beginning of the previous line. (See Sample 9-8: Copyright Information with Permission to Use on page 9-19.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "America, the Beautiful",
+        "features": "Large italic script title, centred; the hymnal entry number '690' is printed at the top-left in a plain serif font, and composer/arranger credits (MATERNA / Samuel A. Ward / Descant by Fred Bock) at the top-right -- none of this surrounding page furniture is right-flushed onto the heading's own line by Emboss's centred-heading formatter, only the title text itself is modelled here."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "© Copyright 1976 by Fred Bock Music Company. All rights reserved. Used by permission.",
+        "features": "Small print permission/copyright notice, printed at the bottom of the print page but moved to directly follow the heading in braille per 9.5.5, blocked in the fifth cell to the right of the heading's own start."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Katharine Lee Bates / MATERNA / Samuel A. Ward / Descant by Fred Bock",
+        "features": "The lyricist byline (printed beneath the title on the left) and the composer/arranger credits (printed at the top-right of the title) become 4 short separate braille lines, all at cell 7 with no blank line between any of them -- a compact multi-caption stack Emboss's document model has no block type for (an attribution/caption block wraps continuously rather than forcing one short phrase per line, and 4 separate attribution blocks would each force an unwanted trailing blank line)."
+      }
+    ],
+    "notes": "Direct worked example of 9.5.5: the copyright/permission notice, which sits at the bottom of the print page, is instead placed on the line immediately following the title/heading in braille, blocked in the fifth cell to the right of the heading's own start. The permission notice itself has no `kind` in this schema distinct from an ordinary un-transcribed page element; recorded as `other` below since Emboss has no relocation logic to move it there automatically (cf. displayed-writeup.md F-D10's 9.5.5 discussion).",
+    "surroundingText": "A hymnal page ('America, the Beautiful').",
+    "printFeatures": "Hymnal page layout: hymn number, title in script font, composer credits, musical staff notation (not transcribed), lyricist byline, and a small copyright/permission notice at the foot of the page."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,am]ica1 ! ,b1uti;l        #fij",
+      "              ^c ,copy\"r #aigf by ,fr$",
+      "              ,bock ,music ,company4",
+      "              ,all \"rs res]v$4 ,us$ by",
+      "              p]mis.n4",
+      "",
+      "      ,ka?>9e ,lee ,bates",
+      "      ,,mat]na",
+      "      ,samuel ,a4 ,w>d",
+      "      ,descant by ,fr$ ,bock",
+      "",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 1-12 (this Sample begins its own braille page at line 1). Field width 5, stripped. Line 1: heading text 'America, the Beautiful' (indent 10, centred within a REDUCED width reserving the right-hand end for the hymn number) plus the hymn number '690' right-flushed as '#fij' (6-9-0) -- ANOMALY: this line measures 41 characters after stripping the gutter, one more than the uniform 40-cell width used everywhere else in this file (confirmed against this same file's own blank filler lines, both exactly 40; measured twice directly against the raw .txt: 10 leading blank cells + ',am]ica1 ! ,b1uti;l' [19 chars] + 8 blank cells + '#fij' [4 chars] = 41). This is a genuine property of the primary source itself (present identically in the PDF page image, braille-formats-2016.pdf p.245, which shows nothing unusual about this line's dot pattern), not an extraction artifact of this reconciliation -- recorded verbatim, not corrected to 40. Lines 2-5: copyright/permission notice, indent 14 (heading's own indent 10 + 4, the 'fifth cell to the right of the previous line' pattern), moved here per 9.5.5 from its print position at the bottom of the page. Line 6: blank. Lines 7-10: lyricist/composer/arranger credits, cell 7, no blank line between any of them. Line 11: blank. Line 12: '444' truncation marker (the musical staff notation is not transcribed in this short excerpt)."
+  },
+  "uncertain": [
+    "Braille line 1 (heading + hymn number) measures 41 characters, one more than the 40-cell width used throughout the rest of this file. Left as measured/verbatim; confirmed identically present in both the .txt and the PDF page image, so it is a property of the source itself, not a disagreement between the two runs or between the two source formats."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B disagreed on exactly one point in `braille.lines`: B measured line 1 at 41 characters (flagged as an anomaly, not corrected); A's own array (reproduced identically otherwise) implicitly treats it as an ordinary line without separately flagging the width. Settled directly against the primary source: a byte-precise Python read of braille-formats-2016.txt line 7067 confirms the post-gutter content is exactly 41 characters (10 blank cells + 19-character title braille + 8 blank cells + 4-character '#fij'), and the PDF page image (p.245) shows nothing anomalous about this specific line's dot pattern -- both source formats agree the line is genuinely 41 cells wide. Kept at 41, per B's measurement, not silently corrected to 40. Print-content structure: A folded the hymn number and composer credits into the heading's own `features` and gave the byline+credits+copyright notice as one combined block; B separated the copyright notice as its own 'source' block (matching the braille's own cell-14 lines 2-5) and the credits as 'other', keeping only the byline as 'attribution' -- but neither run's account puts the copyright notice back in the right place relative to the byline/credits stack. Rebuilt directly from the agreed `braille.lines`' own line-by-line indentation: heading, then the copyright notice ('source', matching lines 2-5's cell-14 indent, immediately after the heading per 9.5.5), then the byline+3-credit-line stack (cell 7, lines 7-10) bundled into one 'other' block since Emboss has no block type that reproduces 4 short forced-line-break phrases with no blank line between any of them (an attribution block wraps continuously; 4 separate ones would each force an unwanted trailing blank)."
+}

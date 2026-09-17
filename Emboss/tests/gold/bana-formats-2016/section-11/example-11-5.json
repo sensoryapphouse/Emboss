@@ -1,0 +1,41 @@
+{
+  "id": "example-11-5",
+  "title": "Continued Sequentially Numbered Table",
+  "pdfPages": [
+    289
+  ],
+  "textLines": [
+    8461,
+    8463
+  ],
+  "illustrates": {
+    "rule": "11.3.2.b",
+    "quote": "b. When a sequentially numbered table is longer than one braille page, repeat and center the table number on line 25 of each succeeding braille page, followed by “(cont.)”. When a table occupies only one page, do not put the table number on line 25."
+  },
+  "print": {
+    "caption": null,
+    "headers": [],
+    "rows": [],
+    "notes": "No print original is shown for this fragment; it depicts two specific braille lines (24 and 25) of a continuation braille page, identified by their printed line numbers in the margin of the PDF sample image.",
+    "surroundingText": "Follows Example 11-4 and rule 11.3.2.a; is followed by 11.3.2.c–d (rules about the end-of-volume statement and omitted sequentially numbered tables).",
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "444",
+      "          ,table #i4e \"<3t4\">                           #de"
+    ],
+    "pageBreaks": [],
+    "notes": "The two lines shown are explicitly labelled by the book as physical braille-page lines 24 and 25 (not sequential lines 1-2 of a normal excerpt): line 24 is blank (rendered here as the omission/ellipsis marker '444' — see uncertain note), and line 25 repeats the centered table number 'Table 9.5' followed by the transcriber's-note-bracketed '(cont.)' and the braille page number on the far right ('#de' = 45)."
+  },
+  "uncertain": [
+    "The '444' token on line 1 (physical page line 24) functions as a continuation/ellipsis marker -- confirmed by its consistent use in the same role elsewhere in this section (Sample 11-19's omitted-months gap), though its exact dot pattern was not independently checked against a UEB chart.",
+    "The exact number of spaces before the page-number token '#de' on line 2 (physical line 25) is copied as extracted; the precise right-margin column was not independently re-measured against a ruler on the dot image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No braille.lines differences (both runs match the source exactly). Decoded, with reasonable confidence, what '444' most likely represents (see uncertain notes)."
+}

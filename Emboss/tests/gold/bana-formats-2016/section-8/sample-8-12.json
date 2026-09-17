@@ -1,0 +1,82 @@
+{
+  "id": "sample-8-12",
+  "title": "Bulleted List",
+  "pdfPages": [
+    221
+  ],
+  "textLines": [
+    6382,
+    6395
+  ],
+  "illustrates": {
+    "rule": "8.6.2",
+    "quote": "Retain bullets whenever they are used in lists."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Health Plan Tiers",
+        "features": "Bold heading."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Five items, each with a small solid round bullet.",
+        "items": [
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Primary Care Physician Office Visit"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Specialist Office Visit"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Inpatient Hospital Care"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Outpatient Surgery"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Emergency Room"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bold heading above five bulleted items, all with the same solid round bullet, no sub-levels."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,h1l? ,plan ,ti]s",
+      "",
+      "_4 ,prim>y ,c>e ,physician ,(fice ,visit",
+      "_4 ,speciali/ ,(fice ,visit",
+      "_4 ,9pati5t ,hospital ,c>e",
+      "_4 ,\\tpati5t ,surg]y",
+      "_4 ,em]g5cy ,room",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Each item's bullet is transcribed with the dot symbol '_4' (the 'Dot' transcriber-defined symbol from 8.6.2.a) in cell 1 followed by a space, then the item text; line 1 carries the heading, line 2 blank, line 8 blank closes the list."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: same issue as sample-8-11 — B’s literal \"5\" contradicted its own braille.notes (\"Line 1 is the centered heading\"); measured directly from source .txt (line 6387) = 11 leading U+2800 blank cells, matching centring floor((40−17)/2)=11 exactly — level 1 (centred), not cell-5. Bullet list (dot bullet on every item, per 8.6.2.a) kept as A had it.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

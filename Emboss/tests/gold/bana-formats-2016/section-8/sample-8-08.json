@@ -1,0 +1,522 @@
+{
+  "id": "sample-8-08",
+  "title": "Long List on Two Braille Pages",
+  "pdfPages": [
+    216,
+    217
+  ],
+  "textLines": [
+    6266,
+    6303
+  ],
+  "illustrates": {
+    "rule": "8.4.1.g",
+    "quote": "When a columned list is too long for a single braille page, list the words in columns and fill the page with as many words as will fit. List the words vertically in alphabetic or numeric order. Continue listing the words in columns on the next braille page. (See Sample 8-8: Long List on Two Braille Pages on page 8-20.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 6,
+        "features": "Eighty-eight words/short phrases (a spelling/vocabulary word bank) in six alphabetized print columns (15/15/15/15/15/13 rows), entirely on one print page; no heading, bullets, or numbers. Confirmed by direct recount against the PDF page image (p. 216) — the whole bank reads as one single alphabetical sequence column-major (column 1 top-to-bottom, then column 2, …, through column 6).",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "a lot"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "again"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "always"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "and"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "another"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "beautiful"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "because"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "before"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "believe"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "buy"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "caught"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "character"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Christmas"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "clothes"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "complement"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "conscious"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Dad’s"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "decided"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "definitely"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "didn’t"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "different"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "discrete"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "doesn’t"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "don’t"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "elude"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "especially"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "everybody"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "everyone"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "everything"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "except"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "excited"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "favorite"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "finally"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "friend"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "friends"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "further"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "getting"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Halloween"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "happened"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "heard"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "I’m"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "into"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "it’s"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "knew"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "know"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "let’s"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "maybe"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Mom"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "off"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "one"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "our"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "outside"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "piece"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "principle"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "probably"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "really"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "said"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "school"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "something"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "sometimes"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "stationery"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "stopped"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "that’s"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "their"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "then"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "there"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "there’s"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "they"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "they’re"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "thought"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "through"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "to"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "too"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "tried"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "TV"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "until"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "upon"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "usually"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "want"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "we’re"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "went"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "were"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "when"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "where"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "which"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "whole"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "you’re"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "your"
+          }
+        ]
+      }
+    ],
+    "notes": "This is a spelling/vocabulary list: print gives the plain English words, and the braille gives their correctly-contracted braille forms. Reading order is straight alphabetical, column-major (column 1 top-to-bottom, then column 2, and so on through column 6) — confirmed directly against the PDF page image (p. 216), which is the definitive source for the print word list (the .txt has no extractable text for this picture-only print page).",
+    "surroundingText": null,
+    "printFeatures": "Plain six-column word list filling the whole print page, alphabetized down each column."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "a lot              especially          \\tside     #,-",
+      "ag                 \"eybody             piece",
+      "alw                \"ey\"o               pr9ciple",
+      "&                  \"ey?+               probably",
+      "ano!r              except              r1lly",
+      "b1uti;l            excit$              sd",
+      "2c                 favorite            s*ool",
+      "2f                 f9ally              \"s?+",
+      "2lieve             fr                  \"s\"ts",
+      "buy                frs                 /a;n]y",
+      "cau<t              fur!r               /opp$",
+      "\"*                 gett+               t's",
+      ",*ri/mas           ,hall[e5            _!",
+      "clo!s              happ5$              !n",
+      "comple;t           he>d                \"!",
+      "3sci\\s             9to                 \"!'s",
+      ",dad's             x's                 !y",
+      "decid$             knew                !y're",
+      "def9itely          \"k                  ?\"\\",
+      "didn't             let's               \"?",
+      "di6]5t             maybe               too",
+      "4crete             ,mom                tri$",
+      "doesn't            (f                  until",
+      "don't              \"o                  ^u",
+      "elude              \\r                  usually    #,-",
+      "want         :5    :ole                           a#,-",
+      "we're        \":    y're",
+      "w5t          :     yr",
+      "7"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 25,
+        "type": "explicit",
+        "note": "Explicit '—New Braille Page—' marker text in the source, matching this book's other explicit-break convention (cf. sample-11-06 in the section-11 precedent)."
+      }
+    ],
+    "notes": "Braille re-flows the print's six columns into three braille columns, filling the first braille page with 25 rows (75 words) and continuing the remaining words in the same three-column layout on a second braille page (4 more rows). Word content and left-to-right/column order were verified against the print list; however, the exact number of blank cells between columns in the .txt extraction could not be taken at face value — a pixel measurement against the PDF dot-image for line 1 (comparing it to a known 40-cell-wide box-rule line elsewhere in this section) confirmed the actual braille line fits the nominal 40-cell width even though the .txt's literal inter-column spacing, read naively, would imply a much longer line (53+ characters). The `lines` below are given exactly as extracted from the .txt (word content and order is solid); the precise inter-column blank-cell counts should not be relied on as pixel-exact."
+  },
+  "uncertain": [
+    "Inter-column spacing (number of blank cells between the three braille columns) in `braille.lines` is copied verbatim from the .txt extraction but is NOT confirmed pixel-exact against the PDF dot image; only the word identity, word order, and overall 40-cell line width (confirmed for line 1) are independently verified. Re-deriving exact column boundaries for all 29 lines would require cell-by-cell pixel measurement of the PDF raster image, which was only done for line 1."
+  ],
+  "resolution": "Print item count: NEITHER run got this right (A said 87, one short; B said 86, two short and also shifted/mis-ordered from \"into\" onward). Recounted directly against the PDF page image (p. 216, rendered fresh at 300dpi): six columns of 15/15/15/15/15/13 words = 88 total, confirmed column-major alphabetical order throughout (column 1’s last entry \"complement\" alphabetically precedes column 2’s first entry \"conscious\", etc.) — replaced with the freshly-recounted, verbatim-spelled 88-item list (curly apostrophes matching print, e.g. \"Dad’s\", \"I’m\"). braille.lines: A’s 29-line array (no literal \"—New Braille Page—\" text as its own array entry) matches the established section-11 precedent (sample-11-06: the marker is recorded only in `pageBreaks`, never as a `lines` entry); B’s 30-line version, which inserted the marker text as its own array element, deviates from that precedent and is not used. Inter-column blank-cell spacing in `lines` remains unverified pixel-exact (per run A’s own flagged uncertainty, carried forward) — word content/order is solid (now independently confirmed against the print image), but the literal space counts between the three braille columns should not be relied on as pixel-exact; re-deriving them would need cell-by-cell pixel measurement of the whole two-page braille image, out of scope here.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

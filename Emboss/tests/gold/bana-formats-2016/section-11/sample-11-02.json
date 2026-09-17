@@ -1,0 +1,93 @@
+{
+  "id": "sample-11-02",
+  "title": "Complex Table",
+  "pdfPages": [
+    308
+  ],
+  "textLines": [
+    9189,
+    9211
+  ],
+  "illustrates": {
+    "rule": "11.4.3",
+    "quote": "Complex Tables with Column and Sub-column Headings. The primary column heading is left-justified over the secondary sub-column heading. a. Insert a separation line after the primary heading... b. Sub-column headings begin on the next line, left-justified above their respective columns... c. Each sub-column heading is followed by a separation line, running the width of the column. (See Sample 11-2: Complex Table on page 11-26.)"
+  },
+  "print": {
+    "caption": "Table 11.1 / Summary Comparison of Outlays for Payments for Individuals",
+    "headers": [
+      [
+        "Fiscal Year",
+        "In Millions of Dollars",
+        "",
+        ""
+      ],
+      [
+        "",
+        "Total",
+        "Direct",
+        "Grants"
+      ]
+    ],
+    "rows": [
+      [
+        "1998",
+        "981,712",
+        "817,770",
+        "163,942"
+      ],
+      [
+        "1999",
+        "1,001,676",
+        "825,833",
+        "175,843"
+      ],
+      [
+        "2000",
+        "1,054,503",
+        "867,713",
+        "186,790"
+      ],
+      [
+        "2001",
+        "1,128,432",
+        "920,394",
+        "208,038"
+      ]
+    ],
+    "notes": "Two-row column heading: primary heading \"In Millions of Dollars\" spans the three sub-columns Total/Direct/Grants; \"Fiscal Year\" has no sub-heading (single-row heading, taller box cell).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; centered bold two-line title above the box (\"Table 11.1\" / \"Summary Comparison...\"); primary heading \"In Millions of Dollars\" bold and centered over its three sub-columns; \"Fiscal Year\", \"Total\", \"Direct\", \"Grants\" bold; ruled lines separate the heading rows from data and each data row from the next."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "              ,table #aa4a",
+      "      ,summ>y ,comp>ison ( ,\\tlays",
+      "        = ,pay;ts = ,9dividuals",
+      "7777777777777777777777777777777777777777",
+      "         ,9 ,millions ( ,doll>s",
+      "         \"33333333333333333333333333333",
+      ",fiscal",
+      ",ye>     ,total      ,direct   ,grants",
+      "\"333333 \"333333333 \"3333333 \"3333333",
+      "#aiih      #iha1gab #hag1ggj #afc1idb",
+      "#aiii    #a1jja1fgf #hbe1hcc #age1hdc",
+      "#bjjj    #a1jed1ejc #hfg1gac #ahf1gij",
+      "#bjja    #a1abh1dcb #ibj1cid #bjh1jch",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 is the literal word \"text\" — a placeholder standing in for body-text paragraph(s) on the print page that precede the table (not transcribed in this illustrative excerpt). The two-line centered title (\"Table 11.1\" / \"Summary Comparison of Outlays\" / \"for Payments for Individuals\", 3 print lines centered onto braille lines 3-5) precedes the box. Inside the box: the primary heading \",9 ,millions ( ,doll>s\" (\"In Millions of Dollars\") is left-justified over its own separation line (line 8), then the sub-column headings \",total ,direct ,grants\" begin on the next line (line 10) with their own separation lines (line 11), while \"Fiscal Year\" (line 9, \",fiscal\") has no separation line of its own at that row per rule 11.4.2.c (no heading yet) — it is followed on line 10 by \",ye>\" which does get a separation line on line 11, consistent with 11.4.1's two-line-heading rule applying differently to the un-sub-headed column."
+  },
+  "uncertain": [
+    "The precise vertical alignment of 'Fiscal Year' against the multi-row primary/sub headings was inferred from the dot-image line numbers and column x-positions, not independently re-measured cell-by-cell."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers: row 2 col 1 resolved to '' (blank), not a repeated 'Fiscal Year' -- confirmed against the PDF image (p. 308): 'Fiscal Year' is one rowspan-style label covering both header rows, not printed twice. Run A's shape was correct; run B's was not."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "sample-note-13-6-4b",
+  "title": "Sample transcriber's note (rule 13.6.4.b)",
+  "pdfPages": [
+    359
+  ],
+  "textLines": [
+    10395,
+    10400
+  ],
+  "illustrates": {
+    "rule": "13.6.4b",
+    "quote": "Insert a transcriber’s note to explain the use of uncontracted braille. Sample: This poem has unusual letter and punctuation combinations. Braille is uncontracted so punctuation can be identified easily. (See Sample 13-6: Embedded Punctuation in an Uncontracted Poem on page 13-20.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "This poem has unusual letter and punctuation combinations. Braille is uncontracted so punctuation can be identified easily.",
+        "features": "Two-sentence displayed (indented) note wording."
+      }
+    ],
+    "notes": "Not itself a worked print/braille example: rule 13.6.4.b offers plain-English wording for a transcriber's note; the actual braille rendering of a (differently phrased) note using this same technique is shown in Sample 13-6 (a separate item, sample-13-06.json).",
+    "surroundingText": "Given as sample wording for a transcriber's note explaining why grade-1 (uncontracted) braille is used around a poem with unusual punctuation; cross-referenced to Sample 13-6.",
+    "printFeatures": "Two-sentence displayed (indented) note."
+  },
+  "braille": {
+    "width": null,
+    "lines": null,
+    "pageBreaks": [],
+    "notes": "No braille transcription of this exact note text is given at this point in the source; only the print wording is shown here. (Sample 13-6's own transcriber's note -- differently worded -- IS transcribed into braille; see sample-13-06.json.)"
+  },
+  "uncertain": [
+    "This item is a suggested note WORDING only, not itself a worked print→braille example; included here because rules.merged.json lists it as an embedded 'Sample:' row."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: the source gives only the suggested English transcriber's-note wording at this rule's own citing location, no braille rendering anywhere nearby; braille.width/lines correctly null/empty in both runs. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

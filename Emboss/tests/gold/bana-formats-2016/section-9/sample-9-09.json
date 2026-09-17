@@ -1,0 +1,72 @@
+{
+  "id": "sample-9-09",
+  "title": "Displayed Letter",
+  "pdfPages": [246],
+  "textLines": [7086, 7107],
+  "illustrates": {
+    "rule": "9.7.1",
+    "quote": "Correspondence and diary entries are formatted according to their placement/format in print."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Mary Forbes was pleased at the Queen’s choice of homes for Sarah and wrote to Mrs. Schoen.",
+        "features": null
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Dear Mrs. Schoen,",
+        "features": "Salutation, italicized in print (the whole letter is set in italics)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I am charmed to hear you are to train up the little Princess. I am sure you will take care and not let her be made a show of, which makes girls so conceited. It will be very spoiling for her if the Queen takes too much notice of her.",
+        "features": "Italicized letter body; first line indented further than its runovers."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "Mary Forbes",
+        "features": "Signature, blocked at the attribution position (cell 7)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The adults around Sarah understood what the special relationship between the young black girl and the Queen meant. Mrs. Forbes was worried that Sarah might",
+        "features": "Resumes the surrounding (non-italic) narrative after the letter; cut off at the bottom edge of the print image."
+      }
+    ],
+    "notes": "Direct worked example of 9.7.1: the letter's salutation, body, and signature are formatted according to their print placement, with the signature moved to the standard attribution position (cell 7) per 9.7.1b.",
+    "surroundingText": "Narrative about Sarah Forbes Bonetta, a young girl under Queen Victoria's guardianship, and Mary Forbes's letter to Mrs. Schoen about her upbringing.",
+    "printFeatures": "Shaded/boxed excerpt; the letter itself (salutation through signature) is entirely italicized, distinguishing it from the plain surrounding narrative."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,m>y ,=bes 0 pl1s$ at ! ,que5's *oice",
+      "( homes = ,s>ah & wrote to ,mrs4 ,s*o54",
+      "",
+      "  ,de> ,mrs4 ,s*o51",
+      "    ,i am *>m$ to he> y >e to tra9 up !",
+      "  ll ,pr9cess4 ,i am sure y w take c>e &",
+      "  n let h] 2 made a %[ (1 : makes girls",
+      "  s 3ceit$4 ,x w 2 v spoil+ = h] if !",
+      "  ,que5 takes too m* notice ( h]4",
+      "      ,m>y ,=bes",
+      "",
+      "  ,! adults >.d ,s>ah \"u/ood :at !",
+      "special rela;n%ip 2t ! \"y black girl & !",
+      ",que5 m1nt4 ,mrs4 ,=bes 0 worri$ t ,s>ah",
+      "mi<t"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 4-18 (a genuine excerpt). Field width 5, stripped. Lines 1-2 (source 4-5): lead-in paragraph, cell 3. Line 3 (6): blank. Line 4 (7): salutation, cell 3. Lines 5-9 (8-12): letter body, first line cell 5, runovers cell 3. Line 10 (13): signature, cell 7. Line 11 (14): blank. Lines 12-15 (15-18): resuming narrative paragraph, cell 3."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 7091-7105 after stripping the 5-character line-number field (the '(Return to Text)' line 7106 excluded). Structural disagreement: A gave the salutation, body and signature as three separate print.blocks (matching the braille's own three distinct indents -- cell3/cell5-runover-cell3/cell7); B merged all three into a single 'quote' block's text (joined with literal newlines), which would build as one continuously-wrapped paragraph and lose the signature's own distinct cell-7 attribution position entirely. Resolved to A's three-block structure, since it reflects what the agreed braille actually shows (three differently-indented pieces, not one wrapped block), and keeps the signature as a genuine `attribution` block consistent with 9.7.1b's own instruction to move it to the attribution position."
+}

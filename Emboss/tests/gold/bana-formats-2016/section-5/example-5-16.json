@@ -1,0 +1,82 @@
+{
+  "id": "example-5-16",
+  "title": "Repeated Sentences",
+  "pdfPages": [
+    138
+  ],
+  "textLines": [
+    4191,
+    4205
+  ],
+  "illustrates": {
+    "rule": "5.8.1",
+    "quote": "Exercise Material. The use of multiple font attributes in quick succession may hinder readability for some students. Transcribers must use their best judgment when opting to show the attributes used in text. It may be beneficial to transcribe a sentence first without the typeform indicators, then repeat the sentence with all the indicators. Explain this technique on the Transcriber’s Notes page or in a transcriber’s note before the exercise. Symbols used should be listed on the Special Symbols page or in a transcriber’s note at the site. Sample: Each sentence is shown first without emphasis and then repeated with all indicators used."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Braille-only transcriber's note restating rule 5.8.1's own printed 'Sample:' text ('Each sentence is shown first without emphasis and then repeated with all indicators used'); has no counterpart inside Example 5-16's own print box.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "1. It is snowing outside. The street is wet.",
+        "features": "Plain restatement (no emphasis) of sentence 1, shown first per 5.8.1's technique.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "It {{td1: is}} <u>snowing</u> outside. The street {{td2: is}} wet.",
+        "features": "Sentence 1 repeated with all indicators: the first 'is' is colored (transcriber-defined symbol 1), 'snowing' is underlined, and the second 'is' is a second, distinct color (transcriber-defined symbol 2) — confirmed by the two different braille symbols used for the two occurrences, per 5.5.2's 'use indicators in order' convention, not the same color reused.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "2. I have bought new boots. They have woolly linings.",
+        "features": "Plain restatement (no emphasis) of sentence 2.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I {{td1: have}} <u>bought</u> new boots. They {{td2: have}} woolly linings.",
+        "features": "Sentence 2 repeated with all indicators: the first 'have' takes transcriber-defined symbol 1 (same symbol as sentence 1's first occurrence), 'bought' is underlined, the second 'have' takes transcriber-defined symbol 2; 'woolly linings' is plain.",
+        "items": null
+      }
+    ],
+    "notes": "Demonstrates 5.8.1's technique directly: each sentence is given first plain, then repeated with typeform indicators, to aid readability with multiple emphases in quick succession.",
+    "surroundingText": "Follows rule 5.8.1 and its printed 'Sample:' text directly, on printed page 5-12.",
+    "printFeatures": "Boxed two-item numbered list, each item given twice (plain, then annotated); two colors and underline all used."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,ea* s5t;e is %[n f/ )\\t",
+      "    emphasis & !n rep1t$ ) all 9dicators",
+      "    us$4@.>",
+      "#a4 ,x is sn[+ \\tside4 ,! /reet is wet4",
+      "  #a4 ,x @#1is _1sn[+ \\tside4 ,! /reet",
+      "    ^#1is wet4",
+      "#b4 ,i h b\"\\ new boots4 ,!y h woolly",
+      "    l9+s4",
+      "  #b4 ,i @#1h _1b\"\\ new boots4 ,!y ^#1h",
+      "    woolly l9+s4"
+    ],
+    "pageBreaks": [],
+    "notes": "Ten lines, margin 8 stripped. Lines 1-3 are a transcriber's-note sentence with no printed counterpart. Lines 4 and 7 are sentences 1 and 2 with NO typeform indicators at all (the 'shown first without emphasis' pass; each carries a genuine 2-cell runover indent on its second line). Lines 5-6 and 9-10 repeat the same sentences with indicators added: '@#1' (transcriber-defined symbol 1) marks the FIRST 'is'/'have' in each sentence, a single-word underline indicator ('_1') marks 'snowing'/'bought', and '^#1' (transcriber-defined symbol 2) marks the SECOND 'is'/'have' — the same two symbols (1 then 2) are reused consistently across both sentences, per 5.5.2's ordering rule, not a puzzling reuse."
+  },
+  "uncertain": [
+    "The precise print colors (read as red and blue) are taken from a modest-resolution page render; the exact hues are not independently confirmed against a printed color key."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte once run B's leading-indentation-stripping bug is corrected (lines 5,6,8,9,10 in this file all lost their genuine 2-4 cell runover/list indent in run B). The 'two different symbols for the same-looking red word' puzzle A flagged as uncertain is resolved, not left open: per rule 5.5.2 ('use the first transcriber-defined symbol...then the second...'), two distinct symbols in the same sentence necessarily mark two distinct print attributes (i.e. two different colors, matching B's direct account), not the same color reused — A's own uncertain-framing is superseded by this rule-text inference; B's residual uncertainty about the exact hues (red/blue) stands, since neither run cross-checked against a printed color key."
+}

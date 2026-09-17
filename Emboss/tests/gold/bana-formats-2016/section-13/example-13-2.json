@@ -1,0 +1,75 @@
+{
+  "id": "example-13-2",
+  "title": "Example 13-2: Poem with One Level",
+  "pdfPages": [
+    357
+  ],
+  "textLines": [
+    10289,
+    10300
+  ],
+  "illustrates": {
+    "rule": "13.3.1 (one level)",
+    "quote": "The indention pattern is based on the entire poem. The main entry begins in cell 1. Each subentry level begins two cells to the right of the previous level. All runovers begin two cells to the right of the farthest indented level. One level: 1-3 Two levels: 1-5, 3-5 Three levels: 1-7, 3-7, 5-7 Four levels: 1-9, 3-9, 5-9, 7-9 etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Untitled excerpt (opening lines of Walt Whitman's \"Song of Myself\"); ordinary body-text font, left-aligned in print, one level of poetic line with no sub-indention.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "My tongue, every atom of my blood, form’d from this soil, this air,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Born here of parents born here from parents the same, and their parents the same,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "I, now thirty-seven years old in perfect health begin,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Hoping to cease not till death.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.357; four lines, each fitting on one print line with no visual indention among them (a genuine one-level poem, matching the example's title).",
+    "surroundingText": null,
+    "printFeatures": "Boxed inline example; plain body-text serif font."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",my t;gue1 e atom ( my blood1 =m'd f ?",
+      "  soil1 ? air1",
+      ",born \"h ( p>5ts born \"h f p>5ts ! same1",
+      "  & _! p>5ts ! same1",
+      ",i1 n[ ?irty-sev5 ye>s old 9 p]fect h1l?",
+      "  2g91",
+      ",hop+ to c1se n till d1?4"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10294-10300; no fixed-margin artifact on this example (0 leading ASCII spaces on every line). Lines 2, 4 and 6 carry a genuine 2-cell (U+2800×2) runover indent (cell 3), matching the One level: 1-3 pattern from rule 13.3.1 -- each of the 4 print lines that needed a runover wraps to cell 3.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

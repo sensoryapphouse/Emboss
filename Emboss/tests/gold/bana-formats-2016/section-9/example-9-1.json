@@ -1,0 +1,47 @@
+{
+  "id": "example-9-1",
+  "title": "Displayed Material (Print Only)",
+  "pdfPages": [227],
+  "textLines": [6538, 6548],
+  "illustrates": {
+    "rule": "9.1.1",
+    "quote": "Displayed material appears within the flow of regular text and is set off from the body of the text by blank lines, change of margins, or emphasis. Pull quotes are material restated from the body of the text. These are typically larger and use a distinctive font attribute. They are not repeated in braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Notice the simple nouns Singer uses to describe Berl and Berlcha’s home in “The Son from America.”",
+        "features": "Ordinary instructional lead-in sentence above the boxed excerpt."
+      },
+      {
+        "kind": "quote",
+        "level": null,
+        "text": "The hut consisted of one room, which contained all their belongings: the table, the shelf for meat, the shelf for milk foods, the two beds, and the clay oven.",
+        "features": "Displayed excerpt, boxed, set off by blank lines; individual nouns (hut, room, belongings, table, shelf x2, meat, milk foods, beds, oven) are printed in bold colour to highlight them."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "You may recall that a noun is a word that refers to a",
+        "features": "Resumed instructional paragraph beneath the excerpt; cut off at the bottom edge of the boxed figure in the source scan, continuation not visible."
+      }
+    ],
+    "notes": "Print-only figure; no braille is given in the source for this example. Illustrates 9.1.1's general description of displayed material (set off by blank lines/margin/emphasis), not the pull-quote sentence specifically (that is Example 9-2).",
+    "surroundingText": "Instructional worksheet page teaching noun identification, referencing the short story \"The Son from America\" (Isaac Bashevis Singer) and its characters Berl and Berlcha.",
+    "printFeatures": "Boxed excerpt on an instructional worksheet page; individual nouns inside the excerpt are printed in different bold colours; bold caption 'Example 9-1: Displayed Material (Print Only)' above the box."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source; lines 6545-6548 following the caption are blank in the extracted .txt -- the print figure itself was never captured as braille text."
+  },
+  "uncertain": [
+    "The paragraph following the boxed excerpt is cut off at the image's bottom edge in the PDF scan; its continuation is not visible and is not reproduced here.",
+    "The coloured highlighting of individual nouns is a print-only visual device; whether/how a real transcription would render it is not stated by 9.1.1 and is not tested by this Print-Only example."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Runs A and B agreed byte-for-byte on all three print.blocks' `text` fields (both read directly from the PDF page image, braille-formats-2016.pdf p.227, since the source .txt captures only the caption and blank filler lines for this Print-Only example -- confirmed against rules.merged.json row 'BANA Example 9-1'). The only disagreement was descriptive prose in `features` (A counted the coloured nouns and described the box; B additionally noted the whole sentence is bold) -- both accurate, merged here. No braille exists for this item, so there is nothing to reconcile in `braille`."
+}

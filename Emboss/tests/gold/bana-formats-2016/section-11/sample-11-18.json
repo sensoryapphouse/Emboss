@@ -1,0 +1,90 @@
+{
+  "id": "sample-11-18",
+  "title": "Partially Filled-In Table",
+  "pdfPages": [
+    325
+  ],
+  "textLines": [
+    9650,
+    9670
+  ],
+  "illustrates": {
+    "rule": "11.9.2",
+    "quote": "Partially Filled-In Tables. Use the same number of columns and/or rows as print when the table shows that only some of the columns and/or rows are filled in. (See Sample 11-18: Partially Filled-in Table on page 11-43.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Cause",
+        "→",
+        "Effect"
+      ]
+    ],
+    "rows": [
+      [
+        "Ed told a lie.",
+        "→",
+        "I got upset."
+      ],
+      [
+        "Ed denied it.",
+        "→",
+        "I got angrier."
+      ],
+      [
+        "Ed betrayed others.",
+        "→",
+        "He ended up friendless."
+      ],
+      [
+        "",
+        "→",
+        ""
+      ],
+      [
+        "",
+        "→",
+        ""
+      ],
+      [
+        "",
+        "→",
+        ""
+      ]
+    ],
+    "notes": "Three rows are filled with cause/effect sentences; three further rows show only the arrow (→) with both Cause and Effect cells left blank for the reader to complete.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, ruled lines between rows; the arrow appears in its own narrow middle column in every row, filled or not."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<.=\\o ,\"r >r[@.>",
+      "",
+      ",cause           ;\\o ,e6ect",
+      "\"33333333333333 \"33 \"333333333333333",
+      ",$ told a lie4   ;\\o ,i got upset4",
+      ",$ d5i$ x4 \"\"\"\" ;\\o ,i got angri]4",
+      ",$ 2tray$ o!rs4 ;\\o ,he 5d$ up fr.s4",
+      "\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" ;\\o \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      "\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" ;\\o \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      "\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" ;\\o \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". A transcriber's note (line 4) explains the arrow symbol: \".=\\\\o ,\"r >r[@.>\" (\"[symbol] for arrow\"). The arrow column (rendered as \";\\\\o\") appears in every row including the three blank ones (lines 11-13), where the Cause and Effect cells are instead filled with dot-5 guide-dot runs matching rule 11.9.2's instruction to keep the same number of rows/columns as print even where unfilled."
+  },
+  "uncertain": [
+    "The exact transcriber's-note wording for the arrow symbol beyond the visible tokens is transcribed literally; its full English gloss ('for arrow') is inferred from context/print meaning, not independently decoded dot-by-dot."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No content differences beyond header-schema normalization; confirmed against the PDF image (p. 325)."
+}

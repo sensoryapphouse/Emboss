@@ -1,0 +1,130 @@
+{
+  "example-16-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",HAMLET\\\"9\" vs actual \"  ,HAMLET\\\"9\". line count differs by +1 (expected 2, actual 3)."
+  },
+  "example-16-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",BRUTUS3 ,ROMANS1 @.<NOTE@.>                           #AD\" vs actual \"  ,BRUTUS3 ,ROMANS1 C.TRYM51 & LOV]S6\". line count differs by -2 (expected 7, actual 5). Input-model limitation: paragraph has no [ref:MARK] token for its note (BANA 16.4b/c, \"notes without a reference mark\") — built the literal embedded word \"note\" per 16.4b; the note's own real wording (\"Romans: citizens of Rome\") has no field to carry it (not representable)."
+  },
+  "example-16-11": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! SEME/] 0 2G9N+ ) A FLURRY (\" vs actual \"  ,! SEME/] 0 2G9N+ ) A FLURRY (\"."
+  },
+  "example-16-12": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,ALL \\\"UL9$ ^WS 9 ! PASSAGE 2L H\" vs actual \"  ,! BUILD+ _H A FE/IVE AIR ON ! \\\\TSIDE\". line count differs by -4 (expected 12, actual 8)."
+  },
+  "example-16-13": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-16-14": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-16-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\\\"<CRAFT;9\\\"0\\\">\" vs actual \"  \\\"<CRAFT;9^J\\\">\". line count differs by +1 (expected 2, actual 3)."
+  },
+  "example-16-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",N[ IS ! \\\"T = ALL BRAVE M5 TO FLY TO\" vs actual \"  ,N[ IS ! \\\"T = ALL BRAVE M5 TO FLY TO\". Input-model limitation: para0: noteref mark \"†\" has no matching print.notes[] entry — built with no note text."
+  },
+  "example-16-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"SCRIPT;9#A OR LIBRETTO;9A\" vs actual \"  SCRIPT;9#A OR LIBRETTO;9A\". Input-model limitation: para0: noteref mark \"1\" has no matching print.notes[] entry — built with no note text."
+  },
+  "example-16-5": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \",TELEMA*US' _1FR5ZY /RUCK \\\"S\\\"O Z\" vs actual \"  ,TELEMA*US' _1FR5ZY /RUCK \\\"S\\\"O Z\". line count differs by -2 (expected 7, actual 5)."
+  },
+  "example-16-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",T FLOAT+ /UFF IS CALL$ SLAG4 @.<NOTE@.>\" vs actual \"  ,T FLOAT+ /UFF IS CALL$ SLAG4 ,! SLAG\". line count differs by +1 (expected 2, actual 3). Input-model limitation: paragraph has no [ref:MARK] token for its note (BANA 16.4b/c, \"notes without a reference mark\") — built the literal embedded word \"note\" per 16.4b; the note's own real wording (\"Slag is the dross of metal\") has no field to carry it (not representable)."
+  },
+  "example-16-7": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"  444\" vs actual \"\\\"333333\". line count differs by -4 (expected 10, actual 6)."
+  },
+  "example-16-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"^1,JULIET4 ,N PR\\\\D Y H1 B ?ANK;L T\" vs actual \"  ,JULIET4 ,N PR\\\\D Y H1 B ?ANK;L T Y H4\". line count differs by -4 (expected 8, actual 4). Input-model limitation: paragraph has no [ref:MARK] token for its note (BANA 16.4b/c, \"notes without a reference mark\") — built the literal embedded word \"note\" per 16.4b; the note's own real wording (\"I'm not pleased, but I am grateful for your intentions.\") has no field to carry it (not representable)."
+  },
+  "example-16-9": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"@#1,PR$ACI\\\\S1 FI]CE1 SECRETIVE1 MAJE/IC1\" vs actual \"  ;9#A,PR$ACI\\\\S1 FI]CE1 SECRETIVE1\". line count differs by -2 (expected 7, actual 5)."
+  },
+  "sample-16-01": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\\\"9,,$S4 ,,NOTE,-,ORWELL 0 WRIT+ 9    #,-\" vs actual \"\\\"333333\". line count differs by +1 (expected 8, actual 9)."
+  },
+  "sample-16-02": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"          ,I L A LOOK ( ,AGONY      #BFH\" vs actual \"          ,I L A LOOK ( ,AGONY\". line count differs by -8 (expected 32, actual 24)."
+  },
+  "sample-16-03": {
+    "status": "mismatch",
+    "note": "first differing line 8: expected \"#A4 ^1MY ^1,\\\"L'S3 ,$W>D ,MONTAGU\" vs actual \";9#AMY ,\\\"L'S3 ,$W>D ,MONTAGU\". line count differs by -2 (expected 16, actual 14)."
+  },
+  "sample-16-04": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",HA? 9 ! SKIRTS ( ,NORWAY \\\"H & \\\"!    #,-\" vs actual \"  ,HA? 9 ! SKIRTS ( ,NORWAY \\\"H & \\\"!\". line count differs by -3 (expected 13, actual 10)."
+  },
+  "sample-16-05": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"  ,8,%]IDAN W N SU3E$ AT ,BA? ) 8    A#,-\" vs actual \"  ',%]IDAN W N SU3E$ AT ,BA? ) 8\". line count differs by -4 (expected 19, actual 15)."
+  },
+  "sample-16-06": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"444                                  #GB\" vs actual \"  444 ,D Y FEEL T X IS A3EPTABLE = A\". line count differs by -7 (expected 17, actual 10)."
+  },
+  "sample-16-07": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"444 N\\\"E 3FESS$ UNTIL N[4            A#DCC\" vs actual \"  ,I /OPP$ 9 ! MIDDLE ( ,VASS> 2C ,I 0\". line count differs by -12 (expected 25, actual 13). Input-model limitation: paragraph has no [ref:MARK] token for its note (BANA 16.4b/c, \"notes without a reference mark\") — built the literal embedded word \"note\" per 16.4b; the note's own real wording (\"This trouble proved to be diphtheria. Buried at Elmira, New York. Langdon Clemen\") has no field to carry it (not rep"
+  },
+  "sample-16-08": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      ,RE5T] ,ANTONY4\" vs actual \"  #ADC RESOLV'D3 3V9C$4 #ADH ?OR\\\\<3 \\\"?4\". line count differs by -1 (expected 8, actual 7). Input-model limitation: print.notes[] entry (ref \"143\", placement \"margin\") was never matched to a [ref:MARK] token in any paragraph — not built: \"resolv'd: convinced.\""
+  },
+  "sample-16-09": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"              ,,TABLE #G4A            #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -1 (expected 20, actual 19). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-109); the marker is stripped and the cell built as plain text, the matching print.notes[] entry"
+  },
+  "sample-16-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"              ,MA9 ,PRODUCTS ( !        #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +5 (expected 45, actual 50). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-109); the marker is stripped and the cell built as plain text, the matching print.notes[] ent"
+  },
+  "sample-16-11.1g": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-16-11": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"                 ,NOTES              #GBG\" vs actual \"                 ,NOTES\". line count differs by +9 (expected 24, actual 33)."
+  },
+  "sample-16-12": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,! FOLL[+ P>AGRAPH IS M>K$ )\" vs actual \"  ,AL? \\\"S P MI<T PREF] WAT*+ ,,TV OR\". line count differs by -20 (expected 34, actual 14). Input-model limitation: print gives no field for this braille's own leading grouping-indicator transcriber's note (rule 16.11.1g's own boilerplate explanatory wording, listing the '.=<'/'.=>' symbols and the key-to-labels codes) -- the print page shows only the labelled essay/letter itself, not this TN's own text, which th"
+  },
+  "sample-16-13": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"          ,,MODEL3 ,SOCIAL ,LR      #ABD\" vs actual \"          ,,MODEL3 ,SOCIAL ,LR\". line count differs by -19 (expected 36, actual 17). Input-model limitation: print gives no field for this braille's own leading grouping-indicator transcriber's note (rule 16.11.1g's own boilerplate explanatory wording, listing the '.=<'/'.=>' symbols and the key-to-labels codes) -- the print page shows only the labelled essay/letter itself, not this TN's own text, which the tr"
+  },
+  "sample-16-7.7a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-16-7.7b": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-16-8.1b": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-16-9.2c": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

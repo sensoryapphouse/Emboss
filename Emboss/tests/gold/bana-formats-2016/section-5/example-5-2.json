@@ -1,0 +1,49 @@
+{
+  "id": "example-5-2",
+  "title": "Prefix and Suffix with Font Attributes",
+  "pdfPages": [
+    129
+  ],
+  "textLines": [
+    3904,
+    3911
+  ],
+  "illustrates": {
+    "rule": "5.3.3",
+    "quote": "Ignore font attributes used with word parts standing alone, e.g., prefixes, suffixes, and identified root words. Note this change on the Transcriber’s Notes page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three short word-part fragments stacked one per line in a bordered box: 'dis-' bold, 'ible' italic, '-ance' bold.",
+        "items": [
+          "**dis-**",
+          "*ible*",
+          "**-ance**"
+        ]
+      }
+    ],
+    "notes": "No heading; the box is simply the three word-part items, one per line.",
+    "surroundingText": "Follows rule 5.3.3 directly; second of two examples (5-1, 5-2) sharing printed page 5-3.",
+    "printFeatures": "Small bordered box, three short stacked lines, black serif text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "dis-",
+      "ible",
+      "-ance"
+    ],
+    "pageBreaks": [],
+    "notes": "Three lines, flush left, margin 8 stripped. Verified letter-by-letter against a 400dpi render of PDF p.129 by pixel-decoding each 6-dot cell (run A): line 1 = d,i,s,hyphen; line 2 = i,b,l,e; line 3 = hyphen,a,n,c,e — confirms these are genuine uncontracted braille spellings identical to the .txt extraction, not print-only picture text mislabelled as braille. No typeform indicators appear: both bold and italic are dropped, per 5.3.3."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille (independently pixel-verified by run A against PDF p.129) and on the underlying print facts (three word-parts, differing weights); only prose wording differed, synthesized here."
+}

@@ -1,0 +1,152 @@
+{
+  "id": "b004-j-1",
+  "title": "B004 Appendix J: Good practice example of poetry – line by line method",
+  "pdfPages": [
+    27,
+    28
+  ],
+  "textLines": [
+    829,
+    876
+  ],
+  "illustrates": {
+    "rule": "B004 J line-by-line-method",
+    "quote": "Each new stanza or paragraph (except the first) may be preceded by a blank line, with its first line beginning in cell 1; alternatively, each stanza or paragraph may start in cell 3 of a new line. Subsequent lines of poetry begin on a new braille line in cell 1. If a line is too long for one braille line, the runover should begin in cell 5."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Example:",
+        "features": "Plain lead-in label, ordinary paragraph."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Two stanzas of Edward Lear's \"The Owl and the Pussy-Cat\" (first stanza), given directly as selectable text in B004.txt (not a picture, unlike the BANA source).",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "The Owl and the Pussycat went to sea",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "In a beautiful pea-green boat.",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "They took some honey, and plenty of money,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Wrapped up in a five pound note.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          },
+          {
+            "lines": [
+              {
+                "text": "The Owl looked up to the stars above",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And sang to a small guitar,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "“O lovely Pussy! O Pussy, my love,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "What a beautiful Pussy you are,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "You are,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "You are!",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "What a beautiful Pussy you are!”",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Print text is given directly in B004.txt as ordinary selectable text (confirmed also legible directly on PDF pp.27-28, not a picture, unlike the BANA Formats source).",
+    "surroundingText": "Follows the rule text describing the 'line by line' method for transcribing poetry.",
+    "printFeatures": "Plain body text; two stanzas separated by a blank print line; a quotation mark opens the Owl's speech and is not closed until the stanza's end."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! ,{l & ! ,pussycat w5t to sea",
+      ",9 a b1uti;l pea-gre5 boat4",
+      ",!y took \"s h\"oy1 & pl5ty ( m\"oy1",
+      ",wrapp$ up 9 a five p.d note4",
+      "",
+      ",! ,{l look$ up to ! />s abv",
+      ",& sang to a small guit>1",
+      "8,o lovely ,pussy6 ,o ,pussy1 my",
+      "    love1",
+      ",:at a b1uti;l ,pussy y >e1",
+      ",y >e1",
+      ",y >e6",
+      ",:at a b1uti;l ,pussy y >e60"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 8,
+        "note": "Braille page break between printed page 26 and 27 (PDF pages 27/28 of the B004 PDF; the guide uses its own plain page numbers, no offset), falling between the runover \"...my / love,\" and the next poem line \",:at a b1uti;l...\" (\"What a beautiful...\"). The source .txt itself carries a literal form-feed character immediately before the resuming line (between .txt lines 858 and 859), independently confirming the page boundary at exactly this point (same evidence pattern as the section-9 gold precedent, sample-9-11). The page-bottom blank filler and the bare footer '27' (.txt lines 854-858) are excluded from braille.lines."
+      }
+    ],
+    "notes": "Verbatim from B004.txt lines 845-853 and 859-862 (the intervening blank lines 854-857 and the print-page footer '27' at line 858 are page-end white space/footer, excluded per the task brief). Stanza 1's first line begins at cell 3 (2-space indent) with no preceding blank line (it is the poem's first stanza); stanza 2's first line begins at cell 1, preceded by a blank line -- i.e. this rendering appears to apply the rule's two alternative stanza-start conventions differently for the first stanza (cell 3, substituting for the inapplicable 'except the first' blank line) versus later stanzas (blank line + cell 1). See 'uncertain' for a caveat on this reading, and for a capitalisation inconsistency against the 'Or:' variant.",
+    "variants": [
+      {
+        "label": "Or: (alternative stanza-start convention, both stanzas at cell 3, no blank line between them)",
+        "lines": [
+          "  ,! ,{l & ! ,pussycat w5t to sea",
+          ",9 a b1uti;l pea-gre5 boat4",
+          ",!y took \"s h\"oy1 & pl5ty ( m\"oy1",
+          ",wrapp$ up 9 a five p.d note4",
+          "  ,! ,{l look$ up to ! />s abv",
+          ",& sang to a small guit>1",
+          "8,o lovely ,pussy6 ,o ,pussy1 my",
+          "    love1",
+          ",:at a b1uti;l ,pussy y >e1",
+          ",Y >e1",
+          ",y >e6",
+          ",:at a b1uti;l ,pussy y >e60"
+        ]
+      }
+    ]
+  },
+  "uncertain": [
+    "The two variants disagree on the capitalisation of the fifth-from-last word: the primary rendering has lower-case ',y >e1' ('you are,'), while the 'Or:' variant has ',Y >e1' (capital-letter-marked 'You are,') for the identical print words 'You are,' -- both quoted verbatim; this looks like a genuine inconsistency in the source rather than a deliberate difference between the two methods, since print gives 'You are,' with a capital Y in both cases and neither variant's own SECOND 'You are!' (',y >e6') uses the capital-letter mark."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Line 0 corrected from run A's 2 leading spaces to 0: the source's PRIMARY rendering (.txt line 845) begins flush at cell 1, not cell 3 -- confirmed directly (no leading ASCII spaces before ',! ,{l...' at .txt line 845), matching run B. Run A's own uncertainty note ('the primary rendering's two stanzas do not follow one single stanza-start convention -- stanza 1 starts at cell 3... stanza 2 starts at cell 1') is resolved as a measurement error, not a genuine editorial inconsistency in the source: BOTH of the primary rendering's stanzas begin at cell 1 (.txt lines 845 and 850 both have 0 leading spaces), consistently matching the line-by-line method's basic rule ('Subsequent lines of poetry begin on a new braille line in cell 1'). Only the separate 'Or:' alternative (braille.variants[0], already correct in both runs) demonstrates the OTHER named convention -- both of ITS stanzas start at cell 3 (.txt lines 865 and 869, 2 leading spaces each) -- illustrating B004 J's two named alternatives on two SEPARATE renderings of the same poem, not mixed within one rendering. All other lines (11 of 12) in both the primary rendering and the 'Or:' variant were already identical between runs and independently confirmed correct against the source, including the 'Or:' variant's own capitalisation difference on 'You are,' (lower-case y-sign in the primary rendering, capital Y-sign in the 'Or:' variant, for identical print wording) -- reproduced verbatim per the task brief's own known note, not silently corrected. braille.pageBreaks converted from run A's non-standard {after, note} shape to the established repo-wide {afterLineIndex, note} shape (section-9's sample-9-11 precedent); run B's inline form-feed character prefixed to the resuming line removed for the same reason as sample-13-12 (no gold file anywhere embeds \\f inside braille.lines)."
+}

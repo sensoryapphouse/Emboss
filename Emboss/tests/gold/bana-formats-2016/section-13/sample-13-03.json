@@ -1,0 +1,74 @@
+{
+  "id": "sample-13-03",
+  "title": "Sample 13-3: Shape Poem",
+  "pdfPages": [
+    370
+  ],
+  "textLines": [
+    10721,
+    10739
+  ],
+  "illustrates": {
+    "rule": "13.5.2",
+    "quote": "Poetic lines are not always easy to determine in some shape poems. Use punctuation and change of thought as a guide. (See Sample 13-3: Shape Poem on page 13-16.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Ampersand",
+        "features": "Bold title, top-left of the image."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Patrick Winstanley",
+        "features": "Byline in a smaller blue/purple font, directly below the title."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "AMPERSAND IS MUCH MORE GRAND ... AN 'AND', BUT AN 'AND' IS SIMPLY AN AMPERSAND (exact wording and reading order uncertain -- see 'uncertain')",
+        "features": "The poem's own words are set, in light grey capitals, along a curving path that traces the shape of an ampersand ('&') glyph; there is no separate body of left-to-right print text to transcribe -- the text IS the shape."
+      }
+    ],
+    "notes": "Picture on PDF p.370 (Patrick Winstanley's 'Ampersand' shape poem). The words visible curving around the glyph include AMPERSAND, IS, MUCH, MORE, GRAND, AN, SIMPLY, BUT, and 'AND' (in quotes), each appearing more than once, consistent with a poem that reads the same way if entered at different points around the closed '&'-shaped loop.",
+    "surroundingText": null,
+    "printFeatures": "Grey, all-capitals, curved/rotated typography following the ampersand's own strokes; small blue byline."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                ,amp]s&",
+      "",
+      "           ,patrick ,w9/anley",
+      "",
+      "      @.<,! poem is writt5 9 ! %ape ( an",
+      "    amp]s&4@.>",
+      "",
+      ",,,an ,8&,0 is simply an ,8&,01",
+      "b an amp]s& is m* m gr&,'"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10726-10734 (first rendering), after stripping a 5-char line-number field (2-digit max line number 11, +3=5) and converting U+2800. This is the FIRST of two alternative renderings the source itself separates with the word 'Or' (see braille.variants); both give the identical two-sentence wording, only re-wrapped across lines differently.",
+    "variants": [
+      {
+        "label": "Or (alternative line-wrap)",
+        "lines": [
+          ",,,an ,8&,0 is simply an ,8&,01 b an",
+          "  amp]s& is m* m gr&,'"
+        ]
+      }
+    ]
+  },
+  "uncertain": [
+    "The shape poem's print text follows a closed curved path (the ampersand glyph itself) with no obvious single start/end point; a definitive left-to-right reading order could not be established with confidence purely from the PDF page image (tried at multiple rotations). The braille transcription is unambiguous and taken verbatim, and is internally self-consistent between the two given variants, but the print.blocks text above is a best-effort paraphrase of the visible words rather than a confirmed, ordered transcription -- flagged rather than guessed as certain.",
+    "Braille token ',8&,0' (identical in both occurrences within the same sentence) most likely represents the quoted word 'and' (open-quote + and-contraction + close-quote), distinguishing it from the fully spelled-out 'amp]s&' (ampersand) in the following clause -- but this reading is inferred from the braille's internal structure, not independently confirmed by successfully reading the corresponding print words on the curve."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

@@ -1,0 +1,77 @@
+{
+  "id": "example-4-5",
+  "title": "Heading Following a Page Change Indicator",
+  "pdfPages": [
+    109
+  ],
+  "textLines": [
+    3245,
+    3258
+  ],
+  "illustrates": {
+    "rule": "4.3.4",
+    "quote": "Insert a blank line before a heading that follows a page change indicator."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "5. Amongst the museum's other treasures are steel suits of armor.",
+        "features": "Tail end of a numbered exercise item on the preceding print page, shown only to establish the page-break context; print page number \"134\" printed to the right of it."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "—New Print Page—",
+        "features": "Print's own explicit new-page marker, printed centered in italic between the two print pages; print page number \"148\" printed to its right."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Interrupted Order",
+        "features": "Centered, bold blue serif heading; print page number \"148\" printed to its right."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The noun closest to the verb is not always the subject of a sentence.",
+        "features": "Plain body text, lead sentence of the new print page."
+      }
+    ],
+    "notes": "Illustrates the blank line inserted before a heading that follows a page-change indicator (here, a \"—New Print Page—\" marker between print pages), per rule 4.3.4.",
+    "surroundingText": "Numbered exercise item on the print page before the page turn.",
+    "printFeatures": "Plain numbered-item text, then an italic centered print-page-change marker, then a bold blue centered heading with its print page number to the right, then plain body text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#e4 ,am;g ! museum's o!r            c#adg",
+      "  tr1sures \"<is1 >e\"> s\"eal suits (",
+      "  >mor4",
+      "------------------------------------#adh",
+      "",
+      "            ,9t]rupt$ ,ord]",
+      "",
+      "  ,! n\\n close/ to ! v]b is n alw !",
+      "subject ( a s5t;e4"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 4,
+        "type": "explicit",
+        "note": "A page-change indicator (dashed rule ending in the coded print-page number '#adh' = 148) marks the print-page boundary; line 1 carries the outgoing page's own coded number 'c#adg' (134) at its right margin. Both belong to UEB's page-change-indicator convention, not to either heading."
+      }
+    ],
+    "notes": "Lines 1-3 finish the exercise item and carry the outgoing print-page-number code 'c#adg' (134) at the right margin of line 1 (41 cells total, preserved verbatim); line 4 is the page-change-indicator rule of hyphens ending in the incoming page's coded number '#adh' (148); line 5 blank (per 4.3.4); line 6 the centered heading 'Interrupted Order'; line 7 blank; lines 8-9 the lead sentence."
+  },
+  "uncertain": [
+    "print.blocks[0]'s exact wording ('5. Amongst the museum's other treasures are steel suits of armor.') is reconstructed from the braille contractions alone, not from a clean print-image reading of the preceding print page (outside this excerpt); this block is already excluded from being fully modeled anyway (see the 'other'/page-marker limitation this file is expected to report).",
+    "The two coded numeric tokens 'c#adg' (end of line 1, =134) and '#adh' (end of line 4, =148) are read as the outgoing/incoming print page numbers of the page-change-indicator convention; '148' is directly visible on the print image, '134' is not (it belongs to the page before this excerpt) so it is inferred from the coding pattern only, not independently confirmed against print."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree between runs. The exercise item that precedes the page-change indicator is a numbered list item in print (kind=list-item, not paragraph -- run B's \"paragraph\" kind for blocks[0] is less precise but not wrong; run A's \"list-item\" is kept as the more specific/faithful kind). `pageBreaks` (only run B recorded one) is adopted: rule 4.3.4 explicitly concerns page-change indicators, and the source line 3248 (\"Example 4-5: Heading Following a Page Change Indicator\") together with the dashed rule at braille line 4 is exactly what a pageBreak entry documents; confirmed against .txt lines 3245-3261 and the \"134\"/\"148\" page-number codes at the right margins of lines 1 and 4."
+}

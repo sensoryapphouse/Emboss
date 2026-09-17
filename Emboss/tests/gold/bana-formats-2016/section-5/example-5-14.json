@@ -1,0 +1,70 @@
+{
+  "id": "example-5-14",
+  "title": "Use of Transcriber-Defined Indicators",
+  "pdfPages": [
+    136
+  ],
+  "textLines": [
+    4120,
+    4134
+  ],
+  "illustrates": {
+    "rule": "5.5.3",
+    "quote": "The transcriber’s defined indicator(s) and termination indicator(s) are listed on the Special Symbols page, or in a transcriber’s note before the text. Sample: Symbols used in this volume: .=@#7 Double underline passage indicator .=@#' Double underline terminator .=^#1 Yellow highlighted word indicator"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Braille-only transcriber's note (opened/closed by '@.<'...'@.>') restating the double-underline passage indicator/terminator and yellow-highlight word indicator already given in rule 5.5.3's own printed 'Sample:' text; no counterpart inside Example 5-14's own print box.",
+        "items": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Single numbered grammar-rule item; 'and' is italicized.",
+        "items": [
+          "Use a plural verb with subjects joined by *and*."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "My school's {{td1: orchestra *and* band}} {{td2: have}} different instruments.",
+        "features": "Demonstration sentence: 'orchestra and band' together are double-underlined (a transcriber-defined attribute, since double underlining is not one of the four standard UEB typeforms) with 'and' additionally italicized nested inside the underlined span; 'have' is highlighted yellow (a second transcriber-defined attribute).",
+        "items": null
+      }
+    ],
+    "notes": "The example's own boxed print content is just these two lines (the numbered rule plus its demonstration sentence); it does NOT include the 'Symbols used in this volume' legend that appears in the braille below (see braille.notes) — that legend belongs to rule 5.5.3's own printed 'Sample:' text (already quoted in `illustrates`), which sits just above the Example 5-14 box in the print layout, not inside it.",
+    "surroundingText": "Follows rule 5.5.3 and its printed symbols-legend directly, on printed page 5-10.",
+    "printFeatures": "Boxed single numbered item; double-underline, italics, and yellow highlighting all visible in the same short passage."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,symbols us$ 2l3",
+      "",
+      ".=@#7 ,d\\ble \"ul9e passage 9dicator",
+      ".=@#' ,d\\ble \"ul9e t]m9ator",
+      ".=^#1 ,yell[ hi<li<t$ ^w 9dicator@.>",
+      "",
+      "#a4 ,use a plural v]b ) subjects jo9$ by",
+      "    .1&4",
+      "  ,my s*ool's @#7or*e/ra .1& b&@#'",
+      "    ^#1h di6]5t 9/ru;ts4"
+    ],
+    "pageBreaks": [],
+    "notes": "Ten lines, margin 8 stripped. Lines 1-5 are a transcriber's-note symbols key ('@.<' ... '@.>'), listing the double-underline passage indicator ('@#7'), its terminator ('@#''), and a yellow-highlight word indicator ('^#1') — no printed counterpart in the example's own picture box. Line 7-8 the rule statement (single-word italic indicator '.1' before 'and'/'&'); line 9 opens 'orchestra' with the double-underline passage indicator ('@#7'), marks 'and' with the single-word italic indicator ('.1') NESTED inside the still-open underlined span, then closes the underline after 'band' ('@#'') — the underline spans all three words 'orchestra and band', not 'orchestra' alone; line 10 marks 'have' with the yellow-highlight word indicator ('^#1')."
+  },
+  "uncertain": [
+    "Whether the print instruction sentence's own 'and' is italicized in the original (it is read as italic here, matching the demonstration sentence's 'and' and the braille's two separate '.1' markers, one per occurrence)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte. The demonstration sentence's double-underline SPAN was a genuine disagreement: A said the underline covers all three words 'orchestra and band' (with italic 'and' nested inside); B's own {{tdN}} markup excluded 'and band' from the underline span. Resolved in favor of A, directly verified against the braille: '@#7' opens before 'orchestra' and '@#'' does not close until immediately after 'band' (line 9, 'my s*ool's @#7or*e/ra .1& b&@#''), with '.1' (italic) opening and implicitly closing on 'and' strictly inside that still-open underline — B's account is a transcription error, not a valid alternative reading. Both runs agree on `illustrates.rule` (5.5.3); only the exact quote text differed (A paraphrased the braille symbols as bracketed descriptions, B quoted the literal .txt ASCII) — B's literal quote is used here since it matches the primary source exactly."
+}

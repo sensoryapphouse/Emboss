@@ -1,0 +1,60 @@
+{
+  "id": "sample-4-05-option-2",
+  "title": "Paragraph Headings Relocated (Option 2: both headings relocated, at the same level -- cell-5 then cell-5)",
+  "pdfPages": [
+    124
+  ],
+  "textLines": [
+    3724,
+    3729
+  ],
+  "illustrates": {
+    "rule": "4.8.2",
+    "quote": "Changing Paragraph Headings to Cell-5 or Cell-7 Headings. A paragraph heading may provide better navigation for the braille reader when it is separated from the paragraph and changed to a cell-5 or cell-7 heading. (See Sample 4-5: Paragraph Headings Relocated on page 4-20 and Sample 4-6: Paragraph Heading Changed to Cell-5 Heading on page 4-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Connection to History",
+        "features": "Small bold banner label with a rolled-scroll icon, above the run-in heading."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "The tree of life",
+        "features": "Bold red run-in heading in print; relocated onto its own line in THIS option and given the SAME cell-5 level as 'Connection to History' (rule 4.5.6's 'equally important' pattern), not the hierarchical cell-7 pairing of Option 1."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In his book *On the Origin of Species*, Charles Darwin used the analogy of a tree to suggest that all of the species",
+        "features": "Plain body text, run in immediately after the heading in print; cut off at the edge of the image."
+      }
+    ],
+    "notes": "Option 2 of 3: both headings are relocated onto their own lines, but BOTH are given the same cell-5 level, stacked directly with no blank line between, treating them as two equally important headings per rule 4.5.6 -- NOT identical to Option 1 (whose second heading is cell-7, a 2-cell-deeper indent). Run A's own uncertainty note claiming Options 1 and 2 are byte-identical is incorrect -- see resolution.",
+    "surroundingText": null,
+    "printFeatures": "Same print source as Option 1: small banner label above a paragraph whose first words are a bold run-in heading."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,3nec;n to ,hi/ory",
+      "    ,! tree ( life",
+      ",9 8 book .7,on ! ,orig9 ( ,species.'1",
+      ",*>les ,d>w9 us$ ! analogy ( a tree to",
+      "su7e/ t all ( ! species"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the cell-5 heading 'Connection to History'; line 2 the cell-5 heading 'The tree of life' (ALSO a 4-cell indent -- 2 cells shallower than Option 1's cell-7 treatment of the same text), stacked with no blank line, per 4.5.6; line 3 the paragraph begins at column 1."
+  },
+  "uncertain": [
+    "The Darwin paragraph directly follows the relocated heading(s) with no blank line; Emboss's formatPara still applies its ordinary 2-cell first-line indent rather than starting flush at column 1 as the gold braille does -- see standards-findings.md F-39. Expect a documented mismatch limited to this indent, not a content bug."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree between runs and were independently re-derived a THIRD time directly from .txt lines 3725-3729, confirming line 2 has exactly 4 leading blank cells -- 2 fewer than Option 1's line 2. This directly REFUTES run A's own `uncertain` entry, which claimed \"Option 2's braille lines are, character for character, identical to Option 1's\": they are not (Option 1 line 2 has 6 leading blanks/cell-7, Option 2 line 2 has 4/cell-5); run A's own braille.lines data array is correct, only its prose uncertainty note was wrong, and it is dropped here. `level` for \"The tree of life\" resolved to 2 (cell-5): run A said null, and run B's own file says 3 (cell-7) in its print.blocks.level field while its OWN braille.notes prose says \"SAME cell-5 indent\" for both headings -- an internal inconsistency in run B, resolved here in favour of the directly-measured braille evidence (4 leading blanks = cell-5 = level 2), not either run's stated `level` value."
+}

@@ -1,0 +1,45 @@
+{
+  "id": "example-5-13",
+  "title": "Glossary Words",
+  "pdfPages": [
+    135
+  ],
+  "textLines": [
+    4084,
+    4091
+  ],
+  "illustrates": {
+    "rule": "5.4.3",
+    "quote": "Follow print for font attributes used to identify glossary words throughout the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Sociologists refer to the trend as **feminization of poverty** (*The State of America's Children*, 1998).",
+        "features": "Plain sentence with two distinct retained attributes: the multi-word glossary term 'feminization of poverty' is bold, and the parenthetical book-title citation 'The State of America's Children' is italic; the year '1998' is plain.",
+        "items": null
+      }
+    ],
+    "notes": "Single-sentence example; no heading.",
+    "surroundingText": "Follows rule 5.4.3 directly, on printed page 5-9.",
+    "printFeatures": "Boxed single sentence with one bold glossary term and one italic citation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,sociologi/s ref] to ? tr5d z !",
+      "^7fem9iza;n ( pov]ty^' \"<.7,! ,/ate (",
+      ",am]ica's ,*n1.' #aiih\">4"
+    ],
+    "pageBreaks": [],
+    "notes": "Three lines, margin 8 stripped; line 1 has a genuine 2-cell runover indent. '^7' opens a bold PASSAGE around 'feminization of poverty', closed by '^''; '.7' opens an italic passage around 'The State of America's Children', closed by '.'' just before the year. Both attributes are retained, per 5.4.3 (glossary term) and 5.3.11-style distinctive-title practice (book title citation), unlike Examples 5-1/5-2/5-3/5-7/5-9 where such attributes were dropped."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte (including line 1's genuine 2-cell runover indent, correctly preserved by both here) and on the substantive print facts."
+}

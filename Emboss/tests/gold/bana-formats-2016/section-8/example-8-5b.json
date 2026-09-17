@@ -1,0 +1,77 @@
+{
+  "id": "example-8-5b",
+  "title": "List with One Bulleted Item",
+  "pdfPages": [
+    204
+  ],
+  "textLines": [
+    5954,
+    5966
+  ],
+  "illustrates": {
+    "rule": "8.7.1.a",
+    "quote": "To indicate that only some items in the list have bullets or other print indicators, such as pictures: a. Follow print for the symbol used as a bullet. The bullet begins in cell 1 and is followed by a space. Symbols used must be listed in a transcriber’s note or placed on the Special Symbols page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Identical three numbered items to Example 8-5a; item 2 alone carries a print bullet, here a small solid black square rather than a round dot.",
+        "items": [
+          {
+            "marker": "1.",
+            "level": 1,
+            "text": "THE LIFE AND TIMES OF SHERLOCK HOLMES",
+            "features": null
+          },
+          {
+            "marker": "2.",
+            "level": 1,
+            "text": "MURDER ON THE SNIKREP CAMPUS",
+            "features": "preceded by a print bullet",
+            "bullet": "solid-square"
+          },
+          {
+            "marker": "3.",
+            "level": 1,
+            "text": "THE MARCH SKY",
+            "features": null
+          }
+        ]
+      }
+    ],
+    "notes": "Demonstrates a different bullet shape (solid square) from Example 8-5a's round dot, both drawing from the transcriber-defined symbol list in 8.6.2.a.",
+    "surroundingText": null,
+    "printFeatures": "Boxed list; numbered items 1-3, all-caps; item 2's bullet is a small solid black square to its left."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text 5ds4                                             #f",
+      "                                     #de",
+      "     #a4 ,,,! life & \"ts ( %]lock",
+      "       holmes,'",
+      "_$#d #b4 ,,,murd] on ! snikrep campus,'",
+      "     #c4 ,,,! m>* sky,'",
+      ""
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 1,
+        "type": "implicit",
+        "note": "Line numbering resets from 25 (previous braille page's last line) to 1 (new braille page) with no explicit '—New Braille Page—' marker text in the source; break inferred from the numbering restart, as with sample-11-21 in the section-11 precedent."
+      }
+    ],
+    "notes": "Line 1 ('text (cont.)', braille page number 6/'#f') is the last line of the *previous* braille page, carried into this excerpt for context, per rule 8.8.5.e's '(cont.)' convention (shown here for a bulleted list rather than an outline, so it is simply supporting context, not itself illustrating 8.8.5). Lines 2-6 are the new braille page's lines 1-5 (line 6 blank): the bullet symbol on line 4 is '_$#d' (dots for the 'Solid square' transcriber-defined symbol from 8.6.2.a), preceding item 2's number '#b4', mirroring Example 8-5a's structure but with the square-bullet symbol."
+  },
+  "uncertain": [
+    "The exact number of literal blank cells between 'text (cont.)' and the trailing page-number code '#f' on the carried-over line 1 was not independently re-derived from the PDF dot image (this line is supporting context, not the graded content of the example); the word content itself ('text', the '(cont.)' marker, and page number 6) is not in doubt."
+  ],
+  "resolution": "Same ALL-CAPS/illustrates fix as example-8-5a (see its resolution). Item 2’s bullet is the solid black square variant (confirmed against the PDF page image, p. 204), recorded as `bullet:\"solid-square\"` alongside its ordinal marker \"2.\" — same compound-marker limitation as 8-5a. braille.pageBreaks: both runs agree it is implicit (line numbering resets 25→1 with no marker text); A’s note kept (matches this section’s own convention, cf. example-8-7’s \"1\" line-number field oddities are unrelated).",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

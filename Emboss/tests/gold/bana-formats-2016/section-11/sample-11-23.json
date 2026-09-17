@@ -1,0 +1,80 @@
+{
+  "id": "sample-11-23",
+  "title": "Interchanged Columns and Rows",
+  "pdfPages": [
+    331
+  ],
+  "textLines": [
+    9810,
+    9830
+  ],
+  "illustrates": {
+    "rule": "11.15.1",
+    "quote": "Wide Tables: Interchanged Columns and Rows. Sometimes it is possible to fit a wide table across the page by interchanging the table columns and rows. This is done only if it preserves the clarity of the table. Insert a transcriber's note before the table. Sample: Columns and rows are interchanged. (See Sample 11-23: Interchanged Columns and Rows on page 11-49.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun"
+      ]
+    ],
+    "rows": [
+      [
+        "Sunrise",
+        "7:23 AM",
+        "7:02 AM",
+        "6:31 AM",
+        "6:10 AM",
+        "5:50 AM",
+        "5:30 AM"
+      ],
+      [
+        "Sunset",
+        "5:53 PM",
+        "6:19 PM",
+        "6:38 PM",
+        "7:57 PM",
+        "8:17 PM",
+        "8:31 PM"
+      ]
+    ],
+    "notes": "In print, the six months are columns and Sunrise/Sunset are the two rows; the braille transcription swaps this so months become row headings and Sunrise/Sunset become the (only two) column headings, letting six data rows replace six wide columns.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; two-row (Sunrise/Sunset), six-column (Jan-Jun) layout; header row (months) bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,columns & r[s >e 9t]*ang$4@.>",
+      "",
+      "      ,sunrise     ,sunset",
+      "      \"3333333333 \"3333333333",
+      ",jan #g3#bc ,,am #e3#ec ,,pm",
+      ",feb #g3#jb ,,am #f3#ai ,,pm",
+      ",m>   #f3#ca ,,am #f3#ch ,,pm",
+      ",apr #f3#aj ,,am #g3#eg ,,pm",
+      ",may #e3#ej ,,am #h3#ag ,,pm",
+      ",jun #e3#cj ,,am #h3#ca ,,pm",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder 'text'. A transcriber's note on line 4 states, in substance, that columns and rows are interchanged - matching the rule's sample sentence exactly. The table body (lines 6-13) then has Sunrise/Sunset as the two column headings and Jan/Feb/Mar/Apr/May/Jun as the six row headings - the inverse orientation of the print original."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers' first cell resolved to '' (blank above the Sunrise/Sunset row headings in print), not a fabricated '(row)' placeholder; confirmed against the PDF image (p. 331)."
+}

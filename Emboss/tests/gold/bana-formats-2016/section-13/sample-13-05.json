@@ -1,0 +1,141 @@
+{
+  "id": "sample-13-05",
+  "title": "Sample 13-5: Poem with Uneven Indention and Wide Spacing",
+  "pdfPages": [
+    372
+  ],
+  "textLines": [
+    10774,
+    10803
+  ],
+  "illustrates": {
+    "rule": "13.6.3 cross-reference",
+    "quote": "Use three blank cells to separate widely spaced words or phrases. Explain the blank cells in a transcriber’s note. Sample: Three blank cells indicate wide spacing. (See Sample 13-5: Poem with Uneven Indention and Wide Spacing on page 13-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Sky Was",
+        "features": "Bold display title."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "by E. E. Cummings",
+        "features": "Byline, grey italic 'by' + plain name, below the title."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "e.e. cummings poem with unevenly indented lines, some words split with wide internal spacing (e.g. 'can  dy  lu' / 'minous', 'greens  coo  l choc' / 'olate'); excerpt ends mid-poem at a torn print edge before 'un  der,'.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "the",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "sky",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "was",
+                "indent": 3,
+                "number": null
+              },
+              {
+                "text": "can  dy  lu",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "minous",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "edible",
+                "indent": 3,
+                "number": null
+              },
+              {
+                "text": "spry",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "pinks shy",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "lemons",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "greens  coo  l choc",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "olate",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "s.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.372; a torn/jagged bottom edge shows the print excerpt cuts off after 's.' and before a further line beginning 'un  der,' -- a genuine excerpt, not the whole poem.",
+    "surroundingText": null,
+    "printFeatures": "Bold title; grey italic 'by'; irregular stepped indention; internal wide word-spacing within several lines."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,?ree blank cells 9dicate   #,-",
+      "    wide spac+4@.>",
+      "",
+      "               ,! ,sky ,0",
+      "",
+      "          by ;,e4 ;,e4 ,cumm+s",
+      "",
+      "!",
+      "  sky",
+      "      0",
+      "can   dy   lu",
+      "m9\\s",
+      "      $ible",
+      "spry",
+      "    p9ks %y",
+      "lemons",
+      "gre5s   coo   ;l *oc",
+      "olate",
+      ";s4",
+      "",
+      "  444"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10781-10801, after stripping a 5-char line-number field (2-digit max line number 21, +3=5) and converting U+2800. Lines 1-2 are the sample's own transcriber's note ('Three blank cells indicate wide spacing.') inside a grade-1 passage, per rule 13.6.3. Title (line 4) is centred; byline (line 6) is centred on its own shorter string. The poem body follows print's uneven indention directly, and the wide-spaced mid-word splits ('can   dy   lu', 'gre5s   coo   ;l *oc') are rendered with three literal blank cells, per this rule. The final '444' line is a continuation marker showing the excerpt is deliberately truncated (matching the source's own torn print edge), not the poem's true ending.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. CORRECTION during buildModel13 integration: three print.blocks poem lines ('was', 'edible', 'pinks shy') had a lower indent level in run A than run B (2/2/1 vs 3/3/2) -- an A/B disagreement not caught by the braille.lines-only diff, since both runs' braille.lines are byte-identical. Resolved in favour of run B throughout: the gold braille measures 6/6/4 leading cells respectively for these three lines ('      0' for 'was', '      $ible' for 'edible', '    p9ks %y' for 'pinks shy') -- nestedMargins's first=level*2 gives 6/6/4 only at levels 3/3/2, not run A's 2/2/1 (which would give 4/4/2)."
+}

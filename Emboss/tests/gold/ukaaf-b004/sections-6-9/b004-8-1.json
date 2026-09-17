@@ -1,0 +1,43 @@
+{
+  "id": "b004-8-1",
+  "title": "Print Page Turn Indicators -- Good Practice Description",
+  "pdfPages": [
+    7
+  ],
+  "textLines": [
+    200,
+    209
+  ],
+  "illustrates": {
+    "rule": "B004 §8",
+    "quote": "Guiding principles: If original print page numbers are included on page information lines, in the braille version, an indication of where the print page turn has occurred must also be shown. Note, the indicator can generally be automatically created by braille translation software."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Prose description of the print-page-turn indicator layout: a centred line of dot 5 + dots 2-5 immediately followed (no space) by the new print page number; text resumes in cell 1 on the next line unless a new paragraph begins. The worked example follows separately (b004-8-2)."
+      }
+    ],
+    "surroundingText": "Followed by the worked 'Example:' (b004-8-2)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No worked braille given in this item; it is the prose statement of good practice. See b004-8-2 for the worked example."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: prose-only, no braille. status: no-braille."
+}

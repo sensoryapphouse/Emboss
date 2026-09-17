@@ -1,0 +1,48 @@
+{
+  "id": "example-1-5",
+  "title": "End-of-Volume Statement Added to Line 25",
+  "pdfPages": [
+    24
+  ],
+  "textLines": [
+    777,
+    780
+  ],
+  "illustrates": {
+    "rule": "1.6.5.e",
+    "quote": "When the text ends on the last line of a page, the end-of-volume statement may be included on the line if it is preceded and followed by three blank cells."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "No print excerpt is given in the source for this example -- only a boxed braille-only excerpt is shown, illustrating braille page-layout mechanics (where the end-of-volume/end-of-book statement falls), confirmed against the PDF page image."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ".1,9f] ,:y d sci5ti/s 2lieve t",
+      "mito*ondria may h be5 9vad]s ( e>ly",
+      "cells8   @.<,5d ( ,volume #c@.>      #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 23-25, verbatim. Text ('cells8') runs to the very end of line 25; the end-of-volume statement is appended on that same line, separated from the preceding text by three blank cells and from the trailing braille page number by a further run of blank cells."
+  },
+  "uncertain": [
+    "The braille page number '#,-' is preserved verbatim; not decoded to a specific value (see example-1-4)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content verbatim and that no print excerpt is given. Emboss has no end-of-volume/end-of-book statement feature at all (standards-findings.md F-54: no code path generates 'End of Volume __.'/'The End.' anywhere) -- there is also no real print content to build from. status: not-representable (limitation: no print given, and F-54)."
+}

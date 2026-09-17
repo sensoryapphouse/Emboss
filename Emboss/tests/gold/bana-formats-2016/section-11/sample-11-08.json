@@ -1,0 +1,75 @@
+{
+  "id": "sample-11-08",
+  "title": "Column Totals",
+  "pdfPages": [
+    315
+  ],
+  "textLines": [
+    9374,
+    9390
+  ],
+  "illustrates": {
+    "rule": "11.6.2.b",
+    "quote": "b. When horizontal lines separate column items from totals, the horizontal line symbol should extend across the width of the column total. (See Sample 11-8: Column Totals on page 11-33.)"
+  },
+  "print": {
+    "caption": "EXAMPLE BASE PRICE METHOD",
+    "headers": null,
+    "rows": [
+      [
+        "Profit",
+        "$3.50",
+        "10%"
+      ],
+      [
+        "Overhead",
+        "9.45",
+        "27%"
+      ],
+      [
+        "Labor",
+        "9.10",
+        "26%"
+      ],
+      [
+        "Raw Food Costs",
+        "12.95",
+        "37%"
+      ],
+      [
+        "Customer's Meal Cost",
+        "$35.00",
+        "100%"
+      ]
+    ],
+    "notes": "\"Raw Food Costs\"/\"37%\" values are each underscored by a short horizontal rule, and \"Customer's Meal Cost\"/\"$35.00\"/\"100%\" is the total row below that rule (sum of Profit+Overhead+Labor+Raw Food Costs).",
+    "surroundingText": null,
+    "printFeatures": "No box border; centered bold caption above a plain (unboxed) table; thin horizontal rules under the \"12.95\" and \"37%\" entries only, marking them as the last addend before the total."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "     ,,,example base price me?od,'",
+      "",
+      ",pr(it \"\"\"\"\"\"\"\"\"\"\"\" @s# c4ej    #aj.0",
+      ",ov]h1d \"\"\"\"\"\"\"\"\"\"\"    # i4de   #bg.0",
+      ",labor \"\"\"\"\"\"\"\"\"\"\"\"    # i4aj   #bf.0",
+      ",raw ,food ,co/s \"\"    #ab4ie   #cg.0",
+      "                     \"3333333 \"33333",
+      ",cu/om]'s ,m1l ,co/ @s#ce4jj #ajj.0",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". No box lines are used (table is not enclosed in a box, consistent with the unboxed print original). The horizontal rule under \"Raw Food Costs\"/\"37%\" in print is rendered in braille as a run of horizontal-line-symbol dots (the two grey-highlighted '.........' / '.......' groups on line 9) extending across the width of each of those two columns only, per rule 11.6.2.b, immediately above the total row."
+  },
+  "uncertain": [
+    "The exact horizontal-line symbol characters on line 9 (shown highlighted/shaded in the PDF image) were taken from the .txt extraction; their precise dot pattern was not independently re-derived from the raster image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages already agreed. print.headers confirmed null (no header row; confirmed against the PDF image, p. 315)."
+}

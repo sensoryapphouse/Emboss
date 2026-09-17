@@ -1,0 +1,81 @@
+{
+  "id": "sample-8-13",
+  "title": "Nested List with Bulleted Subentries",
+  "pdfPages": [
+    222
+  ],
+  "textLines": [
+    6402,
+    6420
+  ],
+  "illustrates": {
+    "rule": "8.6.2.c",
+    "quote": "c. Transcribe bulleted subentries as a nested list. (See Sample 8-12: Bulleted List on page 8-25, Sample 8-13: Nested List with Bulleted Subentries on page 8-26, Sample 8-14: Bulleted Nested List on page 8-27, and Sample 8-15: Two Distinct Bullets in a Simple List on page 8-28.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Two numbered main items; item 2 has three checkmark-bulleted subentries.",
+        "items": [
+          {
+            "marker": "1.",
+            "level": 1,
+            "text": "Read all instructions before beginning."
+          },
+          {
+            "marker": "2.",
+            "level": 1,
+            "text": "Pay attention to the following features:"
+          },
+          {
+            "marker": "√",
+            "level": 2,
+            "text": "the wording of the text"
+          },
+          {
+            "marker": "√",
+            "level": 2,
+            "text": "the style of the letters used in headings"
+          },
+          {
+            "marker": "√",
+            "level": 2,
+            "text": "the way the information is organized into columns"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Boxed list; main items numbered '1.'/'2.'; three checkmark-bulleted subentries indented under item 2."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,9 ! li/ 2l1 ! symbol .=\"% is a",
+      "    *eckm>k4@.>",
+      "",
+      "#a4 ,r1d all 9/ruc;ns 2f 2g9n+4",
+      "#b4 ,pay att5;n to ! foll[+ f1tures3",
+      "  \"% ! ^w+ ( ! text",
+      "  \"% ! /yle ( ! lrs us$ 9 h1d+s",
+      "  \"% ! way ! 9=ma;n is organiz$ 9to",
+      "    columns",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A top box rule (line 8, 40 '7's) and a transcriber's note (lines 9-10, identifying the checkmark symbol) precede the list itself (lines 12-19; the box's own top matter/heading lies outside the requested excerpt). Main entries '#a4'/'#b4' (1./2.) begin cell 1; the three checkmark-bulleted subentries (bullet '\"%', the 'Checkmark' symbol from 8.6.2.a) begin cell 3 as a nested list, per 8.6.2.c, with one runover (the third check-item wraps from line 16 to line 17, indented to cell 5); a bottom box rule (line 18, 40 'g's) and a blank line (19) close the box."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. The braille-only transcriber’s note explaining the checkmark symbol (lines 3-4 of the excerpt) has no print-side counterpart at all (B’s own account confirms this) — left out of print.blocks entirely (there is nothing in print to model), recorded as a limitation instead of forced into a block kind that would misrepresent it; this is F-33 item 3’s documented gap (no transcriber-defined-symbol/Special Symbols mechanism). Because that note and the surrounding box rules can’t be built, this file is NOT wrapped in a `box` print block (unlike sample-8-04, which has no such gap) — the list alone is modeled, with the note/box limitation recorded; a mismatch against the box-rule lines is expected and documented, not \"fixed\". Checkmark subentries (marker \"√\", not Emboss’s one supported bullet •) are recorded as-is; buildModel8 records the missing correspondence per F-33 rather than guessing one.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

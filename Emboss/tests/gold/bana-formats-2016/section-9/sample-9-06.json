@@ -1,0 +1,74 @@
+{
+  "id": "sample-9-06",
+  "title": "Attribution",
+  "pdfPages": [243],
+  "textLines": [7013, 7034],
+  "illustrates": {
+    "rule": "9.4.1.b",
+    "quote": "Block attributions in the fifth cell to the right of the beginning of the previous line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Constitutional Issue",
+        "features": "Bold, coloured heading with a rule beneath it, in a boxed callout."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In reviewing the case the Court said:",
+        "features": null
+      },
+      {
+        "kind": "quote",
+        "level": null,
+        "text": "“Its resolution is a matter of national concern, requiring sensitivity both to the Government’s right to protect itself from unlawful subversion and attack and to the citizen’s right to be secure in his privacy against unreasonable government intrusion.”",
+        "features": "Displayed/blocked quotation in quotation marks, bold in print."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "—Justice Lewis F. Powell, Jr., 1972",
+        "features": "Right-aligned in print, beneath the quotation."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The government argued that such surveillance was a reasonable exercise of the president’s power",
+        "features": "Resumes after the quotation; cut off at the bottom edge of the print image."
+      }
+    ],
+    "notes": "Direct worked example of 9.4.1b: the attribution is blocked at cell 7, the fifth cell to the right of the quotation's own cell-3 beginning.",
+    "surroundingText": null,
+    "printFeatures": "Boxed callout ('The Constitutional Issue') with a coloured heading and rule; the whole box (lead-in sentence, quotation, attribution, resuming sentence) is uniformly indented in the braille at cell 3, except the centred heading and the cell-7 attribution."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,! ,3/itu;nal ,issue",
+      "",
+      "  ,9 review+ ! case ! ,c\\rt sd3",
+      "",
+      "  8,xs resolu;n is a matt] ( na;nal",
+      "  3c]n1 requir+ s5sitiv;y bo? to !",
+      "  ,gov]n;t's \"r to protect xf f unlaw;l",
+      "  subv].n & attack & to ! citiz5's \"r to",
+      "  2 secure 9 8 privacy ag/ unr1sonable",
+      "  gov]n;t 9tru.n40",
+      "      ,-,ju/ice ,lewis ;,f4 ,p[ell1",
+      "      ,jr41 #aigb",
+      "",
+      "  ,! gov]n;t >gu$ t s* surveill.e 0 a",
+      "r1sonable ex]cise ( ! presid5t's p[]"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 6-20 (a genuine excerpt). Field width 5, stripped. Line 1 (6): heading, indent 10, matches the centering formula -- centred, level 1. Line 2 (7): blank. Line 3 (8): lead-in sentence, cell 3. Line 4 (9): blank. Lines 5-10 (10-15): the quotation, blocked at cell 3. Lines 11-12 (16-17): attribution, cell 7 (quotation's cell 3 + 4, per 9.4.1b). Line 13 (18): blank, per 9.4.1d. Lines 14-15 (19-20): resuming sentence, also at cell 3 (matching the quotation's own indent, not cell 1) -- see uncertain."
+  },
+  "uncertain": [
+    "The lead-in sentence and the resuming sentence after the quotation are both indented at cell 3, the same as the quotation itself, rather than at cell 1 as a plain surrounding paragraph elsewhere in this section (e.g. Sample 9-1). Recorded as measured; may reflect the whole boxed callout being transcribed at a uniformly shifted margin, not independently confirmed against another boxed-callout worked example."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 7018-7032 after stripping the 5-character line-number field (the '(Return to Text)' line 7033 excluded). `illustrates.rule` narrowed to 9.4.1.b (the specific margin clause this sample measures) rather than the whole of 9.4.1 (B's choice) since 9.4.1a/c/d are not independently exercised by anything measurable in this short excerpt beyond the blank-line-after (already implied by b's own worked illustration). Heading level 1 (centred) confirmed directly from the agreed braille's own indent-10 match to the centering formula."
+}

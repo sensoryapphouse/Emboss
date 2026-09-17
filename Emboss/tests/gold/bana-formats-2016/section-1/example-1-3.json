@@ -1,0 +1,48 @@
+{
+  "id": "example-1-3",
+  "title": "End-of-Volume Statement within Braille Page",
+  "pdfPages": [
+    23
+  ],
+  "textLines": [
+    756,
+    761
+  ],
+  "illustrates": {
+    "rule": "1.6.5.c",
+    "quote": "Whenever possible, precede the end-of-volume statement with a blank line."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "No print excerpt is given in the source for this example -- only a boxed braille-only excerpt is shown, illustrating braille page-layout mechanics (where the end-of-volume/end-of-book statement falls), confirmed against the PDF page image."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ".1,9f] ,:y d sci5ti/s 2lieve t",
+      "mito*ondria may h be5 9vad]s ( e>ly",
+      "cells8",
+      "",
+      "         @.<,5d ( ,volume #c@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 5-9, verbatim (U+2800 blank cells rendered as spaces, trailing spaces stripped; the source's own line-number field and page margin removed, not real cell content). Line 8 is a fully blank line (rule 1.6.5.c, precede the statement with a blank line where possible); line 9 is the centred, transcriber's-note-enclosed statement 'End of Volume 3'."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content verbatim and that no print excerpt is given. Emboss has no end-of-volume/end-of-book statement feature at all (standards-findings.md F-54: no code path generates 'End of Volume __.'/'The End.' anywhere) -- there is also no real print content to build from. status: not-representable (limitation: no print given, and F-54)."
+}

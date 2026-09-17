@@ -1,0 +1,43 @@
+{
+  "id": "sample-16-7.7a",
+  "title": "Transcriber's Note Wording: Notes in a Separate Volume",
+  "pdfPages": [
+    439
+  ],
+  "textLines": [
+    12701,
+    12701
+  ],
+  "illustrates": {
+    "rule": "16.7.7.a",
+    "quote": "An agency may request that notes be provided in a separate volume(s) when a book has text and notes on facing pages. In this situation, use combined page numbers in both volumes of text and notes. Indicate that the notes are in a separate volume on the Transcriber’s Notes page. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "The text and the notes to the text are in separate volumes.",
+        "features": "Set in italics, indented as a sample of suggested wording for the Transcriber's Notes page (not a worked print/braille pair with its own boxed illustration).",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Follows rule 16.7.7a directly, illustrating rule 16.7.7 (Notes on Facing Pages) about text/notes split into separate volumes.",
+    "printFeatures": "Plain indented italic sentence, no box, no accompanying braille rendering shown in the source."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering of this sentence is given in the source -- it is offered only as suggested English wording for a Transcriber's Notes page entry, not as a worked print-to-braille example. None is guessed here."
+  },
+  "uncertain": [
+    "This item is a plain-text 'Sample:' of suggested wording (not a worked braille illustration); braille.lines is left empty rather than inferring a transcription."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.7.a per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md's own worked-examples table (\"Has braille: No\"); both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

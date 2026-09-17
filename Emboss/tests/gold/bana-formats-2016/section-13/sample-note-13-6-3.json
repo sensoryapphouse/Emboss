@@ -1,0 +1,42 @@
+{
+  "id": "sample-note-13-6-3",
+  "title": "Sample transcriber's note (rule 13.6.3)",
+  "pdfPages": [
+    359
+  ],
+  "textLines": [
+    10382,
+    10387
+  ],
+  "illustrates": {
+    "rule": "13.6.3",
+    "quote": "Use three blank cells to separate widely spaced words or phrases. Explain the blank cells in a transcriber’s note. Sample: Three blank cells indicate wide spacing. (See Sample 13-5: Poem with Uneven Indention and Wide Spacing on page 13-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Three blank cells indicate wide spacing.",
+        "features": "Single displayed (indented) sentence."
+      }
+    ],
+    "notes": "Not a worked print/braille example: rule 13.6.3 offers one plain-English sentence a transcriber might use to explain wide-spacing blank cells; the actual braille use of this technique is shown separately in Sample 13-5 (a different item, sample-13-05.json), whose own transcriber's note IS transcribed into braille there.",
+    "surroundingText": "Given as sample wording for a transcriber's note explaining the meaning of three blank cells used for wide spacing; cross-referenced to Sample 13-5.",
+    "printFeatures": "One short displayed (indented) sentence."
+  },
+  "braille": {
+    "width": null,
+    "lines": null,
+    "pageBreaks": [],
+    "notes": "No braille transcription of this exact note text is given at this point in the source; only the print wording is shown here. (Sample 13-5's own transcriber's note -- a differently-worded three-blank-cell note -- IS transcribed into braille, but that is a separate item; see sample-13-05.json.)"
+  },
+  "uncertain": [
+    "This item is a suggested note WORDING only at its point in the running rule text, not itself a worked print→braille example; included here because rules.merged.json lists it as an embedded 'Sample:' row."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: the source gives only the suggested English transcriber's-note wording at this rule's own citing location, no braille rendering anywhere nearby; braille.width/lines correctly null/empty in both runs. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

@@ -1,0 +1,105 @@
+{
+  "id": "sample-1-05",
+  "title": "Material NOT Transcribed Across Facing Print Pages",
+  "pdfPages": [
+    42,
+    43
+  ],
+  "textLines": [
+    1353,
+    1383
+  ],
+  "illustrates": {
+    "rule": "1.12.1",
+    "quote": "Material printed and read across two facing pages of a book, when there is no other material on either page, is treated as if it were on a single print page. (See Sample 1-5: Material NOT Transcribed Across Facing Print Pages on page 1-26.)"
+  },
+  "print": {
+    "page": {
+      "runningHead": "Workin' on the Railroad",
+      "printPageNumber": "44",
+      "features": "Two facing print pages (44 and 45), each ALSO carrying its own distinct, unrelated material (page 44's title/graphic, page 45's poem) in addition to a timeline graphic that visually spans the bottom of both -- so, unlike Sample 1-4, they are NOT combined into a single print page number (1.12.1's own 'when there is no other material on either page' condition fails)."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Print page 44: faint/watermark-style story-title graphic at the top ('Workin' on the Railroad'), with a small decorative train icon beneath it."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "A single horizontal infographic/timeline (construction milestones dated 2012-2015, with captioned arrows) runs across the bottom of BOTH facing pages (44 and 45) together, visually as one continuous graphic spanning the gutter."
+      },
+      {
+        "kind": "box",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "text": "Down by the station early in the morning"
+          },
+          {
+            "kind": "paragraph",
+            "text": "See the little pufferbellies all in a row",
+            "continuation": true
+          },
+          {
+            "kind": "paragraph",
+            "text": "See the station master turn the little handle",
+            "continuation": true
+          },
+          {
+            "kind": "paragraph",
+            "text": "Puff, puff, toot, toot, off we go!",
+            "continuation": true
+          }
+        ],
+        "features": "Print page 45: a four-line rhyme shown inside a decorative scroll-shaped graphic banner at the top of the page."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,\"w9' on ! ,railroad       #dd",
+      "",
+      "      @.<,! foll[+ \"tl9e is acr ! bottom",
+      "    ( pages #dd-#de4@.>",
+      "",
+      "#bjab",
+      "  ,m>*,-,3/ruc;n \"tl9e set",
+      "  ,fall,-,3/ruc;n />ts on #bcj-k,v",
+      "    ,,ed#e-to-,?ornton ,road l9e 444",
+      "#bjac",
+      "  444",
+      "-------------------------------------#de",
+      "#bjad",
+      "  ,jan4 #bcj k,v 444",
+      "#bjae",
+      "  ,jan4,-,sy/em 9 s]vice",
+      "",
+      "7777777777777777777777777777777777777777",
+      ",d[n by ! /a;n e>ly 9 ! morn+",
+      ",see ! ll pu6]bellies all 9 a r[",
+      ",see ! /a;n ma/] turn ! ll h&le",
+      ",puff1 puff1 toot1 toot1 (f we g6",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [
+      {
+        "index": 11,
+        "label": "print page change indicator, ending #de (print page 45 to 46 -- an ORDINARY page break, not a combined number, confirming the two pages are kept separate)"
+      }
+    ],
+    "notes": "23 lines, verbatim. Line 1 is the running head ('Workin' on the Railroad', centred, matching rule 1.8.2's own line-1 shape exactly) with print page number 44 ('#dd'); lines 3-4 a transcriber's note in TN brackets explaining that the timeline runs across the bottom of both pages 44-45; lines 6-16 the timeline transcribed as running text -- year labels '#bjab'/'#bjac'/'#bjad'/'#bjae' each decode under the plain a=1..j=0 convention to 2012/2013/2014/2015 (independently re-verified here: b=2,j=0,a=1,b=2 -> 2012; ...b=2,j=0,a=1,e=5 -> 2015) with milestone captions, broken at line 12 by an ORDINARY full-width page-change indicator ending '#de' (45) -- confirming the two pages stay separate rather than combining into '44-45' as Sample 1-4 does; lines 18 and 23 are rows of transcriber-defined decorative-border symbols (all 7s, all g's) standing in for the scroll graphic's top/bottom border; lines 19-22 the four-line rhyme, under print page 45."
+  },
+  "uncertain": [
+    "The exact decoded English wording of the transcriber's note (lines 3-4) and the milestone captions (lines 7-9, 14, 16) is read from the braille contractions cross-checked against the infographic's own visible print labels; braille.lines themselves are the authoritative, exactly-as-printed content."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "The two runs disagreed on whether '#bjab'/'#bjac'/'#bjad'/'#bjae' decode to plain years: run A left them undecoded ('do not resolve to plain arabic digits'), run B decoded them as 2012-2015. Independently re-derived here directly from the source .txt using the same #+letters-a-through-j digit convention already established and used without dispute elsewhere in this very section (example-1-17's '#acge'=1375): b=2,j=0,a=1,b=2 -> '2012', and likewise 2013/2014/2015 for the other three tokens -- run A's claim that they 'do not resolve to plain arabic digits under that same convention' is incorrect; run B is right. Also confirmed run B's reading that the page break at line 12 is an ORDINARY (not combined) page-change indicator to plain page 45, distinguishing this sample's point (1.12.1's condition for combining facing pages fails here, since each page carries its own separate unrelated material) from Sample 1-4's combined-number treatment. Not representable overall: the running head (1.8.2, out of scope for this harness, see buildModel1's header comment) dominates line 1, the timeline's own wording is only approximately recoverable from contractions (not confidently re-typeable as faithful print prose), and Emboss has no transcriber-defined decorative-border-symbol mechanism for the scroll graphic's 7-row/g-row borders. The poem itself (lines 19-22, inside a 'box') is the one cleanly representable piece, but it cannot be isolated from the rest of this single 23-line sample for comparison purposes. status: not-representable."
+}

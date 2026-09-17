@@ -1,0 +1,126 @@
+{
+  "id": "sample-8-05",
+  "title": "Two-Column List",
+  "pdfPages": [
+    213
+  ],
+  "textLines": [
+    6196,
+    6212
+  ],
+  "illustrates": {
+    "rule": "8.4.1.c",
+    "quote": "Keep a columned list on a single page when possible. (See Sample 8-5: Two-Column List on page 8-17.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Canadian Provinces/Territories",
+        "features": "Bold heading."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 2,
+        "features": "Two side-by-side columns, left column 7 provinces, right column 6 territories (uneven column lengths).",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Alberta"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "British Columbia"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Manitoba"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "New Brunswick"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Newfoundland"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Nova Scotia"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Ontario"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Prince Edward Island"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Quebec"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Saskatchewan"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Northwest Territories"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Yukon Territory"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Nunavut"
+          }
+        ]
+      }
+    ],
+    "notes": "Items listed in print's own column-major reading order (left column top-to-bottom, then right column top-to-bottom).",
+    "surroundingText": null,
+    "printFeatures": "Bold heading above two plain columns of place names, left column longer than the right by one row."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,canadian ,prov9ces_/,t]ritories",
+      "",
+      ",alb]ta            ,pr9ce ,$w>d ,isl&",
+      ",briti% ,columbia ,quebec",
+      ",manitoba          ,saskat*ewan",
+      ",new ,brunswick    ,nor?we/ ,t]ritories",
+      ",newf.dl&          ,yukon ,t]ritory",
+      ",nova ,scotia      ,nunavut",
+      ",ont>io",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 13/23 blank (list boundary); line 14 the heading; line 15 blank, separating the cell-5/7 heading from the columns per 8.4.1.a; lines 16-22 the seven rows, print's two-column side-by-side layout retained exactly on each braille line (e.g. line 16 ',alb]ta' + blank cells + ',pr9ce ,$w>d ,isl&'), consistent with keeping the whole columned list on a single braille page per 8.4.1.c."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: measured directly from source .txt (line 6202) = 4 leading U+2800 cells = cell-5 = level 2, confirmed independently by rule 8.4.1.a itself (\"Insert a blank line to separate a cell-5 or cell-7 heading from columns\") — not ambiguous with centring here despite the coincidental floor((40−32)/2)=4 match, because every other heading of similar length in this section that IS centred (sample-8-11, -12) measures a leading-blank count matching ITS OWN centring formula instead (13, 11 respectively), and 8.4.1.a’s own wording names only cell-5/cell-7 for this construct. Column order/spelling (7 provinces then 6 territories, column-major) cross-checked against source .txt (lines 524-530) and kept as A had it.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "sample-9-02",
+  "title": "Italicized Displayed Verse",
+  "pdfPages": [239],
+  "textLines": [6909, 6930],
+  "illustrates": {
+    "rule": "9.2.3.b",
+    "quote": "Omit font attributes when the entire section of displayed material is emphasized."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Many upper-class people from Judah were sent to Babylonia in exile, the memory of which is still evoked in the stirring words of Psalm 137:",
+        "features": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Four-line displayed verse, entirely italicized in print; per 9.2.3b the italic font attribute is omitted in braille since the whole displayed section is emphasized -- each verse line at the adjusted left margin (cell 3), runovers at cell 5, per this section's own 'multiple displayed sentences treated as a list' pattern (9.2.2e).",
+        "items": [
+          "By the rivers of Babylon, we sat and wept when we remembered Zion …",
+          "How can we sing the songs of the Lord while in a foreign land?",
+          "If I forgot you, O Jerusalem, may my right hand forget its skill.",
+          "May my tongue cling to the roof of my mouth if I do not remember you, if I do not consider Jerusalem my highest joy."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "But the Babylonian captivity of the people of Judah did not last.",
+        "features": null
+      }
+    ],
+    "notes": "Direct worked example of 9.2.3b: no italic/emphasis indicator is used anywhere in the braille verse lines even though every word of the verse is italicized in print.",
+    "surroundingText": null,
+    "printFeatures": "Plain (unboxed) narrative text; the four-line verse is set in italics and indented as a block quotation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",_m upp]-class p f ,judah 7 s5t to",
+      ",babylonia 9 exile1 ! memory ( : is /",
+      "evok$ 9 ! /irr+ ^ws ( ,psalm #acg3",
+      "",
+      "  ,by ! riv]s ( ,babylon1 we sat & wept",
+      "    :5 we rememb]$ ,zion 444",
+      "  ,h[ c we s+ ! s;gs ( ! ,\"l :ile 9 a",
+      "    =eign l&8",
+      "  ,if ,i =got y1 ,o ,j]usalem1 may my \"r",
+      "    h& =get xs skill4",
+      "  ,may my t;gue cl+ to ! ro( ( my m\\? if",
+      "    ,i d n rememb] y1 if ,i d n 3sid]",
+      "    ,j]usalem my hi<e/ joy4",
+      "",
+      ",b ! ,babylonian captiv;y ( ! p ( ,judah",
+      "did n la/4"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 6-21 in the source (a genuine excerpt). Field width 5, stripped. Lines 1-3 (source 6-8): lead-in paragraph at cell 1. Line 4 (9): blank. Lines 5-13 (10-18): the four verse lines, each first line at cell 3 and its runover(s) at cell 5. Line 14 (19): blank. Lines 15-16 (20-21): closing paragraph at cell 1."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6914-6929 after stripping the 5-character line-number field (the '(Return to Text)' line 6930 excluded). `illustrates.rule` narrowed to 9.2.3.b specifically (B quoted the whole of 9.2.3 including clause a; A cited b alone) since the sample shows the WHOLE passage emphasized, clause b's specific case, not clause a's partial-emphasis case. Structural choice: A recorded the verse as a 'quote' block carrying an `items` array (poem-like); B flattened it into one 'quote' block's `text` (joining the four lines with spaces, losing the line-per-line structure). Resolved to A's `items` structure: the agreed braille shows each verse line independently satisfying the cell-3-first/cell-5-runover pattern (measured directly, matching this section's own 'displayed sentences as a list' convention, 9.2.2e) rather than one continuously-wrapped paragraph, so a flat joined `text` would lose the very line-per-line structure the braille exhibits; kept as `kind:'list'` (not 'quote'+items) for buildModel9's consistency with example-9-4's identical list-of-displayed-sentences pattern."
+}

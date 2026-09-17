@@ -1,0 +1,51 @@
+{
+  "id": "example-9-6",
+  "title": "Source Citation to a Heading",
+  "pdfPages": [233],
+  "textLines": [6740, 6750],
+  "illustrates": {
+    "rule": "9.5.2",
+    "quote": "Headings. Do not insert a blank line between a heading and a source citation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Transcript of Gettysburg Address (1863)",
+        "features": "Bold heading at the top of the boxed excerpt (left-aligned in print; transcribed as a two-line centred heading in braille -- the braille itself spells 'Transcript of Gettysburg Address (1863)', matching print exactly, with no 'the')."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "Abraham Lincoln, Draft of the Gettysburg Address: Nicolay Copy. Transcribed and annotated by the Lincoln Studies Center, Knox College, Galesburg, Illinois. Available at Abraham Lincoln Papers at the Library of Congress, Manuscript Division (Washington, D.C.: American Memory Project, [2000-02]), http://memory.loc.gov/ammem/alhtml/malhome.html.",
+        "features": "Small italic source-citation line, positioned at the bottom of the print box (below the whole letter excerpt) but relocated in braille to sit directly beneath the heading with no intervening blank line, illustrating 9.5.2; the braille excerpt truncates this long citation with an ellipsis ('...') after 'Gettysburg Address:'."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Executive Mansion,",
+        "features": "Opening (dateline-style) line of the transcript body; in print it is followed by a jagged/torn-edge elision device and the transcript's own closing line ('shall not perish from the earth.'), neither of which is part of this short braille excerpt."
+      }
+    ],
+    "notes": "Direct worked example of 9.5.2: in print the source citation sits at the very bottom of the boxed figure, below the whole letter excerpt (heading, opening line, an elision device, closing line); in braille it is moved to immediately follow the heading with no blank line, per 9.5.2, and the letter's own middle/closing content (the elision device and 'shall not perish from the earth.') is dropped from this short excerpt entirely, leaving just the heading, the (truncated) citation, a blank line, and the opening line.",
+    "surroundingText": null,
+    "printFeatures": "Boxed historical-document excerpt; bold heading, small italic multi-line source citation at the foot of the box, a torn-paper/elision graphic dividing the shown opening and closing lines of the transcript."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "             ,transcript (",
+      "     ,gettysburg ,address \"<#ahfc\">",
+      "         ,abraham ,l9coln1 ,draft ( !",
+      "         ,gettysburg ,address3 444",
+      "",
+      ",executive ,man.n1"
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 8 ASCII spaces, stripped. Lines 1-2 (indent 13, 5): both independently satisfy the centering formula (40-len)//2 for their own text length -- a genuine 2-line centred heading (level 1), not a fixed cell-5/7 heading. Lines 3-4 (source citation): indent 9, immediately following the heading with no blank line, per 9.5.2. Line 5: blank. Line 6 (transcript body): cell 1."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, both verified byte-for-byte against lines 6745-6750 after stripping the measured 8-space margin. Structural disagreement: A ordered print.blocks as [heading, source, paragraph] (i.e. matching what braille actually shows -- source directly after the heading); B ordered them in print's own bottom-to-top visual layout [heading, paragraph, elision-other, paragraph(closing line), source] with the source citation placed last, at the bottom of the box. Settled by reading the PDF page image directly (braille-formats-2016.pdf, p.233): print genuinely shows the citation at the FOOT of the box, below the whole letter excerpt including a wavy elision line and the closing sentence 'shall not perish from the earth.' -- confirming B's account of PRINT's own layout. However, this worked example is deliberately built to illustrate 9.5.2 (heading immediately followed by a source citation, no blank line): its own short braille excerpt shows exactly that relocated order and drops the elision device and closing line entirely, so print.blocks here are recorded in the ORDER actually transcribed (heading, source, paragraph) rather than print's raw top-to-bottom layout, matching precedent's practice of building the print content actually needed to test a specific worked excerpt (cf. the section-8 README's sample-8-04 box restructuring). Also resolves A's own noted uncertainty about whether the heading includes 'the': it does not, in either print or the braille's own literal spelling (',transcript (' + ',gettysburg ,address...' decodes letter-for-letter to 'TRANSCRIPT OF GETTYSBURG ADDRESS (1863)', no 'the')."
+}

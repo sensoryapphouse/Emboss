@@ -1,0 +1,79 @@
+{
+  "id": "example-7-2",
+  "title": "Boxed Columns",
+  "pdfPages": [
+    187
+  ],
+  "textLines": [
+    5436,
+    5450
+  ],
+  "illustrates": {
+    "rule": "7.3.4",
+    "quote": "Do not reproduce left and right box lines."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": "Forms of be",
+        "features": "A ruled box with a full border on all four sides (top, bottom, left, right); the title 'Forms of be' is centred above the two column headers, with 'be' set in italic type. Per 7.3.4, braille reproduces only the box's top and bottom lines -- the print box's own left/right ruling is not transcribed.",
+        "blocks": [
+          {
+            "kind": "table",
+            "level": null,
+            "text": null,
+            "headers": [
+              [
+                "Singular",
+                "Plural"
+              ]
+            ],
+            "rows": [
+              [
+                "is (present)",
+                "are (present)"
+              ],
+              [
+                "was (past)",
+                "were (past)"
+              ]
+            ],
+            "features": "Bold column headers 'Singular'/'Plural'; two data rows, each cell parenthetically qualified ('present'/'past'); the braille joins the two columns with a dot-5 guide-dot row under each header and reuses dot-5 guide dots in place of a repeated parenthetical on line 8."
+          }
+        ]
+      }
+    ],
+    "notes": "The print box's title 'Forms of be' is transcribed on its own line inside the box, ahead of the column headers. The box has ruled lines on all four sides in print; only the top and bottom are kept in braille, per 7.3.4.",
+    "surroundingText": null,
+    "printFeatures": "Fully ruled rectangular box (all four sides); centred italic-word title; bold column headers; plain data rows; confirmed directly against the PDF page image (p.187, footer 7-3)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      "               ,=ms ( .12",
+      "",
+      ",s+ul>         ,plural",
+      "\"333333333333 \"333333333333",
+      "is \"<pres5t\"> >e \"<pres5t\">",
+      "0 \"<pa/\"> \"\"\" 7 \"<pa/\">",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "10 lines (source .txt lines 5441-5450; fixed left margin of 8 characters stripped, U+2800 converted to space, trailing spaces stripped). Line 1: blank (preceding the box, per 7.2.1). Line 2: top box line, full 40-cell width (unlike Example 7-1, this box is not set within line-numbered text, so the box line is not shortened per 7.3.3.b). Line 3: the box's own title 'Forms of be', CENTRED (15 leading blank cells; direct measurement of the source .txt confirms floor((40-10)/2)=15 for this 10-cell braille title -- not a fixed cell-5 indent). Line 4: blank (this is not 'immediately following the top box line' in the sense 7.2.1's exception (c) restricts -- only the box line itself must not be followed by a blank line, and line 3 satisfies that). Line 5: column headers 'Singular'/'Plural'. Line 6: dot-5 guide-dot separator under each header. Lines 7-8: the two data rows, each column's parenthetical repeated via dot-5 guide dots where the word itself is not repeated. Line 9: bottom box line, full 40-cell width. Line 10: blank (follows the box, per 7.2.1)."
+  },
+  "uncertain": [
+    "Line 8's exact guide-dot/word-omission pattern in columns 1 and 2 ('0 \"<pa/\"> \"\"\" 7 \"<pa/\">') was read as a same-word-omitted convention rather than independently verified letter-by-letter against a braille contractions table.",
+    "The exact italics indicator preceding 'be' in the braille title ('.1' before the word) is recorded verbatim; its precise meaning (e.g. a specific italics-word marker) was not independently decoded against a Special Symbols page."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. Structural: A modelled the box's own title as `box.text`; B modelled it as a separate nested `heading` child (`level:null`). Reconciled using a dedicated `title` field on the box block itself (paralleling Emboss's own document-model `box.title` field, per this task's own box -> {type:'box', title?, blocks} mapping), since this is the box's own accompanying heading (7.2.1e), not a second sibling block. Direct measurement against the source .txt (line 5443: 15 leading U+2800 cells before ',=ms ( .12', matching floor((40-10)/2)=15) shows the title is CENTRED in the actual braille, not set at a fixed cell-5 indent as either run's own braille.notes assumed without checking. `formatBox` (Emboss/format/document.mjs:838) always renders a box's own `title` field at a hardcoded cell-5 tier (`level:2`) with no emphasis/segment support (a plain string only, so the print's own italic 'be' cannot be reproduced either) -- confirmed by running gold-run.mjs: Emboss's actual output for this title line is '    ,=MS ( 2' (cell-5 margin, no italics indicator) against the expected '               ,=MS ( .12' (centred, with the italics indicator); this sample is expected to mismatch on the title line only (everything else byte-identical) -- see new finding F-75.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

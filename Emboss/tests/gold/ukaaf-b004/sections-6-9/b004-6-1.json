@@ -1,0 +1,43 @@
+{
+  "id": "b004-6-1",
+  "title": "Running Headers (Page Information Line) -- Good Practice Description",
+  "pdfPages": [
+    6
+  ],
+  "textLines": [
+    170,
+    177
+  ],
+  "illustrates": {
+    "rule": "B004 §6",
+    "quote": "Guiding principles: Each braille page should generally carry a page information line (PIL) indicating the braille page number, the print page number (optional), and title or current section name. It should be easily located by the reader."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Prose description of the recommended page-information-line layout: print page number left-justified, title/section name centred, braille page number right-justified, all on one line, title summarised (not truncated), capitals optional. The worked example follows separately (b004-6-2). No print/braille pair given here."
+      }
+    ],
+    "surroundingText": "Followed by an N.B. that most braille translation software can auto-generate this header (though not shorten titles)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No worked braille given in this item; it is the prose statement of good practice. See b004-6-2 for the worked example."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: prose-only, no braille. status: no-braille."
+}

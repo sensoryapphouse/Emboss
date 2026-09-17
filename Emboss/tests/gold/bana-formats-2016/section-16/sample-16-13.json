@@ -1,0 +1,99 @@
+{
+  "id": "sample-16-13",
+  "title": "Labeled Letter",
+  "pdfPages": [
+    462,
+    463,
+    464
+  ],
+  "textLines": [
+    13301,
+    13349
+  ],
+  "illustrates": {
+    "rule": "16.11.1",
+    "quote": "Labels printed in the margin can be intrusive in braille and great care needs to be taken to not interrupt the flow of text any more than necessary. List the labels in a key before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "limitation",
+        "text": "print gives no field for this braille's own leading grouping-indicator transcriber's note (rule 16.11.1g's own boilerplate explanatory wording, listing the '.=<'/'.=>' symbols and the key-to-labels codes) -- the print page shows only the labelled essay/letter itself, not this TN's own text, which the transcriber supplies from the rule's own model wording, not from anything printed on this page; not representable (F-N14, §16.11 wholly unimplemented)."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "MODEL: Social Letter",
+        "features": "Underlined caption above a handwritten-style model social letter, with a small 'MOVING VAN' clip-art graphic above it.",
+        "items": null
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "101 Monticello Road\nColumbus, Ohio 43219\nOctober 2, 19_\n\nDear Jeremy,\nI was really glad to get your letter in the mail yesterday! I've missed you a lot since you moved away. We always had fun together—playing ball after school, studying together at the library, riding bikes through town.\nI'm glad to hear you're making friends at your new school. Have you found some kids to play ball with? I've heard there are good bike paths through some of the parks in New York City. Is that true?\nWe're getting ready for the soccer season here now, as you know. The team is really going to miss you as fullback. Kyle and Jennifer asked me to say “hi.”\nPlease write again soon.\n\nYour friend,\nAndrea",
+        "features": "A handwritten-style model social letter, with small labels in the print margin identifying its parts: 'Heading' (the address/date block), 'Salutation' ('Dear Jeremy,'), 'Body' (the three paragraphs), 'Complimentary close' ('Your friend,'), and 'Signature' ('Andrea').",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Cross-referenced from rule 16.11.1g as the companion worked example to Sample 16-12, applying the ti/au/yb/dp/pu-style keying technique (here using hn/sa/bo/cl/si) to the parts of a model social letter. This sample's own braille excerpt has a genuine page-break gap in the source between its two braille pages (numbering restarts 1-20 then 1-16).",
+    "printFeatures": "A model letter reproduced in a handwriting-style font inside a bordered box, with a small moving-van clip-art image above the box and print margin labels (Heading/Salutation/Body/Complimentary close/Signature) identifying its structural parts."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,,model3 ,social ,lr      #abd",
+      "",
+      "      @.<,sec;ns ( ! foll[+ lr >e m>k$ )",
+      "    labels 9 ! m>g94 ,9 brl1 ea* label",
+      "    is key$4 ,! label is 9s]t$ 2f !",
+      "    2g9n+ ( ! text to : x applies4",
+      "    ,label$ phrases >e 5clos$ 9 brl",
+      "    gr\\p+ 9dicators4",
+      "      ,symbols us$ 2l3",
+      "",
+      ".=< ,op5+ brl gr\\p+ 9dicator",
+      ".=> ,clos+ brl gr\\p+ 9dicator",
+      "",
+      "      ,key to labels3",
+      "",
+      "hn ,h1d+",
+      "sa ,saluta;n",
+      "bo ,body",
+      "cl ,compli;t>y close",
+      "si ,signature@.>",
+      "77777777777777777777777777777777   a#abd",
+      "             hn ;<#aja ,monticello ,road",
+      "             ,columbus1 ,ohio #dcbai",
+      "             ,octob] #b1 #ai,-;>",
+      "",
+      "sa ;<,de> ,j]emy1;>",
+      "  bo ;<,i 0 r1lly glad to get yr lr 9 !",
+      "mail ye/]\"d6 444",
+      "  ,i'm glad to he> y're mak+ frs at yr",
+      "new s*ool4 444",
+      "  ,we're gett+ r1dy = ! so3] s1son \"h",
+      "n[1 z y \"k4 444",
+      "  ,pl1se write ag soon4;>",
+      "             cl ;<,y\\r fri5d1;>",
+      "             si ;<,&rea;>",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 20,
+        "type": "implicit",
+        "note": "No explicit —New Braille Page— marker text in the source; detected because the line numbering restarts at 1 (with a fresh top box-rule line) after line 20 of the first braille page -- the same page-break gap noted in the task brief for this sample."
+      }
+    ],
+    "notes": "Line-number field width 5 (max line number 20, two digits, +3) used consistently across both braille pages. The first braille page (lines 1-20) explains the key (hn=Heading, sa=Salutation, bo=Body, cl=Complimentary close, si=Signature) in a transcriber's note; the second braille page (lines 1-16) is the actual model letter, with each key inserted before its labeled span, each span enclosed in braille grouping indicators (;< ... ;>), per rule 16.11.1g."
+  },
+  "uncertain": [
+    "pdfPages includes 464 because the second braille page's content (numbered lines 1-16) falls under the printed-page-16-36 PDF image, one page beyond the 'Sample 16-13' title page (16-34) and the key-explanation page (16-35); confirmed directly against the page-footer sequence in the source .txt (16-34, 16-35, 16-36)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.11.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13308 (field width 5, digits(25)+3), stripped, is exactly 40 characters at 10 leading spaces (matching Run B, not Run A's 8). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

@@ -1,0 +1,64 @@
+{
+  "id": "sample-11-07",
+  "title": "Table with a Diagonal Line",
+  "pdfPages": [
+    314
+  ],
+  "textLines": [
+    9351,
+    9367
+  ],
+  "illustrates": {
+    "rule": "11.5.5",
+    "quote": "Diagonal Table Lines. Braille symbols are not used to reproduce diagonally printed lines. Treat the text separated by diagonal lines as column and row headings. a. When a diagonal line indicates inclusive row and column headings, the text to the left and below the diagonal line is treated as a column heading to the row headings. b. Text to the right and above the diagonal line is treated as an inclusive heading to two or more of the following columns. (See Sample 11-7: Table with a Diagonal Line on page 11-32.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Animals Grooming \\ Animals Groomed",
+        "Juvenile",
+        "Infant"
+      ]
+    ],
+    "rows": [
+      [
+        "Silverbacked male",
+        "0",
+        "3"
+      ],
+      [
+        "Blackbacked male",
+        "0",
+        "0"
+      ]
+    ],
+    "notes": "The top-left corner cell is split by a diagonal line: \"Animals Groomed\" is printed above/right of the diagonal (heading the Juvenile/Infant columns) and \"Animals Grooming\" below/left of it (heading the Silverbacked/Blackbacked male row headings).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; the corner cell contains a literal diagonal line dividing \"Animals Groomed\" (upper right, bold) from \"Animals Grooming\" (lower left, bold); row headings bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "                  ,animals ,groom$",
+      "                  \"333333333333333",
+      ",animals ,groom+ ,juv5ile ,9fant",
+      "\"333333333333333 \"3333333 \"33333",
+      ",silv]back$ male #j \"\"\"\"\" #c",
+      ",blackback$ male #j \"\"\"\"\" #j",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". Per rule 11.5.5.b, \"Animals Groomed\" (text right/above the diagonal) becomes an inclusive column heading over Juvenile/Infant (braille line 4, with its own separation line 5). Per rule 11.5.5.a, \"Animals Grooming\" (text left/below the diagonal) becomes the heading of the row-headings column, placed on the same line as \"Juvenile\"/\"Infant\" (line 6: \",animals ,groom+ ,juv5ile ,9fant\") with its own separation line (line 7) — no diagonal-line braille symbol is used, matching the rule."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: run A dropped 1 leading indent space on 2 lines (4, 5); run B matches the source .txt exactly and is used. print.headers' diagonal-split corner cell text cleaned up (parenthetical description moved to printFeatures, not left inside the header cell text)."
+}

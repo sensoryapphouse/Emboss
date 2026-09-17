@@ -1,0 +1,58 @@
+{
+  "id": "example-16-5",
+  "title": "Reference Indicated by Underlining",
+  "pdfPages": [
+    432
+  ],
+  "textLines": [
+    12443,
+    12454
+  ],
+  "illustrates": {
+    "rule": "16.3.b",
+    "quote": "When it is clear that one type of emphasis indicates notes, explain this in a transcriber’s note. Sample: All of the bold words in this volume have reference notes associated with them."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "level": null,
+        "text": "All underlined words in the passage below have associated notes.",
+        "features": "Italic, indented transcriber's-note model sentence, printed just above the boxed passage itself (matches this example's own braille exactly).",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Telemachus' <u>frenzy</u> struck someone as funny, and soon the whole room roared with laughter at him, so that all tension passed. …",
+        "features": "The word \"frenzy\" is underlined in print -- rule 16.3's own convention of using emphasis, not a separate symbol, to signal the reference; an ellipsis follows the sentence, and \"170\" is printed flush right as a page number.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Illustration directly below rule 16.3, showing a print passage where underlining (rather than a symbol) marks the note reference, together with the transcriber's note that must explain this convention.",
+    "printFeatures": "Boxed screenshot: a print paragraph with the single word \"frenzy\" underlined, ellipsis at the end, and a print page number \"170\" flush right on the same line as the ellipsis."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,all \"ul9$ ^ws 9 ! passage 2l h",
+      "    associat$ notes4@.>",
+      ",telema*us' _1fr5zy /ruck \"s\"o z",
+      "  funny1",
+      "& soon ! :ole room ro>$ ) lau<t]",
+      "  at hm1",
+      "s t all t5.n pass$4 444             #agj"
+    ],
+    "pageBreaks": [],
+    "notes": "First two lines are a transcriber's note (6 cells of leading indent once the example's own 7-space header margin is stripped, i.e. starting at cell 7) explaining that all underlined words below have reference notes; the underlined word \"frenzy\" itself is rendered with the braille underline/emphasis indicator pair (_1 ... ) rather than a reference-mark symbol, per rule 16.3a. The passage runs 1-3 margins (flush left, runover indented 2 cells) and ends with a right-flush print-page reference #agj (170). No note-separation line appears because no note text follows on this braille page -- only the transcriber's note about the underlining convention and the passage itself."
+  },
+  "uncertain": [
+    "The transcriber's-note lines (source .txt lines 12448-12449) carry a fixed 7-space left margin shared by this whole nested example (matching the 'Example 16-5:' header's own indent, stripped here) plus a further 6 cells of blank-cell indent as their own content; the resulting cell-7 starting position is measured directly from the source, not independently re-derived from a stated margin rule in this excerpt."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.3.b per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: braille.formats-2016.txt lines 12448 and 12454 are both exactly 40 characters after stripping the item's own 7-space left padding (line 12454 right-justified to a braille page-number token '#agj'). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

@@ -1,0 +1,68 @@
+{
+  "id": "example-1-13",
+  "title": "Word and Number Page Numbers",
+  "pdfPages": [
+    32
+  ],
+  "textLines": [
+    1085,
+    1098
+  ],
+  "illustrates": {
+    "rule": "1.13.1.d",
+    "quote": "Words preceding page numbers are changed to an appropriate uppercase letter, e.g., change Reference 1 to R1. Note this change on the Transcriber's Notes page."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "Word/Number",
+            "Combination/Continued Page Numbers"
+          ]
+        ],
+        "rows": [
+          [
+            "Reference 1",
+            "R1"
+          ],
+          [
+            "Reference a1",
+            "aR1"
+          ],
+          [
+            "Reference 1-6",
+            "R1-6"
+          ],
+          [
+            "Reference a1-6",
+            "aR1-6"
+          ],
+          [
+            "Reference 1-a6",
+            "R1-aR6"
+          ]
+        ],
+        "features": "Five-row reference table; column 1 the original print word/number label, column 2 its abbreviated-and-combined form per 1.13.1.d."
+      }
+    ]
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Reference table (not a real 40-cell page): braille transcriptions of column 2 -- ,r#a / a,r#a / ,r#a-#f / a,r#a-#f / ,r#a-a,r#f -- in the same row order as print.blocks[0].rows. Recorded here for evidence; lines left empty since this is not a formatted braille page (see example-1-12's identical treatment)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on content. Same treatment as example-1-12: a reference table, not a real page, so braille.lines is left empty and the braille strings recorded in braille.notes; F-48 applies here too."
+}

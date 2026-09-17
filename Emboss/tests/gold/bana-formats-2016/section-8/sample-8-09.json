@@ -1,0 +1,99 @@
+{
+  "id": "sample-8-09",
+  "title": "Simple Nested List",
+  "pdfPages": [
+    218
+  ],
+  "textLines": [
+    6309,
+    6325
+  ],
+  "illustrates": {
+    "rule": "8.5.1.b",
+    "quote": "The main entry begins in cell 1. Each subentry level begins two cells to the right of the previous level. All runovers begin two cells to the right of the farthest indented subentry. One level: 1-3 ... (See Sample 8-9: Simple Nested List on page 8-22.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three company entries, each with a two-line indented address subentry; no heading.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Apple Inc."
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "1 Infinite Loop"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Cupertino, CA 95014"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Microsoft Corporation"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "One Microsoft Way"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Redmond, WA 98052-6399"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Sun Microsystems"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "4150 Network Circle"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Santa Clara, CA 95054"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain nested address list, main entry (company name) unindented, its two address lines indented one level, no bullets/numbers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      ",apple ,9c4",
+      "  #a ,9f9ite ,loop",
+      "  ,cup]t9o1 ,,ca #iejad",
+      ",micros(t ,corpora;n",
+      "  ,\"o ,micros(t ,way",
+      "  ,r$mond1 ,,wa #ihjeb-#fcii",
+      ",sun ,microsy/ems",
+      "  #daej ,net\"w ,circle",
+      "  ,santa ,cl>a1 ,,ca #iejed",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Main entries (company names) begin in cell 1; each address subentry begins in cell 3 (two cells to the right), per the 'One level: 1-3' margin pattern in 8.5.1.b. Line 5 (blank) precedes the list and line 15 (blank) follows it."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Footer oddity (page 8-21’s own running footer reading \"21\" instead of \"8-21\", source .txt line 6307) noted by B, kept for reference — confirmed directly, not a content error, page-boundary arithmetic unaffected. List content/levels kept as A had them (already correct one-level nested list, cell-1/cell-3).",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

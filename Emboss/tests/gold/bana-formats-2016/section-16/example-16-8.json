@@ -1,0 +1,63 @@
+{
+  "id": "example-16-8",
+  "title": "Note with Range of Line Numbers",
+  "pdfPages": [
+    435
+  ],
+  "textLines": [
+    12543,
+    12555
+  ],
+  "illustrates": {
+    "rule": "16.5.1.h",
+    "quote": "Do not insert a blank line between a note separation line and a title or heading. (See Sample 16-2: Notes with Headings on page 16-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Juliet. Not proud you have, but thankful that you have. Proud can I never be of what I hate, But thankful even for hate that is meant love.",
+        "features": "Play-script dialogue; the speaker's own print line number \"165\" is set in the left margin beside the middle line.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "164-166 I'm not pleased, but I am grateful for your intentions.",
+        "features": "Set to the right of the dialogue, keyed by a print line-number range (164-166) rather than a symbol.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "164-166",
+        "placement": "margin",
+        "text": "I'm not pleased, but I am grateful for your intentions."
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.5.1d, showing a note keyed by a range of print line numbers rather than a reference symbol.",
+    "printFeatures": "Boxed screenshot of a play-script page: dialogue lines with print line number \"165\" at the left margin of one line, and a line-number-keyed note (\"164-166 ...\") set beside it."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "^1,juliet4 ,n pr\\d y h1 b ?ank;l t",
+      "    y h4",
+      "  ,pr\\d c ,i n\"e 2 ( :at ,i hate1   #afe",
+      "  ,b ?ank;l ev5 = hate t is m1nt",
+      "    love4 @.<note@.>",
+      "\"333333",
+      "#afd-#aff ,i'm n pl1s$1 b ,i am grate;l",
+      "  = yr 9t5;ns4"
+    ],
+    "pageBreaks": [],
+    "notes": "The speaker name 'Juliet' is rendered with the italics indicator (^1), matching how play-script speaker names are typically emphasized; a right-flush print-page/line reference (#afe) appears after 'hate'. The note itself begins with a print line-number range (#afd-#aff = 164-166) rather than a symbol, per rule 16.5.1d, following the note separation line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12550, stripped of its 7-space left padding, is exactly 40 characters, right-justified to the braille page-number token '#afe'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

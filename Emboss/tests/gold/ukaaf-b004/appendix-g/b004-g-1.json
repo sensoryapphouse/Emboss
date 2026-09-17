@@ -1,0 +1,35 @@
+{
+  "id": "b004-g-1",
+  "title": "Quoted material — Example 1 (typeform/quotation marks for special-type quotations)",
+  "pdfPages": [24],
+  "pdfFile": "references/ukaaf/presentation-guidelines-B004.pdf",
+  "textLines": [722, 724],
+  "illustrates": {
+    "rule": "B004 Appendix G, Example 1",
+    "quote": "Example 1: A quotation printed in special type within ordinary text lines can be identified by using the corresponding typeform indicators in braille, or else by inserting quotation marks instead."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Example 1: A quotation printed in special type within ordinary text lines can be identified by using the corresponding typeform indicators in braille, or else by inserting quotation marks instead.",
+        "features": "Plain descriptive/guidance prose -- not a worked print excerpt. No specific print passage, no page image, and no accompanying braille transcription are given anywhere in the source for this 'Example.'"
+      }
+    ],
+    "notes": "Unlike BANA Formats §9 (and unlike B004's own Appendix F 'Forms' and Appendix H 'Tables of contents', both of which show an actual 'Print:'/'Braille:' worked pair), B004 Appendix G's two 'Good practice examples' are generic descriptive guidance only -- there is no specific quoted passage shown in print, and therefore nothing rendered into braille to transcribe. Confirmed directly against the PDF page image (presentation-guidelines-B004.pdf, p.24): the page contains only the heading 'G. Quoted material', its 'Guiding principles' sentence, and the prose of 'Example 1' and 'Example 2' -- no figure, box, or braille cell block of any kind.",
+    "surroundingText": "Appendix G, 'Quoted material', of UKAAF's Guiding Principles for the Presentation of Braille (B004), between Appendix F 'Forms' (p.22-23, which has a worked print/braille pair) and Appendix H 'Tables of contents' (p.24-25, which also has one).",
+    "printFeatures": "Plain body text; 'Example 1' is a bold-lead-in run-in label, not a boxed or otherwise visually set-off worked example."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille is given anywhere in the source for this item -- it is prose guidance describing what a transcriber COULD do (use typeform indicators, or insert quotation marks), not a worked example with an actual print passage and its corresponding braille transcription."
+  },
+  "uncertain": [
+    "This item is fundamentally different in kind from every BANA §9 worked example and from B004's own Appendix F/H worked examples: there is no actual print excerpt being illustrated and no braille to check it against. It is recorded here as a gold file only to represent the item named in the task's example list; there is no braille content to transcribe or compare between runs A and B for this item."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B agreed completely that this item is prose-only, with no print excerpt or braille anywhere in the source (both independently confirmed against B004.txt lines 722-724 and the PDF page image, p.24). The only disagreement was `illustrates.rule`/`quote`: A quoted Example 1's own text under the id 'B004 Appendix G, Example 1'; B instead quoted the section's shared 'Guiding principle' sentence ('Quoted material must be easily identifiable...') under the SAME id for both this file and b004-g-2, which is less specific and would make the two files indistinguishable by `illustrates`. Resolved to A's convention (one specific 'Example N' per file, quoting that example's own complete text), matching this project's established convention of one specific rule/example per gold file (see section-4/8's README 'illustrates' convention)."
+}

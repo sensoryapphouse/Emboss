@@ -1,0 +1,91 @@
+{
+  "id": "sample-13-08",
+  "title": "Sample 13-8: Poem with Reference Marks",
+  "pdfPages": [
+    376
+  ],
+  "textLines": [
+    10864,
+    10875
+  ],
+  "illustrates": {
+    "rule": "13.8.1",
+    "quote": "Transcribe references in poetry at the bottom of the print page, separated from the poetry by a note separation line. (See Formats, §16, Notes.) Leave a blank between the end of a stanza, or the end of a poem, and the note separation line. (See Sample 13-8: Poem with Reference Marks on page 13-22.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Excerpt (a genuine excerpt: shown printed line numbers begin at 14) with a superscript footnote reference '1' attached to the word 'clarion'.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "This is the song that the truck drivers hear",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "In the grinding of brake and shifting of gear,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "From the noise of the wheel and the clarion¹ horn",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "From the freight and the weight;",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "a song has been born:",
+                "indent": 1,
+                "number": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "¹clarion (klar’-ē-ən): loud and clear.",
+        "features": "Footnote at the bottom of the print page, keyed to the superscript '1' in the poem, giving a pronunciation and brief gloss."
+      }
+    ],
+    "notes": "Picture on PDF p.376; the footnote sits directly below the poem excerpt with no separation rule shown in print (the note-separation line is a braille-side convention added per rule 13.8.1, not visible in the print image).",
+    "surroundingText": null,
+    "printFeatures": "Plain body-text poem; superscript numeral reference; footnote in smaller type below."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",? is ! s;g t ! truck driv]s he>",
+      ",9 ! gr9d+ ( brake & %ift+ ( ge>1",
+      ",f ! noise ( ! :eel & ! cl>ion;9#a horn",
+      ",f ! frei<t & ! wei<t2",
+      "  a s;g has be5 born3",
+      "\"333333",
+      ";9#a;'cl>ion \"<klar^.b-@-e-_5n\">3 l\\d &",
+      "  cle>4",
+      "-------------------------------------#di",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10864-10873 (excerpt; printed line numbers begin at 14), after stripping a 5-char line-number field (2-digit max line number 23, +3=5) and converting U+2800. The reference mark is the highlighted sign ';9#a' immediately after 'cl>ion' (clarion) on line 3, matching the printed superscript '1'. A row of note-reference dots ('\"333333', line 6) precedes the note-separation rule of dashes (line 9, ending '#di'), per rule 13.8.1; the footnote text itself (line 7-8) repeats the same reference sign before its pronunciation gloss. Trailing '444' marks the excerpt's deliberate truncation.",
+    "variants": []
+  },
+  "uncertain": [
+    "The poem's source/author and full first line are not given in this excerpt (printed line numbers start at 14); not identified beyond the excerpt itself."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

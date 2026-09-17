@@ -1,0 +1,47 @@
+{
+  "id": "example-13-1",
+  "title": "Example 13-1: Poetic Lines within Narrative Text",
+  "pdfPages": [
+    356
+  ],
+  "textLines": [
+    10256,
+    10263
+  ],
+  "illustrates": {
+    "rule": "13.2.1b/c",
+    "quote": "Follow print when poetry is embedded within narrative text. a. Retain font attributes. b. Follow print use for either a slash or vertical line to indicate where one poetic line ends and another begins. c. Follow print for spacing of symbols, which may begin or end a braille line. Identify the use of the symbols on the Special Symbols page, or in a transcriber’s note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "… suggesting that “the trust Othello puts him in / On some odd time of his infirmity / Will shake this island”",
+        "features": "Leading ellipsis shows this is a mid-sentence excerpt from a longer narrative discussion (about Shakespeare's Othello); the quoted poetic fragment uses a slash to mark where each of the three poetic lines ends, run in with the surrounding narrative prose."
+      }
+    ],
+    "notes": "The print original is a picture (PDF p.356, boxed example) with no selectable text layer; transcribed here by reading the image.",
+    "surroundingText": "Excerpt from a larger narrative sentence discussing Othello; only the quoted fragment is shown in the source.",
+    "printFeatures": "Boxed inline example; ordinary body-text font, no special typography beyond the slash marks and quotation marks."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "444 su7e/+ t 8! tru/ ,o!llo puts hm 9 _/",
+      ",on \"s odd \"t ( 8 9firm;y _/ ,w %ake ?",
+      "isl&0"
+    ],
+    "pageBreaks": [],
+    "notes": "Extracted verbatim from braille-formats-2016.txt lines 10261-10263, after stripping a 9-space fixed left margin shared by every line of this boxed example (measured as the minimum leading-space run common to all three lines; it is plain ASCII space padding from the print box's layout, not U+2800 blank-cell content, and disappears once stripped -- the resulting longest line is exactly 40 cells). U+2800 blank-cell characters (none present in this example) would otherwise convert to plain spaces. PDF page 356 shows two braille cells shaded/highlighted in light grey (the two occurrences of the '_/' sign used for the print slash); this is an editorial highlight in the source page image, not braille content, and is not reproduced here.",
+    "variants": []
+  },
+  "uncertain": [
+    "The exact dot-pattern meaning of the two-character sign '_/' (used here for the print slash marking poetic-line breaks) was not decoded; it is reproduced verbatim as it appears in the source .txt and is visually confirmed (as a highlighted 2-cell sign) on the PDF page image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

@@ -1,0 +1,48 @@
+{
+  "id": "example-5-5",
+  "title": "Bold Ignored (Print Only)",
+  "pdfPages": [
+    131
+  ],
+  "textLines": [
+    3952,
+    3952
+  ],
+  "illustrates": {
+    "rule": "5.3.6",
+    "quote": "Ignore font attributes when they are used as a simple visual enhancement for print layout, e.g., a heavier font used for instructions, italics used for a dedication, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**For additional reading, go to InfoTrac College Edition, your online research library at http://web1.infotrac-college.com**",
+        "features": "Bold instructional banner (a heavier font used for instructions, per rule 5.3.6's own example wording) beside a small decorative icon.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Enter the search terms ... using Key Terms. (four lines)",
+        "features": "Four plain-weight instruction lines; the proper-name search terms embedded in each are italicized.",
+        "items": null
+      }
+    ],
+    "notes": "Explicitly '(Print Only)' — the source gives no braille rendering for this example; the point of the example is the ignored bold banner, so no transcription is expected.",
+    "surroundingText": "Follows rule 5.3.6 directly; Example 5-6 (also Print Only) immediately follows on the same printed page (5-5).",
+    "printFeatures": "Boxed callout with a small icon, bold instructional banner, and four plain instruction lines each containing one italicized proper name."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Print Only — the source shows no braille transcription for this example, only the caption 'Example 5-5: Bold Ignored (Print Only)' and the print picture; none is guessed."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree this is Print Only with no braille; print content synthesized from both runs' PDF reads (p.131, printed page 5-5), which agree on substance."
+}

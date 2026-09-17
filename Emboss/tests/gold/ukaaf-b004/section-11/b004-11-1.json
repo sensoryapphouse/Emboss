@@ -1,0 +1,61 @@
+{
+  "id": "b004-11-1",
+  "title": "Footnotes Placed Inline",
+  "pdfPages": [
+    9
+  ],
+  "textLines": [
+    291,
+    301
+  ],
+  "illustrates": {
+    "rule": "B004 11 guiding-principles",
+    "quote": "Guiding principles: Notes and footnotes must be easily identifiable from the surrounding text, consistently applied throughout the document, and not intrusive to the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "They travelled to Hastings [ref:*][where the famous 1066 battle took place]. Many visitors enjoy eating fish and chips from the Blue Dolphin restaurant [ref:*][other restaurants are available!]",
+        "features": "Two footnotes placed inline, directly in square brackets immediately after the word or phrase they annotate, rather than as symbol-and-endnote pairs.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "inline",
+        "text": "where the famous 1066 battle took place"
+      },
+      {
+        "ref": "*",
+        "placement": "inline",
+        "text": "other restaurants are available!"
+      }
+    ],
+    "surroundingText": "First of two 'Good practice examples of notes and footnotes' under B004 §11, illustrating footnotes placed inline (in square brackets) as one of the two main methods, contrasted with Example 2's footnotes-on-a-separate-page method.",
+    "printFeatures": "Two sentences of running prose with the footnote content placed directly in square brackets after each cued word/phrase, not styled as superscript or symbol references."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      "    ,!y travell$ to ,ha/+s .<\": !",
+      "fam\\s #ajff battle took place.>4 ,_m",
+      "visitors 5joy eat+ fi% & *ips f !",
+      ",blue ,dolph9 re/aurant .<o!r",
+      "re/aurants >e available6.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Each inline note is enclosed in braille transcriber's-note-style opening/closing brackets (.< ... .>) directly at its point of reference, rather than a separate symbol-and-list arrangement; this mirrors print's own square-bracket inline placement. This is continuous prose text reflowed by the source PDF to its own page width, not a fixed-cell embossed braille page image, so braille.width is left null rather than assumed; the 4-space indent on the first line reflects the print paragraph's own first-line indent as rendered in the PDF, not a stated braille cell-margin rule."
+  },
+  "uncertain": [
+    "B004's source is a standard word-processed PDF (not a scanned embossed braille page image, unlike the BANA source used for section 16), so the exact leading-space column of each line reflects ordinary paragraph typesetting (e.g. a first-line indent) rather than a verified braille cell position; transcribed verbatim from references/_text/B004.txt lines 297-301, cross-checked against the same wording and layout in references/ukaaf/presentation-guidelines-B004.pdf page 9.",
+    "No explicit braille page width (cells per line) is stated anywhere in B004 for this or any other example; braille.width is left null throughout the B004 items in this file rather than assuming a value (e.g. 40) not given in the source."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to B004 11 guiding-principles per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: B004 gives no stated braille-page cell width anywhere (unlike BANA's stated 40, Formats 1.7.1); the one candidate anchor in this section (a lone right-flush '9' page-footer marker between the two worked examples, B004.txt line 306) is a print-page footer, not part of either example's own braille, and sits 41 columns from the left rather than a clean 40 -- not reliable width evidence. Left null (Run B correct, Run A's assumed 40 not supported). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

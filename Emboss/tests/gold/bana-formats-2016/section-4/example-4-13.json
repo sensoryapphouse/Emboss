@@ -1,0 +1,52 @@
+{
+  "id": "example-4-13",
+  "title": "Paragraph Heading",
+  "pdfPages": [
+    114
+  ],
+  "textLines": [
+    3455,
+    3464
+  ],
+  "illustrates": {
+    "rule": "4.8.1",
+    "quote": "Paragraph (run-in) headings introduce the focus of the paragraph(s). The heading is typically an emphasized word or phrase and may or may not be followed by punctuation. Follow print for emphasis, capitalization, and punctuation. Use full capitalization for uppercase paragraph headings. No additional emphasis should be used."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "COMMUNITY SERVICE",
+        "features": "Centered heading above the paragraph, full capitals, bold serif."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Action Plan** How can you get involved with tree planting in your community?",
+        "features": "'Action Plan' is a bold, mixed-case run-in (paragraph) heading immediately followed, on the same braille line, by its paragraph -- print's own bold emphasis is kept (typeform), per 'follow print for emphasis'."
+      }
+    ],
+    "notes": "Illustrates a mixed-case paragraph (run-in) heading, kept inline within its paragraph and given the bold emphasis print shows it, per rule 4.8.1. Contrast Example 4-14, the same underlying text with the heading in full capitals instead (no added emphasis).",
+    "surroundingText": null,
+    "printFeatures": "Centered full-capitals section heading above; below it, a bold mixed-case run-in heading ('Action Plan') immediately followed by paragraph text on the same print line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "          ,,commun;y ,,s]vice",
+      "",
+      "^1,ac;n ^1,plan ,h[ c y get 9volv$ )",
+      "tree plant+ 9 yr commun;y8"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the centered heading 'COMMUNITY SERVICE'; line 3 blank; lines 4-5 one paragraph, with 'Action Plan' individually word-wrapped in a bold typeform indicator pair per word, left inline (not on its own line), following print's mixed-case capitalization."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. `print.blocks` count resolved to 2, not 3 (run A's count): rule 4.8.1's \"paragraph (run-in) heading\" is by definition NOT modeled as a standalone `heading` block (Emboss's heading block always emits its own line) -- it is emphasis-marked text embedded inside the paragraph block, matching run B's structure. Run A's separate `heading`-kind block for \"Action Plan\" would incorrectly place it on its own line when built into the model."
+}

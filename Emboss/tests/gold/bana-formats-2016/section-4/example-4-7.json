@@ -1,0 +1,55 @@
+{
+  "id": "example-4-7",
+  "title": "Heading with Partial Emphasis",
+  "pdfPages": [
+    110
+  ],
+  "textLines": [
+    3284,
+    3293
+  ],
+  "illustrates": {
+    "rule": "4.3.7",
+    "quote": "Do not use typeform to indicate specific print attributes such as italics, boldface, and font style/size for print headings unless it is necessary for clarity."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Henrik Ibsen, *A Doll's House*",
+        "features": "Centered heading combining an author name in plain serif and an italicised work title; only the play title \"A Doll's House\" is italicised in print, the author name is not."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Nora *(pause)* Does anything strike you as we sit here?",
+        "features": "Plain body text; stage direction '(pause)' is italicised in print."
+      }
+    ],
+    "notes": "Illustrates that print italics within a heading (here, only the play title, not the author name) are ignored in braille except where needed for distinction -- the whole heading is rendered without added typeform emphasis except on the title, per the exception in rule 4.3.7.",
+    "surroundingText": null,
+    "printFeatures": "Centered bold blue heading combining an unitalicised author name and an italicised work title; body paragraph below with an italicised parenthetical stage direction."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "   ,h5rik ,ibs51 .7,a ,doll's ,h\\se.'",
+      "",
+      ",nora \"<pause\">3 ,does any?+ /rike y z",
+      "  we sit \"h8"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the centered heading, with the title portion \"A Doll's House\" wrapped in a typeform (italics) indicator pair -- the one retained font attribute, needed to distinguish the title from the author's name -- while 'Henrik Ibsen,' carries no such indicator; line 3 blank; lines 4-5 the dialogue paragraph."
+  },
+  "uncertain": [
+    "The paragraph's exact final word(s) (line 5, 'we sit ...') are approximated from the braille contractions alone (no clean PDF/print image reading was available for this literary excerpt's exact wording); the heading text and its italics placement -- this example's actual point -- are not in doubt.",
+    "Even with the heading's *italic* markup correctly marking \u201cA Doll's House\u201d per rule 4.3.7's clarity exception, Emboss's formatHeading unconditionally strips typeform from every heading and has no way to invoke that exception -- see standards-findings.md F-41. Expect the gold braille's italic brackets around the title to be absent from Emboss's actual output; this is a documented Emboss gap, not a gold-file error."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree; wording merged. Heading centered (level 1), confirmed by the centering-formula check (indent 3 matches (40-34)/2). print.blocks text corrected during model-building verification: the heading needs *italic* markup on \"A Doll's House\" (the one retained font attribute per rule 4.3.7's exception) to produce the expected typeform brackets, and the paragraph's stage direction needs *(pause)* markup, not the literal BRF ASCII quotation glyphs that had been pasted into the print text by mistake."
+}

@@ -1,0 +1,50 @@
+{
+  "id": "sample-16-7.7b",
+  "title": "Volume and Page Numbering for Separate Note Volumes",
+  "pdfPages": [
+    439
+  ],
+  "textLines": [
+    12706,
+    12712
+  ],
+  "illustrates": {
+    "rule": "16.7.7.b",
+    "quote": "The following is an example of the volume and page numbering for the individual volumes. The text is in the first volume, with notes in the following volume."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Volume 3\nBraille pages t1-t5 and 1-67\nPrint pages 45-a70\n\nVolume 4\nBraille pages t1-t5 and 1-55\nPrint pages 45-a70",
+        "features": "Plain indented text listing, for two consecutive volumes, their own braille page ranges (each with its own preliminary-pages t1-t5 sequence) against the same shared print page range (45-a70), since Volume 4 holds the notes for the text in Volume 3.",
+        "items": [
+          "Volume 3",
+          "Braille pages t1-t5 and 1-67",
+          "Print pages 45-a70",
+          "Volume 4",
+          "Braille pages t1-t5 and 1-55",
+          "Print pages 45-a70"
+        ]
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Follows rule 16.7.7b, illustrating the combined-page-numbering scheme described in 16.7.7a for a text volume and its separate notes volume.",
+    "printFeatures": "Plain indented text list, no box; two short volume/page-range blocks separated by a blank line. Purely descriptive numbering information, not itself a braille-transcribed passage."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "This is a description of a volume/page-numbering scheme (plain print numerals), not a passage transcribed into braille; the source shows no corresponding braille rendering. None is guessed here."
+  },
+  "uncertain": [
+    "No braille rendering exists for this item in the source; it documents a numbering scheme rather than transcribing print text."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.7.b per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

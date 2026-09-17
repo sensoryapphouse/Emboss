@@ -1,0 +1,100 @@
+{
+  "id": "sample-4-07-option-2",
+  "title": "Icon Headings with Descriptions (Option 2: icons listed on Special Symbols page)",
+  "pdfPages": [
+    126
+  ],
+  "textLines": [
+    3784,
+    3786
+  ],
+  "illustrates": {
+    "rule": "4.9.2.b",
+    "quote": "Icons may be assigned a transcriber-defined shape and listed on the Special Symbols page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Full Text of Icon Descriptions in Front of Book",
+        "features": "Plain bold caption labelling the icon-key strip beneath it; excluded from the model (see Option 1)."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Eye Safety: Proper eye protection must be worn at all times by anyone performing or observing science activities.",
+        "features": "Icon-key entry (1 of 5); see Option 1."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Clothing Protection: This symbol appears when substances could stain or burn clothing.",
+        "features": "Icon-key entry (2 of 5); see Option 1."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Animal Safety: This symbol appears when safety of animals and students must be ensured.",
+        "features": "Icon-key entry (3 of 5); see Option 1."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Radioactivity: This symbol appears when radioactive materials are used.",
+        "features": "Icon-key entry (4 of 5); see Option 1."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Handwashing: After the lab, wash hands with soap and water before removing goggles.",
+        "features": "Icon-key entry (5 of 5); see Option 1."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Icon Use within Text",
+        "features": "Plain bold caption; excluded from the model."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Procedure",
+        "features": "Bold heading on a shaded banner, followed immediately in print by three small icon graphics (Eye Safety, Clothing Protection, Handwashing). THIS option represents the three icons with transcriber-defined shape codes, listed on the volume's Special Symbols page, per rule 4.9.2.b -- a braille-only convention with no literal print-text equivalent (see uncertain)."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "@$es @$cp @$hw",
+        "features": "Three transcriber-defined shape codes for the icons, printed directly after 'Procedure' on the SAME braille line (matching where the icon graphics sit in print), per 4.9.2.b; NOT built into the model (see uncertain) since these ASCII tokens are already-encoded braille, not translatable print text."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "1. Read and complete the lab safety form.",
+        "features": "Numbered procedure step beneath the Procedure banner."
+      }
+    ],
+    "notes": "Option 2 of 2 (subtitled in the source 'Icons are Listed on Special Symbols Page'): the same three icons are represented by transcriber-defined shape-indicator codes ('@$es', '@$cp', '@$hw') immediately after the 'Procedure' heading on a single line, per rule 4.9.2.b -- devised symbols listed on the volume's Special Symbols page rather than spelled out as words.",
+    "surroundingText": null,
+    "printFeatures": "Same print source as Option 1: a colored strip of five icon+caption+description entries, then a \"Procedure\" heading followed by three small icon graphics and a numbered instruction step."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,proc$ure @$es @$cp @$hw",
+      "#a4 ,r1d & complete ! lab safety =m4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the cell-5 heading 'Procedure' followed, on the SAME line, by three transcriber-defined shape codes ('@$es','@$cp','@$hw' -- Eye Safety/Clothing Protection/Handwashing, matching Option 1's order), each preceded/followed by a blank space per 4.9.1; line 2 the single numbered procedure step."
+  },
+  "uncertain": [
+    "The three shape codes '@$es'/'@$cp'/'@$hw' are read as Eye Safety/Clothing Protection/Handwashing by matching their order to Option 1's spelled-out heading and by the letters themselves; not cross-checked against an actual Special Symbols page (none is included in this excerpt) or a UEB transcriber-defined-shape reference.",
+    "The shape codes are literal, already-encoded BRF ASCII (a braille-only transcriber convention), not print text -- this print.blocks model has no way to feed pre-encoded braille through Emboss's translate() pipeline (which expects plain text to translate FROM), so this content is recorded as `other` and excluded from the model. Expect gold-run.mjs to report a documented mismatch on line 1 (missing the three shape codes after 'Procedure'), not a bug."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "`illustrates.rule`/`quote` resolved to \"4.9.2.b\" (both runs already agreed on the rule number in substance, differing only in dot-placement; \"4.9.2.b\" chosen to match the §11 precedent's dotted-letter-suffix convention) with the specific clause text about Special Symbols page shape codes. `print.blocks` rebuilt from the PDF image the same way as Option 1, with the shape-code content recorded as `other` (documented, not modeled) since it is pre-encoded braille ASCII with no print-text equivalent -- an explicit, evidence-based limitation rather than a guess."
+}

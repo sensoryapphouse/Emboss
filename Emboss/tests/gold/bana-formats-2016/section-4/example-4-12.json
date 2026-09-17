@@ -1,0 +1,55 @@
+{
+  "id": "example-4-12",
+  "title": "Marginal Heading",
+  "pdfPages": [
+    114
+  ],
+  "textLines": [
+    3436,
+    3446
+  ],
+  "illustrates": {
+    "rule": "4.7.1",
+    "quote": "Unit, chapter, or section headings printed in the margin are placed before the material to which they apply. Use the heading level appropriate to the material."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "REMEMBER",
+        "features": "Bold black full capitals, printed in the left margin beside the body paragraph it annotates, rather than on its own line above it."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Menu items that have an arrow to the right offer submenus, which you can open by holding your mouse on that menu choice. Often the submenus have their own submenus within, offering even more programs.",
+        "features": "Plain body paragraph, to the right of the marginal heading in print."
+      }
+    ],
+    "notes": "Illustrates a marginal heading ('REMEMBER') relocated to precede (i.e., transcribed ahead of) the body text it applies to, at the cell-5 heading level rule 4.7.1 judges appropriate to this short callout label.",
+    "surroundingText": null,
+    "printFeatures": "Bold full-capitals marginal callout label to the left of an ordinary body paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,,rememb]",
+      ",m5u items t h an >r[ to ! \"r (f]",
+      "subm5us1 : y c op5 by hold+ yr m\\se on t",
+      "m5u *oice4 ,(t5 ! subm5us h _! [n",
+      "subm5us )91 (f]+ ev5 m programs4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-5 heading 'REMEMBER' (whole-word capitalization indicator); lines 3-6 the paragraph directly following with no blank line, per 4.5.3/4.7.1."
+  },
+  "uncertain": [
+    "Rule 4.7.1 says only to use the heading level 'appropriate to the material' without naming one; cell-5 (level 2) is adopted here because that is what the braille's own 4-cell indent shows, not because any numbered rule states it."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. `level` resolved to 2 (cell-5, matching run B) rather than run A's null: the braille's own 4-cell indent on line 2 is unambiguous. Text resolved to full-caps \"REMEMBER\" (matching run B's braille-consistent reading) rather than run A's title-cased \"Remember\", which the braille's whole-word capitalization indicator contradicts."
+}

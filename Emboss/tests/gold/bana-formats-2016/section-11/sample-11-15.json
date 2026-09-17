@@ -1,0 +1,97 @@
+{
+  "id": "sample-11-15",
+  "title": "One Cell between Columns",
+  "pdfPages": [
+    322
+  ],
+  "textLines": [
+    9564,
+    9586
+  ],
+  "illustrates": {
+    "rule": "11.7.1.k",
+    "quote": "k. One blank cell may be used between columns of numbers when the column headings are no wider than the longest entry in the column. This should be done only when it would result in the table appearing on one page. (See Sample 11-15: One Cell between Columns on page 11-40.)"
+  },
+  "print": {
+    "caption": "Table 21.1 / Summary Comparison of Total Outlays for Grants to State and Local Governments",
+    "headers": [
+      [
+        "Year",
+        "In Millions of Dollars",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "Total",
+        "Payments",
+        "Investment",
+        "Remainder"
+      ]
+    ],
+    "rows": [
+      [
+        "1990",
+        "135,325",
+        "77,264",
+        "27,185",
+        "30,876"
+      ],
+      [
+        "1991",
+        "154,519",
+        "92,865",
+        "28,237",
+        "33,417"
+      ],
+      [
+        "1992",
+        "178,065",
+        "112,522",
+        "29,297",
+        "36,247"
+      ],
+      [
+        "1993",
+        "193,612",
+        "124,155",
+        "31,170",
+        "38,287"
+      ]
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bordered box; two-line centered bold title above the box; two-row column heading (primary \"In Millions of Dollars\" spanning four sub-columns) each bold with ruled lines beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "              ,table #ba4a",
+      "      ,summ>y ,comp>ison ( ,total",
+      "       ,\\tlays = ,grants to ,/ate",
+      "           & ,local ,gov]n;ts",
+      "7777777777777777777777777777777777777777",
+      "      ,9 ,millions ( ,doll>s",
+      "      \"33333333333333333333333333333333",
+      "ye>   total    pay;ts   9ve/;t rema9d]",
+      "\"3333 \"3333333 \"3333333 \"333333 \"333333",
+      "#aiij #ace1cbe #gg1bfd #bg1ahe #cj1hgf",
+      "#aiia #aed1eai #ib1hfe #bh1bcg #cc1dag",
+      "#aiib #agh1jfe #aab1ebb #bi1big #cf1bdg",
+      "#aiic #aic1fab #abd1aee #ca1agj #ch1bhg",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder \"text\". Because this is a table consisting of columns of numbers whose headings (Total/Payments/Investment/Remainder) are no wider than the longest entry in each column, only a single blank cell separates each column of digits (lines 12-15), rather than the usual two blank cells (rule 11.2.5.b), per rule 11.7.1.k — allowing the four-year, four-number-column table to fit on one braille page."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers rebuilt with the same rowspan pattern as Sample 11-02: 'Year' appears once, in row 1 (matching the PDF image, p. 322, where it is one cell spanning both header rows); row 2 col 1 is blank. Run A's shape was correct; run B's repeated 'Year' was not."
+}

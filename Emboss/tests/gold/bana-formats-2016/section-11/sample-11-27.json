@@ -1,0 +1,105 @@
+{
+  "id": "sample-11-27",
+  "title": "Subdivision Headings",
+  "pdfPages": [
+    338,
+    339
+  ],
+  "textLines": [
+    9954,
+    9986
+  ],
+  "illustrates": {
+    "rule": "11.18.1.j",
+    "quote": "j. Treat a row heading preceding a group of subdivisions in the first column as a cell-5 heading. Include this in the transcriber's note with the column headings. Sample: Table changed as follows: (7-5) Subdivision Heading (5-5) Heading of first column (1-1) Heading of second column (3-3) Heading of third column (5-5) Heading of fourth column (7-7) (See ... Sample 11-27: Subdivision Headings on page 11-56.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": null,
+    "rows": [
+      [
+        "Amusement Parks in Florida",
+        ""
+      ],
+      [
+        "Magic Kingdom",
+        "Lake Buena Vista"
+      ],
+      [
+        "Epcot",
+        "Lake Buena Vista"
+      ],
+      [
+        "Universal's Island of Adventures",
+        "Orlando"
+      ],
+      [
+        "Seaworld",
+        "Orlando"
+      ],
+      [
+        "Amusement Parks in California",
+        ""
+      ],
+      [
+        "Disneyland",
+        "Anaheim"
+      ],
+      [
+        "Universal Studios",
+        "Hollywood"
+      ],
+      [
+        "Knott's Berry Farm",
+        "Buena Park"
+      ],
+      [
+        "Six Flags",
+        "Valencia"
+      ]
+    ],
+    "notes": "Print has no column-header row at all: each subdivision title ('Amusement Parks in Florida' / '...in California') spans both columns as its own row, immediately followed by that subdivision's Park/Location data rows -- matching rule 11.18.1 (Subdivision Headings). Run A omitted the print table's rows entirely; run B's transcription of it, re-checked here directly against the PDF page image (p. 338), is correct.",
+    "surroundingText": null,
+    "printFeatures": "Two separate bordered boxes stacked vertically, each with a centered, ruled subdivision-title row spanning the full width of the box; plain data rows beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,table *ang$ z foll[s3",
+      "",
+      "    ,/ate loca;n",
+      ",amuse;t p>k",
+      "  ,loca;n@.>",
+      "",
+      "    ,amuse;t ,p>ks 9 ,florida",
+      ",magic ,k+dom",
+      "  ,lake ,bu5a ,vi/a",
+      ",epcot",
+      "  ,lake ,bu5a ,vi/a",
+      ",univ]sal's ,isl& ( ,adv5tures",
+      "  ,orl&o",
+      ",s1_w",
+      "  ,orl&o",
+      "",
+      "    ,amuse;t ,p>ks 9 ,cali=nia",
+      ",4neyl&",
+      "  ,anaheim",
+      ",univ]sal ,/udios",
+      "  ,hollywood",
+      ",knott's ,b]ry ,f>m",
+      "  ,bu5a ,p>k",
+      ",six ,flags",
+      "  ,val5cia"
+    ],
+    "pageBreaks": [],
+    "notes": "A transcriber's note (lines 1, 3-5) reads approximately: 'Table changed as follows:' then a heading key involving the words 'State', 'Location' and 'Amusement Park' -- devised headings since none appear in print (rule 11.18.1.k), laid out in the subdivision-heading / first-column-heading / second-column-heading pattern of rule 11.18.1.j (subdivision heading at a 5-5-style margin, column headings at 1-1/3-3-style margins). Each subdivision group ('Amusement Parks in Florida' line 7, 'Amusement Parks in California' line 17) is then blocked as its own cell-5-style heading (indented less than the data rows, at the 'Amusement Park' subdivision level), with its park-name/location pairs following beneath at the stairstep first-column/second-column margins."
+  },
+  "uncertain": [
+    "The exact word-by-word assignment of the 3-line transcriber's-note key (lines 2-4: 'State' / 'Location' / 'Amusement Park') to the rule's column roles is transcribed literally but its precise interpretation is not fully certain."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows: run A recorded an empty table (a significant miss); run B's 10-row transcription (2 subdivision-title rows + 8 Park/Location data rows) is correct, confirmed directly against the PDF image (p. 338). print.headers set to null (no column-header row exists in print at all -- confirmed against the same image). pdfPages corrected to [338, 339]: both runs missed that the braille half of this sample is on its own separate page (339, printed 11-57), the same print-page/braille-page split used by Samples 11-06, 11-21, and 11-24."
+}

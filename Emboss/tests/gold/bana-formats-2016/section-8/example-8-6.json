@@ -1,0 +1,90 @@
+{
+  "id": "example-8-6",
+  "title": "Two Columns Changed to Vertical List",
+  "pdfPages": [
+    205
+  ],
+  "textLines": [
+    5977,
+    5991
+  ],
+  "illustrates": {
+    "rule": "8.7.1.c",
+    "quote": "c. When multi-column lists have some items bulleted, transcribe them vertically."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "This is his wish list from the Louis L’Amour collection. Bulleted items are out of stock.",
+        "level": null,
+        "features": "Introductory sentence above the two-column list."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 2,
+        "features": "Two side-by-side columns of book/story titles, three per column; four of the six titles carry a small solid round bullet ('out of stock'); two are unbulleted.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Bowdrie"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Chancy"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Flint"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "The Lonely Men"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Radigan"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "The Skyliners"
+          }
+        ]
+      }
+    ],
+    "notes": "Items listed in print's own column-major reading order (left column top-to-bottom, then right column top-to-bottom), matching the vertical order the braille transcription uses.",
+    "surroundingText": null,
+    "printFeatures": "Boxed illustration; italic introductory sentence; two columns of titles, four marked with a small solid round bullet."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",? is 8 wi% li/ f ! ,l\\is ,l',am\\r",
+      "collec;n4 ,bullet$ items >e \\ ( /ock4",
+      "",
+      "   .1,b[drie",
+      "_4 .1,*ancy",
+      "   .1,fl9t",
+      "_4 .7,! ,l\"oly ,m5.'",
+      "_4 .1,radigan",
+      "   .1,! .1,skyl9]s",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "The introductory sentence (lines 1-2) precedes a blank line, then the six titles are transcribed as a single vertical column (lines 4-9) preserving the print's left-column-then-right-column order exactly, per 8.7.1.c; each bulleted title keeps the '_4' dot-bullet symbol in cell 1, unbulleted titles begin directly with the capital sign in cell 1."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. \"Louis L’Amour\": confirmed curly apostrophe (’, U+2019) directly against the PDF page image (p. 205) — B was right, A’s straight apostrophe (') was a retyping slip; fixed here. Item marker/column structure (already A’s own clean {marker:’•’|null, level, text} shape, columns:2, column-major order) confirmed correct against the same page image and kept as-is.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

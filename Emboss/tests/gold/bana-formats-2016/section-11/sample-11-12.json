@@ -1,0 +1,94 @@
+{
+  "id": "sample-11-12",
+  "title": "Table with Dittos",
+  "pdfPages": [
+    319
+  ],
+  "textLines": [
+    9484,
+    9502
+  ],
+  "illustrates": {
+    "rule": "11.6.6",
+    "quote": "Dittos. The ditto mark (dots 5, 2) is left-adjusted in the appropriate column. (See UEB, §3.12, Ditto mark.) ... (See Sample 11-12: Table with Dittos on page 11-37.)"
+  },
+  "print": {
+    "caption": "Table 4-3 / PRICE AND QUANTITY OF MILK",
+    "headers": [
+      [
+        "Price",
+        "Surplus/Shortage",
+        "Price Will"
+      ]
+    ],
+    "rows": [
+      [
+        "1.00",
+        "Surplus",
+        "Fall"
+      ],
+      [
+        "0.90",
+        "\"",
+        "\""
+      ],
+      [
+        "0.80",
+        "\"",
+        "\""
+      ],
+      [
+        "0.70",
+        "Neither",
+        "Neither"
+      ],
+      [
+        "0.60",
+        "Shortage",
+        "Rise"
+      ],
+      [
+        "0.50",
+        "\"",
+        "\""
+      ],
+      [
+        "0.40",
+        "\"",
+        "\""
+      ]
+    ],
+    "notes": "Print uses the typographic ditto mark (”) to repeat \"Surplus\"/\"Fall\" for 0.90/0.80 and \"Shortage\"/\"Rise\" for 0.50/0.40.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box (title outside/above); no visible ruled separation lines between data rows in this excerpt; header row bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,table #d-#c          #bac",
+      "      ,,,price & quant;y ( milk,'",
+      "",
+      ",price ,surplus_/,%ortage ,price ,w",
+      "\"33333 \"33333333333333333 \"33333333",
+      "#a4jj   ,surplus \"\"\"\"\"\"\"\"\" ,fall",
+      "#j4ij   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+      "#j4hj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+      "#j4gj   ,nei \"\"\"\"\"\"\"\"\"\"\"\"\" ,nei",
+      "#j4fj   ,%ortage \"\"\"\"\"\"\"\"\" ,rise",
+      "#j4ej   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+      "#j4dj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Title \"Table 4-3\" plus page-continuation-type marker '#bac' appears on line 1 (right-justified), \"PRICE AND QUANTITY OF MILK\" (triple-cap quoted) on line 2. Each ditto ('\"') in print becomes the braille ditto mark (shaded grey in the PDF sample image, dots 5,2) left-adjusted in its column, on lines 7-8 (under Surplus/Fall) and lines 11-12 (under Shortage/Rise), per rule 11.6.6. No transcriber's note explaining the ditto mark is included within the excerpted lines shown (rule 11.6.6.b requires it be listed on the Special Symbols page or in a transcriber's note, not necessarily inline before this particular table)."
+  },
+  "uncertain": [
+    "Whether a transcriber's note or Special-Symbols-page listing for the ditto mark appears elsewhere on this braille page (outside the 13 lines captured for this sample) could not be confirmed from the excerpt alone.",
+    "The print ditto mark is transcribed here as a plain ASCII double quote ('\"') rather than a typeset right-double-quotation-mark glyph; print ditto marks are conventionally straight tick/prime marks, but the exact Unicode code point was not independently confirmed against the raster image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows: the print ditto mark is recorded as a plain ASCII double quote to match the braille's own guide-dot-style rendering, not a typeset right-double-quotation-mark glyph (see uncertain notes)."
+}

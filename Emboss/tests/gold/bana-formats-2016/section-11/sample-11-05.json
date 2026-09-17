@@ -1,0 +1,114 @@
+{
+  "id": "sample-11-05",
+  "title": "Implied Row Headings",
+  "pdfPages": [
+    311
+  ],
+  "textLines": [
+    9278,
+    9300
+  ],
+  "illustrates": {
+    "rule": "11.5.3",
+    "quote": "Implied Row Headings. Implied row headings are not in print but are understood. a. When a row heading is not repeated but refers to more than one column entry, leave the area(s) where the inferred row heading(s) belong blank. b. All column entries sharing the same row heading are considered to be the complete row entry. (See Sample 11-5: Implied Row Headings on page 11-29.)"
+  },
+  "print": {
+    "caption": "Health Sector Workforce Characteristics, 2004",
+    "headers": null,
+    "rows": [
+      [
+        "Gender",
+        "Male",
+        "22%"
+      ],
+      [
+        "",
+        "Female",
+        "78%"
+      ],
+      [
+        "Ethnicity",
+        "White",
+        "89%"
+      ],
+      [
+        "",
+        "Asian",
+        "5%"
+      ],
+      [
+        "",
+        "Black",
+        "3%"
+      ],
+      [
+        "",
+        "Mixed/other",
+        "3%"
+      ],
+      [
+        "Age",
+        "16-24",
+        "7%"
+      ],
+      [
+        "",
+        "25-34",
+        "23%"
+      ],
+      [
+        "",
+        "35-44",
+        "29%"
+      ],
+      [
+        "",
+        "45-54",
+        "25%"
+      ],
+      [
+        "",
+        "55-64",
+        "14%"
+      ],
+      [
+        "",
+        "65+",
+        "1%"
+      ]
+    ],
+    "notes": "The row-heading column ('Gender', 'Ethnicity', 'Age') is printed only once per group; the blank cells below each in print are the implied/understood row headings covered by rule 11.5.3.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, no header row shown (first column values act as the effective headers); ruled lines separate each group ('Gender' rows from 'Ethnicity' rows from 'Age' rows) but not between rows within a group."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,h1l? ,sector ,\"w=ce       #de",
+      "            ,\"*i/ics1 #bjjd",
+      "7777777777777777777777777777777777777777",
+      ",g5d] \"\" ,male \"\"\"\" #bb.0",
+      "          ,female \"\" #gh.0",
+      ",e?nic;y ,:ite \"\"\"\" #hi.0",
+      "          ,asian \"\"\" #e.0",
+      "          ,black \"\"\" #c.0",
+      "          ,mix$_/o!r #c.0",
+      ",age \"\"\" #af-#bd \"\" #g.0",
+      "          #be-#cd \"\" #bc.0",
+      "          #ce-#dd \"\" #bi.0",
+      "          #de-#ed \"\" #be.0",
+      "          #ee-#fd \"\" #ad.0",
+      "          #fe\"6 \"\"\"\" #a.0",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Rows for Female/Asian/Black/Mixed-other and every percentage under Age leave the first column blank in braille (shaded grey in the PDF sample image, matching the print blanks) — per rule 11.5.3.a, the area where the inferred row heading would go is left blank rather than repeating 'Gender'/'Ethnicity'/'Age'."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers set to null: the print table (confirmed against the PDF image, p. 311) has no header row at all -- 'Gender / Male / 22%' is the table's first DATA row, not a heading. Run A had mistakenly duplicated that first data row into headers (while also, correctly, keeping it in rows); run B's headers were an invented placeholder. Both runs' rows lists (12 rows) were already correct and agree."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "example-8-8",
+  "title": "Outline Guide Text",
+  "pdfPages": [
+    207
+  ],
+  "textLines": [
+    6049,
+    6054
+  ],
+  "illustrates": {
+    "rule": "8.8.5",
+    "quote": "Guide Text for Entire Documents in Outline Format. To aid the reader when an entire document is printed in outline format, center the last division number used on each braille page on line 25. This is similar to guide words used in an index."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "I.B.4.",
+        "features": "A single outline-division label shown alone in a box, representing the guide text an agency would center on line 25 of a braille page."
+      }
+    ],
+    "notes": null,
+    "surroundingText": "Follows rule 8.8.5 and its sub-rules a-d; Example 8-9 (decimal-enumerated variant) follows directly below on the same page.",
+    "printFeatures": "Boxed illustration; single centered roman-text label 'I.B.4.', no other content."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "               ,i4,b4#d4             #ae"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 25 only: guide text ',i4,b4#d4' (I.B.4.) is centered within the 40-cell line, followed by at least three blank cells and then the braille page number '#ae' (=15) at the right margin, per 8.8.5.a-c. The source's own left margin/field for this single-line example measured 25 literal characters (6-space title-style margin plus a much wider field than the usual numbered-sample line-number field) before the true 40-cell content begins; this was confirmed by checking that stripping exactly 25 characters leaves a line ending with the page number flush at cell 40."
+  },
+  "uncertain": [],
+  "resolution": "Margin/leading-blanks resolved by direct measurement, not by picking either run: counting the run of literal U+2800 blank-cell characters in the source .txt (line 6054) after the 11-char \"      25   \" margin+line-number field gives EXACTLY 15 blank cells before the guide text — B’s leading-blank count was right, A’s (1 space) was wrong. B’s total line length (54) was wrong too, because it kept the .txt’s literal ASCII-space count for the gap between guide text and the page number, which (as already flagged for sample-8-08’s inter-column spacing) is not a reliable cell count from this PDF-to-text pipeline. The correct construction: 15 leading blanks exactly matches BANA 8.8.5.a’s own \"center guide text\" rule applied to the 40-cell line (floor((40-9)/2)=15 for the 9-character guide text \",i4,b4#d4\"); the remaining 40-15-9=16 cells hold the required ≥3-blank-cell gap (8.8.5.c) then the right-flush 3-character page number \"#ae\", giving a 13-cell gap. Final line is exactly 40 cells, reconciling both runs’ correct halves (B’s leading count + A’s width-40 total) rather than either run’s own line verbatim.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

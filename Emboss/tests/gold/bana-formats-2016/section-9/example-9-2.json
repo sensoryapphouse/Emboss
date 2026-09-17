@@ -1,0 +1,48 @@
+{
+  "id": "example-9-2",
+  "title": "Pull Quote (Print Only)",
+  "pdfPages": [228],
+  "textLines": [6551, 6555],
+  "illustrates": {
+    "rule": "9.1.1",
+    "quote": "Displayed material appears within the flow of regular text and is set off from the body of the text by blank lines, change of margins, or emphasis. Pull quotes are material restated from the body of the text. These are typically larger and use a distinctive font attribute. They are not repeated in braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "black man’s heritage. Up and down the district people were telling anecdotes, reminding each other of things that had happened to them. “But I saw it myself, I tell you. It was a puff-adder bite. The kaffir’s arm was swollen to the elbow, like a great shiny black bladder. He was groggy after a half a minute. He was dying.",
+        "features": "Left column of the two-column print page -- an unrelated story fragment (about a snake bite) left over from the preceding article; an artifact of the page's two-column layout, not part of the pull-quote illustration."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "to lunch, and they told the story all over again, for the hundredth time. Little Teddy was there too, his blue eyes sparkling with health, to prove the truth of it. The scientist explained how humanity might benefit if this new drug could be offered for sale; and the Farquars were even more pleased: they were kind, simple people, who liked to think of something good coming about because of them. But when the scientist began talking of the money that might result, their manner showed discomfort. Their feelings over the miracle (that was how they thought of it) were so strong and deep and religious, that it was distasteful to them to think of money. The scientist, seeing their faces, went back to his first point, which was the advancement of humanity. He was perhaps a",
+        "features": "Right column, the running body text the pull quote restates; the clause 'The scientist explained how humanity might benefit if this new drug could be offered for sale; and the Farquars were' is shaded in the source image to show where the pull quote is drawn from."
+      },
+      {
+        "kind": "quote",
+        "level": null,
+        "text": "The scientist explained how humanity might benefit if this new drug could be offered for sale.",
+        "features": "The pull quote itself: large bold text in a callout box overlapping the two columns, connected by an arrow to the identical clause highlighted in the right-hand column; restates (with a small trim) the highlighted sentence."
+      }
+    ],
+    "notes": "Print-only figure; no braille is given. This is the worked example for 9.1.1's statement that pull quotes 'are not repeated in braille' -- a correct transcription of this page reproduces only the running paragraph text and omits the pull-quote callout box entirely.",
+    "surroundingText": "Two-column magazine/textbook page; left column is the tail of a preceding, unrelated story; right column and pull quote are from a story about a scientist and a new drug (the Farquars).",
+    "printFeatures": "Two-column body text; a large bold pull-quote callout box overlaps both columns with a connecting arrow; the sentence being restated is shaded within the right column's own paragraph; a superscript footnote marker '8' follows ‘kaffir’s’ in the left column."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Captioned '(Print Only)' in the source; lines 6552-6555 following the caption are blank in the extracted .txt -- the print figure itself was never captured as braille text."
+  },
+  "uncertain": [
+    "The left-column text is an unrelated story fragment included only because of the page's two-column layout; not itself part of what Example 9-2 illustrates.",
+    "The pull-quote box's wording differs very slightly from the highlighted body sentence ('...for sale; and the Farquars were even more pleased' in the body vs. the pull quote, which stops at 'for sale.'); both are quoted verbatim as printed.",
+    "The footnote number attached to ‘kaffir’s’ (superscript 8) cannot be resolved from this excerpt -- its footnote text is not part of the captured figure."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "Runs A and B agreed on the substance of all three blocks (left-column fragment, right-column paragraph restating the pull quote, and the pull-quote box itself), both read directly from the PDF page image (p.228). B additionally noted a superscript footnote marker on 'kaffir's' in the left column, folded into this file's `uncertain` list; A additionally flagged the small wording difference between the pull quote and its source sentence, kept here. No braille exists for this item."
+}

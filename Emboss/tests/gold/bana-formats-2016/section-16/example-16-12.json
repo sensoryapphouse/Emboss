@@ -1,0 +1,67 @@
+{
+  "id": "example-16-12",
+  "title": "Note with Pronunciation",
+  "pdfPages": [
+    437
+  ],
+  "textLines": [
+    12630,
+    12646
+  ],
+  "illustrates": {
+    "rule": "16.7.3",
+    "quote": "Notes with Pronunciation. Do not add a second uncontracted spelling for words with pronunciation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The building had a festive air on the outside that contrasted with its inner [ref:*]staidness. Little by little, Juan was absorbed by his job, and he felt at peace since he was doing everything he could to get his letter for Mariana.",
+        "features": "The word \"staidness\" is underlined in print, marking it as having a footnote (per 16.3), immediately followed by a pronunciation-and-definition footnote.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "staidness (stād’nįs) n. a quiet, often strait-laced dignity",
+        "features": "Set below a horizontal rule; \"staidness\" bold, its phonetic respelling in parentheses, the part of speech (n.) in italics.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "staidness (stād’nįs) n. a quiet, often strait-laced dignity"
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.7.3, showing a note that supplies a print pronunciation respelling -- rule 16.7.3 requires not adding a second, separate uncontracted spelling in braille alongside this pronunciation.",
+    "printFeatures": "Boxed screenshot: paragraph with \"staidness\" underlined, horizontal rule beneath, then a dictionary-style pronunciation footnote."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,all \"ul9$ ^ws 9 ! passage 2l h",
+      "    footnotes4@.>",
+      "  ,! build+ _h a fe/ive air on ! \\tside",
+      "t 3tra/$ ) xs 9n] _1/aid;s4 ,ll by ll1",
+      ",juan 0 absorb$ by 8 job1 & he felt at",
+      "p1ce s9ce he 0 do+ \"ey?+ he cd to get 8",
+      "lr = ,m>iana4",
+      "\"333333",
+      "^1/aid;s \"</@-ad^.bn@+is\"> ;n4 a quiet1",
+      "  (t5 /rait-lac$ dign;y",
+      "------------------------------------#ahh",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "As in Example 16-5, the passage opens with a 5-3-margin transcriber's note explaining that underlining marks footnotes throughout. \"staidness\" itself is rendered with the underline/emphasis indicator pair (_1...) at its point of reference. The note after the separation line begins with the numeral 1 (^1) and includes the pronunciation respelling in braille phonetic notation (\"</@-ad^.bn@+is\">); per rule 16.7.3, no second, separately-contracted spelling of \"staidness\" is added anywhere in the note. A dashed rule ending in reference code #ahh, then a lone '444' continuation marker, close the box (as in Example 16-9)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12645 (the page-change dashed rule ending '#ahh'), stripped of its 9-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

@@ -1,0 +1,75 @@
+{
+  "id": "sample-9-01",
+  "title": "Displayed Quote",
+  "pdfPages": [238],
+  "textLines": [6882, 6902],
+  "illustrates": {
+    "rule": "9.2.2.f",
+    "quote": "Displayed material may be relocated to the end of a paragraph when it interferes with the flow of text. If the page has no paragraph breaks, the displayed material may be placed at the end of a sentence."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Soviet premier Joseph Stalin was more of a mystery. Churchill and Roosevelt agreed that",
+        "features": "Leads directly into the displayed quotation, which interrupts this very sentence in print (it resumes below with 'defeating Hitler should be...')."
+      },
+      {
+        "kind": "quote",
+        "level": null,
+        "text": "“THE QUALITY OF HIS BEING ONE WITH THE PEOPLE … MADE IT POSSIBLE FOR HIM TO BE A LEADER WITHOUT EVER BEING, OR THINKING OF BEING, A DICTATOR.”",
+        "features": "Displayed, centred, full-caps quotation in quotation marks, set off by blank lines; transcribed in braille as a blocked (not centred) quotation at the adjusted left margin."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "—Labor Secretary Frances Perkins—",
+        "features": "Right below the quotation, centred, smaller type, em-dashes on both sides."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "defeating Hitler should be the first military priority, but repeated delays in operating a second front on the European continent meant that for most of the war, the Soviet Union bore the brunt of the land battle against Germany. Stalin’s mistrust and bitterness over American and British intentions, evident during the last Big Three summit held at Yalta on the Black Sea in February 1945, carried over into the Cold War that followed.",
+        "features": "Continues directly from the lead-in sentence above -- in PRINT the quotation is inserted mid-sentence, splitting 'agreed that' from 'defeating Hitler'; the braille excerpt truncates the middle of this paragraph with an ellipsis."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "With the President’s attention focused on military matters,",
+        "features": "New paragraph beginning; cut off at the bottom edge of the print image, and the braille excerpt likewise truncates it with an ellipsis."
+      }
+    ],
+    "notes": "Cross-referenced by 9.2.2's trailing cross-reference sentence ('See Sample 9-1: Displayed Quote on page 9-12') as the worked example of 9.2.2f. In PRINT the quotation genuinely interrupts the sentence ('...agreed that' / [QUOTE+ATTRIBUTION] / 'defeating Hitler should be...'); the BRAILLE relocates the quotation and its attribution to the END of that same sentence ('...agreed that defeating Hitler...into the Cold War that followed.' transcribed whole, THEN the quote, THEN the attribution), exactly illustrating 9.2.2f's relocation rule.",
+    "surroundingText": "Excerpt from a history narrative about WWII Allied leaders (Stalin, Churchill, Roosevelt) and wartime strategy disagreements.",
+    "printFeatures": "Plain (unboxed) narrative text; the quotation is centred, full capitals, and set off by blank lines; the attribution beneath it uses em-dashes."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",soviet premi] ,joseph ,/al9 0 m ( a",
+      "my/]y4 ,*ur*ill & ,roosevelt agre$ t",
+      "def1t+ ,hitl] %d 2 ! f/ milit>y prior;y1",
+      "b rep1t$ delays 444 ,black ,sea 9",
+      ",febru>y #aide1 c>ri$ ov] 9to ! ,cold",
+      ",w> t foll[$4",
+      "",
+      "  8,,,! qual;y ( 8 2+ \"o ) ! p 444 made",
+      "  x possible = hm to 2 a l1d] )\\t \"e 2+1",
+      "  or ?9k+ ( 2+1 a dictator4,'0",
+      "      ,-.7,labor ,secret>y ,fr.es",
+      "      ,p]k9s.',-",
+      "",
+      "  ,) ! presid5t's att5;n focus$ on",
+      "milit>y matt]s1 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 5-19 in the source (a genuine excerpt -- lines 1-4 of this braille page precede the shown text and are not invented). Line-number field measured as 5 characters, stripped. Lines 1-6 (source 5-10): the FULL, UNINTERRUPTED sentence at cell 1 (a continuation of an earlier paragraph -- note this is the RELOCATED order, quote-and-attribution moved past this whole sentence, per 9.2.2f). Line 7 (11): blank. Lines 8-10 (12-14): the displayed quotation, blocked at cell 3. Lines 11-12 (15-16): attribution, cell 7. Line 13 (17): blank. Lines 14-15 (18-19): NEW paragraph, first line cell 3 / runover cell 1 (the ordinary indented-paragraph pattern), truncated '444'."
+  },
+  "uncertain": [
+    "Print line 6-10 ('defeating Hitler...that followed') is considerably longer than the braille excerpt (which truncates it internally with '444' after 'delays'); a genuine, deliberate abridgement in the source's own worked example.",
+    "The last visible print sentence ('With the President's attention focused on military matters,') is cut off at the bottom edge of the source scan; whatever text follows is not shown and not reproduced."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6887-6901 after stripping the 5-character line-number field (the '(Return to Text)' line 6902 excluded as PDF-navigation furniture). Structural disagreement over print.blocks: A ordered them to match PRINT's own mid-sentence interruption (paragraph ending 'agreed that', quote, attribution, paragraph continuing 'defeating Hitler...followed', new paragraph); B ordered them to match the ALREADY-RELOCATED braille (one whole uninterrupted sentence, then quote+attribution, then the new paragraph). Settled by reading the PDF page image directly (braille-formats-2016.pdf, p.238): print genuinely shows the quotation interrupting the sentence between 'agreed that' and 'defeating Hitler', confirming A's account of PRINT's own layout -- which is also the only correct input for `buildModel9` (built from `print` only, per this runner's own rule), since B's structure describes the ALREADY-TRANSCRIBED braille, not the print original. Kept A's block order; added the print's own quotation marks (visible in the PDF image but omitted from A's `text`) around the quote, matching B."
+}

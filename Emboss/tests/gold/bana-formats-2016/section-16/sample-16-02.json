@@ -1,0 +1,139 @@
+{
+  "id": "sample-16-02",
+  "title": "Notes with Headings",
+  "pdfPages": [
+    446,
+    447
+  ],
+  "textLines": [
+    12911,
+    12950
+  ],
+  "illustrates": {
+    "rule": "16.5.1.h",
+    "quote": "Do not insert a blank line between a note separation line and a title or heading. (See Sample 16-2: Notes with Headings on page 16-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "I like a look of Agony",
+        "features": "Poem title in large display type, with byline 'Emily Dickinson' beneath it in bold.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I like a look of Agony, Because I know it's true— Men do not sham [ref:3]Convulsion, Nor simulate, a [ref:4]Throe—\nThe Eyes glaze once—and that is Death— Impossible to feign The Beads upon the Forehead By homely Anguish strung.",
+        "features": "Poem set with print line number '5' beside its fifth line; two words ('Convulsion', 'Throe') carry superscript numeral reference marks keyed to notes at the right.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:3] sham Convulsion: pretend to have a seizure.\n[ref:4] Throe: sudden surge of pain.",
+        "features": "Two short glossary notes at the right margin of the first poem.",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "“Good Night, Willie Lee, I'll See You in the Morning”",
+        "features": "Second poem title in large display type, with byline 'Alice Walker' beneath it in bold.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Looking down into my father's dead face for the last time my mother said without tears, without smiles without regrets but with [ref:1]civility “Good night, Willie Lee, I'll see you in the morning.”",
+        "features": "Left column of the second poem, with print line number '5' at its fifth line; the word 'civility' carries a superscript numeral note reference.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "And it was then I knew that the healing of all our wounds is forgiveness that permits a promise of our return at the end.",
+        "features": "Right column of the second poem, with print line number '10' at its first line.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:1] civility: politeness, especially of a merely formal kind.",
+        "features": "Single glossary note below a short rule at the foot of the second poem's right column.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "3",
+        "placement": "margin",
+        "text": "sham Convulsion: pretend to have a seizure."
+      },
+      {
+        "ref": "4",
+        "placement": "margin",
+        "text": "Throe: sudden surge of pain."
+      },
+      {
+        "ref": "1",
+        "placement": "footnote",
+        "text": "civility: politeness, especially of a merely formal kind."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.5.1h, illustrating cell-5 poem-title headings immediately following note separation lines with no intervening blank line, when multiple titled passages with their own notes share one print page.",
+    "printFeatures": "Two poem excerpts on decorative colored backgrounds, each with its own title/byline heading and numbered notes; print page number '268' at the foot."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,i l a look ( ,agony      #bfh",
+      "",
+      "            ,emily ,dick9son",
+      "",
+      ",i l a look ( ,agony1",
+      ",2c ,i \"k x's true,-",
+      ",m5 d n %am ,3vul.n1 @.<note@.>",
+      ",nor simulate1 a ,?roe,- @.<note@.>",
+      "",
+      ",! ,eyes glaze once,-& t is ,d1?,-    #e",
+      "444",
+      "",
+      "       8,gd ,ni<t1 ,willie ,lee1",
+      "       ,i'll ,see ,y 9 ! ,morn+0",
+      "",
+      "             ,alice ,walk]",
+      "",
+      ",look+ d[n 9to my \"f's",
+      "444",
+      "te>s1 )\\t smiles                      #e",
+      ")\\t regrets",
+      "b ) .1civil;y;9#a",
+      "444",
+      "\"333333                            a#bfh",
+      "    ,i l a look ( ,agony",
+      "#c ^1%am ^1,3vul.n3 pret5d to h a",
+      "  seizure4",
+      "#d ^1,?roe3 sudd5 surge ( pa94",
+      "",
+      "    8,gd ,ni<t1 ,willie ,lee1 ,i'll ,see",
+      "    ,y 9 ! ,morn+0",
+      "#a ^1civil;y3 polite;s1 especially 444"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 23,
+        "type": "explicit",
+        "note": "Explicit —New Braille Page— marker in the source, after braille line 23 (print line 23, the last line before the marker); the line-number field (2-digit, width 5) restarts at 1 on the new page."
+      }
+    ],
+    "notes": "Line-number field width 5 (digits up to 2, +3) used throughout both braille pages of this sample, per source. The cell-5 heading titles ('I like a look of Agony', the byline, and the second poem's title/byline) each sit directly after either the sample's own opening or a note separation line, with no intervening blank line, per rule 16.5.1h. Blank-cell-only lines are recorded as empty strings."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12918 (field width 5, digits(23)+3), after stripping a leading form-feed page-break character and the line-number field, is exactly 40 characters, right-justified to '#bfh'; line 12942 (the note-separation line on the second braille page) is also exactly 40. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

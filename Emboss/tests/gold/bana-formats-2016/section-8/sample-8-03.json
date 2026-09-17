@@ -1,0 +1,85 @@
+{
+  "id": "sample-8-03",
+  "title": "Heading After Page Change Indicator",
+  "pdfPages": [
+    211
+  ],
+  "textLines": [
+    6151,
+    6165
+  ],
+  "illustrates": {
+    "rule": "8.3.2.d",
+    "quote": "When format requires a blank line before and after a page change indicator, retain only the blank line after the page change indicator. (See Sample 8-3: Heading After Page Change Indicator on page 8-15.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Same three-question list as Sample 8-2.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Where can you find reliable sources of health information?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What medical services are covered by health insurance?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What influences a teen's buying decisions?"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "—New Print Page— / -65-",
+        "features": "Print page-change marker with the new print page number."
+      },
+      {
+        "kind": "heading",
+        "level": null,
+        "text": "Internet-Based Health Care",
+        "features": "Bold centered heading, immediately after the page turn."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "A patient communicates …",
+        "features": "Opening sentence of the paragraph under the heading, continuing on later braille lines not shown."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Same three questions as Sample 8-2, but the new print page opens with a bold centered heading rather than a plain paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",\": c y f9d reliable s\\rces ( h1l?   #,-",
+      "  9=ma;n8",
+      ",:at m$ical s]vices >e cov]$ by h1l?",
+      "  9sur.e8",
+      ",:at 9flu;es a te5's buy+ deci.ns8",
+      "-------------------------------------#fe",
+      "",
+      "    ,9t]net-,bas$ ,h1l? ,c>e",
+      "  ,a pati5t communicates 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 1-5 as in Sample 8-2; line 6 is the page-change dash rule ('#fe' = 65); line 7 is a single blank line — per 8.3.2.d this is the only blank line retained where format would otherwise call for one both before and after the page-change indicator; line 8 is the heading ',9t]net-,bas$ ,h1l? ,c>e' (Internet-Based Health Care), begun 4 cells in, with no blank line between it and the page-change indicator above or the paragraph text below; line 9 begins the paragraph ('A patient communicates...'), ending '444'."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B; the \"(Return to Text)\" navigation line is correctly excluded from `lines` by both (per the section-11 precedent and this task’s standing decision). Only prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s kept as the base, with B’s explicit note on the \"(Return to Text)\" exclusion folded in.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "b004-9-1",
+  "title": "Paragraphs -- Example 1",
+  "pdfPages": [
+    8
+  ],
+  "textLines": [
+    239,
+    240
+  ],
+  "illustrates": {
+    "rule": "B004 §9",
+    "quote": "Guiding principles: Paragraphs must be easily identifiable and easily found with the fingers (when tracking the left-hand margin of a page)."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Prose statement of the recommended general-reader paragraph format: paragraphs commence in cell 3, runovers start in cell 1. No print passage or braille rendering is given."
+      }
+    ]
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No worked print or braille excerpt is given for this item; it is a one-sentence prose statement of the paragraph margin convention."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: prose-only, no braille. status: no-braille."
+}

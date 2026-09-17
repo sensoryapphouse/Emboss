@@ -1,0 +1,80 @@
+{
+  "id": "sample-1-01",
+  "title": "List at End of Print Page",
+  "pdfPages": [
+    21
+  ],
+  "textLines": [
+    1257,
+    1284
+  ],
+  "illustrates": {
+    "rule": "1.11.3.b",
+    "quote": "Insert a blank line before the page change indicator when the text ending the print page would normally be followed by a blank line. (See Sample 1-1: List at End of Print Page on page 1-21.)"
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": "171",
+      "features": "New print page number 171 ('#aga': a=1,g=7,a=1), shown at the page turn; the preceding page's own number is not itself given in this excerpt."
+    },
+    "blocks": [
+      {
+        "kind": "list",
+        "items": [
+          {
+            "level": 1,
+            "marker": "1",
+            "text": "Older adults increasingly use words to convey positive emotions."
+          },
+          {
+            "level": 1,
+            "marker": "2",
+            "text": "Brain-wave reactions to negative images diminish with age."
+          }
+        ],
+        "features": "Two-item numbered list ending the print page."
+      },
+      {
+        "kind": "pagenum",
+        "text": "171",
+        "features": "Print page turn to page 171."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Moreover, at all ages, the bad feelings we associate with negative events fade faster than do the good feelings we associate with positive events.",
+        "features": "Opening paragraph of the new print page, indented first line."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a ,old] adults 9cr1s+ly use ^ws t 3vey",
+      "  positive emo;ns4",
+      "#b ,bra9-wave reac;ns to negative images",
+      "  dim9i% ) age4",
+      "",
+      "------------------------------------#aga",
+      "  ,moreov]1 at all ages1 ! bad feel+s we",
+      "associate ) negative ev5ts fade fa/] ?an",
+      "d ! gd feel+s we associate ) positive",
+      "ev5ts4"
+    ],
+    "pageBreaks": [
+      {
+        "index": 4,
+        "label": "page change indicator, ending #aga (print page 171)"
+      }
+    ],
+    "notes": "The source shows this SAME print content (a two-item numbered list ending one print page, a paragraph opening the next) transcribed TWO different ways, under the subheadings 'Print Page Break at the Beginning of a Braille Page' and 'Print Page Break within a Braille Page', to contrast the two placements rule 1.11.3.b addresses. braille.lines here is the SECOND (mid-braille-page) variant -- lines 6-15 of the source, renumbered from 1: a blank line (per 1.11.3.b) precedes the full-width page-change indicator, the paragraph resumes after it. This is the variant Emboss's own model (a 'pagenum' block placed between the list and the paragraph) can actually reproduce, since it does not depend on the print-page boundary landing at an exact pre-existing braille-page position. The FIRST variant (lines 22-25 of one braille page, then fresh braille-page lines 1-5, where the new print page's number lands alone on line 1 with no indicator dashes because the break happens to coincide exactly with the braille-page boundary) is recorded here for completeness but is NOT the comparison target: reproducing it would require fabricating enough preceding filler content to land the break at that exact spot, which is not given by print and would not be a faithful test of Emboss's own pagination."
+  },
+  "uncertain": [
+    "Variant 1 (print page break exactly at the top of a fresh braille page) is documented in braille.notes but not modeled/compared -- see notes."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs independently transcribed BOTH variants shown in the source, agreeing on wording; they diverged only on file shape (run A used a non-standard 'braille.variants' extension array, run B flattened both variants plus the source's own English subheadings into one 'lines' array, which is unusable directly -- English caption lines are not braille and would corrupt any real comparison). Resolved by using ONLY the mid-page variant as braille.lines/print.blocks (the one Emboss's pagenum-block mechanic can actually reproduce, verified empirically: a 'list' block followed by a 'pagenum' block followed by a 'para' block renders the identical blank-line + indicator + paragraph shape). id normalised to 'sample-1-01' (zero-padded, matching the file name and this section's own precedent, e.g. section-8/11's sample-N-0M convention) rather than either run's own 'sample-1-1'/'sample-1-01' choice made inconsistently across files."
+}

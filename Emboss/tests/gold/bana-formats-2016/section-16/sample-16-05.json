@@ -1,0 +1,74 @@
+{
+  "id": "sample-16-05",
+  "title": "Note with a Quote",
+  "pdfPages": [
+    450
+  ],
+  "textLines": [
+    13008,
+    13031
+  ],
+  "illustrates": {
+    "rule": "16.7.4",
+    "quote": "Notes Containing Displayed Quoted Material. When a note contains quoted matter set off from the body of the note by blank lines, quotation marks, change of margins, or font attributes, use the listed format of 1-3 for the note, and use the guidelines found in Formats, §9, Displayed Material, Attributions, and Source Information. (See Sample 16-5: Note with a Quote on page 16-22.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "'Sheridan will not succeed at Bath with his oratory. Ridicule has gone down before him, and, I doubt, Derrick is his enemy.'[ref:*]",
+        "features": "Single quoted sentence with an asterisk reference mark at the end.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "*Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample:\n“None but the brave\nNone but the brave.\nNone but the brave deserve the fair.”\nNaughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11.",
+        "features": "Long footnote containing, part-way through, a three-line displayed poem quotation set off by its own blank lines and centered layout, followed by a closing attribution.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample: “None but the brave / None but the brave. / None but the brave deserve the fair.” Naughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.7.4, illustrating a footnote that itself contains displayed quoted material (a three-line poem) using listed 1-3 format.",
+    "printFeatures": "Boxed screenshot: a quoted sentence, then a long footnote below a rule that itself displays a three-line indented poem quotation before its closing attribution."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,8,%]idan w n su3e$ at ,ba? ) 8    a#,-",
+      "oratory4 ,ridicule has g\"o d[n 2f hm1 &1",
+      ",i d\\bt1 ,d]rick is 8 5emy4,0\"9",
+      "\"333333",
+      "\"9,mr4 ,%]idan 0 !n r1d+ lectures ^u",
+      "  ,oratory at ,ba?1 \": ,d]rick 0 ,ma/] (",
+      "  ! ,c]emonies2 or1 z ! phrase is1 ,,k+",
+      "  ,,boswell4 ,dr4 ,p>r1 :o knew ,%]idan",
+      "  well1 describes hm ,8z a wr;g-h1d$1",
+      "  :imsical man4,0 444 ,take a sample3",
+      "",
+      "    8.1,n\"o b ! brave",
+      "    ,n\"o b ! .1brave4",
+      "    ,n\"o .1b ! brave des]ve ! fair40",
+      "",
+      "    ,nau<ty ,ri*>d .<;,r4 ;,b4",
+      "  ,%]idan.>1 l ,gallio1 seem$ to c>e n\"\\",
+      "  = ^! ?+s4,0 ,moore's .1,%]idan1 i4 #i1",
+      "  #aa4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 19, two digits, +3). The displayed three-line poem quotation within the note (lines 12-14 of this excerpt) is set with its own additional cell indent and separated by blank lines from the rest of the note, per the listed 1-3 format referenced in rule 16.7.4."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.4 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988(sic)/13014/13018/13023/13027/13029/13030 area (field width 5, digits(19)+3) reach exactly 40 characters on several lines; line 13013 (41 characters) is a genuine one-cell source anomaly, flagged in uncertain, not a transcription slip -- both runs already agree on this line's content. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

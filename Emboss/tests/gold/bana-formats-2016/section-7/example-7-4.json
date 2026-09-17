@@ -1,0 +1,111 @@
+{
+  "id": "example-7-4",
+  "title": "Box Read Across Pages (Print Only)",
+  "pdfPages": [
+    189
+  ],
+  "textLines": [
+    5514,
+    5518
+  ],
+  "illustrates": {
+    "rule": "7.4.1.c",
+    "quote": "When a box reads across facing pages, but there is other text outside the box, place it at the most logical place on one of the two pages. Insert a transcriber’s note before the box, informing the reader of the location. Sample: The following box appears across the bottom of pages 100-101."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "features": "A two-panel colour worksheet spread spanning the bottom of textbook pages 188 (left) and 189 (right); both panels have a torn/jagged top edge (an illustration-clipping device, not part of the original worksheet's own border); ten small red oval icons, each containing a single bold digit 1-10, are embedded inline within the sentences as fill-in-the-blank answer markers running continuously across both panels.",
+        "blocks": [
+          {
+            "kind": "heading",
+            "level": 2,
+            "text": "See a Problem?",
+            "features": "Large white-on-green arrow-shaped banner heading the left panel."
+          },
+          {
+            "kind": "list",
+            "level": null,
+            "text": null,
+            "items": [
+              {
+                "marker": null,
+                "level": null,
+                "text": "Students noticed that a factory wasn't using [1] to remove ashes. Also, it didn't have bins for [2] cans."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "Often people leave water running or waste it in other ways. They should know that it is expensive to clean [4], or waste water."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "Food and other things we buy have a lot of packaging. This turns into garbage and other [6] that fills up [7]."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "The roads are crowded with cars that cause [9]. Most cars on the road have only one person in them."
+              }
+            ],
+            "features": "Left panel: four rows, each a short 'problem' sentence with one or two circled-number blanks; bracketed numbers [N] stand in for the print's own small red numbered-oval icons."
+          },
+          {
+            "kind": "heading",
+            "level": 2,
+            "text": "Find a Solution!",
+            "features": "Large white-on-green arrow-shaped banner heading the right panel."
+          },
+          {
+            "kind": "list",
+            "level": null,
+            "text": null,
+            "items": [
+              {
+                "marker": null,
+                "level": null,
+                "text": "They invited the factory manager to school to see their recycling project and a display showing how sunlight is turned into [3]."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "Suggest taking a field trip to the [5] to see how sewage is cleaned."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "Write to a town official. Ask if your community has enough landfills to bury garbage or [8] for burning it."
+              },
+              {
+                "marker": null,
+                "level": null,
+                "text": "Plan with your friends to ride together in [10]."
+              }
+            ],
+            "features": "Right panel: four rows, each a short 'solution' sentence with one circled-number blank, matching the problem numbers on the left panel."
+          }
+        ]
+      }
+    ],
+    "notes": "Print-only illustrative figure captioned 'Example 7-4: Box Read Across Pages (Print Only)'. No braille transcription is given. The rule text immediately preceding this figure (7.4.1.c) includes its own generic sample transcriber's-note wording citing hypothetical 'pages 100-101' -- unrelated to this figure's own (unrelated) textbook page numbers 188/189 visible at the bottom corners of the image; a coincidence of two independent uses of page numbers, not a discrepancy.",
+    "surroundingText": "Immediately follows rule 7.4.1.c's own text and its embedded sample transcriber's-note wording (see illustrates.quote).",
+    "printFeatures": "Full-colour textbook-worksheet graphic; green arrow-shaped banners; light blue and white alternating text bands; small red oval number icons; torn-paper illustration top edge (clipping device, not part of the original worksheet's own border)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given in the source -- the example is explicitly captioned '(Print Only)'; nothing but four blank lines (5515-5518) sit between the caption (5514) and the next content, rule 7.4.1.d (5519)."
+  },
+  "uncertain": [],
+  "resolution": "Content agreed identically between the two runs (worksheet sentence text byte-identical, including all ten bracketed blank numbers). Structural: A folded the panel banners ('See a Problem?'/'Find a Solution!') into each list's own free-text `features` note; B attached them as a `text` field directly on the list block. Reconciled as their own explicit `heading` sibling blocks (cell-5, `level:2`) immediately before each list, consistent with how a bold banner heading is modelled elsewhere in this section (see sample-7-02's 'STUDY' heading), rather than folding real, distinct print heading text into another block's own field. The first circled digit (ambiguous between '1'/'0' in both runs' initial read) is confirmed '1' by a fresh 250dpi crop of the PDF page image (p.189): a plain vertical unserifed stroke with no closed counter, matching the unambiguous '10' icon's own glyph style elsewhere in the same graphic -- no longer recorded as uncertain.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

@@ -670,8 +670,13 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         return `${indent}<prodnote${renderAttr}>${content}</prodnote>`;
       }
       const content = serializeInlineSegments(block.segments, block.text, idAlloc);
-      if (lvlClass) {
-        return `${indent}<p class="${lvlClass.trim()}">${content}</p>`;
+      // BANA Formats §1.9.3 (F-39): the per-paragraph "blocked" (1-1 margins) flag round-trips
+      // as class="blocked" (see parse.mjs's makeP, both the top-level and sidebar copies).
+      const classTokens = [];
+      if (block.blocked) classTokens.push('blocked');
+      if (lvlClass) classTokens.push(lvlClass.trim());
+      if (classTokens.length) {
+        return `${indent}<p class="${classTokens.join(' ')}">${content}</p>`;
       }
       return `${indent}<p>${content}</p>`;
     }
@@ -854,8 +859,12 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
 
     case 'table': {
       const isListed = block.format === 'listed' || block.style === 'table-listed';
+      // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): BANA §11.14 Wide Tables:
+      // Vertical Division — round-tripped as class="bana-vertical" (parse.mjs's
+      // parseTable reads it back).
+      const isVertical = block.format === 'vertical';
       const isSpatial = block.format === 'spatial' || block.format === 'columnar' || block.style === 'table-spatial';
-      const cls = isListed ? ' class="bana-listed"' : (isSpatial ? ' class="bana-spatial"' : '');
+      const cls = isListed ? ' class="bana-listed"' : (isVertical ? ' class="bana-vertical"' : (isSpatial ? ' class="bana-spatial"' : ''));
       const lines = [];
       const subIndent = ' '.repeat(indentLevel + 2);
       const rowIndent = ' '.repeat(indentLevel + 4);
@@ -870,17 +879,60 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
 
       lines.push(`${indent}<table${cls}>`);
 
-      if (block.caption || block.title) {
-        lines.push(`${subIndent}<caption>${escapeXml(block.caption || block.title)}</caption>`);
+      // BANA §11.3.1a's HEADING (block.title, centred) vs §11.2.8's CAPTION (block.caption,
+      // 7-5 margins, never centred) round-trips through the same <caption> element DTBook
+      // offers, distinguished by class — see parse.mjs's parseTable for the read side (F-4).
+      // A multi-line title (block.title as an array — a real, hard print line break, e.g. a
+      // sequence number on its own line above the title proper, BANA Example 11-4) becomes
+      // <br/>-separated lines; a plain caption's own line breaks are not preserved (they are
+      // cosmetic for a caption, joined back to one flowing paragraph on re-parse).
+      if (block.title) {
+        const titleLines = Array.isArray(block.title) ? block.title : [block.title];
+        const cls2 = block.titlePosition === 'before-box' ? ' class="bana-heading bana-heading-before-box"' : ' class="bana-heading"';
+        lines.push(`${subIndent}<caption${cls2}>${titleLines.map(escapeXml).join('<br/>')}</caption>`);
+      } else if (block.caption) {
+        lines.push(`${subIndent}<caption>${escapeXml(block.caption)}</caption>`);
       }
 
       if (block.headers && Array.isArray(block.headers) && block.headers.length) {
         lines.push(`${subIndent}<thead>`);
-        lines.push(`${rowIndent}<tr>`);
-        for (const h of block.headers) {
-          lines.push(`${rowIndent}  <th>${cellXml(h)}</th>`);
+        // BANA §11.4.3: a two-row header (a primary heading spanning its sub-columns,
+        // §11.4.3a-c) round-trips as two <tr> of <th> — a group becomes
+        // <th colspan="n"> on row 1 over its plain <th> sub-columns on row 2; a column
+        // with no group (a single-tier heading beside the group, e.g. BANA Sample
+        // 11-2's "Fiscal Year") becomes one <th rowspan="2"> on row 1 with no cell of
+        // its own on row 2 — read back by parse.mjs's parseTable (F-12).
+        const groups = Array.isArray(block.headerGroups) ? block.headerGroups : [];
+        if (groups.length) {
+          const colCount = block.headers.length;
+          const groupOf = Array(colCount).fill(null);
+          groups.forEach((g, gi) => { for (let c = g.from; c <= g.to && c < colCount; c++) groupOf[c] = gi; });
+          lines.push(`${rowIndent}<tr>`);
+          for (let c = 0; c < colCount;) {
+            const gi = groupOf[c];
+            if (gi != null) {
+              const g = groups[gi];
+              const span = g.to - g.from + 1;
+              lines.push(`${rowIndent}  <th colspan="${span}">${cellXml(g.text)}</th>`);
+              c = g.to + 1;
+            } else {
+              lines.push(`${rowIndent}  <th rowspan="2">${cellXml(block.headers[c])}</th>`);
+              c++;
+            }
+          }
+          lines.push(`${rowIndent}</tr>`);
+          lines.push(`${rowIndent}<tr>`);
+          for (let c = 0; c < colCount; c++) {
+            if (groupOf[c] != null) lines.push(`${rowIndent}  <th>${cellXml(block.headers[c])}</th>`);
+          }
+          lines.push(`${rowIndent}</tr>`);
+        } else {
+          lines.push(`${rowIndent}<tr>`);
+          for (const h of block.headers) {
+            lines.push(`${rowIndent}  <th>${cellXml(h)}</th>`);
+          }
+          lines.push(`${rowIndent}</tr>`);
         }
-        lines.push(`${rowIndent}</tr>`);
         lines.push(`${subIndent}</thead>`);
       }
 

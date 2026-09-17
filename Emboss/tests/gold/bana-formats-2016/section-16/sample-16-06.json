@@ -1,0 +1,91 @@
+{
+  "id": "sample-16-06",
+  "title": "Repeated Note",
+  "pdfPages": [
+    451
+  ],
+  "textLines": [
+    13039,
+    13060
+  ],
+  "illustrates": {
+    "rule": "16.7.5.d",
+    "quote": "Include both page location information and reference marks, when given. Note: Do not repeat a referenced note in a volume of endnotes, where notes are transcribed exactly as written. (See Sample 16-6: Repeated Note on page 16-23.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "… Do you feel that it is acceptable for a counselor to act as an expert in viability—or employment opportunities that could result from a music education[ref:4]?",
+        "features": "First print page, ending with a superscript numeral-4 reference mark; print page number '72' boxed at the top right.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:4] See: A Blind Music Student's College Survival Guide",
+        "features": "Footnote at the foot of print page 72.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "… And, how many are aware that published labor statistics clearly dispel these myths[ref:5]? …",
+        "features": "Second print page (73), ending with a superscript numeral-5 reference mark; print page number '73' boxed at the top right.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:5] See note 4.",
+        "features": "Footnote at the foot of print page 73, itself referring back to note 4 on the previous page rather than repeating its full text in print.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "4",
+        "placement": "footnote",
+        "text": "See: A Blind Music Student's College Survival Guide"
+      },
+      {
+        "ref": "5",
+        "placement": "footnote",
+        "text": "See note 4."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.7.5, illustrating a note ('See note 4') that refers to an earlier note on a different print page; per the rule, the referenced note (4) is repeated in braille after the original note (5), rather than left as a bare page-turn-back reference.",
+    "printFeatures": "Two boxed print pages (72 and 73, separated by a '—New Print Page—' marker), each with a superscript reference mark and its own footnote; the second footnote merely says 'See note 4' in print."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "444                                  #gb",
+      ",d y feel t x is a3eptable = a c\\nselor",
+      "to act z an exp]t 9 viabil;y,-or",
+      "employ;t opportunities t cd result f a",
+      "music $uca;n;9#d8",
+      "\"333333",
+      ";9#d,see3 .7,a ,bl ,music ,/ud5t's",
+      "  ,college ,survival ,guide.'",
+      "-------------------------------------#gc",
+      "444",
+      ",&1 h[ _m >e aw>e t publi%$ labor",
+      "/ati/ics cle>ly 4pel ^! my?s;9#e8",
+      "444",
+      "\"333333",
+      ";9#e,see note #d4",
+      "  ;9#d,see3 .7,a ,bl ,music ,/ud5t's",
+      "    ,college ,survival ,guide.'"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 17, two digits, +3). Per rule 16.7.5, braille note 5 ('See note #d', i.e. 'See note 4') is followed immediately by a full repetition of note 4's own text ('See: A Blind Music Student's College Survival Guide') -- the referenced note is repeated after the referencing note, in this single braille page, even though print left it as a bare cross-reference. A single print-page-change indicator (#gb) appears at the very start (right-flush on line 1), and a second one (#gc) after note 4's first occurrence, marking the two print pages combined onto one braille page."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.5.d per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13044 and 13052 (field width 5, digits(17)+3) are each exactly 40 characters, the second a dashed page-change rule ending '#gc'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

@@ -1,0 +1,158 @@
+{
+  "id": "sample-11-06",
+  "title": "Table with Blank Rows",
+  "pdfPages": [
+    312,
+    313
+  ],
+  "textLines": [
+    9307,
+    9344
+  ],
+  "illustrates": {
+    "rule": "11.5.4",
+    "quote": "Blank Lines. Follow print when blank lines are used to show row groupings, or to set off rows of column totals. (See Sample 11-6: Table with Blank Rows on page 11-30.)"
+  },
+  "print": {
+    "caption": "Percentage of Practitioners Accessing Funding by Region and Nation, 2006",
+    "headers": [
+      [
+        "Region/Nation",
+        "Yes—Has Accessed Funding",
+        "No—Has Not Accessed Funding"
+      ]
+    ],
+    "rows": [
+      [
+        "North East",
+        "5%",
+        "95%"
+      ],
+      [
+        "North West",
+        "8%",
+        "92%"
+      ],
+      [
+        "East of England",
+        "14%",
+        "86%"
+      ],
+      [
+        "Yorkshire & Humber",
+        "23%",
+        "77%"
+      ],
+      [
+        "South East",
+        "28%",
+        "72%"
+      ],
+      [
+        "South West",
+        "32%",
+        "68%"
+      ],
+      [
+        "East Midlands",
+        "42%",
+        "58%"
+      ],
+      [
+        "London",
+        "45%",
+        "55%"
+      ],
+      [
+        "West Midlands",
+        "50%",
+        "50%"
+      ],
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "England",
+        "30%",
+        "70%"
+      ],
+      [
+        "Northern Ireland",
+        "4%",
+        "96%"
+      ],
+      [
+        "Scotland",
+        "31%",
+        "69%"
+      ],
+      [
+        "Wales",
+        "46%",
+        "54%"
+      ],
+      [
+        "",
+        "",
+        ""
+      ],
+      [
+        "UK",
+        "31%",
+        "69%"
+      ]
+    ],
+    "notes": "Two blank print rows separate the eight English-region rows from the four home-nation rows, and again separate the home-nation rows from the final 'UK' total row — exactly what the braille preserves as blank lines per rule 11.5.4.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, ruled line under every row; header row bold two-line wrap (\"Yes—Has Accessed / Funding\", \"No—Has Not / Accessed Funding\")."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,p]c5tage ( ,practi;n]s      #hj",
+      "       ,a3ess+ ,fund+ by ,region",
+      "             & ,na;n1 #bjjf",
+      "7777777777777777777777777777777777777777",
+      "      @.<,key3",
+      "",
+      ",yes ,yes,-,has ,a3ess$ ,fund+",
+      ",no ,no,-,has ,n ,a3ess$ ,fund+@.>",
+      ",region_/,na;n       ,yes   ,no     a#hj",
+      "\"333333333333333333 \"3333 \"3333",
+      ",nor? ,ea/ \"\"\"\"\"\"\"\" #e.0    #ie.0",
+      ",nor? ,we/ \"\"\"\"\"\"\"\" #h.0    #ib.0",
+      ",ea/ ( ,5gl& \"\"\"\"\"\" #ad.0 #hf.0",
+      ",york%ire @& ,humb] #bc.0 #gg.0",
+      ",s\\? ,ea/ \"\"\"\"\"\"\"\"\" #bh.0 #gb.0",
+      ",s\\? ,we/ \"\"\"\"\"\"\"\"\" #cb.0 #fh.0",
+      ",ea/ ,midl&s \"\"\"\"\"\" #db.0 #eh.0",
+      ",london \"\"\"\"\"\"\"\"\"\"\" #de.0 #ee.0",
+      ",we/ ,midl&s \"\"\"\"\"\" #ej.0 #ej.0",
+      "",
+      ",5gl& \"\"\"\"\"\"\"\"\"\"\"\"\" #cj.0 #gj.0",
+      ",nor!rn ,irel& \"\"\"\" #d.0    #if.0",
+      ",scotl& \"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0",
+      ",wales \"\"\"\"\"\"\"\"\"\"\"\" #df.0 #ed.0",
+      "",
+      ",,uk \"\"\"\"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 8,
+        "type": "explicit",
+        "note": "Explicit —New Braille Page— marker in the source .txt immediately after braille line 8 (between .txt lines 9321 and 9324); the line numbering restarts at 1 on the new physical braille page (PDF p. 313, printed 11-31)."
+      }
+    ],
+    "notes": "This table is longer than one braille page and is continued: page 1 (braille lines 1-8, PDF p.11-30) carries the centered title, top box line, and a transcriber's-note key (\"@.<,key3\" ... explaining the abbreviated Yes/No column headings) plus the first two data rows (Yes/No); an explicit —New Braille Page— marker follows in the source. Page 2 (lines 1-20, PDF p.11-31) repeats the column headings (\",region_/,na;n ,yes ,no\", with running head page-number token 'a#hj' at the right) and separation line per rule 11.4.4.a, then all 13 region/nation rows including the two blank-line group separators (after 'West Midlands' and after 'Wales', shown as empty strings), ending with the bottom box line and a trailing blank line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines/rows/pageBreaks content already agreed between the two runs and match the source exactly, including the explicit '—New Braille Page—' marker after line 8; pageBreaks schema normalized to run B's richer {afterLineIndex, type, note} object form."
+}

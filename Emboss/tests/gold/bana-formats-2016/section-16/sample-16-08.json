@@ -1,0 +1,94 @@
+{
+  "id": "sample-16-08",
+  "title": "Notes on Facing Page",
+  "pdfPages": [
+    454
+  ],
+  "textLines": [
+    13107,
+    13120
+  ],
+  "illustrates": {
+    "rule": "16.7.7",
+    "quote": "Notes on Facing Pages. Use combined print page numbers when transcribing text and notes printed on facing pages. Lettered continuation pages require the combined print page numbers. (See Sample 16-8: Notes on Facing Page on page 16-26.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "143 resolv'd: convinced.\n148 thorough: through. untrod state: new government.\n155 presently: immediately.\n158 still: always.\n159 falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”",
+        "features": "A facing glossary page (left, unnumbered as running text) keyed entirely by print line numbers rather than symbols, facing the play-script text itself on the right-hand page.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Brutus: Soft! who comes here? A friend of Antony's. … Reenter Antony.",
+        "features": "The play-script text itself, with print line numbers 135-155 in its own right margin, facing the glossary page on the left.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "143",
+        "placement": "margin",
+        "text": "resolv'd: convinced."
+      },
+      {
+        "ref": "148",
+        "placement": "margin",
+        "text": "thorough: through."
+      },
+      {
+        "ref": "148",
+        "placement": "margin",
+        "text": "untrod state: new government."
+      },
+      {
+        "ref": "155",
+        "placement": "margin",
+        "text": "presently: immediately."
+      },
+      {
+        "ref": "158",
+        "placement": "margin",
+        "text": "still: always."
+      },
+      {
+        "ref": "159",
+        "placement": "margin",
+        "text": "falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”"
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.7.7, illustrating notes and text printed on facing pages, requiring combined print page numbers in braille. This is a genuine excerpt: its braille line numbering begins at 20, not 1, matching the source page image.",
+    "printFeatures": "Two facing print pages reproduced side by side: a plain glossary page on the left (line-number-keyed entries, no running prose) and the numbered play-script page (101) on the right."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      "      ,re5t] ,antony4",
+      "\"333333",
+      "#adc ^1resolv'd 3v9c$4",
+      "444",
+      "#aei ^1falls ^1%rewdly happ5s to an",
+      "  extreme degree4 ,\"!=e1 8,my                          #,-",
+      "  suspicions un=tunately >e                     b#ajj-#aja",
+      "  alw a3urate40"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 6,
+        "type": "explicit",
+        "note": "Explicit —New Braille Page— marker in the source, after the 6th line of this excerpt (source braille line 25); the line-number field restarts at 1 on the new page."
+      }
+    ],
+    "notes": "Genuine excerpt starting at braille line 20 (not 1), verified on the page image -- no earlier lines invented. Line-number field width 5 (max line number 25, two digits, +3). Each glossary entry begins with its print line number (e.g. #adc = 143, #aei = 159) rather than a symbol, per the facing-page glossary format; a combined page reference (b#ajj-#aja, i.e. 100-101 combined) appears right-flush at the end."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.7 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A asserted 40; direct verification (lines 13117/13119, field width 5, digits(25)+3) finds 58-character lines -- the same tabbed-reference anomaly as example-16-10, explicitly named in the task brief for this file -- with no line reaching 40. Left null (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

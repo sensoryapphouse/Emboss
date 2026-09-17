@@ -1,0 +1,88 @@
+{
+  "id": "sample-16-07",
+  "title": "Continued Note on Next Print Page",
+  "pdfPages": [
+    452,
+    453
+  ],
+  "textLines": [
+    13068,
+    13099
+  ],
+  "illustrates": {
+    "rule": "16.7.6",
+    "quote": "Notes Continued on Additional Print Pages. When a note is divided between print pages, complete the entire note on the print page on which it begins (before the print page change indicator). When the continuation of a print note is the only material on the following page, place the page change indicator following the note. Treat the page with the continued note as if it is blank; combine that print page number with the following print page number. (See Sample 16-7: Continued Note on Next Print Page on page 16-24.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I stopped in the middle of Vassar because I was afraid I would forget about it, now I will go on where I left off. Some time after Miss Emma Nigh papa took mamma and little Langdon to Elmira for the summer. When in Elmira Langdon began to fail but I think mamma did not know just what was the matter with him.",
+        "features": "Diary-style narrative on the left-hand (verso) print page, headed by a bracketed editorial note naming 'Lord Houghton, Frank Buckland, Mr. Trollope, Tom Hood, ... ' highlighted in yellow, continuing an endnote begun on the facing page.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[cont.] photocopy in CU-MARK, in link note following 26 May 1872 to Bliss, 99-101; 13 Feb 1872 to Fairbanks, 44; 22 Apr 1872 to the Warners, 79: 15 May 1872 to OC and MEC, 86).",
+        "features": "Highlighted continuation of a footnote, printed vertically in the right margin of the right-hand print page (433), continuing onto the facing page.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "At last it was time for papa to return to Hartford, and Langdon decided to go with him. But after they reached Hartford he became very sick, and his mother trusted to be there in the middle of the journey with him ... diphtheria.",
+        "features": "Right-hand print page, headed 'From Susy's Biography' in italics, continuing the same footnote (highlighted) about the trouble Langdon's illness proved to be, with a closing attribution line naming Lord Houghton, Sir Charles Dilke, Mr. Charles Reade, Mr. William Black, Robert Browning, Sir Charles Dilke, Mr. Charles Reade.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "This trouble proved to be diphtheria. Buried at Elmira, New York. Langdon Clemens, born prematurely, was never robust and was so slow to develop that it was unjustly thought that his father was inclined to blame himself unjustly (LS: Crane to Paine, 25 May 1911; photocopy in CU-MARK, in link note following 26 May 1872 to Bliss, 99-101; 13 Feb 1872 to Fairbanks, 44; 22 Apr 1872 to the Warners, 79: 15 May 1872 to OC and MEC, 86). Lord Houghton, Sir Charles Dilke, Mr. Charles Reade, Mr. William Black, Robert Browning, Sir Charles Dilke, Mr. Charles Reade."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.7.6, illustrating a single long footnote that spans two consecutive print pages (433, 434); the entire note is completed on the page where it begins in braille, and the two print page numbers are combined.",
+    "printFeatures": "Two facing print pages (433 verso, 434 recto) reproduced as rotated/boxed photographs of a printed biography page, with the continuing footnote highlighted in yellow running down the margin and across the page break."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "444 n\"e 3fess$ until n[4            a#dcc",
+      "",
+      "         ,f ,susy's ,biography4",
+      "",
+      "    ,at la/ x 0 \"t = papa to return to",
+      "  ,h>t=d1 & ,langdon 0 r1l sick at t \"t1",
+      "  b / mamma decid$ to g ) hm1 ?9k+ !",
+      "  j\\rney mi<t d hm gd4 ,b af !y r1*$",
+      "  ,h>t=d he 2came v sick1 & 8 tr\\ble",
+      "  proov$ to 2 dip!]ia4#aj ,he di$ ab a",
+      "  week af mamma & papa r1*$ ,h>t=d4 444",
+      "  ,br[n+1 ,sir ,*>les ,dilke1 ,mr4",
+      "  ,*>les ,r1de1 ,mr4 ,william ,black1",
+      "\"333333",
+      ";9#aj;his tr\\ble prov$ to 2 dip!]ia 444",
+      "  buri$ 444 at ,elmira1 ,new ,york4",
+      "  ,langdon ,clem5s1 born prematurely1 0",
+      "  n\"e robu/ & 0 sl[ to develop4 444",
+      "  9cl9$ to blame hmf unju/ly0 \"<,,ls3",
+      "  ,crane to ,pa9e1 #be ,may #aiaa1",
+      "  photocopy 9 ,,cu-,,m>k1 444 #ahgb to",
+      "  ,,oc & ,,mec1 #hf\">4",
+      "",
+      "------------------------------------#dcd",
+      "  ,\"l ,h\"\\on1 ,frank ,buckl&1 ,mr4 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 25, two digits, +3). No braille page break occurs partway through the note itself: per rule 16.7.6, the entire footnote (lines 15-25 of this excerpt) is completed together on this one braille page, with the combined print-page reference (a#dcc, i.e. 433-434 combined) appearing right-flush on line 1 rather than a separate page-change indicator interrupting the note."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.6 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13077 (field width 5, digits(25)+3), stripped, is 31 characters at 9 leading spaces (matching Run B, not Run A's 8); line 13075 (41 characters, 'a#dcc' page-number token) is a genuine anomaly both runs already agree on verbatim. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

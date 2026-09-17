@@ -1,0 +1,65 @@
+{
+  "id": "b004-8-2",
+  "title": "Print Page Turn Indicator -- Worked Example",
+  "pdfPages": [
+    7,
+    8
+  ],
+  "textLines": [
+    220,
+    236
+  ],
+  "illustrates": {
+    "rule": "B004 §8",
+    "quote": "Guiding principles: If original print page numbers are included on page information lines, in the braille version, an indication of where the print page turn has occurred must also be shown. Note, the indicator can generally be automatically created by braille translation software."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": "74",
+      "features": "A sentence interrupted mid-flow by a print page turn to page 74, shown as a horizontal rule ending in the new page number."
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Once they had solved that problem, the next part was easy: the clues they had been given began",
+        "features": "Opening portion of the sentence, ending at the print page turn."
+      },
+      {
+        "kind": "pagenum",
+        "text": "74",
+        "features": "Print mock-up of the page turn: a long horizontal rule ending in the new print page number '74', with no space between the rule and the number."
+      },
+      {
+        "kind": "paragraph",
+        "text": "slotting into place and they began making more rapid progress.",
+        "continuation": true,
+        "features": "Continuation of the same sentence after the page turn (no new paragraph), per the good-practice statement's own 'unless there is a new paragraph' clause."
+      }
+    ]
+  },
+  "braille": {
+    "width": 38,
+    "lines": [
+      ",once !y _h solv$ t problem1 !",
+      "next \"p 0 easy3 ! clues !y _h be5",
+      "giv5 2gan",
+      "                             \"3#gd",
+      "slott+ 9to place & !y 2gan mak+ m",
+      "rapid progress4"
+    ],
+    "pageBreaks": [
+      {
+        "index": 3,
+        "label": "print page turn indicator, ending #gd (print page 74)"
+      }
+    ],
+    "notes": "Six lines, verbatim (spans a print-page break in the UKAAF GUIDE's own PDF pagination between its pages 7 and 8, an unrelated document-layout artefact excluded here -- confirmed by both independent runs). Lines 1-3 the sentence up to the interruption; line 4 the centred page-turn indicator (dot 5 + dots 2-5, '\"3', immediately followed with no space by the new print page number '#gd' = g=7,d=4 -> 74); lines 5-6 the sentence resumed in cell 1, since there is no new paragraph."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording. Structural choice: A's kind='pagenum' text='74' for the page-turn block (matching buildModel1's schema directly) is adopted over B's kind='other' text='[page turn to 74]' placeholder. standards-findings.md F-67 already records B004 §8's print-page-turn-indicator mechanism (and paragraph cell-1 resumption) as DONE, and the mechanism itself is confirmed correct here (the indicator's own shape -- centred, no space before the number -- and the continuation sentence's cell-1 resumption both build correctly). It does not byte-match, however: this worked example's own print mock-up hard-wraps the sentence at particular points to fit its own illustration (a fixed pair of pre-wrapped print lines either side of the page-turn graphic), whereas Emboss reflows the paragraph continuously across the full 38-cell width -- a wrap-granularity difference inherent to reproducing ONE specific pre-wrapped worked example from plain flowing print text, not a defect in the page-turn-indicator mechanism itself (F-67 stands). status: mismatch (documented cause)."
+}

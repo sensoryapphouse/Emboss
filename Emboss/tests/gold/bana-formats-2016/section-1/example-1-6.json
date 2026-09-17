@@ -1,0 +1,49 @@
+{
+  "id": "example-1-6",
+  "title": "End-of-Book Statement in Glossary",
+  "pdfPages": [
+    24
+  ],
+  "textLines": [
+    787,
+    793
+  ],
+  "illustrates": {
+    "rule": "1.6.5.b",
+    "quote": "In the final volume include a centered end-of-book statement enclosed in transcriber's note indicators: The End."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "No print excerpt is given in the source for this example -- only a boxed braille-only excerpt is shown, illustrating braille page-layout mechanics (where the end-of-volume/end-of-book statement falls), confirmed against the PDF page image."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "zygote3 f]tiliz$ egg",
+      "",
+      "              @.<,! ,5d@.>",
+      "",
+      "",
+      "             vitam9,-zygote          #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 20-25, verbatim. Line 20 is the glossary's final entry ('zygote: fertilized egg'); line 21 blank; line 22 the centred end-of-book statement 'The End' (rule 1.6.5.b, this is the FINAL volume so 'The End' replaces the ordinary end-of-volume wording); lines 23-24 blank; line 25 carries a running glossary head-word range 'vitamin-zygote' right-aligned with the braille page number, per rule 1.6.5.g (transcribe the end-of-volume/book statement on the last page regardless of format, such as glossaries)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content verbatim and that no print excerpt is given. Emboss has no end-of-volume/end-of-book statement feature at all (standards-findings.md F-54: no code path generates 'End of Volume __.'/'The End.' anywhere) -- there is also no real print content to build from. status: not-representable (limitation: no print given, and F-54)."
+}

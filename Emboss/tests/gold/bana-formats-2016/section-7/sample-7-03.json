@@ -1,0 +1,154 @@
+{
+  "id": "sample-7-03",
+  "title": "Box within a Box",
+  "pdfPages": [
+    196
+  ],
+  "textLines": [
+    5652,
+    5677
+  ],
+  "illustrates": {
+    "rule": "7.6.1",
+    "quote": "One or more boxes within a box are transcribed in a different manner than regular boxes. Include a transcriber’s note explaining how the boxes are related if necessary. = Top and bottom exterior borders 7 Top interior box line g Bottom interior box line a. Do not insert a blank line between a top exterior border and a top interior box line. b. Do not insert a blank line between a bottom interior box line and a bottom exterior border. c. Insert a blank line before a top interior box line when it begins on any line other than immediately after the top exterior border. d. Insert a blank line after a bottom interior box line when it ends on any line other than immediately before the bottom exterior border. e. Consecutive interior boxes are opened and closed with top and bottom interior box lines. f. Consecutive box lines between interior boxes are separated by a blank line. (See Sample 7-3: Box within a Box on page 7-12.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "features": "A single grey-screened rectangular panel with a plain black rule border, containing a heading and two paragraphs at left and a separately-ruled data table at right, side by side. Print draws this as ONE panel with two side-by-side regions, not a visually nested 'box within a box'; braille nonetheless models it per 7.6.1 as an exterior box ('=' border) wrapping an interior box ('7'/'g' border) around just the table, following the heading/paragraph text -- confirmed directly against the braille itself (line 4 '=' exterior top border, line 10 '7' interior top border, line 22 'g' interior bottom border, line 23 '=' exterior bottom border).",
+        "blocks": [
+          {
+            "kind": "heading",
+            "level": 1,
+            "text": "Top Nine States by Population",
+            "features": "Bold heading at the top-left of the panel. Direct measurement against the source .txt (line 5658: 5 leading U+2800 cells before the heading text, matching floor((40-29)/2)=5 for this heading's own 29-cell braille text) confirms this heading is CENTRED, not a fixed-indent cell-5/cell-7 heading."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "The top nine states in population contain half of the total population. The twenty-five lowest-population states contain less than one-sixth of the total population.",
+            "features": "First paragraph, left side of the panel. The braille excerpt transcribes only its first sentence, ending in a '444' omission marker -- its second sentence has no braille counterpart in this excerpt (a documented mismatch, not an error in this print-side transcription)."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "The following is the state-by-state population count (July 1, 2006 estimates).",
+            "features": "Second paragraph, left side of the panel, introducing the table. Confirmed present in print directly against the PDF page image (p.196, footer 7-12); this sentence has NO braille counterpart at all in the transcribed excerpt (lines 4-23) -- whether it fell on one of the missing lines 1-3 or was omitted from the braille sample entirely cannot be determined from the source."
+          },
+          {
+            "kind": "box",
+            "level": null,
+            "text": null,
+            "title": null,
+            "features": "The interior box: a separately-ruled data table (own black border), positioned to the right of the heading/paragraph text within the same panel. Per 7.6.1, braille gives this its own interior top/bottom box lines, nested inside the exterior border that wraps the whole panel.",
+            "blocks": [
+              {
+                "kind": "table",
+                "level": null,
+                "text": null,
+                "headers": [
+                  [
+                    "Rank",
+                    "State",
+                    "Population"
+                  ]
+                ],
+                "rows": [
+                  [
+                    "1",
+                    "California",
+                    "36,457,549"
+                  ],
+                  [
+                    "2",
+                    "Texas",
+                    "23,507,783"
+                  ],
+                  [
+                    "3",
+                    "New York",
+                    "19,306,183"
+                  ],
+                  [
+                    "4",
+                    "Florida",
+                    "18,089,888"
+                  ],
+                  [
+                    "5",
+                    "Illinois",
+                    "12,831,970"
+                  ],
+                  [
+                    "6",
+                    "Pennsylvania",
+                    "12,440,621"
+                  ],
+                  [
+                    "7",
+                    "Ohio",
+                    "11,478,006"
+                  ],
+                  [
+                    "8",
+                    "Michigan",
+                    "10,095,643"
+                  ],
+                  [
+                    "9",
+                    "Georgia",
+                    "9,363,941"
+                  ]
+                ],
+                "features": "3-column, 9-row ranked population table with a bold 'Rank/State/Population' header row and its own black grid ruling on all sides and between every row/column."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "The braille's own numbered-line field starts at '4', not '1' -- lines 1-3 are genuinely absent from the source (both from the .txt extraction and from the rendered PDF page image, which shows only the caption followed directly by the numbered braille beginning at line 4, with no visible content of any kind corresponding to lines 1-3). This is a source artefact, not something inferred or filled in here.",
+    "surroundingText": null,
+    "printFeatures": "One grey-screened panel with a plain black outer rule border; heading and two paragraphs in plain black text at left; a separately outlined black-and-white ruled table at right, taking up roughly the right half of the panel's width and most of its height."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "========================================",
+      "     ,top ,n9e ,/ates by ,popula;n",
+      "",
+      "  ,! top n9e /ates 9 popula;n 3ta9 half",
+      "( ! total popula;n4 444",
+      "",
+      "7777777777777777777777777777777777777777",
+      ",rank ,/ate          ,popula;n",
+      "\"3333 \"33333333333 \"3333333333",
+      "#a \"\" ,cali=nia \"\" #cf1deg1edi",
+      "#b \"\" ,texas \"\"\"\"\" #bc1ejg1ghc",
+      "#c \"\" ,new ,york     #ai1cjf1ahc",
+      "#d \"\" ,florida \"\"\" #ah1jhi1hhh",
+      "#e \"\" ,ill9ois \"\"\" #ab1hca1igj",
+      "#f \"\" ,p5nsylvania #ab1ddj1fba",
+      "#g \"\" ,ohio \"\"\"\"\"\" #aa1dgh1jjf",
+      "#h \"\" ,mi*igan \"\"\" #aj1jie1fdc",
+      "#i \"\" ,georgia \"\"\" #i1cfc1ida",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "========================================"
+    ],
+    "pageBreaks": [],
+    "notes": "20 numbered lines present in the source, numbered 4 through 23 (lines 1-3 absent -- see uncertain). Line 4: the exterior top border, a full 40-cell row of '=' characters. Line 5: the CENTRED heading 'Top Nine States by Population'. Line 6: blank. Lines 7-8: the first introductory paragraph, run together with a mid-sentence line break, ending '444' (an omission marker after 'total population.' -- the print's own second sentence, and its whole second paragraph, are not present in this braille excerpt at all). Line 9: blank, inserted before the interior top box line because it does not begin immediately after the exterior top border (per 7.6.1.c). Line 10: the interior top box line, a full 40-cell row of '7' characters. Lines 11-12: the table's 'Rank/State/Population' header row and its dot-3 guide-dot separator. Lines 13-21 (source-numbered): the nine ranked data rows (California through Georgia), each with a bare rank digit, state name, and population figure aligned via guide dots. Line 22: the interior bottom box line, a full 40-cell row of 'g' characters, immediately followed (no blank line, per 7.6.1.b) by line 23: the exterior bottom border, a full 40-cell row of '=' characters."
+  },
+  "uncertain": [
+    "Lines 1-3 of this sample's braille numbering are absent from the source entirely (both the .txt and the PDF page image show numbering beginning at 4); not invented or estimated. It is not clear from the excerpt alone what those first three lines would have contained (most plausibly a blank line, a running-head/page-change indicator, and/or the sample's own braille page number, by analogy with Samples 7-1 and 7-2's line-1 top-box-line-plus-page-number pattern), but this is not stated anywhere in the source and is not asserted here as fact.",
+    "The print's second paragraph ('The following is the state-by-state population count (July 1, 2006 estimates).') has no representation at all in the transcribed braille lines 4-23; whether it was transcribed on one of the missing lines 1-3, or omitted from the braille sample entirely (as the mid-paragraph '444' omission marker on line 8 suggests is the general editorial approach for this excerpt), cannot be determined from the source."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. Two structural points reconciled: (1) the panel's heading level -- both runs left it unset/null; re-derived directly from the source .txt's own leading-blank-cell count (5 cells before the heading text, matching the centring formula floor((40-29)/2)=5 for this heading's own 29-cell braille text) -- CENTRED (level 1), not a guessed cell-5/cell-7 tier. (2) B's print.blocks silently dropped the panel's own second paragraph ('The following is the state-by-state population count...') and flattened the table directly onto the outer box with no interior-box nesting, even though B's own braille.notes independently describes both the second paragraph's absence from the braille and the exterior/interior '='/'7'/'g' border structure. Confirmed the second paragraph is genuinely present in print (PDF page image p.196) and that the interior/exterior nesting is required to reproduce the braille's own four border lines (4, 10, 22, 23) -- A's complete structure (heading, both paragraphs, then a nested interior box around just the table) is used. textLines extended by one line (to 5677) over A's 5676 to include the source's own trailing '(Return to Text)' hyperlink-artefact line, per B.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

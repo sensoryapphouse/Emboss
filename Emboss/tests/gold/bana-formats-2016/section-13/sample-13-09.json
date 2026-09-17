@@ -1,0 +1,75 @@
+{
+  "id": "sample-13-09",
+  "title": "Sample 13-9: Lines of Poetry with Stress Marks",
+  "pdfPages": [
+    377
+  ],
+  "textLines": [
+    10886,
+    10903
+  ],
+  "illustrates": {
+    "rule": "13.9.3 cross-reference",
+    "quote": "Transcribe a poem that contains stress, scansion, or meter marks twice. Place the two versions on a single braille page if possible. The first version should include the title and author or other attribution."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Two-line e.e. cummings excerpt ('seen from above, the sky / is deep. clouds float down there,'), shown twice in print: first with breve/acute stress marks placed above individual syllables, then repeated as a diagram of stress marks with the words replaced by underscores/spacing beneath a second, differently-capitalised rendering.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Seen from above, the sky",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Is deep. Clouds float down there,",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.377; only the two-line excerpt and its stress-mark diagram are shown (a genuine excerpt: printed line numbers begin at 4), matching the 'Sample:' note under rule 13.9.3.g which explains this twice-shown technique.",
+    "surroundingText": null,
+    "printFeatures": "Breve (˘) and acute (′)-style stress marks placed above syllables in each rendering."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! text is f/ %[n )\\t /ress",
+      "    symbols1 & !n rep1t$ ) ! appropriate",
+      "    symbols & no 3trac;ns4 ,/ress",
+      "    symbols >e 9s]t$ abv ! syllable to :",
+      "    !y apply4 ,symbols us$3",
+      "",
+      ".=^/ ,/ress$ syllable",
+      ".=@+ ,un/ress$ syllable@.>",
+      "",
+      ",se5 f abv1 ! sky",
+      ",is deep4 ,cl\\ds float d[n \"!1",
+      "",
+      "   ^/   @+ @+^/     @+ ^/",
+      "  ,seen from above1 the sky",
+      "",
+      "   @+ ^/     ^/     ^/     @+  ^/",
+      "  ,is deep4 ,clouds float down there1"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10886-10902 (excerpt; printed line numbers begin at 4), after stripping a 5-char line-number field (2-digit max line number 20, +3=5) and converting U+2800. Lines 1-5 are the transcriber's note (identical wording to rule 13.9.3.g's own 'Sample:' text) plus its 2-row symbols key, inside a grade-1 passage. Lines 10-11 are the FIRST writing (contracted braille, no stress marks). Lines 13-14 and 16-17 are the SECOND writing (uncontracted, cell-3 offset per rule 13.9.3.c), each poetic line preceded by its own stress-symbol row directly above it, per rule 13.9.3.e.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

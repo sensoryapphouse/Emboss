@@ -1,0 +1,74 @@
+{
+  "id": "sample-1-03",
+  "title": "Combined Print Page Numbers",
+  "pdfPages": [
+    39
+  ],
+  "textLines": [
+    1311,
+    1325
+  ],
+  "illustrates": {
+    "rule": "1.11.8.d",
+    "quote": "When a page is blank or has only an uncaptioned illustration, combine that/those page(s) with the next page on which text occurs. (See Sample 1-3: Combined Print Page Numbers on page 1-23.)"
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": "4-5",
+      "features": "Combined print page number '4-5' (page 4 carries only a heading and an uncaptioned illustration, so it is combined with page 5, the next page on which text occurs, per 1.11.8.d)."
+    },
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Unit Two",
+        "features": "Print page 4: unit-number heading, centred."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Statistics of Living Things",
+        "features": "Print page 4: unit-title heading beneath, centred, wraps to two lines in braille."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Print page 4: an uncaptioned illustration/grey band occupies the rest of the page, per 1.11.8.d -- this is why page 4 is combined with the following text page 5 rather than given its own page number."
+      },
+      {
+        "kind": "paragraph",
+        "text": "What do you think of when you hear the words building blocks? Perhaps",
+        "features": "Print page 5, opening fragment; the source image shows the remainder of this paragraph obscured by a large blurred illustration."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "               ,unit ,\"o           #d-#e",
+      "         ,\"*i/ics ( ,liv+ ,?+s",
+      "",
+      "  ,:at d y ?9k ( :5 y he> ! ^ws build+",
+      "blocks8 ,p]h 444",
+      "444                                  #,-",
+      "& >e go+ to explore v special        a#e"
+    ],
+    "pageBreaks": [
+      {
+        "index": 6,
+        "label": "New Braille Page (source's own excerpt gap: lines 6-24 of the first braille page are not shown at all)"
+      }
+    ],
+    "notes": "Verbatim, but the source ITSELF omits lines 6-24 of the first braille page (only lines 1,2,4,5 and 25 are shown) -- not a gap introduced by this reconciliation. Line 1 carries the combined print page number '#d-#e' (4-5) at the right margin; lines 1-2 the two centred headings; line 3 blank; lines 4-5 the (truncated, '444'-marked) opening paragraph fragment; line 6 ends the first braille page ('#,-', transcriber-generated); the new braille page's line 1 carries the lettered-continuation combined page number 'a5' ('a#e'), per 1.11.7, since print page 5 continues onto it."
+  },
+  "uncertain": [
+    "Lines 6-24 of the first braille page are not given in the source at all (the guide itself elides them); this is not a transcription gap introduced here."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording; A additionally attempted to reconstruct print page 5's obscured middle text as a single merged paragraph (with bracketed guesses for the hidden portion) — not adopted, since the illustration genuinely hides that wording in the source image and inventing it would contradict the 'never guess' precedent; B's two-fragment split (matching the braille's own '444' truncation) is used instead. Not representable: the combined/lettered-continuation page-number transform has no code path in Emboss (F-46, F-48), and the source's own excerpt has a genuine content gap (lines 6-24 never shown) that a single formatDocument pass cannot reproduce as two separate slices of one continuous flow. status: not-representable."
+}

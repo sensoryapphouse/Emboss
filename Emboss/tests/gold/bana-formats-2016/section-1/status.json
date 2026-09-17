@@ -1,0 +1,102 @@
+{
+  "example-1-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-1-10": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"------------------------------------#CFJ\" vs actual \"\". line count differs by +4 (expected 10, actual 14)."
+  },
+  "example-1-11": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-1-12": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-1-13": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-1-14": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"------EI<TY-N9E                      #HI\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-15": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"              ,RUNN+ ,H1D            #HI\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-16": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"TEXT 444\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-17": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"------\\\"O-?\\\\S& ?REE-HUNDR$          #ACGE\" vs actual \"                 ,TITLE\". line count differs by -1 (expected 4, actual 3). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-18": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! ^W = SL$ IS .1TR9EO4\" vs actual \",! ^W SL$ IS SPELL$ TR9EO4\"."
+  },
+  "example-1-19": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! ^W = WOOD%$ 9 ,SPANI% IS LE^]N]A4\" vs actual \",! ^W WOOD$ 9 ,SPANI% IS LE^]N]A4\"."
+  },
+  "example-1-2": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-1-20": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",! ,SEV5 ,WOND]S ( ! ,_W\" vs actual \"        ,! ,SEV5 ,WOND]S ( ! ,_W\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"V5: 105-145\""
+  },
+  "example-1-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \".1,9F] ,:Y D SCI5TI/S 2LIEVE T\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \".1,9F] ,:Y D SCI5TI/S 2LIEVE T\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \".1,9F] ,:Y D SCI5TI/S 2LIEVE T\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"ZYGOTE3 F]TILIZ$ EGG\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"          ,EXPLOR+ ,PSY*OLOGY         #C\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "example-1-8": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-1-9": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-1-01": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"#A ,OLD] ADULTS 9CR1S+LY USE ^WS T 3VEY\" vs actual \"#A ,OLD] ADULTS 9CR1S+LY USE ^WS TO 3VEY\"."
+  },
+  "sample-1-02": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-1-03": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"               ,UNIT ,\\\"O           #D-#E\" vs actual \"               ,UNIT ,TWO\". line count differs by -2 (expected 7, actual 5). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  },
+  "sample-1-04": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",TEXT IS R1D ACR FAC+ PAGES Z         #DD-#DE\" vs actual \"  ,TEXT IS R1D ACR FAC+ PAGES Z IF BO?\". line count differs by -2 (expected 4, actual 2). Input-model limitation: print.page.printPageNumber (\"44-45\") places a print page number at the top of a braille page (BANA 1.11.2) with no page-change indicator — the same running-head/page-1-title path as print.page.runningHead above; not built here, not a defect."
+  },
+  "sample-1-05": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"          ,\\\"W9' ON ! ,RAILROAD       #DD\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -16 (expected 23, actual 7). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+  }
+}

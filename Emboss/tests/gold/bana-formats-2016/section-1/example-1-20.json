@@ -1,0 +1,51 @@
+{
+  "id": "example-1-20",
+  "title": "Volume Label",
+  "pdfPages": [
+    36
+  ],
+  "textLines": [
+    1234,
+    1240
+  ],
+  "illustrates": {
+    "rule": "1.17.3",
+    "quote": "Most labels are limited to 30 cells and 2-4 lines."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Seven Wonders of the World",
+        "features": "Volume-cover label, first line: book title."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "V5: 105-145",
+        "features": "Volume-cover label, second line: abbreviated volume number and inclusive print page range."
+      }
+    ]
+  },
+  "braille": {
+    "width": 30,
+    "lines": [
+      ",! ,sev5 ,wond]s ( ! ,_w",
+      ",v#e3 #aje-#ade"
+    ],
+    "pageBreaks": [],
+    "notes": "Two lines, verbatim, no line numbers shown; within the 2-4 line / 30-cell label limit of 1.17.3, not a normal 40-cell braille page. Line 1 the title in full; line 2 'Volume 5: 105-145' (the abbreviated print label 'V5' expanded to 'Volume 5' in braille, with inclusive print pages 105-145)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording. This is a volume COVER LABEL (BANA 1.17: vertical label applied to a volume cover, at most 30 cells / 2-4 lines), not an ordinary 40-cell text page -- and Emboss's own volume-label generator (cover.mjs) is dead code, unreachable from the app (standards-findings.md F-59). status: not-representable (F-59; also the 30-cell width itself does not match this runner's fixed 40-cell OPTS)."
+}

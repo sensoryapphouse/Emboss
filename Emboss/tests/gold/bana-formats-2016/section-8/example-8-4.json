@@ -1,0 +1,77 @@
+{
+  "id": "example-8-4",
+  "title": "Simple List After Directions",
+  "pdfPages": [
+    200
+  ],
+  "textLines": [
+    5810,
+    5822
+  ],
+  "illustrates": {
+    "rule": "8.3.3.c",
+    "quote": "A list is not preceded by a blank line: ... c. When it follows directions. (See Formats, §10, Exercise Material.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Write the principal parts for each verb. Use your dictionary if needed.",
+        "features": "Two-line direction/instruction text directly above the list, no blank line beneath it in print."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Four one-word verb items, one per line, plain roman lowercase.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "fly"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "be"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "go"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "put"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Boxed illustration; two-line direction sentence immediately above four plain lowercase words, no rule line between them."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,write ! pr9cipal \"ps = ea* v]b4",
+      "    ,use yr dic;n>y if ne$$4",
+      "fly",
+      "2",
+      "g",
+      "put",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Blank line precedes the direction text (line 1) per ordinary paragraph spacing; the two-line direction (indented 4 blank cells, i.e. cell-5 style) is immediately followed by the list with no blank line between, per 8.3.3.c; 'be' is transcribed as the one-cell whole-word contraction '2' (dots 2,3) and 'go' as the one-cell whole-word contraction 'g', per standard braille contractions, not letter-for-letter spelling; a blank line follows the list."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B; only prose fields differed — A’s kept. Directions paragraph modeled as an ordinary paragraph block (Emboss has no \"directions\" concept — F-37); illustrates.quote kept as A’s (stem + clause c, matching the source’s own multi-clause layout).",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

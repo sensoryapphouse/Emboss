@@ -1,0 +1,10 @@
+{
+  "b004-11-1": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,!Y TRAVELL$ TO ,HA/+S .<\\\": !\" vs actual \"  ,!Y TRAVELL$ TO ,HA/+S\". line count differs by +1 (expected 5, actual 6). Input-model limitation: para0: an 'inline'-placement note (\"where the famous 1066 battle took place\") has no inline-note segment type in document.mjs (F-107) — built as a separate note block instead of fused onto this line; expect a mismatch there."
+  },
+  "b004-11-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"   ,!Y TRAVELL$ TO ,HA/+S;9#A4 ,_M\" vs actual \"  ,!Y TRAVELL$ TO ,HA/+S;9#A4 ,_M\". line count differs by +1 (expected 7, actual 8)."
+  }
+}

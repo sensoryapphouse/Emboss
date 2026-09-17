@@ -1,0 +1,54 @@
+{
+  "id": "example-4-2",
+  "title": "Centered Title and Author Headings",
+  "pdfPages": [
+    107
+  ],
+  "textLines": [
+    3199,
+    3208
+  ],
+  "illustrates": {
+    "rule": "4.3.3",
+    "quote": "Do not insert a blank line between connected headings."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "By Any Other Name",
+        "features": "Story title; large stylized red cursive script logo/graphic (book-cover title treatment), centered, spanning two print lines."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Santha Rama Rau",
+        "features": "Author byline directly beneath the title graphic; small italic serif type, right-aligned in print."
+      }
+    ],
+    "notes": "Two connected headings (title + author) with no blank line between them in braille, per rule 4.3.3, even though the print title is a decorative script logotype and the author name is a small right-aligned byline rather than a second display heading.",
+    "surroundingText": null,
+    "printFeatures": "Boxed cover/title-page excerpt; title in large decorative red script font/graphic, author name in small italic serif beneath it, right-aligned."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "           ,by ,any ,o!r ,\"n",
+      "",
+      "           ,san?a ,rama ,rau",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the centered title heading; line 3 an all-blank-cell row (see uncertain); line 4 the centered byline heading, directly beneath with no intervening blank line per 4.3.3; line 5 blank."
+  },
+  "uncertain": [
+    "Line 3 (an all-blank braille row between the two headings) is preserved verbatim as \"\" per the transcribe-exactly convention; it is most likely an unused wrapped-title continuation slot (the title happened to fit on one line) rather than a rule violation, but this reading is inference, not something the rule text states outright."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs' braille.lines agree (independently re-verified against .txt lines 3204-3208, confirming margin=8). The one substantive disagreement was `print.blocks[1].level`: run A said 1 (centered), run B said 2 (cell-5). Resolved in favour of A: both braille lines carry the SAME 11-cell leading indent, and 11 matches the centering formula (40-len)/2 for both texts exactly (len 17 each) -- neither line has the fixed 4-cell or 6-cell indent of a cell-5/cell-7 heading, so both are centered, level 1. Run B's level 2 for the byline is a transcription error, contradicted by its own braille data."
+}

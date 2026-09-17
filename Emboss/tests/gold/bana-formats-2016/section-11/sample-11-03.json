@@ -1,0 +1,98 @@
+{
+  "id": "sample-11-03",
+  "title": "Row Subheadings",
+  "pdfPages": [
+    309
+  ],
+  "textLines": [
+    9218,
+    9238
+  ],
+  "illustrates": {
+    "rule": "11.5.1",
+    "quote": "The first column consists of the row headings, which may or may not have a column heading. a. Use 1-3 margins for row headings. b. When there are row subheadings, use 1-5 margins for the primary row headings and 3-5 margins for the secondary row headings. ... (See Sample 11-3: Row Subheadings on page 11-27.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Item",
+        "1980",
+        "1981"
+      ]
+    ],
+    "rows": [
+      [
+        "Machining Centers",
+        "",
+        ""
+      ],
+      [
+        "  Production",
+        "413.0",
+        "482.6"
+      ],
+      [
+        "  Exports",
+        "56.7",
+        "53.4"
+      ],
+      [
+        "  Imports",
+        "93.4",
+        "195.7"
+      ],
+      [
+        "Punching and Shearing Machines",
+        "",
+        ""
+      ],
+      [
+        "  Production",
+        "110.6",
+        "97.1"
+      ],
+      [
+        "  Exports",
+        "13.2",
+        "28.3"
+      ],
+      [
+        "  Imports",
+        "16.5",
+        "32.5"
+      ]
+    ],
+    "notes": "\"Machining Centers\" and \"Punching and Shearing Machines\" are primary row headings with no column entries of their own (they head a group); \"Production\"/\"Exports\"/\"Imports\" beneath each are secondary row (sub)headings with their own entries.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box with a heavy rule under the header row; \"Item\", \"1980\", \"1981\" and the two group headings (\"Machining Centers\", \"Punching and Shearing Machines\") are bold; the sub-row items (Production/Exports/Imports) are indented and plain."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      ",item                   #aihj   #aiha",
+      "\"333333333333333333333 \"33333 \"33333",
+      ",ma*9+ ,c5t]s",
+      "  ,produc;n \"\"\"\"\"\"\"\"\"\" #dac4j #dhb4f",
+      "  ,exports \"\"\"\"\"\"\"\"\"\"\"   #ef4g   #ec4d",
+      "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #ic4d #aie4g",
+      ",pun*+ & ,%e>+ ,ma*9es",
+      "  ,produc;n \"\"\"\"\"\"\"\"\"\" #aaj4f    #ig4a",
+      "  ,exports \"\"\"\"\"\"\"\"\"\"\"   #ac4b   #bh4c",
+      "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #af4e   #cb4e",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 = placeholder \"text\" for preceding body prose. Primary row headings \",ma*9+ ,c5t]s\" (Machining Centers) and \",pun*+ & ,%e>+ ,ma*9es\" (Punching and Shearing Machines) begin at the 1-5 margin (cell 1) with no guide dots/entries; the secondary row headings \",produc;n\"/\",exports\"/\",imports\" are indented to the 3-5 margin, each followed by dot-5 guide dots then their two numeric entries."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: run A dropped 2 characters (either 2 leading indent spaces, or 2 guide-dot quote characters) on 6 lines; run B matches the source .txt exactly and is used. print.rows: the 'Production'/'Exports'/'Imports' row labels are indented 2 spaces under each category heading in print (confirmed against the PDF image, p. 309) and in the braille (which uses the same 2-cell indent) -- run B's indented version is kept; run A had dropped the indent."
+}

@@ -1,0 +1,45 @@
+{
+  "id": "example-4-15",
+  "title": "Pencil Icon with Heading",
+  "pdfPages": [
+    116
+  ],
+  "textLines": [
+    3512,
+    3518
+  ],
+  "illustrates": {
+    "rule": "4.9.1",
+    "quote": "Icons may be used with headings or within text to indicate specific types of text, e.g., important facts, essay questions, etc. (See UEB, §3.22, Shapes and §11.7.2, Transcriber-Defined Shapes.) The icon (shape indicator and letters) is preceded and followed by a blank space. Icons follow print for placement, e.g., preceding or following a heading."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "We Remember",
+        "features": "Bold italic serif heading, flanked by em-dashes, preceded by a small pencil-icon graphic."
+      }
+    ],
+    "notes": "Illustrates a print icon (a pencil graphic) placed before a heading, transcribed in braille as a transcriber-defined shape indicator plus letters, preceded and followed by a blank space, per rule 4.9.1.",
+    "surroundingText": null,
+    "printFeatures": "Em-dash, small pencil icon graphic, em-dash, then the italic bold heading 'We Remember', all on one line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    @$p ,we ,rememb]"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-5 heading, opening with a transcriber-defined shape indicator for the pencil icon (surrounded by blank spaces per 4.9.1) followed by 'We Remember' (single-capital indicator on each word, i.e. mixed/title case, not full caps)."
+  },
+  "uncertain": [
+    "The exact transcriber-defined shape code used for the pencil icon ('@$p' in the source ASCII) was not cross-checked against a Special Symbols page or a UEB shape-indicator reference table; transcribed verbatim as it appears in the source."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. `level` resolved to 2 (cell-5, matching run B) rather than run A's null: the braille's 4-cell indent (after the shape-indicator token) is unambiguous."
+}

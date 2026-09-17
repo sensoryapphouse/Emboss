@@ -1,0 +1,82 @@
+{
+  "id": "sample-16-03",
+  "title": "Sequentially Numbered Notes",
+  "pdfPages": [
+    448
+  ],
+  "textLines": [
+    12954,
+    12975
+  ],
+  "illustrates": {
+    "rule": "16.5.1",
+    "quote": "Place notes at the end of the print page. a. Separate notes from text by a note separation line ⠰⠒⠒⠒⠒⠒⠒⠒ (5, 25, 25, 25, 25, 25, 25) across seven cells. The separation line cannot be on the last line of the braille page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "To my Lord's[ref:1] in the morning, where I met with Captain Cuttance. But my Lord not being up, I went out to Charing Cross to see Major General Harrison[ref:2] hanged, drawn, and quartered—which was done there—he looking as cheerfully as any man could do in that condition. …",
+        "features": "Diary-style passage with print line number '15' at the left margin of its first line; two superscript numeral reference marks (1, 2) key sequentially numbered notes below.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:1] my Lord's: Edward Montagu (1625-1672), earl of Sandwich; he was a cousin of Pepys and his superior at the Naval Office.\n[ref:2] Harrison: Thomas Harrison (1606-1660), one of the people responsible for the execution of King Charles I in 1649.",
+        "features": "Two notes below a horizontal rule, numbered sequentially 1 and 2 in the order their marks appear in the passage above (not grouped by any other criterion).",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "1",
+        "placement": "footnote",
+        "text": "my Lord's: Edward Montagu (1625-1672), earl of Sandwich; he was a cousin of Pepys and his superior at the Naval Office."
+      },
+      {
+        "ref": "2",
+        "placement": "footnote",
+        "text": "Harrison: Thomas Harrison (1606-1660), one of the people responsible for the execution of King Charles I in 1649."
+      }
+    ],
+    "surroundingText": "Cross-referenced from Example 16-7, illustrating rule 16.5.1c's sequential (not grouped) note numbering. This is a genuine excerpt: its braille line numbering begins at 15, not 1, matching the print passage's own starting line number.",
+    "printFeatures": "Boxed screenshot of a diary-excerpt page, print line number '15' in the margin, horizontal rule, two numbered notes beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,to my ,\"l's;9#a 9 ! morn+1 \": ,i met",
+      ") ,capta9 ,cutt.e4 ,b my ,\"l n 2+ up1 ,i",
+      "w5t \\ to ,*>+ ,cross to see ,major",
+      ",g5]al ,h>rison;9#b hang$1 drawn1 &",
+      "qu>t]$,-: 0 d\"o \"!,-he look+ z *e];lly z",
+      "any man cd d 9 t 3di;n4 444",
+      "\"333333",
+      "#a4 ^1my ^1,\"l's3 ,$w>d ,montagu",
+      "  \"<#afbe-#afgb\">1 e>l ( ,s&wi*2 he 0 a",
+      "  c\\s9 ( ,pepys & 8 sup]ior at ! ,naval",
+      "  ,(fice4                            #,-",
+      "#b4 ^1,h>rison3 ,?omas ,h>rison    b#edd",
+      "  \"<#afjf-#affj\">1 \"o ( ! p responsible",
+      "  = ! execu;n ( ,k+ ,*>les ,i 9 #afdi4",
+      "------------------------------------#ede",
+      "444"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 11,
+        "type": "explicit",
+        "note": "Explicit —New Braille Page— marker in the source, after braille line 25 (11th line of this excerpt, which starts mid-page at line 15); the line-number field restarts at 1 on the new page."
+      }
+    ],
+    "notes": "Genuine excerpt starting at braille line 15 (not line 1), verified on the page image -- no earlier lines invented. Line-number field width 5 (max line number 25, two digits, +3) used on both braille pages of this sample."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.5.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12960/12963/12969/12971/12974 (field width 5, digits(25)+3) are each exactly 40 characters after stripping the line-number field. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

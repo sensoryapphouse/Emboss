@@ -1,0 +1,72 @@
+{
+  "id": "sample-1-02",
+  "title": "Heading at Beginning of Print Page",
+  "pdfPages": [
+    22
+  ],
+  "textLines": [
+    1291,
+    1303
+  ],
+  "illustrates": {
+    "rule": "1.11.3.c",
+    "quote": "Insert a blank line after the page change indicator when the new print page starts with a format that normally is preceded by a blank line. (See Sample 1-2: Heading at Beginning of Print Page on page 1-22.)"
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": "325",
+      "features": "New print page number 325 ('#cbe': c=3,b=2,e=5), shown at the page turn; the preceding page's own number is not itself given in this excerpt."
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Others have special structures on their back in which their young develop.",
+        "continuation": true,
+        "features": "Final sentence ending the previous print page."
+      },
+      {
+        "kind": "pagenum",
+        "text": "325",
+        "features": "Print page turn to page 325."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Frogs and Toads",
+        "features": "Centred heading opening the new print page."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Have you ever wondered what happens to frogs and toads in the winter when the temperature falls?",
+        "features": "Opening paragraph following the heading, indented first line."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",o!rs h special /ructures on _! back 9 :",
+      "_! \"y develop4",
+      "------------------------------------#cbe",
+      "",
+      "            ,frogs & ,toads",
+      "",
+      "  ,h y \"e wond]$ :at happ5s to frogs &",
+      "toads 9 ! w9t] :5 ! temp]ature falls8"
+    ],
+    "pageBreaks": [
+      {
+        "index": 2,
+        "label": "page change indicator, ending #cbe (print page 325)"
+      }
+    ],
+    "notes": "Braille page lines 4-11 of the source, renumbered from 1. Line 3 (source line 6) is the full-width page-change indicator ending '#cbe' (325). A blank line follows it (per 1.11.3.c, since the heading that opens the new print page would normally itself be preceded by a blank line) -- the rule this sample illustrates; the centred heading follows; another blank line precedes the paragraph per the ordinary heading-then-paragraph spacing rule; the paragraph resumes on the last two lines."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording and the underlying mechanic (both cite 1.11.3.c). Confirmed 'Others' (not 'Otters', a prior reference index's own error) directly against the source .txt and cross-checked by both independent runs. Structural choice: a leading 'paragraph', mid-flow 'pagenum' block, centred 'heading', then a closing 'paragraph' -- verified empirically against Emboss (gold-run.mjs scratch probe): this exact block sequence reproduces the given braille.lines byte-for-byte (aside from the established letter-case convention, standards-findings.md F-24) -- this sample is expected to MATCH."
+}

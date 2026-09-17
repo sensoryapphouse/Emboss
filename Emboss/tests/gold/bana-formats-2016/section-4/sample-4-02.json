@@ -1,0 +1,95 @@
+{
+  "id": "sample-4-02",
+  "title": "Heading Hierarchy",
+  "pdfPages": [
+    121
+  ],
+  "textLines": [
+    3631,
+    3654
+  ],
+  "illustrates": {
+    "rule": "4.2.2",
+    "quote": "The order of braille heading hierarchy is as follows: centered, cell-5, cell-7. (See Sample 4-2: Heading Hierarchy on page 4-17.) Additional provisions governing the use and placement of headings are given in other sections of these guidelines."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Make Connections",
+        "features": "Centered, large bold blue-black serif title heading."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Writing ELA—W 2.3",
+        "features": "Bold blue, left-aligned, standards-code sub-heading."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "Write a Report",
+        "features": "Bold black run-in-style heading, indented beneath the ELA code heading."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Some types of bacteria have been used to help clean up oil spills in oceans or in lakes. Gather information about how the bacteria were used, and prepare a report. Share your findings with the other students in your class.",
+        "features": "Plain body text (instructions) for the Writing activity."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Math SDAP 1.1",
+        "features": "Bold blue, left-aligned, standards-code sub-heading, same visual level as \"Writing ELA—W 2.3\"."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "Make a Graph",
+        "features": "Bold black run-in-style heading, indented beneath the SDAP code heading, same visual level as \"Write a Report\"."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Healthy soil has large numbers of decomposers living in it. One gram of soil (much less than an ounce) can contain 100,000 algae, 1,000,000 fungi, and 100,000,000 bacteria. Make a bar graph comparing the numbers of these types of decomposers in the soil.",
+        "features": "Plain body text (instructions) for the Math activity."
+      }
+    ],
+    "notes": "Illustrates the centered/cell-5/cell-7 heading hierarchy of rule 4.2.2: a centered major heading ('Make Connections'), then two cell-5 subject-code headings, each immediately followed (no blank line) by its own cell-7 task heading, per rule 4.5.7.",
+    "surroundingText": null,
+    "printFeatures": "Boxed \"Make Connections\" callout; two parallel activity blocks, each with a bold blue standards-code sub-heading and a bold black task-name heading, followed by plain instructional body text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "             ,make ,3nec;ns",
+      "",
+      "    ,writ+ ,,ela,-;,w #b4c",
+      "      ,write a ,report",
+      ",\"s types ( bact]ia h be5 us$ to help",
+      "cl1n up oil spills 9 oc1ns or 9 lakes4",
+      ",ga!r 9=ma;n ab h[ ! bact]ia 7 us$1 &",
+      "prep>e a report4 ,%>e yr f9d+s ) ! o!r",
+      "/ud5ts 9 yr class4",
+      "",
+      "    ,ma? ;,,sdap #a4a",
+      "      ,make a ,graph",
+      ",h1l?y soil has l>ge numb]s ( decompos]s",
+      "liv+ 9 x4 ,\"o gram ( soil \"<m* less ?an",
+      "an \\nce\"> c 3ta9 #ajj1jjj algae1",
+      "#a1jjj1jjj fungi1 & #ajj1jjj1jjj",
+      "bact]ia4 ,make a b> graph comp>+ !",
+      "numb]s ( ^! types ( decompos]s 9 ! soil4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the centered heading 'Make Connections'; line 2 blank; line 3 the cell-5 heading 'Writing ELA—W 2.3'; line 4 the cell-7 heading 'Write a Report' directly beneath with no blank line, per 4.5.7; lines 5-9 its paragraph; line 10 blank; line 11 the cell-5 heading 'Math SDAP 1.1'; line 12 the cell-7 heading 'Make a Graph' directly beneath; lines 13-18 its paragraph. The clearest single illustration in the section of the fixed centered→cell-5→cell-7 order rule 4.2.2 states."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines and every print.blocks field agree between runs; only prose wording differed. `illustrates.quote` resolved to the FULL text of rule 4.2.2 (matching run A): rule 4.2.2 is a single, short, unlettered paragraph, and the §11 precedent quotes the entirety of the specific numbered rule id cited, not an editorial trim (run B dropped the rule's second sentence)."
+}

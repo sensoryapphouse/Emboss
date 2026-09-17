@@ -1,0 +1,47 @@
+{
+  "id": "example-16-14",
+  "title": "List of Note Abbreviations (Print Only)",
+  "pdfPages": [
+    442
+  ],
+  "textLines": [
+    12797,
+    12797
+  ],
+  "illustrates": {
+    "rule": "16.9.3.e",
+    "quote": "Before the note section in each volume, repeat lists of abbreviations for book/magazine titles referred to in the endnotes. List the abbreviations using 1-3 margins and follow print for punctuation, capitalization, and font attributes. Also follow print for the capitalization and use of font attributes for the abbreviations within the endnote."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "table",
+        "level": null,
+        "text": "NOTES\nAbbreviations",
+        "features": "Boxed heading 'NOTES' with italic sub-heading 'Abbreviations', above a two-column key: each row is a small-caps/plain abbreviation on the left and its expansion on the right.",
+        "items": [
+          "NCC — North Carolina Collection, Louis Round Wilson Library, University of North Carolina at Chapel Hill",
+          "NCSA — North Carolina State Archives, Raleigh, North Carolina",
+          "RCC — Rockingham Community College, Historical Collections Room, Gerald B. James Library, Wentworth, North Carolina",
+          "SHC — Southern Historical Collection, Louis Round Wilson Library, University of North Carolina at Chapel Hill",
+          "UNC-G — University Archives and Manuscripts, Walter C. Jackson Library, University of North Carolina at Greensboro"
+        ]
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Explicitly labeled '(Print Only)' in its own title, illustrating the abbreviations-list requirement of rule 16.9.3e; immediately followed by a cross-reference to Sample 16-11: Endnotes on page 16-30.",
+    "printFeatures": "Boxed screenshot of a five-row abbreviations key with a bordered box, heading 'NOTES' and italic 'Abbreviations' sub-heading; no braille shown below it."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Explicitly '(Print Only)' -- the source gives no braille rendering for this example; none is guessed."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.9.3.e per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: explicitly '(Print Only)' in the source; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

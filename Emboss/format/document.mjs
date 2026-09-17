@@ -37,6 +37,50 @@ function centredBlock(text, width, wrapWidth = width) {
   return wrapCells(text, wrapWidth, 0, 0).map((line) => centred(line.trim(), width));
 }
 
+// F-40 / BANA §4.4.3: "Headings should be balanced and divided at a logical location
+// when longer than one line" (Example 4-8 divides "Using Natural Resources in the
+// United States" as "Using Natural Resources" / "in the United States" — a break after
+// the fourth word, NOT the greedy fill that would instead pack "...in the United" onto
+// line 1 and strand "States" alone on line 2). wrapCells's plain greedy fill respects
+// word boundaries ("logical location") but always packs each line as full as it can
+// before moving on, so it never balances. This finds the NARROWEST wrap width that
+// still needs the same (minimum) number of lines wrapCells' own greedy fill needs at
+// the full `maxWidth` — greedy line count is monotonic non-increasing as width grows,
+// so binary search applies — then wraps at that narrower width instead. This can never
+// split a word (the search floor is the longest word) and never adds a line beyond the
+// minimum wrapCells itself would use. Verified against Example 4-8 (width 40,
+// wrapWidth 34): greedy gives 33/7-cell lines (only "STATES" left on line 2); this
+// gives 23/17, breaking after "RESOURCES" — the gold braille exactly.
+function balancedWrapWidth(text, maxWidth) {
+  const words = String(text || '').split(' ').filter((w) => w.length > 0);
+  if (words.length <= 1) return maxWidth;
+  const targetLines = wrapCells(text, maxWidth, 0, 0).length;
+  if (targetLines <= 1) return maxWidth;
+  const maxWordLen = Math.max(...words.map((w) => w.length));
+  let lo = Math.max(1, maxWordLen), hi = maxWidth;
+  if (lo >= hi) return hi;
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    const lines = wrapCells(text, mid, 0, 0).length;
+    if (lines <= targetLines) hi = mid; else lo = mid + 1;
+  }
+  return lo;
+}
+
+// Balanced centred-heading block — BANA §4.4.3 only (see balancedWrapWidth above). Used
+// ONLY by formatHeading's BANA centred branch: every OTHER centred block (the document
+// title §2.10, UKAAF §5/Appendix A's L1 heading, a table heading §11.3.1a, the generated
+// "Contents"/volume title lines) keeps plain centredBlock — §4.4.3's balanced-division
+// requirement is specific to centred HEADINGS, and BANA names it nowhere else. Falls
+// back to centredBlock's plain greedy fill for text carrying an explicit line break
+// (`\n`, e.g. a hard-broken multi-segment heading) — the "logical/balanced" division
+// this implements is for wrapping ONE overlong line, not for re-flowing an author-chosen
+// break, and no gold sample exercises that combination.
+function centredHeadingBlock(text, width, wrapWidth = width) {
+  if (String(text || '').includes('\n')) return centredBlock(text, width, wrapWidth);
+  return wrapCells(text, balancedWrapWidth(text, wrapWidth), 0, 0).map((line) => centred(line.trim(), width));
+}
+
 // Indicator / break lines (B004 Glossary, R17: "An indicator line (or end
 // marker) is a line which can be placed after a section is complete"). Three
 // forms: a colons end marker (line indicator dot5,dots25 + 10 colons), a
@@ -148,9 +192,10 @@ function verseRunLevels(blocks) {
 // Blank-line exceptions after a heading (BANA). True when `block`, which follows the
 // emitted heading `prev`, may not be separated from it by a blank line: §4.3.3 no
 // blank line between connected headings (§4.5.6 cell-5 → cell-5; §4.5.7 / §4.6.2
-// cell-5 → cell-7); §4.5.3 / §8.3.3a a cell-5 or cell-7 heading is not followed by
-// a blank line before a list; §13.3.1a nor before the poem it applies to. A centred
-// heading keeps its blank line after (§4.4.1) except before another heading.
+// cell-5 → cell-7 — see HEADING_JOIN_TIERS below for the exact heading/heading table);
+// §4.5.3 / §8.3.3a a cell-5 or cell-7 heading is not followed by a blank line before a
+// list; §13.3.1a nor before the poem it applies to. A centred heading keeps its blank
+// line after (§4.4.1) except before another heading of one of the tiers named below.
 //
 // BANA heading tiers (Formats §4.2.1-§4.2.2). The braille hierarchy is centred, cell-5,
 // cell-7. "When there are more than three distinct heading levels in print, cell-7
@@ -192,10 +237,49 @@ function banaTier(lvl, o) {
   return L === 1 ? 'centred' : (L === 2 ? 'cell5' : 'cell7');   // no document context: fixed mapping
 }
 const headingTierKey = (o) => (o && o.headingTiers ? JSON.stringify(o.headingTiers) : '');
+// F-26: the exact heading-to-heading tier pairs BANA §4 exempts from the general
+// blank-line defaults (§4.4.1 blank after a centred heading; §4.5.1 blank before a
+// cell-5 heading; §4.6.2 blank before a cell-7 heading). Every pair NOT listed here
+// keeps the default blank line — "followed by another heading" is not one of §4.4.1's
+// three named exceptions (a: related box; b: table-of-contents entry; c: alphabetic
+// division), so a centred heading followed by a cell-5 or cell-7 heading is NOT exempt,
+// contrary to the previous "any heading after any heading" behaviour this replaces:
+//   centred -> centred : NO blank — §4.3.3 "Do not insert a blank line between
+//                         connected headings" (Examples 4-2/4-3/4-4 are each one
+//                         conceptual heading split across two centred lines: title +
+//                         author, chapter number + title, unit number + title — all
+//                         same-tier).
+//   cell-5  -> cell-5  : NO blank — §4.5.6 "A cell-5 heading may be followed by an
+//                         equally important cell-5 heading, without a blank line
+//                         between the two headings."
+//   cell-5  -> cell-7  : NO blank — §4.5.7 "A cell-5 heading may be followed by a
+//                         cell-7 heading, without an intervening blank line", and
+//                         §4.6.2's own exception: "There is no blank line between a
+//                         cell-5 heading and cell-7 heading."
+//   centred -> cell-5  : blank kept — §4.4.1 default + §4.5.1 "Precede a cell-5
+//                         heading with a blank line" (unconditional; not excepted).
+//   centred -> cell-7  : blank kept — §4.4.1 default + §4.6.2 "Precede a cell-7
+//                         heading with a blank line" (its only exception names a
+//                         PRECEDING cell-5 heading, not centred).
+//   cell-5  -> centred : blank kept — §4.5.5 "A cell-5 heading cannot be followed by
+//                         a centered heading" says this pairing doesn't occur in a
+//                         well-formed document; if it appears anyway, no rule exempts
+//                         it, so §4.4.1's default (blank before a centred heading)
+//                         applies.
+//   cell-7  -> (any)   : blank kept — §4.6.6 "A cell-7 heading cannot be followed by
+//                         a: Centered heading / Cell-5 heading / Cell-7 heading" names
+//                         no exception either; the receiving tier's own default rule
+//                         (§4.4.1 / §4.5.1 / §4.6.2) applies if it appears anyway.
+const HEADING_JOIN_TIERS = new Set(['centred>centred', 'cell5>cell5', 'cell5>cell7']);
 function joinsWithoutBlank(prev, block, o) {
   if (o.mode !== 'bana' || !prev || !block || prev.type !== 'heading') return false;
-  if (block.type === 'heading') return true;
-  if (banaTier(prev.level, o) === 'centred') return false;
+  if (block.type === 'heading') return HEADING_JOIN_TIERS.has(`${banaTier(prev.level, o)}>${banaTier(block.level, o)}`);
+  const prevTier = banaTier(prev.level, o);
+  if (prevTier === 'centred') return false;
+  // §1.9.3's own exception, having failed the centred check above `prevTier` is now either
+  // cell-5 or cell-7: "[a blank line precedes each blocked paragraph] unless it follows a
+  // cell-5 or cell-7 heading" — drop the blocked paragraph's own leading blank (F-39).
+  if (block.type === 'para' && block.blocked) return true;
   return block.type === 'list' || block.type === 'glossary' || isVerseBlock(block);
 }
 
@@ -240,7 +324,7 @@ function formatHeading(block, o, atStart) {
     const tier = banaTier(L, o);                                                          // §4.2.1-2, see banaHeadingTiers
     if (tier === 'cell5') { out.push('', ...wrapCells(plainT(), w, 4, 4)); }              // cell-5 (§4.5)
     else if (tier === 'cell7') { out.push('', ...wrapCells(plainT(), w, 6, 6)); }         // cell-7 (§4.6)
-    else { out.push('', ...centredBlock(plainT(), w, Math.max(1, w - 6)), ''); }          // centred (§4.4.1-2)
+    else { out.push('', ...centredHeadingBlock(plainT(), w, Math.max(1, w - 6)), ''); }   // centred (§4.4.1-2, §4.4.3)
   } else {
     // §5: an L1 heading is centred and preceded by an indicator line. The indicator is an
     // "end marker … placed after a section is complete" (B004 R17), so there is nothing for
@@ -452,16 +536,29 @@ const quoteLines = (lines, q, block) => {
 // A paragraph interrupted by a print page turn is split around the page change indicator:
 // `continued` marks the piece before it, `continuation` the piece after, which resumes in
 // cell 1 (BANA §1.11.3 Example 1-9; B004 §8 "resumed in cell 1 … unless a new paragraph").
+//
+// F-39 / BANA §1.9.3: "Use 1-1 margins for blocked paragraphs. A blank line precedes each
+// blocked paragraph, unless it follows a cell-5 or cell-7 heading." — a PER-PARAGRAPH
+// `block.blocked` flag (set from print, e.g. `<p class="blocked">` — see parse.mjs /
+// nimas-export.mjs), independent of the document-wide `o.paragraphStyle === 'block'` toggle
+// above (which already gets the 1-1 margins right but adds its blank line AFTER, not
+// before, every paragraph — wrong for this rule, confirmed directly against the §4 gold
+// corpus). A blocked paragraph's own leading blank line is added here unconditionally;
+// `joinsWithoutBlank` (below) drops it again, along with the preceding block's trailing
+// blank, exactly when this paragraph follows a cell-5/cell-7 heading (the rule's own
+// exception) — the same drop-and-collapse machinery already used for headings.
 function formatPara(block, o) {
   const q = quoteMargins(block, o);
   if (block.segments) return formatSegmentedPara(block.segments, o, block, q);
   const text = block.text ?? '';
   if (!text.trim()) return [];                          // empty paragraph -> no lines
   if (q) return quoteLines(formatParagraph(text, o.translate, { width: o.width, first: block.continuation ? q.runover : q.first, runover: q.runover }), q, block);
+  const blocked = !!block.blocked;
   const isBlock = o.paragraphStyle === 'block';
-  const first = (isBlock || block.continuation) ? 0 : 2;
+  const first = (blocked || isBlock || block.continuation) ? 0 : 2;
   const lines = formatParagraph(text, o.translate, { width: o.width, first, runover: 0 });
-  if (isBlock && !block.continued) lines.push('');       // the paragraph has not ended yet
+  if (blocked && !block.continuation) lines.unshift(''); // §1.9.3: blank line precedes (dropped by joinsWithoutBlank after cell-5/7)
+  else if (isBlock && !block.continued) lines.push('');       // the paragraph has not ended yet
   return lines;
 }
 
@@ -585,10 +682,12 @@ function formatSegmentedPara(segments, o, block = null, q = null) {
   if (!stripLineNumbers(braille)) return [];
   const note = block ? lineNumberNote(block, o) : [];
   if (q) return [...note, ...quoteLines(wrapBody(braille, o, o.width, block?.continuation ? q.runover : q.first, q.runover), q, block)];
+  const blocked = !!block?.blocked;                      // see formatPara's comment (F-39 / §1.9.3)
   const isBlock = o.paragraphStyle === 'block';
-  const first = (isBlock || block?.continuation) ? 0 : 2;
+  const first = (blocked || isBlock || block?.continuation) ? 0 : 2;
   const lines = wrapBody(braille, o, o.width, first, 0);
-  if (isBlock && !block?.continued) lines.push('');
+  if (blocked && !block?.continuation) lines.unshift('');
+  else if (isBlock && !block?.continued) lines.push('');
   return [...note, ...lines];
 }
 
@@ -749,7 +848,7 @@ function boxBorders(block, o, w) {
 function formatBox(block, o) {
   const w = o.width || 38;
   const text = String(block.text ?? '');
-  const rawTitle = block.title != null ? String(block.title).trim() : '';
+  const rawTitle = block.title != null ? String(block.title).trim() : '';    // the BOX's own heading (unrelated to a child table's block.title below)
   const { top, bottom } = boxBorders(block, o, w);
   const inner = { ...o, _boxDepth: (o._boxDepth || 0) + 1 };
   const body = [];
@@ -757,8 +856,29 @@ function formatBox(block, o) {
   const kids = Array.isArray(block.blocks) ? block.blocks : [];
   const hasTitleHeading = !!rawTitle && kids.some((cb) => cb && typeof cb === 'object' && cb.type === 'heading' && String(cb.text ?? '').trim() === rawTitle);
   if (rawTitle && !hasTitleHeading) add(formatHeading({ type: 'heading', level: 2, text: rawTitle }, inner, false));
-  if (kids.some((cb) => cb && typeof cb === 'object')) {
-    for (const cb of kids) {
+
+  // BANA Formats §11.3.1b: "Follow print for the placement of table headings ... which may
+  // be before or after a top box line." A table nested directly in this box whose own
+  // heading (block.title, §11.3.1a) is marked titlePosition:'before-box' is hoisted OUT
+  // ahead of the top border instead of rendering, as it normally does (formatTable's own
+  // formatTitle), as the box's first interior line ('in-box', the default — gold-verified,
+  // BANA Sample 11-4: the top box line comes first, the centred heading right after it with
+  // no blank between). Either placement, §11.3.1c/d forbid a blank line between the heading
+  // and the box line beside it (gold-verified for 'before-box' too, BANA Sample 11-26: the
+  // title's last line is followed immediately by the top box line, no blank) — satisfied
+  // here either by add()'s own blank-line dedupe (in-box: the table's leading '' collapses
+  // against the still-empty body) or by splicing the hoisted title directly before `top`
+  // with no blank of its own (before-box, below).
+  let hoistedTitle = [];
+  const renderKids = kids.map((cb) => {
+    if (!hoistedTitle.length && cb && typeof cb === 'object' && cb.type === 'table' && cb.title && cb.titlePosition === 'before-box') {
+      hoistedTitle = tableTitleLines(cb.title, inner, w);
+      return { ...cb, title: null };
+    }
+    return cb;
+  });
+  if (renderKids.some((cb) => cb && typeof cb === 'object')) {
+    for (const cb of renderKids) {
       if (!cb || typeof cb !== 'object') continue;
       add(formatBlock(cb, inner));
     }
@@ -766,7 +886,7 @@ function formatBox(block, o) {
     add(wrapCells(o.translate(text), w, 0, 2));
   }
   while (body.length && body[body.length - 1] === '') body.pop();
-  return ['', top, ...body, bottom, ''].map((l) => l.replace(/\s+$/, ''));
+  return ['', ...hoistedTitle, top, ...body, bottom, ''].map((l) => l.replace(/\s+$/, ''));
 }
 
 // Glossary definition list formatting per BANA Formats §19 (1-3 runover, 3-5 nested)
@@ -832,9 +952,20 @@ function formatPageNum(block, o) {
 const TABLE_GUIDE = '"';                                   // guide dot: dot 5
 // Column separation line under the column headings (Formats §11.4.2b): "3333 — dot 5
 // followed by a series of dots 25 — "extends across the full width of the column"
-// (Example 11-6: `"333333333333 "3333333 "333333333`). One run per column, gutter between.
-const tableSeparator = (widths, gutter) =>
-  widths.map((cw) => TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1))).join(' '.repeat(gutter));
+// (Example 11-6: `"333333333333 "3333333 "333333333`). One dot-run per column, always
+// exactly the column's own width by construction — so by the same "no room left for a
+// guide-dot run" reasoning as colGutter/F-10/Q-7, the gap between two dot-runs is always
+// the single narrowed cell, never the nominal two (gold-verified: BANA Example 11-2's own
+// separation line, `"3333333 "33333333333333333`, has one blank cell between runs, not two).
+// `overhangWidths` (BANA §11.4.3a, Change 2 — see padOverhang below): extra blank cells
+// after a specific column, when a grouped column's own separator run must line up with
+// an overhanging primary heading above it instead of the plain narrowed 1-cell gap.
+const tableSeparator = (widths, gutter, overhangWidths) => {
+  const cols = widths.map((cw) => TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1)));
+  if (!overhangWidths || !overhangWidths.some(Boolean)) return cols.join(' ');
+  const exactFill = cols.map((_, ci) => !overhangWidths[ci]);
+  return joinTableRow(padOverhang(cols, overhangWidths), exactFill, gutter);
+};
 // A numeric entry for place-value alignment (§11.6.1d): optional sign, digits with
 // thousands commas, optional decimal fraction. Anything else (units, %, ±, text) is a
 // text entry and left-adjusted (§11.6.1c). Returns the fraction length incl. the point
@@ -942,15 +1073,137 @@ function fitColumnWidths(colWidths, w, gutter, minWidths = null) {
   if (actualWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * gutter > w) return null;
   return actualWidths;
 }
+// The widest space-separated word in a string (braille words are single-space-separated).
+const widestWord = (str) => Math.max(0, ...String(str || '').split(' ').map((t) => t.length));
 // The widest word (space-separated braille) in each column, headers included.
 function columnMinWidths(headers, rows, colCount) {
   const out = Array(colCount).fill(0);
-  const widest = (str) => Math.max(0, ...String(str || '').split(' ').map((t) => t.length));
+  const widest = widestWord;
   for (let c = 0; c < colCount; c++) {
-    out[c] = Math.max(widest(headers[c]), ...rows.map((r) => widest(r[c])));
+    let m = widest(headers[c]);                     // headers wrap at runover 0 (§11.4.1) — no extra margin needed
+    for (const r of rows) {
+      const words = String(r[c] || '').split(' ').filter(Boolean);
+      if (!words.length) continue;
+      // §11.6.1a: a column entry's runover is indented 2 cells. Any word after the
+      // first can end up on a runover line (pushed there by the words before it), so it
+      // needs 2 cells of headroom beyond its own length or wrapCells' overflow safety
+      // net divides it (found while proving T9: BANA Sample 11-04's "territory"-style
+      // entries, A27b/§1.10.1). The FIRST word always starts the entry's first line at
+      // indent 0, so it needs only its own width — reserving +2 for it too made BANA
+      // Sample 11-04's "Williamson's Sapsucker" column (13 cells in the book: the first
+      // word exactly fills it, "Sapsucker" runs over in 2+10) need 15 and fall back.
+      const rest = words.slice(1).map((t) => t.length);
+      m = Math.max(m, words[0].length, rest.length ? Math.max(...rest) + 2 : 0);
+    }
+    out[c] = m;
   }
   return out;
 }
+// T9 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): BANA §11.6.1 "Column entries are
+// limited to two lines. Entries that cannot be limited to two lines require another
+// specialized table format." Checked against the SQUEEZED width actually chosen by
+// fitColumnWidths (never the unsqueezed natural width) — a header or a column entry
+// that would need a third line at that width fails the check, so 'auto' mode rejects
+// columnar and falls back as before this fix. Word division is already impossible here
+// (fitColumnWidths never squeezes a column below columnMinWidths' widest word), so this
+// only ever checks line COUNT. Headers wrap 0/0 (no runover indent, matching
+// formatColumnar's plain header path); entries wrap 0/2 (§11.6.1a's two-cell runover
+// indent, matching formatColumnar's data-row path).
+function fitsTwoLines(headers, rows, actualWidths) {
+  for (let c = 0; c < actualWidths.length; c++) {
+    if (headers[c] && wrapCells(headers[c], actualWidths[c], 0, 0).length > 2) return false;
+  }
+  for (const row of rows) {
+    for (let c = 0; c < actualWidths.length; c++) {
+      if (row[c] && wrapCells(row[c], actualWidths[c], 0, 2).length > 2) return false;
+    }
+  }
+  return true;
+}
+// T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026 — standards-findings.md F-18's own
+// status update): BANA §11.14 Wide Tables: Vertical Division. "A wide table may be
+// divided into vertical sections" (11.14.1); "Repeat the row headings for each section of
+// the table" (11.14.1b). Column 0 is always the row-heading column (§11.5.1: "The first
+// column consists of the row headings"), so this greedily packs the table's DATA columns
+// (1..colCount-1) into consecutive sections, each of which — together with column 0,
+// repeated — must fit the line at their own NATURAL (unsqueezed) width. Natural width,
+// not a squeeze, is what BANA's own Sample 11-22 (gold: tests/gold/bana-formats-2016/
+// section-11/sample-11-22.json) shows: none of its six data columns is narrowed at all —
+// they are simply grouped 4+2 across two sections once the table no longer has to fit
+// them all on one line. Returns an array of one-or-more-column-index arrays (each
+// excluding column 0, which the caller repeats in every section), or null when even a
+// single data column cannot fit beside the row-heading column (division cannot help —
+// Listed, §11.16, is the next resort per §11.12.1) or when the whole table needs only one
+// section (division achieves nothing; defensive — resolveTableLayout only tries this
+// after the plain columnar squeeze has already failed on the full, unsqueezed table).
+function computeVerticalSections(colWidths, gutter, w, colCount) {
+  if (colCount < 3) return null; // a row-heading column + at least 2 data columns to divide
+  const rowHeadW = colWidths[0];
+  const sections = [];
+  let current = [];
+  let currentWidth = 0;
+  for (let ci = 1; ci < colCount; ci++) {
+    const add = current.length ? gutter + colWidths[ci] : colWidths[ci];
+    const proposed = currentWidth + add;
+    if (current.length && rowHeadW + gutter + proposed > w) {
+      sections.push(current);
+      if (rowHeadW + gutter + colWidths[ci] > w) return null; // a single column doesn't fit
+      current = [ci];
+      currentWidth = colWidths[ci];
+    } else {
+      if (!current.length && rowHeadW + gutter + colWidths[ci] > w) return null;
+      current.push(ci);
+      currentWidth = proposed;
+    }
+  }
+  if (current.length) sections.push(current);
+  return sections.length >= 2 ? sections : null;
+}
+// Renders one vertical-division section (BANA §11.14.1b's repeated row-heading column,
+// index 0, plus a subset of data columns) at its NATURAL width — header row (§11.4.1),
+// its separation line (§11.4.2, blank under column 0 since it has no heading of its own
+// here — 11.4.2c: "Columns without a heading do not have a separation line", gold-verified
+// by Sample 11-22's own blank row-heading-column header having no dot run beneath it), then
+// the data rows (§11.6, F-77: no forced blank line between rows). `headers`/`rows`/`widths`/
+// `numPlans` are already restricted to this section's own columns (column 0 first).
+function renderVerticalSection(headers, rows, widths, numPlans, gutter, w) {
+  const colCount = widths.length;
+  const out = [];
+  if (headers.some((h) => h.trim())) {
+    const headerWrapped = headers.map((h, ci) => wrapCells(h, widths[ci], 0, 0));
+    const maxHdrLines = Math.max(1, ...headerWrapped.map((l) => l.length));
+    for (let li = 0; li < maxHdrLines; li++) {
+      const raw = headerWrapped.map((lines) => lines[li] || '');
+      const lineCols = raw.map((t, ci) => t.padEnd(widths[ci], ' '));
+      const exactFill = raw.map((t, ci) => t.length >= widths[ci]);
+      out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
+    }
+    const sepCols = widths.map((cw, ci) => (headers[ci].trim() ? (TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1))) : ' '.repeat(cw)));
+    const sepExactFill = widths.map((_, ci) => !!headers[ci].trim());
+    out.push(joinTableRow(sepCols, sepExactFill, gutter).slice(0, w));
+  }
+  const plans = numPlans.map((p, c) => (p && widths[c] >= p.width ? p : null));
+  const rowWrappedData = rows.map((row) => row.map((cell, ci) => wrapCells(cell, widths[ci], 0, 2)));
+  rowWrappedData.forEach((cellWrapped, ri) => {
+    const maxLines = Math.max(1, ...cellWrapped.map((l) => l.length));
+    for (let li = 0; li < maxLines; li++) {
+      const exactFill = [];
+      const lineCols = cellWrapped.map((lines, ci) => {
+        const t = lines[li] || '';
+        const { pre, post } = tableCellFill(t, widths[ci], { firstLine: li === 0, lastCol: ci === colCount - 1, numPad: plans[ci] ? plans[ci].pads[ri] : -1 });
+        const cell = pre + t + post;
+        exactFill.push(t !== '' && !cell.endsWith(' '));
+        return cell;
+      });
+      out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
+    }
+  });
+  return out;
+}
+// The transcriber's note announcing a vertically divided table (BANA 11.14.1c sample
+// wording): "Table is divided vertically into 2 sections." — pluralised count (always
+// >= 2 sections by computeVerticalSections' own construction).
+const verticalDivisionTn = (n) => `Table is divided vertically into ${n} sections.`;
 // BANA Formats §11.16 Listed Table Format: the transcriber's note explaining the change to
 // print format (l, sample wording), the note for blank entries (h), and the three unspaced
 // guide dots (dot 5) that stand for a blank entry.
@@ -1038,11 +1291,57 @@ function computeTableColumns(block, o) {
     if (numPlans[c]) colWidths[c] = Math.max(colWidths[c], numPlans[c].width);
   }
 
+  // BANA §11.4.3: a second, primary heading tier over two or more sub-columns
+  // (`block.headerGroups = [{ text, from, to }]`, 0-based inclusive column span —
+  // parse.mjs/nimas-export.mjs's DTBook round trip, F-12). Translated once here so
+  // formatTable/traceTable never re-translate it.
+  const rawHeaderGroups = Array.isArray(block.headerGroups) ? block.headerGroups : [];
+  const headerGroups = rawHeaderGroups
+    .map((g) => ({ text: tr(g && g.text), from: Math.max(0, Math.trunc(Number(g && g.from))), to: Math.min(colCount - 1, Math.trunc(Number(g && g.to))) }))
+    .filter((g) => Number.isFinite(g.from) && Number.isFinite(g.to) && g.to >= g.from && g.text);
+
   // Inter-column gutter: 2 spaces per standard
   const gutter = 2;
-  const totalSpatialWidth = colWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * gutter;
+  // BANA 11.4.3a (Change 2, Paul's decision 17 Sep 2026 — standards-findings.md F-12's
+  // own "open question", now settled; standards-questions.md has the remaining
+  // transcriber question on whether this is the right reading): "The separation line is
+  // the width of the primary heading when it is wider than all of the sub-column
+  // headings." Tried in this order for each group whose heading is wider than its own
+  // span (widths measured PRE-squeeze — fitColumnWidths runs on `colWidths` afterwards
+  // and, by construction, never needs to squeeze when an overhang was granted, since
+  // the whole-table fit was already checked here):
+  //  1. OVERHANG (preferred): if the whole table — every column's natural width, plus
+  //     every overhang already granted to an earlier group, plus this one — still fits
+  //     the line, the heading stays UNWRAPPED at its own full width; the sub-columns
+  //     beneath are entirely unchanged (colWidths untouched); the extra cells needed
+  //     are recorded in `overhangWidths[g.to]` (rendering-only padding, applied by
+  //     formatGroupedHeaderRows/formatColumnar via padOverhang — never guide-dotted,
+  //     11.6.1g's reasoning) so every later column still starts two cells after the
+  //     wider of the heading and its span.
+  //  2. WRAP (the pre-existing behaviour, when the overhang would not fit the page):
+  //     the heading wraps within its span (formatGroupedHeaderRows, unchanged), the
+  //     span widened only to the heading's own WIDEST WORD (never its whole unwrapped
+  //     text — words are never divided, A27b/§1.10.1) — added to the LAST sub-column.
+  // No gold sample in this section has a primary heading wider than its own span, so
+  // neither branch is gold-verified; both are synthetic-tested (table_auto_squeeze.
+  // test.mjs) against the rule text itself, per this project's own testing rule.
+  const overhangWidths = Array(colCount).fill(0);
+  for (const g of headerGroups) {
+    const spanWidth = colWidths.slice(g.from, g.to + 1).reduce((a, b) => a + b, 0) + gutter * (g.to - g.from);
+    if (g.text.length <= spanWidth) continue;                // heading already fits its span
+    const overhangExtra = g.text.length - spanWidth;
+    const currentTotal = colWidths.reduce((a, b) => a + b, 0) + gutter * (colCount - 1) + overhangWidths.reduce((a, b) => a + b, 0);
+    if (currentTotal + overhangExtra <= w) {
+      overhangWidths[g.to] += overhangExtra;
+      g.overhang = true;
+    } else {
+      const need = widestWord(g.text) - spanWidth;
+      if (need > 0) colWidths[g.to] += need;
+    }
+  }
+  const totalSpatialWidth = colWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * gutter + overhangWidths.reduce((a, b) => a + b, 0);
 
-  return { rawHeaders, rawRows, w, mode, colCount, has, segsBraille, tr, headers, rows, numPlans, colWidths, gutter, totalSpatialWidth, bana: o.mode === 'bana' };
+  return { rawHeaders, rawRows, w, mode, colCount, has, segsBraille, tr, headers, rows, numPlans, colWidths, gutter, totalSpatialWidth, headerGroups, overhangWidths, bana: o.mode === 'bana' };
 }
 
 // The layout formatTable actually uses for a table: 'columnar' with its squeezed column
@@ -1057,8 +1356,41 @@ function resolveTableLayout(c) {
     const actualWidths = fitColumnWidths(c.colWidths, c.w, c.gutter, columnMinWidths(c.headers, c.rows, c.colCount));
     return actualWidths ? { layout: 'columnar', actualWidths } : { layout: fallbackLayout };
   };
+  // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): BANA §11.14 Wide Tables: Vertical
+  // Division. Only attempted for a table with a single-tier header — c.headerGroups is
+  // BANA §11.4.3's own two-tier complex heading (F-12); no gold sample combines the two,
+  // and dividing columns under a primary heading that spans several of them would need
+  // its own, unverified span-splitting rule, so that combination is left to Listed.
+  const tryVertical = () => {
+    if (c.headerGroups.length) return null;
+    const sections = computeVerticalSections(c.colWidths, c.gutter, c.w, c.colCount);
+    return sections ? { layout: 'vertical', sections } : null;
+  };
+  if (c.mode === 'vertical') return tryVertical() || { layout: fallbackLayout };
   if (c.mode === 'columnar') return tryColumnar();
-  if (c.totalSpatialWidth <= c.w) return tryColumnar();
+  // T9 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026, standards-findings.md F-18's own
+  // status update): 'auto' mode always tries the word-preserving squeeze FIRST — never
+  // gated on whether the table already fits at its unsqueezed natural width, as before
+  // this fix (that old pre-check is why BANA Sample 11-04 fell straight to Listed even
+  // though the book's own transcription squeezes 22/17/19-cell columns to 13/13/10 with
+  // runovers) — and accepts columnar only when the squeeze both fits the line
+  // (fitColumnWidths, which already never divides a word — columnMinWidths) AND every
+  // entry, headers included, fits in at most two lines of its squeezed column (BANA
+  // §11.6.1: "Column entries are limited to two lines. Entries that cannot be limited
+  // to two lines require another specialized table format." — fitsTwoLines). A
+  // headerGroups table (BANA §11.4.3, F-12) is covered by this same unconditional
+  // attempt: its primary heading's own width need is already folded into c.colWidths
+  // above, before this squeeze runs. Falls back (as before) when either check fails;
+  // the transcriber can still force 'columnar' from the toolbar (c.mode==='columnar'
+  // above), which bypasses this two-line check entirely — unchanged.
+  const attempt = tryColumnar();
+  if (attempt.layout === 'columnar' && fitsTwoLines(c.headers, c.rows, attempt.actualWidths)) return attempt;
+  // T4: when the squeeze doesn't reach a usable columnar table, try dividing it
+  // vertically (BANA §11.14) before falling back to Listed/paragraph, which stays the
+  // last resort (EMBOSS-TASKS.md T4: "vertical division ... also the automatic fallback
+  // when its sections fit a page; listed stays the last resort").
+  const vertical = tryVertical();
+  if (vertical) return vertical;
   return { layout: fallbackLayout };
 }
 
@@ -1073,6 +1405,199 @@ export function tableLayout(block, o) {
   return resolveTableLayout(c).layout;
 }
 
+// BANA Formats §11.3.1a: "Center table headings." A table's HEADING (its own title, e.g.
+// "Table 12: Populations") is a different thing from its CAPTION (§11.2.8b: 7-5 margins,
+// never centred — see formatCaption / the standalone 'caption' block; F-4). `title` is the
+// heading text carried on the table block itself (`block.title`) — a string, or an array
+// when print shows it as more than one hard-broken line (e.g. a sequence number on its own
+// line above the title proper, BANA Example 11-4: "Table 9.5" / "Smoking Among Americans by
+// Age and Sex"). Each print line is centred independently and, if it alone is wider than the
+// page, further word-wrapped first (centredBlock) — never merged with an adjacent print line
+// even when the two would together fit the width (gold-verified: BANA Sample 11-2's "Table
+// 11.1" stays alone on its own centred line, not joined to "Summary Comparison...").
+function tableTitleLines(title, o, w) {
+  if (title == null) return [];
+  const raw = Array.isArray(title) ? title : [title];
+  const out = [];
+  for (const line of raw) {
+    const s = String(line ?? '').trim();
+    if (!s) continue;
+    out.push(...centredBlock(o.translate(s), w));
+  }
+  return out.map((l) => l.replace(/\s+$/, ''));
+}
+
+// BANA Formats §11.2.5b: "Each column is separated from a following column by two blank
+// cells." Paul's reading of the standard's own worked examples (standards-findings.md F-10,
+// standards-questions.md Q-7): the printed gutter narrows to ONE blank cell wherever a
+// column's rendered content, on that particular line, already reaches the column's full
+// width WITHOUT a plain-space filler as the last thing added — i.e. the column's own text,
+// or a run of guide dots, sits right at its edge — two cells only when the last thing added
+// to reach that width is plain blank padding, which still needs the full gap to read as
+// separation. Gold-verified two ways: BANA Example 11-2 (`"mosquito #cj "ds` — a data entry
+// that reaches its column's edge on its own, no fill at all, cf. `"gorilla   #ej ye>s"`
+// which pads with a space first, kept at two cells) and BANA Sample 11-1 (`,daily
+// """"""""" #e4ci.0` — a guide-dot RUN reaching the column's edge narrows exactly the same
+// way, even though tableCellFill's guide-dot branch still returns a non-empty `post`).
+// `exactFill` is whether the column's fully padded text on this line does NOT end in a
+// plain space (a header's own pad-to-width included).
+const colGutter = (exactFill, gutter) => (exactFill ? 1 : gutter);
+// Assemble one output line from column strings, joining each boundary with colGutter's
+// width instead of a single uniform gutter (Array.join can't vary per boundary).
+function joinTableRow(colTexts, exactFill, gutter) {
+  let s = '';
+  for (let ci = 0; ci < colTexts.length; ci++) {
+    s += colTexts[ci];
+    if (ci < colTexts.length - 1) s += ' '.repeat(colGutter(exactFill[ci], gutter));
+  }
+  return s;
+}
+
+// BANA §11.4.3a overhang (Change 2, Paul's decision 17 Sep 2026 — see computeTableColumns'
+// `overhangWidths`/`headerGroups[gi].overhang`): "The separation line is the width of the
+// primary heading when it is wider than all of the sub-column headings." When a group's
+// heading overhangs its own span AND the whole table still fits the line with that overhang,
+// the sub-columns beneath stay their own natural width (never widened) — instead, extra
+// blank cells are appended after the group's LAST sub-column, on every row of the table
+// (primary, extra, sub-tier, separator and data rows alike), so every later column still
+// lines up under the wider heading/separator above. Never guide-dotted (11.6.1g's own "no
+// dots after a runover" reasoning applies here too: this is layout padding, not column
+// content) and always followed by the standard 2-cell gutter, never the narrowed one
+// (`overhangExactFill` forces `exactFill` false there) — together giving exactly "the next
+// column starts two cells after the wider of the heading and its span." A no-op (returns
+// its input unchanged) whenever no column has an overhang, so it is safe to call
+// unconditionally from formatColumnar/traceColumnar's general row-rendering code, whether
+// or not the table has a two-tier header at all.
+const padOverhang = (colTexts, overhangWidths) => (
+  (overhangWidths && overhangWidths.some(Boolean))
+    ? colTexts.map((t, ci) => (overhangWidths[ci] ? t + ' '.repeat(overhangWidths[ci]) : t))
+    : colTexts
+);
+const overhangExactFill = (exactFill, overhangWidths) => (
+  (overhangWidths && overhangWidths.some(Boolean))
+    ? exactFill.map((e, ci) => (overhangWidths[ci] ? false : e))
+    : exactFill
+);
+
+// Which group (index into `headerGroups`) each column belongs to, or null for a
+// column with a single-tier heading (no primary heading over it) — shared by the
+// format and trace renderers of BANA §11.4.3's complex column headings.
+function groupColumnMap(colCount, headerGroups) {
+  const groupOf = Array(colCount).fill(null);
+  headerGroups.forEach((g, gi) => { for (let c = g.from; c <= g.to; c++) groupOf[c] = gi; });
+  return groupOf;
+}
+// A group's own rendered width: its sub-columns' widths plus the (nominal, 2-cell)
+// gutters between them — the primary heading is one continuous run of text/dots
+// across this width, never per-sub-column (11.4.3a: "The [separation] line starts at
+// the left margin of the primary and secondary sub-column headings and ends at the
+// right margin of the last sub-column").
+const groupSpanWidth = (g, actualWidths, gutter) =>
+  actualWidths.slice(g.from, g.to + 1).reduce((a, b) => a + b, 0) + gutter * (g.to - g.from);
+
+// BANA §11.4.3: Complex Tables with Column and Sub-column Headings. `headerGroups`
+// carries the primary heading row; `headers` (unchanged) stays the flat sub-column/
+// single-tier row. Gold-derived from the section's only four worked two-tier-header
+// samples (11-2, 11-9, 11-13, 11-15 — standards-findings.md F-12):
+//  - the primary row (a) and its separation line span ONLY the grouped columns; a
+//    column with no group is blank on both those lines (11.4.2c: "Columns without a
+//    heading do not have a separation line" — read here as "without a heading AT
+//    THAT TIER").
+//  - the sub-column row (b) and its OWN separation line (c) span every column,
+//    grouped or not: a single-tier column's own heading — one line, or, per §11.4.1's
+//    generic two-line cap, two — sits BOTTOM-ALIGNED against this row. A one-line
+//    heading (Samples 11-9/11-13/11-15's "Year"/"Annual avg"/"prép.") sits only here;
+//    a two-line one (Sample 11-2's "Fiscal Year", wrapped "Fiscal"/"Year" because it
+//    doesn't fit its own 7-cell column) puts its runover ("Year") here and pushes its
+//    first line ("Fiscal") into an EXTRA row inserted between the primary row's
+//    separation line and this row — never sharing the primary row itself, confirmed
+//    by the gold braille's literal blanks under the grouped columns on that extra row
+//    and under the single-tier column on the primary row (see the gold JSON's own
+//    line-by-line `braille.notes`).
+function formatGroupedHeaderRows(headers, headerGroups, actualWidths, gutter, w, overhangWidths = null) {
+  const colCount = actualWidths.length;
+  const groupOf = groupColumnMap(colCount, headerGroups);
+  const overhang = overhangWidths || Array(colCount).fill(0);
+
+  const ownWrapped = headers.map((h, ci) => wrapCells(h, actualWidths[ci], 0, 0));
+  // BANA §11.4.3a overhang: a group flagged `.overhang` (computeTableColumns) stays
+  // UNWRAPPED, one line, at its own full width — the sub-columns beneath are never
+  // widened for it (see padOverhang/`overhang` below instead).
+  const groupWrapped = headerGroups.map((g) => (g.overhang ? [g.text] : wrapCells(g.text, groupSpanWidth(g, actualWidths, gutter), 0, 0)));
+
+  const primaryTierHeight = Math.max(1, ...groupWrapped.map((l) => l.length));
+  const groupedCols = [...Array(colCount).keys()].filter((ci) => groupOf[ci] != null);
+  const subTierHeight = Math.max(1, ...groupedCols.map((ci) => ownWrapped[ci].length));
+  const extra = Array(colCount).fill(0);
+  for (let ci = 0; ci < colCount; ci++) {
+    if (groupOf[ci] == null) extra[ci] = Math.max(0, ownWrapped[ci].length - subTierHeight);
+  }
+  const maxExtra = Math.max(0, ...extra);
+
+  const out = [];
+
+  // One "slot" per group (spanning its whole width, plus any overhang past its last
+  // sub-column) or per ungrouped column — used by the primary row and its separation
+  // line, the only two rows where a group's text spans more than one real column.
+  const slots = [];
+  for (let ci = 0; ci < colCount;) {
+    const gi = groupOf[ci];
+    if (gi != null) {
+      const g = headerGroups[gi];
+      slots.push({ width: groupSpanWidth(g, actualWidths, gutter) + (g.overhang ? overhang[g.to] : 0), groupIndex: gi });
+      ci = g.to + 1;
+    } else { slots.push({ width: actualWidths[ci] }); ci++; }
+  }
+
+  for (let li = 0; li < primaryTierHeight; li++) {
+    const raw = slots.map((s) => (s.groupIndex != null ? (groupWrapped[s.groupIndex][li] || '') : ''));
+    const lineCols = raw.map((t, si) => t.padEnd(slots[si].width, ' '));
+    const exactFill = raw.map((t, si) => t.length >= slots[si].width);
+    out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
+  }
+  {
+    const raw = slots.map((s) => (s.groupIndex != null ? TABLE_GUIDE + '3'.repeat(Math.max(0, s.width - 1)) : ' '.repeat(s.width)));
+    const exactFill = slots.map((s) => s.groupIndex != null);
+    out.push(joinTableRow(raw, exactFill, gutter).slice(0, w));
+  }
+
+  // Extra rows: only when some ungrouped column's own heading needs more lines than
+  // the sub-tier row height (BANA §11.4.1's generic two-line cap on a single-tier
+  // heading beside a two-tier group — gold Sample 11-2's "Fiscal"/"Year"). Overhang
+  // padding is still applied so a column after the group keeps lining up.
+  for (let li = 0; li < maxExtra; li++) {
+    const raw = Array.from({ length: colCount }, (_, ci) => {
+      if (groupOf[ci] != null || extra[ci] === 0) return '';
+      const padTop = maxExtra - extra[ci];
+      return li >= padTop ? (ownWrapped[ci][li - padTop] || '') : '';
+    });
+    const lineCols = padOverhang(raw.map((t, ci) => t.padEnd(actualWidths[ci], ' ')), overhang);
+    const exactFill = overhangExactFill(raw.map((t, ci) => t.length >= actualWidths[ci]), overhang);
+    out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
+  }
+
+  // Sub-tier row(s) + separation line: the plain single-tier header loop's own
+  // mechanics (unchanged), fed a per-column line array that is either the grouped
+  // column's own sub-heading wrap, or an ungrouped column's own heading bottom-aligned
+  // against this block. Overhang padding keeps every later column aligned with the
+  // (wider) primary row/separator above.
+  const subTierWrapped = Array.from({ length: colCount }, (_, ci) => {
+    if (groupOf[ci] != null) return ownWrapped[ci];
+    const own = ownWrapped[ci];
+    const padTop = subTierHeight - own.length;
+    return padTop > 0 ? [...Array(padTop).fill(''), ...own] : own.slice(own.length - subTierHeight);
+  });
+  for (let li = 0; li < subTierHeight; li++) {
+    const raw = subTierWrapped.map((lines) => lines[li] || '');
+    const lineCols = padOverhang(raw.map((t, ci) => t.padEnd(actualWidths[ci], ' ')), overhang);
+    const exactFill = overhangExactFill(raw.map((t, ci) => t.length >= actualWidths[ci]), overhang);
+    out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
+  }
+  out.push(tableSeparator(actualWidths, gutter, overhang).slice(0, w));
+
+  return out;
+}
+
 // Table formatting: Spatial Columnar Table (BANA §11 / B004 §12 tabular form), the BANA
 // Listed Table Format (§11.9) or, in UKAAF mode, B004 paragraph form for a table too wide
 // for the line.
@@ -1081,13 +1606,14 @@ function formatTable(block, o) {
   if (!(c.colCount > 0)) return [];
   const { rawHeaders, rawRows, w, colCount, has, segsBraille, headers, rows, numPlans, colWidths, gutter } = c;
 
-  // Title / Caption helper
-  const title = block.title || block.caption;
-  const formatTitle = () => {
-    if (!title || !String(title).trim()) return [];
-    const tStr = o.translate(String(title).trim());
-    return [centred(tStr, w).replace(/\s+$/, '')];
-  };
+  // Title helper (§11.3.1a; see tableTitleLines). A table's CAPTION (§11.2.8) is never
+  // stored on the table object in the real parse/editor pipeline — it is always the
+  // standalone 'caption' sibling block (formatCaption, 7-5 margins, not centred) pushed
+  // immediately before this table block, per BANA 11.2.8a. Reading block.caption here too
+  // (as before this fix) made a genuine caption take the centred heading path whenever a
+  // test or the editor happened to set it directly on the table object — F-4.
+  const title = block.title;
+  const formatTitle = () => tableTitleLines(title, o, w);
 
   // UKAAF paragraph form (B004 §12b and Example 2): a transcriber's note naming the
   // column order, then each row as one 3-1 paragraph — its entries "separated by
@@ -1183,35 +1709,47 @@ function formatTable(block, o) {
 
     // Column headings: left-justified above their columns, wrapped within the column,
     // no guide dots between headings (§11.4.1b/c); then the separation line (§11.4.2).
-    if (headers.some((h) => h.trim())) {
+    // A complex (two-tier) header (§11.4.3, F-12) takes its own renderer.
+    if (c.headerGroups.length) {
+      out.push(...formatGroupedHeaderRows(headers, c.headerGroups, actualWidths, gutter, w, c.overhangWidths));
+    } else if (headers.some((h) => h.trim())) {
       const headerWrapped = headers.map((h, ci) => wrapCells(h, actualWidths[ci], 0, 0));
       const maxHdrLines = Math.max(...headerWrapped.map((l) => l.length));
       for (let li = 0; li < maxHdrLines; li++) {
-        const lineCols = headerWrapped.map((lines, ci) => (lines[li] || '').padEnd(actualWidths[ci], ' '));
-        out.push(lineCols.join(' '.repeat(gutter)).slice(0, w));
+        const raw = headerWrapped.map((lines) => lines[li] || '');
+        const lineCols = raw.map((t, ci) => t.padEnd(actualWidths[ci], ' '));
+        const exactFill = raw.map((t, ci) => t.length >= actualWidths[ci]);   // F-10/Q-7
+        out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
       }
       out.push(tableSeparator(actualWidths, gutter).slice(0, w));
     }
 
     // Column entries: runovers indented 2 cells inside the column (§11.6.1a).
     const rowWrappedData = rows.map((row) => row.map((cell, ci) => wrapCells(cell, actualWidths[ci], 0, 2)));
-    // Check if any row has multi-line cells (BANA §11.3.4 inter-row spacing rule)
-    const hasMultiLine = rowWrappedData.some((cellWrapped) => Math.max(1, ...cellWrapped.map((l) => l.length)) > 1);
 
     // Render Data Rows: each entry line filled to its column with guide dots / place-value
     // padding (tableCellFill: §11.6.1f/g, §11.6.4, §11.6.1d).
     rowWrappedData.forEach((cellWrapped, ri) => {
       const maxLines = Math.max(1, ...cellWrapped.map((l) => l.length));
       for (let li = 0; li < maxLines; li++) {
+        const exactFill = [];
         const lineCols = cellWrapped.map((lines, ci) => {
           const t = lines[li] || '';
           const { pre, post } = tableCellFill(t, actualWidths[ci], { firstLine: li === 0, lastCol: ci === colCount - 1, numPad: plans[ci] ? plans[ci].pads[ri] : -1 });
-          return pre + t + post;
+          const cell = pre + t + post;
+          // F-10/Q-7's evidence is always a real, non-empty entry (short or exactly-fitting)
+          // bridged to its column's edge — never BANA §11.6.4's OWN "blank space" cell
+          // (entirely guide-dotted, `t === ''`), which stays a deliberate full-width
+          // placeholder and must line up with the un-blank rows around it (table_rowspan.
+          // test.mjs's rowspan alignment check: a rowspanned row's blank area must line up
+          // under the row above it, which a narrowed gutter here would break).
+          exactFill.push(t !== '' && !cell.endsWith(' '));
+          return cell;
         });
-        out.push(lineCols.join(' '.repeat(gutter)).slice(0, w));
-      }
-      if (hasMultiLine && ri < rowWrappedData.length - 1) {
-        out.push('');
+        // BANA §11.4.3a overhang (Change 2): data rows keep lining up under a group
+        // whose heading overhangs its span (padOverhang/overhangExactFill — no-op when
+        // c.overhangWidths has nothing set, i.e. every table without this rule in play).
+        out.push(joinTableRow(padOverhang(lineCols, c.overhangWidths), overhangExactFill(exactFill, c.overhangWidths), gutter).slice(0, w));
       }
     });
 
@@ -1219,9 +1757,36 @@ function formatTable(block, o) {
     return out;
   };
 
+  // BANA §11.14 Wide Tables: Vertical Division (T4). `resolveTableLayout` has already
+  // divided the DATA columns into sections that each fit the line at their natural width
+  // (computeVerticalSections); this repeats column 0 (the row heading, §11.5.1) in every
+  // section (11.14.1b) with a blank line between sections and the rule's own transcriber's
+  // note (11.14.1c) before the first one.
+  const formatVertical = (sections) => {
+    const out = [''];
+    const titleLines = formatTitle();
+    if (titleLines.length) out.push(...titleLines, '');
+    if (block.tabletn || block.note) {
+      out.push(...wrapCells(TN_OPEN + o.translate(block.tabletn || block.note).trim() + TN_CLOSE, w, 6, 4), '');
+    }
+    out.push(...wrapCells(TN_OPEN + o.translate(verticalDivisionTn(sections.length)).trim() + TN_CLOSE, w, 6, 4), '');
+    sections.forEach((cols, si) => {
+      const allCols = [0, ...cols];
+      const subHeaders = allCols.map((ci) => headers[ci]);
+      const subRows = rows.map((row) => allCols.map((ci) => row[ci]));
+      const subWidths = allCols.map((ci) => colWidths[ci]);
+      const subPlans = allCols.map((ci) => numPlans[ci]);
+      out.push(...renderVerticalSection(subHeaders, subRows, subWidths, subPlans, gutter, w));
+      if (si < sections.length - 1) out.push('');
+    });
+    out.push('');
+    return out;
+  };
+
   const resolved = resolveTableLayout(c);
   if (resolved.layout === 'listed') return formatListed();
   if (resolved.layout === 'paragraph') return formatParagraphForm();
+  if (resolved.layout === 'vertical') return formatVertical(resolved.sections);
   return formatColumnar(resolved.actualWidths);
 }
 
@@ -1555,6 +2120,134 @@ function tcCentredBlock(o, tr, width, wrapWidth = width) {   // mirror centredBl
     return tcRstrip({ s: ' '.repeat(pad) + trimmed, src });
   });
 }
+// Mirror of centredHeadingBlock (BANA §4.4.3, F-40): same balancedWrapWidth search over
+// the plain translated text (word/width arithmetic only — no source positions involved),
+// then wrap+centre with wrapCellsSrc/pad exactly as tcCentredBlock does, just at the
+// narrower balanced width instead of `wrapWidth`. Same `\n` fallback to plain tcCentredBlock.
+function tcCentredHeadingBlock(o, tr, width, wrapWidth = width) {
+  if (tr.s.includes('\n')) return tcCentredBlock(o, tr, width, wrapWidth);
+  const bw = balancedWrapWidth(tr.s, wrapWidth);
+  const { lines, srcs } = wrapCellsSrc(tr.s, tr.src, bw, 0, 0);
+  return lines.map((line, i) => {
+    let a = 0, b = line.length; while (a < b && line[a] === ' ') a++; while (b > a && line[b - 1] === ' ') b--;
+    const trimmed = line.slice(a, b);
+    const pad = Math.max(0, Math.floor((width - trimmed.length) / 2));
+    const src = []; for (let k = 0; k < pad; k++) src.push(null); for (let k = a; k < b; k++) src.push(srcs[i][k]);
+    return tcRstrip({ s: ' '.repeat(pad) + trimmed, src });
+  });
+}
+// Traced mirror of tableTitleLines (BANA §11.3.1a): each print line of a table heading,
+// independently centred (and wrapped if it alone overflows the width) — never joined with
+// an adjacent print line. unit 0 throughout, matching traceTable's pre-existing single-line
+// traceTitle (a heading has no per-cell "unit" of its own to trace).
+function traceTableTitleLines(title, o, w) {
+  if (title == null) return [];
+  const raw = Array.isArray(title) ? title : [title];
+  const out = [];
+  for (const line of raw) {
+    const s = String(line ?? '').trim();
+    if (!s) continue;
+    out.push(...tcCentredBlock(o, tcRun(o, s, null, 0, 0), w));
+  }
+  return out;
+}
+// Traced mirror of formatGroupedHeaderRows (BANA §11.4.3, F-12) — see that function's
+// own comment for the gold-derived row layout this reproduces. `headerTrs[ci]` is
+// already the traced {s,src} for column ci's flat (sub-column/single-tier) heading;
+// `headerGroups[gi].tr` is the traced {s,src} for the group's own primary heading
+// (translated once in traceTable's setup).
+function traceGroupedHeaderRows(headerTrs, headerGroups, actualWidths, gutter, w, overhangWidths = null) {
+  const colCount = actualWidths.length;
+  const groupOf = groupColumnMap(colCount, headerGroups);
+  const overhang = overhangWidths || Array(colCount).fill(0);
+  // BANA §11.4.3a overhang (Change 2) — traced mirror of the same helper in
+  // formatGroupedHeaderRows/padOverhang: append extra blank cells (null src) after a
+  // specific column's part, forcing exactFill false there.
+  const padPartOverhang = (part, ci) => (overhang[ci] ? { s: part.s + ' '.repeat(overhang[ci]), src: [...part.src, ...Array(overhang[ci]).fill(null)], exactFill: false } : part);
+
+  const ownWrapped = headerTrs.map((tr, ci) => wrapCellsSrc(tr.s, tr.src, actualWidths[ci], 0, 0));
+  // A group flagged `.overhang` stays UNWRAPPED, one line, at its own full width.
+  const groupWrapped = headerGroups.map((g) => (g.overhang ? { lines: [g.tr.s], srcs: [g.tr.src] } : wrapCellsSrc(g.tr.s, g.tr.src, groupSpanWidth(g, actualWidths, gutter), 0, 0)));
+
+  const primaryTierHeight = Math.max(1, ...groupWrapped.map((wc) => wc.lines.length));
+  const groupedCols = [...Array(colCount).keys()].filter((ci) => groupOf[ci] != null);
+  const subTierHeight = Math.max(1, ...groupedCols.map((ci) => ownWrapped[ci].lines.length));
+  const extra = Array(colCount).fill(0);
+  for (let ci = 0; ci < colCount; ci++) {
+    if (groupOf[ci] == null) extra[ci] = Math.max(0, ownWrapped[ci].lines.length - subTierHeight);
+  }
+  const maxExtra = Math.max(0, ...extra);
+
+  const out = [];
+  const slots = [];
+  for (let ci = 0; ci < colCount;) {
+    const gi = groupOf[ci];
+    if (gi != null) {
+      const g = headerGroups[gi];
+      slots.push({ width: groupSpanWidth(g, actualWidths, gutter) + (g.overhang ? overhang[g.to] : 0), groupIndex: gi });
+      ci = g.to + 1;
+    } else { slots.push({ width: actualWidths[ci] }); ci++; }
+  }
+  const padTr = (s, src, width) => ({ s: s + ' '.repeat(Math.max(0, width - s.length)), src: [...src, ...Array(Math.max(0, width - s.length)).fill(null)] });
+  const joinSlotLine = (parts) => {
+    let s = '', src = [];
+    for (let i = 0; i < parts.length; i++) {
+      s += parts[i].s; src.push(...parts[i].src);
+      if (i < parts.length - 1) { const g = colGutter(parts[i].exactFill, gutter); s += ' '.repeat(g); for (let k = 0; k < g; k++) src.push(null); }
+    }
+    return { s: s.slice(0, w), src: src.slice(0, w) };
+  };
+
+  for (let li = 0; li < primaryTierHeight; li++) {
+    const parts = slots.map((sl) => {
+      if (sl.groupIndex == null) return { s: ' '.repeat(sl.width), src: Array(sl.width).fill(null), exactFill: false };
+      const wc = groupWrapped[sl.groupIndex];
+      const lineS = wc.lines[li] || ''; const lineSrc = wc.srcs[li] || [];
+      return { ...padTr(lineS, lineSrc, sl.width), exactFill: lineS.length >= sl.width };
+    });
+    out.push(joinSlotLine(parts));
+  }
+  {
+    const parts = slots.map((sl) => {
+      if (sl.groupIndex == null) return { s: ' '.repeat(sl.width), src: Array(sl.width).fill(null), exactFill: false };
+      const dots = TABLE_GUIDE + '3'.repeat(Math.max(0, sl.width - 1));
+      return { s: dots, src: Array(dots.length).fill(null), exactFill: true };
+    });
+    out.push(joinSlotLine(parts));
+  }
+
+  for (let li = 0; li < maxExtra; li++) {
+    const parts = Array.from({ length: colCount }, (_, ci) => {
+      if (groupOf[ci] != null || extra[ci] === 0) return padPartOverhang({ s: ' '.repeat(actualWidths[ci]), src: Array(actualWidths[ci]).fill(null), exactFill: false }, ci);
+      const padTop = maxExtra - extra[ci];
+      const wc = ownWrapped[ci];
+      const idx = li - padTop;
+      const lineS = (idx >= 0 ? wc.lines[idx] : '') || '';
+      const lineSrc = (idx >= 0 ? wc.srcs[idx] : []) || [];
+      return padPartOverhang({ ...padTr(lineS, lineSrc, actualWidths[ci]), exactFill: lineS.length >= actualWidths[ci] }, ci);
+    });
+    out.push(joinSlotLine(parts));
+  }
+
+  const subTierLines = Array.from({ length: colCount }, (_, ci) => {
+    const wc = ownWrapped[ci];
+    if (groupOf[ci] != null) return wc;
+    const padTop = subTierHeight - wc.lines.length;
+    if (padTop > 0) return { lines: [...Array(padTop).fill(''), ...wc.lines], srcs: [...Array(padTop).fill([]), ...wc.srcs] };
+    const start = wc.lines.length - subTierHeight;
+    return { lines: wc.lines.slice(start), srcs: wc.srcs.slice(start) };
+  });
+  for (let li = 0; li < subTierHeight; li++) {
+    const parts = subTierLines.map((wc, ci) => {
+      const lineS = wc.lines[li] || ''; const lineSrc = wc.srcs[li] || [];
+      return padPartOverhang({ ...padTr(lineS, lineSrc, actualWidths[ci]), exactFill: lineS.length >= actualWidths[ci] }, ci);
+    });
+    out.push(joinSlotLine(parts));
+  }
+  out.push(tcDeco(tableSeparator(actualWidths, gutter, overhang).slice(0, w)));
+
+  return out;
+}
 function traceBlock(block, o, atStart, unit = 0) {
   if (!block || typeof block !== 'object') return [];
   const w = o.width;
@@ -1566,10 +2259,12 @@ function traceBlock(block, o, atStart, unit = 0) {
       const res = tcWrap(o, tcRun(o, text, null, unit, 0), w, block.continuation ? q.runover : q.first, q.runover);
       return quoteLines(res, q, block).map((x) => (x === '' ? tcBlank : x));
     }
+    const blocked = !!block.blocked;                     // mirror formatPara (F-39 / §1.9.3)
     const isBlock = o.paragraphStyle === 'block';
-    const first = (isBlock || block.continuation) ? 0 : 2;
+    const first = (blocked || isBlock || block.continuation) ? 0 : 2;
     const res = tcWrap(o, tcRun(o, text, null, unit, 0), w, first, 0);
-    if (isBlock && !block.continued) res.push(tcBlank);
+    if (blocked && !block.continuation) res.unshift(tcBlank);
+    else if (isBlock && !block.continued) res.push(tcBlank);
     return res;
   };
   switch (block.type) {
@@ -1588,7 +2283,7 @@ function traceBlock(block, o, atStart, unit = 0) {
         const tier = banaTier(L, o);                     // mirror formatHeading
         if (tier === 'cell5') out.push(tcBlank, ...tcWrap(o, plainTr(), w, 4, 4));
         else if (tier === 'cell7') out.push(tcBlank, ...tcWrap(o, plainTr(), w, 6, 6));
-        else out.push(tcBlank, ...tcCentredBlock(o, plainTr(), w, Math.max(1, w - 6)), tcBlank);
+        else out.push(tcBlank, ...tcCentredHeadingBlock(o, plainTr(), w, Math.max(1, w - 6)), tcBlank);
       } else {
         if (L === 1) {                                   // mirror formatHeading: no end marker at the document start
           if (atStart) out.push(...tcCentredBlock(o, plainTr(), w));
@@ -1610,10 +2305,12 @@ function traceBlock(block, o, atStart, unit = 0) {
           const res = tcWrapBody(o, tr, w, block.continuation ? q.runover : q.first, q.runover);
           return [...note, ...quoteLines(res, q, block).map((x) => (x === '' ? tcBlank : x))];
         }
+        const blocked = !!block.blocked;                 // mirror formatSegmentedPara (F-39 / §1.9.3)
         const isBlock = o.paragraphStyle === 'block';
-        const first = (isBlock || block.continuation) ? 0 : 2;   // a paragraph resumed after a page turn: cell 1
+        const first = (blocked || isBlock || block.continuation) ? 0 : 2;   // a paragraph resumed after a page turn: cell 1
         const res = tcWrapBody(o, tr, w, first, 0);
-        if (isBlock && !block.continued) res.push(tcBlank);
+        if (blocked && !block.continuation) res.unshift(tcBlank);
+        else if (isBlock && !block.continued) res.push(tcBlank);
         return [...note, ...res];
       }
       return paraLike(block);
@@ -1766,8 +2463,17 @@ function traceBlock(block, o, atStart, unit = 0) {
       const kids = Array.isArray(block.blocks) ? block.blocks : [];
       const hasTitleHeading = !!rawTitle && kids.some((cb) => cb && typeof cb === 'object' && cb.type === 'heading' && String(cb.text ?? '').trim() === rawTitle);
       if (rawTitle && !hasTitleHeading) add(traceBlock({ type: 'heading', level: 2, text: rawTitle }, inner, false, 0));
-      if (kids.some((cb) => cb && typeof cb === 'object')) {
-        kids.forEach((cb, u) => {
+      // BANA §11.3.1b/c/d — mirror formatBox's before-box title hoist (see there for the rule).
+      let hoistedTitle = [];
+      const renderKids = kids.map((cb) => {
+        if (!hoistedTitle.length && cb && typeof cb === 'object' && cb.type === 'table' && cb.title && cb.titlePosition === 'before-box') {
+          hoistedTitle = traceTableTitleLines(cb.title, inner, w);
+          return { ...cb, title: null };
+        }
+        return cb;
+      });
+      if (renderKids.some((cb) => cb && typeof cb === 'object')) {
+        renderKids.forEach((cb, u) => {
           if (!cb || typeof cb !== 'object') return;
           add(traceBlock(cb, inner, false, u));
         });
@@ -1776,7 +2482,7 @@ function traceBlock(block, o, atStart, unit = 0) {
         add(tcWrap(o, { s: braille, src: inputPos.map((p) => ({ u: 0, c: p })) }, w, 0, 2));
       }
       while (body.length && body[body.length - 1].s === '') body.pop();
-      return [tcBlank, tcDeco(top), ...body, tcDeco(bottom), tcBlank].map((x) => tcRstrip(x));
+      return [tcBlank, ...hoistedTitle, tcDeco(top), ...body, tcDeco(bottom), tcBlank].map((x) => tcRstrip(x));
     }
     case 'pagenum': {
       const p = String(block.page ?? block.text ?? '').trim();
@@ -1865,14 +2571,37 @@ function traceTable(block, o) {
     if (numPlans[c]) colWidths[c] = Math.max(colWidths[c], numPlans[c].width);
   }
 
-  const gutter = 2;
-  const totalSpatialWidth = colWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * gutter;
+  // mirror computeTableColumns: BANA §11.4.3's complex (two-tier) header, F-12 — the
+  // group's own text is translated once here (unit -1-groupIndex: a group's primary
+  // heading has no single flat-headers cell of its own to trace, matching the
+  // existing convention for a table's title/heading, traceTableTitleLines above).
+  const rawHeaderGroups = Array.isArray(block.headerGroups) ? block.headerGroups : [];
+  const groupTrRuns = rawHeaderGroups.map((g, gi) => tcRun(o, String((g && g.text) ?? ''), null, -1 - gi, 0));
+  const headerGroups = rawHeaderGroups
+    .map((g, gi) => ({ text: groupTrRuns[gi].s, tr: groupTrRuns[gi], from: Math.max(0, Math.trunc(Number(g && g.from))), to: Math.min(colCount - 1, Math.trunc(Number(g && g.to))) }))
+    .filter((g) => Number.isFinite(g.from) && Number.isFinite(g.to) && g.to >= g.from && g.text);
 
-  const title = block.title || block.caption;
-  const traceTitle = () => {
-    if (!title || !String(title).trim()) return [];
-    return tcCentredBlock(o, tcRun(o, String(title).trim(), null, 0, 0), w);
-  };
+  const gutter = 2;
+  // mirror computeTableColumns: BANA 11.4.3a overhang (Change 2) — see that function's
+  // own comment for the rule and the two-branch (overhang / wrap) reasoning.
+  const overhangWidths = Array(colCount).fill(0);
+  for (const g of headerGroups) {
+    const spanWidth = colWidths.slice(g.from, g.to + 1).reduce((a, b) => a + b, 0) + gutter * (g.to - g.from);
+    if (g.text.length <= spanWidth) continue;
+    const overhangExtra = g.text.length - spanWidth;
+    const currentTotal = colWidths.reduce((a, b) => a + b, 0) + gutter * (colCount - 1) + overhangWidths.reduce((a, b) => a + b, 0);
+    if (currentTotal + overhangExtra <= w) {
+      overhangWidths[g.to] += overhangExtra;
+      g.overhang = true;
+    } else {
+      const need = widestWord(g.text) - spanWidth;
+      if (need > 0) colWidths[g.to] += need;
+    }
+  }
+  const totalSpatialWidth = colWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * gutter + overhangWidths.reduce((a, b) => a + b, 0);
+
+  const title = block.title;                      // mirror formatTable: never block.caption (F-4)
+  const traceTitle = () => traceTableTitleLines(title, o, w);
   const traceTn = (text, unit) => {                         // @.< text @.> with the text traced
     const openDeco = tcDeco(TN_OPEN), closeDeco = tcDeco(TN_CLOSE);
     const run = unit == null ? tcDeco(o.translate(text).trim()) : tcRun(o, text.trim(), null, unit, 0);
@@ -1941,6 +2670,87 @@ function traceTable(block, o) {
     return out;
   };
 
+  // Traced mirror of renderVerticalSection (BANA §11.14 Wide Tables: Vertical Division,
+  // T4): the same header/separator (blank under a column without a heading, 11.4.2c) and
+  // data-row rendering, unit-tracked, restricted to one section's own columns (column 0,
+  // the row heading, first).
+  const traceVerticalSection = (headerTrsSub, rowTrsSub, widths, numPlansSub) => {
+    const colCountSub = widths.length;
+    const headerStrs = headerTrsSub.map((h) => h.s);
+    const out = [];
+    const traceRow = (cellTrList, ri) => {
+      const isData = ri != null;
+      const wrappedCells = cellTrList.map((cTr, ci) => wrapCellsSrc(cTr.s, cTr.src, widths[ci], 0, isData ? 2 : 0));
+      const maxLines = Math.max(1, ...wrappedCells.map((wc) => wc.lines.length));
+      const rowOut = [];
+      for (let li = 0; li < maxLines; li++) {
+        let lineStr = '';
+        const lineSrc = [];
+        for (let ci = 0; ci < colCountSub; ci++) {
+          const wc = wrappedCells[ci];
+          const cellLine = wc.lines[li] || '';
+          const cellSrc = wc.srcs[li] || [];
+          const targetW = widths[ci];
+          let exactFill;
+          if (isData) {
+            const { pre, post } = tableCellFill(cellLine, targetW, { firstLine: li === 0, lastCol: ci === colCountSub - 1, numPad: numPlansSub[ci] ? numPlansSub[ci].pads[ri] : -1 });
+            lineStr += pre + cellLine + post;
+            for (let k = 0; k < pre.length; k++) lineSrc.push(null);
+            lineSrc.push(...cellSrc);
+            for (let k = 0; k < post.length; k++) lineSrc.push(null);
+            const cell = pre + cellLine + post;
+            exactFill = cellLine !== '' && !cell.endsWith(' ');
+          } else {
+            lineStr += cellLine.padEnd(targetW, ' ');
+            lineSrc.push(...cellSrc);
+            for (let k = cellLine.length; k < targetW; k++) lineSrc.push(null);
+            exactFill = cellLine.length >= targetW;
+          }
+          if (ci < colCountSub - 1) {
+            const g = colGutter(exactFill, gutter);
+            lineStr += ' '.repeat(g);
+            for (let k = 0; k < g; k++) lineSrc.push(null);
+          }
+        }
+        rowOut.push({ s: lineStr.slice(0, w), src: lineSrc.slice(0, w) });
+      }
+      return rowOut;
+    };
+    if (headerStrs.some((h) => h.trim())) {
+      out.push(...traceRow(headerTrsSub, null));
+      const sepCols = widths.map((cw, ci) => (headerStrs[ci].trim() ? (TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1))) : ' '.repeat(cw)));
+      const sepExactFill = widths.map((_, ci) => !!headerStrs[ci].trim());
+      out.push(tcDeco(joinTableRow(sepCols, sepExactFill, gutter).slice(0, w)));
+    }
+    rowTrsSub.forEach((r, ri) => out.push(...traceRow(r, ri)));
+    return out;
+  };
+  const traceVertical = (sections) => {
+    const out = [tcBlank];
+    const titleLines = traceTitle();
+    if (titleLines.length) out.push(...titleLines, tcBlank);
+    if (block.tabletn || block.note) {
+      const tnText = block.tabletn || block.note;
+      const openDeco = tcDeco(TN_OPEN);
+      const closeDeco = tcDeco(TN_CLOSE);
+      const tnRun = tcRun(o, tnText.trim(), null, 0, 0);
+      out.push(...tcWrap(o, { s: openDeco.s + tnRun.s + closeDeco.s, src: [...openDeco.src, ...tnRun.src, ...closeDeco.src] }, w, 6, 4), tcBlank);
+    }
+    out.push(...tcWrap(o, tcDeco(TN_OPEN + o.translate(verticalDivisionTn(sections.length)).trim() + TN_CLOSE), w, 6, 4), tcBlank);
+    sections.forEach((cols, si) => {
+      const allCols = [0, ...cols];
+      out.push(...traceVerticalSection(
+        allCols.map((ci) => headerTrs[ci]),
+        rowTrs.map((r) => allCols.map((ci) => r[ci])),
+        allCols.map((ci) => colWidths[ci]),
+        allCols.map((ci) => numPlans[ci]),
+      ));
+      if (si < sections.length - 1) out.push(tcBlank);
+    });
+    out.push(tcBlank);
+    return out;
+  };
+
   const traceColumnar = () => {
     const actualWidths = fitColumnWidths(colWidths, w, gutter, columnMinWidths(headers, rows, colCount));
     if (!actualWidths) return traceFallback();
@@ -1979,21 +2789,35 @@ function traceTable(block, o) {
           const cellSrc = (wc.srcs[li] || []);
           const targetW = actualWidths[ci];
 
+          let exactFill;
           if (isData) {
             const { pre, post } = tableCellFill(cellLine, targetW, { firstLine: li === 0, lastCol: ci === colCount - 1, numPad: plans[ci] ? plans[ci].pads[ri] : -1 });
             lineStr += pre + cellLine + post;
             for (let k = 0; k < pre.length; k++) lineSrc.push(null);
             lineSrc.push(...cellSrc);
             for (let k = 0; k < post.length; k++) lineSrc.push(null);
+            const cell = pre + cellLine + post;
+            exactFill = cellLine !== '' && !cell.endsWith(' ');   // F-10/Q-7 — mirror formatColumnar
           } else {
             lineStr += cellLine.padEnd(targetW, ' ');
             lineSrc.push(...cellSrc);
             for (let k = cellLine.length; k < targetW; k++) lineSrc.push(null);
+            exactFill = cellLine.length >= targetW;
+          }
+
+          // BANA §11.4.3a overhang (Change 2) — mirror formatColumnar's padOverhang: a
+          // no-op except on the specific column a group's heading overhangs past
+          // (overhangWidths is all zero for a table with no headerGroups).
+          if (overhangWidths[ci]) {
+            lineStr += ' '.repeat(overhangWidths[ci]);
+            for (let k = 0; k < overhangWidths[ci]; k++) lineSrc.push(null);
+            exactFill = false;
           }
 
           if (ci < colCount - 1) {
-            lineStr += ' '.repeat(gutter);
-            for (let g = 0; g < gutter; g++) lineSrc.push(null);
+            const g = colGutter(exactFill, gutter);
+            lineStr += ' '.repeat(g);
+            for (let k = 0; k < g; k++) lineSrc.push(null);
           }
         }
         rowOut.push({
@@ -2004,7 +2828,9 @@ function traceTable(block, o) {
       return { lines: rowOut, maxLines };
     };
 
-    if (headers.some((h) => h.trim())) {
+    if (headerGroups.length) {
+      out.push(...traceGroupedHeaderRows(headerTrs, headerGroups, actualWidths, gutter, w, overhangWidths));
+    } else if (headers.some((h) => h.trim())) {
       const hdrFormatted = formatTracedRow(headerTrs);
       out.push(...hdrFormatted.lines);
 
@@ -2012,13 +2838,9 @@ function traceTable(block, o) {
     }
 
     const rowFormatted = rowTrs.map((r, ri) => formatTracedRow(r, ri));
-    const hasMultiLine = rowFormatted.some((rf) => rf.maxLines > 1);
 
-    rowFormatted.forEach((rf, ri) => {
+    rowFormatted.forEach((rf) => {
       out.push(...rf.lines);
-      if (hasMultiLine && ri < rowFormatted.length - 1) {
-        out.push(tcBlank);
-      }
     });
 
     out.push(tcBlank);
@@ -2027,8 +2849,27 @@ function traceTable(block, o) {
 
   if (mode === 'listed') return traceListed();
   if (mode === 'paragraph' || mode === 'table-paragraph') return traceParagraphForm();
+  // T4 — mirror resolveTableLayout: an explicit 'vertical' format divides the table's
+  // data columns into sections (BANA §11.14); a two-tier header (headerGroups, F-12) is
+  // out of scope (same reasoning as resolveTableLayout's tryVertical) and falls back.
+  if (mode === 'vertical') {
+    const sections = headerGroups.length ? null : computeVerticalSections(colWidths, gutter, w, colCount);
+    return sections ? traceVertical(sections) : traceFallback();
+  }
   if (mode === 'columnar') return traceColumnar();
-  if (totalSpatialWidth <= w) return traceColumnar();
+  // T9 — mirror resolveTableLayout: 'auto' always tries the squeeze first (never gated
+  // on the unsqueezed natural width, as before this fix) and accepts columnar only when
+  // it fits AND every entry, headers included, stays within two lines (BANA §11.6.1).
+  // traceColumnar recomputes this identical fitColumnWidths call, so this pre-check
+  // can never disagree with what it actually renders.
+  const autoWidths = fitColumnWidths(colWidths, w, gutter, columnMinWidths(headers, rows, colCount));
+  if (autoWidths && fitsTwoLines(headers, rows, autoWidths)) return traceColumnar();
+  // T4 — mirror resolveTableLayout: try vertical division before falling back to
+  // Listed/paragraph, which stays the last resort.
+  if (!headerGroups.length) {
+    const sections = computeVerticalSections(colWidths, gutter, w, colCount);
+    if (sections) return traceVertical(sections);
+  }
   return traceFallback();
 }
 

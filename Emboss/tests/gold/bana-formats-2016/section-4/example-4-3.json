@@ -1,0 +1,59 @@
+{
+  "id": "example-4-3",
+  "title": "Connected Chapter Number and Title Headings",
+  "pdfPages": [
+    108
+  ],
+  "textLines": [
+    3215,
+    3225
+  ],
+  "illustrates": {
+    "rule": "4.3.3",
+    "quote": "Do not insert a blank line between connected headings."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Theme 1",
+        "features": "Large decorative drop-cap chapter number (\"Theme\" in ornamental red cursive, \"1\" in a plain numeral); an underline rule extends right to the title heading."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Transitions",
+        "features": "Bold blue serif chapter title, printed to the right of/below the chapter number, on the same heading-line group."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Transitions are changes\u2014passages from one place to another,",
+        "features": "Italic lead-in body text, cut off at the bottom edge of the image."
+      }
+    ],
+    "notes": "Connected chapter-number and chapter-title headings with no blank line between them, per rule 4.3.3.",
+    "surroundingText": null,
+    "printFeatures": "Chapter-opener page furniture: decorative drop-cap chapter number, bold serif chapter title beside it, italic lead-in paragraph below."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "                ,!me #a",
+      "               ,transi;ns",
+      "",
+      "  ,transi;ns >e *anges,-passages f \"o",
+      "place to ano!r1"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 centered heading \"Theme 1\"; line 3 centered heading \"Transitions\" directly beneath with no blank line, per 4.3.3; line 4 blank; lines 5-6 the italic lead-in sentence as an ordinary paragraph, cut off."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. Both `print.blocks[0].level` and `[1].level` resolved to 1 (centered): line 2's indent 16 and line 3's indent 15 each match (40-len)/2 for their own text exactly -- confirmed directly, not assumed from either run's prose. During model-building verification (node Emboss/scripts/gold-run.mjs --section section-4), two print.blocks text corrections were needed and made: the paragraph's hyphen needed to be a real em dash (\u201cchanges\u2014passages\u201d, which UEB renders with a comma-hyphen indicator matching the gold braille) and the sentence needed to continue to \u201cplace to another,\u201d (comma, not a period -- the source is cut off mid-clause, not at a sentence end) to reproduce the gold braille's own wrapping exactly. With both corrections, example-4-3 is a byte-for-byte MATCH."
+}

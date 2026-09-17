@@ -1,0 +1,110 @@
+{
+  "id": "sample-11-11",
+  "title": "Blank Column Entries",
+  "pdfPages": [
+    318
+  ],
+  "textLines": [
+    9453,
+    9481
+  ],
+  "illustrates": {
+    "rule": "11.6.4",
+    "quote": "Use guide dots across the width of a column to indicate a blank space or a blank to be filled in. Explain the series of guide dots in a transcriber's note. (See ... Sample 11-11: Blank Column Entries on page 11-36.)"
+  },
+  "print": {
+    "caption": "Table 13 / Trends in Availability of Drugs by 12th Graders / Percentage saying “fairly easy” or “very easy” to get",
+    "headers": [
+      [
+        "",
+        "1986",
+        "1987",
+        "1988",
+        "1989"
+      ]
+    ],
+    "rows": [
+      [
+        "Marijuana",
+        "85.2",
+        "84.8",
+        "85.0",
+        "84.3"
+      ],
+      [
+        "Amy/butyl nitrites",
+        "",
+        "23.9",
+        "25.9",
+        "26.8"
+      ],
+      [
+        "LSD",
+        "28.5",
+        "31.4",
+        "33.3",
+        "38.3"
+      ],
+      [
+        "Some other hallucinogen",
+        "24.9",
+        "25.0",
+        "26.2",
+        "28.2"
+      ],
+      [
+        "PCP",
+        "",
+        "22.8",
+        "24.9",
+        "28.9"
+      ],
+      [
+        "Ecstasy (MDMA)",
+        "",
+        "",
+        "",
+        "21.7"
+      ]
+    ],
+    "notes": "Several cells are blank in print because that survey question was not asked/reported in earlier years (e.g. no 1986 data at all for Amy/butyl nitrites, PCP, or Ecstasy; no 1986-1988 data for Ecstasy).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; two-line bold centered title above the box, italic subtitle line (\"Percentage saying...\") beneath the title; header row (years) bold with ruled line beneath; row headings left-aligned, some wrapping to two lines (\"Amy/butyl nitrites\", \"Some other hallucinogen\", \"Ecstasy (MDMA)\")."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777   #,-",
+      "               ,table #ac",
+      "        ,tr5ds 9 ,availabil;y (",
+      "        ,drugs by #abth ,grad]s",
+      "",
+      "  ,p]c5tage say+ 8fairly easy0 or 8v",
+      "easy0 to get",
+      "",
+      "      @.<,a s]ies ( dot #es acr ! wid? (",
+      "    a column 9dicates a blank space4@.>",
+      "",
+      "              #aihf #aihg #aihh #aihi",
+      "              \"3333 \"3333 \"3333 \"3333",
+      ",m>ijuana \"\" #he4b #hd4h #he4j #hd4c",
+      ",amy_/butyl",
+      "  nitrites    \"\"\"\"\" #bc4i #be4i #bf4h",
+      ",,lsd \"\"\"\"\"\" #bh4e #ca4d #cc4c #ch4c",
+      ",\"s o!r",
+      "  halluc9og5 #bd4i #be4j #bf4b #bh4b",
+      ",,pcp \"\"\"\"\"\" \"\"\"\"\" #bb4h #bd4i #bh4i",
+      ",ec/asy",
+      "  \"<,,mdma\"> \"\"\"\"\" \"\"\"\"\" \"\"\"\"\" #ba4g",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 carries the transcriber's-note continuation marker '#,-' at the right margin of the top box line. A transcriber's note (lines 9-10) explains: \"A series of dot #es acr [across] a width [of a] column indicates a blank space.\" Each blank print cell is rendered as a run of dot-5 guide dots (shaded grey in the PDF sample image) across that column's width, e.g. the 1986 cells for Amy/butyl nitrites, PCP, and Ecstasy, and the 1986-1988 cells for Ecstasy."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers' first cell resolved to '' (blank above the drug-name row headings in print, confirmed against the PDF image, p. 318), not a fabricated '(drug)' placeholder."
+}

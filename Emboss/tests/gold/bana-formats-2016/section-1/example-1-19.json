@@ -1,0 +1,44 @@
+{
+  "id": "example-1-19",
+  "title": "Contraction Not Used with Accented Letter",
+  "pdfPages": [
+    35
+  ],
+  "textLines": [
+    1215,
+    1220
+  ],
+  "illustrates": {
+    "rule": "1.16.3",
+    "quote": "Foreign language words or phrases within an English language paragraph are contracted. Use modified letter indicators to represent accented letters. If a modification applies to a letter that would be part of a contraction, do not use the contraction. Use UEB symbols for inverted punctuation."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The word wooded in Spanish is leñera.",
+        "continuation": true,
+        "features": "Single sentence; the foreign (Spanish) word 'leñera' (with accented/modified letter ñ) is italicised in the print original."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! ^w = wood%$ 9 ,spani% is le^]n]a4"
+    ],
+    "pageBreaks": [],
+    "notes": "One line, verbatim, no line number shown. Because the accented letter n-with-tilde falls where the 'er' contraction would otherwise span it (le-ñ-era), the contraction is NOT used around it: the word is spelled 'le^]n]a' with the accent-modifier letter indicator on the n and ordinary letters either side, per the second and third sentences of 1.16.3."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording; same F-68 rationale as example-1-18."
+}

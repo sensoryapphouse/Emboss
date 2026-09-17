@@ -1,0 +1,92 @@
+{
+  "id": "sample-13-06",
+  "title": "Sample 13-6: Embedded Punctuation in an Uncontracted Poem",
+  "pdfPages": [
+    373
+  ],
+  "textLines": [
+    10814,
+    10827
+  ],
+  "illustrates": {
+    "rule": "13.6.4 cross-reference",
+    "quote": "Insert a transcriber’s note to explain the use of uncontracted braille. Sample: This poem has unusual letter and punctuation combinations. Braille is uncontracted so punctuation can be identified easily. (See Sample 13-6: Embedded Punctuation in an Uncontracted Poem on page 13-20.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Excerpt from e.e. cummings's \"she being Brand\", with unusual embedded punctuation inside single run-together words (e.g. 'tremB\\n-ling', 'a:dead.', ';Still)'), attributed at the end.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "brought allofher tremB",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "-ling",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "to a:dead.",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "stand-",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": ";Still)",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "from she being Brand, by e. e. cummings",
+        "features": "Italic poem-title-plus-attribution line, right-indented under the excerpt."
+      }
+    ],
+    "notes": "Picture on PDF p.373; capital letters and punctuation are embedded inside otherwise-lowercase run-together words (e.g. capital 'B' mid-word in 'tremB'), which is what makes uncontracted (grade 1) braille necessary per rule 13.6.4.a-b.",
+    "surroundingText": null,
+    "printFeatures": "Plain body-text poem; italic title/attribution line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,? poem has unusual lr &    #.-",
+      "    punctua;n comb9a;ns4 ,brl is",
+      "    uncontract$ s punctua;n c 2 id5tifi$",
+      "    easily4@.>",
+      "",
+      ";;;brought allofher trem,b",
+      "-ling",
+      "to a3dead4",
+      "",
+      "stand-",
+      "2,still\">;'",
+      "    f .7%e 2+ ,br&1.' by ;e4 ;e4 cumm+s",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10814-10826, after stripping a 5-char line-number field (2-digit max line number 13, +3=5) and converting U+2800. Lines 1-4 are this sample's own transcriber's note, inside a grade-1 passage, per rule 13.6.4.b. Lines 6-11 are the poem itself, opened with a grade-1 passage indicator (';;;') per rule 13.6.4.a and closed later in the same passage; punctuation such as the colon and semicolon appear literally (uncontracted) rather than as UEB contractions, matching this sample's title.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

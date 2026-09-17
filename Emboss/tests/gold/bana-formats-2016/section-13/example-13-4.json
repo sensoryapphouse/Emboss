@@ -1,0 +1,75 @@
+{
+  "id": "example-13-4",
+  "title": "Example 13-4: Poem with Deep Indention",
+  "pdfPages": [
+    358
+  ],
+  "textLines": [
+    10325,
+    10334
+  ],
+  "illustrates": {
+    "rule": "13.3.1d",
+    "quote": "Use normal poetry indention when print is deeply indented."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Untitled excerpt (from a translation of Homer's Iliad); print deeply indents the 3rd line (\"So he shouted\") far to the right, well beyond an ordinary sub-entry indent -- the very deep print indention this example's title refers to.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "if the best of immortals really drives me on,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Hera’s lord whose thunder drums the sky!”",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "So he shouted",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "Lashing the rage and fighting-fury in every Trojan.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.358; \"So he shouted\" is printed far to the right of the print column (well past a normal sub-entry tab stop), illustrating the deep print indention that rule 13.3.1.d says braille should NOT reproduce literally.",
+    "surroundingText": null,
+    "printFeatures": "Boxed inline example; plain body-text serif font."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "if ! be/ ( immortals r1lly drives me on1",
+      ",h]a's \"l ^: ?\"u drums ! sky60",
+      "  ,s he %\\t$",
+      ",la%+ ! rage & fi<t+-fury 9 e ,trojan4"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10330-10334, after stripping a 9-space fixed left margin shared by every line of this boxed example (measured as the minimum leading-space run; plain ASCII padding, not braille content). Line 1 is a fully blank 40-cell braille line (all-blank cells, U+2800×40 before conversion) -- a genuine blank line, not decoration; consistent with 13.3.1.a's 'leave a blank line before...a poem'. Per rule 13.3.1.d, the deeply-indented print line 'So he shouted' is NOT given deep braille indention: it instead gets only a normal 2-cell (cell-3) runover indent, i.e. it is treated as a continuation/runover of the previous poetic line rather than a new, deeply indented one.",
+    "variants": []
+  },
+  "uncertain": [
+    "The print poem's source/author is not named in this inline example; identified only as a Homer/Iliad-style translation excerpt from its content and register, not confirmed against a citation in the source."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines identical between runs except index 0: both runs agree the source shows a full 40-cell blank braille row at this position (.txt line 10330, confirmed: 40 literal U+2800 characters after the 9-space box margin -- a genuine content row, part of the excerpt, not page filler), but run A rendered it as 40 literal ASCII spaces while run B rendered it as \"\". Resolved in favour of run B's \"\": every other blank line in the entire existing gold corpus (304 instances checked across sections 1/4/7/8/9/11/16 and UKAAF appendix-e/g) is represented as \"\", never as a non-empty string of spaces -- run A's own stated method (\"trailing spaces stripped\") already implies \"\" here too; keeping the padded form would be the only non-\"\" blank line in the whole repository's gold data for no evidenced reason. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. CORRECTION during buildModel13 integration: print.blocks poem line 'So he shouted' had indent:3 (run A) vs indent:1 (run B) -- an A/B disagreement not caught by the braille.lines-only diff. Resolved in favour of run B (1): the gold braille (.txt line 10333) measures exactly 2 leading blank cells for this line -- nestedMargins's first=level*2 gives 2 only for level 1, not level 3 (which would be 6). Rule 13.3.1d itself confirms this reading: 'Use NORMAL poetry indention when print is deeply indented' -- the deep PRINT indentation this example's title refers to is deliberately normalized down to one ordinary sub-level (cell 3) in braille, not reproduced at its own visual depth."
+}

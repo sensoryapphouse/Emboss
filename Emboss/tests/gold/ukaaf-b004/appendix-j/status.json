@@ -1,0 +1,10 @@
+{
+  "b004-j-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! ,{L & ! ,PUSSYCAT W5T TO SEA\" vs actual \"  ,EXAMPLE3\"."
+  },
+  "b004-j-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"  ,! ,{L & ! ,PUSSYCAT W5T TO SEA_ ,9\" vs actual \"  ,EXAMPLE3\". line count differs by +4 (expected 9, actual 13)."
+  }
+}

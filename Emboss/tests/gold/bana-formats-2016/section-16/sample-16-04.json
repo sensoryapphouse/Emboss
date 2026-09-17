@@ -1,0 +1,78 @@
+{
+  "id": "sample-16-04",
+  "title": "Two Marked Notes on an Unnumbered Print Line",
+  "pdfPages": [
+    449
+  ],
+  "textLines": [
+    12983,
+    13000
+  ],
+  "illustrates": {
+    "rule": "16.7.1",
+    "quote": "Treat multiple-marked or unmarked reference points on the same line as separate references. (See Sample 16-4: Two Marked Notes on an Unnumbered Print Line on page 16-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Hath in the skirts of Norway here and there Shark'd up[ref:°] a list of lawless resolutes,[ref:°] For food and diet,[ref:°] to some enterprise That hath a stomach in't; which is no other …",
+        "features": "Play-script passage, unnumbered in print; three hollow-dot reference marks after 'up', 'resolutes,', and 'diet,' on two different lines.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "Shark'd up: Got together in haphazard fashion; resolutes: Desperadoes.\nfood and diet: No pay but their keep.",
+        "features": "Two bold-keyed glossary notes below a short rule; the first note bundles two of the three marked terms ('Shark'd up' and 'resolutes') together on one note line.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "°",
+        "placement": "footnote",
+        "text": "Shark'd up: Got together in haphazard fashion."
+      },
+      {
+        "ref": "°",
+        "placement": "footnote",
+        "text": "resolutes: Desperadoes."
+      },
+      {
+        "ref": "°",
+        "placement": "footnote",
+        "text": "food and diet: No pay but their keep."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.7.1 (via Example 16-10), illustrating two separately marked reference points ('Shark'd up' and 'resolutes') falling on the very same unnumbered print line, each still treated as its own reference.",
+    "printFeatures": "Boxed screenshot of an unnumbered play-script passage with three hollow-dot marks and an ellipsis line, then two glossary notes below a rule."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",ha? 9 ! skirts ( ,norway \"h & \"!    #,-",
+      ",%>k'd up;9\"0 a li/ ( law.s",
+      "  resolutes1;9\"0",
+      ",= food & diet1;9\"0 to \"s 5t]prise",
+      ",t ha? a /oma* 9't2 : is no o!r",
+      "444",
+      "\"333333",
+      "^1,%>k'd ^1up ,got tgr 9 haphaz>d",
+      "  fa%ion2",
+      "^1resolutes ,desp]adoes4",
+      "^7food & diet^' ,no pay b _! keep4",
+      "------------------------------------#bii",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 13, two digits, +3). The two marked terms on the same braille line ('Shark'd up' and 'resolutes') each carry their own hollow-dot mark (;9\"0) as separate reference points, per rule 16.7.1."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988 and 12999 (field width 5, digits(13)+3) are each exactly 40 characters, the first right-justified to '#,-', the second a dashed page-change rule ending '#bii'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

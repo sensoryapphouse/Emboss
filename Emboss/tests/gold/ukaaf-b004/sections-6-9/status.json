@@ -1,0 +1,30 @@
+{
+  "b004-6-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "b004-6-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"#BE              COMMON NATIVE TREES                               #DH\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"25                      Common Native Trees                             48\""
+  },
+  "b004-7-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "b004-8-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "b004-8-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",ONCE !Y _H SOLV$ T PROBLEM1 !\" vs actual \"  ,ONCE !Y _H SOLV$ T PROBLEM1 ! NEXT\". line count differs by -1 (expected 6, actual 5)."
+  },
+  "b004-9-1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "b004-9-2": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

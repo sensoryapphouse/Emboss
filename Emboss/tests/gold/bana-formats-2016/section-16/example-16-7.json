@@ -1,0 +1,67 @@
+{
+  "id": "example-16-7",
+  "title": "Note Placement",
+  "pdfPages": [
+    434
+  ],
+  "textLines": [
+    12519,
+    12533
+  ],
+  "illustrates": {
+    "rule": "16.5.1.h",
+    "quote": "Do not insert a blank line between a note separation line and a title or heading. (See Sample 16-2: Notes with Headings on page 16-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "“I know—that’s what I’m saying—the old stories about the ka’tsina spirit[ref:†] and Yellow Woman can’t mean us.”",
+        "features": "Quoted dialogue, with a dagger reference mark after \"ka'tsina spirit\"; an ellipsis and a short rule line follow it, then a blank gap before the note.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:†]ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians.",
+        "features": "Set below a short horizontal rule at the foot of the print page; \"ka'tsina spirit\" is bold, the dagger mark precedes it.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "†",
+        "placement": "footnote",
+        "text": "ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians."
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.5.1a, showing the note separation line placed between the passage and the foot-of-page note, followed by a cross-reference to Sample 16-3: Sequentially Numbered Notes on page 16-20.",
+    "printFeatures": "Boxed screenshot: quoted dialogue with an ellipsis and short rule beneath it, a gap, then a horizontal rule and the dagger-marked footnote below."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  8,i \"k,-t's :at ,i'm say+,-! old",
+      "/ories ab ! ka'ts9a _s@,? & ,yell[",
+      ",woman c't m1n u40",
+      "  444",
+      "\"333333",
+      "@,?^1ka'ts9a ^1_s3 ,a m.ta9 _s ( !",
+      "  ,laguna ,pueblo ,9dians4",
+      "",
+      "------------------------------------#gbc",
+      "  ,text"
+    ],
+    "pageBreaks": [],
+    "notes": "The quoted passage (opening/closing quotation marks 8...0, 2-cell indent for the quote) is followed by an ellipsis line (444) then the seven-cell note separation line (\"333333, i.e. dots 2-5-6 then six cells of dots 2-5). The footnote itself follows with the dagger mark and its 2-cell runover indent. Line 8 is a line of blank braille cells (U+2800 in the source, recorded here as an empty string) sitting between the note and a second, unrelated dashed rule (a page-layout/continuation rule, ending in the reference code #gbc) that precedes the placeholder word \",text\" -- this second rule and placeholder are the guide's own boundary marking for the illustration box, not part of the worked note example proper."
+  },
+  "uncertain": [
+    "Lines 8-10 (the blank-cell line, the long dashed rule ending #gbc, and \",text\") sit inside the same source line range as the worked example but read as the guide's own page-boundary graphic rather than further note content; included verbatim since the task requires transcribing the range exactly as given, but flagged here as likely not part of the substantive note-placement illustration itself."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12531 is a full 40-cell blank line and line 12532 (the page-change dashed rule ending '#gbc') is exactly 40 characters, with no left padding on this item at all. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

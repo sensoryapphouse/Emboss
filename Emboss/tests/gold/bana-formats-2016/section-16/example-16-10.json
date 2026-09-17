@@ -1,0 +1,67 @@
+{
+  "id": "example-16-10",
+  "title": "Two Unmarked Notes on a Numbered Print Line",
+  "pdfPages": [
+    436
+  ],
+  "textLines": [
+    12591,
+    12602
+  ],
+  "illustrates": {
+    "rule": "16.7.1",
+    "quote": "Treat multiple-marked or unmarked reference points on the same line as separate references. (See Sample 16-4: Two Marked Notes on an Unnumbered Print Line on page 16-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Brutus: Romans, countrymen, and lovers! Hear me for my cause, and be silent, that you may hear: believe me.",
+        "features": "Play-script dialogue; print line number \"15\" set flush right beside the first line.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "14 Romans: citizens of Rome\n14 countrymen: Italians",
+        "features": "Two separate glossary-style notes below the dialogue, both keyed to print line 14 (an unnumbered dialogue line above the one bearing \"15\"), with no print symbol distinguishing \"Romans\" from \"countrymen\" on that line.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "14",
+        "placement": "footnote",
+        "text": "Romans: citizens of Rome"
+      },
+      {
+        "ref": "14",
+        "placement": "footnote",
+        "text": "countrymen: Italians"
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.7.1, showing two unmarked notes referencing two different words on the very same (unnumbered) print line, each treated as a separate reference.",
+    "printFeatures": "Boxed screenshot of a play-script page: dialogue with print line number \"15\", and two line-14-keyed glossary notes stacked beneath it."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      ",brutus3 ,romans1 @.<note@.>                           #ad",
+      "  c.trym51 @.<note@.> & lov]s6 ,he>",
+      "  me = my   cause1 & 2 sil5t1 t y                      #ae",
+      "  may he>3 2lieve me4",
+      "\"333333",
+      "#ad ,romans3 citiz5s ( ,rome",
+      "#ad c.trym53 ,italians"
+    ],
+    "pageBreaks": [],
+    "notes": "Both \"Romans\" and \"countrymen\" carry an embedded placeholder transcriber's note (@.<note@.>) as separate reference points on the same braille line, per rule 16.7.1, even though print shows no distinguishing symbol at either point. Both note entries after the separation line begin with the same print line number (#ad = 14), since both notes key to that same print line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A asserted 40 by inference; direct verification (braille-formats-2016.txt lines 12596-12602, 9-space padding stripped) finds lines of 58 and 62 characters -- an embedded '@.<note@.>' plus a right-flush print-line-number token tabbed far past any 40-cell column, with no line anywhere reaching exactly 40. This is the same tabbed-reference-mark anomaly the task brief flags for sample-16-08; there is no reliable column-40 evidence here, so width is left null (overturning Run A's own inference, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

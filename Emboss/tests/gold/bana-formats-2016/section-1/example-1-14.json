@@ -1,0 +1,45 @@
+{
+  "id": "example-1-14",
+  "title": "Page Number without Running Head",
+  "pdfPages": [
+    33
+  ],
+  "textLines": [
+    1134,
+    1136
+  ],
+  "illustrates": {
+    "rule": "1.14.1.c",
+    "quote": "The alphabetic page number is placed on line 1 if there is no running head and on line 2 if there is a running head. The alphabetic page number is preceded by six cells of the page change indicator symbol (dots 36). Runovers are in cell 7."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": "Alphabetic page number scenario, no running head; numeric print page number 89 decoded from the braille numeral sign (a=1..i=9,j=0): #hi = h(8)i(9) = 89."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Schematic placeholder for generic body text ('text 444'); no real print excerpt is given -- illustrates alphabetic-page-number placement mechanics directly in braille."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "------ei<ty-n9e                      #hi",
+      "text 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 1-2, reconstructed to the stated 40-cell width (see example-1-7's identical extraction artefact: this line was 82 characters raw, right-tab-justified by the source .txt's own plain-text rendering rather than a literal one-space-per-cell count). No running head is used, so the alphabetic page number ('eighty-nine') is placed on line 1 by itself, preceded by six cells of the page-change-indicator symbol (dots 36, '------') and ending with the numeric page number '#hi' (89) at the right margin (6+9+22+3=40). Line 2 begins the body text placeholder."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49)."
+}

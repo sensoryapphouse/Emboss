@@ -1,0 +1,114 @@
+{
+  "id": "example-1-10",
+  "title": "Blank Line After Page Change Indicator",
+  "pdfPages": [
+    29
+  ],
+  "textLines": [
+    956,
+    970
+  ],
+  "illustrates": {
+    "rule": "1.11.3.c",
+    "quote": "Insert a blank line after the page change indicator when the new print page starts with a format that normally is preceded by a blank line. (See Sample 1-2: Heading at Beginning of Print Page on page 1-22.)"
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "list",
+        "items": [
+          {
+            "level": 1,
+            "marker": null,
+            "text": "down"
+          },
+          {
+            "level": 1,
+            "marker": null,
+            "text": "territory"
+          },
+          {
+            "level": 1,
+            "marker": null,
+            "text": "migrate"
+          }
+        ],
+        "features": "Three vocabulary words ending the previous print page, one per line, no bullets or numbers."
+      },
+      {
+        "kind": "pagenum",
+        "text": "360",
+        "features": "Print page turn to page 360 ('#cfj': c=3,f=6,j=0), falling in the middle of the braille page."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Choose the letter of the answer that best completes each statement.",
+        "features": "Instruction line opening the new print page, indented; normally preceded by a blank line (hence the blank line inserted after the page-change indicator, per 1.11.3.c, the rule this example illustrates)."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "level": 1,
+            "marker": "1.",
+            "text": "Which of these is a bird of prey?"
+          },
+          {
+            "level": 2,
+            "marker": "a.",
+            "text": "eagle"
+          },
+          {
+            "level": 2,
+            "marker": "b.",
+            "text": "pigeon"
+          },
+          {
+            "level": 2,
+            "marker": "c.",
+            "text": "toucan"
+          },
+          {
+            "level": 2,
+            "marker": "d.",
+            "text": "ostrich"
+          }
+        ],
+        "features": "Numbered question with four lettered answer choices, a nested list."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "d[n",
+      "t]ritory",
+      "migrate",
+      "------------------------------------#cfj",
+      "",
+      "    ,*oose ! lr ( ! answ] t be/",
+      "    completes ea* /ate;t4",
+      "#a4 ,: ( ^! is a bird ( prey8",
+      "  a4 eagle",
+      "  ;b4 444"
+    ],
+    "pageBreaks": [
+      {
+        "index": 3,
+        "label": "page change indicator, ending #cfj (new print page 360)"
+      }
+    ],
+    "notes": "Ten lines, verbatim (an approx. 9-character page-layout margin measured and stripped; not real cell content). Line 5, immediately after the page-change indicator, is blank per rule 1.11.3.c because the new print page opens with an instruction/list format that would normally take a preceding blank line. The braille list of choices is truncated with '444' after choice 'b' in the source's own worked example."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the mechanic (blank line after indicator, per 1.11.3.c) and on the vocabulary words/instruction/question wording; they differed on how to shape print.blocks (plain paragraphs vs. nested lists) -- resolved here using 'list' blocks for both the vocabulary words and the numbered question (matching the nested-list shape already proven in section-8's own buildListItem convention), since print itself shows these as a list, not running prose. Expected outcome: the braille excerpt truncates the answer list after choice 'b' with a '444' ellipsis (no print-side input to build the ellipsis itself from); built from the full print list (all four choices, per the print image), so Emboss's output is expected to run longer than the truncated braille -- a documented, expected mismatch, not a bug."
+}

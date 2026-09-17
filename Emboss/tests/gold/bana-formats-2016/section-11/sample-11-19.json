@@ -1,0 +1,81 @@
+{
+  "id": "sample-11-19",
+  "title": "Partially Omitted Table",
+  "pdfPages": [
+    326
+  ],
+  "textLines": [
+    9677,
+    9698
+  ],
+  "illustrates": {
+    "rule": "11.10.1",
+    "quote": "Omitted Portion of Print Table. Insert an ellipsis at the appropriate location to indicate an omitted section of a table. Explain the use of the ellipsis in a transcriber's note. Sample: Part of the table is omitted in print. This omitted section is indicated with an ellipsis. (See Sample 11-19: Partially Omitted Table on page 11-44.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "",
+        "Sunrise",
+        "Sunset"
+      ]
+    ],
+    "rows": [
+      [
+        "Jan",
+        "9:47 AM",
+        "4:35 PM"
+      ],
+      [
+        "Feb",
+        "8:27 AM",
+        "6:01 PM"
+      ],
+      [
+        "Nov",
+        "9:19 AM",
+        "4:10 PM"
+      ],
+      [
+        "Dec",
+        "10:14 AM",
+        "3:41 PM"
+      ]
+    ],
+    "notes": "Print shows only these four months explicitly; a wavy/zig-zag horizontal divider is drawn across the table between Feb and Nov to show that the intervening months (Mar-Oct) are omitted from print. No literal character fills that gap in print, so no placeholder row is recorded here for it (the braille's own rendering of the gap, the token '444', is preserved verbatim in braille.lines).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, ruled lines between rows, with a distinctive jagged/wavy rule (rather than a plain straight rule) marking the omitted-rows break between February and November."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,\"p ( ! table is omitt$ 9 pr9t4",
+      "    ,? omitt$ sec;n is 9dicat$ by an",
+      "    ellipsis4@.>",
+      "",
+      "      ,sunrise      ,sunset",
+      "      \"33333333333 \"3333333333",
+      ",jan #i3#dg ,,am    #d3#ce ,,pm",
+      ",feb #h3#bg ,,am    #f3#ja ,,pm",
+      "444",
+      ",nov #i3#ai ,,am    #d3#aj ,,pm",
+      ",dec #aj3#ad ,,am #c3#da ,,pm",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder 'text'. A transcriber's note on lines 4-6 explains the ellipsis usage (opening/closing TN brackets '@.<'/'@.>'), reading approximately: part of the table is omitted in print, and the omitted section is indicated by an ellipsis. In the table body, the omitted-rows break (line 12) is rendered simply as the token '444' rather than reproducing the wavy print divider as a braille line-drawing symbol, per rule 11.10.1."
+  },
+  "uncertain": [
+    "The exact English gloss of the transcriber's-note braille on lines 4-6 is a paraphrase based on the rule's own sample sentence and context, not an independently re-derived letter-by-letter translation."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows trimmed to the 4 real data rows; the Mar-Oct gap is print's wavy/zig-zag divider graphic, not literal text, so no invented character ('≈' in run A) or descriptive string as a cell value (run B) is kept for it -- explained in a note instead. print.headers' first cell resolved to '' (blank above the month column in print), not a fabricated '(month)' placeholder."
+}

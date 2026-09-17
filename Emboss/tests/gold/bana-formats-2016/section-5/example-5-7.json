@@ -1,0 +1,62 @@
+{
+  "id": "example-5-7",
+  "title": "Italics Ignored for Spelling Words",
+  "pdfPages": [
+    131
+  ],
+  "textLines": [
+    3964,
+    3974
+  ],
+  "illustrates": {
+    "rule": "5.3.7",
+    "quote": "Ignore font attributes when an entire vocabulary or spelling words list is emphasized."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "SPELLING WORDS",
+        "features": "Bold, full-capitals list heading in a reddish-brown/maroon accent color.",
+        "items": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Four numbered spelling words in the same reddish-brown/maroon accent color as the heading; the numerals are bold, the words themselves are italicized.",
+        "items": [
+          "**1.** *friend*",
+          "**2.** *very*",
+          "**3.** *people*",
+          "**4.** *busy*"
+        ]
+      }
+    ],
+    "notes": "No paragraph text; the whole example is a heading plus a 4-item numbered word list, per rule 5.3.7's 'entire...spelling words list' wording.",
+    "surroundingText": "Follows rule 5.3.7 directly, immediately after Example 5-6, on printed page 5-5.",
+    "printFeatures": "Boxed list, colored (reddish-brown) heading and list text, italic words with bold numerals."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,,spell+ ,,^ws",
+      "#a4 fr friend",
+      "#b4 v very",
+      "#c4 p people",
+      "#d4 busy"
+    ],
+    "pageBreaks": [],
+    "notes": "Six lines, margin 8 stripped. Line 1 is a full blank-cell (U+2800) filler line immediately before the heading, kept as an empty string (matching the treatment of the equivalent leading blank line in Examples 5-4/5-11/5-12, all of which precede a heading-like first content line the same way). Line 2 is the double-capped heading 'SPELLING WORDS' at a fixed 4-cell indent — matching the cell-5 convention exactly (not the (40−len)//2=13 centering formula), so classified level 2 (cell-5), not centered. No italics/bold indicator appears anywhere on the four items."
+  },
+  "uncertain": [
+    "Items 1-3 each carry two extra letter-cells ('fr', 'v', 'p' respectively) immediately before the fully spelled word, separated from it by one blank cell — e.g. '#a4 fr⠀friend'. Verified pixel-by-pixel against 150dpi and 400dpi renders of PDF p.131 (run A, and independently re-confirmed here with a fresh 300dpi render of the same page): the dots are genuinely embossed, not a text-extraction artifact — decoding the full 40-cell line dot-by-dot reproduces exactly '#a4 fr friend', '#b4 v very', '#c4 p people', '#d4 busy'. No corresponding partial-word print emphasis is visible on 'friend', 'very', or 'people' at either resolution, and rule 5.3.7's text only concerns ignoring attributes for an *entire* emphasized list, which does not explain a partial-word prefix. A plausible but UNCONFIRMED hypothesis, checked against rule 5.7.1 ('Emphasized Letters within a Word') and not found conclusively supported there either: 'v' and 'p' are themselves valid UEB one-cell whole-word alphabetic contractions (v=very, p=people) — i.e. items 2-3 may be showing the word's own single-cell contraction immediately before its fully spelled-out form, as a contrast/drill device appropriate to a spelling-words list (contrast the WRONG, contracted, way to write a spelling word against the CORRECT, fully-spelled way). This does not extend cleanly to item 1 ('fr' is not itself a valid UEB contraction sign, though 'friend' does have the three-letter EBAE/UEB shortform 'frd' — 'fr' could be that shortform's first two letters with the third letter's dots not surviving the extraction, or could be unrelated), and 'busy' (item 4) has no prefix of any kind, which this hypothesis does not explain either. No rule text quoted in this section confirms or refutes this reading; left as a documented hypothesis, not asserted as fact, and transcribed verbatim rather than guessed at."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from .txt lines 3969-3974 (margin 8); matches run A's lines exactly, including the leading blank-cell filler line at 3969, which run B omitted — resolved in favor of including it (see example-5-4/5-9's identical construct, kept there by both runs) since there is no principled difference between a leading and an interior full-width U+2800 line; both are equally part of the transcribed excerpt. Heading level (2, cell-5) newly measured directly against the fixed-4-cell convention, not taken from either run (both left it null/unset)."
+}

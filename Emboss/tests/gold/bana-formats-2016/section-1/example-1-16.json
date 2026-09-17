@@ -1,0 +1,47 @@
+{
+  "id": "example-1-16",
+  "title": "Page Number with Page Change Indicator",
+  "pdfPages": [
+    34
+  ],
+  "textLines": [
+    1148,
+    1152
+  ],
+  "illustrates": {
+    "rule": "1.14.1.b",
+    "quote": "The numeric and alphabetic numbers must appear on the same braille page."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": "New print page (89, alphabetic 'eighty-nine') begins in the middle of this braille page: both the ordinary mid-page page-change indicator and the alphabetic-number line are needed on the same braille page, per 1.14.1.b."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Schematic placeholder for generic body text ('text 444'); no real print excerpt is given -- illustrates alphabetic-page-number placement mechanics directly in braille."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text 444",
+      "-------------------------------------#hi",
+      "------ei<ty-n9e",
+      "text 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 11-14, verbatim. Line 11: text ending the previous print page. Line 12: the mid-page page-change indicator ending in the numeric page number '#hi' (89). Line 13: the alphabetic page number ('eighty-nine'), preceded by six cells of the page-change-indicator symbol, on the line immediately after the numeric indicator (a new print page begins mid-braille-page, so the alphabetic number does not land on line 1/2 of a fresh page). Line 14 resumes body text."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49)."
+}

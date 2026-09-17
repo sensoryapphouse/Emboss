@@ -1,0 +1,116 @@
+{
+  "id": "sample-16-10",
+  "title": "Notes in a Listed Table",
+  "pdfPages": [
+    456,
+    457
+  ],
+  "textLines": [
+    13156,
+    13207
+  ],
+  "illustrates": {
+    "rule": "16.8.2.f",
+    "quote": "A reference mark may be included in a keyed transcriber’s note. Insert the note after the completion of the transcriber’s note explaining the key. (See Sample 16-10: Notes in a Listed Table on page 16-28.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "table",
+        "level": null,
+        "text": "Main Products of the World's Mines",
+        "features": "A three-column table (Product / Annual production* / Leading producers (% total)) grouped under two bold section headings ('Precious Metals', 'Fossil Fuels'), with two footnoted column values (production units).",
+        "items": [
+          "Precious Metals",
+          "silver | 16 | Mexico (15%), U.S. (12%)",
+          "gold | 2 | South Africa (28%), U.S. (14%)",
+          "platinum | 0.3 | South Africa (50%), Russia (42%)",
+          "Fossil Fuels",
+          "coal | 4,600,000 | China (24%), U.S. (20%)",
+          "petroleum | 3,000,000 | Russia (15%), Saudi Arabia (13%)",
+          "natural gas | 2,000,000[ref:**] | Russia (31%), U.S. (24%)"
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "1,000 Metric tons"
+      },
+      {
+        "ref": "**",
+        "placement": "footnote",
+        "text": "Cubic meters"
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.8.2, illustrating listed-table format with notes inserted after the completion of each cell entry, using a transcriber's-note key (Annual = 'Annual Production*', Producers = 'Leading Producers (% Total)') before the listed data.",
+    "printFeatures": "A shaded/bordered two-section data table with column headers and two footnotes below the table explaining the production units."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,ma9 ,products ( !        #,-",
+      "              ,_w's ,m9es",
+      "7777777777777777777777777777777777777777",
+      "      @.<,key3",
+      "",
+      ",annual3 ,,annual ,,produc;n\"9",
+      ",produc]s3 ,,l1d+ ,,produc]s \"<.0",
+      "  ,,total\">@.>",
+      "      \"9#a1jjj ,metric tons",
+      "",
+      "            ,preci\\s ,metals",
+      "",
+      "    ,,product3 silv]",
+      ",annual3 #af",
+      ",produc]s3 ,mexico \"<#ae.0\">1 ,u4,s4",
+      "  \"<#ab.0\">",
+      "",
+      "    ,,product3 gold",
+      ",annual3 #b",
+      ",produc]s3 ,s\\? ,africa \"<#bh.0\">1",
+      "  ,u4,s4 \"<#ad.0\">",
+      "    ,,product3 plat9um               a#,-",
+      ",annual3 #j4c",
+      ",produc]s3 ,s\\? ,africa \"<#ej.0\">1",
+      "  ,russia \"<#db.0\">",
+      "",
+      "             ,fossil ,fuels",
+      "",
+      "    ,,product3 coal",
+      ",annual3 #d1fjj1jjj",
+      ",produc]s3 ,*9a \"<#bd.0\">1 ,u4,s4",
+      "  \"<#bj.0\">",
+      "",
+      "    ,,product3 petroleum",
+      ",annual3 #c1jjj1jjj",
+      ",produc]s3 ,russia \"<#ae.0\">1 ,saudi",
+      "  ,>abia \"<#ac.0\">",
+      "",
+      "    ,,product3 natural gas",
+      ",annual3 #b1jjj1jjj\"9\"9",
+      "      \"9\"9,cubic met]s",
+      ",produc]s3 ,russia \"<#ca.0\">1 ,u4,s4",
+      "  \"<#bd.0\">",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 21,
+        "type": "implicit",
+        "note": "No explicit —New Braille Page— marker text in the source; detected because the line numbering restarts at 1 after line 21 (matching the section-11 gold precedent's convention for silent page breaks)."
+      }
+    ],
+    "notes": "Line-number field width 5 (max line number 24, two digits, +3) used consistently across both braille pages. Line 4 is a transcriber's note ('Key:') introducing the abbreviation key (lines 6-9) used for the listed column headers, per the listed-table format; each product's annual-production value and leading-producers value are each followed, on the next line, by their own footnote text where one exists (e.g. natural gas's value is immediately followed by its 'Cubic meters' unit note on the same/next line), per rule 16.8.2c."
+  },
+  "uncertain": [
+    "Whether the page break between the two braille pages of this table is explicit or implicit could not be verified beyond the absence of marker text and the numbering restart; recorded as implicit per the same detection method used in the section-11 precedent (sample-11-21)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.8.2.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13161 (field width 5, digits(25 or more)+3... actually digits(2)+3) is exactly 40 characters, right-justified to a page-change token '#,-'; several \"9 sequences Run A inserted into the percentage-range tokens (e.g. '<#ae.0\"9\">') do not appear in the source at all (line 13175 reads '<#ae.0\">' with no '\"9') -- corrected throughout to match the source exactly (Run B). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

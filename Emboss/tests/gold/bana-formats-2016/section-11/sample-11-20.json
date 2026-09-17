@@ -1,0 +1,76 @@
+{
+  "id": "sample-11-20",
+  "title": "Bar Graph Information Converted to a Table",
+  "pdfPages": [
+    327
+  ],
+  "textLines": [
+    9705,
+    9728
+  ],
+  "illustrates": {
+    "rule": "11.11.1",
+    "quote": "Graphics with Identified Values. Tactile graphics are preferred, but a requester may ask that certain graphics be converted to a table. For example, a bar graph may show the value of each bar, lending itself to a table format. Explain the original format in a transcriber's note. Sample: The bar graph is presented as a table. (See Sample 11-20: Bar Graph Information Converted to a Table on page 11-44.)"
+  },
+  "print": {
+    "caption": "HEART ATTACKS IN THE UNITED STATES, 2000",
+    "headers": [
+      [
+        "Age",
+        "Males",
+        "Females"
+      ]
+    ],
+    "rows": [
+      [
+        "29–44",
+        "34,000",
+        "10,000"
+      ],
+      [
+        "45–64",
+        "257,000",
+        "86,000"
+      ],
+      [
+        "65+",
+        "430,000",
+        "314,000"
+      ]
+    ],
+    "notes": "The print original is a horizontal bar graph (Age on the vertical axis, Attacks in thousands on the horizontal axis, separate blue/red bars for Males/Females with their values labeled directly on each bar), not a table; the braille converts it into an ordinary table.",
+    "surroundingText": null,
+    "printFeatures": "Bar chart with a bold green two-line title, gridlines, an axis label ('Attacks in thousands'), a Males/Females color-coded legend, and a source line ('Source: American Heart Association') beneath the chart in italics."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777    #,-",
+      "          ,,,he>t attacks 9 !",
+      "          unit$ /ates1,' #bjjj",
+      "",
+      "      @.<,pr9t %[s a horizontal b>",
+      "    graph4 ,9 brl1 ! graph has be5 *ang$",
+      "    to a table4@.>",
+      "",
+      "         ,attacks 9 ?\\s&s",
+      "         \"33333333333333333",
+      ",age     ,males    ,females",
+      "\"333333 \"3333333 \"3333333",
+      "#bi-#dd   #cd1jjj   #aj1jjj",
+      "#de-#fd #beg1jjj    #hf1jjj",
+      "#fe\"6    #dcj1jjj #cad1jjj",
+      "    ,s\\rce3 ,am]ican ,he>t ,associa;n",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 carries a transcriber's-note continuation marker token at the far right of the title line. A transcriber's note on lines 5-7 explains, in substance, that the print shows a horizontal bar graph and that in braille the graph has been changed to a table - matching the rule's own sample sentence. The source citation ('Source: American Heart Association') is transcribed on line 16, blocked in from the margin per rule 11.2.5.g."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows: age ranges use an en dash ('29–44' etc.), matching print typography for numeric ranges (confirmed against the PDF image, p. 327) -- run B's plain hyphen was normalized to match run A. Same trailing-reference-code note as Sample 11-16 applies to line 1's length."
+}

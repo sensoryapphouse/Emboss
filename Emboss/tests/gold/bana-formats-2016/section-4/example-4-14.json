@@ -1,0 +1,52 @@
+{
+  "id": "example-4-14",
+  "title": "Uppercase Paragraph Heading",
+  "pdfPages": [
+    115
+  ],
+  "textLines": [
+    3471,
+    3480
+  ],
+  "illustrates": {
+    "rule": "4.8.1",
+    "quote": "Paragraph (run-in) headings introduce the focus of the paragraph(s). The heading is typically an emphasized word or phrase and may or may not be followed by punctuation. Follow print for emphasis, capitalization, and punctuation. Use full capitalization for uppercase paragraph headings. No additional emphasis should be used."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "COMMUNITY SERVICE",
+        "features": "Centered heading above the paragraph, full capitals, bold serif -- identical to Example 4-13."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "ACTION PLAN How can you get involved with tree planting in your community?",
+        "features": "'ACTION PLAN' is printed in full bold caps (rather than initial caps as in Example 4-13) as the run-in heading, immediately followed on the same line by its paragraph; per the rule's 'no additional emphasis' instruction for uppercase paragraph headings, no bold/typeform indicator is added -- the whole-word capitalization indicator alone marks it."
+      }
+    ],
+    "notes": "Same underlying heading and paragraph as Example 4-13, but the run-in heading is printed in full uppercase ('ACTION PLAN') and rendered in braille as whole-word capitals with no additional emphasis, per rule 4.8.1's specific instruction for uppercase paragraph headings.",
+    "surroundingText": null,
+    "printFeatures": "Identical layout to Example 4-13 except the run-in heading is set in full bold caps rather than bold title case."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "          ,,commun;y ,,s]vice",
+      "",
+      ",,ac;n ,,plan ,h[ c y get 9volv$ ) tree",
+      "plant+ 9 yr commun;y8"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the centered heading 'COMMUNITY SERVICE'; line 3 blank; lines 4-5 one paragraph, with 'ACTION PLAN' carrying the whole-word (double) capitalization indicator on each word and NO typeform/emphasis indicator at all -- confirming the rule's 'no additional emphasis' instruction, contrasting with Example 4-13's bold-wrapped 'Action Plan'."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. `illustrates.quote` resolved to the FULL text of rule 4.8.1 (matching run A and the §11 precedent of quoting the entirety of the specific cited rule id, not an editorial trim) -- run B's quote was only the rule's last two sentences. `print.blocks` count resolved to 2 (as for Example 4-13, for the same reason: a run-in heading is not a standalone `heading` block)."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "example-1-2",
+  "title": "Embedded Material (Print Only)",
+  "pdfPages": [
+    22
+  ],
+  "textLines": [
+    688,
+    688
+  ],
+  "illustrates": {
+    "rule": "1.4.6",
+    "quote": "Embedded material refers to text inserted within a paragraph."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Boxed print-only mock-up: the identical sentence from Example 1-1 ('The fields are awash in a sea of blue.') is now run into the paragraph (italicised in the source image, not set off by blank lines or a different margin) -- illustrating 'embedded' material (BANA 1.4.6). No braille is given."
+      }
+    ],
+    "notes": "Explicitly captioned '(Print Only)'; confirmed against the PDF page image (p.22)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given; print-only illustration."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: print-only, no braille. status: no-braille."
+}

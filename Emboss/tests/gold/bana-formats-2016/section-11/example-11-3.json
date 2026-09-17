@@ -1,0 +1,93 @@
+{
+  "id": "example-11-3",
+  "title": "Related Columns",
+  "pdfPages": [
+    286
+  ],
+  "textLines": [
+    8337,
+    8354
+  ],
+  "illustrates": {
+    "rule": "11.2.4",
+    "quote": "Related columns show a relationship between entries across a row of columns but no relationship between entries in one row with entries in another row."
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Infinitive",
+        "Past",
+        "Past Participle"
+      ]
+    ],
+    "rows": [
+      [
+        "awake",
+        "awoke",
+        "awoken"
+      ],
+      [
+        "be",
+        "was, were",
+        "been"
+      ],
+      [
+        "bear",
+        "bore",
+        "born"
+      ],
+      [
+        "beat",
+        "beat",
+        "beat"
+      ],
+      [
+        "become",
+        "became",
+        "become"
+      ],
+      [
+        "begin",
+        "began",
+        "begun"
+      ],
+      [
+        "bend",
+        "bent",
+        "bent"
+      ]
+    ],
+    "notes": null,
+    "surroundingText": "11.2.5 General Format (rules a–g) follows the example.",
+    "printFeatures": "Bordered box with ruled line under the header row and ruled lines between every data row. Header row is bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      ",9f9itive ,pa/     ,pa/ ,\"piciple",
+      "\"33333333 \"33333 \"3333333333333",
+      "awake \"\"\" awoke    awok5",
+      "2 \"\"\"\"\"\"\" was1 7 be5",
+      "be> \"\"\"\"\" bore     born",
+      "b1t \"\"\"\"\" b1t \"\" b1t",
+      "2come \"\"\" 2came    2come",
+      "2g9 \"\"\"\"\" 2gan     2gun",
+      "b5d \"\"\"\"\" b5t \"\" b5t",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Column headings are left-adjusted (not capitalized as full words after the first, e.g. 'Infinitive'->',9f9itive' uses the capital indicator only once). Row entries use literary-braille contractions freely (e.g. 'become'->'2come' using the 'be' contraction '2', 'bear'->'be>' with the 'ar' sign, 'bore'->'bore' plain). The 'be' row's Past column 'was, were' is rendered 'was1 7 be5' where '1' is the comma and '7' is the word 'were' contracted; guide dots (\") lead from the shorter word to the separation-line width in every column."
+  },
+  "uncertain": [
+    "The exact UEB contraction meanings of tokens like '2', '1', '7', 'b1t' are copied character-for-character from the source text as instructed, without independently re-deriving the braille translation dot-by-dot."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: run B added one extra guide-dot quote character on 5 lines (physical lines 8347-8349, 8351-8352); run A matches the source .txt exactly and is used."
+}

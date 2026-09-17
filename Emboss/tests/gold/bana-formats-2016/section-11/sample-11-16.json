@@ -1,0 +1,84 @@
+{
+  "id": "sample-11-16",
+  "title": "Keyed Column and Row Headings",
+  "pdfPages": [
+    323
+  ],
+  "textLines": [
+    9593,
+    9620
+  ],
+  "illustrates": {
+    "rule": "11.8.2.m",
+    "quote": "m. Use cell-5 headings to group key items by column and row headings. List keyed column headings first, preceded by “Column headings” as a cell-5 heading. Next, list the keyed row headings preceded by “Row headings” as a cell-5 heading. (See Sample 11-16: Keyed Column and Row Headings on page 11-41.)"
+  },
+  "print": {
+    "caption": "SAT Scores by Race and Ethnicity",
+    "headers": [
+      [
+        "Racial/Ethnic Category",
+        "SAT Verbal Mean Scores",
+        "SAT Math Mean Scores",
+        "Totals"
+      ]
+    ],
+    "rows": [
+      [
+        "Native American or Alaskan Native",
+        "482",
+        "481",
+        "963"
+      ],
+      [
+        "African American",
+        "434",
+        "426",
+        "860"
+      ],
+      [
+        "White (excluding Latino origin)",
+        "528",
+        "530",
+        "1058"
+      ]
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bordered box; centered bold title spanning the full box width above the header row; header row bold; row headings wrap to two lines for the longer category names."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777    #,-",
+      "   ,,sat ,scores by ,race & ,e?nic;y",
+      "",
+      "      @.<,key to column & r[ h1d+s3",
+      "",
+      "    ,column h1d+s",
+      "mms ,,sat ,ma? ,m1n ,scores",
+      "rec ,racial_/,e?nic ,category",
+      "vms ,,sat ,v]bal ,m1n ,scores",
+      "",
+      "    ,r[ h1d+s",
+      "aam ,african ,am]ican",
+      "nan ,native ,am]ican or ,alaskan ,native",
+      "wht ,:ite \"<exclud+ ,lat9o orig9\">@.>",
+      "",
+      "rec vms    mms   totals",
+      "\"33 \"333 \"333 \"33333",
+      "nan #dhb #dha #ifc",
+      "aam #dcd #dbf #hfj",
+      "wht #ebh #ecj #ajeh",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Long column headings (\"SAT Verbal Mean Scores\", \"SAT Math Mean Scores\") and row headings (\"Native American or Alaskan Native\", \"African American\", \"White (excluding Latino origin)\") are keyed to short two/three-letter codes per rule 11.8: column keys 'mms' (SAT Math Mean Scores), 'rec' (Racial/Ethnic Category), 'vms' (SAT Verbal Mean Scores); row keys 'nan' (Native American...), 'aam' (African American), 'wht' (White...). The transcriber's note (lines 4-14) groups them under the two required cell-5 headings \"Column headings\" and \"Row headings\" (rule 11.8.2.m), listing column keys alphabetically by key word before row keys, per rule 11.8.2.n-o. The table body (lines 16-20) then uses only the short keys as its column/row headings."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "width/box-rule note: line 1's top box rule is intentionally shorter (34 cells) to leave room for a trailing 3-character reference code ending at cell 41, one cell beyond the section's usual 40-cell body width; both runs already transcribed this line correctly verbatim, and braille.width is still recorded as the section's declared 40 (not measured per-line) to stay consistent with every other item."
+}

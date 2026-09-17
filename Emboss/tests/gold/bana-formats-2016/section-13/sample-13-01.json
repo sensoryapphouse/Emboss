@@ -1,0 +1,113 @@
+{
+  "id": "sample-13-01",
+  "title": "Sample 13-1: Centered Poem",
+  "pdfPages": [
+    367
+  ],
+  "textLines": [
+    10658,
+    10675
+  ],
+  "illustrates": {
+    "rule": "13.3.1c",
+    "quote": "Poems that are centered on the print page use 1-3 margins or are treated as displayed material and use the margin in effect. (See Sample 13-1: Centered Poem on page 13-13.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Presented here is a familiar example from one of Donne’s songs:",
+        "features": "Introductory lead-in sentence, ordinary paragraph, before the centered poem."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Nine lines from John Donne's \"The Bait\" (originally titled \"Song\"), centered as a block on the print page (each line's own horizontal centre roughly aligned, not flush to a common left margin).",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Go and catch a falling star,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Get with child a mandrake root,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Tell me where all times past are,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Or who cleft the Devil’s foot;",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Teach me to hear mermaids singing,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Or to keep off envy's stinging,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And find",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "What wind",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Serves to advance an honest mind.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.367; the poem is visually centred as a block (per this example's title) rather than left-justified.",
+    "surroundingText": null,
+    "printFeatures": "Plain body-text serif font; poem block visually centred under the lead-in sentence."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",pres5t$ \"h is a famili> example f \"o (",
+      ",donne's s;gs3",
+      "",
+      "  ,g & cat* a fall+ />1",
+      "  ,get ) * a m&rake root1",
+      "  ,tell me \": all \"ts pa/ >e1",
+      "  ,or :o cleft ! ,devil's foot2",
+      "  ,t1* me to he> m]maids s++1",
+      "  ,or to keep (f 5vy's /++1",
+      "  ,& f9d",
+      "  ,:at w9d",
+      "  ,s]ves to adv.e an h\"o/ m9d4"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10663-10674 (a genuine excerpt: the sample's own printed line numbers begin at 10, i.e. lines 1-9 of this braille page belong to preceding, unshown content), after stripping a 5-character line-number field (2-digit max line number 21, + 3 = 5) and converting U+2800 blank cells to spaces. Line 3 above is the blank line (line 12 in the source) between the lead-in sentence and the poem. All nine poem lines (originally numbered 13-21) carry a uniform 2-cell indent (cell 3) -- i.e. the whole poem is transcribed at a flush cell-3 margin throughout, matching rule 13.3.1.c's alternative 'treated as displayed material and use the margin in effect' option, rather than the ordinary 1-3 main/runover margin (which would put line-initial cells at column 1, not 3).",
+    "variants": []
+  },
+  "uncertain": [
+    "Whether the source intends the cell-3 flush margin as 'displayed material...margin in effect' or as some other convention is not stated explicitly in the rule text; inferred from the measured, uniform 2-cell indent on every poem line (no line starts at cell 1)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

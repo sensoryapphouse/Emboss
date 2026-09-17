@@ -1,0 +1,81 @@
+{
+  "id": "sample-4-04",
+  "title": "Cell-7 Heading with Displayed Quotation",
+  "pdfPages": [
+    123
+  ],
+  "textLines": [
+    3687,
+    3706
+  ],
+  "illustrates": {
+    "rule": "4.6.4",
+    "quote": "Follow a cell-7 heading by accompanying text, including lists, on the next line. (See Sample 4-4: Cell-7 Heading with Displayed Quotation on page 4-19.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Striking the proper balance between freedom for the individual and the rights of society as a whole is similarly difficult—and vital. Abraham Lincoln once stated democracy's problem in these words:",
+        "features": "Ordinary body paragraph leading into the displayed quotation; the excerpt image begins here, mid-article (the braille page's own line numbering begins at 6, confirming lines 1-5 of this braille page precede the excerpt and are not reproduced)."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "PRIMARY Sources",
+        "features": "Small bold two-tone logo/badge ('PRIMARY' banner over 'Sources' in a serif logotype) functioning as a cell-7-level heading introducing the quotation."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "\"Must a government of necessity be too strong for the liberties of its own people, or too weak to maintain its own existence?\"",
+        "features": "Displayed/indented block quotation in italics, large decorative opening/closing quotation marks."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "—Response to a Serenade, November 10, 1864",
+        "features": "Right-aligned italic citation line, below the quotation, indented differently from the quotation body."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Human beings desire both liberty and authority.",
+        "features": "Plain body text, resumes after the quotation."
+      }
+    ],
+    "notes": "Illustrates a cell-7 heading ('PRIMARY Sources') followed on the next line by its accompanying text -- here a displayed/indented quotation with its citation -- per rule 4.6.4.",
+    "surroundingText": "Tail of a paragraph about balancing individual freedom and the rights of society, leading into the quotation.",
+    "printFeatures": "Bold badge/logo heading beside a 'PRIMARY Sources' icon; the accompanying text is a displayed, indented, italicised quotation with a right-aligned citation line, framed by large curly quotation marks."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,/rik+ ! prop] bal.e 2t fre$om = !",
+      "9dividual & ! \"rs ( society z a :ole is",
+      "simil>ly di6icult,-& vital4 ,abraham",
+      ",l9coln once /at$ democracy's problem 9",
+      "^! ^ws3",
+      "",
+      "        ,,prim>y ,s\\rces",
+      "  8,m/ a gov]n;t ( necess;y 2 too /r;g =",
+      "  ! lib]ties ( xs [n p1 or too w1k to",
+      "  ma9ta9 xs [n exi/;e80",
+      "      ,-.7,response to a ,s]5ade1.'",
+      "      ,novemb] #aj1 #ahfd",
+      "",
+      "  ,human 2+s desire bo? lib]ty & 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbering begins at 6 in the source (lines 1-5 of this braille page precede the excerpt). Lines 6-10 the lead-in paragraph (2-cell indent); line 11 blank; line 12 the cell-7 heading 'PRIMARY Sources' (whole-word cap on 'PRIMARY', single-cap on 'Sources' -- NOT full caps on both words), indented 8 cells rather than the usual 6 (see uncertain); lines 13-15 the quotation body at a 2-cell indent; lines 16-17 the attribution, indented 6 cells; line 18 blank; line 19 the resuming sentence, ending '444'."
+  },
+  "uncertain": [
+    "The heading 'PRIMARY Sources' is indented 8 cells rather than a plain 6; read as 'cell-7 (6) plus the displayed quotation's own 2-cell margin shift' (6+2=8) rather than a different heading level, because the sample's own title names it a cell-7 heading and the quotation body lines around it are consistently shifted by the same 2 cells -- though the attribution lines (16-17) are back at a plain 6-cell indent, not 8, so the '+2 applies to the heading line too' reading is not fully consistent and was not cross-checked against another worked example of a heading nested inside a displayed quotation elsewhere in Formats (this section has none)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. Text resolved to \"PRIMARY Sources\" (matching run B): the braille's double-comma indicator on \"prim>y\" (whole-word caps) but single-comma on \"s\\rces\" (initial cap only) shows print reads \"PRIMARY Sources\", not run A's \"Primary Sources\" (which the same braille contradicts). `print.blocks` kept as run A's 5-block split (quotation body and citation as two separate `other` blocks, matching their different braille indents) rather than run B's single merged block -- a documentation-only choice since `other` blocks are excluded from modeling either way."
+}

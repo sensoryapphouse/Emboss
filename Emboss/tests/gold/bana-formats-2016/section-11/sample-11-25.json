@@ -1,0 +1,93 @@
+{
+  "id": "sample-11-25",
+  "title": "Linear Table Format",
+  "pdfPages": [
+    334
+  ],
+  "textLines": [
+    9876,
+    9901
+  ],
+  "illustrates": {
+    "rule": "11.17.1",
+    "quote": "Wide Tables: Linear Table Format. When other options are not effective in dealing with wide tables, a linear format may be used. Multiple columns of numbers or repetitive types of entries (e.g., proper names) are not appropriate for linear format. This format is not an option when there are colons or semicolons in the table. (See Sample 11-25: Linear Table Format on page 11-52.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "State",
+        "Capital",
+        "Nickname",
+        "Flower",
+        "Bird"
+      ]
+    ],
+    "rows": [
+      [
+        "Alabama",
+        "Montgomery",
+        "Yellowhammer State",
+        "Camellia",
+        "Yellowhammer"
+      ],
+      [
+        "Alaska",
+        "Juneau",
+        "The Last Frontier",
+        "Forget-Me-Not",
+        "Willow Ptarmigan"
+      ],
+      [
+        "Arizona",
+        "Phoenix",
+        "The Grand Canyon State",
+        "Saguaro Cactus",
+        "Cactus Wren"
+      ],
+      [
+        "Arkansas",
+        "Little Rock",
+        "",
+        "Apple Blossom",
+        "Mockingbird"
+      ]
+    ],
+    "notes": "Arkansas's Nickname cell is blank in print.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, ruled line under the header row; header row bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,a s]ies ( ?ree dot #es",
+      "    9dicates a blank space 9 pr9t4",
+      "      ,columns foll[ \"o ano!r 9 ? ord]3",
+      "",
+      ",/ate3 ,capital2 ,nick\"n2 ,fl[]2",
+      "  ,bird@.>",
+      "",
+      ",alabama3 ,montgom]y2 ,yell[hamm] ,/ate2",
+      "  ,camellia2 ,yell[hamm]",
+      ",alaska3 ,jun1u2 ,! ,la/ ,fronti]2",
+      "  ,=get-,me-,n2 ,will[ ,pt>migan",
+      ",>izona3 ,pho5ix2 ,! ,gr& ,canyon ,/ate2",
+      "  ,sagu>o ,cactus2 ,cactus ,wr5",
+      ",>kansas3 ,ll ,rock2 \"\"\"2 ,apple",
+      "  ,blossom2 ,mock+bird",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder 'text'. A transcriber's note on lines 4-6 explains: a series of three dot 5s indicates a blank space in print, and columns follow one another in this order (per the rule's own sample sentence pattern). Line 8 lists the column-heading order with punctuation: 'State:' (colon after the first heading, rule c) then 'Capital;', 'Nickname;', 'Flower;', 'Bird' (semicolons after each internal heading). Each data row (lines 11, 13, 15, 17) then runs the row linearly: state name + colon, capital + semicolon, nickname + semicolon, flower + semicolon, bird - continuing onto a second, indented line (12, 14, 16, 18) when the row is too long for one line, per rule f/h. Arkansas's blank Nickname (line 17) is rendered as three unspaced dot-5 guide dots ('\"\"\"') followed by the semicolon, per rule k."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages corrected to [334] only: page 335 (printed 11-53) is a genuinely blank page in the source PDF (confirmed directly), not part of this sample -- run A's own uncertainty note said as much but its pdfPages field still listed 335 inconsistently; run B's [334] was correct. braille.lines/rows/headers content already agreed and matches the source exactly."
+}

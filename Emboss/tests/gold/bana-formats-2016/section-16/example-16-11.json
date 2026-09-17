@@ -1,0 +1,69 @@
+{
+  "id": "example-16-11",
+  "title": "Two Indicators at Same Reference Point",
+  "pdfPages": [
+    437
+  ],
+  "textLines": [
+    12613,
+    12626
+  ],
+  "illustrates": {
+    "rule": "16.7.2",
+    "quote": "Transcribe each reference mark used at the same reference point as a separate indicator. Follow print order for these reference marks."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The semester was beginning with a flurry of activities. All the students were preoccupied with the details of the syllabus[ref:†][ref:‡] that was disseminated by the professor at the opening class.",
+        "features": "Two reference marks (dagger, then double dagger) appear together, in that order, immediately after \"syllabus\", each keyed to its own note at the right.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "[ref:†]syllabus: the subject studied for a particular course\n[ref:‡]syllabus: a summary outline of a course of study",
+        "features": "Two short glossary-style notes stacked at the right margin, each repeating \"syllabus\" in italics with its own mark.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "†",
+        "placement": "margin",
+        "text": "syllabus: the subject studied for a particular course"
+      },
+      {
+        "ref": "‡",
+        "placement": "margin",
+        "text": "syllabus: a summary outline of a course of study"
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.7.2, showing two reference marks stacked at the same point in the text, transcribed as two separate indicators in print order.",
+    "printFeatures": "Boxed screenshot: paragraph with a dagger then a double-dagger mark together after \"syllabus\"; two short marginal glossary notes at the right, one per mark."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      ",! seme/] 0 2g9n+ ) a flurry (",
+      "activities4 ,all ! /ud5ts 7 preo3upi$ )",
+      "! details ( ! syllabus@,?@,] t 0",
+      "4sem9at$ by ! pr(essor at ! op5+ class4",
+      "\"333333",
+      "@,?.1syllabus3 ! subject /udi$ = a",
+      "  \"picul> c\\rse",
+      "@,].1syllabus3 a summ>y \\tl9e ( a c\\rse",
+      "  ( /udy"
+    ],
+    "pageBreaks": [],
+    "notes": "The dagger (@,?) and double dagger (@,]) are transcribed one immediately after the other, in print order, directly after \"syllabus\" -- two separate indicators at one reference point, per rule 16.7.2. Each note after the separation line repeats its own mark (with the italics indicator .1) before its own \"syllabus\" gloss."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.7.2 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A itself flagged this as weak evidence (\"no line reaches exactly column 40, max observed is 39\") before still recording 40; direct verification (lines 12618-12626, 9-space padding stripped) confirms no line reaches 40 (max 39, on four separate lines) and no page/line-number token anchors the right edge. Left null, per the same \"never guess\" convention applied to Examples 16-1..16-4 (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

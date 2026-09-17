@@ -1,0 +1,57 @@
+{
+  "id": "example-13-6",
+  "title": "Example 13-6: Word with Unspaced Internal Foot",
+  "pdfPages": [
+    363
+  ],
+  "textLines": [
+    10534,
+    10542
+  ],
+  "illustrates": {
+    "rule": "13.9.4d",
+    "quote": "The foot and caesura symbols may begin or end a braille line when it is necessary to divide a line between braille lines. Exception: Do not break a line at a meter symbol when it is unspaced within a word."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "One line shown twice: first as ordinary text with foot marks (vertical pipes) between words, then repeated with a foot mark placed UNSPACED inside a single word ('u|pon') to show a foot division occurring within a word.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "All the | night sleep | came not u|pon my | eyelids",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.363; the pipe between 'u' and 'pon' is printed with no surrounding space, unlike the other (spaced) pipes in the same line.",
+    "surroundingText": null,
+    "printFeatures": "Boxed inline example; plain body-text serif font with vertical-pipe foot marks."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",all ! ni<t sleep came n ^u my eyelids",
+      "",
+      "  ,all ! _\\ ni<t sleep _\\",
+      "    came n u_\\pon my _\\ eyelids"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10539-10542, after stripping a 9-space fixed left margin shared by every line of this boxed example. First writing (line 1, no foot marks, contracted braille). Second writing (lines 3-4, cell-3 offset, foot marks '_\\' shown): the internal, unspaced foot mark inside 'u_\\pon' sits with no surrounding blank cell, matching rule 13.9.4.c's exception that such a mark may not be used to break the braille line, unlike the other (spaced) '_\\' marks.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Same all-blank-row correction (index 1; .txt line 10540, 40 literal U+2800 characters after the 9-space box margin) -- run A's padding replaced with \"\". Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

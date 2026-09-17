@@ -1,0 +1,46 @@
+{
+  "id": "example-1-8",
+  "title": "Uppercase Used at Beginning of Paragraph",
+  "pdfPages": [
+    26
+  ],
+  "textLines": [
+    869,
+    877
+  ],
+  "illustrates": {
+    "rule": "1.9.1",
+    "quote": "Follow print for capitalization at the beginning of a paragraph."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "continuation": true,
+        "text": "THE OLD WOMAN FOLLOWED THEM home from the grocery store.",
+        "features": "Opening words 'THE OLD WOMAN FOLLOWED THEM' set in full capitals (a stylistic/decorative print opening); the remainder ('home from the grocery store.') is in ordinary sentence case."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,,! old woman foll[$ !m,' home f !",
+      "groc]y /ore4"
+    ],
+    "pageBreaks": [],
+    "notes": "Two lines, verbatim, no line number shown in the source. The triple capital-word indicator ',,,' before the capitalised run preserves the print's full-capitals opening; the remainder is in ordinary case, per rule 1.9.1 ('follow print for capitalization')."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording and braille content; the only difference was descriptive-prose phrasing (merged here). Representable: a single 'para' block with the literal capitalization from print, translated by Emboss's own liblouis UEB table (no Emboss-authored capitalisation logic is involved, per F-68's own point about foreign/contraction handling being liblouis's responsibility -- capitalisation indicators are likewise a liblouis translation matter, not an Emboss format-layer feature)."
+}

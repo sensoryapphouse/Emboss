@@ -1,0 +1,59 @@
+{
+  "id": "example-1-17",
+  "title": "Long Page Number with Title on First Page",
+  "pdfPages": [
+    34
+  ],
+  "textLines": [
+    1156,
+    1160
+  ],
+  "illustrates": {
+    "rule": "1.14.1.g",
+    "quote": "A blank line is not inserted between the alphabetic page number and the full title on the first page of text."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": "First page of text: alphabetic page number spanning two braille lines, followed immediately (no blank line) by the title and subtitle. Numeric page number '#acge' decodes to 1375 (a=1,c=3,g=7,e=5)."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Alphabetic (spelled-out) form of the numeric print page number 1,375 ('one-thousand three hundred seventy-five'), split across braille lines 1-2."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Title",
+        "features": "Placeholder book title on the first page of text, immediately following the page number with no intervening blank line, per 1.14.1.g."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Subtitle",
+        "features": "Placeholder subtitle line beneath the title."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "------\"o-?\\s& ?ree-hundr$          #acge",
+      "                 sev5ty-five",
+      "                    ,title",
+      "                  ,subtitle"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 1-4, line 1-2 reconstructed to 40 cells each (same raw-extraction artefact as example-1-7/14/15). Lines 1-2 carry the long alphabetic page number, preceded by six cells of the page-change-indicator symbol and ending with the numeric page number 1375 ('#acge': a=1,c=3,g=7,e=5) at the end of line 1, with the runover ('seventy-five') beginning in cell 7 of line 2, per 1.14.1.c. Line 3 (the placeholder title) follows immediately with NO intervening blank line, per 1.14.1.g (the rule this example illustrates); line 4 the placeholder subtitle."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49)."
+}

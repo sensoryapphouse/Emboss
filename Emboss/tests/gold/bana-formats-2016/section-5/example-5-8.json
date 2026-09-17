@@ -1,0 +1,72 @@
+{
+  "id": "example-5-8",
+  "title": "Font Attributes Ignored in Plays",
+  "pdfPages": [
+    132
+  ],
+  "textLines": [
+    3981,
+    3992
+  ],
+  "illustrates": {
+    "rule": "5.3.8",
+    "quote": "Ignore font attributes for scene settings and stage directions in plays or dialogue."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Katie** (*amused*). Bill, that machine was made by Japanese technicians who think of near everything. It'll run on its own.",
+        "features": "'Katie' bold (character name); '(amused)' italic (stage direction); remaining dialogue plain.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Bill.** Yeah, but it's been a long time . . .",
+        "features": "'Bill.' bold (character name, including the period); rest plain, trailing off with a literal print ellipsis.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Katie.** Okay. . . .",
+        "features": "'Katie.' bold; rest plain, a one-word reply trailing off with a literal print ellipsis.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "(*She starts out, . . . then turns in the doorway as something else strikes her.*)",
+        "features": "Entire parenthetical stage direction italicized.",
+        "items": null
+      }
+    ],
+    "notes": "Illustrates ignoring the italic attribute on stage directions ('(amused)' and the closing parenthetical) in a play excerpt, per rule 5.3.8; bold character names are unaffected by this rule.",
+    "surroundingText": "Follows rule 5.3.8 directly, on printed page 5-6, immediately after Example 5-7's page.",
+    "printFeatures": "Boxed play excerpt: bold speaker labels, italic stage directions, plain dialogue."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "^1,katie \"<amus$\">4 ,bill1 t ma*9e 0",
+      "  made by ,japanese te*nicians :o ?9k (",
+      "  ne> \"ey?+4 ,x'll run on xs [n4",
+      "^1,bill4 ,y1h1 b x's be5 a l;g \"t 444",
+      "^1,katie4 ,okay4444",
+      "      \"<,%e />ts \\1444 !n turns 9 !",
+      "      doorway z \"s?+ else /rikes h]4\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Seven lines, margin 9 stripped. Line 1 flush left with a bold-word indicator ('^1') before 'Katie'; lines 2-3 are a 2-cell-indented runover of line 1's speech. Lines 4-5 are the other two speeches, each flush left with their own bold-word indicator. Lines 6-7 are the closing stage direction (6-cell indent), wrapped in typeform-passage-style markers ('\"<' ... '\">') that in this transcription render braille parenthesis signs (matching print's own parenthetical), not quotation marks; no separate italics marker distinguishes '(amused)' or the closing parenthetical, consistent with that attribute being dropped."
+  },
+  "uncertain": [
+    "The exact identity of the '<'/'>' braille signs (read here as parentheses, matching the print's own parenthetical stage directions) has not been cross-checked against a Special Symbols/braille-signs key; inferred from context, not independently confirmed."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille independently re-derived from .txt lines 3986-3992 (margin 9); matches run A's fuller 7-line, indentation-preserving rendering exactly (run B's flush-stripped version dropped the genuine 2-cell runover indent on lines 2-3, an instance of the section-wide leading-U+2800-stripping bug documented in differences.md). Print content (4-paragraph decomposition, one per speech) follows run A's finer-grained split, with 'other' kind corrected to 'paragraph' since these are ordinary play-dialogue paragraphs, not unmodelled content. Both runs' own print text for Bill's and Katie's short replies is REJECTED, not adopted: both A and B gave much longer sentences (\"...since I've seen this one, and . . .\" / \"Okay. Enjoy. I think I'll be awake for a little while. . . .\") that do not match the given braille at all — the braille's own '444'/'4444' markers fall immediately after 'a long time' and 'Okay' respectively, with no further words transcribed on either line before the NEXT speech begins, so the extra clauses both runs supplied are not supported by the primary source and are corrected here to match the braille exactly (a literal print ellipsis showing each character trailing off, not a truncated excerpt — contrast the stage direction's OWN mid-sentence '444' in 'starts out, . . . then turns', which is genuinely followed by more transcribed words and is kept as originally read)."
+}

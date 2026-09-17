@@ -1,0 +1,75 @@
+{
+  "id": "sample-9-07",
+  "title": "Source Citation to an Image",
+  "pdfPages": [244],
+  "textLines": [7040, 7056],
+  "illustrates": {
+    "rule": "9.5.4",
+    "quote": "Images. Place any associated source citation or copyright information appearing with an image in a new 7-5 paragraph following the caption. Follow print for wording and sequence of information. (See Sample 9-7: Source Citation to an Image on page 9-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "[Picture] Other Sources of Power",
+        "features": "A transcriber's-note picture indicator combined with the print's own bold banner heading across the top of the photograph, onto one braille line (cell 7)."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "Locomotives (see the Norris above) or horses pulled cars on the levels between inclines. The long level between incline Number 10 and Hollidaysburg was steep enough to allow cars to descend by gravity, with a locomotive used only to control speed.",
+        "features": "Left-hand caption beneath the photograph (cell 5); the braille excerpt truncates it with an ellipsis after 'inclines.', omitting the rest of this print sentence."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "Allegheny Portage Railroad",
+        "features": "Bold sub-heading introducing the right-hand caption (cell 7)."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "National Historic Site is one of more than 380 parks in the National Park System. The National Park Service cares for these special places so that all may experience our heritage. To learn more visit www.nps.gov.",
+        "features": "Right-hand caption text (cell 5); the braille excerpt truncates it with an ellipsis after 'National Park System.', omitting the rest of this print sentence."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "[Print shows an old locomotive]",
+        "features": "Transcriber's note describing the photo, in place of reproducing it (cell 7)."
+      },
+      {
+        "kind": "source",
+        "level": null,
+        "text": "Library of Congress",
+        "features": "Small vertical credit line on the photograph's right edge, identifying the image source; placed after the transcriber's note per 9.5.4, at the same cell-7 indent as that note (not 4 cells further right)."
+      }
+    ],
+    "notes": "Direct worked example of 9.5.4: the transcriber's-note description of the photo and its source ('Library of Congress') are placed in a new paragraph following the (transcribed) caption text. No blank line separates ANY of the six chunks above -- unlike Sample 9-6's attribution/Sample 9-1's attribution (each followed by a blank line, per 9.4.1d/9.5.1d), this sample's own citation-like fragments run on with no blank line anywhere between the heading and the final source line.",
+    "surroundingText": null,
+    "printFeatures": "A captioned historical photo of a locomotive with two blocks of explanatory caption text beneath it and a small vertical photo-credit line along its right edge."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,picture@.> ,o!r ,s\\rces ( ,p[]",
+      "    ,locomotives .7\"<see ! ,norris",
+      "    abv\">.' or horses pull$ c>s on !",
+      "    levels 2t 9cl9es4 444",
+      "      ,alle<5y ,portage ,railroad",
+      "    ,na;nal ,hi/oric ,site is \"o ( m ?an",
+      "    #chj p>ks 9 ! ,na;nal ,p>k ,sy/em4",
+      "    444",
+      "      @.<,pr9t %[s an old locomotive@.>",
+      "      ,,,libr>y ( 3gress,'"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 6-15 (a genuine excerpt). Field width 5, stripped. Line 1 (6): caption-bar transcriber's note + heading, cell 7. Lines 2-4 (7-9): left caption text, cell 5, truncated '444'. Line 5 (10): 'Allegheny Portage Railroad' sub-heading, cell 7. Lines 6-8 (11-13): right caption text, cell 5, truncated '444' on its own line. Line 9 (14): transcriber's note about the photo, cell 7. Line 10 (15): 'Library of Congress' source line, cell 7 (same indent as line 9, not the usual 'previous line + 4')."
+  },
+  "uncertain": [
+    "The 'Library of Congress' source line (line 10) is at the same cell-7 indent as the transcriber's-note line before it, rather than 4 cells further right as the 'fifth cell to the right of the previous line' pattern measured elsewhere in this section would suggest."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 7045-7054 after stripping the 5-character line-number field (the '(Return to Text)' line 7055 excluded). Print-content structure differed substantially: A broke this into 5 blocks (folding the right caption's sub-heading into the same block as its body text); B collapsed the whole photo/captions into 2 blocks (a heading and 2 long paragraphs) plus a separate 'other' for the photo and a separate 'source' for the credit line, which does not reflect the braille's own 6 distinct, differently-indented chunks (cell7/cell5/cell7/cell5/cell7/cell7) at all. Rebuilt from the agreed `braille.lines`' own indentation directly (not picking either run's account): 6 blocks matching the 6 physically distinct chunks, `kind:'source'` used for every cell-5/cell-7 citation-like fragment (mapped to Emboss's attribution reuse per the existing displayed-writeup.md finding F-D9). Each caption's FULL print sentence is kept in `text` (not truncated to match the braille's own ellipsis point), consistent with this whole corpus's convention (e.g. Sample 9-1) of feeding buildModel9 the complete print content and documenting the resulting over-production against the gold's own deliberately-abridged excerpt as an expected, not invented, limitation."
+}

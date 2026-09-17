@@ -1,0 +1,51 @@
+{
+  "id": "example-4-4",
+  "title": "Unit Number and Title",
+  "pdfPages": [
+    108
+  ],
+  "textLines": [
+    3227,
+    3235
+  ],
+  "illustrates": {
+    "rule": "4.3.3",
+    "quote": "Do not insert a blank line between connected headings."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "UNIT ONE",
+        "features": "Small-caps banner heading, bold black, with a small red decorative ornament between \"UNIT\" and \"ONE\"."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Short Story",
+        "features": "Very large bold red serif display type, on a tan textured banner background, directly beneath \"UNIT ONE\"."
+      }
+    ],
+    "notes": "Connected unit-number and unit-title headings with no blank line between them, per rule 4.3.3.",
+    "surroundingText": null,
+    "printFeatures": "Boxed unit-opener banner: small-caps \"UNIT ONE\" above a very large red serif display title on a tan textured background."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "              ,,unit ,,\"o",
+      "             ,! ,%ort ,/ory",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 centered heading \"UNIT ONE\" (whole-word capitalization indicator on each word); line 3 centered heading \"The Short Story\" directly beneath with no blank line, per 4.3.3; line 4 blank."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree; `print.blocks[0].text` resolved to title-case \"Unit One\" is WRONG -- the braille's double-comma indicator (\",,unit ,,\\\"o\") marks BOTH words as whole-word capitals, i.e. print reads \"UNIT ONE\" in full caps, matching run B, not run A's title-cased \"Unit One\". Both blocks are centered (level 1), confirmed by the centering-formula check on lines 2-3."
+}

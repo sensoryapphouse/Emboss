@@ -1,0 +1,79 @@
+{
+  "id": "sample-11-14",
+  "title": "Transcriber's Note Regarding Omitting a Print Symbol",
+  "pdfPages": [
+    321
+  ],
+  "textLines": [
+    9535,
+    9557
+  ],
+  "illustrates": {
+    "rule": "11.7.1.i",
+    "quote": "i. When the table uses only one type of symbol or abbreviation, omit it from all entries in the table. Explain the omission in a transcriber's note placed before the table. Sample: All numbers in the table are percentages. (See Sample 11-14: Transcriber's Note Regarding Omitting a Print Symbol on page 11-39.)"
+  },
+  "print": {
+    "caption": "Table 16 / Long-Term Trends in Grade 12",
+    "headers": [
+      [
+        "",
+        "1992",
+        "1993",
+        "1994"
+      ]
+    ],
+    "rows": [
+      [
+        "Cigarettes",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Daily",
+        "17.2%",
+        "19.0%",
+        "19.4%"
+      ],
+      [
+        "Half pack or more per day",
+        "10.0%",
+        "10.9%",
+        "11.2%"
+      ]
+    ],
+    "notes": "\"Cigarettes\" is a cell-5-style group heading with no entries of its own; \"Daily\" and \"Half pack or more per day\" are the actual data rows, every entry being a percentage.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box; title above the box, bold; header row (years) bold with ruled line beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "               ,table #af",
+      "     ,l;g-,t]m ,tr5ds 9 ,grade #ab",
+      "",
+      "      @.<,figures 9 ! table >e",
+      "    p]c5tages4@.>",
+      "",
+      "                 #aiib #aiic #aiid",
+      "                 \"3333 \"3333 \"3333",
+      ",cig>ettes",
+      "  ,daily \"\"\"\"\"\" #ag4b #ai4j #ai4d",
+      "  ,half pack or",
+      "    m p] \"d \"\"\" #aj4j #aj4i #aa4b",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A transcriber's note (lines 7-8) explains: \"All figures 9 [in] table >e [are] p]c5tages [percentages].\" (\"All figures in table are percentages.\") — matching rule 11.7.1.i's sample wording almost exactly. As a result, the '%' sign is omitted from every entry in the table body (lines 13, 15) since it is the table's one and only recurring symbol."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers' first cell resolved to '' (blank above the year columns in print, confirmed against the PDF image, p. 321), not a fabricated '(row)' placeholder."
+}

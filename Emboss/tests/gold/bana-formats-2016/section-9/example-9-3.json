@@ -1,0 +1,54 @@
+{
+  "id": "example-9-3",
+  "title": "Displayed Single Sentence",
+  "pdfPages": [229],
+  "textLines": [6602, 6619],
+  "illustrates": {
+    "rule": "9.2.2.d",
+    "quote": "Blocked paragraphs are blocked at the adjusted left margin; indented paragraphs begin 2 cells to the right of the adjusted left margin."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In the third person, the correct form is doesn’t, whether the subject is singular or plural.",
+        "features": "'doesn't' italicized."
+      },
+      {
+        "kind": "quote",
+        "level": null,
+        "text": "Cathy (doesn’t, don’t) like movies with sad endings.",
+        "features": "Displayed single sentence, indented, set off by blank lines above and below; both 'doesn't' and 'don't' italicized within the parenthetical choice."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The correct form is doesn’t: Cathy doesn’t like movies with sad endings.",
+        "features": "'doesn't' italicized in both occurrences."
+      }
+    ],
+    "notes": "The section's own running rule text (9.2.2e, on the page immediately before) discusses *multiple* displayed sentences; this example itself shows a single displayed sentence blocked at the adjusted left margin (cell 3) -- both its own line and its runover at the same indent (first==runover), the defining feature of clause d's 'blocked' variant rather than 'indented'.",
+    "surroundingText": null,
+    "printFeatures": "Plain (unboxed) worked-example text; italics used for the emphasized word 'doesn't'/'don't' throughout."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",9 ! ?ird p]son1 ! correct =m is",
+      ".1doesn't1 :e!r ! subject is s+ul> or",
+      "plural4",
+      "",
+      "  ,ca?y \"<doesn't1 don't\"> l movies )",
+      "  sad 5d+s4",
+      "",
+      ",! correct =m is .1doesn't3 ,ca?y",
+      ".1doesn't l movies ) sad 5d+s4"
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 0 (no page-layout ASCII padding to strip). Lines 1-3: lead-in paragraph, cell 1. Line 4: blank. Lines 5-6: the displayed sentence -- FIRST and RUNOVER at the same cell-3 indent (blocked, per 9.2.2d, not indented). Line 7: blank. Lines 8-9: closing paragraph, cell 1."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified independently byte-for-byte against references/_text/braille-formats-2016.txt lines 6607-6615 (margin 0, confirmed by direct byte inspection: no leading ASCII-space run on any line). The two runs disagreed only on `illustrates.rule`: A cited 9.2.2e ('multiple displayed sentences...as a list'), B quoted the whole of 9.2.2. Neither fits exactly -- this example shows a SINGLE sentence (not 'multiple', ruling out 9.2.2e, which Example 9-4 illustrates instead with its own two-item list) with first-line and runover at the identical cell-3 indent, i.e. genuinely 'blocked' rather than 'indented' -- the specific distinction drawn by clause 9.2.2d. Resolved to 9.2.2d on that direct evidence from the agreed `braille.lines` (lines 5-6 above), not by picking either run's stated id."
+}

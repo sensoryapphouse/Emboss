@@ -1,0 +1,44 @@
+{
+  "id": "example-5-1",
+  "title": "Italicized Single Letters",
+  "pdfPages": [
+    129
+  ],
+  "textLines": [
+    3893,
+    3899
+  ],
+  "illustrates": {
+    "rule": "5.3.2",
+    "quote": "Ignore font attributes used for letters that mean letters and are shown standing alone, with or without punctuation. Note this change on the Transcriber’s Notes page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "The spelling hint “*i* before *e*, except after *c*” isn't very helpful, because there are many exceptions.",
+        "features": "Boxed plain-serif sentence; the three standing-alone letters i, e, and c (each meaning the letter itself, inside the quoted spelling mnemonic) are italicized; the rest is plain roman.",
+        "items": null
+      }
+    ],
+    "notes": "Single boxed sentence; no separate heading block.",
+    "surroundingText": "Follows rule 5.3.2 directly; Example 5-2 (same printed page, 5-3) follows immediately, illustrating 5.3.3.",
+    "printFeatures": "Single bordered box, plain serif black text, no color; only i, e, c italicized."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! spell+ h9t 8i 2f ;e1 except af ;c0",
+      "isn't v help;l1 2c \"! >e _m excep;ns4"
+    ],
+    "pageBreaks": [],
+    "notes": "Two lines, margin of 8 literal spaces stripped; no U+2800 blank-cell filler lines occur in this example. No typeform indicator appears on i, e, or c anywhere in the braille — the attribute is dropped entirely, per 5.3.2, leaving plain contracted UEB (independently re-derived from .txt lines 3898-3899, byte-identical to both runs)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No disagreement: both runs agree on every field. Braille independently re-derived from references/_text/braille-formats-2016.txt lines 3898-3899 (margin 8 spaces) and matches byte-for-byte. Print content read from the boxed illustration on PDF p.129 (printed page 5-3)."
+}

@@ -1,0 +1,82 @@
+{
+  "id": "sample-16-09",
+  "title": "Note in Column Entry",
+  "pdfPages": [
+    455
+  ],
+  "textLines": [
+    13128,
+    13152
+  ],
+  "illustrates": {
+    "rule": "16.8.1.h",
+    "quote": "Other transcriber’s notes follow the reference note(s). (See Sample 16-9: Note in Column Entry on page 16-27.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "table",
+        "level": null,
+        "text": "TABLE 7.1\nSocial Readjustment Rating Scale\n(from Holmes and Rahe, 1967)",
+        "features": "A ranked two-column table (Rank/Life event, Mean value), with a footnoted asterisk on the 'Marriage' row's mean value, explained in a note below the table.",
+        "items": [
+          "1 | Death of spouse | 100",
+          "2 | Divorce | 73",
+          "3 | Marital separation | 65",
+          "4 | Jail term | 63",
+          "5 | Death of close family member | 63",
+          "6 | Personal injury or illness | 53",
+          "7 | Marriage[ref:*] | 50",
+          "8 | Fired at work | 47"
+        ],
+        "headers": [
+          "Rank",
+          "Life event",
+          "Mean value"
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "Marriage was arbitrarily assigned a stress value of 500; no event was found to be any more than twice as stressful. Here the values are reduced proportionally and range up to 100."
+      }
+    ],
+    "surroundingText": "Cross-referenced from rule 16.8.1h, illustrating a transcriber's note ('Note(s) in the table below') placed before a table, followed by the reference note itself, followed by the table -- per rule 16.8.1's ordering (transcriber's note, blank line, reference note(s), then the table).",
+    "printFeatures": "A shaded/bordered data table with a title above it and a small footnote below the table (marked by an asterisk keyed to row 7's value)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,,table #g4a            #,-",
+      "    ,social ,readju/;t ,rat+ ,scale",
+      "      \"<f ,holmes & ,rahe1 #aifg\">",
+      "",
+      "      @.<,note to table 5try4@.>",
+      "",
+      "\"9 ,m>riage 0 >bitr>ily assign$ a /ress",
+      "  value ( #ejj2 444",
+      "",
+      "                                  ,m1n",
+      ",rank ,life ev5t                   value",
+      "\"3333 \"333333333333333333333333 \"33333",
+      "#a \"\" ,d1? ( sp\\se \"\"\"\"\"\"\"\"\"\"\"\" #ajj",
+      "#b \"\" ,divorce \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #gc",
+      "#c \"\" ,m>ital sep>a;n \"\"\"\"\"\"\"\"\"     #fe",
+      "#d \"\" ,jail t]m \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #fc",
+      "#e \"\" ,d1? ( close family memb]     #fc",
+      "#f \"\" ,p]sonal 9jury or ill;s       #ec",
+      "#g \"\" ,m>riage \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #ej\"9",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 20, two digits, +3). Line 5 is the required transcriber's note ('Note to table entry.') inserted before the table per rule 16.8.1b; line 7 is the reference note itself (about the arbitrary stress value of 500), placed after a blank line and before the table proper (lines 10 onward), matching the ordering in rule 16.8.1c-d. Table rows use 1-3-style columns with braille row-leader dot-fill ('...') between the life-event label and its value."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.8.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13143 (the table's own header row, field width 5, digits(20)+3) is exactly 40 characters; the title line (13133, 41 characters) and the footnoted 'Marriage' row (13151, 41 characters) are one cell over, a genuine source anomaly on those two lines only, not grounds to null the whole item's width. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+}

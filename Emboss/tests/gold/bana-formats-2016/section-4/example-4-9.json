@@ -1,0 +1,73 @@
+{
+  "id": "example-4-9",
+  "title": "Cell-5 Heading Before List",
+  "pdfPages": [
+    111
+  ],
+  "textLines": [
+    3342,
+    3354
+  ],
+  "illustrates": {
+    "rule": "4.5.3",
+    "quote": "The heading is usually not followed by a blank line, and takes precedence over the use of blank lines in other formats, such as lists (unless the list is arranged in more than one column). (See Formats, §4.5.4, §8.4.1a, Simple Lists in Columns.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Materials",
+        "features": "Left-aligned, bold blue serif run-in list header."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "field notebook",
+        "features": "Plain single-column list item."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "field guide of area species (plant, animal, and fungus)",
+        "features": "Plain single-column list item, wraps to a second print line."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "string",
+        "features": "Plain single-column list item."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "pencil",
+        "features": "Plain single-column list item."
+      }
+    ],
+    "notes": "Illustrates a cell-5 heading immediately followed (no blank line) by a simple single-column list, per rule 4.5.3.",
+    "surroundingText": null,
+    "printFeatures": "Boxed callout; bold blue left-aligned heading above a plain single-column list of four materials."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,mat]ials",
+      "field notebook",
+      "field guide ( >ea species \"<plant1",
+      "  animal1 & fungus\">",
+      "/r+",
+      "p5cil",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-5 heading 'Materials'; line 3 'field notebook' at column 1 (no blank line after the heading, per 4.5.3); lines 4-5 'field guide...' wrapping to a runover indented 2 cells; lines 6-7 'string' and 'pencil'; line 8 blank."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Runs agree on every field (both `braille.lines` and `print.blocks`); only prose wording differed (merged)."
+}

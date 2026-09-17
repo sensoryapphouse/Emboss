@@ -1,0 +1,61 @@
+{
+  "id": "example-5-17",
+  "title": "Use of Typeform Indicators to Show Words in Shapes",
+  "pdfPages": [
+    139
+  ],
+  "textLines": [
+    4227,
+    4243
+  ],
+  "illustrates": {
+    "rule": "5.9.2",
+    "quote": "A transcriber’s note and/or a list of special symbols explains this usage. Sample: In the sentences below, some words are enclosed in a rectangle or an oval. When multiple words are within one shape, a passage indicator rather than a word indicator is used. Symbols used: .=@#7 Words enclosed in a rectangle .=@#' Rectangle terminator .=^#1 Word enclosed in an oval"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Braille-only transcriber's note restating rule 5.9.2's own printed symbols legend (rectangle passage indicator/terminator, oval word indicator); no counterpart in this example's own print box.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Boston can be {{td1: very hot}} during the {{td2: summer}} months.",
+        "features": "Plain sentence with two enclosing shapes: 'very hot' is boxed in a rectangle outline, and 'summer' is enclosed in an oval outline.",
+        "items": null
+      }
+    ],
+    "notes": "Single-sentence example; no heading. The braille carries a transcriber's note restating rule 5.9.2's own printed symbols legend, not part of this example's own print box.",
+    "surroundingText": "Follows rule 5.9.2 and its printed 'Sample:' text directly, on printed page 5-13.",
+    "printFeatures": "Boxed single sentence with a rectangle drawn around 'very hot' and an oval drawn around 'summer'."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,9 ! s5t;es 2l1 \"s ^ws >e",
+      "    5clos$ 9 a rectangle or an oval4 ,:5",
+      "    multiple ^ws >e )9 \"o %ape1 a",
+      "    passage 9dicator r ?an a ^w 9dicator",
+      "    is us$4 ,symbols us$3",
+      "",
+      ".=@#7 ,^ws 5clos$ 9 a rectangle",
+      ".=@#' ,rectangle t]m9ator",
+      ".=^#1 ,^w 5clos$ 9 an oval@.>",
+      "",
+      ",bo/on c 2 @#7v hot@#' dur+ ! ^#1summ]",
+      "mon?s4"
+    ],
+    "pageBreaks": [],
+    "notes": "Twelve lines, margin 7 stripped (one cell narrower than most others in the section). Lines 1-9 are a transcriber's note ('@.<' ... '@.>') explaining the shapes convention and listing the two symbols — 'words enclosed in a rectangle' passage indicator ('@#7')/terminator ('@#''), and 'word enclosed in an oval' word indicator ('^#1') — with no printed counterpart in the example's own picture box (lines 1-4 have a genuine 4-cell runover indent). Lines 11-12 are the actual sentence: 'very hot' is wrapped in the rectangle passage indicator/terminator pair, and 'summer' carries the oval word indicator immediately before it (no separate terminator, since it is applied to only one word at a time)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte once run B's leading-indentation-stripping bug is corrected (lines 2-4, 7-8, 11 all lost their genuine runover/list indent in run B). `illustrates.rule` disagreement (A: 5.9.1, B: 5.9.2) resolved in favor of 5.9.2: this rule's own 'Sample:' text is the direct printed source of the exact two-symbol legend (rectangle indicator/terminator, oval indicator) reused verbatim in Example 5-17's own transcriber's note, whereas 5.9.1 is the general statement that a transcriber-defined indicator should be used at all."
+}

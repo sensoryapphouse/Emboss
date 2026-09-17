@@ -1,0 +1,45 @@
+{
+  "id": "example-4-8",
+  "title": "Balanced Centered Heading",
+  "pdfPages": [
+    111
+  ],
+  "textLines": [
+    3322,
+    3330
+  ],
+  "illustrates": {
+    "rule": "4.4.3",
+    "quote": "Divide a long centered heading at a logical break, balancing the two (or more) lines rather than dividing it arbitrarily."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "USING NATURAL RESOURCES IN THE UNITED STATES",
+        "features": "Bold black small caps, one long centered heading spanning the full width of the boxed print page; too long for one print line but shown here as the single heading being divided/balanced across two braille lines."
+      }
+    ],
+    "notes": "Illustrates dividing a long centered heading across two lines at a logical break point ('...Natural Resources' / 'in the United States'), balanced rather than divided arbitrarily, per rule 4.4.3.",
+    "surroundingText": null,
+    "printFeatures": "Boxed, centered, bold, full-capitals serif heading spanning the full width of the box; no accompanying body text shown in this excerpt."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "        ,,,us+ natural res\\rces",
+      "           9 ! unit$ /ates,'",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 'USING NATURAL RESOURCES' (whole-word capitalization indicator on each word) individually centered; line 3 'IN THE UNITED STATES' individually centered beneath it, division falling at a natural phrase break; line 4 blank."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree; text resolved to full capitals (\"USING NATURAL RESOURCES IN THE UNITED STATES\", matching run B) per the double-comma whole-word-capitalization indicator on every word in the braille -- run A's title-cased text does not match its own agreed braille."
+}

@@ -1,0 +1,95 @@
+{
+  "id": "sample-8-06",
+  "title": "Two-Column List Changed to Vertical List",
+  "pdfPages": [
+    214
+  ],
+  "textLines": [
+    6219,
+    6235
+  ],
+  "illustrates": {
+    "rule": "8.4.1.d",
+    "quote": "Preserve print alphabetic or numeric order, whether horizontal or vertical. (See Sample 8-6: Two-Column List Changed to Vertical List on page 8-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 2,
+        "features": "Two side-by-side columns of four sports each, both columns already in alphabetical order (column 1: B-words; column 2: S/T/V-words).",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Baseball"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Basketball"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Football"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Hockey"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Soccer"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Swimming"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Track"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Volleyball"
+          }
+        ]
+      }
+    ],
+    "notes": "No heading is shown in print for this list; items listed in print's column-major reading order, which here also happens to be fully alphabetical across both columns combined.",
+    "surroundingText": null,
+    "printFeatures": "Plain two-column list of sport names, no heading, bullets, or numbers visible in the print excerpt."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,runn+ ,h1d             #i",
+      "",
+      ",baseball",
+      ",basketball",
+      ",football",
+      ",hockey",
+      ",so3]",
+      ",swimm+",
+      ",track",
+      ",volleyball",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 is the braille page's own running head ',runn+ ,h1d' (Running Head) with a trailing reference code '#i'; line 2 is blank; the list itself begins on line 3, consistent with rule 8.3.4.b ('Start the list on line 3 when a running head is used'); the print's two side-by-side columns are transcribed as a single vertical column in strict alphabetical order (Baseball...Volleyball), per 8.4.1.d; line 11 blank closes the list."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Line 1’s \"Running Head\" text is confirmed (source .txt line 544, literal braille for the words \"Running Head\") to be the book’s own illustrative placeholder for rule 8.3.4.b (list starts on line 3 when a running head is used), not a real print heading — B’s reading is right; not modeled in print.blocks (Emboss has no running-head mechanism to build it from), recorded as a limitation/expected first-line mismatch instead. List items/order (8 sports, single combined alphabetical order down column 1 then column 2) cross-checked against source .txt (lines 546-553) and kept as A had it.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

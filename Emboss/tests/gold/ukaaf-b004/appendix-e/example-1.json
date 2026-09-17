@@ -1,0 +1,99 @@
+{
+  "id": "example-1",
+  "title": "Good practice example of a transposed table (Household Expenditure)",
+  "pdfPages": [
+    17,
+    18
+  ],
+  "textLines": [
+    546,
+    581
+  ],
+  "illustrates": [
+    {
+      "rule": "B004 E ex1-transpose",
+      "quote": "To fit the braille page, the table has been transposed, capitals and bold are omitted and the pound sign moved to the column headings."
+    },
+    {
+      "rule": "B004 E ex1-guide-dots",
+      "quote": "Guide dots are used, but are left short of the aligned column of figures."
+    }
+  ],
+  "print": {
+    "caption": "Household Expenditure",
+    "headers": [
+      [
+        "",
+        "Mortgage",
+        "Life Insurance",
+        "Buildings and Contents Insurance",
+        "Council Tax",
+        "Water Rates",
+        "Gas and Electricity",
+        "Total"
+      ]
+    ],
+    "rows": [
+      [
+        "Year 1",
+        "£7,504.28",
+        "£372.12",
+        "£249.12",
+        "£1,134.76",
+        "£363.00",
+        "£1,130.00",
+        "£11,256.62"
+      ],
+      [
+        "Year 2",
+        "£7,504.28",
+        "£372.12",
+        "£318.54",
+        "£1,186.50",
+        "£370.99",
+        "£1,396.00",
+        "£11,669.97"
+      ]
+    ],
+    "notes": "Print table as given (2 rows x 7 data columns, row-headed 'Year 1'/'Year 2'); the braille below is the TRANSPOSED result (7 rows x 2 data columns, row-headed by the expenditure category) that this example illustrates, not a direct copy of the print orientation.",
+    "surroundingText": "Heading 'Good practice example of a transposed table' precedes the two explanatory sentences quoted in 'illustrates' above; the table and its braille immediately follow.",
+    "printFeatures": "Bordered/ruled box (visible cell borders in the PDF, page 17); column headers 'Life Insurance', 'Buildings and Contents Insurance' and 'Gas and Electricity' wrap onto 2-3 print lines within their header cell (a column-width rendering effect, not extra header rows). No bold or shading on this table (contrast Example 2)."
+  },
+  "braille": {
+    "width": 38,
+    "lines": [
+      "       ,h\\sehold ,exp5diture",
+      "  @.<,! Table has be5 transpos$ 9",
+      "brl1 & capitals >e n 9dicat$4@.>",
+      "                ye> #a      ye> #b",
+      "                \"<@l\">      \"<@l\">",
+      "mortgage \"\"\"\"\"\"  #g1ejd4bh   #g1ejd4bh",
+      "life 9sur.e \"\"\"    #cgb4ab     #cgb4ab",
+      "build+s &",
+      "  3t5ts 9sur.e     #bdi4ab     #cah4ed",
+      "c\\ncil tax \"\"\"\"  #a1acd4gf   #a1ahf4ej",
+      "wat] rates \"\"\"\"    #cfc4jj     #cgj4ii",
+      "gas &",
+      "  electric;y \"\"  #a1acj4jj   #a1cif4jj",
+      "total \"\"\"\"\"\"\"\"\" #aa1bef4fb  #aa1ffi4ig",
+      "             \"31111111111"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 9,
+        "type": "implicit",
+        "note": "No explicit New-Braille-Page marker text. Print/PDF page 17 (lines 1-9 above: TN, headers, Mortgage/Life Insurance/Buildings-and-Contents-Insurance rows) is followed by print/PDF page 18 (lines 10-15: Council Tax/Water Rates/Gas-and-Electricity/Total rows plus the closing sign); detected from the print guide's own page-footer digits ('17' after line 9, '18' after line 15 in the source, both omitted here as pagination artifacts of the guide's own printing, not braille content). This is the guide's own print pagination, not a genuine facing-page braille split (contrast Example 2) — the table's own line count (38 cells wide throughout) shows no reason it could not have stayed on one braille page; it only crosses this guide's print page boundary."
+      }
+    ],
+    "notes": "Corrected against the PDF's actual embedded text (not the plain-text extraction — see 'resolution'). Line 8 ('build+s &') and line 12 ('gas &') are the first of a 2-line wrapped row heading ('Buildings and\\n   Contents Insurance', 'Gas and\\n electric;y'); their continuation (line 9, line 13) carries that row's figures. The opening 3-line block (lines 1-3) is the table's title in braille ('Household Expenditure') followed by a transcriber's note, opened/closed with the RUEB transcriber's-note indicators '@.<' / '@.>' (Unicode ⠈⠨⠣ / ⠈⠨⠜, RUEB §3/§3.27 — confirmed cell-by-cell via Emboss/engine/brf-ascii.mjs's BRF64 table: '@'=dot4, '.'=dots46, '<'=dots126, '>'=dots345). Its wording is not translated word-for-word here (only the digits and the already cross-verified currency/decimal signs are asserted with confidence) — see 'uncertain'."
+  },
+  "uncertain": [
+    "Line 4-5's repeated sign '\"<@l\">' under each 'Year N' heading: DECODED with high confidence as the pound sign in parentheses, i.e. '(£)', added once per column heading per this example's own stated rule ('the pound sign moved to the column headings'). Evidence: (a) RUEB §3 lists the pound sign as the 2-cell sign ⠈⠇ (dots4,123 = ASCII '@l' via Emboss's BRF64 table) and the braille-grouping indicators as the single cells ⠣/⠜ (dots126/dots345 = ASCII '<'/'>'), with RUEB §2.6.2's own worked example showing a grade-1-symbol-indicator (dot5, ASCII '\"') immediately before an opening grouping sign in exactly this configuration ('(c' -> dot5 + opening-grouping + ...); (b) independently, feeding the literal print string '(£)' as a table-heading cell through Emboss's own real liblouis en-ueb-g2 translator (scratch experiment, see standards-map.md / differences.md) produces the ASCII string '\"<@L\">' — an exact match, case aside. The residual, lowest-confidence detail is the precise RUEB rule number governing the leading/trailing dot-5 cell in this exact context (very likely the grade-1-symbol-indicator RUEB §5.2/2.6.2 pattern for a sign standing next to punctuation, but not pinned to one numbered sub-rule with full certainty).",
+      "Line 15's closing sign '\"31111111111' (also line 20 of example-2, in the same position): not decoded. Plausibly an end-of-transcriber's-note or end-of-table marker (a long run of the same cell after a distinct lead-in sign), but no RUEB citation was found for this exact form; left as a question for a transcriber (see standards-questions.md)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both independent extraction runs (extract-E-A, extract-E-B) quoted this example's braille directly from references/_text/B004.txt lines 563-581, which is a pdftotext '-layout' style reconstruction. Re-reading the source PDF (references/ukaaf/presentation-guidelines-B004.pdf, page 17) directly — via PyMuPDF's per-line text-span extraction, which returns each line's literal embedded characters from its single underlying text-drawing operation, not a layout-reconstructed guess — shows that the .txt file inserted spurious EXTRA horizontal whitespace into 5 of this example's lines (the two 'Year N'/'(£)' header lines and the Mortgage/Life-Insurance/Buildings-and-Contents-Insurance data rows, i.e. every row that was printed on PDF page 17): e.g. the .txt gives 'mortgage \"\"\"\"\"\"                          #g1ejd4bh                   #g1ejd4bh' (78 characters) where the PDF's own text run is 'mortgage \"\"\"\"\"\"  #g1ejd4bh   #g1ejd4bh' (38 characters, matching every other line of this table and both examples' braille-page-number-token lines). Every one of this example's rows is 38 cells wide once read this way, including the 4 rows on page 18 (Council Tax onward) where the .txt was already only off by 1-2 stray spaces. Content (the actual non-whitespace characters, in order) is identical between the .txt and the PDF for every line — this is a spacing-only artifact of the .txt extraction tool (most likely a poppler/pdftotext '-layout' column-width misestimate for the embedded SimBraille font), not a content error, and not something either extraction run could have caught by cross-checking the .txt against itself or against a rendered page image without measuring actual character/word bounding boxes as done here. Both runs' own verification method (comparing the .txt to a re-run of the same extraction tool, or eyeballing a rendered image for gross structure) did not catch it. Corrected here using the PDF's own text layer, cross-checked against the rendered page image for the general row/column structure (unchanged). Width is 38 throughout, confirmed independently by the braille-page-number tokens '#eb'/'#ec' in Example 2 sitting right-justified at column 38 of an otherwise-38-cell line."
+}

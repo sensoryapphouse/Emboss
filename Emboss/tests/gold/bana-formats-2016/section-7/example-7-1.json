@@ -1,0 +1,66 @@
+{
+  "id": "example-7-1",
+  "title": "Box within Line-Numbered Prose",
+  "pdfPages": [
+    187
+  ],
+  "textLines": [
+    5422,
+    5433
+  ],
+  "illustrates": {
+    "rule": "7.3.3.b",
+    "quote": "The length of box lines within line-numbered text adheres to the required two blank cells before line numbers."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "gained, and write them out for publication. And he added:",
+        "features": "End of running line-numbered prose, print line 80 (right-margin line-number column; facsimile image of a line-numbered manuscript page)."
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "features": "An indented quotation box drawn around print lines 81-82, opened with a top box line only; the box's own bottom edge is drawn as a jagged, torn-paper line beneath line 82 (confirmed against the PDF page image, p.187, footer 7-3), with line 83's row in the line-number gutter left blank (no text visible there). Read as the source figure being a deliberately cropped/partial illustration, consistent with the braille's own '444' continuation marker in place of a bottom box line. Matches 7.3.3.b: the braille top box line stops short (35 of 40 cells) to leave the required two blank cells before the line-number field.",
+        "blocks": [
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "\"Never say ‘We learn’ so-and-so, or ‘It is reported,’ or ‘It is rumored,’ or ‘We understand’ so-and-so, but go to",
+            "features": "Print lines 81-82 of the line-numbered quotation (line 81 wraps across two print lines in the source image; line 82 ends the excerpt, cut off by the box's own torn bottom edge after 'but go to'). The braille excerpt itself ends this same quotation with a '444' continuation marker rather than a bottom box line -- the quotation is evidently longer than what either the print image or the braille excerpt reproduces."
+          }
+        ]
+      }
+    ],
+    "notes": "Two-part print image: (1) a facsimile of ordinary line-numbered prose (line 80, unboxed) ending 'And he added:'; (2) immediately below/right, an indented box containing the start of a quotation (lines 81-82), whose print border is drawn torn off (no bottom line, no line-83 text) -- the source figure is itself a deliberately partial excerpt, not a complete page.",
+    "surroundingText": null,
+    "printFeatures": "Photographic facsimile of a line-numbered manuscript page; the quotation box is a plain-ruled rectangle (top line only) inset within the shared right-margin line-number gutter used by both the running text and the box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "ga9$1 & write !m \\ = publica;n4 ,&   #hj",
+      "he add$3",
+      "",
+      "77777777777777777777777777777777777",
+      "8,n\"e say ,8,we le>n,0 s-&-s1 or     #ha",
+      ",8,x is report$1,0 or ,8,x is",
+      "rumor$1,0 or ,8,we \"u/&,0 444        #hb"
+    ],
+    "pageBreaks": [],
+    "notes": "7 lines (source .txt lines 5427-5433; fixed left margin of 8 characters stripped, U+2800 converted to space, trailing spaces stripped). Line 1: print line 80 ('gained, and write them out for publication. And he added:'), right-justified line-number code '#hj' (=80). Line 2: wrapped continuation of line 80 ('he added:'), no line-number code (same print line as line 1). Line 3: blank (a box is preceded by a blank line, 7.2.1). Line 4: the top box line, 35 dot-2356 '7' characters -- NOT the full 40-cell width; per 7.3.3.b it stops short to leave the required two blank cells before the line-number field (unlike Example 7-2's box lines, which run the full 40 cells because that example is not set within line-numbered text). No bottom box line appears in this excerpt. Line 5: print line 81, opening quotation mark and text, line-number code '#ha' (=81). Line 6: continuation of line 81's wrapped text, no line-number code. Line 7: print line 82, ending in a '444' continuation-omission marker, line-number code '#hb' (=82)."
+  },
+  "uncertain": [
+    "Print line 83's row in the line-number gutter is visible but blank in the source page image -- the print box's own bottom border is drawn as a jagged, torn-paper line after line 82 rather than a normal ruled bottom edge. Read as the source figure being a deliberately partial/cropped illustration (consistent with the braille excerpt also truncating the same quotation with a '444' marker rather than a bottom box line), not as evidence that line 83 contained further boxed text that was simply omitted from transcription.",
+    "The BANA line-number encoding was decoded by the standard a=1..j=0 letter-for-digit convention (#hj=80, #ha=81, #hb=82); not cross-checked against a separate Special Symbols page in this reference copy."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. Print content and structure agree; wording differs only in how the box's own torn bottom edge is described (A: 'wavy/cut-off line'; B: 'hand-torn/frayed edge') -- both describe the same jagged torn-paper-style line, confirmed directly against the PDF page image (p.187, footer 7-3). Title uses the bare descriptive form ('Box within Line-Numbered Prose'), matching the section-4/8 gold precedent's own convention -- B's title field wrongly carried a literal 'Example 7-1:' prefix, not used. This box carries no title of its own (contrast Example 7-2's 'Forms of be'). BOTH runs transcribed the quotation's nested quotation marks as straight ASCII apostrophes ('We learn'); corrected to proper Unicode single quotation marks (‘We learn’) matching the print image's own typographic quotes -- confirmed by direct translate() experiment that only the curly form reproduces the expected braille's own nested-quote indicator (',8,we le>n,0'); the straight-apostrophe form translates as a plain apostrophe-word instead, which does not match. (This sample still mismatches Emboss's own output for unrelated reasons -- see standards-findings.md F-70/F-76.)",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

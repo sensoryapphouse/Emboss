@@ -1,0 +1,110 @@
+{
+  "example-8-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-8-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-8-3": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-8-4": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"    ,WRITE ! PR9CIPAL \\\"PS = EA* V]B4\" vs actual \"  ,WRITE ! PR9CIPAL \\\"PS = EA* V]B4 ,USE\". line count differs by +1 (expected 7, actual 8)."
+  },
+  "example-8-5a": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"   #A4 ,,,! LIFE & \\\"TS ( %]LOCK HOLMES,'\" vs actual \"#A4 ,,,! LIFE & \\\"TS ( %]LOCK HOLMES,'\". Input-model limitation: list item 1: has both an ordinal marker (\"2.\") and a print bullet (\"dot\") — Emboss's list formatter cannot combine an ordinal marker with a bullet indicator on one item; built with the ordinal marker only, the bullet is dropped (not representable)."
+  },
+  "example-8-5b": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"TEXT 5DS4                                             #F\" vs actual \"#A4 ,,,! LIFE & \\\"TS ( %]LOCK HOLMES,'\". line count differs by -3 (expected 7, actual 4). Input-model limitation: list item 1: has both an ordinal marker (\"2.\") and a print bullet (\"solid-square\") — Emboss's list formatter cannot combine an ordinal marker with a bullet indicator on one item; built with the ordinal marker only, the bullet is dropped (not representable)."
+  },
+  "example-8-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",? IS 8 WI% LI/ F ! ,L\\\\IS ,L',AM\\\\R\" vs actual \"  ,? IS 8 WI% LI/ F ! ,L\\\\IS ,L',AM\\\\R\". Input-model limitation: list has print.blocks columns:2 (print laid this list out in 2 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "example-8-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"#A .-\" vs actual \"#A\". Input-model limitation: list has one or more skeleton-outline blank-fill items (print gives a division number with no text, e.g. a ruled blank line to write on) — Emboss has no dot-5 blank-fill mechanism (F-36); built with empty text, the blank-fill symbol is not representable."
+  },
+  "example-8-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"               ,I4,B4#D4             #AE\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"I.B.4.\""
+  },
+  "example-8-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                 #I4AA               #AE\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"9.11\""
+  },
+  "sample-8-01": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"444 CALM1 NONCOMPETITIVE SETT+ = $UCA;N4\" vs actual \"  444 CALM1 NONCOMPETITIVE SETT+ =\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"—New Print Page— / -41-\""
+  },
+  "sample-8-02": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",\\\": C Y F9D RELIABLE S\\\\RCES ( H1L?   #,-\" vs actual \",\\\": C Y F9D RELIABLE S\\\\RCES ( H1L?\". line count differs by -1 (expected 9, actual 8). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"—New Print Page— / -65-\""
+  },
+  "sample-8-03": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",\\\": C Y F9D RELIABLE S\\\\RCES ( H1L?   #,-\" vs actual \",\\\": C Y F9D RELIABLE S\\\\RCES ( H1L?\". line count differs by -2 (expected 9, actual 7). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"—New Print Page— / -65-\""
+  },
+  "sample-8-04": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"TEXT 444\" vs actual \"  TEXT\". line count differs by +1 (expected 12, actual 13). Input-model limitation: paragraph is this book's own \"text\" placeholder for elided surrounding running text — the braille \"444\" ellipsis marker that follows it has no print-side input to build from; built as plain text only, the ellipsis is not representable."
+  },
+  "sample-8-05": {
+    "status": "not-representable",
+    "note": "first differing line 2: expected \"\" vs actual \",ALB]TA\". line count differs by +5 (expected 10, actual 15). Input-model limitation: list has print.blocks columns:2 (print laid this list out in 2 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "sample-8-06": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"              ,RUNN+ ,H1D             #I\" vs actual \",BASEBALL\". line count differs by -2 (expected 11, actual 9). Input-model limitation: list has print.blocks columns:2 (print laid this list out in 2 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "sample-8-07": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                     #AJ\" vs actual \"ADMIRA;N\". line count differs by +19 (expected 12, actual 31). Input-model limitation: list has print.blocks columns:6 (print laid this list out in 6 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "sample-8-08": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"A LOT              ESPECIALLY          \\\\TSIDE     #,-\" vs actual \"A LOT\". line count differs by +60 (expected 29, actual 89). Input-model limitation: list has print.blocks columns:6 (print laid this list out in 6 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "sample-8-09": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-8-10": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",PAY ATT5;N TO ! FOLL[+ F1TURES Z Y   #I\" vs actual \",PAY ATT5;N TO ! FOLL[+ F1TURES Z Y\". line count differs by +1 (expected 9, actual 10)."
+  },
+  "sample-8-11": {
+    "status": "not-representable",
+    "note": "first differing line 18: expected null vs actual \"\". line count differs by +1 (expected 17, actual 18). Input-model limitation: list has print.blocks columns:3 (print laid this list out in 3 side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column."
+  },
+  "sample-8-12": {
+    "status": "match",
+    "note": "match"
+  },
+  "sample-8-13": {
+    "status": "not-representable",
+    "note": "expected output is enclosed in a box (top '7...'/bottom 'G...' rule lines per BANA §7/11.2.5e) but Emboss produced no box lines for this input. first differing line 1: expected \"7777777777777777777777777777777777777777\" vs actual \"#A4 ,R1D ALL 9/RUC;NS 2F 2G9N+4\". line count differs by -6 (expected 12, actual 6). Input-model limitation: list item 2: print bullet \"√\" has no braille correspondence built in Emboss besides the primary dot bullet • (F-33) — dropped, not guessed."
+  },
+  "sample-8-14": {
+    "status": "not-representable",
+    "note": "first differing line 4: expected \"  ;$= ,BLACK TEA\" vs actual \"  ,BLACK TEA\". Input-model limitation: list item 2: print bullet \"○\" has no braille correspondence built in Emboss besides the primary dot bullet • (F-33) — dropped, not guessed."
+  },
+  "sample-8-15": {
+    "status": "not-representable",
+    "note": "first differing line 11: expected \"_$#D ,9 :AT WAYS 7 ! CIVILIZA;NS (\" vs actual \",9 :AT WAYS 7 ! CIVILIZA;NS (\". line count differs by +1 (expected 13, actual 14). Input-model limitation: list item 3: print bullet \"■\" has no braille correspondence built in Emboss besides the primary dot bullet • (F-33) — dropped, not guessed."
+  },
+  "sample-8-16": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                     #DE\" vs actual \",I4 ,BACKGR.D ( #AHIC ,COLUMBIAN\". line count differs by -1 (expected 18, actual 17). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"#de\""
+  },
+  "sample-8-17": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",ROOM #BEG                            #HI\" vs actual \",ROOM #BEG\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"#hi\""
+  }
+}

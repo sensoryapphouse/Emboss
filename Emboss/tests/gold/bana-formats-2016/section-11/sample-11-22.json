@@ -1,0 +1,106 @@
+{
+  "id": "sample-11-22",
+  "title": "Table Divided Vertically",
+  "pdfPages": [
+    330
+  ],
+  "textLines": [
+    9776,
+    9804
+  ],
+  "illustrates": {
+    "rule": "11.14.1",
+    "quote": "Wide Tables: Vertical Division. A wide table may be divided into vertical sections. When a divided table takes more than a single page, the preferred format is to place the table on facing pages. a. Divided tables should be on one braille page if possible. b. Repeat the row headings for each section of the table. (See Sample 11-22: Table Divided Vertically on page 11-48.)"
+  },
+  "print": {
+    "caption": "Unionized Manual Workers",
+    "headers": [
+      [
+        "",
+        "1900",
+        "1910",
+        "1920",
+        "1930",
+        "1940",
+        "1950"
+      ]
+    ],
+    "rows": [
+      [
+        "Denmark",
+        "13.9",
+        "16.2",
+        "37.0",
+        "33.8",
+        "44.3",
+        "54.4"
+      ],
+      [
+        "Sweden",
+        "8.7",
+        "12.2",
+        "32.4",
+        "41.7",
+        "64.3",
+        "75.2"
+      ],
+      [
+        "Norway",
+        "10.3",
+        "14.6",
+        "35.9",
+        "43.2",
+        "67.9",
+        "77.3"
+      ],
+      [
+        "Finland",
+        "6.9",
+        "10.3",
+        "25.6",
+        "34.7",
+        "44.2",
+        "52.1"
+      ]
+    ],
+    "notes": "Same underlying print table as Sample 11-21, here used to illustrate the alternative (single-braille-page) vertical-division format instead of facing pages.",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, single header row (years) bold, ruled line beneath; row headings (country names) bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "",
+      "7777777777777777777777777777777777777777",
+      "        ,unioniz$ ,manual ,\"w]s",
+      "",
+      "      @.<,table is divid$ v]tically 9to",
+      "    #b sec;ns4@.>",
+      "",
+      "         #aijj #aiaj #aibj #aicj",
+      "         \"3333 \"3333 \"3333 \"3333",
+      ",d5m>k   #ac4i #af4b #cg4j #cc4h",
+      ",sw$5     #h4g #ab4b #cb4d #da4g",
+      ",norway #aj4c #ad4f #ce4i #dc4b",
+      ",f9l&     #f4i #aj4c #be4f #cd4g",
+      "",
+      "         #aidj #aiej",
+      "         \"3333 \"3333",
+      ",d5m>k   #dd4c #ed4d",
+      ",sw$5    #fd4c #ge4b",
+      ",norway #fg4i #gg4c",
+      ",f9l&    #dd4b #eb4a",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 placeholder 'text'. A transcriber's note on lines 6-7 states, in substance, that the table is divided vertically into 2 sections - matching the rule's sample sentence. The table is then given twice on the SAME braille page: first section (lines 9-14) with columns 1900/1910/1920/1930 and full row headings (Denmark/Sweden/Norway/Finland); a blank line (15); second section (lines 16-21) repeating the same row headings with columns 1940/1950, per rule 11.14.1.b (repeat the row headings for each section)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers' first cell resolved to '' (blank), same pattern and same source table as Sample 11-21, confirmed against the PDF image (p. 330)."
+}

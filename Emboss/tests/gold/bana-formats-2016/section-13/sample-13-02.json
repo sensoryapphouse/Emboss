@@ -1,0 +1,202 @@
+{
+  "id": "sample-13-02",
+  "title": "Sample 13-2: Poem with Stanza Numbers",
+  "pdfPages": [
+    368,
+    369
+  ],
+  "textLines": [
+    10682,
+    10714
+  ],
+  "illustrates": {
+    "rule": "13.4.1 cross-reference",
+    "quote": "Use cell-5 headings for stanza numbers."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A Victim",
+        "features": "Bold, dark-red display title."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "by Alfred Tennyson",
+        "features": "Byline, plain text below the title."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "I.",
+        "features": "Roman-numeral stanza number."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "First stanza of Tennyson's \"A Victim\", 8 main poetic lines each followed by an indented sub-line, then a further-indented block of 8 short quoted-speech lines.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "A plague upon the people fell,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "A famine after laid them low;",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "Then thorpe and byre arose in fire,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "For on them brake the sudden foe;",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "So thick they died the people cried,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "‘The Gods are moved against the land.’",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "The Priest in horror about his altar",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "To Thor and Odin lifted a hand:",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "‘Help us from famine",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "And plague and strife!",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "What would you have of us?",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Human life?",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Were it our nearest,",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Were it our dearest,—",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Answer, O answer!—",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "We give you his life.’",
+                "indent": 2,
+                "number": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "II.",
+        "features": "Roman-numeral stanza number."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Opening two lines of the second stanza (excerpt; print continues beyond what is shown/needed for this sample).",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "But still the foeman spoil’d and burn’d,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And cattle died, and deer in wood,",
+                "indent": 1,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture spanning PDF pp.368-369 (title/stanza-1 on p.368, continuing to stanza-2's first two lines on p.369 before the print excerpt is torn off).",
+    "surroundingText": null,
+    "printFeatures": "Bold dark-red title; plain byline; bold roman-numeral stanza numbers; alternating-indent couplets, with quoted speech indented further still."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "               ,a ,victim",
+      "",
+      "           by ,alfr$ ,t5nyson",
+      "",
+      "    ,i4",
+      ",a plague ^u ! p fell1",
+      "  ,a fam9e af laid !m l[2",
+      ",!n ?orpe & byre >ose 9 fire1",
+      "  ,= on !m brake ! sudd5 foe2",
+      ",s ?ick !y di$ ! p cri$1",
+      "  ,8,! ,gods >e mov$ ag/ ! l&4,0",
+      ",! ,prie/ 9 horror ab 8 alt>",
+      "  ,to ,?or & ,od9 lift$ a h&3",
+      "    ,8,help u f fam9e",
+      "    ,& plague & /rife6",
+      "    ,:at wd y h ( u8",
+      "    ,human life8",
+      "    ,7 x \\r ne>e/1",
+      "    ,7 x \\r de>e/1,-",
+      "    ,answ]1 ,o answ]6,-",
+      "    ,we give y 8 life4,0",
+      "",
+      "    ,,ii4",
+      ",b / ! foeman spoil'd & burn'd1",
+      "  ,& cattle di$1 & de] 9 wood1"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10689-10713, after stripping a 5-char line-number field (2-digit max line number 25, +3=5) and converting U+2800. Title line 1 is centered (far right-shifted, matching a centered heading); the byline (line 3) is also centered, on a shorter string. Stanza numbers 'I.' and 'II.' (lines 5 and 23) are each shown with a 4-cell indent -- the cell-5 heading position -- matching rule 13.4.1.b exactly. Main poetic lines sit at cell 1; their paired sub-lines get a 2-cell runover indent (cell 3); the eight quoted-speech lines inside stanza I get a deeper, uniform 4-cell indent (cell 5).",
+    "variants": []
+  },
+  "uncertain": [
+    "Exact print indent levels for the quoted-speech block (assigned indent:2 here) are approximate, read from the image's relative left-indentation rather than measured typographically."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

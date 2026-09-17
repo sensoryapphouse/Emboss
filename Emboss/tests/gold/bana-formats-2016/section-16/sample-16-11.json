@@ -1,0 +1,95 @@
+{
+  "id": "sample-16-11",
+  "title": "Endnotes",
+  "pdfPages": [
+    458,
+    459
+  ],
+  "textLines": [
+    13215,
+    13245
+  ],
+  "illustrates": {
+    "rule": "16.9.3",
+    "quote": "Format of Endnotes"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Notes",
+        "features": "Plain section heading, not enclosed in any special marking in print (print's own heading, distinct from the transcriber-supplied bracketed 'NOTES' the rule requires when print has none).",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Chapter 1: “Ike”",
+        "features": "Chapter-identifying sub-heading for this endnote section.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Among the books I consulted in writing this chapter, the following were particularly helpful: Winston S. Churchill, Painting as a Pastime; Ferguson, The Pity of War; Lukacs, Five Days in London, May 1940. In general I have based British casualty numbers on generally accepted figures. Ferguson's The Pity of War analyzes these very accurately and in great detail. Casualty numbers for the First Battle of the Somme are based on those in Prior and Wilson, The Somme, 300–302.",
+        "features": "Introductory prose paragraph before the numbered endnote list, citing several italicized book titles.",
+        "items": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Six numbered endnotes in list format (cell 1, reference number; runovers cell 3), each citing a source with page numbers.",
+        "items": [
+          "1. Alanbrooke, War Diaries, 355-505. This is a constant theme in Alanbrooke's diary entries, though he does vary it from time to time with even more exasperated remarks about Ike, such as, “He is a hopeless commander” (638).",
+          "2. Winston S. Churchill, Into Battle: Winston Churchill's War Speeches, speech in the House of Commons, May 19, 1940, 212.",
+          "3. Larrabee, Commander in Chief, 347.",
+          "4. Winston S. Churchill, Into Battle, speech in the House of Commons, June 4, 1940, 219.",
+          "5. Calder, The People's War, 113.",
+          "6. Winston S. Churchill, Never Give In! speech of November 10, 1942, 342."
+        ]
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Cross-referenced from Example 16-14 (List of Note Abbreviations), illustrating a full endnote section beginning on its own page, headed 'Notes' (print's own heading, here doubling for the transcriber-required NOTES heading since print does supply one), with print page number '727' centered at the foot.",
+    "printFeatures": "A plain endnotes page: 'Notes' heading, 'Chapter 1: “Ike”' sub-heading, an introductory paragraph, then a six-item numbered list, with a decorative centered page-number rule '—727—' at the foot."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                 ,notes              #gbg",
+      "",
+      "    ,*apt] #a3 8,ike0",
+      ",am;g ! books ,i 3sult$ 9 writ+ ? *apt]1",
+      "! foll[+ 7 \"picul>ly help;l3 444",
+      "  444",
+      "",
+      "#a4 ,alanbrooke1 .1,w> .1,di>ies1",
+      "  #cee-#eje4 ,? is a 3/ant !me 9",
+      "  ,alanbrooke's di>y 5tries1 ?\\< he does",
+      "  v>y x f \"t to \"t ) ev5 m exasp]at$",
+      "  rem>ks ab ,ike1 s* z1 8,he is a hope.s",
+      "  comm&]0 \"<#fch\">4",
+      "#b4 ,w9/on ;,s4 ,*ur*ill1 .7,9to",
+      "  ,battle3 ,w9/on ,*ur*ill's ,w>",
+      "  ,spee*es1.' spee* 9 ! ,h\\se (",
+      "  ,commons1 ,may #ai1 #aidj1 #bab4",
+      "#c4 ,l>rabee1 .7,comm&] 9 ,*ief1.' #cdg4",
+      "#d4 ,w9/on ;,s4 ,*ur*ill1 .1,9to",
+      "  .1,battle1 spee* 9 ! ,h\\se ( ,commons1",
+      "  ,june #d1 #aidj1 #bai4",
+      "#e4 ,cald]1 .7,! ,p's ,w>1.' #aac4",
+      "#f4 ,w9/on ;,s4 ,*ur*ill1 .7,n\"e",
+      "  ,give ,96.' spee* ( ,novemb] #aj1 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field width 5 (max line number 24, two digits, +3). Line 1 is the heading \",notes\" (NOTES) with a right-flush print-page reference (#gbg = 727); it is not enclosed in transcriber's-note indicators here because print itself supplies this heading (per rule 16.9.3b's own condition -- the transcriber's-note-indicator wrapping applies only 'if the text does not include a heading'). Each endnote begins at cell 1 with its reference number (#a4, #b4, etc.), runovers at cell 3 (2-cell indent from the number), per rule 16.9.3c's 1-3 margins."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.9.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13225/13228/13231/13233/13239/13241 (field width 5, digits(24)+3) are each exactly 40 characters; the title line (13222, 41 characters, right-justified to '#gbg') is a one-cell anomaly on that line alone. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

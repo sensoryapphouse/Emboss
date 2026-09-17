@@ -1,0 +1,59 @@
+{
+  "id": "example-9-4",
+  "title": "Displayed Multiple Sentences",
+  "pdfPages": [230],
+  "textLines": [6622, 6637],
+  "illustrates": {
+    "rule": "9.2.2.e",
+    "quote": "Multiple displayed sentences are treated as a list beginning at the adjusted left margin; e.g., if the adjusted left margin is 5, displayed sentences would be placed with margins 5-7."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Respectively and Respectfully",
+        "features": "Bold heading at the top of the excerpt box."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Respectively means “separately” or “individually”; respectfully means “full of respect”",
+        "features": "'Respectively' and 'respectfully' italicized (defined terms)."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "The two displayed sentences, each formatted as a list item at the adjusted left margin, with 'respectively'/'respectfully' italicized within them.",
+        "items": [
+          "The participants in the debate were St. Lawrence High School and Delphi High School, respectively.",
+          "The students respectfully stated their arguments."
+        ]
+      }
+    ],
+    "notes": "Illustrates 9.2.2e directly: two displayed sentences are formatted as a list beginning at the adjusted left margin (cell 3), with wrapped runover lines at cell 5 -- the list-item-plus-runover pattern the rule describes.",
+    "surroundingText": null,
+    "printFeatures": "Boxed vocabulary-style excerpt: bold heading, an italicized two-clause definition sentence, then the two displayed example sentences with the defined words italicized in place."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,respectively & ,respect;lly",
+      ".1,respectively m1ns 8sep>ately0 or 444",
+      "",
+      "  ,! \"picipants 9 ! debate 7 ,st4",
+      "    ,lawr;e ,hi< ,s*ool & ,delphi ,hi<",
+      "    ,s*ool1 .1respectively4",
+      "  ,! /ud5ts .1respect;lly /at$ _!",
+      "    >gu;ts4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 8 ASCII spaces (a page-layout artifact of this stretch of the .txt scan, present on every line of this block including blank filler lines -- confirmed by direct byte inspection of all 10 lines including line 1, a genuine blank braille-cell line, not a truly-empty .txt line, and so kept as line 1 of this array; contrast the truly-empty .txt lines immediately before/after this block, which are page-layout gaps and are excluded). After stripping: line 2 (heading) has a further fixed 4-cell indent (cell 5 -- does not match the centering formula for its own length, confirming a fixed cell-5 heading, not centred); line 3 (definition sentence) has 0 further indent (cell 1); lines 5 and 8 (list items) have 2 further cells (adjusted margin, cell 3); lines 6-7 and 9 (runovers) have 4 further cells (cell 5)."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B agreed on every `braille.lines` byte except one: A included a leading blank line (this block's own line 6627 in the source, a genuine 40-blank-cell braille line, not a truly-empty .txt filler line) that B omitted. Settled from the primary source directly (awk-extracted, byte-counted): line 6627 carries the block's own 8-space left-margin padding plus 40 literal U+2800 characters -- a real blank braille line distinct from the truly-empty .txt lines 6623-6626 immediately before it -- so A's leading blank is correct and is kept; B's array (missing it) is not used. `illustrates.rule` dotted per this project's convention (9.2.2.e, not A's undotted '9.2.2e'). Heading level: A measured a fixed 4-cell indent (cell 5, not matching the centering formula) and recorded level 2; B recorded null. Resolved to level 2 on A's direct measurement against the agreed braille."
+}

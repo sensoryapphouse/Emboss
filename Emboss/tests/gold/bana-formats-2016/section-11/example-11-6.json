@@ -1,0 +1,56 @@
+{
+  "id": "example-11-6",
+  "title": "Column Headings with Runovers",
+  "pdfPages": [
+    290
+  ],
+  "textLines": [
+    8488,
+    8498
+  ],
+  "illustrates": {
+    "rule": "11.4.1.c",
+    "quote": "c. Column headings and their runovers are left-justified above their respective columns."
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "Species",
+        "Habitat Unit",
+        "Potential Population"
+      ]
+    ],
+    "rows": [
+      [
+        "Grizzly Bear",
+        "Variable",
+        "Undetermined"
+      ]
+    ],
+    "notes": "Only one data row is shown in the print excerpt (a fragment of a larger table).",
+    "surroundingText": "Follows 11.4.2.c; is followed immediately by 11.4.3 Complex Tables with Column and Sub-column Headings.",
+    "printFeatures": "Bordered box; header row bold with a ruled line beneath it."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      "               ,habitat ,pot5tial",
+      ",species       ,unit     ,popula;n",
+      "\"333333333333 \"3333333 \"333333333",
+      ",grizzly ,be> ,v>iable ,undet]m9$"
+    ],
+    "pageBreaks": [],
+    "notes": "'Potential Population' runs over two lines: 'Habitat Potential' appears on the heading's first line (left-justified over its own column, i.e. 'Habitat' over the Habitat-Unit column and 'Potential' over the Potential-Population column) and 'Species / Unit / Population' complete each heading on the second line — all column headings end together on that same (second) line per rule 11.4.1.d. No separation line appears until after both heading lines are complete."
+  },
+  "uncertain": [
+    "No bottom box rule ('gggg...') or trailing blank line appears in the .txt source for this example, unlike every other boxed example in this section (11-2, 11-3, 11-8); this was not independently re-checked against the physical page beyond the .txt and the single page image already reviewed, so it is recorded as a deliberately partial excerpt rather than a proven one."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No content differences beyond header-schema normalization."
+}

@@ -1,0 +1,71 @@
+{
+  "id": "sample-11-01",
+  "title": "Table Caption",
+  "pdfPages": [
+    307
+  ],
+  "textLines": [
+    9166,
+    9182
+  ],
+  "illustrates": {
+    "rule": "11.2.8.b",
+    "quote": "b. Use 7-5 margins. If the table has no title or heading, insert an identifier (e.g., figure, chart, table, etc.) enclosed in transcriber's note indicators. The caption follows the identifier on the same line. (See Sample 11-1: Table Caption on page 11-25.)"
+  },
+  "print": {
+    "caption": "Figure 24-7  The APY is the best indicator of how much interest you will earn.",
+    "headers": [
+      [
+        "5.25%, compounded",
+        "APY"
+      ]
+    ],
+    "rows": [
+      [
+        "Daily",
+        "5.39%"
+      ],
+      [
+        "Quarterly",
+        "5.35%"
+      ],
+      [
+        "Semiannually",
+        "5.32%"
+      ],
+      [
+        "Annually",
+        "5.25%"
+      ]
+    ],
+    "notes": "The table itself has no title/heading of its own; \"Figure 24-7\" plus the sentence about APY functions as a figure caption below the table (in print).",
+    "surroundingText": null,
+    "printFeatures": "Bordered box, shaded blue background behind the header row area; header row (\"5.25%, compounded\" / \"APY\") bold. Below the box, \"Figure 24-7\" is bold, followed in the same paragraph by italic caption text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      ,figure #bd-#g ,! ,,apy is !   #,-",
+      "    be/ 9dicator ( h[ m* 9t]e/ y w e>n4",
+      "7777777777777777777777777777777777777777",
+      "#e4be.01 comp.d$ ,,apy",
+      "\"333333333333333 \"333333",
+      ",daily \"\"\"\"\"\"\"\"\" #e4ci.0",
+      ",qu>t]ly \"\"\"\"\"\"\" #e4ce.0",
+      ",semiannually \"\" #e4cb.0",
+      ",annually \"\"\"\"\"\" #e4be.0",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Because the print table has no title, the transcriber inserts an identifier in a transcriber's note before the table: line 1 begins with the note (shaded/highlighted in the PDF image) \",figure #bd-#g ,! ,,apy is ! #,-\" continuing on line 2 \"be/ 9dicator ( h[ m* 9t]e/ y w e>n4\" — i.e. the caption \"Figure 24-7. The APY is the best indicator of how much interest you will earn.\" is placed BEFORE the table body (per rule 11.2.8.a), then the box and table follow on lines 3–10, with a blank line 11 after."
+  },
+  "uncertain": [
+    "The precise dot pattern of the shaded transcriber's-note bracket on line 1 was read from the .txt extraction and cross-checked for plausibility against the PDF image, but not independently re-derived from the raster image dot-by-dot."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No content differences; both runs match the source .txt exactly."
+}

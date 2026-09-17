@@ -1,0 +1,128 @@
+{
+  "id": "b004-j-2",
+  "title": "B004 Appendix J: Good practice example of poetry – line indicator method",
+  "pdfPages": [
+    28,
+    29
+  ],
+  "textLines": [
+    885,
+    899
+  ],
+  "illustrates": {
+    "rule": "B004 J line-indicator-method",
+    "quote": "Poetry may be written continuously with the line indicator placed at the end of each verse line. Each stanza begins in cell 3 of a new line. The line indicator occurs at the end of each stanza except the last. It doesn’t appear at the end of a poem or verse extract."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Example:",
+        "features": "Plain lead-in label, ordinary paragraph."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "The same two stanzas of Edward Lear's \"The Owl and the Pussy-Cat\" as the line-by-line example, but no separate print rendering is given here in B004.txt beyond a repeat reference to the same lines already quoted for the line-by-line method (the guiding text introduces this second method as an alternative way of BRAILLING the identical print poem, not a new print excerpt).",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "The Owl and the Pussycat went to sea",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "In a beautiful pea-green boat.",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "They took some honey, and plenty of money,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Wrapped up in a five pound note.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          },
+          {
+            "lines": [
+              {
+                "text": "The Owl looked up to the stars above",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And sang to a small guitar,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "“O lovely Pussy! O Pussy, my love,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "What a beautiful Pussy you are,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "You are,",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "You are!",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "What a beautiful Pussy you are!”",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "No new print text is given for this second example in B004.txt; it reuses the identical Owl-and-Pussycat print poem already given for the line-by-line method, now transcribed with the alternative line-indicator technique.",
+    "surroundingText": "Follows the rule text describing the 'line indicator' method for transcribing poetry, offered as a space-saving alternative to the 'line by line' method.",
+    "printFeatures": "Same print poem as b004-j-1; no separate print image for this second example."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,! ,{l & ! ,pussycat w5t to sea_ ,9",
+      "a b1uti;l pea-gre5 boat4_ ,!y took \"s",
+      "h\"oy1 & pl5ty ( m\"oy1_ ,wrapp$ up 9 a",
+      "five p.d note4_",
+      "  ,! ,{l look$ up to ! />s abv_ ,&",
+      "sang to a small guit>1_ 8,o lovely",
+      ",pussy6 ,o ,pussy1 my love1_ ,:at a",
+      "b1uti;l ,pussy y >e1_ ,y >e1_ ,y",
+      ">e6_ ,:at a b1uti;l ,pussy y >e60"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 2,
+        "note": "Braille page break between printed page 27 and 28 (PDF pages 28/29), falling mid-run-on-line between \"...wrapp$ up 9 a\" and \"five p.d note4_\" (no content lost -- the line-indicator method's continuous run simply continues on the new page). The source .txt itself carries a literal form-feed character immediately before the resuming line (between .txt lines 893 and 894), independently confirming the page boundary. The page-bottom blank filler and the bare footer '28' (.txt lines 889-893) are excluded from braille.lines."
+      }
+    ],
+    "notes": "Verbatim from B004.txt lines 886-888 and 894-899 (the intervening blank lines and the print-page footer '28' at line 893 are page-end white space/footer, excluded per the task brief). The line indicator is the underscore-like sign '_' placed at the end of every verse line except the very last; stanza 1's first line and stanza 2's first line both begin at cell 3 (2-space indent), per the rule's 'each stanza begins in cell 3' instruction -- applied consistently to both stanzas here, unlike the line-by-line example's mixed convention.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines identical between runs (run A's content, with no inline form-feed, kept) and independently re-verified character-by-character against the source (.txt lines 886-888, 894-899); every leading-space count confirmed. braille.pageBreaks converted from run A's non-standard {after, note} shape to the established repo-wide {afterLineIndex, note} shape (section-9's sample-9-11 precedent); run B's inline form-feed character prefixed to the resuming line removed for the same reason as sample-13-12/b004-j-1."
+}

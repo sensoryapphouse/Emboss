@@ -1,0 +1,59 @@
+{
+  "id": "example-4-6",
+  "title": "Heading After a Top Box Line",
+  "pdfPages": [
+    109
+  ],
+  "textLines": [
+    3262,
+    3275
+  ],
+  "illustrates": {
+    "rule": "4.3.5",
+    "quote": "Do not insert a blank line between the top line of a box and a heading that immediately follows."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Take Care of a Nosebleed",
+        "features": "Centered, bold blue serif, first line inside a boxed callout with a torn-paper-style top/bottom border."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Sit upright and lean forward.** By remaining upright, you reduce blood pressure in the veins of your nose.",
+        "features": "Bold lead-in phrase ('Sit upright and lean forward.') followed by plain body text, inside the same box."
+      }
+    ],
+    "notes": "Illustrates no blank line between the box's top rule and the heading that immediately follows it, per rule 4.3.5.",
+    "surroundingText": null,
+    "printFeatures": "Boxed callout with a torn-paper-style top and bottom border; heading centered in bold blue immediately below the top border, body paragraph below that with a bold lead-in phrase.",
+    "boxed": true
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      "        ,take ,c>e ( a ,noseble$",
+      "",
+      "^7,sit up\"r & l1n =w>d4^' ,by rema9+",
+      "  up\"r1 y r$uce blood pressure 9 ! ve9s",
+      "  ( yr nose4 444",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the top box line (40 dot-7 cells); line 3 the centered heading directly beneath with no blank line, per 4.3.5; line 4 blank; lines 5-6 the paragraph, its bold lead-in phrase wrapped in an emphasis indicator pair, ending in the '444' continuation marker; line 7 the bottom box line; line 8 blank."
+  },
+  "uncertain": [
+    "This paragraph directly follows the heading with no blank line (per 4.3.5); Emboss's formatPara still applies its ordinary 2-cell first-line indent rather than starting flush at column 1 as the gold braille does -- see standards-findings.md F-39. Expect a documented mismatch limited to this indent (and consequent re-wrapping), not a content bug."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree; only prose wording differed (merged). Heading confirmed centered (level 1) by the centering-formula check. During model-building verification, the paragraph's bold lead-in phrase needed **markup** in print.blocks (it had been described in `features` but never actually marked in `text`); with that fix, this file's only remaining difference from the real Emboss output is the systematic heading-then-paragraph flush-indent gap recorded as standards-findings.md F-39."
+}

@@ -1,0 +1,142 @@
+{
+  "id": "sample-8-11",
+  "title": "Columned Nested List Changed to Vertical List",
+  "pdfPages": [
+    220
+  ],
+  "textLines": [
+    6353,
+    6375
+  ],
+  "illustrates": {
+    "rule": "8.5.1.d",
+    "quote": "Nested lists are always transcribed in a single column. (See Sample 8-11: Columned Nested List Changed to Vertical List on page 8-24.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Birding Basics",
+        "features": "Styled/colored heading."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 3,
+        "features": "Three side-by-side column headings (Size, Shape, Behavior), each with its own indented sub-items beneath it.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Size"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Small"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Medium"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Large"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Shape"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Body shape"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Bill shape"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Head and neck shape"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Legs and tail shape"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Behavior"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Foraging"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Flight"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Perching"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Nesting"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Vocal"
+          }
+        ]
+      }
+    ],
+    "notes": "Items given in print's left-to-right column order, then top-to-bottom within each column.",
+    "surroundingText": null,
+    "printFeatures": "Styled heading above three side-by-side column headings, each with its own bulleted-looking but unbulleted indented sub-list beneath it."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "             ,bird+ ,basics",
+      "",
+      ",size",
+      "  ,small",
+      "  ,m$ium",
+      "  ,l>ge",
+      ",%ape",
+      "  ,body %ape",
+      "  ,bill %ape",
+      "  ,h1d & neck %ape",
+      "  ,legs & tail %ape",
+      ",2havior",
+      "  ,=ag+",
+      "  ,fli<t",
+      "  ,p]*+",
+      "  ,ne/+",
+      "  ,vocal"
+    ],
+    "pageBreaks": [],
+    "notes": "Print's three side-by-side column headings (Size/Shape/Behavior), each with its own indented sub-items, are transcribed as a single nested vertical list: main entries (Size, Shape, Behavior) begin cell 1 and their sub-items begin cell 3, in print left-to-right column order, per 8.5.1.d — nested lists are never kept in side-by-side columns, unlike simple lists. Line 1 carries the heading plus a trailing reference code; line 2 is blank."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: BOTH runs’ own \"level\" fields were unreliable (A: null; B: literal \"5\", contradicted by B’s OWN braille.notes prose calling it \"the centered heading\") — resolved by direct measurement: source .txt (line 6358) shows 13 leading U+2800 blank cells before \",bird+ ,basics\", matching the centring formula floor((40−14)/2)=13 exactly (not the fixed 4/6 of cell-5/cell-7) — level 1 (centred). Nested-list structure (Size/Shape/Behavior main entries, single vertical column per 8.5.1.d) kept as A had it.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

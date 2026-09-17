@@ -1,0 +1,63 @@
+{
+  "id": "b004-11-2",
+  "title": "Footnotes Placed on a Separate Page",
+  "pdfPages": [
+    10
+  ],
+  "textLines": [
+    307,
+    322
+  ],
+  "illustrates": {
+    "rule": "B004 11 guiding-principles",
+    "quote": "Guiding principles: Notes and footnotes must be easily identifiable from the surrounding text, consistently applied throughout the document, and not intrusive to the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "They travelled to Hastings[ref:1]. Many visitors enjoy eating fish and chips from the Blue Dolphin restaurant[ref:2].",
+        "features": "Two footnotes marked by superscript numerals in the running text, with their text collected together below (on the same print page here, illustrating the 'separate page' method described by the example's own title -- the numbered notes are set apart from the sentence, as a list, rather than placed inline in brackets).",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "1",
+        "placement": "footnote",
+        "text": "where the famous 1066 battle took place."
+      },
+      {
+        "ref": "2",
+        "placement": "footnote",
+        "text": "other restaurants are available!"
+      }
+    ],
+    "surroundingText": "Second of two 'Good practice examples of notes and footnotes' under B004 §11, illustrating footnotes placed on a separate page/section (a numbered list of notes) as the alternative to Example 1's inline-bracket method.",
+    "printFeatures": "One sentence of running prose with two superscript numeral references, followed by a numbered list of the two footnote texts set apart below."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      "   ,!y travell$ to ,ha/+s;9#a4 ,_m",
+      "visitors 5joy eat+ fi% & *ips f !",
+      ",blue ,dolph9 re/aurant;9#b4",
+      "",
+      "   #a4 \": ! fam\\s #ajff battle took",
+      "place4",
+      "   #b4 o!r re/aurants >e available6"
+    ],
+    "pageBreaks": [],
+    "notes": "Superscript numeral references (;9#a, ;9#b) mark the two reference points in the running text; the two notes are then listed separately below (each beginning with its own number, #a4 and #b4), separated from the passage by a blank line -- the numbered-list method, as opposed to Example 1's inline-bracket method. As with Example 1, this is reflowed prose text from the source PDF, not a fixed-cell braille page image, so braille.width is left null."
+  },
+  "uncertain": [
+    "The 3-space indent appearing on the first line of the passage and on each numbered note entry (but not on their runover/continuation lines) reflects the print paragraph's own first-line-indent style as rendered in the source PDF; transcribed verbatim from references/_text/B004.txt lines 315-322, cross-checked against references/ukaaf/presentation-guidelines-B004.pdf page 10, where the same layout appears.",
+    "No explicit braille page width is stated for this example; braille.width is left null rather than assumed."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to B004 11 guiding-principles per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: same reasoning as b004-11-1 -- no stated or evidenced braille cell width anywhere in B004; left null (Run B correct). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

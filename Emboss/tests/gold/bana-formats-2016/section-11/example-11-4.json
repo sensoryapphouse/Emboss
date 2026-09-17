@@ -1,0 +1,39 @@
+{
+  "id": "example-11-4",
+  "title": "Sequentially Numbered Table Heading",
+  "pdfPages": [
+    289
+  ],
+  "textLines": [
+    8447,
+    8455
+  ],
+  "illustrates": {
+    "rule": "11.3.2.a",
+    "quote": "Sequentially Numbered Tables a. Center sequentially numbered table headings."
+  },
+  "print": {
+    "caption": "Table 9.5\nSmoking Among Americans by Age and Sex",
+    "headers": null,
+    "rows": [],
+    "notes": "No table body is shown, only the heading block: \"Table 9.5\" on its own line, \"Smoking Among Americans by Age and Sex\" below it.",
+    "surroundingText": "Follows 11.3.2.a; is followed by 11.3.2.b describing repetition of the table number as \"(cont.)\" on line 25 of succeeding pages (illustrated next in Example 11-5).",
+    "printFeatures": "Both heading lines centered inside a bordered box; \"Table 9.5\" and the title line are both bold."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,table #i4e",
+      "         ,smok+ ,am;g ,am]icans",
+      "             by ,age & ,sex"
+    ],
+    "pageBreaks": [],
+    "notes": "Both heading lines are centered (not left-adjusted) per rule a; 'Table 9.5' -> ',table #i4e' (9.5 as digits with decimal point '4' acting as the point here, i.e. '#i4e'); 'Smoking' is contracted 'smok+'; 'Americans' -> 'am]icans'."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.width resolved to 40 (run B's 33 was a measured-content-length artifact, not the section's declared page width). print.caption populated from the two print heading lines ('Table 9.5' / 'Smoking Among Americans by Age and Sex'), confirmed against the PDF box image (p. 289); print.headers is null (no column headers are shown, confirmed against the same image -- this is a heading-only excerpt, not a truncated table)."
+}

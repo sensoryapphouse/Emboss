@@ -1,0 +1,106 @@
+{
+  "id": "sample-5-01",
+  "title": "Underlined Text",
+  "pdfPages": [
+    140
+  ],
+  "textLines": [
+    4256,
+    4276
+  ],
+  "illustrates": {
+    "rule": "5.1.4",
+    "quote": "Print Font Attributes UEB defines symbols for italics, bold, underlining, and script. There are also five transcriber-defined typeform indicators to be used for other print font attributes. Each typeform indicator requires the addition of a symbol, word, or passage indicator. Passage indicators require the use of a typeform terminator. (See Formats, Appendix G, for a list of these symbols and UEB, §9, Typeforms.) See Sample 5-1: Underlined Text, page 5-14."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Braille-only transcriber's note (opened/closed by '@.<'...'@.>') defining a single-underline word indicator and a double-underline word indicator; no counterpart in this Sample's own print excerpt.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**On Your Own**",
+        "features": "White bold text reversed out of a solid maroon/dark-red banner; a recurring textbook feature heading, not specific to this exercise.",
+        "items": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Exercise number '15-40.' bold (blue); instruction text plain.",
+        "items": [
+          "**15–40.** Write the twenty-six prepositional phrases in this part of an encyclopedia entry. Underline each preposition once and its object twice."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Example:** Cultured pearls come in a variety of colors.",
+        "features": "Bold label 'Example:' followed by a plain demonstration sentence.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "<u>in</u> a {{td1: variety}}; <u>of</u> {{td1: colors}}",
+        "features": "A worked demonstration line placed directly beneath the example sentence, underlining the two prepositional phrases: each preposition ('in', 'of') is singly underlined (standard UEB underline-word indicator), and each object ('variety', 'colors') is doubly underlined (the sample's one transcriber-defined symbol, reused for both).",
+        "items": null
+      }
+    ],
+    "notes": "This numbered Sample begins at line 7 of the braille excerpt given in the source (lines 1-6 absent, not invented). Cross-referenced from rule 5.1.4 ('See Sample 5-1: Underlined Text, page 5-14'); illustrates needing both a single-underline (word) indicator and a double-underline (word) indicator for the same general attribute at two intensities, matching 5.1.4's point that each typeform indicator needs a symbol/word/passage form.",
+    "surroundingText": "Cross-referenced from rule 5.1.4; this is the exercise that rule illustrates.",
+    "printFeatures": "Textbook 'On Your Own' exercise box: banner heading, bold exercise number, plain instructions, and a worked example with a single- vs. double-underline demonstration line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,symbols us$3",
+      "",
+      ".=_1 ,\"ul9$ ^w 9dicator",
+      ".=@#1 ,d\\ble \"ul9e@.>",
+      "",
+      "    ,on ,yr ,[n",
+      "    #ae-#dj4 ,write ! tw5ty-six",
+      "    preposi;nal phrases 9 ? \"p ( an",
+      "    5cyclop$ia 5try4 ,\"ul9e ea*",
+      "    preposi;n once & xs object twice4",
+      "",
+      "      ,example3",
+      ",cultur$ pe>ls c 2 f.d 9 a v>iety (",
+      "    colors4",
+      "  _19 a @#1v>iety2 _1( @#1colors",
+      ""
+    ],
+    "lineNumbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "pageBreaks": [],
+    "notes": "16 lines, numbered 1-16 in the source; the 5-character line-number field (1 digit + up to 4 spaces, since max line number 16 has 2 digits, 2+3=5) is stripped and recorded separately as `lineNumbers`. Lines 1-4 are a transcriber's-note symbols key ('@.<' ... '@.>') defining a single-underline word indicator ('_1') and a double-underline word indicator ('@#1'); no separate printed box shows this key. Line 6 the banner heading (4-cell indent, matching cell-5); lines 7-10 the numbered exercise instruction (line 7 flush left, continuation lines with a genuine 4-cell runover indent); line 12 'Example:' (6-cell indent); line 13 the example sentence flush left; line 14 'colors.' (4-cell runover indent); line 15 the demonstration line (2-cell indent) using '_1' before 'in'/'of' (single underline) and '@#1' before 'variety'/'colors' (double underline, the same symbol reused both times), with '2' marking the semicolon; lines 2, 5, 11, 16 are full blank-cell filler lines."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from .txt lines 4261-4276 (field width 5); matches run A's rendering, which correctly preserves the genuine 4/6/2-cell runover indents run B stripped (the same section-wide bug documented elsewhere). `lineNumbers` (run B's own schema addition, not in the original task-brief schema) is adopted here since the source itself prints an explicit line number on every line of the three numbered Samples — a genuinely present structural fact worth preserving separately from `lines`."
+}

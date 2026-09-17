@@ -46,9 +46,18 @@ const spatialOut = clean(formatDocument(spatialDoc, {
 }));
 
 const spatialLines = spatialOut.split('\n').filter(l => l.length > 0);
-check('Spatial table has header line with 2-space gutter', spatialLines.some(l => l.includes('NAME  AGE')));
-// BANA §11.4.2b: the separation line is dot 5 followed by dots 25 ("3333) across each column's full width
-check('Spatial table has "333 separation line under each column (§11.4.2b)', spatialLines.some(l => l === '"333  "33'), `lines: ${JSON.stringify(spatialLines)}`);
+// BANA §11.2.5b's nominal two-blank-cell gutter narrows to one wherever a column's content
+// on that line already reaches the column's full width with no fill needed after it (no room
+// for a guide-dot run) — gold-verified against the standard's own worked examples (BANA
+// Example 11-2/11-3; standards-findings.md F-10, standards-questions.md Q-7, Paul's decision
+// 17 Sep 2026 EMBOSS-TASKS.md T7). "NAME" (4 cells) exactly fills column 1 (width 4, set by
+// "NAME" itself) so the gutter before "AGE" narrows to one cell.
+check('Spatial table has header line with 1-cell gutter where the header exactly fills its column (F-10/Q-7)', spatialLines.some(l => l.includes('NAME AGE')));
+// BANA §11.4.2b: the separation line is dot 5 followed by dots 25 ("3333) across each column's
+// full width — a dot-run always exactly fills its own column, so by the same F-10/Q-7 rule the
+// gap between two separator runs is always the narrowed one cell, never two (gold-verified,
+// BANA Example 11-2: `"3333333 "33333333333333333`, one blank cell, not two).
+check('Spatial table has "333 separation line, one cell between columns (§11.4.2b, F-10/Q-7)', spatialLines.some(l => l === '"333 "33'), `lines: ${JSON.stringify(spatialLines)}`);
 check('Spatial table has row 1 data', spatialLines.some(l => l.includes('ANN   3')));
 check('Spatial table has row 2 data', spatialLines.some(l => l.includes('BOB   5')));
 // Single-line rows should not have blank lines between them
@@ -56,7 +65,7 @@ const annIdx = spatialLines.findIndex(l => l.includes('ANN'));
 const bobIdx = spatialLines.findIndex(l => l.includes('BOB'));
 check('Single-line rows are single-spaced (no blank line between them)', bobIdx === annIdx + 1);
 
-// --- Test 2: Multi-line Spatial Table (BANA §11.3.4 Inter-row spacing) ---
+// --- Test 2: Multi-line Spatial Table (F-77: no forced inter-row blank line) ---
 console.log('\n--- Test 2: Multi-line Spatial Table ---');
 const multiLineSpatialDoc = {
   blocks: [
@@ -86,7 +95,13 @@ check('Multi-line spatial table contains row 1 cell', rawMultiLines.some(l => l.
 const row1LineIdx = rawMultiLines.findIndex(l => l.includes('ECOSYSTEM'));
 const row2LineIdx = rawMultiLines.findIndex(l => l.includes('BIOME'));
 const linesBetween = rawMultiLines.slice(row1LineIdx + 1, row2LineIdx);
-check('Multi-line spatial table has blank line between data rows (BANA §11.3.4)', linesBetween.includes(''), `lines between: ${JSON.stringify(linesBetween)}`);
+// F-77 (standards-findings.md): formatColumnar used to insert a blank line after EVERY
+// row once any one of them wrapped, citing a "BANA §11.3.4" that does not exist in this
+// reference edition. BANA Formats 2016 Sample 7-1 and Sample 11-4 both show a wrapped row
+// with NO blank line around it, and §11.5.4 ("Blank Lines. Follow print when blank lines
+// are used to show row groupings...") only follows print's own blank lines. Fixed: no
+// blank line here even though row 1 ("Ecosystem") wraps to more than one line.
+check('Multi-line spatial table has NO forced blank line between data rows (F-77; no such BANA rule)', !linesBetween.includes(''), `lines between: ${JSON.stringify(linesBetween)}`);
 
 // --- Test 3: Listed Table Format (BANA Formats §11.16, Sample 11-24) ---
 console.log('\n--- Test 3: Listed Table Format (Forced via format: listed) ---');
@@ -225,8 +240,10 @@ const noHeadersOut = clean(formatDocument(noHeadersDoc, {
   standard: 'bana'
 }));
 
-check('Table without headers formats in spatial columns without errors', noHeadersOut.includes('ITEM A  100'));
-check('Second row of headerless table formats cleanly', noHeadersOut.includes('ITEM B  200'));
+// "Item A"/"Item B" (6 cells) exactly fill column 1 (width 6, set by their own length), so
+// the gutter before the number column narrows to one cell (F-10/Q-7, as above).
+check('Table without headers formats in spatial columns without errors', noHeadersOut.includes('ITEM A 100'));
+check('Second row of headerless table formats cleanly', noHeadersOut.includes('ITEM B 200'));
 
 console.log(`\nTable formatting tests complete: ${pass} passed, ${fail} failed.`);
 process.exit(fail ? 1 : 0);

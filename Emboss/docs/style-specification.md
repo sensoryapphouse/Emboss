@@ -70,7 +70,7 @@ Inserts (objects, not styles): Table (spatial / listed), Equation, Formula Templ
 - **Saved as** `<list type="ul">` + `<li>`; nested lists as `<list>` inside `<li>` (G8). **BB** L-styles (list items).
 - **BANA** §8: 1-3 with blank lines around the list (§8.3.2); nested margins per §8.5.1b (1-5/3-5, 1-7/3-7/5-7 …); bullets retained, following print (§8.6.2): primary bullet `_4`, other symbols as transcriber-defined symbols listed on the Special Symbols page. **UKAAF** §10 / App. C: levels distinguishable by indentation (1/5, 3/7, 5/9 …) or the 5/1 compact layout.
 - **Levels:** unlimited (depth). **Contains:** text, maths, a nested list, following paragraphs. **Appears in:** document, sidebar, list item, note.
-- ⚠ Saved flat with `class="level-N"` today, and bullets are dropped on import (G8, A6). ⚠ No Special Symbols page yet (G8).
+- Nested lists save as real nested `<list>` elements (A31, 17 Sep). ⚠ Bullets are dropped on import for a `<list type="ul">` with no literal glyph, and every recognised glyph becomes `_4` (A6, F-33). ⚠ No Special Symbols page yet (G8).
 
 ### Numbered List — `list-number`
 - **Saved as** `<list type="ol" enum="1|a|A|i|I" start="n">` + `<li>`. **BB** L-styles.

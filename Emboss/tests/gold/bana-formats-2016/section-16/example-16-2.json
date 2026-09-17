@@ -1,0 +1,50 @@
+{
+  "id": "example-16-2",
+  "title": "Hollow Dot Reference Mark with Punctuation",
+  "pdfPages": [
+    431
+  ],
+  "textLines": [
+    12406,
+    12412
+  ],
+  "illustrates": {
+    "rule": "16.2.2.c",
+    "quote": "Asterisks, daggers, and double daggers that appear raised from the baseline are not considered to be in the superscript position. (See UEB, §3.3.1, Asterisk, Dagger, and Double Dagger.) Retain the superscript format for all other symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "(craft[ref:°])",
+        "features": "First line: the word \"craft\" in parentheses with a superscript hollow-dot reference mark just before the closing parenthesis; the note itself (built separately from print.notes[], repeating the hollow dot before \"craft.\" per rule 16.2.1) is not restated in this field.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "°",
+        "placement": "footnote",
+        "text": "craft."
+      }
+    ],
+    "surroundingText": "Second of the four reference-mark illustrations directly below rule 16.2.2c.",
+    "printFeatures": "Bordered box, two print lines only: \"(craft°)\" and \"craft°.\", both in serif print type with a small raised open-circle (hollow dot) mark."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      "\"<craft;9\"0\">",
+      "craft;9\"04"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1: opening parenthesis, \"craft\", the hollow-dot symbol (;9\"0) in superscript position (grade-1 indicator ;9 before the dot-symbol \"0), closing parenthesis. Line 2: \"craft\", the same hollow-dot symbol, then a braille period (4). Follows print for punctuation and spacing exactly as rule 16.2.2 directs."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: no page/line-number evidence; both runs agree, left null. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

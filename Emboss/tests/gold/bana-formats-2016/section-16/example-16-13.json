@@ -1,0 +1,41 @@
+{
+  "id": "example-16-13",
+  "title": "Extensive Notes in a Separate Volume (Print Only)",
+  "pdfPages": [
+    441
+  ],
+  "textLines": [
+    12770,
+    12770
+  ],
+  "illustrates": {
+    "rule": "16.9.2.c",
+    "quote": "Extensive endnote sections may be placed in a separate volume. This transposition of endnotes must be mentioned on the Transcriber’s Notes page in each volume. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "1170 “For the love of the Wife of Bath.” For the order of words cf. the Grekes hors Synoun, SqT, V, 209; The kynges metynge Pharao, BD, 282; Eleyne that was Menelaus wif his brothir, Bo, iv, m. 7, 7. Other examples are given by Skeat in his note on the passage in the SqT. In the earlier form of the construction the proper name was put in the genitive (“the Kinges sone Henries,” AS. Chron., s.a., 1140), and there was therefore no ambiguity.\n1171 secte, either “Sect” or “Sex.” The former meaning is established for Chaucer, and Kittredge, in his discussion of the Marriage Group, took it in that sense here. The Clerk, he held, was describing the Wife as a heresiarch. For objections see H. Kökeritz, PQ, XXVI, 147 ff., who argues for the meaning “Sex.”",
+        "features": "A page of scholarly endnotes, each keyed by a bold print line number (1170, 1171) rather than a symbol; dense literary-critical prose with italicized titles and abbreviations.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Explicitly labeled '(Print Only)' in its own title; illustrates 16.9.2c's separate-endnote-volume provision by showing what an extensive endnote page looks like in print, without any braille counterpart given.",
+    "printFeatures": "Boxed screenshot of a dense scholarly endnotes page, two long line-numbered entries (1170, 1171), no braille shown below it."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Explicitly '(Print Only)' -- the source gives no braille rendering for this example; none is guessed."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.9.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: explicitly '(Print Only)' in the source; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

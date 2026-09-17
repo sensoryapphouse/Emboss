@@ -1,0 +1,98 @@
+{
+  "id": "sample-9-10",
+  "title": "Letters with Signatures as Attributions",
+  "pdfPages": [247],
+  "textLines": [7113, 7134],
+  "illustrates": {
+    "rule": "9.7.1.b",
+    "quote": "When signatures and any accompanying closing appear at a position beyond the left margin in print, move them to the attribution position, blocked in the fifth cell to the right of the beginning of the previous line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Emperor William II to Tsar Nicholas II, July 28, 10:45 P.M.",
+        "features": "Bold italic dateline heading introducing the first letter."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I have heard with the greatest anxiety of the impression which is caused by the action of Austria-Hungary against Servia [Serbia]. The inscrupulous agitation which has been going on for years in Servia, has led to the revolting crime of which Archduke Franz Ferdinand has become a victim. The spirit which made the Servians murder their own King and his consort still dominates that country. Doubtless You will agree with me that both of us, You as well as I, and all other sovereigns, have a common interest to insist that all those who are responsible for this horrible murder shall suffer their deserved punishment. …",
+        "features": "sic, as printed: 'Servia'/'Servians' (period-contemporary spellings of 'Serbia'/'Serbians', with '[Serbia]' editorially inserted in brackets by this book); 'inscrupulous' is printed exactly so (apparent typo for 'unscrupulous', re-verified at zoom against the PDF image) -- reproduced verbatim, as printed."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "Your most sincere and devoted friend and cousin",
+        "features": "Closing phrase, printed indented; moved to the attribution position along with the signature below, per 9.7.1b."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "(Signed)",
+        "features": "Italic per print convention."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "Wilhelm",
+        "features": "Script-font signature."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Tsar Nicholas II to Emperor William II, July 29, 1:00 P.M.",
+        "features": "Bold italic dateline heading introducing the second (reply) letter."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I am glad that you are back in Germany. In this serious moment I ask You earnestly to help me. An ignominious war has been declared against a weak country and in Russia the indignation which I full share is tremendous. I fear that very soon I shall be unable to resist the pressure exercised upon me and that I shall be forced to take measures which will lead to war. To prevent a calamity as a European war would be, I urge You in the name of our old friendship to do all in Your power to restrain Your ally from going too far.",
+        "features": "sic, as printed: 'which I full share' (apparent typo for 'which I fully share', re-verified at zoom against the PDF image) -- reproduced verbatim, as printed."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "(Signed)",
+        "features": "Italic per print convention; this letter's excerpt has no separate closing-phrase line before it."
+      },
+      {
+        "kind": "attribution",
+        "level": null,
+        "text": "Nicolas",
+        "features": "Script-font signature; note the print itself spells the signature 'Nicolas' although the heading above spells the Tsar's name 'Nicholas' -- both forms kept exactly as printed, not reconciled (a genuine period detail of the historical Willy-Nicky telegrams, not a transcription inconsistency)."
+      }
+    ],
+    "notes": "Direct worked example of 9.7.1b: both signature blocks ('(Signed)' plus the name) are moved to the attribution position rather than left where they sit (indented/right-shifted) in print.",
+    "surroundingText": "A historical exchange of telegrams/letters between Emperor William II of Germany and Tsar Nicholas II of Russia on the eve of WWI.",
+    "printFeatures": "Two letters shown one after another, each with a bold italic dateline heading, an italic body paragraph, and a right-indented '(Signed)' plus script-font signature."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,emp]or ,william ,,ii to       a#gea",
+      "    ,ts> ,ni*olas ,,ii1 ,july #bh1",
+      "    #aj3#de ,p4,m4",
+      ",i h he>d ) ! grte/ anxiety ( ! impres.n",
+      ": is caus$ by ! ac;n ( 444",
+      "  ,yr mo/ s9c]e & devot$ fr & c\\s9",
+      "      .1\"<,sign$\">",
+      "      .1,wilhelm",
+      "",
+      "    ,ts> ,ni*olas ,,ii to ,emp]or",
+      "    ,william ,,ii1 ,july #bi1 #a3#jj",
+      "    ,p4,m4",
+      ",i am glad t y >e back 9 ,g]_m4 444",
+      "    .1\"<,sign$\">",
+      "    .1,nicolas"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 1-15 (this Sample begins its own braille page at line 1). Field width 5, stripped. Lines 1-3: first dateline heading, cell 5, spanning 3 lines (time '10:45 P.M.' right-flushed on line 1). Lines 4-5: letter body at cell 1, truncated '444'. Line 6: closing phrase 'Your most sincere...', cell 3. Lines 7-8: '(Signed)'/'Wilhelm', cell 7 (= closing phrase's cell 3 + 4), italicized. Line 9: blank. Lines 10-12: second dateline heading, cell 5. Line 13: letter body at cell 1, truncated '444' (no separate closing-phrase line in this excerpt). Lines 14-15: '(Signed)'/'Nicolas', cell 5 (= body paragraph's own cell 1 + 4, not cell 7) -- the attribution indent tracks the immediately preceding line's own start in each case, giving a different result for the two letters."
+  },
+  "uncertain": [
+    "The second letter's signature block ('(Signed)'/'Nicolas') is indented 4 cells (cell 5) rather than 6 (cell 7) as in the first letter; consistent with 9.4.1b's 'fifth cell to the right of the beginning of the previous line' when 'the previous line' is the immediately preceding body-paragraph line (cell 1) rather than a separate closing phrase (which this excerpt of the second letter does not show)."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 7118-7132 after stripping the 5-character line-number field (the '(Return to Text)' line 7133 excluded). Both runs agreed on the 'inscrupulous'/'I full share' typos and the Nicolas/Nicholas spelling discrepancy, re-verified by B at zoom against the PDF image; kept verbatim. Structural disagreement: A gave each letter's closing/signature as one combined 'attribution' block (e.g. '(Signed) / Wilhelm'); B gave the whole closing phrase + '(Signed)' + name as ONE combined block per letter. Resolved to three separate attribution blocks per letter's own closing where the braille shows three separately-indented pieces (closing phrase at cell 3, then '(Signed)'/name at cell 7, for the first letter), and two for the second letter (no separate closing phrase in this excerpt) -- since a single Emboss `attribution` block wraps continuously and cannot reproduce the closing phrase sitting at a DIFFERENT indent from the '(Signed)'/name pair beneath it."
+}

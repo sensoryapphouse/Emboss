@@ -1,0 +1,108 @@
+{
+  "id": "sample-8-04",
+  "title": "Simple Boxed List",
+  "pdfPages": [
+    212
+  ],
+  "textLines": [
+    6172,
+    6189
+  ],
+  "illustrates": {
+    "rule": "8.3.3.b",
+    "quote": "A list is not preceded by a blank line: ... b. When it follows a top box line. (See Formats, §7, Boxed Material.) (See Sample 8-4: Simple Boxed List on page 8-16.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "text",
+        "features": "Placeholder standing in for running text on the print page that precedes the box, not shown in this excerpt (this book’s own convention; the braille ellipsis \"444\" that follows it has no print-side input to model from)."
+      },
+      {
+        "kind": "box",
+        "blocks": [
+          {
+            "kind": "heading",
+            "level": 2,
+            "text": "Interrogative Pronouns",
+            "features": "Bold heading directly above the boxed list, no blank line beneath it in print."
+          },
+          {
+            "kind": "list",
+            "level": null,
+            "text": null,
+            "features": "Boxed list of five questions; each item's opening interrogative word is underlined.",
+            "items": [
+              {
+                "marker": null,
+                "level": 1,
+                "text": "<u>Who</u> wants more cake?",
+                "features": "'Who' underlined"
+              },
+              {
+                "marker": null,
+                "level": 1,
+                "text": "<u>What</u> time is it?",
+                "features": "'What' underlined"
+              },
+              {
+                "marker": null,
+                "level": 1,
+                "text": "<u>When</u> are you arriving?",
+                "features": "'When' underlined"
+              },
+              {
+                "marker": null,
+                "level": 1,
+                "text": "<u>Where</u> did John go?",
+                "features": "'Where' underlined"
+              },
+              {
+                "marker": null,
+                "level": 1,
+                "text": "<u>Why</u> were you late for class?",
+                "features": "'Why' underlined"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "text",
+        "features": "Placeholder standing in for running text on the print page that follows the box (same convention, closing side)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Ruled box inside a light-grey shaded panel; bold heading above the box (outside the ruled border); each item's interrogative word underlined."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text 444",
+      "",
+      "    ,9t]rogative ,pron\\ns",
+      "7777777777777777777777777777777777777777",
+      "_1,:o wants m cake8",
+      "_1,:at \"t is x8",
+      "_1,:5 >e y >riv+8",
+      "_1,\": did ,john g8",
+      "_1,:y 7 y late = class8",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "  ,text 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 'text 444' is the placeholder for preceding running text; line 2 blank; line 3 the heading ',9t]rogative ,pron\\ns' (Interrogative Pronouns); line 4 the top box rule (40 '7's); lines 5-9 the five list items, each opening with the underline-word indicator '_1' before the interrogative word and ending in '8' (question mark); line 10 the bottom box rule (40 'g's); line 11 blank; line 12 ',text 444' resumes the placeholder running text after the box. The list is NOT preceded by a blank line because it follows the top box rule directly (line 4 to line 5), per 8.3.3.b."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: both runs stored the raw cell-position \"5\"; re-derived directly from source .txt (line 6179, \",9t]rogative ,pron\\ns\") = 4 leading U+2800 blank cells = cell-5 = level 2. Structure: reshaped into an explicit nested `{kind:\"box\", blocks:[heading, list]}` print block (mirroring Emboss’s own `{type:\"box\", blocks:[...]}` document-model shape) so buildModel8 can build the top/bottom box-rule pair faithfully — unlike sample-8-13, this box has no un-modelable content inside it, so a full match is plausible here. A’s \"text 444\" placeholder paragraphs (on both sides of the box, matching this book’s own convention for eliding surrounding running text) are kept; B silently dropped them from print.blocks even though its own braille.notes describes them — A’s more complete structure is used. The \"444\" braille ellipsis marker itself has no print-side input to build from and is expected to be a documented mismatch on those two lines only.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

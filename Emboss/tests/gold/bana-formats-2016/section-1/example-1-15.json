@@ -1,0 +1,46 @@
+{
+  "id": "example-1-15",
+  "title": "Page Number with Running Head or Short Title",
+  "pdfPages": [
+    33
+  ],
+  "textLines": [
+    1138,
+    1141
+  ],
+  "illustrates": {
+    "rule": "1.14.1.c",
+    "quote": "The alphabetic page number is placed on line 1 if there is no running head and on line 2 if there is a running head. The alphabetic page number is preceded by six cells of the page change indicator symbol (dots 36). Runovers are in cell 7."
+  },
+  "print": {
+    "page": {
+      "runningHead": "Running Head",
+      "printPageNumber": null,
+      "features": "Alphabetic page number scenario, WITH a running head ('Running Head'); print page number 89 as example-1-14."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Schematic placeholder for generic body text ('text 444'); no real print excerpt is given -- illustrates alphabetic-page-number placement mechanics directly in braille."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "              ,runn+ ,h1d            #hi",
+      "------ei<ty-n9e",
+      "text 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 1-3, line 1 reconstructed to 40 cells (raw extraction 82 characters, same artefact as example-1-7/1-14: 14-cell centred lead-in + 11-char title + 12-cell gap + 3-char page number = 40). The running head 'Running Head' occupies line 1 (centred, 14 = (40-11)//2) with the numeric print page number '#hi' (89) at the right margin; because a running head is present, the alphabetic page number moves to line 2 (per 1.14.1.c), preceded by the six-cell indicator symbol; body text resumes on line 3."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49)."
+}

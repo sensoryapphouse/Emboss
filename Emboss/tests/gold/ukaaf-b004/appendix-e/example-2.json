@@ -1,0 +1,163 @@
+{
+  "id": "example-2",
+  "title": "Good practice example of a table over two pages (Table 3: Weather Forecast for Somewhere City)",
+  "pdfPages": [
+    19,
+    20,
+    21
+  ],
+  "textLines": [
+    587,
+    667
+  ],
+  "illustrates": [
+    {
+      "rule": "B004 E ex2-split-facing-pages",
+      "quote": "The table is too wide for the braille page, and in this case has been split to be read across two facing pages."
+    },
+    {
+      "rule": "B004 E ex2-align-rows",
+      "quote": "The rows on the facing pages must line up"
+    },
+    {
+      "rule": "B004 E ex2-extend-guidelines",
+      "quote": "the guidelines on the first page extend to the right-hand side to aid tracking across to the facing page."
+    },
+    {
+      "rule": "B004 E ex2-abbreviate-days",
+      "quote": "Days of the week are abbreviated."
+    }
+  ],
+  "print": {
+    "caption": "Table 3: Weather Forecast for Somewhere City",
+    "headers": [
+      [
+        "",
+        "Summary",
+        "Maximum temperature",
+        "Humidity",
+        "Visibility",
+        "Pressure",
+        "Wind direction",
+        "Wind speed"
+      ]
+    ],
+    "rows": [
+      [
+        "Monday",
+        "Light rain",
+        "5°C",
+        "87%",
+        "Good",
+        "1011mb",
+        "SE",
+        "16mph"
+      ],
+      [
+        "Tuesday",
+        "Light cloud",
+        "6°C",
+        "87%",
+        "Good",
+        "1014mb",
+        "ENE",
+        "8mph"
+      ],
+      [
+        "Wednesday",
+        "Partly cloudy",
+        "8°C",
+        "90%",
+        "Good",
+        "1016mb",
+        "E",
+        "9mph"
+      ],
+      [
+        "Thursday",
+        "Heavy rain",
+        "10°C",
+        "92%",
+        "Moderate",
+        "1014mb",
+        "SSE",
+        "14mph"
+      ],
+      [
+        "Friday",
+        "Light rain shower",
+        "11°C",
+        "88%",
+        "Good",
+        "1012mb",
+        "SW",
+        "17mph"
+      ]
+    ],
+    "attribution": "(Weather or Not Forecasts Ltd.)",
+    "notes": "Row headings (day names) are given here in full, as print has them; the braille abbreviates them (Mon/Tues/Wed/Thurs/Fri) per this example's own stated rule (ex2-abbreviate-days) — see braille.lines.",
+    "surroundingText": "Heading 'Good practice example of a table over two pages' precedes the three explanatory sentences quoted in 'illustrates' above; the table, its attribution line, and its two-facing-page braille immediately follow.",
+    "printFeatures": "Bordered/ruled box (PDF page 19); header row and the day-name column are bold on a grey-shaded background (visible in the PDF; lost in the plain .txt extraction, which preserves only whitespace). 'Maximum temperature' wraps to 2 print lines; Wednesday's 'Partly cloudy' and Friday's 'Light rain shower' each wrap to 2 lines within their Summary cell — column-width rendering, not extra rows."
+  },
+  "braille": {
+    "width": 38,
+    "lines": [
+      "                                   #eb",
+      "",
+      ",table #c3",
+      ",w1!r ,=eca/ = ,\"s\": ,c;y",
+      "  @.<,! foll[+ table is TO 2 r1d acr",
+      "fac+ pages4 ,\"ds >e a2reviat$4@.>",
+      "",
+      "                  ,maximum",
+      "       ,summ>y    temp]ature  ,humid;y",
+      ",mon   ,li<t ra9   #e^j,c \"\"\" #hg.0 \"\"",
+      ",tues  ,li<t",
+      "         cl\\d \"\"\"  #f^j,c \"\"\" #hg.0 \"\"",
+      ",w$    ,\"ply",
+      "         cl\\dy \"\"  #h^j,c \"\"\" #ij.0",
+      "\"\" ,?urs  ,h1vy",
+      "         ra9 \"\"\"\" #aj^j,c \"\"\" #ib.0 \"\"",
+      ",fri   ,li<t",
+      "         ra9 %[]  #aa^j,c \"\"\" #hh.0 \"\"",
+      "                                   #ec",
+      "",
+      "",
+      "",
+      "",
+      "                       ,w9d     ,w9d",
+      ",visibil;y  ,pressure  direc;n",
+      "spe$  ,gd \"\"\"\"\"\"\" #ajaamb \"\" ,,se \"\"\"",
+      "#afmph",
+      "",
+      ",gd \"\"\"\"\"\"\" #ajadmb \"\" ,,ene \"\"  #hmph",
+      "",
+      ",gd \"\"\"\"\"\"\" #ajafmb \"\" ;,e \"\"\"\"  #imph",
+      "",
+      ",mod]ate \"\" #ajadmb \"\" ,,sse \"\" #admph",
+      "",
+      ",gd \"\"\"\"\"\"\" #ajabmb \"\" ,,sw \"\"\" #agmph",
+      "",
+      "\"<,w1!r or ,n ,=eca/s ,ltd4\">",
+      "             \"31111111111"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 18,
+        "type": "implicit",
+        "note": "No explicit New-Braille-Page marker text. Lines 1-18 are the left-hand (verso) braille page, running-numbered '#eb' (braille numeral 52: 'e'=5,'b'=2 in the standard a-j=1..9,0 numeral mapping) at its top right; lines 19-37 are the facing right-hand (recto) braille page, running-numbered '#ec' (53). Detected from the print guide's own page-footer digits ('20' after the left page, '21' after the right page, both PDF/print pagination and omitted here) and the braille page-number tokens themselves."
+      }
+    ],
+    "notes": "Left-hand page: lines 3-6 are the transcriber's note explaining the split-table format (opened/closed by the RUEB transcriber's-note indicators '@.<'/'@.>' — see example-1.json's notes for the decode); lines 8-9 are the (wrapped) column headings; lines 10-18 are the five day-rows, abbreviated (',mon'/',tues'/',w$'/'?urs'/',fri' for Mon/Tues/Wed/Thurs/Fri — '$' and '?' are the UEB two-letter groupsigns 'ed'/'th'), each row's guide dots ('\"\"\"'/'\"\"' etc.) continuing to the right edge of the page as line ex2-extend-guidelines requires; no blank line separates any of the five rows. Right-hand page: lines 24-25 are the (wrapped) remaining column headings (Visibility/Pressure/Wind direction/Wind speed); lines 26-35 are the same five days' remaining data, but here Monday's row (26-27) is followed by ONE blank line, then every subsequent row (Tuesday/Wednesday/Thursday/Friday) is both preceded AND followed by one blank line, i.e. every right-page row is separated from its neighbour by a blank line that has no counterpart on the left page. This was measured directly from the PDF's own per-line vertical position (PyMuPDF text-span y-coordinates), not read off the plain-text extraction or a screenshot: the five day-rows' braille content lines on the left page advance by a constant 24.3pt per line with NO gap; on the right page, the gap from one row to the next is consistently 48.6pt — exactly twice the single-line pitch — five times in a row (Monday->Tuesday, Tuesday->Wednesday, Wednesday->Thursday, Thursday->Friday, Friday->attribution), i.e. exactly one blank braille line between each. (references/_text/B004.txt's own layout shows two blank lines in each of these gaps, not one — a second, independent spacing artifact of that .txt extraction, on top of the one documented in example-1.json; see 'resolution'.) This directly and precisely confirms, rather than merely visually suggests, that the two facing pages' rows do NOT start on the same physical line — contradicting this example's own stated rule 'The rows on the facing pages must line up.' See standards-map.md / differences.md 'Unresolved' for this."
+  },
+  "uncertain": [
+    "The braille page-number tokens '#eb'/'#ec' (lines 1, 19) decode via the standard a-j=1..9,0 numeral mapping (already cross-verified throughout this section's currency/weather figures) to 52 and 53 — i.e. this table is on the guide's own braille pages 52-53, not printed/PDF-guide pages 20-21 (which are the surrounding PRINT document's own page numbers). Not independently confirmed against any other braille-page-numbering evidence in this extracted section (there is none), but the arithmetic is the same one used for every other number in both examples.",
+    "Line 30's extra sign ';' before the single capital 'E' (Wednesday's Wind direction, ';,e' where every other single/whole capital direction letter in this table is plain ',' + letter, e.g. the ',c' single-capital pattern used for every degree-Celsius figure) is DECODED with high confidence via two independent lines of evidence: (a) RUEB §5.2.1 ('grade 1 symbol indicator ⠰', ASCII ';' via Emboss's BRF64 table) states this indicator is required before a letter standing alone whose grade-2 meaning could be misread — its own worked example is literally the letter 'e' ('the vowels are: a, e, i, o and u' -> '...⠰⠑...', i.e. ';E' for standalone 'e', vs. no indicator for a/i/o); (b) independently, feeding the literal print string 'E' alone as a table cell through Emboss's own real liblouis en-ueb-g2 translator (scratch experiment, see standards-map.md) produces the ASCII string ';,E' — an exact match. This also explains why 'C' (for degrees Celsius) never needs it: 'C' immediately follows a numeral+degree-sign token with no surrounding space, so it is never 'standing alone' in RUEB's technical sense (§2.6.1), where 'E' (Wednesday's Wind-direction entry, alone in its cell) is.",
+    "Line 37's closing sign '\"31111111111' — see example-1.json's identical unresolved sign."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print fields as both runs agreed (day rows/columns/attribution), with 'attribution' as its own field (run A's name) rather than folded into printFeatures (run B's choice) — cosmetic only, both carry the same text. braille.lines built from references/_text/B004.txt lines 619-667 (reliable for horizontal spacing on this page pair, unlike example-1 — the .txt's non-blank lines here already matched the PDF's own text-span extraction to the character), but with the number of BLANK lines between rows on the right-hand page corrected from 2 (as literally given in the .txt) to 1, per the exact PDF line-pitch measurement described in braille.notes above; the same correction was NOT needed on the left-hand page (already 0 blank lines between rows, confirmed by the same method) nor for the Monday-row-internal wrap (still 0). Neither extraction run performed this pixel/point-level check; run B flagged the qualitative mismatch (blank lines on the right page, none on the left) correctly from the .txt's own line count, and that qualitative finding stands even though its exact blank-line tally needed this correction. Run A did not flag the row-alignment mismatch in this example at all (see differences.md)."
+}

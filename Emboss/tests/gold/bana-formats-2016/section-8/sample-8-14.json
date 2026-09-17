@@ -1,0 +1,81 @@
+{
+  "id": "sample-8-14",
+  "title": "Bulleted Nested List",
+  "pdfPages": [
+    223
+  ],
+  "textLines": [
+    6427,
+    6439
+  ],
+  "illustrates": {
+    "rule": "8.6.2.c",
+    "quote": "c. Transcribe bulleted subentries as a nested list."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Beverage Options",
+        "features": "Bold heading."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three main bulleted items; 'Tea' has two hollow-circle sub-bulleted items beneath it.",
+        "items": [
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Coffee"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Tea"
+          },
+          {
+            "marker": "○",
+            "level": 2,
+            "text": "Black tea"
+          },
+          {
+            "marker": "○",
+            "level": 2,
+            "text": "Green tea"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Milk"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bold heading above three solid-bullet main items; two hollow-circle sub-bullets indented beneath the second item."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,b\"eage ,op;ns",
+      "_4 ,c(fee",
+      "_4 ,tea",
+      "  ;$= ,black tea",
+      "  ;$= ,gre5 tea",
+      "_4 ,milk",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Main-level bullets use the dot symbol '_4' (8.6.2.a's 'Dot') in cell 1; the two 'Black tea'/'Green tea' sub-bullets use the grade-1-indicator-prefixed hollow-circle symbol ';$=' (8.6.2.a's 'Hollow circle', whose note '[will require a grade 1 indicator]' is confirmed here by the leading ';'), placed at cell 3 as a nested list under 'Tea', per 8.6.2.c. Line 8 carries the heading."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading level: measured directly from source .txt (line 6432) = 4 leading U+2800 cells = cell-5 = level 2 (both runs’ raw \"5\"/null values replaced with the section-4-style 1/2/3 convention). Main-level dot bullets (•, supported by Emboss per 8.6.2.a) kept; Tea’s two hollow-circle (○) subentries have no Emboss correspondence (F-33) — recorded as-is, expected limitation/mismatch on those two lines.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

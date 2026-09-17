@@ -1,0 +1,45 @@
+{
+  "id": "example-1-11",
+  "title": "Lettered Continuation Pages (Print Only)",
+  "pdfPages": [
+    30
+  ],
+  "textLines": [
+    1007,
+    1016
+  ],
+  "illustrates": {
+    "rule": "1.11.7",
+    "quote": "Lettered Continuation Pages. Material on a print page typically continues on one or more braille pages. Place the same print page number to end at the right margin on line 1 of each of these pages. Precede the page number by an unspaced a for the first continued page, b for the second, etc."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Four bordered page-outline thumbnails in a row, each a schematic mock-up (no body text): thumbnail 1 print page '45' / braille page 88; thumbnail 2 'a45' (continuation letter a) / braille page 89; thumbnail 3 'b45' (continuation letter b), with a dashed rule partway down leading to '46' (print page turns mid-braille-page) / braille page 90; thumbnail 4 'a46' (print page 46's own first continuation) / braille page 91."
+      }
+    ],
+    "notes": "Explicitly '(Print Only)'; confirmed against the PDF page image (p.30): four small page-outline thumbnails, no braille cell rendering at all."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given; print-only illustration."
+  },
+  "uncertain": [
+    "The page numbers shown (45/88, a45/89, b45/90, a46/91) are schematic illustration numbers in the mock-up, not a real book's page numbers; preserved as shown."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: print-only, no braille (status: no-braille). Content recorded as a single 'other' block since Emboss's document model has no page-thumbnail/mock-up concept to build toward."
+}

@@ -1,0 +1,87 @@
+{
+  "id": "example-13-3",
+  "title": "Example 13-3: Three-Level Poem",
+  "pdfPages": [
+    357
+  ],
+  "textLines": [
+    10302,
+    10315
+  ],
+  "illustrates": {
+    "rule": "13.3.1 (three levels)",
+    "quote": "The indention pattern is based on the entire poem. The main entry begins in cell 1. Each subentry level begins two cells to the right of the previous level. All runovers begin two cells to the right of the farthest indented level. One level: 1-3 Two levels: 1-5, 3-5 Three levels: 1-7, 3-7, 5-7 Four levels: 1-9, 3-9, 5-9, 7-9 etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Untitled excerpt (opening of Gerard Manley Hopkins's \"Pied Beauty\"); print shows three visually staggered indention levels among the six lines.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Glory be to God for dappled things—",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "For skies of couple-colour as a brinded cow;",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "For rose-moles all in stipple upon trout that swim;",
+                "indent": 2,
+                "number": null
+              },
+              {
+                "text": "Fresh-firecoal chestnut-falls; finches’ wings;",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "Landscape plotted and pieced—fold, fallow, and plough;",
+                "indent": 1,
+                "number": null
+              },
+              {
+                "text": "And all trades, their gear and tackle and trim.",
+                "indent": 2,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.357; three print indention levels, repeating in the pattern main/2nd/3rd, main/2nd/3rd across the two 3-line groups.",
+    "surroundingText": null,
+    "printFeatures": "Boxed inline example; plain body-text serif font."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",glory 2 to ,god = dappl$ ?+s,-",
+      "  ,= skies ( c\\ple-col\\r z a br9d$ c[2",
+      "    ,= rose-moles all 9 /ipple ^u tr\\t t",
+      "      swim2",
+      ",fre%-firecoal *e/nut-falls2 f9*es' w+s2",
+      "  ,l&scape plott$ & piec$,-fold1 fall[1",
+      "      & pl\\<2",
+      "    ,& all trades1 _! ge> & tackle &",
+      "      trim4"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10307-10315; no fixed-margin artifact (0 leading ASCII spaces). Indent runs measured in U+2800 cells: main entries at cell 1 (0 indent), 2nd level at cell 3 (2-cell indent, line 2/6), 3rd level at cell 5 (4-cell indent, line 3/7), and runovers of the 3rd-level lines at cell 7 (6-cell indent, lines 4/8) -- matching the 'Three levels: 1-7, 3-7, 5-7' pattern from rule 13.3.1 exactly.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

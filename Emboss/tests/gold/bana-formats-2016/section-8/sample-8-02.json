@@ -1,0 +1,79 @@
+{
+  "id": "sample-8-02",
+  "title": "List Before Page Change Indicator",
+  "pdfPages": [
+    210
+  ],
+  "textLines": [
+    6130,
+    6144
+  ],
+  "illustrates": {
+    "rule": "8.3.2.c",
+    "quote": "Insert a blank line between a list and a page change indicator. (See Sample 8-2: List Before Page Change Indicator on page 8-14.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three one-line questions, no markers or bullets.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Where can you find reliable sources of health information?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What medical services are covered by health insurance?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What influences a teen's buying decisions?"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "—New Print Page— / -65-",
+        "features": "Print page-change marker with the new print page number."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Internet-based health care allows a patient to communicate …",
+        "features": "Opening of the next paragraph, carried onto later braille lines not shown in this excerpt."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain running text; three questions directly followed by the page-change marker/new page number, then the next paragraph begins."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",\": c y f9d reliable s\\rces ( h1l?   #,-",
+      "  9=ma;n8",
+      ",:at m$ical s]vices >e cov]$ by h1l?",
+      "  9sur.e8",
+      ",:at 9flu;es a te5's buy+ deci.ns8",
+      "",
+      "-------------------------------------#fe",
+      "  ,9t]net-bas$ h1l? c>e all[s a pati5t",
+      "to communicate 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 1-5 are the three-question list; line 6 is blank, inserted between the list and the page-change indicator, per 8.3.2.c; line 7 is the print-page-change dash rule ending in the page number '#fe' = 65, matching print '-65-'; line 8 begins the next paragraph ('Internet-based health care...') directly after the indicator with no blank line; line 9 continues the paragraph, ending in the '444' continuation symbol (text truncated in this excerpt, matching this book's placeholder convention)."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B; the \"(Return to Text)\" navigation line is correctly excluded from `lines` by both (per the section-11 precedent and this task’s standing decision). Only prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s kept as the base, with B’s explicit note on the \"(Return to Text)\" exclusion folded in.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

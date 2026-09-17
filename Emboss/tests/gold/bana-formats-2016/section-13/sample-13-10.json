@@ -1,0 +1,84 @@
+{
+  "id": "sample-13-10",
+  "title": "Sample 13-10: Attribution with First Writing",
+  "pdfPages": [
+    378
+  ],
+  "textLines": [
+    10915,
+    10933
+  ],
+  "illustrates": {
+    "rule": "13.9.4 cross-reference",
+    "quote": "Attributions are shown with the first writing of the material and omitted in the second writing."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "Two lines from Milton's Paradise Lost, shown twice: first as ordinary verse, then repeated with foot marks (slashes) and syllable breaks for meter, without the attribution.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "I may assert Eternal Providence.",
+                "indent": 0,
+                "number": null
+              },
+              {
+                "text": "And justify the ways of God to men.",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Milton, Paradise Lost, page 227, lines 25-26",
+        "features": "Attribution line, italicised work-title, below the two verse lines (shown only with the first writing)."
+      }
+    ],
+    "notes": "Picture on PDF p.378; the attribution appears once, directly under the first (unmarked) writing, and is not repeated under the second (meter-marked) writing below it -- matching this sample's title exactly.",
+    "surroundingText": null,
+    "printFeatures": "Plain verse lines; italic work-title within the attribution line; foot-mark diagrams (breve/slash) above syllables in the second writing."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                     #,-",
+      ",i may ass]t ,et]nal ,provid;e4",
+      ",& ju/ify ! ways ( ,god to m54",
+      "    ,milton1 .1,p>adise .1,lo/1 page",
+      "    #bbg1 l9es #be-#bf",
+      "",
+      "  @+ ^/     @+^/      @+^/",
+      "  ,i may _/ assert _/ ,eter- _/",
+      "",
+      "    @+   ^/      @+^/",
+      "    nal ,prov- _/ idence4",
+      "",
+      "   @+ ^/       @+^/    @+ ^/",
+      "  ,and jus- _/ tify _/ the ways _/",
+      "",
+      "    @+ ^/      @+ ^/",
+      "    of ,god _/ to men4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10915-10931, after stripping a 5-char line-number field (2-digit max line number 18, +3=5) and converting U+2800. Line 1 is blank except for a highlighted reference-style symbol at the far right (cell 38-40 area); its exact function is not identified (see 'uncertain'). Lines 2-5 are the FIRST writing (contracted braille, WITH the Milton attribution on lines 4-5). Lines 7-17 are the SECOND writing (uncontracted, meter-marked, offset to cell 3) -- with NO attribution repeated, matching rule 13.9.4.g exactly.",
+    "variants": []
+  },
+  "uncertain": [
+    "The highlighted symbol at the end of line 1 (a blank line otherwise) was not identified; it may be an editorial page-image callout rather than braille content proper. The identical-shaped highlight recurs (one cell wider) at the start of Sample 13-11's line 1; the two are likely the same convention, but its meaning is not stated in the surrounding rule text."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A's braille.lines has 17 entries, run B has 18. The source (.txt lines 10915-10932) numbers 18 reference lines (1 through 18) for this sample, the 18th (.txt line 10932) a full 40-cell blank row -- confirmed directly, and matching this section's usual practice of one final blank row closing a stress-diagram excerpt (cf. Sample 13-9, Sample 13-12). Run A silently dropped this trailing line; run B's 18-line array (with a trailing \"\") is adopted, appended here to run A's otherwise-identical 17 lines. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

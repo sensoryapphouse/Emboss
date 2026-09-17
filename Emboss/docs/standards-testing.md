@@ -4,7 +4,8 @@ Paul's decisions (17 Sep 2026): test Emboss against **BANA Braille Formats 2016*
 (as held) and **NIMAS 1.1 / DTBook 2005-3 (+ MathML)**. BrailleBlaster is a comparison only, not
 a reference. No transcriber checks are available; concise questions for a transcriber are
 collected in `standards-questions.md` and sent when the other checks are done. Keep costs
-reasonable without compromising quality. The rule texts are in `references/_text/`.
+reasonable without compromising quality. Order (Paul, 17 Sep): BANA and UKAAF first — measured and
+fixed — before NIMAS/DTBook compliance and the translation checks. The rule texts are in `references/_text/`.
 
 ## Outputs (all in the repository, never only in chat)
 

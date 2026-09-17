@@ -1,0 +1,71 @@
+{
+  "id": "example-1-12",
+  "title": "Letter and Number Page Numbers",
+  "pdfPages": [
+    32
+  ],
+  "textLines": [
+    1074,
+    1098
+  ],
+  "illustrates": {
+    "rule": "1.13.1.c",
+    "quote": "Omit the print hyphen; a transcriber's note noting this change to print is required."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "Print",
+            "Combined Page Numbers",
+            "Combined/Continued Numbers"
+          ]
+        ],
+        "rows": [
+          [
+            "IV49",
+            "IV49-51",
+            "aIV49-51"
+          ],
+          [
+            "77S",
+            "77S-79",
+            "a77S-79"
+          ],
+          [
+            "I–65",
+            "I65-66",
+            "aI65-66"
+          ],
+          [
+            "6-12",
+            "6-12-14",
+            "a6-12-14"
+          ]
+        ],
+        "features": "Four-row reference table of sample letter/number print page identifiers; the guide itself renders this as a combined print+braille table (braille given verbatim below, not a real formatted 40-cell page)."
+      }
+    ]
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Not a real 40-cell braille page: this is the guide's own reference table pairing each print identifier with its 'Combined Page Numbers' and 'Combined/Continued Numbers' braille renderings (three braille strings per row, in row-major Print/Combined/Combined-Continued order). width recorded as null since this is a table, not a measured braille page."
+  },
+  "uncertain": [
+    "The en dash in 'I–65' is reproduced exactly as it appears in the source (not a hyphen)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on every value once B's table-column split (print label vs. its two braille forms) is used -- A instead kept the whole row as one literal braille.lines string; B's structured headers/rows is closer to this section's own table schema and was adopted. This is a reference table (print label + its own braille rendering given side by side by the guide itself), not a real 40-cell braille page, so braille.lines is left empty (the runner's own no-braille signal) and the actual braille strings are recorded in braille.notes as evidence instead -- Emboss has no letter/number page-identifier transformation feature in any case (standards-findings.md F-48)."
+}

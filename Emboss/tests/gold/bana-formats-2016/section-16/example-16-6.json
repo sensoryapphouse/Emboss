@@ -1,0 +1,59 @@
+{
+  "id": "example-16-6",
+  "title": "Note without a Print Reference Mark",
+  "pdfPages": [
+    433
+  ],
+  "textLines": [
+    12471,
+    12477
+  ],
+  "illustrates": {
+    "rule": "16.4.c",
+    "quote": "The embedded note must be on the same line as at least one word or phrase to which it applies. Note: Do not confuse marginal notes with sidebars. (See Formats, §12, Sidebars.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "That floating stuff is called slag. The slag is then skimmed off.",
+        "features": "Plain body text, no reference symbol or emphasis marking the word \"slag\".",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "Slag is the dross of metal",
+        "features": "Set in the right margin, in italic type, alongside the body paragraph -- a genuine marginal note with no print symbol connecting it to a specific word.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "margin",
+        "text": "Slag is the dross of metal"
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.4, showing a marginal note with no print reference mark or emphasis at all.",
+    "printFeatures": "Boxed screenshot: two-line body paragraph on the left, italic marginal note (\"Slag is the dross of metal\") set to the right of the first line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",t float+ /uff is call$ slag4 @.<note@.>",
+      ",! slag is !n skimm$ (f4"
+    ],
+    "pageBreaks": [],
+    "notes": "Per rule 16.4b, the embedded transcriber's note reads literally \"note\" (not the marginal note's actual text) enclosed in transcriber's-note indicators (@.< ... @.>), inserted after \"slag\" on the same braille line -- the point of reference -- rather than reproducing the marginal note's wording inline. The margin note's actual text (\"Slag is the dross of metal\") is not itself shown transcribed anywhere in this two-line excerpt."
+  },
+  "uncertain": [
+    "The excerpt shown does not include where/whether the marginal note's actual wording (\"Slag is the dross of metal\") is transcribed elsewhere on this braille page; only the embedded placeholder note is visible in this two-line box."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.4.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12476, stripped of its 9-space left padding, is exactly 40 characters, ending in the embedded TN indicator. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

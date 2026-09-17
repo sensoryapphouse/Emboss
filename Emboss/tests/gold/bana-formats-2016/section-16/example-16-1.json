@@ -1,0 +1,50 @@
+{
+  "id": "example-16-1",
+  "title": "Book with Asterisk Reference Mark",
+  "pdfPages": [
+    431
+  ],
+  "textLines": [
+    12398,
+    12404
+  ],
+  "illustrates": {
+    "rule": "16.2.2.c",
+    "quote": "Asterisks, daggers, and double daggers that appear raised from the baseline are not considered to be in the superscript position. (See UEB, §3.3.1, Asterisk, Dagger, and Double Dagger.) Retain the superscript format for all other symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Hamlet[ref:*]",
+        "features": "Two short lines: a book title \"Hamlet\" followed immediately by a superscript asterisk reference mark; the note itself (built separately from print.notes[], repeating the asterisk before \"Othello\" per rule 16.2.1) is not restated in this field.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "inline",
+        "text": "Othello"
+      }
+    ],
+    "surroundingText": "Boxed illustration directly below rule 16.2.2c, illustrating an asterisk print reference mark and its repetition before the note.",
+    "printFeatures": "Bordered box containing two print lines only, no running body text; \"Hamlet\" with a raised/superscript asterisk after it, then \"*Othello\" on the next line."
+  },
+  "braille": {
+    "width": null,
+    "lines": [
+      ",hamlet\"9",
+      "\"9,o!llo"
+    ],
+    "pageBreaks": [],
+    "notes": "Two-line braille box mirroring the print: line 1 is the title with the asterisk symbol (\"9) placed directly after it with no space (grade-1-indicator-free, per the rule text saying such indicators aren't part of the symbol proper); line 2 repeats the asterisk immediately before the note word. No separation line, page/volume reference, or margin indent is used -- this is a two-line isolated symbol illustration, not a full note-placement example, so braille.width is left null (the source does not show a full-width braille page for this item)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: no page/line-number evidence anywhere in this isolated two-line demonstration; both runs agree, left null. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

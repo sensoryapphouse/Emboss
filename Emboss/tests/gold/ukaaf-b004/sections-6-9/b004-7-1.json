@@ -1,0 +1,43 @@
+{
+  "id": "b004-7-1",
+  "title": "Page Numbering -- Good Practice Description",
+  "pdfPages": [
+    7
+  ],
+  "textLines": [
+    189,
+    197
+  ],
+  "illustrates": {
+    "rule": "B004 §7",
+    "quote": "Guiding principles: Page numbers (braille and print) must be easy to find and not intrusive to the text. Braille page numbering must always start at 1 (for each volume)."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Two-line prose description of the recommended page-number positions: braille page number top right, print page number top left. No worked print/braille pair is given for this section."
+      }
+    ],
+    "surroundingText": "Followed by an N.B. that when a braille page carries material from print pages 61 and 62, the print page number shown is 62 (the later of the two), and that showing print page numbers at all is optional."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No worked braille is given for this item; it is a two-line prose statement of placement only."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: prose-only, no braille. status: no-braille."
+}

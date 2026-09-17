@@ -175,6 +175,12 @@ ParagraphNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaSt
 // The NIMAS exporter rejoins the pieces into one <p> with the <pagenum> inline.
 ParagraphNode.prototype.getPageTurn = function() { return this.getLatest().__pageTurn || null; };
 ParagraphNode.prototype.setPageTurn = function(v) { this.getWritable().__pageTurn = v || null; return this; };
+// F-39 — BANA Formats §1.9.3: a per-paragraph "blocked" (1-1 margins) flag, alongside the
+// paragraph's own banaStyle (a plain body paragraph can be blocked; a quote/attribution/etc.
+// paragraph ignores this flag entirely — see document.mjs formatPara's own comment). Toggled
+// by the "Blocked Paragraph" toolbar button (btnBlockedPara), not the blockStyle dropdown.
+ParagraphNode.prototype.getBlocked = function() { return !!this.getLatest().__blocked; };
+ParagraphNode.prototype.setBlocked = function(v) { this.getWritable().__blocked = !!v; return this; };
 // A footnote paragraph keeps its note id (the target of note references, A5) and kind.
 ParagraphNode.prototype.getNote = function() { return this.getLatest().__note || null; };
 ParagraphNode.prototype.setNote = function(v) { this.getWritable().__note = v && v.id ? { id: String(v.id), kind: v.kind || null } : null; return this; };
@@ -184,6 +190,7 @@ ParagraphNode.prototype.afterCloneFrom = function(prev) {
   this.__banaStyle = prev.__banaStyle || null;
   this.__pageTurn = prev.__pageTurn || null;
   this.__note = prev.__note || null;
+  this.__blocked = !!prev.__blocked;
 };
 const origParaCreateDOM = ParagraphNode.prototype.createDOM;
 ParagraphNode.prototype.createDOM = function(config) {
@@ -195,6 +202,7 @@ ParagraphNode.prototype.createDOM = function(config) {
   }
   const turn = this.getPageTurn();
   if (turn === 'continuation' || turn === 'both') dom.classList.add('bana-continuation');
+  if (this.getBlocked()) dom.classList.add('bana-blocked');
   return dom;
 };
 const origParaUpdateDOM = ParagraphNode.prototype.updateDOM;
@@ -218,6 +226,12 @@ ParagraphNode.prototype.updateDOM = function(prevNode, dom, config) {
     dom.classList.toggle('bana-continuation', nextTurn === 'continuation' || nextTurn === 'both');
     updated = true;
   }
+  const prevBlocked = prevNode ? prevNode.getBlocked() : false;
+  const nextBlocked = this.getBlocked();
+  if (prevBlocked !== nextBlocked) {
+    dom.classList.toggle('bana-blocked', nextBlocked);
+    updated = true;
+  }
   return updated;
 };
 const origParaExportJSON = ParagraphNode.prototype.exportJSON;
@@ -238,6 +252,7 @@ ParagraphNode.prototype.exportJSON = function() {
   if (turn) json.pageTurn = turn;
   const note = this.getNote();
   if (note) json.note = note;
+  if (this.getBlocked()) json.blocked = true;
   return json;
 };
 const origParaUpdateFromJSON = ParagraphNode.prototype.updateFromJSON;
@@ -246,6 +261,7 @@ ParagraphNode.prototype.updateFromJSON = function(serializedNode) {
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
   if (serializedNode?.note) node.setNote(serializedNode.note);
+  if (serializedNode?.blocked) node.setBlocked(true);
   return node;
 };
 // A node class's own static importJSON, or null. Lexical nodes declared with $config()
@@ -258,6 +274,7 @@ ParagraphNode.importJSON = function(serializedNode) {
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
   if (serializedNode?.note) node.setNote(serializedNode.note);
+  if (serializedNode?.blocked) node.setBlocked(true);
   return node;
 };
 
@@ -854,11 +871,33 @@ class TableNode extends DecoratorNode {
   __headers = [];
   __rows = [];
   __format = 'spatial';
+  // BANA §11.3.1a's HEADING (centred; `null` when this table has none, or only a plain
+  // §11.2.8 CAPTION — carried as a separate sibling "Caption / Attribution" block instead,
+  // unrelated to this node, F-4/F-5) — a string, or an array for a real hard print line
+  // break (e.g. a sequence number on its own line, BANA Example 11-4). __titlePosition
+  // ('in-box' | 'before-box') is BANA §11.3.1b's box-line placement; see document.mjs
+  // formatBox/formatTable and parse.mjs parseTable for the same signal on the model/DTBook
+  // side.
+  __title = null;
+  __titlePosition = 'in-box';
+  // BANA §11.4.3's complex (two-tier) header, F-12: [{ text, from, to }] (0-based
+  // inclusive column span) for the primary heading row; `__headers` stays the flat
+  // sub-column/single-tier row (unchanged shape) — see document.mjs's
+  // formatGroupedHeaderRows/computeTableColumns and parse.mjs's parseTable for the
+  // same signal on the format/DTBook side. Data only, carried through save/load like
+  // __title/__titlePosition above; there is no editor UI to author or edit it — a
+  // table authored fresh in the editor simply has none, same as before this fix — and
+  // addColumn/removeColumn below do not adjust it (no UI path exercises that
+  // combination yet, so it is left rather than half-fixed).
+  __headerGroups = null;
 
   static getType() { return 'emboss-table'; }
   static clone(n) {
     const node = new TableNode([...(n.__headers || [])], (n.__rows || []).map(r => [...r]), n.__key);
     node.__format = n.__format || 'spatial';
+    node.__title = Array.isArray(n.__title) ? [...n.__title] : (n.__title ?? null);
+    node.__titlePosition = n.__titlePosition || 'in-box';
+    node.__headerGroups = Array.isArray(n.__headerGroups) ? n.__headerGroups.map((g) => ({ ...g })) : null;
     return node;
   }
   constructor(headers = [], rows = [], key) {
@@ -867,6 +906,12 @@ class TableNode extends DecoratorNode {
     this.__rows = Array.isArray(rows) ? rows : [];
     this.__format = 'spatial';
   }
+  getTitle() { return this.getLatest().__title; }
+  setTitle(t) { this.getWritable().__title = (t == null || t === '') ? null : t; }
+  getTitlePosition() { return this.getLatest().__titlePosition || 'in-box'; }
+  setTitlePosition(p) { this.getWritable().__titlePosition = p === 'before-box' ? 'before-box' : 'in-box'; }
+  getHeaderGroups() { return this.getLatest().__headerGroups; }
+  setHeaderGroups(g) { this.getWritable().__headerGroups = Array.isArray(g) && g.length ? g : null; }
   getFormat() { return this.getLatest().__format || 'spatial'; }
   setFormat(f) { this.getWritable().__format = f || 'spatial'; }
   createDOM() {
@@ -899,6 +944,9 @@ class TableNode extends DecoratorNode {
       headers: this.__headers,
       rows: this.__rows,
       format: this.__format || 'spatial',
+      title: this.__title ?? null,
+      titlePosition: this.__titlePosition || 'in-box',
+      ...(this.__headerGroups ? { headerGroups: this.__headerGroups } : {}),
     };
   }
   isInline() { return false; }
@@ -953,17 +1001,25 @@ class TableNode extends DecoratorNode {
       headers: this.__headers,
       rows: this.__rows,
       format: this.__format || 'spatial',
+      ...(this.__title != null ? { title: this.__title, titlePosition: this.__titlePosition || 'in-box' } : {}),
+      ...(this.__headerGroups ? { headerGroups: this.__headerGroups } : {}),
     };
   }
   static importJSON(j) {
     const n = new TableNode(j.headers || [], j.rows || []);
     if (j.format) n.__format = j.format;
+    if (j.title != null) n.__title = j.title;
+    if (j.titlePosition) n.__titlePosition = j.titlePosition === 'before-box' ? 'before-box' : 'in-box';
+    if (Array.isArray(j.headerGroups) && j.headerGroups.length) n.__headerGroups = j.headerGroups;
     return n;
   }
 }
-const $createTableNode = (headers, rows, format = 'spatial') => {
+const $createTableNode = (headers, rows, format = 'spatial', title = null, titlePosition = 'in-box', headerGroups = null) => {
   const t = new TableNode(headers, rows);
   if (format) t.setFormat(format);
+  if (title != null) t.setTitle(title);
+  t.setTitlePosition(titlePosition);
+  if (headerGroups) t.setHeaderGroups(headerGroups);
   return t;
 };
 const $isTableNode = (n) => n instanceof TableNode;
@@ -1114,10 +1170,10 @@ function updateTableWarningBadge(bar, headers, rows, format) {
   if (!bar) return;
   const fmt = format || 'spatial';
   let badge = bar.querySelector('.table-warn-badge');
-  if (fmt === 'listed') { if (badge) badge.remove(); return; }   // an explicit listed table isn't "too wide" — that's what was asked for
+  if (fmt === 'listed' || fmt === 'vertical') { if (badge) badge.remove(); return; }   // an explicit listed/vertical table isn't "too wide" — that's what was asked for
   const o = currentFormatOpts();
   const layout = tableLayout({ headers: headers || [], rows: rows || [], format: fmt }, o);
-  if (layout === 'columnar') { if (badge) badge.remove(); return; }
+  if (layout === 'columnar' || layout === 'vertical') { if (badge) badge.remove(); return; }   // T4: vertical division (BANA §11.14) is a legitimate auto fallback, not the "too wide" warning
   const bana = o.mode === 'bana';
   const msg = t(bana ? 'app.table.too_wide_listed' : 'app.table.too_wide_paragraph');
   const desc = t(bana ? 'app.table.too_wide_listed_title' : 'app.table.too_wide_paragraph_title');
@@ -1392,11 +1448,12 @@ editor.registerDecoratorListener((decorators) => {
       const btnFormat = document.createElement('button');
       btnFormat.type = 'button';
       btnFormat.className = 'table-context-btn';
-      const FORMAT_LABEL = { auto: `🔀 ${t('app.table.fmt_auto')}`, spatial: `📊 ${t('app.table.fmt_spatial')}`, listed: `📋 ${t('app.table.fmt_listed')}` };
+      const FORMAT_LABEL = { auto: `🔀 ${t('app.table.fmt_auto')}`, spatial: `📊 ${t('app.table.fmt_spatial')}`, listed: `📋 ${t('app.table.fmt_listed')}`, vertical: `🔲 ${t('app.table.fmt_vertical')}` };
       const FORMAT_TITLE = {
         auto: t('app.table.fmt_auto_title'),
         spatial: t('app.table.fmt_spatial_title'),
         listed: t('app.table.fmt_listed_title'),
+        vertical: t('app.table.fmt_vertical_title'),
       };
       btnFormat.textContent = FORMAT_LABEL[curFormat] || FORMAT_LABEL.spatial;
       btnFormat.title = t('app.table.fmt_title', { format: FORMAT_TITLE[curFormat] || FORMAT_TITLE.spatial });
@@ -1405,7 +1462,9 @@ editor.registerDecoratorListener((decorators) => {
         editor.update(() => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) {
-            const nextFmt = { auto: 'spatial', spatial: 'listed', listed: 'auto' }[n.getFormat()] || 'listed';
+            // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): 'vertical' (BANA §11.14
+            // Wide Tables: Vertical Division) added to the cycle between Listed and Auto.
+            const nextFmt = { auto: 'spatial', spatial: 'listed', listed: 'vertical', vertical: 'auto' }[n.getFormat()] || 'listed';
             n.setFormat(nextFmt);
           }
         });
@@ -1713,6 +1772,42 @@ function applyBlockStyle(v) {
   announce(label);
 }
 $id('blockStyle')?.addEventListener('change', (e) => applyBlockStyle(e.target.value));
+
+// F-39 — BANA Formats §1.9.3: "Blocked Paragraph" toggle, alongside (not instead of) the
+// blockStyle dropdown above — it layers a `blocked` flag onto whichever paragraph(s) the
+// selection touches, the way bold/italic/underline layer onto text, rather than replacing
+// the paragraph's own style the way the dropdown does.
+function nearestParagraphNode(node) {
+  let n = node;
+  while (n && n !== $getRoot()) {
+    if (typeof n.getBlocked === 'function' && typeof n.setBlocked === 'function') return n;
+    n = n.getParent ? n.getParent() : null;
+  }
+  return null;
+}
+function toggleBlockedParagraph() {
+  editor.update(() => {
+    const sel = $getSelection();
+    const paras = new Set();
+    if ($isRangeSelection(sel)) {
+      for (const n of sel.getNodes()) {
+        const p = nearestParagraphNode(n);
+        if (p) paras.add(p);
+      }
+    }
+    if (!paras.size && lastActiveEditorSelection?.anchorKey) {
+      const p = nearestParagraphNode($getNodeByKey(lastActiveEditorSelection.anchorKey));
+      if (p) paras.add(p);
+    }
+    if (!paras.size) return;
+    const anyBlocked = [...paras].some((p) => p.getBlocked());
+    for (const p of paras) p.setBlocked(!anyBlocked);
+  });
+  clearTranslationCache();
+  scheduleRender();
+  refreshToolbar();
+}
+$id('btnBlockedPara')?.addEventListener('click', toggleBlockedParagraph);
 
 let savedLexicalBlockKey = null;
 let lastKnownEditorBlockIndex = null;
@@ -2363,6 +2458,9 @@ function paraBlock(node) {
   const turn = typeof node.getPageTurn === 'function' ? node.getPageTurn() : null;
   if (turn === 'continued' || turn === 'both') block.continued = true;
   if (turn === 'continuation' || turn === 'both') block.continuation = true;
+  // F-39 — BANA §1.9.3: only meaningful on a plain body paragraph (formatPara ignores it
+  // once a styled path — quote, attribution, ... — takes over the block's own margins).
+  if (typeof node.getBlocked === 'function' && node.getBlocked()) block.blocked = true;
   if (banaStyle && banaStyle !== 'body') {
     block.style = banaStyle;
     if (banaStyle === 'note') block.type = 'note';
@@ -2483,6 +2581,13 @@ function nodeToBlocks(node, blocks) {
       tblBlock.format = format;
       tblBlock.style = `table-${format}`;
     }
+    const nodeTitle = typeof node.getTitle === 'function' ? node.getTitle() : null;
+    if (nodeTitle != null) {
+      tblBlock.title = nodeTitle;
+      tblBlock.titlePosition = (typeof node.getTitlePosition === 'function' ? node.getTitlePosition() : 'in-box');
+    }
+    const headerGroups = typeof node.getHeaderGroups === 'function' ? node.getHeaderGroups() : null;
+    if (headerGroups) tblBlock.headerGroups = headerGroups;
     blocks.push(tblBlock);
   } else if ($isImageNode(node)) {
     blocks.push({ ...imageBlock(node), _key: nodeKey });
@@ -2802,6 +2907,17 @@ function refreshToolbar(explicitTarget) {
     $id('btnBold')?.setAttribute('aria-pressed', String(b));
     $id('btnItalic')?.setAttribute('aria-pressed', String(i));
     $id('btnUnderline')?.setAttribute('aria-pressed', String(u));
+
+    // F-39 — sync the "Blocked Paragraph" toggle to the current selection's own paragraph.
+    let blockedPara = false;
+    if ($isRangeSelection(sel)) {
+      const p = nearestParagraphNode(sel.anchor.getNode());
+      if (p) blockedPara = p.getBlocked();
+    } else if (lastActiveEditorSelection?.anchorKey) {
+      const p = nearestParagraphNode($getNodeByKey(lastActiveEditorSelection.anchorKey));
+      if (p) blockedPara = p.getBlocked();
+    }
+    $id('btnBlockedPara')?.setAttribute('aria-pressed', String(blockedPara));
 
     // Check if caret/selection is inside a list item to update Indent/Outdent buttons
     let activeLi = null;
@@ -6574,7 +6690,7 @@ function appendBlock(parent, b) {
   } else if (b.type === 'table') {
     // A table the source did not mark keeps 'auto' (columns when they fit, else the
     // listed / paragraph fallback) — it was forced to spatial on load (A26).
-    parent.append($createTableNode(b.headers || [], b.rows || [], b.format || 'auto'));
+    parent.append($createTableNode(b.headers || [], b.rows || [], b.format || 'auto', b.title ?? null, b.titlePosition || 'in-box', b.headerGroups || null));
   } else if (b.type === 'math') {
     const latex = b.latex || (b.mathml ? safeMathmlToLatex(b.mathml) : '');
     const p = $createParagraphNode();
@@ -6593,6 +6709,7 @@ function appendBlock(parent, b) {
     if (b.type === 'footnote' && b.id) p.setNote({ id: b.id, kind: b.kind });
     fillFromBlock(p, b);
     if (b.continued || b.continuation) p.setPageTurn(b.continued && b.continuation ? 'both' : (b.continued ? 'continued' : 'continuation'));
+    if (b.blocked) p.setBlocked(true);   // F-39 — BANA §1.9.3
     parent.append(p);
   }
 }

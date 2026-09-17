@@ -1,0 +1,52 @@
+{
+  "id": "example-5-15",
+  "title": "Emphasized Letters within a Word",
+  "pdfPages": [
+    137
+  ],
+  "textLines": [
+    4163,
+    4170
+  ],
+  "illustrates": {
+    "rule": "5.7.1",
+    "quote": "Letters within words are emphasized for a variety of reasons, e.g., to show changes in spelling, additions of prefixes or suffixes, and alliteration. When letters are emphasized with any font attribute (e.g., italics, bold, colored type, underlined letters, etc.): a. Follow print for the emphasis used. b. Use contracted braille for all words with emphasized letters. If the emphasis applies to the initial letter of a contraction, the contraction can still be used. c. Use the typeform word indicator when the emphasis applies to more than one symbol. If the emphasis occurs within a word and a return to regular type is required, use a terminator to show the return to regular print font."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "<u>S</u>he <u>s</u>ells <u>s</u>eashells by the <u>s</u>eashore.",
+        "features": "Alliteration demonstration #1: only the single initial letter of each of the four alliterating words (She, sells, seashells, seashore) is underlined.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "<u>Sh</u>e sells sea<u>sh</u>ells by the sea<u>sh</u>ore.",
+        "features": "Alliteration demonstration #2: the two-letter cluster 'Sh'/'sh' is underlined wherever it occurs within a word; 'sells' has no 'sh' and is left entirely plain.",
+        "items": null
+      }
+    ],
+    "notes": "Two near-identical sentences (a tongue-twister), each underlining a different letter-span to demonstrate emphasis on letters within a word rather than whole words — illustrating both halves of rule 5.7.1.c.",
+    "surroundingText": "Follows rule 5.7.1 directly, on printed page 5-11.",
+    "printFeatures": "Boxed two-sentence pair, underlining only (no italics/bold/color)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "_2,%e _2sells _2s1%ells by ! _2s1%ore4",
+      "_1,%_'e sells sea_1%_'ells by !",
+      "  sea_1%_'ore4"
+    ],
+    "pageBreaks": [],
+    "notes": "Three lines, margin 8 stripped; line 3 has a genuine 2-cell runover indent. Line 1 uses '_2' as an underline SYMBOL indicator (marking exactly the one letter that follows) before each of 'She', 'sells', 'seashells', 'seashore' — matching the single-initial-letter underlining in print, per rule 5.7.1.c's word-indicator case for one symbol. Lines 2-3 instead use a paired start/end indicator ('_1' ... \"_'\") bracketing the two-letter 'Sh'/'sh' span within 'She', 'seashells', and 'seashore'; 'sells' — which contains no 'sh' — carries no indicator at all in lines 2-3, matching print."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte (including line 3's genuine runover indent, correctly preserved by both). Prose synthesized; substance agreed."
+}

@@ -1,0 +1,96 @@
+{
+  "id": "sample-11-24",
+  "title": "Listed Table Format",
+  "pdfPages": [
+    332,
+    333
+  ],
+  "textLines": [
+    9837,
+    9869
+  ],
+  "illustrates": {
+    "rule": "11.16.1",
+    "quote": "Wide Tables: Listed Table Format. The listed table format repeats the column heading for each entry. This is useful for tables with numerous columns, columns of numbers, repetitive entries, or nonintuitive entries. (See Sample 11-24: Listed Table Format on page 11-50.)"
+  },
+  "print": {
+    "caption": "PRESIDENTIAL ADMINISTRATIONS",
+    "headers": [
+      [
+        "President",
+        "Vice President",
+        "Secretary of State",
+        "Secretary of Treasury",
+        "Secretary of War",
+        "Secretary of Navy",
+        "Postmaster General",
+        "Attorney General"
+      ]
+    ],
+    "rows": [
+      [
+        "George Washington 1789-1797",
+        "John Adams 1789-1797",
+        "Thomas Jefferson 1789-1794\nEdmund Randolph 1794-1795\nTimothy Pickering 1795-1797",
+        "Alexander Hamilton 1789-1795\nOliver Wolcott 1795-1797",
+        "Henry Knox 1789-1795\nTimothy Pickering 1795-1796\nJames McHenry 1796-1797",
+        "",
+        "Samuel Osgood 1789-1791\nTimothy Pickering 1791-1795\nJoseph Habersham 1795-1797",
+        "Edmund Randolph 1789-1794\nWilliam Bradford 1794-1795\nCharles Lee 1795-1797"
+      ],
+      [
+        "John Adams 1797-1801",
+        "Thomas Jefferson 1797-1801",
+        "Timothy Pickering 1797-1800\nJohn Marshall 1800-1801",
+        "Oliver Wolcott 1797-1801\nSamuel Dexter 1800-1801",
+        "James McHenry 1797-1800\nSamuel Dexter 1800-1801",
+        "Benjamin Stoddert 1798-1801",
+        "Joseph Habersham 1797-1801",
+        "Charles Lee 1797-1801"
+      ]
+    ],
+    "notes": "Each cell that holds more than one office-holder shows them on separate lines in print (and, matching that, on separate indented braille lines -- see braille.lines 12-14 for Sec of State, 15-16 for Sec of Treasury); multiple names are joined here with '\\n' to preserve that one-per-line structure rather than inventing a print punctuation mark that is not actually there. Secretary of Navy did not exist until 1798 and is genuinely blank for the Washington administration. See 'Unresolved' in the README for the Secretary-of-War/Secretary-of-Navy braille anomaly.",
+    "surroundingText": null,
+    "printFeatures": "Small-caps bold section label (PRESIDENTIAL ADMINISTRATIONS) above a bordered box, alternating light-grey/white row shading, ruled column dividers, bold column headers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777    #,-",
+      "      ,,presid5tial ,,adm9i/ra;ns",
+      "",
+      "      @.<,pr9t =mat is *ang$4 ,r[ h1d+s",
+      "    >e block$ 9 cell #e2 column h1d+s",
+      "    2g9 9 cell #a4 ,all h1d+s >e rep1t$",
+      "    = cl>;y4 ,a colon sep>ates h1d+s f",
+      "    table 5tries4",
+      "      ,a s]ies ( ?ree dot #es 9dicates a",
+      "    blank 5try 9 pr9t4@.>",
+      "",
+      "    ,presid5t3 ,george ,wa%+ton #aghi-",
+      "    #agig",
+      ",vice ,presid5t3 ,john ,adams #aghi-",
+      "  #agig",
+      ",sec ( ,/ate3",
+      "  ,?omas ,je6]son #aghi-#agid",
+      "  ,$mund ,r&olph #agid-#agie",
+      "  ,timo?y ,pick]+ #agie-#agig",
+      ",sec ( ,tr1sury3",
+      "  ,alex&] ,hamilton #aghi-#agie",
+      "  ,oliv] ,wolcott #agie-#agig",
+      ",sec ( ,w>3",
+      "  444",
+      ",sec ( ,navy3 \"\"\""
+    ],
+    "pageBreaks": [],
+    "notes": "The eight print columns become the Listed Table Format: a transcriber's note (lines 4-10) explains the change (print format is changed; row headings are blocked in cell 2; column headings are repeated for clarity; a colon separates headings from table entries; plus the guide-dots-blank-entry sample sentence). The body then lists Washington's administration as a cell-5 heading (President: George Washington 1789-1797, lines 12-13), followed by each subsequent column heading plus colon plus value: Vice President (single entry, lines 14-15), Sec of State (three entries, heading line 16 + indented entries lines 17-19), Sec of Treasury (two entries, heading line 20 + indented entries lines 21-22), Sec of War (heading line 23), then a line reading only '444' (line 24), then Sec of Navy (heading line 25) followed inline by three double-quote guide-dot characters."
+  },
+  "uncertain": [
+    "See the section README's 'Known uncertainties and source errata' list: Secretary of War's braille entry (line 24) is just the token '444' where print shows three named office-holders; flagged for Paul."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows: multiple office-holders within one cell are joined with a newline to preserve print's (and braille's) one-name-per-line layout, rather than inventing a print punctuation mark ('/' in run A, ';' in run B) that is not actually there (confirmed against both the PDF image, pp. 332-333, and the source .txt's own indented one-name-per-braille-line layout for Sec of State/Treasury). See 'Unresolved' in the README for the Secretary-of-War/-Navy braille anomaly that both runs flagged."
+}

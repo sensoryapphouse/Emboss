@@ -1,0 +1,64 @@
+{
+  "id": "sample-9-05",
+  "title": "Epigraph",
+  "pdfPages": [242],
+  "textLines": [6988, 7007],
+  "illustrates": {
+    "rule": "9.3.1.c",
+    "quote": "Do not treat epigraphs as displayed material."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Eight Brief Tales of Lovers                    157",
+        "features": "Running head (book/chapter title, italic) and print page number at the top of the page; page furniture carried into the braille excerpt as its own centred line."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "ALPHEUS AND ARETHUSA",
+        "features": "Full-caps centred story title."
+      },
+      {
+        "kind": "epigraph",
+        "level": null,
+        "text": "This story is told in full only by Ovid. There is nothing noteworthy in his treatment of it. The verse at the end is taken from the Alexandrian poet Moschus.",
+        "features": "Entirely italicized in print. Per 9.3.1c ('do not treat epigraphs as displayed material') the epigraph is NOT given an adjusted/indented margin -- it is blocked at cell 1 in this excerpt, the same block-paragraph margin this book's own surrounding narrative uses; per 9.3.1e no italics markup is added despite the whole passage being italic in print."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In Ortygia, an island which formed part of Syracuse, the greatest city of Sicily, there is a sacred spring called Arethusa. Once, however, Arethusa was not water or even",
+        "features": "First paragraph of the story's actual body text, beginning immediately after the epigraph; cut off at the bottom edge of the print image."
+      }
+    ],
+    "notes": "Direct worked example of 9.3.1: the epigraph (a short quotation-like introduction) precedes the story's own body text, is not treated as displayed material (9.3.1c -- cell 1, not the adjusted cell-3 margin), and is set off by a blank line before and after (9.3.1d).",
+    "surroundingText": "Opening page of a short-story anthology chapter ('Alpheus and Arethusa', one of 'Eight Brief Tales of Lovers').",
+    "printFeatures": "Plain page with a running head/page number at top, a full-caps centred story title, an italicized epigraph paragraph, and the story's opening paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "     ,ei<t ,brief ,tales ( ,lov]s   #aeg",
+      "",
+      "         ,,,alpheus & >e?usa,'",
+      "",
+      ",? /ory is told 9 full only by ,ovid4",
+      ",\"! is no?+ notewor?y 9 8 tr1t;t ( x4 ,!",
+      "v]se at ! 5d is tak5 f ! ,alex&rian poet",
+      ",mos*us4",
+      "",
+      "  ,9 ,ortygia1 an isl& : =m$ \"p (",
+      ",syracuse1 ! grte/ c;y ( ,sicily1 \"! is",
+      "a sacr$ spr+ call$ ,>e?usa4 ,once1 h[\"e1",
+      ",>e?usa 0 n wat] or ev5"
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 1-13 in the source (this Sample begins its own braille page at line 1). Field width 5, stripped. Line 1: running head + page number, indent 5 (matches the centering formula for its own length); trailing '#aeg' = the print page number '157', right-flushed. Line 2: blank. Line 3: story title, indent 9 (also matches centering) -- centred heading, level 1. Line 4: blank. Lines 5-8: epigraph paragraph at cell 1. Line 9: blank. Lines 10-13: story body paragraph, first line at cell 3, runovers at cell 1 (this book's ordinary indented-paragraph margin)."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6993-7005 after stripping the 5-character line-number field (the '(Return to Text)' line 7006 excluded). `illustrates.rule` narrowed to 9.3.1.c specifically (both runs quoted the whole of 9.3.1): the epigraph's own measured margin (cell 1, matching this book's ordinary block-paragraph style, NOT the cell-3 adjusted displayed-material margin used elsewhere in this section, e.g. the quote in Sample 9-1) is exactly what clause c's 'do not treat epigraphs as displayed material' means in practice, and is the one fact this sample settles unambiguously. Heading level 1 (centred) confirmed directly against the agreed braille's own centering-formula match for both the running-head line and the title line."
+}

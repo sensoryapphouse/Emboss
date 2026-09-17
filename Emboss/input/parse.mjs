@@ -9,7 +9,7 @@
 import { ommlElementToMathML, MATH_NS } from './omml.mjs';
 import { SCRIPT_MARKS } from '../format/text-style.mjs';
 import { mathmlToLatex } from '../engine/mathml-to-latex.mjs';
-import { cellFromSegments } from '../format/cell-markup.mjs';
+import { cellFromSegments, cellIsBlank } from '../format/cell-markup.mjs';
 import { loadWarnings } from './load-audit.mjs';
 import { synthesizeOrderedMarker } from './nimas-export.mjs';
 
@@ -2669,7 +2669,11 @@ export function parseDtbook(xmlStr) {
           } else if (cls.includes('bana-break-dot2s')) {
             return { type: 'break', kind: 'dot2s' };
           } else if (t) {
-            return segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+            // BANA Formats §1.9.3 (F-39): per-paragraph "blocked" flag, e.g. a box paragraph
+            // (Example 4-6) that carries class="blocked" (see parse.mjs's top-level makeP).
+            const blk = segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+            if (cls.includes('blocked')) blk.blocked = true;
+            return blk;
           }
           return null;
         };
@@ -2825,9 +2829,40 @@ export function parseDtbook(xmlStr) {
     targetBlocks.push(box);
   }
 
+  // BANA Formats §11.3.1a distinguishes a table's HEADING (its own title, e.g. "Table 12:
+  // Populations" — centred, §11.3.1a) from its CAPTION (§11.2.8: an explanatory blurb, 7-5
+  // margins, never centred). DTBook gives exactly one element, <caption>, for both (F-4) —
+  // so a `class="bana-heading"` on it is the signal this table's heading is a heading, not a
+  // caption; `bana-heading-before-box` additionally marks BANA 11.3.1b's "before" placement
+  // (the heading rendered outside/above an enclosing box's top line) — omitted, the default
+  // is 'in-box' (right after the top line, formatTable's own centred rendering; see
+  // document.mjs formatBox/formatTable). A <br/> inside a heading <caption> is a real,
+  // hard print line break (e.g. a sequence number on its own line above the title proper,
+  // BANA Example 11-4) — getTextLines keeps each one separate; a plain caption's own <br/>
+  // stays cosmetic (getCleanText merges it to a space, unchanged).
+  function getTextLines(el) {
+    if (!el) return [];
+    const lines = [''];
+    (function collect(node) {
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType === 3) {
+          lines[lines.length - 1] += child.nodeValue || '';
+        } else if (child.nodeType === 1) {
+          const tag = (child.localName || child.tagName || '').toLowerCase();
+          if (tag === 'br') { lines.push(''); continue; }
+          if (tag === 'img' || tag === 'image') { lines[lines.length - 1] += ' '; continue; }
+          collect(child);
+        }
+      }
+    })(el);
+    return lines.map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  }
+
   function parseTable(tableEl, targetBlocks = blocks) {
     let tabletnText = null;
     let captionText = null;
+    let headingLines = null;             // set instead of captionText when class="bana-heading"
+    let headingBeforeBox = false;
 
     for (let c = tableEl.firstChild; c; c = c.nextSibling) {
       if (c.nodeType !== 1) continue;
@@ -2835,7 +2870,13 @@ export function parseDtbook(xmlStr) {
       if (cTag === 'tabletn' || cTag.includes('tabletn')) {
         tabletnText = getCleanText(c);
       } else if (cTag === 'caption' || cTag === 'figcaption') {
-        captionText = getCleanText(c);
+        const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '');
+        if (cls.includes('bana-heading')) {
+          headingLines = getTextLines(c);
+          headingBeforeBox = cls.includes('bana-heading-before-box');
+        } else {
+          captionText = getCleanText(c);
+        }
       }
     }
 
@@ -2874,39 +2915,173 @@ export function parseDtbook(xmlStr) {
     const cls = tableEl.getAttribute ? (tableEl.getAttribute('class') || '') : '';
     let format = null;
     if (cls.includes('bana-listed') || cls.includes('listed')) format = 'listed';
+    // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): BANA §11.14 Wide Tables: Vertical
+    // Division, round-tripped as class="bana-vertical" (see nimas-export.mjs's table case).
+    else if (cls.includes('bana-vertical') || cls.includes('vertical')) format = 'vertical';
     else if (cls.includes('bana-spatial') || cls.includes('spatial')) format = 'spatial';
 
     const trs = tableEl.getElementsByTagName ? [...tableEl.getElementsByTagName('tr')] : [];
     const headers = [];
     const rows = [];
 
+    // A rowspanned cell occupies its column in every row it covers, not just its own <tr>
+    // (F-1: parseTable used to read colspan but never rowspan, so a later row lost a cell
+    // and everything after it shifted left). BANA 11.5.3a: "When a row heading is not
+    // repeated but refers to more than one column entry, leave the area(s) where the
+    // inferred row heading(s) belong blank" — Emboss applies the same blank fill to any
+    // rowspanned cell (row heading or column entry) so later columns never shift. rowSpans
+    // tracks, per column, how many further rows still owe a blank; it is shared across the
+    // whole table (thead rows, then body rows) since a span can run from one into the other.
+    const rowSpans = new Map();
+    const spanPending = (col) => rowSpans.has(col);
+    const consumeSpan = (col) => {
+      const left = rowSpans.get(col) - 1;
+      if (left > 0) rowSpans.set(col, left); else rowSpans.delete(col);
+    };
+    const registerSpan = (col, rowspan) => { if (rowspan > 1) rowSpans.set(col, rowspan - 1); };
+    // Reads one <tr>'s th/td elements into a column-aligned row: colspan pads a blank cell
+    // after the cell it belongs to (pre-existing), a pending rowspan from an earlier row
+    // blanks its column here (F-1), and any rowspan on this row's own cells is registered
+    // for the rows still to come — including a rowspan on the last cell, which is beyond
+    // the reach of the cell-by-cell loop and only cleared by the trailing while below. A
+    // rowspan reaching past the table's last row simply leaves rowSpans non-empty when
+    // parsing ends, which is harmless.
+    const readSpannedRow = (cellEls) => {
+      const out = [];
+      let col = 0;
+      for (const cellEl of cellEls) {
+        while (spanPending(col)) { out.push(''); consumeSpan(col); col++; }
+        const value = cellValue(cellEl);
+        const colspan = parseInt(cellEl.getAttribute ? (cellEl.getAttribute('colspan') || '1') : '1', 10) || 1;
+        const rowspan = parseInt(cellEl.getAttribute ? (cellEl.getAttribute('rowspan') || '1') : '1', 10) || 1;
+        out.push(value);
+        registerSpan(col, rowspan);
+        col++;
+        for (let k = 1; k < colspan; k++) {
+          while (spanPending(col)) { out.push(''); consumeSpan(col); col++; }
+          out.push('');
+          registerSpan(col, rowspan);
+          col++;
+        }
+      }
+      while (spanPending(col)) { out.push(''); consumeSpan(col); col++; }
+      return out;
+    };
+
     const thead = tableEl.getElementsByTagName ? tableEl.getElementsByTagName('thead')[0] : null;
     let headerRowFound = false;
+    // BANA §11.4.3 (Complex Tables with Column and Sub-column Headings): a second, primary
+    // heading tier — set when `<thead>` has exactly two rows of nothing but `<th>` cells
+    // (see below). `headerGroups` = [{ text, from, to }], 0-based inclusive column span;
+    // `headers` stays the flat sub-column/single-tier row (F-12's data model — a column
+    // with no group over it, e.g. a `th[rowspan]` heading beside a two-tier group, BANA
+    // Sample 11-2's "Fiscal Year", has no headerGroups entry at all).
+    let headerGroups = null;
 
     const extraHeadRows = [];                                // further <thead> rows lead the body (A28)
     if (thead) {
       const theadTrs = [...thead.getElementsByTagName('tr')];
-      for (const tr of theadTrs.slice(1)) {
-        const rowCells = [];
+      const thCellsOf = (tr) => {
+        const cells = [];
         for (let c = tr.firstChild; c; c = c.nextSibling) {
           if (c.nodeType !== 1) continue;
           const tag = (c.localName || c.tagName || '').toLowerCase();
-          if (tag !== 'th' && tag !== 'td') continue;
-          rowCells.push(cellValue(c));
-          const colspan = parseInt(c.getAttribute ? (c.getAttribute('colspan') || '1') : '1', 10) || 1;
-          for (let k = 1; k < colspan; k++) rowCells.push('');
+          if (tag === 'th' || tag === 'td') cells.push({ tag, el: c });
         }
-        if (rowCells.some((v) => (typeof v === 'string' ? v : v.text))) extraHeadRows.push(rowCells);
-      }
-      if (theadTrs.length) {
+        return cells;
+      };
+      const row1Cells = theadTrs.length > 0 ? thCellsOf(theadTrs[0]) : [];
+      const row2Cells = theadTrs.length > 1 ? thCellsOf(theadTrs[1]) : [];
+      const hasSpanSignal = row1Cells.some(({ el }) => {
+        const colspan = parseInt(el.getAttribute ? (el.getAttribute('colspan') || '1') : '1', 10) || 1;
+        const rowspan = parseInt(el.getAttribute ? (el.getAttribute('rowspan') || '1') : '1', 10) || 1;
+        return colspan > 1 || rowspan > 1;
+      });
+      // BANA §11.4.3 is specifically a HIERARCHICAL relationship — a primary heading
+      // spanning two or more sub-columns (colspan), or a single-tier heading spanning
+      // both header rows (rowspan) beside such a group. Two plain <th> rows with
+      // neither (no span signal at all) encode no such hierarchy — e.g.
+      // corpus_word_losses.test.mjs's "every <thead> row is kept" case, a table whose
+      // second head row is just a second row of plain sub-labels — so that shape keeps
+      // the pre-existing behaviour (second row leads the body, extraHeadRows below)
+      // rather than being guessed into a headerGroups structure the markup never signalled.
+      const isTwoTierHeader = theadTrs.length === 2
+        && row1Cells.length > 0 && row2Cells.length > 0
+        && row1Cells.every((x) => x.tag === 'th') && row2Cells.every((x) => x.tag === 'th')
+        && hasSpanSignal;
+
+      if (isTwoTierHeader) {
+        // Row 1: a `colspan > 1` cell is a GROUP's primary heading over its sub-columns
+        // (11.4.3); a `rowspan > 1` cell is a single-tier heading that spans both header
+        // rows (no group; its text is the flat heading for that column, e.g. "Fiscal
+        // Year" or "Year" beside a two-tier group — Samples 11-2/11-9/11-13/11-15). A
+        // plain (colspan=1, rowspan=1) cell with real text is not exercised by any BANA
+        // §11 gold sample; kept as its own one-column group rather than dropped.
+        const groups = [];
+        const spanningText = new Map();          // column -> row-1 cell's own text (rowspan)
+        const flatHeaders = [];
+        let col = 0;
+        for (const { el } of row1Cells) {
+          const colspan = parseInt(el.getAttribute ? (el.getAttribute('colspan') || '1') : '1', 10) || 1;
+          const rowspan = parseInt(el.getAttribute ? (el.getAttribute('rowspan') || '1') : '1', 10) || 1;
+          const value = cellValue(el);
+          if (rowspan > 1) {
+            spanningText.set(col, value);
+          } else if (colspan > 1) {
+            groups.push({ text: value, from: col, to: col + colspan - 1 });
+          } else if (!cellIsBlank(value)) {
+            groups.push({ text: value, from: col, to: col });
+          }
+          col += colspan;
+        }
+        // Row 2: its cells map, left to right, onto every column NOT already claimed by
+        // a row-1 rowspan (F-1's own rowspan-bookkeeping approach, applied to headers).
+        let col2 = 0;
+        for (const { el } of row2Cells) {
+          while (spanningText.has(col2)) col2++;
+          const colspan = parseInt(el.getAttribute ? (el.getAttribute('colspan') || '1') : '1', 10) || 1;
+          flatHeaders[col2] = cellValue(el);
+          col2++;
+          for (let k = 1; k < colspan; k++) { flatHeaders[col2] = ''; col2++; }
+        }
+        for (const [c, text] of spanningText) flatHeaders[c] = text;
+        const colCount2 = Math.max(col, col2, ...groups.map((g) => g.to + 1), 0);
+        for (let c = 0; c < colCount2; c++) if (flatHeaders[c] === undefined) flatHeaders[c] = '';
+        headers.push(...flatHeaders);
+        headerGroups = groups;
+        headerRowFound = true;
+      } else if (theadTrs.length) {
+        // theadTrs[0] is read first, and its rowspans registered, before theadTrs.slice(1)
+        // below reads any later head row — a rowspan on the first header row (F-1) must
+        // already be in rowSpans by the time a later row checks for it. The header row
+        // itself is never colspan-padded (pre-existing, unrelated to F-1), so `col` tracks
+        // the intended column position for span bookkeeping even where it runs ahead of
+        // headers.length.
+        let col = 0;
         for (let c = theadTrs[0].firstChild; c; c = c.nextSibling) {
           if (c.nodeType !== 1) continue;
           const tag = (c.localName || c.tagName || '').toLowerCase();
           if (tag === 'th' || tag === 'td') {
             headers.push(cellValue(c));
+            const colspan = parseInt(c.getAttribute ? (c.getAttribute('colspan') || '1') : '1', 10) || 1;
+            const rowspan = parseInt(c.getAttribute ? (c.getAttribute('rowspan') || '1') : '1', 10) || 1;
+            for (let k = 0; k < colspan; k++) registerSpan(col + k, rowspan);
+            col += colspan;
           }
         }
         headerRowFound = true;
+      }
+      if (!isTwoTierHeader) {
+        for (const tr of theadTrs.slice(1)) {
+          const cellEls = [];
+          for (let c = tr.firstChild; c; c = c.nextSibling) {
+            if (c.nodeType !== 1) continue;
+            const tag = (c.localName || c.tagName || '').toLowerCase();
+            if (tag === 'th' || tag === 'td') cellEls.push(c);
+          }
+          const rowCells = readSpannedRow(cellEls);
+          if (rowCells.some((v) => (typeof v === 'string' ? v : v.text))) extraHeadRows.push(rowCells);
+        }
       }
     }
 
@@ -2925,15 +3100,16 @@ export function parseDtbook(xmlStr) {
 
       if (!headerRowFound && cells.length && cells.every(c => (c.localName || c.tagName || '').toLowerCase() === 'th')) {
         headers.push(...cells.map(cellValue));
+        let col = 0;
+        for (const c of cells) {
+          const colspan = parseInt(c.getAttribute ? (c.getAttribute('colspan') || '1') : '1', 10) || 1;
+          const rowspan = parseInt(c.getAttribute ? (c.getAttribute('rowspan') || '1') : '1', 10) || 1;
+          for (let k = 0; k < colspan; k++) registerSpan(col + k, rowspan);
+          col += colspan;
+        }
         headerRowFound = true;
       } else {
-        const rowCells = [];
-        for (const cell of cells) {
-          const cellText = cellValue(cell);
-          const colspan = parseInt(cell.getAttribute ? (cell.getAttribute('colspan') || '1') : '1', 10) || 1;
-          rowCells.push(cellText);
-          for (let k = 1; k < colspan; k++) rowCells.push('');
-        }
+        const rowCells = readSpannedRow(cells);
         if (rowCells.some((v) => (typeof v === 'string' ? v : v.text))) rows.push(rowCells);
       }
     }
@@ -2943,9 +3119,14 @@ export function parseDtbook(xmlStr) {
     targetBlocks.push(...pn.before);
     if (headers.length || rows.length) {
       const tblBlock = { type: 'table', headers, rows };
+      if (headerGroups && headerGroups.length) tblBlock.headerGroups = headerGroups;
       if (format) {
         tblBlock.format = format;
         tblBlock.style = `table-${format}`;
+      }
+      if (headingLines && headingLines.length) {
+        tblBlock.title = headingLines.length > 1 ? headingLines : headingLines[0];
+        tblBlock.titlePosition = headingBeforeBox ? 'before-box' : 'in-box';
       }
       targetBlocks.push(tblBlock);
     }
@@ -3097,7 +3278,11 @@ export function parseDtbook(xmlStr) {
           } else if (cls.includes('bana-break-dot2s')) {
             return { type: 'break', kind: 'dot2s' };
           } else if (t) {
-            return segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+            // BANA Formats §1.9.3 (F-39): a per-paragraph "blocked" (1-1 margins) flag,
+            // round-tripped as class="blocked" (see nimas-export.mjs's matching 'para' case).
+            const blk = segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+            if (cls.includes('blocked')) blk.blocked = true;
+            return blk;
           }
           return null;
         };

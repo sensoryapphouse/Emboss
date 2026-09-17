@@ -1,0 +1,101 @@
+{
+  "id": "sample-11-09",
+  "title": "Table with Dashes",
+  "pdfPages": [
+    316
+  ],
+  "textLines": [
+    9397,
+    9421
+  ],
+  "illustrates": {
+    "rule": "11.6.4",
+    "quote": "Omissions and Blanks. Follow print when an omission is indicated by a dash, ellipsis, or other print symbol. Begin this mark in the first cell of the column. (See Sample 11-9: Table with Dashes on page 11-34, Sample 11-10: Blank Cells Indicating Answers to Be Inserted on page 11-35, and Sample 11-11: Blank Column Entries on page 11-36.)"
+  },
+  "print": {
+    "caption": "Table 27 / Historical Consumer Price Index for Urban Wage Earners and Clerical Workers",
+    "headers": [
+      [
+        "",
+        "Semiannual averages",
+        "Semiannual averages",
+        ""
+      ],
+      [
+        "Year",
+        "1st half",
+        "2nd half",
+        "Annual avg"
+      ]
+    ],
+    "rows": [
+      [
+        "1980",
+        "–",
+        "–",
+        "82.9"
+      ],
+      [
+        "1981",
+        "–",
+        "–",
+        "91.4"
+      ],
+      [
+        "1982",
+        "–",
+        "–",
+        "96.9"
+      ],
+      [
+        "1983",
+        "–",
+        "–",
+        "99.8"
+      ],
+      [
+        "1984",
+        "102.1",
+        "104.4",
+        "103.3"
+      ]
+    ],
+    "notes": "En-dashes (–) mark unavailable/omitted semiannual figures for 1980-1983 (only annual averages were published for those years).",
+    "surroundingText": "A source citation appears on the line after the table, blocked four cells to the right: \"Source: from CPI Detailed Report Data for August 2009 (p. 91)\" (italicized in print).",
+    "printFeatures": "Bordered box; two-row column heading (\"Semiannual averages\" spanning 1st half/2nd half, sub-headings below); italic source citation line beneath the box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777   #,-",
+      "               ,table #bg",
+      "        ,hi/orical ,3sum] ,price",
+      "          ,9dex = ,urban ,wage",
+      "        ,e>n]s & ,cl]ical ,\"w]s",
+      "",
+      "       ,semiannual av]ages",
+      "       \"3333333333333333333",
+      ",ye>   #ast half #bnd half ,annual avg",
+      "\"3333 \"33333333 \"33333333 \"3333333333",
+      "#aihj ,- \"\"\"\"\"\" ,- \"\"\"\"\"\"      #hb4i",
+      "#aiha ,- \"\"\"\"\"\" ,- \"\"\"\"\"\"      #ia4d",
+      "#aihb ,- \"\"\"\"\"\" ,- \"\"\"\"\"\"      #if4i",
+      "#aihc ,- \"\"\"\"\"\" ,- \"\"\"\"\"\"      #ii4h",
+      "#aihd #ajb4a \"\" #ajd4d \"\" #ajc4c",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "    ,s\\rce3 f .7,,cpi ,detail$ ,report",
+      "    ,data = ,augu/ #bjji.' \"<;p4 #ia\">",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 carries a transcriber's-note continuation marker '#,-' at the far right of the top box line (the note about the table continues past the box start). Each dash entry is rendered as \",-\" beginning in the first cell of its column, per rule 11.6.4 (\"Begin this mark in the first cell of the column\"), followed by dot-5 guide-dot filler (the run of '\"' characters) to the column width. The source citation is on line 17-18, blocked in from the left margin (four cells right of the material it follows) per rule 11.2.5.g, in italics-indicator brackets ('.7' / '<;p4' etc.)."
+  },
+  "uncertain": [
+    "The exact indentation (number of cells) of the source-citation lines 17-18 relative to the left margin was taken as extracted; not independently re-measured against the dot image."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.headers rebuilt as a 2-row spanning structure matching the PDF image (p. 316): row 1 carries 'Semiannual averages' over the two sub-columns it spans and is blank elsewhere; row 2 carries 'Year', '1st half', '2nd half', 'Annual avg'. Neither run's single-row (A) or row-1-repeating-Year-and-Annual-avg (B) version matched the image exactly."
+}

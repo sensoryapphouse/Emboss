@@ -1,0 +1,66 @@
+{
+  "id": "example-4-10",
+  "title": "Cell-5 Heading Before Related Columns",
+  "pdfPages": [
+    112
+  ],
+  "textLines": [
+    3364,
+    3379
+  ],
+  "illustrates": {
+    "rule": "4.5.4",
+    "quote": "Maintaining the hierarchy of headings in a document is important, and there may be times when columned material will follow a cell-5 heading. Insert a blank line to separate the cell-5 heading from the columns so it is clear the heading is related to all columns."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Irregular Adverbs",
+        "features": "Left-aligned, bold blue serif."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Positive / Comparative / Superlative",
+        "features": "Bold white-on-navy three-column table header bar."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "well/better/best; badly/worse/worst; little/less/least; much/more/most; far/farther/farthest",
+        "features": "Five plain three-column, comparative-forms-related data rows below the header bar; the braille joins each row with dot-5 guide dots (a related-columns table), which this section's heading/paragraph/list-item print-block schema has no dedicated block type for."
+      }
+    ],
+    "notes": "Illustrates a blank line inserted between a cell-5 heading and the related three-column table that follows it, per rule 4.5.4. The table itself (header bar + 5 related-columns data rows, joined by guide dots) is recorded as `other` because it needs Emboss's table/related-columns formatting, which this gold-run harness's print.blocks model (heading/paragraph/list-item/other) does not build -- see standards-findings.md.",
+    "surroundingText": null,
+    "printFeatures": "Left-aligned blue heading above a three-column table with a bold white-on-navy header bar (Positive/Comparative/Superlative) and five plain data rows."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,irregul> ,adv]bs",
+      "",
+      ",positive ,comp>ative ,sup]lative",
+      "\"33333333 \"3333333333 \"3333333333",
+      "well \"\"\"\" bett] \"\"\"\"\" be/",
+      "badly \"\"\" worse \"\"\"\"\" wor/",
+      "ll \"\"\"\"\"\" less \"\"\"\"\"\" l1/",
+      "m* \"\"\"\"\"\" m \"\"\"\"\"\"\"\"\" mo/",
+      "f> \"\"\"\"\"\" f>!r \"\"\"\"\"\" f>!/",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-5 heading 'Irregular Adverbs'; line 3 blank, per 4.5.4; line 4 the three column headers; line 5 three dot-5 guide-dot separator segments; lines 6-10 the five related-columns data rows; line 11 blank."
+  },
+  "uncertain": [
+    "The header bar and data rows are a related-columns table (BANA §8/§4.5.4), not a plain single-column list; this gold-run harness's print.blocks kinds (heading/paragraph/list-item/other) have no table block type, so this content is recorded as `other` (excluded from the model) rather than built inaccurately as a plain list. Expect gold-run.mjs to report a mismatch/not-representable status limited to the missing table rows, not the heading itself."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. `kind` for the table rows resolved to `other` rather than run B's per-row `list-item`: this section's print.blocks-to-model mapping (task brief: heading/paragraph/list-item/other) has no representation for guide-dot-joined related columns, so tagging the rows `list-item` would build them as a plain unrelated single-column list and produce a *silently wrong* model rather than a documented limitation; `other` is the honest choice, matching gold-run.mjs's own \"never invent, always record\" precedent from §11."
+}

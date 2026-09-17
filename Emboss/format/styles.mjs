@@ -27,6 +27,26 @@ export const STYLE_DEFINITIONS = {
     blankAfter: false,
     description: 'Standard paragraph with Cell 3 indent and Cell 1 runover (3-1).',
   },
+  // F-39 — BANA Formats §1.9.3: "Use 1-1 margins for blocked paragraphs. A blank line
+  // precedes each blocked paragraph, unless it follows a cell-5 or cell-7 heading." A
+  // per-paragraph flag layered onto an ordinary body paragraph (editor.mjs's blockStyle
+  // toggle, ParagraphNode.__blocked), not a mutually-exclusive alternative to it — see
+  // `getStyleMargins`'s own `blankBefore` note below for the cell-5/cell-7 exception, which
+  // getStyleMargins cannot express (it is conditional on what precedes the paragraph, not a
+  // fixed per-style constant) and is instead implemented in document.mjs's
+  // joinsWithoutBlank.
+  blocked: {
+    id: 'blocked',
+    name: 'Blocked Paragraph',
+    category: 'text',
+    xmlTag: 'p',
+    xmlClass: 'blocked',
+    firstCell: 1,
+    runoverCell: 1,
+    blankBefore: true,
+    blankAfter: false,
+    description: 'BANA Formats §1.9.3: 1-1 margins (flush first line and runover); a blank line precedes it unless it follows a cell-5 or cell-7 heading (see document.mjs joinsWithoutBlank).',
+  },
   h1: {
     id: 'h1',
     name: 'Heading 1',

@@ -1,0 +1,48 @@
+{
+  "id": "sample-note-13-6-2",
+  "title": "Sample transcriber's note (rule 13.6.2)",
+  "pdfPages": [
+    359
+  ],
+  "textLines": [
+    10373,
+    10381
+  ],
+  "illustrates": {
+    "rule": "13.6.2",
+    "quote": "Treat the poem as a single level, using 1-3 margins, when the indentions of irregular lines of poetry have no discernible pattern or the poem uses uneven spacing. Some poems may need a transcriber’s note of explanation. Sample: The poem has inconsistent indention patterns, which are not reproduced. or The poem has multiple irregular indentions, which are not reproduced."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "The poem has inconsistent indention patterns, which are not reproduced.",
+        "features": "First alternative wording, indented as a displayed transcriber's-note sample."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "The poem has multiple irregular indentions, which are not reproduced.",
+        "features": "Second alternative wording, introduced by the word 'or' between the two samples."
+      }
+    ],
+    "notes": "Not a worked print/braille example: rule 13.6.2 simply offers two alternative plain-English sentences a transcriber might use, without transcribing either into braille anywhere in the source.",
+    "surroundingText": "Given as sample wording for an optional transcriber's note explaining why irregular print indention is not reproduced in braille.",
+    "printFeatures": "Two short displayed (indented) sentences separated by the word 'or' on its own line."
+  },
+  "braille": {
+    "width": null,
+    "lines": null,
+    "pageBreaks": [],
+    "notes": "No braille transcription of this note text is given anywhere in the source; only the print wording of the suggested note is shown. Confirmed by reading both the .txt (lines 10373-10381, plain English throughout, no braille ASCII) and PDF p.359 (plain roman type, no braille dots)."
+  },
+  "uncertain": [
+    "This item is a suggested note WORDING only, not a worked print→braille example; included here because rules.merged.json lists it as an embedded 'Sample:' row, but it has no braille.lines to record."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: the source gives only the suggested English transcriber's-note wording at this rule's own citing location, no braille rendering anywhere nearby; braille.width/lines correctly null/empty in both runs. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

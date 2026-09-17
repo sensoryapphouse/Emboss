@@ -1,0 +1,67 @@
+{
+  "id": "example-11-7",
+  "title": "Repeated Row Headings Omitted (Print Only)",
+  "pdfPages": [
+    291
+  ],
+  "textLines": [
+    8537,
+    8542
+  ],
+  "illustrates": {
+    "rule": "11.5.1.e",
+    "quote": "e. Row headings repeated in the last column are omitted."
+  },
+  "print": {
+    "caption": "Water and Power Projects (in millions of dollars)",
+    "headers": [
+      [
+        "Fiscal year",
+        "Total",
+        "Corps of Engineers",
+        "Bureau of Reclamation",
+        "Bonneville and Other Power Marketing Agencies",
+        "Tennessee Valley Authority",
+        "Nuclear and Other",
+        "Fiscal year"
+      ]
+    ],
+    "rows": [
+      [
+        "1985",
+        "4,620",
+        "1,307",
+        "657",
+        "186",
+        "1,479",
+        "992",
+        "1985"
+      ],
+      [
+        "1986",
+        "4,251",
+        "1,180",
+        "738",
+        "262",
+        "1,327",
+        "744",
+        "1986"
+      ]
+    ],
+    "notes": "The rightmost 'Fiscal year' column (repeating the row heading and the year values) is crossed out with a large red X in the print original, marking it for omission per rule 11.5.1.e. Only the 1985 and 1986 rows are transcribed here: a third row (evidently 1987) is cropped at the very bottom edge of the source figure and is not legible even in the master PDF page image itself (not only in the .txt extraction, which has no text at all for this Print-Only example) -- see 'Unresolved' in the section README.",
+    "surroundingText": "Immediately followed by \"(See Sample 11-3: Row Subheadings on page 11-27.)\" — note the example illustrates omitting a repeated row heading, but the cross-reference sample (11-3) actually illustrates row subheadings; the two are adjacent in the rule text but are not the same table.",
+    "printFeatures": "Bordered box; header row and \"Fiscal year\"/\"Total\" etc. column headings bold. The last (repeated) \"Fiscal year\" column is marked with a large red X drawn diagonally across it, print-only annotation not meant to be transcribed as such (its content is simply omitted per rule 11.5.1.e)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille is given for this example (Print Only); the reader is referred instead to Sample 11-3: Row Subheadings for a worked full transcription."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.rows trimmed to the two fully legible rows (1985, 1986); the print table's third row is cropped at the bottom edge of the source PDF page itself (confirmed directly against the master PDF, p. 291) -- not only in the .txt extraction, which has nothing at all for this Print-Only example. Neither run's placeholder for that row ('...' in A, a descriptive string in B) is literal print content, so neither is kept; see 'Unresolved' in the README. pdfPages/width and other fields: pdfPages already agreed at [291]; braille.width set to null (Print Only, no braille lines)."
+}

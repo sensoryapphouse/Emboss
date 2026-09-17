@@ -1,0 +1,53 @@
+{
+  "id": "sample-1-04",
+  "title": "Material Across Facing Print Pages",
+  "pdfPages": [
+    40
+  ],
+  "textLines": [
+    1332,
+    1344
+  ],
+  "illustrates": {
+    "rule": "1.12.1",
+    "quote": "Material printed and read across two facing pages of a book, when there is no other material on either page, is treated as if it were on a single print page. The combined print page numbers (e.g., 44-45) are placed to end at the right margin. If lettered continuation pages are required, they also carry the combined print page numbers, e.g., a44-45, b44-45, and so forth."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": "44-45",
+      "features": "Two facing print pages (44 and 45) with a single diagram running across both, no other material on either page, so combined into one print page number '44-45' per 1.12.1."
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Text is read across facing pages as if both pages were a single page.",
+        "features": "Caption overlaid on a two-page-spread graphic, joined by an arrow across the page-44/45 boundary; several further long horizontal arrows fill the rest of both pages beneath it, purely decorative."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",text is r1d acr fac+ pages z         #dd-#de",
+      "if bo? pages 7 a s+le page4 444",
+      "444                                  #,-",
+      "444                                a#dd-#de"
+    ],
+    "pageBreaks": [
+      {
+        "index": 2,
+        "label": "New Braille Page (source's own excerpt gap: lines 3-24 of the first braille page are not shown at all)"
+      }
+    ],
+    "notes": "Verbatim, but the source itself omits lines 3-24 of the first braille page (only lines 1, 2 and 25 are shown). Line 1 carries the combined print page number '44-45' ('#dd-#de') at the right margin per 1.12.1; the new braille page's line 1 carries the lettered-continuation combined page number 'a44-45' ('a#dd-#de'), since the material continues onto a further braille page, per 1.12.1's final sentence."
+  },
+  "uncertain": [
+    "Lines 3-24 of the first braille page are not given in the source (the guide itself elides them)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording. Not representable for the same reasons as sample-1-03: no combined/facing-page-number transform in Emboss (F-46, F-47), and the source's own excerpt has a genuine content gap. status: not-representable."
+}

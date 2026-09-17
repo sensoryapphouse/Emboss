@@ -1,0 +1,35 @@
+{
+  "id": "b004-g-2",
+  "title": "Quoted material — Example 2 (indented set-out quotation)",
+  "pdfPages": [24],
+  "pdfFile": "references/ukaaf/presentation-guidelines-B004.pdf",
+  "textLines": [726, 729],
+  "illustrates": {
+    "rule": "B004 Appendix G, Example 2",
+    "quote": "Example 2: A set-out quoted passage can be indented by 4 cells, so that new paragraphs within the quote start in cell 7, and runovers begin in cell 5. (Overall typeform indicators are not necessary.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Example 2: A set-out quoted passage can be indented by 4 cells, so that new paragraphs within the quote start in cell 7, and runovers begin in cell 5. (Overall typeform indicators are not necessary.)",
+        "features": "Plain descriptive/guidance prose -- not a worked print excerpt. No specific print passage, no page image, and no accompanying braille transcription are given anywhere in the source for this 'Example.'"
+      }
+    ],
+    "notes": "As with Example 1 (b004-g-1.json), this is generic descriptive guidance (a margin/indent recipe: quote indented 4 cells, its own paragraphs at cell 7, runovers at cell 5) with no actual quoted passage shown in print and nothing rendered into braille. Confirmed directly against the PDF page image (presentation-guidelines-B004.pdf, p.24): no figure, box, or braille cell block accompanies this text.",
+    "surroundingText": "Appendix G, 'Quoted material', of UKAAF's Guiding Principles for the Presentation of Braille (B004), immediately following Example 1 on the same page.",
+    "printFeatures": "Plain body text; 'Example 2' is a bold-lead-in run-in label, not a boxed or otherwise visually set-off worked example."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille is given anywhere in the source for this item -- it is prose guidance describing an indentation scheme (4-cell quote indent, cell-7 paragraph starts, cell-5 runovers), not a worked example with an actual print passage and its corresponding braille transcription."
+  },
+  "uncertain": [
+    "This item, like b004-g-1, has no actual print excerpt being illustrated and no braille to check it against. It is recorded here as a gold file only to represent the item named in the task's example list; there is no braille content to transcribe or compare between runs A and B for this item."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B agreed completely that this item is prose-only, with no print excerpt or braille anywhere in the source (both independently confirmed against B004.txt lines 726-729 and the PDF page image, p.24). As with b004-g-1, the only disagreement was `illustrates.rule`/`quote` (A: 'Example 2' specifically; B: the shared 'Guiding principle' sentence, identical to what B gave b004-g-1). Resolved to A's convention for the same reason as b004-g-1: one specific example per file, quoting its own complete text."
+}

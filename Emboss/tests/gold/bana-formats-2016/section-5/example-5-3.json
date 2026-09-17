@@ -1,0 +1,45 @@
+{
+  "id": "example-5-3",
+  "title": "Part-of-Speech Abbreviation",
+  "pdfPages": [
+    130
+  ],
+  "textLines": [
+    3920,
+    3925
+  ],
+  "illustrates": {
+    "rule": "5.3.4",
+    "quote": "Ignore font attributes used with parts-of-speech abbreviations (with or without punctuation), e.g., v. or v for verb, n. or n for noun, m. or m for masculine, f. or f for feminine in dictionaries and glossaries. Note this change on the Transcriber’s Notes page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**accuse** (uh-KUZ) *v.* blame",
+        "features": "Single dictionary-style glossary-entry line: headword 'accuse' bold, phonetic respelling '(uh-KUZ)' plain (possibly small caps — modest source resolution), part-of-speech abbreviation 'v.' italic, definition 'blame' plain.",
+        "items": null
+      }
+    ],
+    "notes": "No heading; the box is a single glossary-entry line.",
+    "surroundingText": "Follows rule 5.3.4 directly, on printed page 5-4.",
+    "printFeatures": "Single boxed dictionary-entry line, black serif text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "a3use \"<uh-,,kuz\"> ;v4 blame"
+    ],
+    "pageBreaks": [],
+    "notes": "One line, flush left, margin 8 stripped. No typeform indicators: both the bold headword and the italic 'v.' abbreviation are dropped, per 5.3.4; ';v4' is the ordinary UEB way of writing the abbreviation 'v.', not a font-attribute indicator."
+  },
+  "uncertain": [
+    "The exact print styling of the phonetic respelling '(uh-KUZ)' (plain vs. small caps) is read from a modest-resolution page image; it does not affect the braille, which drops it as ordinary un-emphasized text either way."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No disagreement on substance; both runs read the same single boxed line. Braille independently re-derived from .txt line 3925 (margin 8), byte-identical to both runs."
+}

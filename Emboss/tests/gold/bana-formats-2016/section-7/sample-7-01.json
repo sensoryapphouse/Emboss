@@ -1,0 +1,137 @@
+{
+  "id": "sample-7-01",
+  "title": "Two Boxes Separated by a Blank Line",
+  "pdfPages": [
+    192,
+    193
+  ],
+  "textLines": [
+    5583,
+    5608
+  ],
+  "illustrates": {
+    "rule": "7.3.8",
+    "quote": "Adjoining Vertical Boxes. Close the first box before opening a second box. Insert a blank line between each box. (See Sample 7-1: Two Boxes Separated by a Blank Line on page 7-8.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "#,- (a print-invisible right-margin running-head/reference code embedded at the end of the sample's opening braille line -- no print-side counterpart)",
+        "features": "Braille-only page-furniture artefact; not visible anywhere in the print page image."
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "features": "First of two separate, vertically-stacked rounded boxes (orange header band, cream body, thin blue rule border) with plain white space between them in print -- no border, rule, or shared edge; the print-side justification for the single blank line 7.3.8 requires between the two braille boxes.",
+        "blocks": [
+          {
+            "kind": "table",
+            "level": null,
+            "text": null,
+            "headers": [
+              [
+                "Potential Energy",
+                "Example"
+              ]
+            ],
+            "rows": [
+              [
+                "Chemical",
+                "battery"
+              ],
+              [
+                "Elastic",
+                "compressed spring"
+              ],
+              [
+                "Mechanical",
+                "rock on a ledge"
+              ]
+            ],
+            "features": "Two-column table, bold orange header row 'Potential Energy'/'Example', three plain data rows."
+          }
+        ]
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": null,
+        "features": "Second box, same rounded/orange-header visual style as the first, separated from it by plain white space on the print page.",
+        "blocks": [
+          {
+            "kind": "table",
+            "level": null,
+            "text": null,
+            "headers": [
+              [
+                "Kinetic Energy",
+                "Example"
+              ]
+            ],
+            "rows": [
+              [
+                "Sound",
+                "vibrating object"
+              ],
+              [
+                "Thermal",
+                "hot cocoa"
+              ],
+              [
+                "Mechanical",
+                "falling rock"
+              ],
+              [
+                "Electrical",
+                "electrons in an electrical current"
+              ]
+            ],
+            "features": "Two-column table, bold orange header row 'Kinetic Energy'/'Example', four plain data rows (the last row's example text wraps to a second print line)."
+          }
+        ]
+      }
+    ],
+    "notes": "Two independent rounded boxes, each a simple two-column term/example table, printed one above the other with plain vertical whitespace between them (no rule line, no shared border) -- the print-side justification for braille's single blank line between the two boxes' top/bottom box lines (7.3.8).",
+    "surroundingText": null,
+    "printFeatures": "Rounded-rectangle boxes with a thin blue outer border, bold orange/tan header bands, cream body rows, thin blue horizontal rules between data rows."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777   #,-",
+      ",pot5tial ,5]gy ,example",
+      "\"33333333333333 \"3333333333333",
+      ",*emical \"\"\"\"\"\" batt]y",
+      ",ela/ic \"\"\"\"\"\"\" compress$ spr+",
+      ",me*anical \"\"\"\" rock on a l$ge",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "7777777777777777777777777777777777777777",
+      ",k9etic ,5]gy ,example",
+      "\"333333333333 \"333333333333333333333333",
+      ",s.d \"\"\"\"\"\"\"\" vibrat+ object",
+      ",!rmal \"\"\"\"\"\" hot cocoa",
+      ",me*anical \"\" fall+ rock",
+      ",electrical    electrons 9 an electrical",
+      "                 curr5t",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "18 numbered lines in the source (numbered 1-18; line-number field of width 5 -- digit-count-of-max-line-number(2)+3 -- stripped, along with a leading form-feed on the first numbered line, 5590). Line 1: top box line for box 1 -- only 34 sevens (not the full 40 cells), leaving room for the right-margin running-head/page code '#,-' (a braille reference token, not a per-line number -- this sample carries no line-numbered text of its own, so this is NOT the 7.3.3.b case); box 2's own top/bottom lines are full 40 cells with no such trailing code. Line 2: box 1's table header row 'Potential Energy Example'. Line 3: dot-3 guide-dot column separator. Lines 4-6: box 1's three data rows. Line 7: box 1's bottom box line (full 40 cells). Line 8: the single blank line rule 7.3.8 requires between adjoining boxes. Line 9: box 2's top box line (full 40 cells). Line 10: box 2's header row 'Kinetic Energy Example'. Line 11: dot-3 guide-dot column separator. Lines 12-14: three of box 2's four data rows. Lines 15-16: the fourth data row ('Electrical'/'electrons in an electrical current'), wrapping the second column's text onto its own continuation line. Line 17: box 2's bottom box line (full 40 cells). Line 18: trailing blank line after the box."
+  },
+  "uncertain": [
+    "The right-margin code on braille line 1 ('#,-') is read as a running-head/page-reference token (by its position and form, consistent with similar codes elsewhere in this section's samples) rather than independently verified against a Special Symbols/transcriber's-code reference page.",
+    "Print's own box styling (rounded corners, coloured header band) has no representation in this section's box/table print-block schema beyond a free-text 'features' note; this is a documented schema limitation, not an omission."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. Structural: A nested each table inside its own `{kind:\"box\", blocks:[...]}` wrapper; B flattened each box's `headers`/`rows` directly onto the box block itself (no nested `table` child). Reconciled using A's explicit nesting, matching this section's own box->blocks[] convention (reused by buildModel7's recursive builder, which mirrors buildModel8's buildBlocks8). Title convention: A's bare descriptive title used ('Two Boxes Separated by a Blank Line') -- B's title field wrongly carried a literal 'Sample 7-1:' prefix, against the section-4/8 precedent. textLines extended by one line (to 5608) over A's 5607 to include the source's own trailing '(Return to Text)' hyperlink-artefact line, per B -- excluded from braille.lines either way. Added a leading `{kind:\"other\"}` block recording the braille-only '#,-' running-head/reference code on line 1 (neither run's own print.blocks captured it), matching the section-8 precedent's own convention for a print-invisible braille reference code with no print-side counterpart -- this registers as a documented limitation rather than an unexplained mismatch. Running gold-run.mjs also surfaces an unrelated cause on this sample: Emboss's own table formatter inserts a blank line between EVERY data row of the second (Kinetic Energy) box because its last row wraps to two lines, citing a 'BANA §11.3.4' that does not exist anywhere in this reference copy (checked: §11.3 runs 11.3.1-11.3.2 only) -- contradicted directly by this sample's own braille (lines 12-17), which carries no blank line anywhere despite the wrapped row; see new finding F-77.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

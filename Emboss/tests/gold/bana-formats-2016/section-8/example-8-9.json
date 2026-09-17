@@ -1,0 +1,42 @@
+{
+  "id": "example-8-9",
+  "title": "Decimal Enumerated Outline Guide Text",
+  "pdfPages": [
+    207
+  ],
+  "textLines": [
+    6056,
+    6061
+  ],
+  "illustrates": {
+    "rule": "8.8.5",
+    "quote": "Guide Text for Entire Documents in Outline Format. To aid the reader when an entire document is printed in outline format, center the last division number used on each braille page on line 25. This is similar to guide words used in an index."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "9.11",
+        "features": "A single decimal-enumerated outline-division label shown alone in a box, the decimal-enumeration counterpart to Example 8-8's letter/number label."
+      }
+    ],
+    "notes": null,
+    "surroundingText": "Rule 8.8.5.f (odd-page-only guide text for interpoint transcriptions) follows immediately after.",
+    "printFeatures": "Boxed illustration; single centered roman-text label '9.11', no other content."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                 #i4aa               #ae"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 25 only: guide text '#i4aa' (9.11) is centered within the 40-cell line, followed by blank cells and the braille page number '#ae' (=15) at the right margin, per 8.8.5.a-c, using the same 25-character margin/field convention as Example 8-8."
+  },
+  "uncertain": [],
+  "resolution": "Same method as example-8-8 (see its resolution). Source .txt line 6061: 11-char margin+field, then EXACTLY 17 literal U+2800 blank cells before \"#i4aa\" — matches centering floor((40-5)/2)=17 for the 5-character guide text. Remaining 40-17-5=18 cells hold the ≥3-blank gap (8.8.5.c) then the right-flush \"#ae\", giving a 15-cell gap. B’s leading count (17) was right; its total (54) was wrong for the same unreliable-mid-gap reason as example-8-8. A’s total (40) was right; its leading count (3) was wrong.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

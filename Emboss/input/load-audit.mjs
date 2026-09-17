@@ -74,7 +74,13 @@ export function modelStats(doc) {
   (function walk(bs) {
     for (const b of bs || []) {
       if (!b || typeof b !== 'object') continue;
-      if (b.type === 'table') { tables++; text += ` ${[...(b.headers || []), ...(b.rows || []).flat()].map(cell).join(' ')} ${b.caption || ''}`; }
+      if (b.type === 'table') {
+        tables++;
+        // F-12: a complex (two-tier) header's primary heading lives in headerGroups[].text,
+        // not in the flat headers row — kept here too, or it reads as a lost word (BANA §11.4.3).
+        const groupTexts = (b.headerGroups || []).map((g) => (g && g.text) || '');
+        text += ` ${[...(b.headers || []), ...(b.rows || []).flat()].map(cell).join(' ')} ${groupTexts.join(' ')} ${b.caption || ''}`;
+      }
       else if (b.type === 'pagenum' || b.type === 'math') { /* not running text */ }
       else if (b.type === 'graphic') text += ` ${b.caption || ''} ${b.description || ''}`;   // caption + prodnote (alt is not running text)
       else text += ` ${b.segments ? seg(b.segments) : (b.text || '')} ${b.title && b.type !== 'box' && b.type !== 'sidebar' ? b.title : ''}`;
@@ -100,11 +106,37 @@ export function modelStats(doc) {
 
 const quote = (s) => `“${s}”`;
 
+// BANA Formats §1.9.3's own exception: "Use indented paragraphs when an entire text is
+// printed in blocked paragraphs. Note this change on the Transcriber's Notes page." (F-39).
+// This is a whole-document editorial choice, not something the formatter should decide (or
+// silently un-apply) on the transcriber's behalf, so it is surfaced here as a load warning
+// instead. Only ordinary body paragraphs count (`type === 'para'` with no `.style`): a
+// styled paragraph (quote, attribution, ...) ignores its own `blocked` flag — formatPara's
+// quoteMargins/other-style path takes precedence — so it plays no part in "an entire text
+// ... printed in blocked paragraphs". Requires at least two such paragraphs so a document
+// with a single (necessarily "every paragraph") blocked paragraph does not warn on its own —
+// a deliberate threshold, not a rule requirement; flag to Paul if he wants otherwise.
+function blockedParagraphCounts(blocks) {
+  let total = 0, blocked = 0;
+  (function walk(bs) {
+    for (const b of bs || []) {
+      if (!b || typeof b !== 'object') continue;
+      if (b.type === 'para' && !b.style) { total++; if (b.blocked) blocked++; }
+      if (Array.isArray(b.blocks)) walk(b.blocks);
+    }
+  })(blocks);
+  return { total, blocked };
+}
+
 /** Readable notices for anything in the source that the model lacks (empty when all is kept). */
 export function loadWarnings(dom, doc) {
   const want = sourceStats(dom);
   const have = modelStats(doc);
   const out = [];
+  const { total: paraTotal, blocked: paraBlocked } = blockedParagraphCounts(doc.blocks);
+  if (paraTotal >= 2 && paraBlocked === paraTotal) {
+    out.push('Every paragraph in this document is a blocked paragraph (BANA Formats §1.9.3’s exception: "Use indented paragraphs when an entire text is printed in blocked paragraphs. Note this change on the Transcriber’s Notes page.") — consider switching to indented paragraphs and noting the change on the Transcriber’s Notes page.');
+  }
   const lost = missingWords(want.text, have.text);
   if (lost.length) {
     const w = lost[0];

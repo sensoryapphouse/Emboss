@@ -1,0 +1,64 @@
+{
+  "id": "example-5-10",
+  "title": "Italics Retained for Distinctive Entry Words",
+  "pdfPages": [
+    133
+  ],
+  "textLines": [
+    4021,
+    4031
+  ],
+  "illustrates": {
+    "rule": "5.3.11",
+    "quote": "Ignore font attributes for entry words in alphabetic references, unless required for distinction, e.g., book titles, foreign words, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": null,
+        "text": "G",
+        "features": "Large bold letter marking the start of the 'G' alphabetic division of a glossary.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "**Gift tax** A tax on a gift by a living person. p. 451",
+        "features": "Bold glossary headword ('Gift tax', an ordinary English term, not distinctive); plain definition and page reference.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "<b><i>Glasnost</i></b> The Soviet policy of openness under which tolerance of dissent and freedom of expression increased. p. 646",
+        "features": "Glossary headword 'Glasnost' in bold italics (a foreign/loan word, retained per 5.3.11's 'unless required for distinction' exception); plain definition and page reference.",
+        "items": null
+      }
+    ],
+    "notes": "Two glossary entries under the 'G' alphabetic-division letter: 'Gift tax' (ordinary term, bold dropped) and 'Glasnost' (foreign term, italics retained).",
+    "surroundingText": "Follows rule 5.3.11 directly, spanning printed pages 5-6/5-7, with the example itself on page 5-7.",
+    "printFeatures": "Glossary page: bold letter divider 'G', two bold entry words (one also italic), plain definitions with page-number citations."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                  ;,g",
+      ",gift tax ,a tax on a gift by a liv+",
+      "  p]son4 ;p4 #dea",
+      ".1,glasno/ ,! ,soviet policy ( op5;s \"u",
+      "  : tol].e ( 4s5t & fre$om ( expres.n",
+      "  9cr1s$4 ;p4 #fdf"
+    ],
+    "pageBreaks": [],
+    "notes": "Six lines, margin 9 stripped. Line 1 is the 'G' divider, indented 18 cells with a leading semicolon-sign before it (function not established by any rule text quoted in this section — see uncertain). 'Gift tax' (lines 2-3, with a genuine 2-cell runover indent on line 3) carries no bold indicator: its bold is dropped, since it is an ordinary retained headword. 'Glasnost' (line 4, with 2-cell runover indents on lines 5-6) opens with '.1' — a single-word italic indicator — confirming its italics are retained per 5.3.11's foreign-word exception, while its bold is dropped (only the primary attribute is kept, per 5.1.5); 'p.' abbreviations use a semicolon-prefixed marker (';p4') on both entries, the ordinary UEB abbreviation form, not a font-attribute indicator."
+  },
+  "uncertain": [
+    "Line 1's braille (';,g') for the plain letter 'G' divider carries a leading ';' mark whose function is not established by any rule text quoted in this section; recorded verbatim rather than interpreted."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from .txt lines 4026-4031 (margin 9); matches run A's rendering, which correctly preserves the genuine 2-cell runover indent on lines 3, 5, and 6 (verified directly: raw .txt lines 4028/4030/4031 each carry 9 literal margin spaces followed by exactly 2 literal U+2800 blank cells before the content). Run B's flush-stripped versions of these same three lines are rejected — confirmed as the section-wide indentation-stripping bug documented in differences.md, the first instance found in the corpus."
+}

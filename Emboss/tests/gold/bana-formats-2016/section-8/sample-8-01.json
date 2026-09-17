@@ -1,0 +1,80 @@
+{
+  "id": "sample-8-01",
+  "title": "List After Page Change Indicator",
+  "pdfPages": [
+    209
+  ],
+  "textLines": [
+    6108,
+    6123
+  ],
+  "illustrates": {
+    "rule": "8.3.2.b",
+    "quote": "Insert a blank line between a page change indicator and a list. (See Sample 8-1: List After Page Change Indicator on page 8-13.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "… calm, noncompetitive setting for education.",
+        "features": "End of a paragraph carried over from the previous print page."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "—New Print Page— / -41-",
+        "features": "Print page-change marker with the new print page number, centered above the number, which is right-aligned."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three one-line questions, no markers or bullets, plain roman text.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "How might a dress code help create a safe school environment?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What are two common causes of fires in the home?"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "What should you do if you are outside and a tornado strikes?"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain running text; the page-change marker and new page number are centered/right-aligned between the end of one print page and the start of the next; the three questions follow directly on the new print page."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "444 calm1 noncompetitive sett+ = $uca;n4",
+      "-------------------------------------#da",
+      "",
+      ",h[ mi<t a dress code help cr1te a safe",
+      "  s*ool 5viron;t8",
+      ",:at >e two common causes ( fires 9 !",
+      "  home8",
+      ",:at %d y d if y >e \\tside & a tornado",
+      "  /rikes8",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Shown are lines 4-13 of the braille page. Line 4 finishes the carried-over paragraph ('444 calm...') ending with the paragraph-continuation symbol '444'; line 5 is the print-page-change indicator (dash rule ending in the print page number '#da' = 41, matching the print '-41-'); line 6 is a blank line inserted between the page-change indicator and the list, per 8.3.2.b; lines 7-12 are the three-question list, each item wrapping to a second runover line indented two cells from the item's own start; line 13 is blank, padding to the bottom of the braille page."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B; the \"(Return to Text)\" navigation line is correctly excluded from `lines` by both (per the section-11 precedent and this task’s standing decision). Only prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s kept as the base, with B’s explicit note on the \"(Return to Text)\" exclusion folded in.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

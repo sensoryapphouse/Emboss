@@ -1,0 +1,44 @@
+{
+  "id": "example-1-18",
+  "title": "Foreign Language in an English Context",
+  "pdfPages": [
+    35
+  ],
+  "textLines": [
+    1208,
+    1213
+  ],
+  "illustrates": {
+    "rule": "1.16.3",
+    "quote": "Foreign language words or phrases within an English language paragraph are contracted. Use modified letter indicators to represent accented letters. If a modification applies to a letter that would be part of a contraction, do not use the contraction. Use UEB symbols for inverted punctuation."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The word sled is spelled trineo.",
+        "continuation": true,
+        "features": "Single sentence; the foreign (Spanish) word 'trineo' is italicised in the print original; no accented letters."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! ^w = sl$ is .1tr9eo4"
+    ],
+    "pageBreaks": [],
+    "notes": "One line, verbatim, no line number shown in the source. 'trineo' is contracted like ordinary English text ('.1' marks the italics font/passage indicator; the normal 'in' contraction '9' is used within the word since no accented letter blocks it), per the first sentence of 1.16.3."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on wording; the italics/font handling ('.1' passage indicator) is text feeding straight into liblouis's own UEB translation, not an Emboss format-layer decision -- built as a single para block, letting liblouis's real translation decide contraction use (F-68)."
+}

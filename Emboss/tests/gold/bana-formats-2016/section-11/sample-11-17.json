@@ -1,0 +1,87 @@
+{
+  "id": "sample-11-17",
+  "title": "Skeleton Table with Column Headings",
+  "pdfPages": [
+    324
+  ],
+  "textLines": [
+    9626,
+    9643
+  ],
+  "illustrates": {
+    "rule": "11.9.1.c(2)",
+    "quote": "c. When more than one blank row is provided in print for possible answers: (1) At least two rows must be included in the skeleton table. (2) State in a transcriber's note the number of rows shown in print. Sample: Print table has five blank rows provided for answers. (See Sample 11-17: Skeleton Table with Column Headings on page 11-42.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "SCHOOL",
+        "PEOPLE",
+        "PETS",
+        "PLACES",
+        "BOOKS"
+      ]
+    ],
+    "rows": [
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    ],
+    "notes": "A skeleton table: only the five column headings are filled in print; all four rows are entirely blank, intended for the reader to fill in their own interests.",
+    "surroundingText": "\"Use the chart below to list your interests.\" appears as instructional text above the table.",
+    "printFeatures": "Bordered box; all-caps bold header row; four empty ruled rows below it."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,use ! *>t 2l to li/ yr          #,-",
+      "    9t]e/s4",
+      "7777777777777777777777777777777777777777",
+      "      @.<,pr9t table has five blank",
+      "    r[s4@.>",
+      "",
+      ",,,s*ool p    pets places books,'",
+      "\"3333333 \"3 \"333 \"33333 \"333333",
+      "\"\"\"\"\"\"\"\" \"\" \"\"\"\" \"\"\"\"\"\" \"\"\"\"\"\"\"",
+      "\"\"\"\"\"\"\"\" \"\" \"\"\"\" \"\"\"\"\"\" \"\"\"\"\"\"\"",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 1-2 carry the instructional print sentence (\"Use the chart below to list your interests.\") which precedes the table, with page-number token '#,-' at the right margin of line 1. A transcriber's note (lines 4-5) states: \"Print table has five blank rows provided for answers\" — even though only 4 fully blank data rows are visible in the captured print image (a discrepancy noted below). The table body then shows the five column headings (line 7) each followed by their own separation line (line 8) and two rows of guide-dot filler (lines 9-10) standing in for the blank print rows, per rule 11.9.1.b (guide dots for empty column entries) and c(1) (at least two rows included in the skeleton table)."
+  },
+  "uncertain": [
+    "See the section README's 'Known uncertainties and source errata' list: the transcriber's note claims the print table has five blank rows, but the print image (verified directly) shows only four; flagged for Paul."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Rule 11.9.1.c(1) ('at least two rows must be included in the skeleton table') explains why braille legitimately shows only 2 blank-guide-dot rows though print shows more; confirmed by direct reading of the PDF image (p. 324): print has exactly 4 blank ruled rows below the header, not 5 as the transcriber's note in the source claims -- see 'Unresolved' in the README."
+}

@@ -1,0 +1,46 @@
+{
+  "id": "b004-6-2",
+  "title": "Running Header (Page Information Line) -- Worked Example",
+  "pdfPages": [
+    6
+  ],
+  "textLines": [
+    182,
+    187
+  ],
+  "illustrates": {
+    "rule": "B004 §6",
+    "quote": "Guiding principles: Each braille page should generally carry a page information line (PIL) indicating the braille page number, the print page number (optional), and title or current section name. It should be easily located by the reader."
+  },
+  "print": {
+    "page": {
+      "runningHead": "Common Native Trees",
+      "printPageNumber": "25",
+      "features": "Mock-up page information line: print page number left-justified, title centred, braille page number right-justified, all on one line."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "25                      Common Native Trees                             48",
+        "features": "Print mock-up of the PIL: '25' left-justified (print page number), 'Common Native Trees' centred (title/section name), '48' right-justified (braille page number)."
+      }
+    ]
+  },
+  "braille": {
+    "width": 38,
+    "lines": [
+      "#be              common native trees                               #dh"
+    ],
+    "pageBreaks": [],
+    "notes": "One line, verbatim. '#be' (b=2,e=5) is the print page number 25, left-justified; 'common native trees' is the centred title (lower case, per the good-practice note that capitals may be omitted); '#dh' (d=4,h=8) is the braille page number 48, right-justified."
+  },
+  "uncertain": [
+    "B004 states no fixed cells-per-line page width anywhere (unlike BANA's stated 40 cells); the exact internal spacing of this line could not be independently reconstructed beyond what the text extraction shows."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on content. Structural choice: print.page.runningHead/printPageNumber record the PIL's own two numbers/title for documentation (matching buildModel1's schema), and the print mock-up text is kept as a single 'other' block since it is a schematic three-field mock-up line, not real running prose Emboss's paragraph/heading formatting could build from directly. Not representable: Emboss's UKAAF running head shows the braille page number and a centred title, but never a print page number at all (standards-findings.md F-66) -- even if this harness's shared per-page furniture were enabled (it is off, see buildModel1's header comment), the print page number '25' could not be reproduced. status: not-representable (F-66)."
+}

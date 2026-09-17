@@ -1,0 +1,43 @@
+{
+  "id": "sample-16-9.2c",
+  "title": "Transcriber's Note Wording: Endnotes in a Separate Volume",
+  "pdfPages": [
+    440
+  ],
+  "textLines": [
+    12763,
+    12763
+  ],
+  "illustrates": {
+    "rule": "16.9.2.c",
+    "quote": "Extensive endnote sections may be placed in a separate volume. This transposition of endnotes must be mentioned on the Transcriber’s Notes page in each volume. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "The endnotes to the text are in a separate volume.",
+        "features": "Set in italics, indented as a sample of suggested wording for the Transcriber's Notes page, per rule 16.9.2c.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Follows rule 16.9.2c directly; immediately precedes Example 16-13: Extensive Notes in a Separate Volume (Print Only).",
+    "printFeatures": "Plain indented italic sentence, no box, no accompanying braille rendering shown in the source."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering of this sentence is given in the source; it is suggested wording only. None is guessed here."
+  },
+  "uncertain": [
+    "This item is a plain-text 'Sample:' of suggested wording; braille.lines is left empty rather than inferring a transcription."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.9.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

@@ -1,0 +1,64 @@
+{
+  "id": "example-5-4",
+  "title": "Ignore Font Attribute for Title",
+  "pdfPages": [
+    130
+  ],
+  "textLines": [
+    3931,
+    3941
+  ],
+  "illustrates": {
+    "rule": "5.3.5",
+    "quote": "Ignore font attributes for titles of books, poems, plays, etc., that appear as a complete heading. Note: Font attributes are retained when titles of books, poems, plays, etc., are mentioned in the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "*Eyes and Tears*",
+        "features": "Centered, italic serif poem title standing as a complete heading.",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "ANDREW MARVELL",
+        "features": "Centered, full-capitals author byline beneath the title, plain (non-italic, non-bold).",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "How wisely Nature did decree,",
+        "features": "Left-aligned (not centered) opening line of the poem — part of the same decorative title-page unit as the title/byline above it. Whether this line is itself italicized in print is unconfirmed (see uncertain); it makes no difference to the braille either way, since 5.3.5 drops the attribute as part of the same 'complete heading' unit regardless.",
+        "items": null
+      }
+    ],
+    "notes": "Title-page-style block: italic title, plain full-caps byline, then the poem's opening line, all one decorative 'complete heading' unit per 5.3.5.",
+    "surroundingText": "Follows rule 5.3.5 directly, on printed page 5-4, immediately after Example 5-3.",
+    "printFeatures": "Three centered/left lines, no border: italic title, plain caps byline, poem opening line (italic per run A, plain per run B — unconfirmed either way, see uncertain)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "             ,eyes & ,te>s",
+      "",
+      "            ,,&rew ,,m>vell",
+      "",
+      ",h[ wisely ,nature did decree1"
+    ],
+    "pageBreaks": [],
+    "notes": "Six lines, margin 8 stripped. Lines 1, 3, 5 are full blank-cell (U+2800) filler lines bracketing/separating the title, byline, and quotation, kept as empty strings. Title (line 2, indent 13) and byline (line 4, indent 12, double-capital sign) both verified centered by the (40−len)//2 formula. No typeform indicator anywhere: the title's and poem line's italics, and the byline's full-caps styling, are all dropped as font attributes, per 5.3.5 — the capitalization itself is retained via ordinary UEB capital signs, not as a font attribute."
+  },
+  "uncertain": [
+    "Whether the poem's opening line ('How wisely Nature did decree,') is itself printed in italics is a genuine disagreement between the two runs (A: italic; B: plain) that pixel-level evidence was not obtained for. It has no effect on the braille (5.3.5 drops the attribute here regardless, as part of the same title+byline+quotation 'complete heading' unit), so it is left unresolved rather than asserted either way; `print.blocks[2].text` is kept plain (no *italic* markup) so this section's own gold-run.mjs comparison isn't skewed by an unconfirmed guess."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille (including all three blank filler lines) independently re-derived from .txt lines 3936-3941 (margin 8) and matches both runs byte-for-byte; both runs' own summaries agree on this file's line count and content. Heading level (1, centered) newly verified here directly against the measured indent using the (40−len)//2 formula for both the title (indent 13, len 13) and byline (indent 12, len 15) — not taken from either run's own 'level' field (A asserted level 1/heading, B left level null throughout the section). Whether the poem's opening line is italic in print (A: italic; B: plain) is left as a documented uncertainty, not picked either way — see `uncertain`."
+}

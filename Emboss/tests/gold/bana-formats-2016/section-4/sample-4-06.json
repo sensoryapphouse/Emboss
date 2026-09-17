@@ -1,0 +1,66 @@
+{
+  "id": "sample-4-06",
+  "title": "Paragraph Heading Changed to Cell-5 Heading",
+  "pdfPages": [
+    125
+  ],
+  "textLines": [
+    3743,
+    3757
+  ],
+  "illustrates": {
+    "rule": "4.8.2",
+    "quote": "Changing Paragraph Headings to Cell-5 or Cell-7 Headings. A paragraph heading may provide better navigation for the braille reader when it is separated from the paragraph and changed to a cell-5 or cell-7 heading. (See Sample 4-5: Paragraph Headings Relocated on page 4-20 and Sample 4-6: Paragraph Heading Changed to Cell-5 Heading on page 4-21.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Kettles and Steamers",
+        "features": "Bold blue run-in heading in print, opening the first paragraph; relocated to its own cell-5 line in braille because its effect covers the whole passage (this paragraph AND the bulleted item that follows), per rule 4.8.3.b."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "With kettles and steamers, chefs can prepare large amounts of food efficiently.",
+        "features": "Plain body text, follows the elevated heading."
+      },
+      {
+        "kind": "list-item",
+        "level": null,
+        "text": "**Steam-Jacketed Kettle.** Available in both freestanding and tabletop models, a **steam-jacketed kettle** is a kettle that provides an even heat by circulating steam through its walls.",
+        "features": "Bulleted list item whose own bold run-in lead phrase, 'Steam-Jacketed Kettle.', covers only this one paragraph and is therefore left INLINE (not elevated), wrapped only in an emphasis/typeform indicator pair, per rule 4.8.2/4.8.3.b's scope test.",
+        "marker": "\u2022"
+      }
+    ],
+    "notes": "Two print run-in headings of different scope: 'Kettles and Steamers' covers the whole passage and is elevated to its own cell-5 line in braille, per 4.8.3.b, while 'Steam-Jacketed Kettle.' covers only its own single bulleted paragraph and is left inline as an ordinary (emphasized) paragraph heading -- the section's clearest illustration of the scope test that decides between rule 4.8.2's two outcomes.",
+    "surroundingText": null,
+    "printFeatures": "Bold blue section-level run-in heading followed by a plain paragraph, then a bulleted sub-item with its own smaller bold run-in heading."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,kettles & ,/1m]s",
+      ",) kettles & /1m]s1 *efs c prep>e l>ge",
+      "am.ts ( food e6ici5tly4 444",
+      "",
+      "_4 ^1,/1m-,jacket$ ^1,kettle4 ,available",
+      "  9 bo? free/&+ & tabletop models1 a",
+      "  ^1/1m-jacket$ ^1kettle is a kettle t",
+      "  provides an ev5 h1t by circulat+ /1m",
+      "  \"? xs walls4 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the cell-5 heading 'Kettles and Steamers', elevated per 4.8.3.b; lines 2-3 its paragraph, ending '444'; line 4 blank; lines 5-9 the bulleted sub-item, whose own run-in heading 'Steam-Jacketed Kettle.' stays inline, wrapped in a typeform (bold) indicator pair (also re-applied where print repeats the term in bold mid-paragraph)."
+  },
+  "uncertain": [
+    "Both paragraphs in this file are longer in print than what the braille excerpt actually transcribes -- each is cut off with a '444' continuation/ellipsis marker (line 3 and, originally, the end of the bulleted item) with no print.blocks equivalent for 'more text omitted here', matching the same convention documented for sample-4-01. print.blocks is trimmed to match exactly what the braille excerpt itself gives, per the 'transcribe only what the source shows' convention, rather than the fuller print sentence.",
+    "The first paragraph directly follows its heading with no blank line -- its flush first line versus Emboss's ordinary 2-cell indent is the same standards-findings.md F-39 gap seen throughout this section."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Runs agree on every field (kind/level/text and braille.lines); only prose wording differed (merged). During model-building verification, both paragraphs needed trimming to match exactly what the braille excerpt transcribes (each is cut short with a '444' continuation marker, matching sample-4-01's own documented convention), and the bulleted item's mid-sentence repeat of \u201csteam-jacketed kettle\u201d needed its own **bold** markup (braille repeats the typeform indicator there, per the file's own braille.notes)."
+}

@@ -1,0 +1,86 @@
+{
+  "id": "sample-8-15",
+  "title": "Two Distinct Bullets in a Simple List",
+  "pdfPages": [
+    224
+  ],
+  "textLines": [
+    6446,
+    6464
+  ],
+  "illustrates": {
+    "rule": "8.6.2.a",
+    "quote": "a. Follow print for the symbol used as a bullet. If the print symbol does not have a corresponding symbol in braille, devise a symbol using a transcriber-defined symbol indicator. (See UEB, §3.26, Transcriber-Defined Symbols.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "FOCUS QUESTIONS",
+        "features": "Styled small-caps/bold heading."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Four items; the first three carry a small round bullet, the fourth a visually distinct solid square bullet.",
+        "items": [
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "Where did the Neolithic agricultural revolution occur, and how did it affect the lives of men and women?",
+            "features": "round bullet"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "What are the characteristics of civilization, and what are some explanations for why early civilizations emerged?",
+            "features": "round bullet"
+          },
+          {
+            "marker": "•",
+            "level": 1,
+            "text": "How did geography contribute to the civilizations that arose in Mesopotamia and Egypt?",
+            "features": "round bullet"
+          },
+          {
+            "marker": "■",
+            "level": 1,
+            "text": "In what ways were the civilizations of Mesopotamia and Egypt alike? In what ways were they different?",
+            "features": "square bullet, visually distinct from the other three round bullets"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Styled heading; three items with a small round bullet, one item with a visually distinct solid square bullet."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,,focus ,,\"qs",
+      "_4 ,\": did ! ,neoli?ic agricultural",
+      "  revolu;n o3ur1 & h[ did x a6ect !",
+      "  lives ( m5 & wom58",
+      "_4 ,:at >e ! \"*i/ics ( civiliza;n1 & :at",
+      "  >e \"s explana;ns = :y e>ly civiliza;ns",
+      "  em]g$8",
+      "_4 ,h[ did geography 3tribute to !",
+      "  civiliza;ns t >ose 9 ,mesopotamia &",
+      "  ,egypt8",
+      "_$#d ,9 :at ways 7 ! civiliza;ns (",
+      "  ,mesopotamia & ,egypt alike8 ,9 :at",
+      "  ways 7 !y di6]5t8"
+    ],
+    "pageBreaks": [],
+    "notes": "First three items use the dot bullet '_4'; the fourth (visually distinct in print) uses the solid-square symbol '_$#d', matching 8.6.2.a's 'Solid square' — demonstrating that print's two visually distinct bullet shapes are retained as two distinct transcriber-defined braille symbols. Line 1 carries the heading."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Heading text kept ALL-CAPS (\"FOCUS QUESTIONS\", confirmed against this section’s own consistent print-casing pattern for small-caps/bold headings, e.g. example-8-5a/b) — A was right, B’s Title-Case retyping wrong. Heading level: measured directly (line 6451) = 4 leading U+2800 cells = cell-5 = level 2 (both runs’ raw values replaced). illustrates.quote extended to include the \"(See UEB §3.26…)\" cross-reference sentence, stopping before the non-prose bullet-correspondence table (matching how table content is excluded from quotes elsewhere in this corpus). First three items’ dot bullets (•) supported; fourth item’s solid-square bullet (■) has no Emboss correspondence besides the one dot symbol (F-33) — recorded as-is.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

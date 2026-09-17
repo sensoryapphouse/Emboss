@@ -1,0 +1,46 @@
+{
+  "id": "example-1-7",
+  "title": "Running Head",
+  "pdfPages": [
+    26
+  ],
+  "textLines": [
+    861,
+    866
+  ],
+  "illustrates": {
+    "rule": "1.8.2",
+    "quote": "Running Heads. If a braille running head is used, it appears on the first line of every page, except the title page and the first page of text in each volume where the full title is indicated. The running head is centered on the available cells of the first line, i.e., leaving at least three blank cells at both the beginning of the line and before the print page number."
+  },
+  "print": {
+    "page": {
+      "runningHead": "Exploring Psychology",
+      "printPageNumber": "3",
+      "features": "The print artifact shown is the book's front cover/title page itself (small 'exploring' logotype, 'EIGHTH EDITION' caption, large 'Psychology' logotype) -- title pages do not carry a running head (rule 1.8.2); the single braille line shown instead demonstrates the running head DERIVED from this title as it would appear on a LATER page of the volume (here print page 3, per the trailing '#c')."
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Book cover: small lowercase 'exploring' logotype, 'EIGHTH EDITION' caption, large stylised 'Psychology' logotype -- from which the running head 'Exploring Psychology' is formed per rule 1.8.2.c. Not itself a running-head-bearing page."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,explor+ ,psy*ology         #c"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page line 1, reconstructed to the stated 40-cell page width (rule 1.7.1): the running head 'Exploring Psychology' begins 10 cells in (centred, (40-19)//2=10 for its 19-character length) and the print page number '#c' (3) sits at the right margin, 9 blank cells after the title (>= the 3-cell minimum, rule 1.8.2). As extracted from the source .txt the line is 64 characters (33 plain-ASCII filler spaces between title and page number) because this example's title is rendered as a caption under a raster cover-image in the PDF, an extraction artefact -- not a literal blank-cell run. Recomputed from the fixed 40-cell width and the confirmed 10-cell leading indent (independently verified: 29 characters of left content + 2-character page number leaves exactly 9 cells for the gap, both runs' own analysis converge on this)."
+  },
+  "uncertain": [
+    "The 9-cell gap before '#c' is recomputed from the 40-cell page width rather than read directly off the raw text extraction (see braille.notes); not independently pixel-verified against the PDF."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs independently found the same extraction artefact (an over-long line from a raster-image caption) and both estimated the same 9-cell true gap by the same method (40-cell width minus known left/right content) -- confirmed correct here by direct measurement (title 10+19=29 cells, page number 2 cells, 29+9+2=40). Structural choice: 'Exploring Psychology' is recorded in print.page.runningHead (this section's own schema field for BANA 1.8.2/1.8.1's title-derived running head), not as a print.blocks heading -- matching how buildModel1 is designed to read it (see gold-run.mjs). Not built into the model: Emboss's real running-head/page-1-title machinery (doc.title) only activates when this runner's shared per-page furniture is enabled, which is kept OFF here so the rest of this section's partial-page excerpts stay line-comparable (see buildModel1's own header comment) -- also, this specific example needs the running head on a LATER page (page 3, not page 1), which requires real preceding book content this excerpt does not supply. status: not-representable (limitation, not a defect -- the feature itself is real and separately tested, Emboss/tests/book_title_running_head.test.mjs)."
+}

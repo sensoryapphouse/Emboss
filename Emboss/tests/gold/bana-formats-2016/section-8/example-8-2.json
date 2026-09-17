@@ -1,0 +1,80 @@
+{
+  "id": "example-8-2",
+  "title": "Simple List",
+  "pdfPages": [
+    199
+  ],
+  "textLines": [
+    5761,
+    5772
+  ],
+  "illustrates": {
+    "rule": "8.3.2.a",
+    "quote": "A list is preceded and followed by a blank line in most situations."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Single-column vertical list, five items, one word per line, no markers or bullets, plain roman lowercase font, left-aligned flush with the paragraph margin.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "cat",
+            "features": null
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "dog",
+            "features": null
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "mouse",
+            "features": null
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "cow",
+            "features": null
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "horse",
+            "features": null
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": "8.3.2.b/c/d follow, cross-referencing Samples 8-1/8-2/8-3 for blank-line handling around page-change indicators.",
+    "printFeatures": "Boxed illustration; five single words stacked vertically, no bullets or numbers, ordinary roman lowercase, generous blank space above and below inside the box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "cat",
+      "dog",
+      "m\\se",
+      "c[",
+      "horse",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Blank line (all 40 cells blank, U+2800) precedes and follows the list per 8.3.2.a; items begin in cell 1 per 8.3.1, each item's braille line is unpadded to the 40-cell width (only the two boundary blank lines are full-width)."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B; only prose fields differed in wording — A’s kept.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

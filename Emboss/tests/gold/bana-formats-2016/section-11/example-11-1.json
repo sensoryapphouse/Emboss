@@ -1,0 +1,62 @@
+{
+  "id": "example-11-1",
+  "title": "Parts of a Table (Print Only)",
+  "pdfPages": [
+    284
+  ],
+  "textLines": [
+    8298,
+    8298
+  ],
+  "illustrates": {
+    "rule": "11.2.2",
+    "quote": "Parts of a Table. For our purposes, the parts of a table are: Column Headings: Headings across the top of the table Separation Line: Line between a column heading and column entry Row Headings: Headings listed vertically on the left and/or right side of the table Column Entries: Intersections of a row and a column Guide Dots: A series of dot 5s leading the reader from one column to the next or indicating an empty column entry."
+  },
+  "print": {
+    "caption": null,
+    "headers": [
+      [
+        "",
+        "Column Heading",
+        "Column Heading"
+      ],
+      [
+        "",
+        "Column Subheading",
+        "Column Subheading"
+      ]
+    ],
+    "rows": [
+      [
+        "Row Heading",
+        "Column Entry",
+        "Column Entry"
+      ],
+      [
+        "Row Subheading",
+        "Column Entry",
+        "Column Entry"
+      ],
+      [
+        "Row Heading",
+        "Column Entry",
+        "Column Entry"
+      ]
+    ],
+    "notes": "This is a schematic/generic diagram, not a table of real data: every cell literally contains the placeholder label naming the part it illustrates (\"Column Heading\", \"Column Subheading\", \"Row Heading\", \"Row Subheading\", \"Column Entry\"), boxed with ruled lines.",
+    "surroundingText": "11.2.2 Parts of a Table (defines the five terms) precedes the example; 11.2.3 (\"Tables have a relationship between columns and rows...\") follows it.",
+    "printFeatures": "Bordered box (outer border plus internal rules separating the column-heading row from the sub-heading row, and the row-heading column from the entries). \"Column Heading\", \"Column Subheading\" and \"Row Heading\" text is bold; \"Row Subheading\" is bold and indented under the row-heading column; \"Column Entry\" text is plain (not bold)."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille is given for this example; the heading is explicitly labelled '(Print Only)' and the .txt extraction contains no dot-pattern block between this heading and the start of 11.2.3."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.width set to null (no braille is given). print.headers rebuilt as a 2-row spanning structure matching the PDF box image (p. 284): run A's shape was correct, run B's flattened description was not schema-equivalent. print.caption set to null: the bold text over the box is this item's own title, not a separate in-print table caption (run B had duplicated the title into caption)."
+}

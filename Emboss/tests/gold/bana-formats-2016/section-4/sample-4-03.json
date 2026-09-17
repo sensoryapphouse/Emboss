@@ -1,0 +1,88 @@
+{
+  "id": "sample-4-03",
+  "title": "Cell-5 Heading Followed by a Cell-7 Heading",
+  "pdfPages": [
+    122
+  ],
+  "textLines": [
+    3661,
+    3680
+  ],
+  "illustrates": {
+    "rule": "4.5.7",
+    "quote": "A cell-5 heading may be followed by a cell-7 heading, without an intervening blank line. (See Sample 4-3: Cell-5 Heading Followed by a Cell-7 Heading on page 4-18.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "The Punishment of Crime",
+        "features": "Large decorative old-style centered title, bold serif, on a mottled/textured parchment-style background."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Torture and capital punishment remained common features of European judicial systems well into the eighteenth century. Public spectacles were especially gruesome as this excerpt from the *Nocturnal Spectator* of Restif de la Bretonne demonstrates.",
+        "features": "Plain italic introductory text."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Restif de la Bretonne,",
+        "features": "Bold heading, author name, first of two print/braille lines, immediately below the introductory paragraph, no blank line."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "*Nocturnal Spectator*",
+        "features": "Bold italic work title, second print/braille line of the same two-line heading, directly beneath the author's name."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "The Broken Man",
+        "features": "Smaller bold heading, sub-title of the excerpt, directly below the cell-5 heading, preceded in print by a small decorative icon."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "I went home by way of rue Saint-Antoine and the Place",
+        "features": "Plain body text, cut off at the bottom edge of the image."
+      }
+    ],
+    "notes": "Illustrates a cell-5 heading ('Restif de la Bretonne, Nocturnal Spectator') immediately followed (no blank line) by a cell-7 heading ('The Broken Man'), per rule 4.5.7.",
+    "surroundingText": null,
+    "printFeatures": "Mottled parchment-style background box; centered cell-1 title heading, italic introduction, then a bold author/work-title heading immediately followed by a smaller bold sub-title heading, then body text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,! ,puni%;t ( ,crime",
+      "",
+      ",torture & capital puni%;t rema9$ common",
+      "f1tures ( ,europ1n judicial sy/ems well",
+      "9to ! ei<te5? c5tury4 ,public spectacles",
+      "7 especially grue\"s z ? exc]pt f !",
+      ".1,nocturnal .1,spectator ( ,re/if de la",
+      ",bretonne demon/rates4",
+      "",
+      "    ,re/if de la ,bretonne1",
+      "    .1,nocturnal .1,spectator",
+      "      ,! ,brok5 ,man",
+      ",i w5t home by way ( rue ,sa9t-,anto9e &",
+      "! ,place 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 the centered heading 'The Punishment of Crime'; line 2 blank; lines 3-8 the introductory paragraph; line 9 blank; lines 10-11 the cell-5 heading 'Restif de la Bretonne, Nocturnal Spectator', wrapping across two lines both held at the same 4-cell indent (blocked, not individually centered); line 12 the cell-7 heading 'The Broken Man' directly beneath with no blank line, per 4.5.7; lines 13-14 the excerpt paragraph, ending in the '444' continuation marker."
+  },
+  "uncertain": [
+    "The second heading line (\u201cNocturnal Spectator\u201d) loses its italics when built as a `heading` block and run through Emboss's real formatHeading, per standards-findings.md F-41 -- a documented Emboss gap (rule 4.3.7's clarity exception), not a gold-file error; the same paragraph's own mid-sentence italics on the same words ARE preserved correctly.",
+    "The excerpt paragraph directly follows the cell-7 heading with no blank line; expect the same systematic flush-indent gap as standards-findings.md F-39 on its first line."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree. All three `level` fields resolved in favour of run B (1, 2, 3 for the three headings respectively) over run A (which had them shifted down by one: 2, 3, null): the centering-formula/leading-blank-cell check confirms line 1 is centered (level 1, not 2), lines 10-11 are cell-5/level 2 (not 3), and line 12 is cell-7/level 3 (not null). During model-building verification, three further corrections were made: (1) the two-line heading \u201cRestif de la Bretonne, / Nocturnal Spectator\u201d is built as TWO separate level-2 heading blocks (not one block whose text happens to contain both lines) so Emboss's own heading-to-heading no-blank-line join (rule 4.5.7/4.3.3) reproduces the source's genuine two-line break, rather than letting generic word-wrap re-flow it differently; (2) \u201cNocturnal Spectator\u201d needed *italic* markup, both where it appears mid-sentence in the introductory paragraph and as the second heading line (the paragraph's italics ARE preserved by Emboss; the heading's are not -- see standards-findings.md F-41, the same gap example-4-7 illustrates); (3) the final excerpt paragraph needed to be trimmed to end at \u201c...and the Place\u201d (matching the gold braille's own '444' continuation marker) rather than continuing further, per the 'transcribe only what the braille excerpt shows' convention."
+}

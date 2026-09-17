@@ -1,0 +1,62 @@
+{
+  "id": "example-1-9",
+  "title": "Page Change Indicator Mid-Braille Page",
+  "pdfPages": [
+    28
+  ],
+  "textLines": [
+    932,
+    935
+  ],
+  "illustrates": {
+    "rule": "1.11.3",
+    "quote": "When a new print page begins in the middle of a braille page, the print page number is preceded by the page change indicator. The indicator, a line of unspaced dots 36, is on the same braille line as the page number, starting at the left margin and ending with the new page number at the right margin. There is no space between the page change indicator and the first symbol of the print page number."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Schematic placeholder: the literal word 'text' stands in for generic body text ending the previous print page; no real print excerpt is given (confirmed against the PDF page image, p.28). The gold-run.mjs harness's own expectedLinesFor() convention strips a leading literal 'text' placeholder line from the EXPECTED braille before comparison (see gold-run.mjs), so this placeholder is deliberately left un-built here rather than modeled as a real paragraph."
+      },
+      {
+        "kind": "pagenum",
+        "text": "22",
+        "features": "Print page turn to page 22 ('#bb': b=2, b=2), falling in the middle of the braille page."
+      },
+      {
+        "kind": "paragraph",
+        "text": "continues on the line after the indicator.",
+        "continuation": true,
+        "features": "Placeholder sentence describing the mechanic itself; no real print excerpt is given (lowercase in the source: a continuation of the placeholder body text, not a fresh capitalised sentence)."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "text",
+      "-------------------------------------#bb",
+      "3t9ues on ! l9e af ! 9dicator4"
+    ],
+    "pageBreaks": [
+      {
+        "index": 0,
+        "label": "page change indicator (mid braille page), ending #bb (print page 22)"
+      }
+    ],
+    "notes": "Three lines, verbatim, no left-margin padding in the source (this instance is set flush against the left edge of the printed page). Line 2 is the unspaced-dots-36 page-change indicator running the full 40-cell width and ending with the new print page number '#bb' (22), no space between indicator and number."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on content and structure. Representable via a leading 'para' placeholder, a mid-flow 'pagenum' block (page='22'), and a trailing 'para' -- this is exactly the print-page-change-indicator mechanic gold-run.mjs's buildModel1 models directly (verified empirically against Emboss: a pagenum block placed between two paragraphs renders the identical dashes-plus-number line, no space, matching this example's own shape)."
+}

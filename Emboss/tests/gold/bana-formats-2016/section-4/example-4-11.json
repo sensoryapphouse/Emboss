@@ -1,0 +1,58 @@
+{
+  "id": "example-4-11",
+  "title": "Cell-7 Heading Before Unrelated Columns",
+  "pdfPages": [
+    113
+  ],
+  "textLines": [
+    3411,
+    3424
+  ],
+  "illustrates": {
+    "rule": "4.6.5",
+    "quote": "Maintaining the hierarchy of headings in a document is important, and there may be times when columned material will follow a cell-7 heading. Insert a blank line to separate the cell-7 heading from the columns, so it is clear the heading is related to all columns."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "Verbs",
+        "features": "Left-aligned, bold black serif."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "beat/blow/catch/do; become/break/choose/draw; begin/bring/come/drink; bet/burst/cut/drive; bite/buy/dive/eat",
+        "features": "Plain four-column word list, no column headers; the four columns are unrelated to one another (each is a separate alphabetized block), so the braille joins them only with plain spaces, not guide dots -- unlike Example 4-10's related columns. Recorded as `other` for the same reason as Example 4-10's table: no table/columns block type in this print.blocks model."
+      }
+    ],
+    "notes": "Illustrates a blank line inserted between a cell-7 heading and the four-column word list that follows it, per rule 4.6.5. Note the source example's own title says 'Unrelated Columns' even though the governing rule (4.6.5) concerns columns related to the heading; quoted verbatim, not corrected.",
+    "surroundingText": null,
+    "printFeatures": "Bold left-aligned heading above an unheaded four-column word list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "      ,v]bs",
+      "",
+      "b1t    bl[   cat*   d",
+      "2come br1k *oose draw",
+      "2g9    br+   come   dr9k",
+      "bet    bur/ cut     drive",
+      "bite   buy   dive   eat",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1 blank; line 2 the cell-7 heading 'Verbs'; line 3 blank, per 4.6.5; lines 4-7 the four-column word list, columns separated only by plain spaces (unrelated columns, no guide dots); line 8 blank."
+  },
+  "uncertain": [
+    "The four-column word list has no table/columns block type in this print.blocks model and is recorded as `other`; expect a documented mismatch on the list rows, not the heading."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines agree; `kind` resolved to `other` for the same reason as Example 4-10 (no related/unrelated-columns block type available). Heading level 3 (cell-7) confirmed directly by the 6-cell indent."
+}

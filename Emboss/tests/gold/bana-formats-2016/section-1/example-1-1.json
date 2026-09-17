@@ -1,0 +1,43 @@
+{
+  "id": "example-1-1",
+  "title": "Displayed Material (Print Only)",
+  "pdfPages": [
+    21
+  ],
+  "textLines": [
+    675,
+    675
+  ],
+  "illustrates": {
+    "rule": "1.4.5",
+    "quote": "Displayed material refers to text set off by blank lines and/or a different margin."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Boxed print-only mock-up: a plain paragraph, then one sentence ('The fields are awash in a sea of blue.') set off on its own indented line with blank space above and below and shaded in the source image, then the paragraph resumes -- illustrating 'displayed' material (BANA 1.4.5). No braille is given for this example."
+      }
+    ],
+    "notes": "Explicitly captioned '(Print Only)' in the source; confirmed against the PDF page image (p.21): a boxed print excerpt only, no accompanying braille box."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given; print-only illustration."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree: print-only, no braille. Modeled as a single 'other' block (no real transcribable content) since this sample exists to show a PRINT layout convention (displayed vs. embedded material), not a print-to-braille correspondence; Emboss has no concept of 'displayed material' as a print-side visual cue distinct from ordinary body text (there is nothing in the braille to build toward). status: no-braille (braille.width is null)."
+}

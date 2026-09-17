@@ -1,0 +1,115 @@
+{
+  "id": "sample-9-11",
+  "title": "Sample Letter for Instructional Purposes",
+  "pdfPages": [248, 249],
+  "textLines": [7140, 7185],
+  "illustrates": {
+    "rule": "9.7.2",
+    "quote": "Instructional Correspondence. Letters intended to teach proper print format should be followed for spacing, indentions, and font attributes. This includes the spacing positions of headings, closings, the body of the letter, etc. Insert a blank line before and after the letter if it is not enclosed in a box. These types of letters are not considered displayed material and use the entire width of the braille line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "A sample business letter is presented below. Note the parts of the letter include the 1) heading (return address) and date; 2) inside address; 3) greeting; 4) body; 5) close; 6) signature and identification.",
+        "features": "Introductory paragraph, on the print page before the boxed letter."
+      },
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "features": "Bordered box in print containing the whole sample letter, entirely on printed page 9-22 (PDF p.248) -- the corresponding braille is split across two consecutive braille pages purely because of length, not because of any print page break.",
+        "blocks": [
+          {
+            "kind": "other",
+            "level": null,
+            "text": "Jane Doe / 1234 State Street / Any Town, State 11111 / July 8, 2010",
+            "features": "Letter heading (return address and date), right-aligned in print."
+          },
+          {
+            "kind": "other",
+            "level": null,
+            "text": "Steve Smith / CEO / Smith Distributors / 6522 Fifth Avenue / Any Town, State 11111",
+            "features": "Inside address, left-aligned."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "Dear Mr. Smith:",
+            "features": "Greeting."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "Your inability to complete our order, reference number AC0965, placed on February 22, 2010, has left us with no choice but to cancel the entire order. We regret we cannot extend our deadline any further.",
+            "features": "Body."
+          },
+          {
+            "kind": "other",
+            "level": null,
+            "text": "Sincerely, / Jane Doe / Jane Doe / Purchasing Manager",
+            "features": "Close, script signature (a cursive 'Jane Doe' graphic), and typed identification, right-aligned within the box -- left at its own wide print-matching indentation (17 leading spaces) rather than being normalized to the standard cell-7 attribution position used in Samples 9-9/9-10, per 9.7.2's own 'these types of letters ... use the entire width of the braille line' and 'follow print for spacing' instructions."
+          }
+        ]
+      }
+    ],
+    "notes": "Direct worked example of 9.7.2/9.7.1a: a full instructional business letter, formatted to preserve the print's own spacing/positions for the heading, inside address, greeting, body, and close, boxed in print (box-border lines transcribed at cell 1 spanning most of the line width) and using the full 40-cell braille line width rather than an adjusted (displayed-material) margin.",
+    "surroundingText": null,
+    "printFeatures": "Boxed sample business letter with a right-aligned heading/date block, left-aligned inside address, greeting, one-paragraph body, and a close with a cursive signature graphic."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",a sample busi;s lr is pres5t$ 2l4 ,note",
+      "! \"ps ( ! lr 9clude ! #a\"> h1d+ \"<return",
+      "address\"> & date2 #b\"> 9side address2",
+      "#c\"> greet+2 #d\"> body2 #e\"> close2 #f\">",
+      "signature & id5tifica;n4",
+      "",
+      "",
+      "",
+      "                                     #,-",
+      "777777777777777777777777777777777   a#hh",
+      "                 ,jane ,doe",
+      "                 #abcd ,/ate ,/reet",
+      "                 ,any ,t[n1 ,/ate #aaaaa",
+      "                 ,july #h1 #bjaj",
+      "",
+      ",/eve ,smi?",
+      ",,ceo",
+      ",smi? ,4tributors",
+      "#febb ,fif? ,av5ue",
+      ",any ,t[n1 ,/ate #aaaaa",
+      "",
+      ",de> ,mr4 ,smi?3",
+      "",
+      ",yr 9abil;y to complete \\r ord]1 ref];e",
+      "numb] ,,ac#jife1 plac$ on ,febru>y #bb1",
+      "#bjaj1 has left u ) no *oice b to c.el !",
+      "5tire ord]4 ,we regret t we _c ext5d \\r",
+      "d1dl9e any fur!r4",
+      "",
+      "                 ,s9c]ely1",
+      "                 @1,jane @1,doe",
+      "                 ,jane ,doe",
+      "                 ,pur*as+ ,manag]",
+      "gggggggggggggggggggggggggggggggggg   #,-"
+    ],
+    "pageBreaks": [
+      {
+        "afterLineIndex": 8,
+        "afterLineNumber": "25",
+        "note": "Braille page break between printed page 9-22 (source .txt lines 7145-7153, the introductory paragraph, renumbered 17-25 continuing that braille page's own line count) and printed page 9-23 (source .txt lines 7159-7183, the letter itself, renumbered 1-25 on the new braille page). The intervening page footer/blank separator lines (.txt lines 7154-7158) are excluded, consistent with every other example/sample in this section. The source .txt itself carries a form-feed character immediately before line 7159's '1', independently confirming the page boundary at exactly this point."
+      }
+    ],
+    "notes": "Numbered lines 17-25 on the first (9-22) braille page, then numbered lines 1-25 on the second (9-23) braille page -- a genuine two-page excerpt (this Sample's first page begins mid-sequence; lines 1-16 of that page, the tail end of 9.7.2's own rule text, are not part of this Sample and are not invented). Field width 5 throughout. Lines 1-5: the introductory paragraph, cell 1. Lines 6-8: blank. Line 9: blank line 25 of the first page, with only a right-flush marker '#,-'. Line 10: the letter box's top border (a row of 33 '7' characters) plus a right-flush marker 'a#hh', beginning the second braille page. Lines 11-14: heading/date, right-aligned. Line 15: blank. Lines 16-19: inside address, cell 1. Line 20: blank. Line 21: greeting. Line 22: blank. Lines 23-27: body. Line 28: blank. Lines 29-32: close/signature, right-aligned. Line 33: the letter box's bottom border (a row of 34 'g' characters) plus a right-flush marker '#,-'."
+  },
+  "uncertain": [
+    "The right-flush markers '#,-' (end of first page and end of box) and 'a#hh' (top of box) are transcribed verbatim as they appear in the source; their function (braille volume/page continuation marks, or a box-drawing artifact of this scan) was not independently confirmed.",
+    "Whether the box-border rows (repeated '7'/'g' characters) represent a literal box-drawing convention in this edition of Formats, or an OCR/extraction artifact of a graphical border, is not stated in the surrounding rule text; preserved verbatim regardless.",
+    "This excerpt begins mid-page (line 17 of the first braille page); Emboss builds a fresh, isolated document starting at line 1, so an exact reproduction of the page-break position from this excerpt alone is not possible."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B disagreed on exactly one byte in `braille.lines`: A's line 10 (the box's top border) carries a leading ASCII space (' 777...7   a#hh', 41 characters after stripping); B's has none ('777...7   a#hh', 40 characters). Settled directly from the primary source: source .txt line 7159 begins with a literal form-feed character ('\\x0c') immediately before the line-number field ('1    '); the form-feed is a page-break marker inserted by the PDF-to-text extractor, not a gutter or content character, and must be stripped before the 5-character line-number gutter is measured (confirmed by a byte-precise Python read: after stripping the leading '\\x0c', the gutter is exactly '1    ' and the content is exactly 40 characters, matching this file's own uniform 40-cell width). A's extraction evidently counted the form-feed as if it were the first content character, producing a spurious extra leading space; B's is correct and is used here. `pageBreaks` recorded as a structured object (afterLineIndex/afterLineNumber/note), extending the existing section-8 precedent's `{afterLineIndex, type, note}` shape (example-8-5b) with the explicit line-number label, per B's fuller account. Print-content structure: A gave the letter's five parts as flat sibling blocks; B additionally used 'attribution' for the heading/inside-address/close blocks and wrapped nothing in a box. Resolved to a `box` wrapper around the five parts (matching BANA §7's own box construct, reused here per precedent, e.g. section-8's sample-8-04) since print itself shows a bordered box around the whole letter, with each of the five parts kept as its own 'other'/'paragraph' block (not 'attribution', since 9.7.2 explicitly does NOT move this instructional letter's close to the attribution position -- unlike Samples 9-9/9-10 -- so reusing that block type would misrepresent the very distinction this sample illustrates)."
+}

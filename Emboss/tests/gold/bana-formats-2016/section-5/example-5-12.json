@@ -1,0 +1,73 @@
+{
+  "id": "example-5-12",
+  "title": "Retain Font Attribute for Preposition",
+  "pdfPages": [
+    134
+  ],
+  "textLines": [
+    4062,
+    4074
+  ],
+  "illustrates": {
+    "rule": "5.4.2",
+    "quote": "Follow print when a title is printed in italics or other emphasizing typeface and follows a preposition that is in a different typeface, or when the preposition is in a typeface different from the title."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "What Makes A Winner",
+        "features": "Centered, plain roman title, not italicized (the reverse pairing from Example 5-11).",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "*from* Seabiscuit: An American Legend",
+        "features": "Centered subtitle: 'from' italic, book title 'Seabiscuit: An American Legend' plain roman — the preposition, not the title, carries the differing typeface, per 5.4.2's second clause.",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "a biography by Laura Hillenbrand",
+        "features": "Centered, plain roman byline.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Quiet trepidation settled over ...",
+        "features": "Plain roman opening line; the braille excerpt truncates after 'settled over', short of the print's fuller sentence.",
+        "items": null
+      }
+    ],
+    "notes": "Companion example to 5-11: here the preposition ('from'), not the title, carries the differing typeface.",
+    "surroundingText": "Follows rule 5.4.2's example pair, immediately after Example 5-11, on the same printed page (5-8).",
+    "printFeatures": "Plain (unboxed) centered title block, matching Example 5-11's layout; mixed-typeface subtitle (italic preposition + plain title)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "          ,:at ,makes ,a ,w9n]",
+      "            .1f ,s1biscuit3",
+      "          ,an ,am]ican ,leg5d",
+      "",
+      "     ,biography by ,laura ,hill5br&",
+      "",
+      ",quiet trepida;n settl$ ov] 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Eight lines, margin 8 stripped. Line 1 blank filler; line 2 centered title (indent 10), no typeform indicator — heading font attributes ignored, per 5.3.1; line 3 centered subtitle (indent 12) with a single-word italic indicator ('.1') directly before 'f' (from) only, confirming only the single word 'from' is italicized; line 4, 'An American Legend' (indent 10), continues unmarked; line 5 blank (interior); line 6 centered byline (indent 5); line 7 blank (interior); line 8 paragraph opening, ending '444' (an ellipsis/continuation marker) — the print's fuller sentence ('... the Howard barn in the week before the Santa Anita Handicap.') is not transcribed in this worked excerpt, a deliberate excerpt truncation in the source, not an omission introduced here."
+  },
+  "uncertain": [
+    "The print sentence continues well past what the braille excerpt transcribes (it stops at 'settled over' plus an ellipsis marker); the remainder has no braille counterpart in the source to check against."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte and on the substantive print facts. Heading level (1, centered) verified directly against the (40−len)//2 formula for all three centered lines (title indent 10/len 20; subtitle line1 indent 12/len 15; subtitle line2 indent 10/len 19; byline indent 5/len 30 — all match exactly)."
+}

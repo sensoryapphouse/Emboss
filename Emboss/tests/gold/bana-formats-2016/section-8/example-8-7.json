@@ -1,0 +1,81 @@
+{
+  "id": "example-8-7",
+  "title": "Decimal Enumeration Skeleton Outline",
+  "pdfPages": [
+    206
+  ],
+  "textLines": [
+    6013,
+    6025
+  ],
+  "illustrates": {
+    "rule": "8.8.2",
+    "quote": "Follow print for the symbol used to represent blanks in a skeleton outline. Insert three dot 5s to represent blank space (no print symbol). A transcriber’s note is required to explain the use of the dot 5s."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Decimal-enumeration skeleton outline; each entry is a decimal number followed by a long blank underscore rule (no text), for the reader to fill in; indentation increases with each additional decimal level.",
+        "items": [
+          {
+            "marker": "1",
+            "level": 1,
+            "text": null
+          },
+          {
+            "marker": "1.1",
+            "level": 2,
+            "text": null
+          },
+          {
+            "marker": "1.2",
+            "level": 2,
+            "text": null
+          },
+          {
+            "marker": "1.2.1",
+            "level": 3,
+            "text": null
+          },
+          {
+            "marker": "2",
+            "level": 1,
+            "text": null
+          },
+          {
+            "marker": "2.1",
+            "level": 2,
+            "text": null
+          }
+        ]
+      }
+    ],
+    "notes": "Print’s division numbers are purely decimal (1 / 1.1 / 1.2 / 1.2.1 / 2 / 2.1) — no letters at any level, confirmed directly from the PDF page image (p. 206, printed 8-10).",
+    "surroundingText": "Rule 8.8.5 (Guide Text for Entire Documents in Outline Format) follows on the same/next page.",
+    "printFeatures": "Boxed illustration; each decimal-numbered line followed by a long horizontal underscore rule of blank space, indentation stepping in with each additional decimal level."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "#a .-",
+      "  #a4a .-",
+      "  #a4b .-",
+      "    #a4b4a .-",
+      "#b .-",
+      "  #b4a .-",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Each outline entry ends with the two-character ascii sequence '.-', standing in for the print's long blank underscore — per 8.8.2 this should be exactly three dot-5 cells; margin 8 (this example uses the fixed left margin, not the digit-plus-3 numbered-sample field, since the '1'/'1.1' etc. markers here are the outline numbers themselves, not braille-page line numbers)."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. The blank-fill marker \".-\" (both runs transcribed it identically but left its dot pattern \"uncertain\" against rule 8.8.2’s \"three dot 5s\"): decoded exactly via Emboss’s own canonical BRF-ASCII table (Emboss/engine/brf-ascii.mjs, BRF64) rather than by eye — '.' = dots {4,6}, '-' = dots {3,6}: two ordinary two-dot cells, NOT three dot-5 cells (dot-5 alone is '\"' in this same table — compare the literal '\"\"\"' guide-dot rows already used in the section-11 precedent, e.g. sample-11-06). This is now a settled finding, not an open uncertainty: the worked example’s own braille does not literally follow rule 8.8.2’s prescription for the blank-fill symbol; kept verbatim as transcribed (not \"corrected\" to a guessed three-dot-5 rendering). print.notes on the all-decimal numbering (already a Paul decision per the task brief) added from B, confirmed against the same page image.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "sample-9-04",
+  "title": "Displayed Vertical List",
+  "pdfPages": [241],
+  "textLines": [6960, 6982],
+  "illustrates": {
+    "rule": "9.2.5.d",
+    "quote": "Transcribe word lists that contain phrases vertically, with each phrase beginning in cell 1."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "How are you at comparing things for different sizes? Read the words. Under which heading would you write each word?",
+        "features": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Six words/phrases, one of them multi-word ('hot-air balloon', 'rubber raft'), transcribed vertically with each phrase beginning in cell 1 per 9.2.5d.",
+        "items": ["house", "skyscraper", "airplane", "hot-air balloon", "rubber raft", "bear"]
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "A blank three-column answer chart (headed 'Big / Bigger / Biggest') with two blank underline rows per column for the reader to sort the words into.",
+        "features": "Rendered in braille as a heading line, a row of guide-dot placeholders, and two rows of blank-answer-line filler cells; no print text to transcribe beyond the three column headings, and Emboss has no ruled-blank-answer-chart/guide-dot mechanism to build the rest from (cf. standards-findings.md F-36, the related skeleton-outline blank-fill gap)."
+      }
+    ],
+    "notes": "Direct worked example of 9.2.5d: each list word/phrase begins in cell 1, one per line, including the two-word phrases.",
+    "surroundingText": null,
+    "printFeatures": "Plain (unboxed) worksheet text; six comparison words/phrases in one row; a 3-column 'Big / Bigger / Biggest' chart with blank underlines beneath each heading for the reader to write in."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,h[ >e y at comp>+ ?+s = di6]5t",
+      "    sizes8 ,r1d ! ^ws4 ,\"u : h1d+ wd y",
+      "    write ea* ^w8",
+      "",
+      "h\\se",
+      "skyscrap]",
+      "airplane",
+      "hot-air balloon",
+      "ru2] raft",
+      "be>",
+      "",
+      ",big ,bi7] ,bi7e/",
+      "\"333 \"3333 \"33333",
+      ".-    .- \"\" .-",
+      ".-    .- \"\" .-",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Numbered lines 8-23 (a genuine excerpt). Field width 5, stripped. Lines 1-3 (source 8-10): lead-in paragraph, cell 5. Line 4 (11): blank. Lines 5-10 (12-17): the six list words/phrases, each at cell 1. Line 11 (18): blank. Lines 12-15 (19-22): the 'Big/Bigger/Biggest' answer-chart heading, its guide-dot row, and two blank-answer rows. Line 16 (23): blank."
+  },
+  "uncertain": [
+    "The exact braille cell-pattern used for the worksheet's blank ruled answer lines (encoded as repeated '.-' groups) is transcribed verbatim from the ASCII source without independently confirming its dot-pattern meaning against a Special Symbols page."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6965-6980 after stripping the 5-character line-number field (the '(Return to Text)' line 6981 excluded). `illustrates.rule` narrowed to 9.2.5.d (both runs agreed, dotted per convention). Structural disagreement over the answer-chart block: A recorded it as one non-modelled 'other' block; B modelled it as a second 'list' (items: 'Big'/'Bigger'/'Biggest') which would cause buildModel9 to build an actual formatted list -- not matching the chart's real guide-dot/ruled-blank-line braille at all. Resolved to A's 'other' treatment: Emboss has no mechanism to build a worksheet answer grid (column headings + guide dots + blank ruled lines), so it is recorded as a limitation rather than mis-modelled as an ordinary list."
+}

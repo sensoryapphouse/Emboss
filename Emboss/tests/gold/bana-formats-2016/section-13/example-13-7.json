@@ -1,0 +1,47 @@
+{
+  "id": "example-13-7",
+  "title": "Example 13-7: Diagrammed Scansion and Meter",
+  "pdfPages": [
+    363
+  ],
+  "textLines": [
+    10556,
+    10559
+  ],
+  "illustrates": {
+    "rule": "13.9.5",
+    "quote": "Diagrammed Scansion and Meter. Follow print for spacing and punctuation of scansion and meter symbols when the text shows only a diagram consisting of accent/stress and meter signs with no lines of poetry. Use 1-3 margins for each diagrammed line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Four lines of a pure scansion/meter diagram (breve and acute stress marks over vertical foot-division pipes), with no words of poetry at all -- print shows only the accent and meter signs themselves, repeated as two near-identical pairs of lines.",
+        "stanzas": []
+      }
+    ],
+    "notes": "Picture on PDF p.363; a symbol-only diagram (stress marks above vertical pipes marking feet), matching rule 13.9.5's description of a diagram with 'no lines of poetry'.",
+    "surroundingText": null,
+    "printFeatures": "Boxed inline example; four rows of breve/acute and pipe glyphs, no letters."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "@+^/ _\\ @+@+^/ _\\ @+@+^/",
+      "@+^/ _\\ @+@+^/ _\\ @+@+^/",
+      "^/ _\\ @+@+^/ _\\ @+^/",
+      "^/ _\\ @+@+^/ _\\ @+^/"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 10556-10559, after stripping a 9-space fixed left margin shared by every line of this boxed example. All four lines begin at cell 1 (1-3 margins for each diagrammed line, per rule 13.9.5); lines 1-2 are identical to each other, as are lines 3-4, matching the print's two visually-paired diagram rows.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+}

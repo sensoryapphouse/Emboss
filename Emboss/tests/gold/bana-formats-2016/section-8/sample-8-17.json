@@ -1,0 +1,93 @@
+{
+  "id": "sample-8-17",
+  "title": "Annotated List",
+  "pdfPages": [
+    226
+  ],
+  "textLines": [
+    6501,
+    6518
+  ],
+  "illustrates": {
+    "rule": "8.9",
+    "quote": "Annotations are explanatory notes or comments about an entry. Use the nested list format. (See Sample 8-17: Annotated List on page 8-30.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Two room entries, each with a two-line indented annotation describing its location and contents.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Room 257"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Located on the fourth floor of the Taylor Hall on the Lower Campus"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Classroom with 25 desks, blackboard, projector, screen, and internet connection."
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "Room 456"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Located on the second floor of Brown Hall on the Middle Campus"
+          },
+          {
+            "marker": null,
+            "level": 2,
+            "text": "Lecture hall with 100 seats, podium, microphone, projector, screen, and internet connection"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "#hi",
+        "features": "A trailing braille page-number code at the right edge of braille line 1 (\"#hi\" = h,i = 8,9 = page 89), with no print-side counterpart in this excerpt — same class of gap as sample-8-16’s/sample-8-06’s reference codes."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain nested list; room number unindented, its two-line annotation indented one level, no bullets/numbers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",room #beg                            #hi",
+      "  ,locat$ on ! f\\r? floor ( ! ,taylor",
+      "    ,hall on ! ,l[] ,campus",
+      "  ,classroom ) #be desks1 blackbo>d1",
+      "    projector1 scre51 & 9t]net 3nec;n4",
+      ",room #def",
+      "  ,locat$ on ! second floor ( ,br[n",
+      "    ,hall on ! ,middle ,campus",
+      "  ,lecture hall ) #ajj s1ts1 podium1",
+      "    microph\"o1 projector1 scre51 &",
+      "    9t]net 3nec;n",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Main entries ('Room 257'/'Room 456') begin cell 1 (line 1 carries a trailing reference code '#hi' after 'Room 257'); each annotation begins cell 3 as a nested-list subentry, per 8.9's instruction to use the nested-list format for annotations."
+  },
+  "uncertain": [
+    "The trailing reference code '#hi' on line 1 was transcribed literally; its exact meaning was not determined (see the equivalent note on sample-8-16)."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. \"Room 257\" / \"Room 456\" (both runs already agree, independently confirmed here directly against source .txt line 826/831: braille digit-letters \"#beg\" = 2,5,7 and \"#def\" = 4,5,6) — this corrects the prior mis-reading \"Room 347\" flagged in the task brief; no change needed since both A and B already had it right. Nested annotation structure (room number at level 1, two-line annotation at level 2) kept as A had it — with the trailing page-number code recorded as a `kind:\"other\"` block (see above), every other line matches exactly.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

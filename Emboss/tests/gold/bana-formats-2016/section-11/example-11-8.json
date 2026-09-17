@@ -1,0 +1,54 @@
+{
+  "id": "example-11-8",
+  "title": "Segmented Numbers in a Table",
+  "pdfPages": [
+    294
+  ],
+  "textLines": [
+    8650,
+    8663
+  ],
+  "illustrates": {
+    "rule": "11.6.5",
+    "quote": "Note: Transcribe segmented numbers in technical works and foreign language texts in accordance with the applicable code or supplement. Insert the numeric space indicator (dot 5) to represent the spaces in segmented numbers. (See UEB, §6.6, The Numeric Space.)"
+  },
+  "print": {
+    "caption": null,
+    "headers": [],
+    "rows": [
+      [
+        "Stove",
+        "Model 34 432 567"
+      ],
+      [
+        "Microwave",
+        "Model 87 908 531"
+      ]
+    ],
+    "notes": "Two-column, two-row table with no column headings shown; the second column contains a model number with internal spaces (a \"segmented number\").",
+    "surroundingText": "Preceded by the rule text and note about segmented numbers; followed by 11.6.6 Dittos.",
+    "printFeatures": "Bordered box, no header row; plain text, left-aligned."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "7777777777777777777777777777777777777777",
+      "      @.<,model numb]s >e spac$ 9 pr9t4",
+      "    ,a dot #e replaces ! space4@.>",
+      "",
+      ",/ove \"\"\"\" ,model #cd\"dcb\"efg",
+      ",microwave ,model #hg\"ijh\"eca",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A transcriber's note (7-5 margin, opened/closed with '.<'/'.>') explains that a dot 5 (rendered here as the quotation-mark-like character \") replaces each space within the segmented model numbers, e.g. '34 432 567' -> '#cd\"dcb\"efg' with the numeric-space indicator standing in place of each print space between digit groups (note: the transcriber's-note quote symbol \" is also literary-braille's closing-quote/dot-5 glyph in this ASCII scheme, which is why it looks identical to guide-dot \" elsewhere in this corpus)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages corrected to [294] (run B's 295 was wrong -- the heading falls within the page-boundary map's page 294, confirmed by the form-feed/footer page map and by the printed-page-footer text itself)."
+}

@@ -1,0 +1,53 @@
+{
+  "id": "example-9-8",
+  "title": "Incidental Note",
+  "pdfPages": [235],
+  "textLines": [6816, 6829],
+  "illustrates": {
+    "rule": "9.6.1.e",
+    "quote": "Use 7-5 margins for a note without a heading."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Learn from Biographies",
+        "features": "Bold heading on a torn-paper-style graphic box."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Why do you think Pericles thought it was so important to beautify and rebuild Athens after the destruction caused by war?",
+        "features": null
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "For more information, go online to Meet the People at www.sfsocialstudies.com.",
+        "features": "Boxed incidental note with a small computer icon, no heading of its own; a page number '257' is printed at the bottom-right corner of the graphic (page furniture, not transcribed)."
+      }
+    ],
+    "notes": "Illustrates 9.6.1e (a note without a heading, using 7-5 margins): unlike Example 9-7, this note has no heading of its own, so the whole note block uses a first-line/runover 7-5 pattern.",
+    "surroundingText": "Textbook page discussion question about Pericles and the rebuilding of Athens.",
+    "printFeatures": "Torn-paper-style graphic box with a bold heading and a discussion question, plus a separate small boxed incidental note (with a computer icon) referring the reader to a companion website."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,le>n f ,biographies",
+      ",:y d y ?9k ,p]icles ?\"\\ x 0 s important",
+      "to b1utify & rebuild ,a!ns af ! de/ruc;n",
+      "caus$ by w>8",
+      "",
+      "      ,= m 9=ma;n1 g onl9e to .7,meet !",
+      "    ,p.' at www4sfsocial/udies4com4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 8 ASCII spaces, stripped. Line 1 (heading) indent 4 (cell 5); lines 2-4 (discussion-question paragraph) indent 0 (cell 1); line 5 blank; line 6 (incidental note, first line) indent 6 (cell 7); line 7 (note runover) indent 4 (cell 5) -- the 7-5 margin pattern of 9.6.1e for a note without its own heading; line 8 blank, per 9.6.1c. Unlike Examples 9-4/9-7, this block's own leading position (source .txt line 6821) is the heading's first line directly, with no separate leading all-blank-cell line before it -- confirmed against the source: lines 6817-6820 are truly-empty .txt filler (page-layout gap), not a margin+blank-cells content line."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6821-6828 after stripping the measured 8-space margin. Both runs agreed the whole note (including the page number '257') is page furniture except the quoted note text. `illustrates.rule` narrowed to 9.6.1.e specifically (both runs cited the whole of 9.6.1) since this example -- unlike Example 9-7, which has a note heading and illustrates 9.6.1d -- shows a note with NO heading of its own, the specific case named in clause e. Heading level 2 (cell 5) measured directly from the agreed braille's own 4-cell indent, matching example-9-7's own heading-level convention."
+}

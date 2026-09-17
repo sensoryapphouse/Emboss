@@ -1,0 +1,49 @@
+{
+  "id": "example-1-4",
+  "title": "End-of-Volume Statement on Line 25",
+  "pdfPages": [
+    24
+  ],
+  "textLines": [
+    768,
+    772
+  ],
+  "illustrates": {
+    "rule": "1.6.5.d",
+    "quote": "When text ends on the next to last line of a page, the end-of-volume statement may be placed on the last line."
+  },
+  "print": {
+    "page": {
+      "runningHead": null,
+      "printPageNumber": null,
+      "features": null
+    },
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "No print excerpt is given in the source for this example -- only a boxed braille-only excerpt is shown, illustrating braille page-layout mechanics (where the end-of-volume/end-of-book statement falls), confirmed against the PDF page image."
+      }
+    ]
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ".1,9f] ,:y d sci5ti/s 2lieve t",
+      "mito*ondria may h be5 9vad]s ( e>ly",
+      "cells8",
+      "        @.<,5d ( ,volume #c@.>       #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Braille page lines 22-25, verbatim. Text ends on line 24 (next-to-last); the end-of-volume statement occupies the whole of line 25, right-aligned against the braille page number '#,-' at the very end of the line (transcriber-generated page number, not decoded to a specific arabic numeral here since '#,-' does not resolve under the plain #+letters-a-j digit convention used elsewhere in this section)."
+  },
+  "uncertain": [
+    "The final token on line 25, '#,-', is preserved exactly as printed as the braille page number; its literal value has not been decoded/asserted (it does not resolve under the plain a=1..j=0 convention used elsewhere in this section)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on the braille content verbatim and that no print excerpt is given. Emboss has no end-of-volume/end-of-book statement feature at all (standards-findings.md F-54: no code path generates 'End of Volume __.'/'The End.' anywhere) -- there is also no real print content to build from. status: not-representable (limitation: no print given, and F-54)."
+}

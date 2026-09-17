@@ -1,0 +1,76 @@
+{
+  "id": "sample-16-01",
+  "title": "Multiple Reference Marks",
+  "pdfPages": [
+    445
+  ],
+  "textLines": [
+    12891,
+    12903
+  ],
+  "illustrates": {
+    "rule": "16.2.2.c",
+    "quote": "Asterisks, daggers, and double daggers that appear raised from the baseline are not considered to be in the superscript position. (See UEB, §3.3.1, Asterisk, Dagger, and Double Dagger.) Retain the superscript format for all other symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "[ref:*]\n[ref:**]\n[ref:***]\n[ref:†]\n[ref:‡]",
+        "features": "Five consecutive editor's notes, each keyed by a different reference mark (single/double/triple asterisk, dagger, double dagger); no separate referencing passage is shown in this excerpt (see surroundingText) -- the marks shown here are each note's own restated leading mark, per rule 16.2.1's \"repeated ... before the word at the beginning of the note\".",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "*",
+        "placement": "footnote",
+        "text": "EDS. NOTE—Orwell was writing in 1936, when Hitler and Stalin were in power and World War II was only three years away."
+      },
+      {
+        "ref": "**",
+        "placement": "footnote",
+        "text": "EDS. NOTE—Raj: sovereignty."
+      },
+      {
+        "ref": "***",
+        "placement": "footnote",
+        "text": "EDS. NOTE—From time immemorial."
+      },
+      {
+        "ref": "†",
+        "placement": "footnote",
+        "text": "EDS. NOTE—In terrorizing him."
+      },
+      {
+        "ref": "‡",
+        "placement": "footnote",
+        "text": "EDS. NOTE—That is, gone into an uncontrollable frenzy."
+      }
+    ],
+    "surroundingText": "Cross-referenced from Example 16-4; the accompanying (unshown) main-text passage uses the corresponding marks at their five separate reference points.",
+    "printFeatures": "Five short editorial notes stacked at the foot of the page, each preceded by 1-3 asterisks, a dagger, or a double dagger."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "\"9,,$s4 ,,note,-,orwell 0 writ+ 9    #,-",
+      "  #aicf1 :5 ,hitl] & ,/al9 7 9 p[] & ,_w",
+      "  ,w> ,,ii 0 only ?ree ye>s away4",
+      "\"9\"9,,$s4 ,,note,-.1,raj3 sov]eignty4",
+      "\"9\"9\"9,,$s4 ,,note,-,f \"t immemorial4",
+      "@,?,,$s4 ,,note,-,9 t]roriz+ hm4",
+      "@,],,$s4 ,,note,-,t is1 g\"o 9to an",
+      "  uncontrollable fr5zy4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field (single digit, width 4: digit+3 spaces) stripped per source convention. Each note repeats its own mark (\"9 once/twice/thrice, @,? dagger, @,] double dagger) before the capitalized editorial abbreviation \",,$s4 ,,note,-\" (EDS. NOTE—)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: braille-formats-2016.txt line 12896, stripped of its 4-character line-number field (digits(8)+3=4), is exactly 40 characters, ending in a page-change token '#,-'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

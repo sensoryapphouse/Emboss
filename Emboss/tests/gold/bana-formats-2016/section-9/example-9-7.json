@@ -1,0 +1,69 @@
+{
+  "id": "example-9-7",
+  "title": "Cross-Reference",
+  "pdfPages": [234],
+  "textLines": [6795, 6810],
+  "illustrates": {
+    "rule": "9.6.1",
+    "quote": "These notes are formatted in the same way. a. Do not use a reference mark. b. Ignore font attributes except when they are necessary for distinction. c. A blank line precedes and follows the note to avoid the impression that it is “attached” to the previous or following paragraphs. d. When the note includes a heading, do not insert a blank line between the heading and the note. Use 7-7 margins for the heading. Transcribe the note on the next line using 5-5 margins. e. Use 7-5 margins for a note without a heading. f. Insert the notes at the most appropriate location on the page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Publishing and Presenting",
+        "features": "Bold red run-in-style section heading of the main article excerpt (left column)."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Publish in a print medium. Submit your narrative to a school newspaper or national magazine that publishes student writing. Consult your teacher or librarisn for suggestions.",
+        "features": "'Publish in a print medium.' italicized as a run-in lead-in; sic: print reads 'librarisn' (apparent typo for 'librarian', re-verified at 8x zoom directly against the PDF image -- reproduced verbatim, as printed)."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": "[small pencil/quill icon beside the marginal cross-reference box]",
+        "features": "Non-text graphic; no print-side words to transcribe."
+      },
+      {
+        "kind": "heading",
+        "level": 3,
+        "text": "Speaking Connection",
+        "features": "Small bold heading of the marginal cross-reference/incidental-note box."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "For instruction about narrative presentations, see the Listening and Speaking Workshop on page 120.",
+        "features": "Right-hand marginal box; 'Listening and Speaking Workshop' italicized."
+      }
+    ],
+    "notes": "Illustrates the cross-reference note format of 9.6.1: the note carries its own heading ('Speaking Connection'), formatted with 7-7 margins for the heading and 5-5 for the note text (measured), set off by a blank line before it (9.6.1c) and no blank line between the note's own heading and its text (9.6.1d).",
+    "surroundingText": "Main body text about publishing a student narrative writing assignment.",
+    "printFeatures": "Two-column page; a boxed 'Speaking Connection' cross-reference note with a small icon sits beside the main article text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,publi%+ & ,pres5t+",
+      ".7,publi% 9 a pr9t m$ium4.' ,submit yr",
+      "n>rative to a s*ool newspap] or 444",
+      "",
+      "      @$p ,sp1k+ ,3nec;n",
+      "    ,= 9/ruc;n ab n>rative pres5ta;ns1",
+      "    see ! ^7,li/5+ & ,sp1k+ ,\"w%op^' on",
+      "    page #abj4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 8 ASCII spaces, stripped (line 1, the block's own leading blank braille-cell line at source .txt line 6800, is genuine content -- distinct from the truly-empty .txt lines 6796-6799 immediately before it -- and is kept, matching the same pattern as Example 9-4). After stripping: line 2 (main article heading) indent 4 (cell 5); lines 3-4 (its paragraph, truncated '444' before reaching the 'librarisn' typo) indent 0 (cell 1); line 5 blank; line 6 (note's own heading 'Speaking Connection', preceded by a transcriber-defined symbol '@$p' for the small icon) indent 6 (cell 7); lines 7-9 (the note text) indent 4 (cell 5) -- matching 9.6.1d's '7-7 margins for the heading...5-5 margins' for the note; line 10 blank, per 9.6.1c."
+  },
+  "uncertain": [
+    "Whether the main-article heading 'Publishing and Presenting' and its paragraph are meant to be read as part of 'Example 9-7' or merely as page context the cross-reference note sits within is not stated explicitly by the rule text."
+  ],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines` except A included a leading blank line (source .txt line 6800, a genuine 40-blank-cell braille line) that B omitted. Settled the same way as Example 9-4: byte-counted directly from the source, line 6800 carries the 8-space margin plus 40 literal U+2800 cells, distinct from the truly-empty .txt lines 6796-6799 before it -- A's leading blank is correct and kept. Print-content disagreement: A folded the icon and the note's own heading into one 'other' block's text; B kept the icon as its own 'other' block and gave 'Speaking Connection' its own 'heading' block (level null). Resolved to B's finer split (icon as 'other', note heading as its own 'heading' block, level 3/cell-7 measured directly from the agreed braille's own indent) since it separates print's own distinct visual elements rather than merging unrelated content into one block's text, matching this section's general convention (cf. example-9-8). Both runs agreed on the 'librarisn' typo, kept verbatim per the task's 'as printed' instruction."
+}

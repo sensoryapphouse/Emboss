@@ -1,0 +1,206 @@
+{
+  "id": "sample-8-07",
+  "title": "Six Columns Changed to Three Columns",
+  "pdfPages": [
+    215
+  ],
+  "textLines": [
+    6242,
+    6259
+  ],
+  "illustrates": {
+    "rule": "8.4.1.f",
+    "quote": "Do not rearrange the order of words. (See Sample 8-7: Six Columns Changed to Three Columns on page 8-19.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "columns": 6,
+        "features": "Thirty adjectives in six print columns of five words each, alphabetically ordered down each column (column-major); no heading shown.",
+        "items": [
+          {
+            "marker": null,
+            "level": 1,
+            "text": "admiration"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "agreeable"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "attraction"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "comfortable"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "conversation"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "convertible"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "dangerous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "decoration"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "education"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "famous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "flexible"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "humorous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "imagination"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "inflation"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "information"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "instruction"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "joyous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "marvelous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "mysterious"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "nervous"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "organization"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "preparation"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "reasonable"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "rejection"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "responsible"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "reversible"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "selection"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "sensible"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "valuable"
+          },
+          {
+            "marker": null,
+            "level": 1,
+            "text": "washable"
+          }
+        ]
+      }
+    ],
+    "notes": "Items above are given in print's row-by-row, left-to-right reading order (row 1 = the first word of each of the six columns, etc.), matching the order the braille transcription preserves.",
+    "surroundingText": null,
+    "printFeatures": "Plain six-column word list, five rows, alphabetized down each column, no heading/bullets/numbers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                     #aj",
+      "admira;n     agre1ble   attrac;n",
+      "com=table    3v]sa;n    3v]tible",
+      "dang]\\s      decora;n   $uca;n",
+      "fam\\s        flexible   humor\\s",
+      "imag9a;n     9fla;n     9=ma;n",
+      "9/ruc;n      joy\\s      m>vel\\s",
+      "my/]i\\s      n]v\\s      organiza;n",
+      "prep>a;n     r1sonable rejec;n",
+      "responsible rev]sible selec;n",
+      "s5sible      valuable   wa%able",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Braille re-flows the print's six columns into three braille columns of ten/eleven rows. Each print row of six words (e.g. row 1: admiration, agreeable, attraction, comfortable, conversation, convertible) is split across two consecutive braille lines of three words each (line 2: admiration/agreeable/attraction; line 3: comfortable/conversation/convertible), preserving the original row-by-row, left-to-right word order without rearranging any word, per 8.4.1.f. Line 1 is blank except for a trailing reference code '#aj'; line 12 is blank."
+  },
+  "uncertain": [],
+  "resolution": "braille.lines byte-identical between A and B. Print reading order confirmed row-major (left-to-right across all six columns, then down) directly against source .txt (lines 568-577) — matches B’s account exactly (A mis-described it as column-major in prose, but A’s own item array is already in the correct row-major order, so no data change was needed, only the corrected description, taken from B). Word list/order kept as A had it (already correct).",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

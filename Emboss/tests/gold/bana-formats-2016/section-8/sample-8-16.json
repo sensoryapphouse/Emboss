@@ -1,0 +1,119 @@
+{
+  "id": "sample-8-16",
+  "title": "Outline",
+  "pdfPages": [
+    225
+  ],
+  "textLines": [
+    6471,
+    6494
+  ],
+  "illustrates": {
+    "rule": "8.8.3",
+    "quote": "Outlines Using Letters and Numbers. Follow print for capitalization and punctuation. (See Sample 8-16: Outline on page 8-29.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "#de",
+        "features": "A trailing reference/running-head code at the right edge of braille line 1, with no print-side counterpart in this excerpt (same class of gap as sample-8-06’s placeholder running head) — purpose not determined (cf. the equivalent codes on sample-8-6/-7/-17)."
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Four-level roman-numeral/letter/number/letter outline.",
+        "items": [
+          {
+            "marker": "I.",
+            "level": 1,
+            "text": "Background of 1893 Columbian Exposition"
+          },
+          {
+            "marker": "A.",
+            "level": 2,
+            "text": "Continued tradition of big fairs"
+          },
+          {
+            "marker": "1.",
+            "level": 3,
+            "text": "Previous world's fairs"
+          },
+          {
+            "marker": "a.",
+            "level": 4,
+            "text": "London and the Crystal Palace, 1851"
+          },
+          {
+            "marker": "b.",
+            "level": 4,
+            "text": "Philadelphia, 1876"
+          },
+          {
+            "marker": "2.",
+            "level": 3,
+            "text": "Chicago fair to be larger than earlier fairs"
+          },
+          {
+            "marker": "B.",
+            "level": 2,
+            "text": "Emphasized cultural achievements"
+          },
+          {
+            "marker": "1.",
+            "level": 3,
+            "text": "Planners D. H. Burnham and F. L. Olmsted"
+          },
+          {
+            "marker": "2.",
+            "level": 3,
+            "text": "Nation's top artists, inventors, industrialists"
+          },
+          {
+            "marker": "II.",
+            "level": 1,
+            "text": "Background of George W. G. Ferris"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain four-level outline, no bullets; each level's marker style is roman numeral / capital letter / arabic number / lowercase letter."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                                     #de",
+      ",i4 ,backgr.d ( #ahic ,columbian",
+      "        ,exposi;n",
+      "  ,a4 ,3t9u$ tradi;n ( big fairs",
+      "    #a4 ,previ\\s _w's fairs",
+      "      a4 ,london & ! ,cry/al ,palace1",
+      "        #ahea",
+      "      ;b4 ,philadelphia1 #ahgf",
+      "    #b4 ,*icago fair to 2 l>g] ?an e>li]",
+      "        fairs",
+      "  ;,b4 ,emphasiz$ cultural a*ieve;ts",
+      "    #a4 ,plann]s ;,d4 ;,h4 ,burnham &",
+      "        ;,f4 ;,l4 ,olm/$",
+      "    #b4 ,na;n's top >ti/s1 9v5tors1",
+      "        9du/riali/s",
+      ",,ii4 ,backgr.d ( ,george ;,w4 ;,g4",
+      "        ,f]ris",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Four-level outline uses the '1-9, 3-9, 5-9, 7-9' margin pattern from 8.5.1.b/8.8.1 (I./II. at cell 1, A./B. at cell 3, 1./2. at cell 5, a./b. at cell 7). Line 1 is blank except for a trailing reference code '#de'; the outline body runs lines 2-17; line 18 blank closes it."
+  },
+  "uncertain": [
+    "The trailing 2-3 character reference codes appearing at the right edge of line 1 in this and several other Samples (e.g. '#de' here, '#i' in Sample 8-6, '#aj' in Sample 8-7) were transcribed literally but their exact meaning (a print/braille cross-reference page number, or something else) was not determined."
+  ],
+  "resolution": "braille.lines byte-identical between A and B. Four-level outline margins (1-9/3-9/5-9/7-9 per 8.5.1.b/8.8.1) and roman-numeral/letter/number/letter markers kept as A had them (already correct, cross-checked against source .txt lines 796-813) — with this fix, every other line matches exactly. Running-head-only line 1 (\"#de\") has no print-side counterpart at all in this excerpt; recorded as a `kind:\"other\"` block so buildModel8 records it as an explicit limitation (not-representable) rather than a plain, silent mismatch.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

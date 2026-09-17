@@ -1,0 +1,64 @@
+{
+  "id": "example-16-9",
+  "title": "Highlighted Note Reference",
+  "pdfPages": [
+    435
+  ],
+  "textLines": [
+    12557,
+    12568
+  ],
+  "illustrates": {
+    "rule": "16.5.1.f",
+    "quote": "Retain font attributes unless all notes using the same reference mark are entirely emphasized. Do not retain font attributes for line numbers."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "[ref:1]Predacious, fierce, secretive, majestic, and even wise are adjectives that describe the owl.",
+        "features": "The word \"Predacious\" is highlighted (yellow background) rather than marked with a symbol; this highlighting is the reference mark per rule 16.3a.",
+        "items": null
+      },
+      {
+        "kind": "note",
+        "level": null,
+        "text": "predacious: characteristic of a predator",
+        "features": "Set off below a horizontal rule at the foot of the passage; \"predacious\" itself is bold.",
+        "items": null
+      }
+    ],
+    "notes": [
+      {
+        "ref": "1",
+        "placement": "footnote",
+        "text": "predacious: characteristic of a predator"
+      }
+    ],
+    "surroundingText": "Illustration directly below rule 16.7.3 (immediately following 16.6's gloss-note material), showing highlighting used as the print reference mark.",
+    "printFeatures": "Boxed screenshot: one sentence with the word \"Predacious\" highlighted in yellow, a horizontal rule beneath the passage, then a glossary-style note below."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "@#1,pr$aci\\s1 fi]ce1 secretive1 maje/ic1",
+      "& ev5 wise >e adjectives t describe !",
+      "[l4",
+      "\"333333",
+      "^1pr$aci\\s3 \"*i/ic ( a pr$ator",
+      "------------------------------------#abc",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "The highlighted word is preceded by a numeric reference indicator (@#1) rather than a repeat of the highlighting itself (braille has no highlight-emphasis equivalent, so a numbered reference mark is substituted, following the 'use the braille equivalent that represents that print symbol' principle even though print itself used emphasis, not a symbol, at this point). The note begins with the same numeral (^1) after the note separation line, then a second dashed rule ending in reference code #abc, then a lone '444' (ellipsis/continuation marker) on the final line."
+  },
+  "uncertain": [
+    "Whether '@#1' is the guide's own generic placeholder numeral (as opposed to a specific numbered-note braille sequence tied to this passage's context) was not independently confirmed beyond what the seven-line excerpt itself shows."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.5.1.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12567 (the page-change dashed rule ending '#abc'), stripped of its 7-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "sample-16-8.1b",
+  "title": "Transcriber's Note Wording: Notes in the Table Below",
+  "pdfPages": [
+    439
+  ],
+  "textLines": [
+    12720,
+    12720
+  ],
+  "illustrates": {
+    "rule": "16.8.1.b",
+    "quote": "Insert a transcriber’s note before the table. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Note(s) in the table below.",
+        "features": "Set in italics, indented as a sample of suggested wording for the transcriber's note inserted before a table with notes, per rule 16.8.1b.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Follows rule 16.8.1b directly, part of the Notes in Table Format subsection (16.8.1), preceding the cross-reference to Sample 16-9: Note in Column Entry.",
+    "printFeatures": "Plain indented italic sentence, no box, no accompanying braille rendering shown in the source."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering of this sentence is given in the source; it is suggested wording only. None is guessed here."
+  },
+  "uncertain": [
+    "This item is a plain-text 'Sample:' of suggested wording; braille.lines is left empty rather than inferring a transcription."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule set to 16.8.1.b per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+}

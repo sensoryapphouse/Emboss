@@ -1,0 +1,90 @@
+{
+  "id": "sample-13-13",
+  "title": "Sample 13-13: Song Title with Additional Information",
+  "pdfPages": [
+    382
+  ],
+  "textLines": [
+    11023,
+    11030
+  ],
+  "illustrates": {
+    "rule": "13.11.2b",
+    "quote": "Leave a blank line following the title. List the information printed between the title and the song in the following order: (1) Text centered below the title. (2) Text printed on the left side of the page. (3) Text printed on the right side of the page. Use 7-5 margins for each item; do not leave blank lines between these items. Do leave a blank line before the beginning of the first verse. (See Sample 13-13: Song Title with Additional Information on page 13-28.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Over the Rainbow",
+        "features": "Large decorative display-font title."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Words by E. Y. Harburg",
+        "features": "Printed on the left side of the page, below the title."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "from The Wizard of Oz",
+        "features": "Printed centered below the title."
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Music by Harold Arlen",
+        "features": "Printed on the right side of the page, below the title."
+      },
+      {
+        "kind": "other",
+        "level": null,
+        "text": null,
+        "features": "Musical staff notation for the song's opening phrase, with lyric words printed under the notes ('Some- where o- ver the rain- bow, way up high,')."
+      },
+      {
+        "kind": "poem",
+        "level": null,
+        "text": null,
+        "features": "First lyric line only, shown with the music.",
+        "stanzas": [
+          {
+            "lines": [
+              {
+                "text": "Somewhere over the rainbow, way up high,",
+                "indent": 0,
+                "number": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Picture on PDF p.382; title is centred and decorative; the three information items (words-by, from-source, music-by) are arranged left/centre/right around the title, per the print layout rule 13.11.2.b is transcribing.",
+    "surroundingText": null,
+    "printFeatures": "Large decorative title font; small caption-style text for the three attribution items; a line of musical staff notation beneath."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "             ,ov] ! ,ra9b[",
+      "         f .7,! ,wiz>d ( ,oz.'",
+      "",
+      "      ,^ws by ;,e4 ;,y4 ,h>burg",
+      "      ,music by ,h>old ,>l5",
+      "",
+      ",\"s\": ov] ! ra9b[1 way up hi<1"
+    ],
+    "pageBreaks": [],
+    "notes": "Verbatim from .txt lines 11023-11029, after stripping a 4-char line-number field (1-digit max line number 7, +3=4) and converting U+2800. Title (line 1, centred) is followed directly by the centred 'from The Wizard of Oz' item (line 2, per list item (1), no blank line between it and the title's info block); a blank line then separates the title block from the two 7-5-margin items 'Words by...' (list item (2), left) and 'Music by...' (list item (3), right) on lines 4-5, with no blank line between those two; a further blank line (line 6) precedes the first verse line (line 7), per rule 13.11.2.b exactly.",
+    "variants": []
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Leading-space counts re-derived against the source (.txt lines 11023-11029, reference field 4 characters, single digit + 3). Index 0 ('Over the Rainbow' title, ref '1', .txt line 11023) needed a NEW value neither run had: 13 leading blank cells (both runs had 15). Indices 3/4 ('Words by...'/'Music by...', ref '4'/'5', .txt lines 11026/11027) match run B's count (6); run A had 8. The remaining 4 lines (indices 1,2,5,6) were already identical between runs and independently confirmed correct."
+}

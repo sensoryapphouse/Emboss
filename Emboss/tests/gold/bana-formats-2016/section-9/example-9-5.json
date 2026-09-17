@@ -1,0 +1,53 @@
+{
+  "id": "example-9-5",
+  "title": "Displayed Horizontal Word List",
+  "pdfPages": [231],
+  "textLines": [6660, 6672],
+  "illustrates": {
+    "rule": "9.2.4",
+    "quote": "Format for Displayed Short Word Lists. Horizontal word lists across the print page must fit on a single braille line, with each word separated by a blank cell. (See UEB, §3.23.1, Space.) Present phrases vertically. The first word begins at the adjusted left margin."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "Suppose you are asked to arrange the following words into a sentence.",
+        "features": null
+      },
+      {
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three single words displayed horizontally in bold on one print line, fitting on a single braille line with one blank cell between each, per 9.2.4.",
+        "items": ["sank", "submarine", "Tuesday"]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "There is more than one sentence that can be made from these words.",
+        "features": null
+      }
+    ],
+    "notes": "Direct worked example of 9.2.4: the three-word horizontal list fits on one braille line, each word separated by exactly one blank cell (U+2800 in the source .txt, converted to a single space), beginning at the adjusted left margin (cell 3).",
+    "surroundingText": null,
+    "printFeatures": "Plain (unboxed) worked-example text; the three list words are bold in print."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,suppose y >e ask$ to >range ! foll[+",
+      "^ws 9to a s5t;e4",
+      "",
+      "  sank subm>9e ,tues\"d",
+      "",
+      "  ,\"! is m ?an \"o s5t;e t c 2 made f ^!",
+      "^ws4"
+    ],
+    "pageBreaks": [],
+    "notes": "Measured fixed left margin = 8 ASCII spaces, stripped. After stripping, all three text blocks are indented 2 cells (adjusted margin, cell 3). The word-list line's own inter-word separators are literal blank braille cells in the source (U+2800), not page-margin filler, converted to single ASCII spaces per the 'blank cells as spaces' convention."
+  },
+  "uncertain": [],
+  "sources": ["A", "B"],
+  "resolution": "A and B transcribed identical `braille.lines` and agreed the rule illustrated is 9.2.4; both verified independently byte-for-byte against lines 6665-6671 after stripping the measured 8-space margin. No disagreement to resolve."
+}

@@ -1,0 +1,41 @@
+{
+  "id": "sample-16-11.1g",
+  "title": "Transcriber's Note Wording: Marginal-Label Key",
+  "pdfPages": [
+    443
+  ],
+  "textLines": [
+    12848,
+    12860
+  ],
+  "illustrates": {
+    "rule": "16.11.1.g",
+    "quote": "In the text, insert the assigned key, followed by a space, before the appropriate material. Use braille grouping indicators to enclose the affected text. Explain this usage in a transcriber’s note. Sample:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "In print, labels appear in the margin of the following letter. In braille, the labels are keyed. The keyed label is inserted before the beginning of the text to which it applies. Labeled phrases or sentences are enclosed in braille grouping indicators.\nSymbols used below:\n.=< Opening braille grouping indicator\n.=> Closing braille grouping indicator\nKey to labels:\nti Title\nau Author (last name first)\nyb Year of birth\ndp Date of publication\npu Publishers",
+        "features": "Italic explanatory paragraph and 'Symbols used below:'/'Key to labels:' lead-ins are the guide's own print apparatus (plain italic print type, per the PDF page image); the two grouping-indicator codes ('.=<', '.=>') and the five two-letter key codes ('ti', 'au', 'yb', 'dp', 'pu') are themselves literal print citations of the braille symbols being defined, not running prose.",
+        "items": null
+      }
+    ],
+    "notes": [],
+    "surroundingText": "Follows rule 16.11.1g directly; the two-letter keys shown here (ti/au/yb/dp/pu) are the ones actually used in Sample 16-13: Labeled Letter on page 16-34, cross-referenced at the end of this passage along with Sample 16-12: Marginal Labels.",
+    "printFeatures": "Plain indented text (no box): an italic explanatory paragraph, then a 'Symbols used below:' list showing the two grouping-indicator glyphs, then a 'Key to labels:' list showing five two-letter abbreviation glyphs beside their meanings."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Per standards-map.md's own BANA §16 worked-examples table (\"BANA 16.11.1g Sample\", Has braille: No), this item is print-only: none of its content is transcribed as a separate embossed braille-page excerpt anywhere in the source. The '.=<'/'.=>' grouping-indicator codes and the five two-letter key codes ARE literal braille-ASCII citations given directly in the print prose (a symbol-key legend, not a worked print/braille pair), matching how rule 16.2.2's own reference-mark table cites braille codes (\"9, @,?, @,]\") inline within its print rule text without that making the rule text itself a braille transcription."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A recorded no braille for this item; Run B built a 7-line braille.lines array from the '.=<'/'.=>' and two-letter key codes, treating them as a worked braille excerpt. Resolved against standards-map.md's own BANA §16 worked-examples table, which already classifies \"BANA 16.11.1g Sample\" as \"Has braille: No\" -- confirmed directly against references/_text/braille-formats-2016.txt lines 12844-12860, which shows this whole passage as ordinary running print prose (the symbol/key codes are print's own citation of the braille signs being defined, exactly like rule 16.2.2's own reference-mark table), with no separate braille-page excerpt given anywhere nearby. Run A is correct; Run B's braille.lines has been dropped."
+}

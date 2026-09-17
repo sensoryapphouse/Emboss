@@ -1,0 +1,73 @@
+{
+  "id": "example-7-5",
+  "title": "Box Across Facing Pages (Print Only)",
+  "pdfPages": [
+    190
+  ],
+  "textLines": [
+    5530,
+    5534
+  ],
+  "illustrates": {
+    "rule": "7.4.1.d",
+    "quote": "A box designed to be read first on the left page and then continued on the next page needs to remain intact. Transcribe the text on the first page, then the boxed material. Insert the page change indicator and complete the boxed material before returning to the remainder of the text. Note, if the box breaks the flow of text on the first page (e.g., mid-paragraph), insert the box at the most appropriate location and include a transcriber’s note, as in the previous example."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "box",
+        "level": null,
+        "text": null,
+        "title": "Studio Background",
+        "features": "A single continuous rounded-border callout panel spanning the bottom two-thirds of facing textbook pages 100 (left) and 101 (right), on a pale yellow/cream textured background with a torn-paper top edge; the panel's own title 'Studio Background' is set in a pill-shaped white banner overlapping its top edge at the page gutter. Two 'Copyrighted Image' placeholder rectangles (dark-blue ruled borders, one per page) overlap the panel's own top-left/top-right corners. A rotated sidebar label 'Identity and Ideals' runs down the right margin of page 101, outside the panel. Page numbers 100/101 are printed at the bottom corners. Confirmed directly against the PDF page image (p.190, footer 7-6): the two placeholder images visually overlap this SAME single rounded panel -- there is no separate outer box enclosing them.",
+        "blocks": [
+          {
+            "kind": "other",
+            "level": null,
+            "text": "Copyrighted Image",
+            "features": "Left-page placeholder rectangle (page 100), captioned below in small print: 'Fig. 2-8 The artist chose a symbol of this person's identity. Peter Vandenberge, Hostess, 1998. Ceramic, stains, slips, underglazes, 46\" x 22\" x 13\" (116.8 x 55.9 x 33 cm). John Natsoulas Gallery, Davis, CA.'"
+          },
+          {
+            "kind": "heading",
+            "level": 2,
+            "text": "Artworks About People",
+            "features": "Bold sub-heading inside the panel, page 100, below the 'Studio Background' title banner."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "Art can show what a person looks like on the surface. It can also show deeper characteristics—what the person loves or hates and how he or she feels. A person's identity, including his or her ideals, values, beliefs, and principles, can be shown in different ways. The artist might show the person doing something. Or the person might be shown dressed a certain way. Artists also use facial expression to show emotions.",
+            "features": "Body text, page-100 portion of the panel."
+          },
+          {
+            "kind": "paragraph",
+            "level": null,
+            "text": "How did artists Peter Vandenberge (Fig. 2–8) and Alison Saar (Fig. 2–10) give us information about the people they sculpted? Can you guess some groups these people might belong to? What do the materials the artists chose tell us about the people they portrayed? Both of the sculptures shown here include symbolic objects. Saar and Vandenberge very carefully chose the objects they included in their portrait sculptures. Notice where these objects are placed within the sculptures. What does the placement of the objects tell us about these people?",
+            "features": "Body text, page-101 portion of the same panel, continuing directly from the page-100 paragraph with no heading break of its own."
+          },
+          {
+            "kind": "other",
+            "level": null,
+            "text": "Copyrighted Image",
+            "features": "Right-page placeholder rectangle (page 101), captioned below in small print: 'Fig. 2-10 This contemporary portrait bust has wild orange hair and a green formal suit. What do you think these features might symbolize? Do you think the artist promoted or challenged ideas by including the man's own medicine “chest”? Alison Saar, Medicine Man, 1987. Wood and tin, 27\" (68.6 cm) high. Jan Baum Gallery, Los Angeles.'"
+          }
+        ]
+      }
+    ],
+    "notes": "Print-only illustrative figure captioned 'Example 7-5: Box Across Facing Pages (Print Only)'. No braille transcription is given. Unlike Example 7-4 (a box that reads across pages but shares the spread with other text), this box is shown as the ONLY content at the bottom of both pages -- the rule 7.4.1.d scenario: a single box meant to be read intact across a page turn, with its own text flowing continuously from the left half into the right half (no repeated heading on the right half).",
+    "surroundingText": "Immediately follows rule 7.4.1.d's own text (see illustrates.quote), which itself opens §7.5 (Different Colored Boxes) on the next page.",
+    "printFeatures": "Torn-paper-edge box top; rounded corners; pale cream/yellow textured background; a rounded-pill-shaped 'Studio Background' title label overlapping the box's own top edge; rotated vertical sidebar text 'Identity and Ideals' on the right margin of page 101, outside the box."
+  },
+  "braille": {
+    "width": null,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille given in the source -- the example is explicitly captioned '(Print Only)'; nothing but four blank lines (5531-5534) sit between the caption (5530) and the next content, §7.5's heading (5535)."
+  },
+  "uncertain": [],
+  "resolution": "Content agreed identically between the two runs (both picture captions transcribed identically in full). Structural: A modelled this as ONE box titled 'Studio Background' containing all five children (both placeholders, the heading, and both paragraphs); B introduced an extra level of nesting (an untitled outer box wrapping the two placeholders and a second, separately-titled inner 'Studio Background' box around just the heading/paragraphs). Confirmed directly against the PDF page image (p.190, footer 7-6) that print shows only ONE rounded panel -- the two placeholder images physically overlap its own top edge rather than sitting in a separate outer container -- so A's flat single-box structure is used, with the title moved to the box's own `title` field per the example-7-2 convention.",
+  "sources": [
+    "A",
+    "B"
+  ]
+}

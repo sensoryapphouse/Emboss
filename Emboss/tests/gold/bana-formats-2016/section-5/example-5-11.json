@@ -1,0 +1,70 @@
+{
+  "id": "example-5-11",
+  "title": "Retain Font Attribute for Title",
+  "pdfPages": [
+    134
+  ],
+  "textLines": [
+    4049,
+    4060
+  ],
+  "illustrates": {
+    "rule": "5.4.2",
+    "quote": "Follow print when a title is printed in italics or other emphasizing typeface and follows a preposition that is in a different typeface, or when the preposition is in a typeface different from the title."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "*Eyes and Tears*",
+        "features": "Centered italic title (a complete heading on its own, per 5.3.5).",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "From *Andrew Marvell Revisited*",
+        "features": "Centered subtitle: 'From' plain roman, book title 'Andrew Marvell Revisited' italic — the title follows a preposition in a different typeface, per 5.4.2's first clause.",
+        "items": null
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "by Thomas Wheeler",
+        "features": "Centered, plain roman byline.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "How wisely Nature did decree,",
+        "features": "Left-aligned, plain roman opening line of the poem (contrast Example 5-4, where the same line is italic).",
+        "items": null
+      }
+    ],
+    "notes": "Same overall title-page layout as Example 5-4, but here the title is mentioned inside a subtitle ('From ... Revisited') rather than standing alone, so 5.4.2 (not 5.3.5) governs the referenced title's italics.",
+    "surroundingText": "Follows rule 5.4.2 directly, on printed page 5-8.",
+    "printFeatures": "Four centered/left lines, no border: italic main title, mixed-typeface subtitle, plain byline, plain poem line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "             ,eyes & ,te>s",
+      "     ,f .7,&rew ,m>vell ,revisit$.'",
+      "",
+      "            by ,?omas ,:eel]",
+      "",
+      ",h[ wisely ,nature did decree1"
+    ],
+    "pageBreaks": [],
+    "notes": "Seven lines, margin 8 stripped. Line 1 blank filler; line 2 centered title (indent 13), no typeform indicator, per 5.3.5; line 3 centered subtitle (indent 5) with a single-word italic indicator ('.7') before 'Andrew' and an italics terminator (\".'\") after 'Revisited' — 'f' (From) itself carries no italics marker, confirming only the title is italicized, matching print; line 4 blank (interior); line 5 centered byline (indent 12); line 6 blank (interior); line 7 flush-left poem line, no italics (matching plain print here, unlike Example 5-4)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on braille byte-for-byte and on the substantive print facts; only prose/heading-classification differed. Heading level (1, centered) verified directly against the (40−len)//2 formula for all three centered lines (title indent 13/len 13; subtitle indent 5/len 30; byline indent 12/len 16 — all match exactly), settling A's heading classification over B's flatter 'paragraph' choice with independent measurement, not either run's own account."
+}
