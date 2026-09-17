@@ -1,0 +1,34 @@
+{
+  "id": "sample-3-4-1-a",
+  "title": "Technical Codes TN",
+  "pdfPages": [
+    102
+  ],
+  "textLines": [
+    3084,
+    3087
+  ],
+  "illustrates": {
+    "rule": "3.4.1",
+    "quote": "3.4.1   Include a comment on the Transcriber’s Notes page when Nemeth Code, Tactile Graphics, or other technical notation is used in the transcription."
+  },
+  "print": {
+    "blocks": [],
+    "transcriberNote": "Mathematical content is transcribed according to The Nemeth Braille Code for Mathematics and Science Notation, 1972 Revision, 2007–2016 including updates and the Guidance for Transcription Using the Nemeth Code within UEB Context.",
+    "notes": "An anonymous 'Samples:' block item introduced by 3.4.1, given as plain print text with no braille rendering anywhere near this citing location.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed byte-for-byte and matched the source text (references/_text/braille-formats-2016.txt lines 3084-3087) directly; no change."
+}

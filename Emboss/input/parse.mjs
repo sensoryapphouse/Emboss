@@ -1763,17 +1763,44 @@ export function parseDtbook(xmlStr) {
 
   // A DTBook <note> is always a footnote or endnote (transcriber's notes are <prodnote>):
   // kept with its id (the target of <noteref>) and its inline segments.
+  //
+  // F-113 / BANA 16.5.1d ("for additional paragraphs in a note, use 5-3 margins") / B004 D
+  // ("notes containing more than one paragraph are treated as such"): a <note> with more
+  // than one direct <p> child keeps each <p> as its own paragraph block (blk.blocks), the
+  // shape formatFootnote already renders with the second-paragraph 5-3 indent — instead of
+  // getCleanText() flattening every <p> into one joined string with the paragraph break
+  // discarded. A note with a single <p> (the common case) keeps the plain text/segments
+  // shape unchanged.
   function pushNote(target, el) {
     const cls = ((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
     const id = (el.getAttribute && el.getAttribute('id')) || '';
-    pushAtomic(target, el, (t, segs) => {
-      if (!t) return null;
-      const blk = { type: 'footnote', text: t };
-      if (segs) blk.segments = segs;
-      if (id) blk.id = id;
-      if (cls.includes('endnote') || cls.includes('rearnote')) blk.kind = 'endnote';
-      return blk;
-    }, { excludeTags: NOTE_SPLIT_TAGS });
+    const kind = (cls.includes('endnote') || cls.includes('rearnote')) ? 'endnote' : null;
+    const directPs = [...el.childNodes].filter((c) => c.nodeType === 1 && (c.localName || c.tagName || '').toLowerCase() === 'p');
+    if (directPs.length > 1) {
+      const paras = directPs.map((p) => {
+        const t = getCleanText(p, NOTE_SPLIT_TAGS);
+        if (!t) return null;
+        const segs = inlineSegments(p, false, NOTE_SPLIT_TAGS);
+        const para = { type: 'para', text: t };
+        if (segsHaveEmphOrMath(segs) && segs.length) para.segments = segs;
+        return para;
+      }).filter(Boolean);
+      if (paras.length) {
+        const blk = { type: 'footnote', blocks: paras };
+        if (id) blk.id = id;
+        if (kind) blk.kind = kind;
+        target.push(blk);
+      }
+    } else {
+      pushAtomic(target, el, (t, segs) => {
+        if (!t) return null;
+        const blk = { type: 'footnote', text: t };
+        if (segs) blk.segments = segs;
+        if (id) blk.id = id;
+        if (kind) blk.kind = kind;
+        return blk;
+      }, { excludeTags: NOTE_SPLIT_TAGS });
+    }
     // A note's tables and images follow it as their own blocks (A2).
     (function split(n) {
       for (let k = n.firstChild; k; k = k.nextSibling) {
@@ -2622,7 +2649,10 @@ export function parseDtbook(xmlStr) {
         parseSingleList(c, 0, targetBlocks);
       } else if (cTag === 'table') {
         parseTable(c, targetBlocks);
-      } else if (cTag === 'epigraph' || cTag === 'blockquote') {
+      } else if (cTag === 'epigraph') {
+        // F-94 / §9.3.1c: not treated as displayed material like <blockquote> — its own style.
+        pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'para', style: 'epigraph', text: t, segments: segs } : { type: 'para', style: 'epigraph', text: t }) : null));
+      } else if (cTag === 'blockquote') {
         pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t }) : null));
       } else if (c.textContent && c.textContent.trim()) {     // dateline and anything else with text
         pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'para', text: t, segments: segs } : { type: 'para', text: t }) : null));
@@ -3201,6 +3231,30 @@ export function parseDtbook(xmlStr) {
           const segs = inlineSegments(child);
           pushParaParts(segs, blocks, (t, partSegs) => (partSegs ? { type: 'para', style: 'quote', segments: partSegs, text: t } : { type: 'para', style: 'quote', text: t }));
         }
+      } else if (tag === 'epigraph') {
+        // BANA §9.3.1c (F-94): "Do not treat epigraphs as displayed material" — unlike
+        // <blockquote>, an epigraph keeps its own print format (§9.3.1b: "a poem in poetry
+        // format, 3-1 margins for indented paragraphs, etc."). A block child (DTD:
+        // <epigraph> is `(%flow;)*`, so it may hold a <poem>, several <p>s, etc.) is walked
+        // as itself — a <poem> child routes to the ordinary parsePoem dispatch below, not a
+        // style:'epigraph' paragraph, satisfying 9.3.1b's "a poem in poetry format" case
+        // automatically; a <p> child is tagged style:'epigraph' by the isInsideEpigraph
+        // check in the 'p' branch below. Only plain running text (no block children) is
+        // built directly here. Only 9.3.1d's blank line before/after is common with
+        // Blockquote (see quoteMargins/withEpigraphBlanks, format/document.mjs). An
+        // inline-only child (a bare <span>/<em> alongside running text, no <p>) does not
+        // itself count as block content — same test wrapInlineRuns/the "unknown container"
+        // fallback below uses — or the loose text beside it would be silently dropped by
+        // walk(), which only visits ELEMENT children.
+        const hasElements = Array.from(child.childNodes || []).some((c) => c.nodeType === 1
+          && !PAGENUM_TAGS.has((c.localName || c.tagName || '').toLowerCase())
+          && !INLINE_TAGS.has((c.localName || c.tagName || '').toLowerCase()));
+        if (hasElements) {
+          walk(child);
+        } else {
+          const segs = inlineSegments(child);
+          pushParaParts(segs, blocks, (t, partSegs) => (partSegs ? { type: 'para', style: 'epigraph', segments: partSegs, text: t } : { type: 'para', style: 'epigraph', text: t }));
+        }
       } else if (tag === 'dt' || tag === 'dfn') {
         pushTextOnly(blocks, child, (t) => (t ? { type: 'para', style: 'dt', text: t } : null));
       } else if (tag === 'dd') {
@@ -3242,6 +3296,10 @@ export function parseDtbook(xmlStr) {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
         const pLevel = getElementLevel(child);
         const isInsideQuote = child.parentNode && (child.parentNode.localName || child.parentNode.tagName || '').toLowerCase() === 'blockquote';
+        // F-94 / BANA §9.3.1c: a <p> directly inside <epigraph> (with no more specific class
+        // of its own) is the epigraph's own text — style:'epigraph', not style:'quote' — see
+        // the 'epigraph' tag branch above for the container itself.
+        const isInsideEpigraph = child.parentNode && (child.parentNode.localName || child.parentNode.tagName || '').toLowerCase() === 'epigraph';
         
         const imgs = child.getElementsByTagName ? [...child.getElementsByTagName('img'), ...child.getElementsByTagName('image')] : [];
         for (const im of imgs) {
@@ -3267,6 +3325,8 @@ export function parseDtbook(xmlStr) {
             return { type: 'attribution', text: t, segments: segs };
           } else if (cls.includes('quote') || cls.includes('blockquote') || cls.includes('extract') || isInsideQuote) {
             return { type: 'para', style: 'quote', level: pLevel, text: t, segments: segs };
+          } else if (isInsideEpigraph) {
+            return { type: 'para', style: 'epigraph', level: pLevel, text: t, segments: segs };
           } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
             return { type: 'indicator', kind: 'line' };
           } else if (cls.includes('bana-break-asterism') || ((cls.includes('doc-break') || cls === 'break') && /^[⁂\s]+$/.test(t || '') && t.includes('⁂')) || /^⁂(\s+⁂)*$/.test(t || '')) {

@@ -5,11 +5,11 @@
   },
   "example-4-10": {
     "status": "not-representable",
-    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -9 (expected 10, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Positive / Comparative / Superlative\""
+    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -8 (expected 9, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Positive / Comparative / Superlative\""
   },
   "example-4-11": {
     "status": "not-representable",
-    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -7 (expected 8, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"beat/blow/catch/do; become/break/choose/draw; begin/bring/come/drink; bet/burst/cut/drive; bite/buy/dive/eat\""
+    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -6 (expected 7, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"beat/blow/catch/do; become/break/choose/draw; begin/bring/come/drink; bet/burst/cut/drive; bite/buy/dive/eat\""
   },
   "example-4-12": {
     "status": "match",
@@ -29,7 +29,7 @@
   },
   "example-4-2": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"\" vs actual \"           ,SAN?A ,RAMA ,RAU\". line count differs by -1 (expected 4, actual 3)."
+    "note": "first differing line 2: expected \"\" vs actual \"           ,SAN?A ,RAMA ,RAU\". line count differs by -1 (expected 3, actual 2)."
   },
   "example-4-3": {
     "status": "match",
@@ -89,7 +89,7 @@
   },
   "sample-4-06": {
     "status": "mismatch",
-    "note": "first differing line 3: expected \"AM.TS ( FOOD E6ICI5TLY4 444\" vs actual \"AM.TS ( FOOD E6ICI5TLY4\". line count differs by +1 (expected 9, actual 10)."
+    "note": "first differing line 3: expected \"AM.TS ( FOOD E6ICI5TLY4 444\" vs actual \"AM.TS ( FOOD E6ICI5TLY4\"."
   },
   "sample-4-07-option-1": {
     "status": "not-representable",

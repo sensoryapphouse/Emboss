@@ -1,0 +1,38 @@
+{
+  "example-3-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,! SYMBOL .=\\\"8 REPRES5TS\" vs actual \"      @.<,! SYMBOL \\\"8 REPRES5TS\"."
+  },
+  "example-3-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",ELECTRICAL 5]GY ;\\\\O @.<\\\"R >R[@.> LI<T &\" vs actual \"  ,ELECTRICAL 5]GY ;\\\\O\". line count differs by +1 (expected 2, actual 3)."
+  },
+  "example-3-3": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"\" vs actual \"    3 IS TO\". line count differs by -1 (expected 9, actual 8)."
+  },
+  "example-3-4": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"\" vs actual \"      @.<,TEXT 3T9UES ON PAGE #HCD4@.>\". line count differs by -2 (expected 12, actual 10)."
+  },
+  "sample-3-01": {
+    "status": "mismatch",
+    "note": "first differing line 7: expected \"    @.<,T]M@.>\" vs actual \"      @.<,T]M@.>\". line count differs by +8 (expected 19, actual 27)."
+  },
+  "sample-3-3-3-a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-3-3-3-b": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-3-4-1-a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-3-4-1-b": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

@@ -189,6 +189,51 @@ function verseRunLevels(blocks) {
   return out;
 }
 
+// F-121 / BANA §13.3.1a ("Leave a blank line before and after a poem", exceptions: a
+// cell-5/cell-7 heading immediately before the poem it applies to, or a cell-5 glossary
+// entry word before a poem in a glossary — both already handled by joinsWithoutBlank, which
+// is unaffected by this) and §13.7.1a ("Precede and follow a prose poem with blank lines").
+// §13.9.3b (a blank line between the first and second doubly-transcribed versions of a poem)
+// and §13.11.2b (a blank line before the first verse of a song) share this same root cause
+// and need no separate mechanism: each is just another poem placed next to other content.
+//
+// Three block shapes carry a poem or prose poem, each needing its OWN run-boundary rule:
+//  - a per-print-line block (`type:'play'`, subtype/style verse — what parse.mjs's parsePoem
+//    and the real DTBook <poem>/<linegroup>/<line> round trip always produce, one block per
+//    braille line): a maximal run of these, stanza-break indicators allowed inside (mirrors
+//    verseRunLevels above), is ONE poem — no blank between its own lines, only at the run's
+//    own two ends.
+//  - a "whole poem" block (`type` verse/poem/poetry, its own `.lines` array): always its own,
+//    self-contained poem, even sitting directly next to another one of the same kind — this
+//    is exactly §13.9.3b's "first and second version" shape (two complete poems placed back
+//    to back) and the general "two consecutive poems" case, which must still get a blank
+//    line between them, not be merged into one run.
+//  - a run of contiguous `para`/`style:'verse'` blocks (Emboss's prose-poem representation,
+//    §13.7): merges like the per-line verse form (its own paragraphs are one prose poem),
+//    parallel to how F-93/joinsWithoutBlank treats the paragraphs of one quoted passage.
+const isVerseLineBlock = (b) => !!b && typeof b === 'object' && b.type === 'play' && (b.subtype === 'verse' || b.style === 'verse' || b.style === 'poem');
+const isWholePoemBlock = (b) => !!b && typeof b === 'object' && (b.type === 'verse' || b.type === 'poem' || b.type === 'poetry');
+const isProsePoemBlock = (b) => !!b && typeof b === 'object' && b.type === 'para' && String(b.style ?? '').toLowerCase() === 'verse';
+function poemRunBoundaries(blocks) {
+  const starts = new Set(), ends = new Set();
+  let run = [], kind = null;
+  const flush = () => { if (run.length) { starts.add(run[0]); ends.add(run[run.length - 1]); } run = []; kind = null; };
+  for (let bi = 0; bi < blocks.length; bi++) {
+    const b = blocks[bi];
+    if (isWholePoemBlock(b)) { flush(); starts.add(bi); ends.add(bi); continue; }
+    if (isVerseLineBlock(b) || isProsePoemBlock(b)) {
+      const k = isVerseLineBlock(b) ? 'line' : 'prose';
+      if (run.length && kind === k) run.push(bi);
+      else { flush(); run = [bi]; kind = k; }
+      continue;
+    }
+    if (run.length && kind === 'line' && isVerseSeparator(b)) continue;   // stanza break inside a poem
+    flush();
+  }
+  flush();
+  return { starts, ends };
+}
+
 // Blank-line exceptions after a heading (BANA). True when `block`, which follows the
 // emitted heading `prev`, may not be separated from it by a blank line: §4.3.3 no
 // blank line between connected headings (§4.5.6 cell-5 → cell-5; §4.5.7 / §4.6.2
@@ -272,15 +317,30 @@ const headingTierKey = (o) => (o && o.headingTiers ? JSON.stringify(o.headingTie
 //                         (§4.4.1 / §4.5.1 / §4.6.2) applies if it appears anyway.
 const HEADING_JOIN_TIERS = new Set(['centred>centred', 'cell5>cell5', 'cell5>cell7']);
 function joinsWithoutBlank(prev, block, o) {
-  if (o.mode !== 'bana' || !prev || !block || prev.type !== 'heading') return false;
-  if (block.type === 'heading') return HEADING_JOIN_TIERS.has(`${banaTier(prev.level, o)}>${banaTier(block.level, o)}`);
-  const prevTier = banaTier(prev.level, o);
-  if (prevTier === 'centred') return false;
-  // §1.9.3's own exception, having failed the centred check above `prevTier` is now either
-  // cell-5 or cell-7: "[a blank line precedes each blocked paragraph] unless it follows a
-  // cell-5 or cell-7 heading" — drop the blocked paragraph's own leading blank (F-39).
-  if (block.type === 'para' && block.blocked) return true;
-  return block.type === 'list' || block.type === 'glossary' || isVerseBlock(block);
+  if (o.mode !== 'bana' || !prev || !block) return false;
+  if (prev.type === 'heading') {
+    if (block.type === 'heading') return HEADING_JOIN_TIERS.has(`${banaTier(prev.level, o)}>${banaTier(block.level, o)}`);
+    const prevTier = banaTier(prev.level, o);
+    if (prevTier === 'centred') return false;
+    // §1.9.3's own exception, having failed the centred check above `prevTier` is now either
+    // cell-5 or cell-7: "[a blank line precedes each blocked paragraph] unless it follows a
+    // cell-5 or cell-7 heading" — drop the blocked paragraph's own leading blank (F-39).
+    if (block.type === 'para' && block.blocked) return true;
+    return block.type === 'list' || block.type === 'glossary' || isVerseBlock(block);
+  }
+  // F-93 / §9.2.2b: "Do not insert blank lines between individual items in displayed
+  // material" — two adjacent quote-styled paragraphs at the SAME adjusted margin (same
+  // style bucket via quoteMargins, same nesting level) are the paragraphs of one displayed
+  // passage (exactly what parse.mjs's <blockquote> handling produces for a <blockquote>
+  // with several <p> children), not two separate passages — join with no blank at all. A
+  // different margin (a different nesting level) is treated as a different passage and
+  // keeps the default blank (see the F-93 regression test in
+  // displayed_and_verse_rules.test.mjs).
+  if (block.type === 'para') {
+    const prevQ = quoteMargins(prev, o), q = quoteMargins(block, o);
+    if (prevQ && q && prevQ.first === q.first && prevQ.runover === q.runover) return true;
+  }
+  return false;
 }
 
 // Heading formatter. levels 1..6.
@@ -496,23 +556,26 @@ function formatList(block, o) {
 }
 
 // Displayed / quoted material: a `para` whose style is quote-like (the parser emits
-// {type:'para', style:'quote'} for <blockquote> / class="quote" / "extract"; an
-// epigraph is set the same way). Returns the margins and blank-line rule, or null
-// for body text. Shared by formatPara / formatSegmentedPara and traceBlock.
+// {type:'para', style:'quote'} for <blockquote> / class="quote" / "extract"). Returns the
+// margins and blank-line rule, or null for body text (including an epigraph — see isEpigraph
+// below; F-94, §9.3.1c: "Do not treat epigraphs as displayed material", so `epigraph` is
+// deliberately NOT a member of this set). Shared by formatPara / formatSegmentedPara and
+// traceBlock.
 //  BANA (Formats §9.2.2): the adjusted left margin is 2 cells to the right of the
 //    runover position of the surrounding text — cell 3 for body text — and
 //    paragraphs are blocked at it (§9.2.2d), i.e. 3-3. A blank line precedes and
 //    follows displayed material (§9.2.2a) but none separates the paragraphs of one
-//    displayed passage (§9.2.2b): every quote paragraph carries both blanks and the
-//    block loop in buildDocPages collapses the adjacent pair between two quote
-//    paragraphs to a single blank. Nested displayed matter (block.level, e.g. a
-//    quote inside a list) moves a further 2 cells per level (§9.2.2 example).
+//    displayed passage (§9.2.2b): joinsWithoutBlank (above) drops the blank entirely
+//    between two quote paragraphs at the same adjusted margin (F-93) — every quote
+//    paragraph still carries both blanks on its own, for the passage's own outer boundary.
+//    Nested displayed matter (block.level, e.g. a quote inside a list) moves a further
+//    2 cells per level (§9.2.2 example).
 //  UKAAF (B004 App. B "Good practice example of paragraph layout" / App. G Ex. 2):
 //    a set-out quoted passage is indented 4 cells — "new paragraphs start in cell 7
 //    with runover lines in cell 5" (7-5) — and "otherwise, no blank lines are used"
 //    (a blank line only between two separate extracts, which the model cannot tell
 //    from two paragraphs of one extract, so none is emitted).
-const QUOTE_STYLES = new Set(['quote', 'blockquote', 'extract', 'epigraph', 'displayed']);
+const QUOTE_STYLES = new Set(['quote', 'blockquote', 'extract', 'displayed']);
 function quoteMargins(block, o) {
   if (!block || !QUOTE_STYLES.has(String(block.style ?? '').toLowerCase())) return null;
   const nest = Math.max(0, Number(block.level) || 0) * 2;
@@ -521,6 +584,29 @@ function quoteMargins(block, o) {
     : { first: 6 + nest, runover: 4 + nest, blank: false };
 }
 const withQuoteBlanks = (lines, q) => (q.blank ? ['', ...lines, ''] : lines);
+// F-94 / BANA §9.3.1: an epigraph is explicitly NOT displayed material (9.3.1c) — it keeps
+// its own print format instead of the adjusted/blocked quote margin (9.3.1b: "a poem in
+// poetry format, 3-1 margins for indented paragraphs, etc." — a poem epigraph is parsed as
+// an ordinary nested <poem>, see parse.mjs, so only the plain "indented paragraph" case
+// reaches formatPara/formatSegmentedPara here; block.blocked (§1.9.3) is honoured exactly
+// like any other paragraph for the "etc." case where print itself is blocked). 9.3.1d's own
+// blank line before and after is independent of the margin choice, so it is added here
+// directly rather than by (re-)joining QUOTE_STYLES. BANA-only: no UKAAF B004 rule names an
+// epigraph or a forced blank line around one.
+const isEpigraph = (block) => !!block && typeof block === 'object' && String(block.style ?? '').toLowerCase() === 'epigraph';
+const withEpigraphBlanks = (lines, block, o) => {
+  if (!isEpigraph(block) || o.mode !== 'bana' || !lines.length) return lines;
+  const out = block.continuation ? [...lines] : ['', ...lines];
+  if (!block.continued) out.push('');
+  return out;
+};
+// Same, for traceBlock's { s, src } line shape (tcBlank stands in for a plain '').
+function withEpigraphBlanksTc(lines, block, o) {
+  if (!isEpigraph(block) || o.mode !== 'bana' || !lines.length) return lines;
+  const out = block.continuation ? [...lines] : [tcBlank, ...lines];
+  if (!block.continued) out.push(tcBlank);
+  return out;
+}
 // Same, for a quote paragraph split around a print page turn: no blank at the split,
 // and the piece after the turn starts at the runover cell.
 const quoteLines = (lines, q, block) => {
@@ -559,7 +645,7 @@ function formatPara(block, o) {
   const lines = formatParagraph(text, o.translate, { width: o.width, first, runover: 0 });
   if (blocked && !block.continuation) lines.unshift(''); // §1.9.3: blank line precedes (dropped by joinsWithoutBlank after cell-5/7)
   else if (isBlock && !block.continued) lines.push('');       // the paragraph has not ended yet
-  return lines;
+  return withEpigraphBlanks(lines, block, o);           // §9.3.1d: blank line before/after an epigraph (F-94)
 }
 
 // Group inline segments for translation: adjacent contracted text segments form ONE run
@@ -612,7 +698,15 @@ function groupSegments(segments) {
 // A print note reference mark (BANA Formats §16.2.2, same form in UKAAF B004 §11 Ex 2):
 // a superscripted number or letter takes the superscript indicator (;9#a, ;9b);
 // asterisks and daggers are not superscript (§16.2.2c) and keep their own symbols.
-const NOTE_SYMBOLS = { '*': '"9', '∗': '"9', '†': '@,?', '‡': '@,]' };
+// BANA 16.2.2's own symbol table gives a fixed equivalent for a "superscripted hollow
+// dot" mark too — ";9"0" (Example 16-2: '"<craft;9"0"> craft;9"04') — a print glyph with
+// no single canonical Unicode form (F-106/Q-34). The section's own worked examples settle
+// on "°" (U+00B0 DEGREE SIGN, gold-transcribed for Example 16-2 and all three marks of
+// Sample 16-4 from the PDF's small raised open circle); ○ U+25CB, ◦ U+25E6 and • U+2022 are
+// the other candidates a real source could plausibly use for the same glyph. All four map
+// to the rule's fixed symbol exactly like asterisk/dagger/double-dagger do, rather than
+// falling through to raw liblouis translation of whichever character the print used.
+const NOTE_SYMBOLS = { '*': '"9', '∗': '"9', '†': '@,?', '‡': '@,]', '°': ';9"0', '○': ';9"0', '◦': ';9"0', '•': ';9"0' };
 function noterefBraille(seg, o) {
   const mark = String(seg.text ?? '').trim();
   if (!mark) return '';
@@ -688,7 +782,7 @@ function formatSegmentedPara(segments, o, block = null, q = null) {
   const lines = wrapBody(braille, o, o.width, first, 0);
   if (blocked && !block?.continuation) lines.unshift('');
   else if (isBlock && !block?.continued) lines.push('');
-  return [...note, ...lines];
+  return [...note, ...withEpigraphBlanks(lines, block, o)];   // §9.3.1d (F-94)
 }
 
 // Transcriber's note (a `note` block): the UEB TN indicators @.< … @.> (UEB §3.27)
@@ -738,16 +832,22 @@ function formatTranscriberNote(block, o) {
 // (§16.9) and UKAAF (B004 D) keep a blank line before each note.
 const NOTE_SEPARATOR = '"333333';
 const noteLead = (block, o) => (isBanaOpts(o) && block.kind !== 'endnote' ? (block.noteRunStart ? [NOTE_SEPARATOR] : []) : ['']);
+// F-113 / BANA 16.5.1d: "Use 1-3 margins; for additional paragraphs in a note, use 5-3
+// margins." Each of a multi-paragraph note's blk.blocks (parse.mjs's pushNote) is rendered
+// directly at its own margin — first cell 1 (0,2) for the opening paragraph, first cell 5
+// (4,2) for every one after it in BANA; UKAAF has no equivalent rule (B004 D only says a
+// multi-paragraph note is "treated as such"), so its continuation paragraphs keep the same
+// 1-3 margin, still on their own line rather than run into the paragraph before them.
 function formatFootnote(block, o) {
   const w = o.width || 38;
   const out = noteLead(block, o);
   if (Array.isArray(block.blocks) && block.blocks.length) {
-    for (const cb of block.blocks) {
-      const lines = formatBlock(cb, o);
-      for (const l of lines) {
-        if (l !== '') out.push(l);
-      }
-    }
+    block.blocks.forEach((cb, i) => {
+      const body = cb.segments ? segmentsToBraille(cb.segments, o) : o.translate(String(cb.text ?? ''));
+      if (!body.trim()) return;
+      const { first, runover } = (i > 0 && isBanaOpts(o)) ? { first: 4, runover: 2 } : { first: 0, runover: 2 };
+      out.push(...wrapCells(body, w, first, runover));
+    });
   } else if (Array.isArray(block.segments)) {
     const body = segmentsToBraille(block.segments, o);
     out.push(...wrapCells(body, w, 0, 2));
@@ -2265,7 +2365,7 @@ function traceBlock(block, o, atStart, unit = 0) {
     const res = tcWrap(o, tcRun(o, text, null, unit, 0), w, first, 0);
     if (blocked && !block.continuation) res.unshift(tcBlank);
     else if (isBlock && !block.continued) res.push(tcBlank);
-    return res;
+    return withEpigraphBlanksTc(res, block, o);           // mirror formatPara (F-94 / §9.3.1d)
   };
   switch (block.type) {
     case 'title': return tcCentredBlock(o, tcRun(o, block.text ?? '', null, unit, 0), w).map((x) => tcRstrip(x));
@@ -2311,7 +2411,7 @@ function traceBlock(block, o, atStart, unit = 0) {
         const res = tcWrapBody(o, tr, w, first, 0);
         if (blocked && !block.continuation) res.unshift(tcBlank);
         else if (isBlock && !block.continued) res.push(tcBlank);
-        return [...note, ...res];
+        return [...note, ...withEpigraphBlanksTc(res, block, o)];   // §9.3.1d (F-94)
       }
       return paraLike(block);
     }
@@ -2336,6 +2436,19 @@ function traceBlock(block, o, atStart, unit = 0) {
       const tr = block.segments ? tcSegs(o, block.segments, unit) : tcRun(o, block.text || '', null, unit, 0);
       if (!tr.s) return [];
       return tcWrap(o, tr, w, first, runover).map((x) => tcRstrip(x));
+    }
+    case 'verse':
+    case 'poem':
+    case 'poetry': {                                                        // mirror formatBlockUnguarded
+      if (Array.isArray(block.lines)) {
+        const out = [];
+        block.lines.forEach((line, li) => {
+          const itemUnit = unit ? (unit * 1000 + li) : li;
+          out.push(...traceBlock({ type: 'play', subtype: 'verse', text: String(line), level: block.level || 0, maxLevel: block.maxLevel }, o, false, itemUnit));
+        });
+        return out;
+      }
+      return traceBlock({ ...block, type: 'play', subtype: 'verse' }, o, atStart, unit);
     }
     case 'stage': {
       const lvl = block.level || 0;
@@ -2367,12 +2480,13 @@ function traceBlock(block, o, atStart, unit = 0) {
       const w = o.width || 38;
       const out = noteLead(block, o).map((l) => (l ? tcDeco(l) : tcBlank));
       if (block.blocks && block.blocks.length) {
-        for (const cb of block.blocks) {
-          const clines = traceBlock(cb, o, false, unit);
-          for (const cl of clines) {
-            if (cl && cl.s !== '') out.push(cl);
-          }
-        }
+        // Mirror formatFootnote: 1-3 for the opening paragraph, 5-3 (BANA) after it (F-113).
+        block.blocks.forEach((cb, i) => {
+          const tr = cb.segments ? tcSegs(o, cb.segments, unit) : tcRun(o, cb.text || '', null, unit, 0);
+          if (!tr.s) return;
+          const { first, runover } = (i > 0 && isBanaOpts(o)) ? { first: 4, runover: 2 } : { first: 0, runover: 2 };
+          out.push(...tcWrap(o, tr, w, first, runover));
+        });
       } else if (block.segments) {
         const seg = tcSegs(o, block.segments, unit);
         out.push(...tcWrap(o, seg, w, 0, 2));
@@ -3002,10 +3116,27 @@ function getBlockSignature(block, o, atStart) {
 // at the end of the document), in reference order; a note with no reference in the document
 // stays where it is. Endnotes (§16.9) and UKAAF (B004 D: notes may stay near their text) keep
 // their place. `runStart` holds the footnotes that open a run of notes (separation line).
+//
+// F-108 (16.5.1c/g/h): notes queued for the end of the page live in `pending` until the
+// next flush point; every OTHER block (including a note nobody ever references) used to be
+// pushed straight into `order` the moment it was reached, ahead of whatever was still
+// waiting in `pending` — silently reordering notes (16.5.1c: "list notes in the order in
+// which they appear") and letting a note run get displaced past a later heading that starts
+// a new titled section on the same print page (16.5.1g/h). Fix: an unreferenced note joins
+// `pending` too, in its own place in the queue, instead of jumping the queue; and a heading
+// is also a flush point (like a page-number block), so a note run can never land after it.
+//
+// F-109 (16.8.1a): "Place notes before tables… they need to be read before reading the
+// table." A table whose own cell content carries a `noteref` matches the scan below just
+// like an ordinary referencing paragraph, so its released note(s) would otherwise join
+// `pending` and surface at the *next* page-end flush — i.e. after the table. Notes released
+// by a table are tracked separately (`releasedByTable`) and spliced directly into `order`
+// immediately before the table itself, never deferred.
 function noteLayout(blocks, isBana) {
   const n = blocks.length;
   const isNote = (b) => !!b && typeof b === 'object' && b.type === 'footnote' && b.kind !== 'endnote';
-  const releasedBy = new Map();                              // referencing bi -> [note bi]
+  const releasedBy = new Map();                              // referencing bi -> [note bi], deferred to page end
+  const releasedByTable = new Map();                         // table bi -> [note bi], placed right before the table
   const moved = new Set();
   if (isBana) {
     const noteAt = new Map();
@@ -3019,8 +3150,9 @@ function noteLayout(blocks, isBana) {
           const nb = noteAt.get(JSON.parse(`"${m[1]}"`));
           if (nb == null || moved.has(nb)) continue;
           moved.add(nb);
-          if (!releasedBy.has(bi)) releasedBy.set(bi, []);
-          releasedBy.get(bi).push(nb);
+          const target = b.type === 'table' ? releasedByTable : releasedBy;
+          if (!target.has(bi)) target.set(bi, []);
+          target.get(bi).push(nb);
         }
       });
     }
@@ -3029,10 +3161,13 @@ function noteLayout(blocks, isBana) {
   const pending = [];
   const flush = () => { order.push(...pending); pending.length = 0; };
   for (let bi = 0; bi < n; bi++) {
-    if (moved.has(bi)) continue;                             // placed after its reference instead
+    if (moved.has(bi)) continue;                             // placed before/after its reference instead
     const b = blocks[bi];
-    if (b && typeof b === 'object' && b.type === 'pagenum') flush();
-    order.push(bi);
+    if (b && typeof b === 'object' && (b.type === 'pagenum' || b.type === 'heading')) flush();
+    const before = releasedByTable.get(bi);
+    if (before) order.push(...before);                       // 16.8.1a: pinned immediately before the table
+    if (isBana && isNote(b)) pending.push(bi);                // unreferenced note: still deferred, keeps its queue place
+    else order.push(bi);
     const notes = releasedBy.get(bi);
     if (notes) pending.push(...notes);
   }
@@ -3206,6 +3341,7 @@ function buildDocPages(doc, o) {
   const headings = [];
   if (isBana) o.headingTiers = banaHeadingTiers(blocks); // document-wide heading tiers (Formats §4.2.1)
   const verseMax = verseRunLevels(blocks);              // poem-wide indentation (Formats §13.3.1)
+  const poemRuns = isBana ? poemRunBoundaries(blocks) : null;   // poem/prose-poem blank lines (F-121, §13.3.1a/13.7.1a)
   const lineNumbers = lineNumberInfo(blocks, o);
   o.lineNumberWidth = lineNumbers.width;                 // the text of every numbered line ends 2 cells before the widest number
   const firstAsterism = isBana ? blocks.findIndex((b) => b && (b.type === 'break' || b.type === 'indicator') && b.kind === 'asterism' && !b.text) : -1;
@@ -3241,6 +3377,16 @@ function buildDocPages(doc, o) {
       if (o.blockCache && cacheKey && (!o.translatePos || srcs !== null)) {
         o.blockCache.set(cacheKey, { lines, srcs });
       }
+    }
+    // F-121 / §13.3.1a / §13.7.1a: a blank line before/after a poem or prose poem — added
+    // here (not inside formatPlay/formatPara) because it depends on the poem's own RUN
+    // boundary across sibling blocks (poemRunBoundaries), exactly like the heading-join
+    // blank-line logic below depends on the two adjacent blocks, not either one alone. The
+    // cell-5/cell-7 heading exception is untouched: it fires via joinsWithoutBlank, which
+    // drops this same leading blank a few lines down when it applies.
+    if (poemRuns && lines.length) {
+      if (poemRuns.starts.has(bi)) { lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs]; }
+      if (poemRuns.ends.has(bi)) { lines = [...lines, '']; if (srcs) srcs = [...srcs, null]; }
     }
 
     const headingText = block.text || (block.segments ? block.segments.map(s => s.text || '').join('') : '');
@@ -3327,6 +3473,7 @@ async function buildDocPagesAsync(doc, o) {
   const headings = [];
   if (isBana) o.headingTiers = banaHeadingTiers(blocks); // document-wide heading tiers (Formats §4.2.1)
   const verseMax = verseRunLevels(blocks);              // poem-wide indentation (Formats §13.3.1)
+  const poemRuns = isBana ? poemRunBoundaries(blocks) : null;   // poem/prose-poem blank lines (F-121, §13.3.1a/13.7.1a)
   const lineNumbers = lineNumberInfo(blocks, o);
   o.lineNumberWidth = lineNumbers.width;                 // the text of every numbered line ends 2 cells before the widest number
   const firstAsterism = isBana ? blocks.findIndex((b) => b && (b.type === 'break' || b.type === 'indicator') && b.kind === 'asterism' && !b.text) : -1;
@@ -3369,6 +3516,11 @@ async function buildDocPagesAsync(doc, o) {
       if (o.blockCache && cacheKey && (!o.translatePos || srcs !== null)) {
         o.blockCache.set(cacheKey, { lines, srcs });
       }
+    }
+    // F-121 / §13.3.1a / §13.7.1a — see buildDocPages's identical comment.
+    if (poemRuns && lines.length) {
+      if (poemRuns.starts.has(bi)) { lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs]; }
+      if (poemRuns.ends.has(bi)) { lines = [...lines, '']; if (srcs) srcs = [...srcs, null]; }
     }
 
     const headingText = block.text || (block.segments ? block.segments.map(s => s.text || '').join('') : '');

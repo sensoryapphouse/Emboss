@@ -1,7 +1,7 @@
 {
   "example-7-1": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,&   #HJ\" vs actual \"  GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,& HE\". line count differs by +2 (expected 7, actual 9)."
+    "note": "first differing line 1: expected \"GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,&   #HJ\" vs actual \"  GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,& HE\". line count differs by +1 (expected 7, actual 8)."
   },
   "example-7-2": {
     "status": "mismatch",
@@ -25,10 +25,10 @@
   },
   "sample-7-02": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"    ,,/UDY ,SAY EA* ^W4 ,!N R1D !    #,-\" vs actual \"    ,,/UDY ,SAY EA* ^W4 ,!N R1D ! M1N+\". line count differs by +8 (expected 23, actual 31). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"#,- (a print-invisible right-margin running-head/reference code embedded at the end of the heading's braille line -- no print-side counterpart)\""
+    "note": "first differing line 1: expected \"    ,,/UDY ,SAY EA* ^W4 ,!N R1D !    #,-\" vs actual \"    ,,/UDY ,SAY EA* ^W4 ,!N R1D ! M1N+\". line count differs by +8 (expected 22, actual 30). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"#,- (a print-invisible right-margin running-head/reference code embedded at the end of the heading's braille line -- no print-side counterpart)\""
   },
   "sample-7-03": {
     "status": "mismatch",
-    "note": "first differing line 5: expected \"( ! TOTAL POPULA;N4 444\" vs actual \"( ! TOTAL POPULA;N4 ,! TW5TY-FIVE\". line count differs by +5 (expected 20, actual 25)."
+    "note": "first differing line 5: expected \"( ! TOTAL POPULA;N4 444\" vs actual \"( ! TOTAL POPULA;N4 ,! TW5TY-FIVE\". line count differs by +4 (expected 20, actual 24)."
   }
 }

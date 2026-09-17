@@ -6549,6 +6549,18 @@ function fillFromBlock(parent, b) {
     if (latex || b.mathml) parent.append($createMathNode(latex, b.mathml || null));
     return;
   }
+  // F-113: a multi-paragraph note (parse.mjs's pushNote) keeps its paragraphs as
+  // b.blocks — but a footnote is one editor ParagraphNode, with no multi-paragraph
+  // authoring UI yet (a separate gap from this data-loss fix). Join them with a forced
+  // line break so the text survives visibly instead of being silently dropped (fillFromBlock
+  // otherwise finds no b.segments/b.lines/b.text on a blocks-only footnote block).
+  if (Array.isArray(b.blocks) && b.blocks.length && !b.segments && !(Array.isArray(b.lines) && b.lines.length)) {
+    b.blocks.forEach((cb, i) => {
+      if (i > 0) parent.append($createLineBreakNode());
+      fillFromBlock(parent, cb);
+    });
+    return;
+  }
   if (b.segments) {
     for (const s of b.segments) {
       if (s.type === 'math') {

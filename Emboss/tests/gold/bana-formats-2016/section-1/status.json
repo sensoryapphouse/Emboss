@@ -5,7 +5,7 @@
   },
   "example-1-10": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"------------------------------------#CFJ\" vs actual \"\". line count differs by +4 (expected 10, actual 14)."
+    "note": "first differing line 4: expected \"------------------------------------#CFJ\" vs actual \"\". line count differs by +3 (expected 10, actual 13)."
   },
   "example-1-11": {
     "status": "no-braille",
@@ -49,7 +49,7 @@
   },
   "example-1-20": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \",! ,SEV5 ,WOND]S ( ! ,_W\" vs actual \"        ,! ,SEV5 ,WOND]S ( ! ,_W\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"V5: 105-145\""
+    "note": "first differing line 1: expected \",! ,SEV5 ,WOND]S ( ! ,_W\" vs actual \"        ,! ,SEV5 ,WOND]S ( ! ,_W\". line count differs by -1 (expected 2, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"V5: 105-145\""
   },
   "example-1-3": {
     "status": "not-representable",
@@ -97,6 +97,6 @@
   },
   "sample-1-05": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"          ,\\\"W9' ON ! ,RAILROAD       #DD\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -16 (expected 23, actual 7). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+    "note": "first differing line 1: expected \"          ,\\\"W9' ON ! ,RAILROAD       #DD\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -17 (expected 23, actual 6). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
   }
 }

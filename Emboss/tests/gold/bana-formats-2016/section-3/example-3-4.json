@@ -1,0 +1,87 @@
+{
+  "id": "example-3-4",
+  "title": "Continuation Transcriber’s Note",
+  "pdfPages": [
+    102
+  ],
+  "textLines": [
+    3062,
+    3078
+  ],
+  "illustrates": {
+    "rule": "3.3.3",
+    "quote": "3.3.3   Continuity. Whenever narrative text is interrupted by a full print page or more of material (e.g., charts, graphs, boxed, or columned information), insert a transcriber’s note at the end of the narrative text, before the print page change indicator. Insert the continuation transcriber’s note before the narrative text continues (frequently on a new print page after the page change indicator)."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Third Plebeian. Let him be Caesar.",
+        "features": "Play dialogue; the speaker name is followed by a period, not a colon. Flush (no first-line indent) in the given braille — this excerpt opens mid-scene, matching the section-1 gold precedent's own 'a worked excerpt's own leading text, flush because it is a continuation of a longer document rather than a fresh paragraph start' convention (buildModel1) — marked continuation:true.",
+        "continuation": true
+      },
+      {
+        "kind": "note",
+        "text": "Text continues on page 834."
+      },
+      {
+        "kind": "pagenum",
+        "text": "833"
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "LITERATURE AND GOVERNMENT",
+        "features": "Centred heading, first of two lines; print itself spells out 'AND' — UEB contracts it to the whole-word sign & when translated, which is not evidence print used a literal ampersand glyph. Modelled as its own heading block (not one block with an embedded newline): Emboss's translate() collapses an embedded '\\n' to a plain space before formatHeading's own width-based wrap ever sees it, so a single two-line block's own print break is not reliably preserved (it happens to coincide here by chance, since the natural greedy word-wrap falls at the same point, but see sample-3-01 for a case where it does not) — two separate, connected level-1 headings rely instead on document.mjs's own HEADING_JOIN_TIERS mechanism to join with no blank line between them."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Rule by the Rich",
+        "features": "Centred heading, second line."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Roman politics often resembled a …",
+        "features": "Body paragraph, truncated by the book's own worked-example excerpt; the braille's own trailing '444' run (an omission marker for the untranscribed remainder) has no print-side input to build from — the same convention documented for section 8's 'text' placeholder ellipsis (see Emboss/scripts/gold-run.mjs buildBlocks8)."
+      },
+      {
+        "kind": "pagenum",
+        "text": "834"
+      },
+      {
+        "kind": "note",
+        "text": "Text continued from page b832."
+      }
+    ],
+    "transcriberNote": "Text continues on page 834.",
+    "notes": "Direct read of references/bana/braille-formats-2016.pdf p.102 (print 3-4). Print also shows an editorial '—New Print Page—' caption and a boxed '833' page-number annotation directly above the heading; these are the SOURCE BOOK'S OWN pedagogical markup showing the reader where the print page turns for this worked example — they are not braille content themselves. Only the dashed page-change indicator ending in the braille page number (833, then again 834 at the end) is actually transcribed into the braille.lines, so only that is modelled here (kind:'pagenum', matching the section-1 gold precedent); the '—New Print Page—' caption text itself never appears in braille.lines and is not built. Two wording corrections from both prior runs: 'Third Plebeian: ...' (colon) corrected to 'Third Plebeian.' (period); 'LITERATURE & GOVERNMENT' corrected to 'LITERATURE AND GOVERNMENT' (print spells the word out in full).",
+    "surroundingText": null,
+    "printFeatures": "A play-dialogue paragraph, a standard transcriber's note, a print-page-change indicator (833), a two-line centred heading, a body paragraph (truncated by the book's own excerpt), a second print-page-change indicator (834), and a closing standard transcriber's note."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",?ird ,plebeian4 ,let hm 2 ,caes>4",
+      "",
+      "      @.<,text 3t9ues on page #hcd4@.>",
+      "------------------------------------#hcc",
+      "",
+      "        ,,,lit]ature & gov]n;t,'",
+      "            ,rule by ! ,ri*",
+      "",
+      "  ,roman politics (t5 resembl$ a 444",
+      "  444",
+      "------------------------------------#hcd",
+      "      @.<,text 3t9u$ f page b#hcb4@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "TN before the page change line. The print indicates a page change. Each dashed page-change line is a full-width row of unspaced dots-36 ending, with no space, in the numeral-sign page number, per BANA 1.11.3 — exactly Emboss's own formatPageNum output shape (document.mjs) for a {type:'pagenum'} block. The gold braille has a blank line between the closing dialogue paragraph and the opening 'Text continues on page 834.' note that formatTranscriberNote never supplies on its own (standards-findings.md F-163, new — point 3, an only partially characterised gap: example-3-3's own paragraph-then-note transition has NO such blank line, so this is not simply 'always add one')."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Punctuation after 'Third Plebeian' and the spelled-out 'AND' in the heading were corrected against a direct read of references/bana/braille-formats-2016.pdf p.102 (print 3-4) and confirmed by forward-translation matching the agreed braille.lines exactly: translate('Third Plebeian. Let him be Caesar.') ends '...plebeian4 ,let...' (dot-4 = period), matching the given braille; translate with a colon instead ends '...plebeian3 ,let...' (dot-3 = colon), which does not match. translate('LITERATURE AND GOVERNMENT') reproduces ',,,lit]ature & gov]n;t,'' EXACTLY (the '&' in the OUTPUT is UEB's ordinary whole-word contraction of the INPUT word 'AND', not evidence of a literal print ampersand). The two print-page-change indicators (833, 834) — present in the given braille as dashed lines ending in #hcc/#hcd — are now modelled explicitly as kind:'pagenum' print.blocks entries (matching the section-1 gold precedent's own {type:'pagenum', page} block) rather than left implicit inside a single free-text 'notes' field, as both run A and run B had done. See differences.md §4."
+}

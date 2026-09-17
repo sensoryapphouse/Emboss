@@ -583,6 +583,11 @@ Which does Paul want? (9.3.1d's blank-line-before/after and 9.3.1e's font-attrib
 are separate from this margin question — 9.3.1e has no omission logic at all yet regardless of
 which style epigraph ends up using.)
 
+**Resolved (17 Sep 2026):** option (a) — `epigraph` is now its own style, plain body-paragraph
+margins by default (respecting `block.blocked`), with a `<poem>` child routed to the ordinary
+Poem/verse formatting. See F-94's "Status update". 9.3.1e (font attributes) remains open,
+unchanged.
+
 ---
 
 **Q-31. Should BANA §9.5 Source Citations get its own style, distinct from §9.4 Attribution?**
@@ -796,6 +801,12 @@ at once (13.7.1a prose poems, 13.9.3b between two doubly-transcribed versions, 1
 the first verse) since they share the same root cause. Worth prioritising given how many rules
 it unblocks at once?
 
+**Resolved (17 Sep 2026):** yes — a poem/prose poem now gets its own leading/trailing blank
+line (BANA mode), via `poemRunBoundaries` in `Emboss/format/document.mjs`; 13.3.1a, 13.7.1a,
+13.9.3b and 13.11.2b's "blank before the first verse" clause are all done. See F-121's "Status
+update" (13.11.2b's OTHER clauses — song-header-info ordering/margins/no-blank-between-items —
+remain not done, unrelated to this fix).
+
 ---
 
 **Q-45. Should stanza/verse numbers get their own cell-5-heading rendering instead of being
@@ -930,3 +941,372 @@ against the standard's lowercase `p1`/`t1` examples). Building a small, general
 "front-matter/transcriber-generated page number" primitive once, ahead of the specific pages
 that would consume it, seems likely to be cheaper than re-deriving it per feature — does Paul
 agree, and if so, should it be prioritized ahead of Q-50's page-content work?
+
+---
+
+**Q-55. Embedded transcriber's note length limit (BANA 3.1.4, 3.2.3)**
+
+**Rule:** "Transcriber’s notes consisting of seven words or fewer are embedded in the text." (BANA 3.1.4)
+
+**Question:** Is the seven-word limit counted from the print source text, or from the translated braille? (e.g. if a 7-word print note becomes an 8-word braille note due to braille indicators or expanded contractions, should it still be embedded?)
+
+---
+
+**Q-56. Formatting of web page sections in descriptive screenshots**
+
+**Rules:** BANA 6.12.3b(1)
+
+> "Divide the web page into sections, e.g., navigation panel on the left, the tool bar on the top, the content area, the footer, etc."
+
+**Question:** When dividing a descriptive screenshot into sections, what specific braille heading level (e.g., cell-5, cell-7) or list format should be used to denote these sections? The standard dictates dividing the content but does not prescribe the specific heading or division format.
+
+---
+
+**Q-57. How should Emboss know where a bibliography entry's citation ends and its
+annotation begins, and that several `<list>` blocks together form one bibliography?**
+
+BANA 22.3.1 requires an annotated bibliography entry's bibliographic information at 1-5
+margins and its descriptive/annotation information at 3-5; 22.3.2 extends the same 1-5/3-5
+scheme to every entry (annotated or not) once a bibliography mixes both kinds. DTBook/NIMAS
+has no `<bibliography>`, `<citation>`, or `<annotation>` element — a bibliography can only
+reach Emboss as an ordinary `<list>`. Emboss's existing nested-list margin mechanism
+(`nestedMargins`/`listMaxLevel`, `Emboss/format/document.mjs`) already produces *exactly*
+BANA's 1-5/3-5 split when an entry's annotation is authored as a nested list item (a `<li>`
+inside a `<list>` inside the citation's own `<li>`) — but produces the wrong (flat 1-3 or
+1-5-only) margin when the annotation is left as continuous prose in the same `<li>` as the
+citation, which is at least as plausible a way to encode one continuous paragraph of print
+(see `bibliographies-writeup.md` F-184 for both probed cases). Separately, 22.3.2's "mixed"
+requirement only works when every entry of one bibliography shares a single `<list>` block,
+since the margin decision is scoped per-block.
+
+Options to put to Paul: (a) do nothing — leave 1-5/3-5 reachable only by the specific nested-
+list authoring convention, and accept that a continuous-prose annotation (or a
+document that gives each entry its own `<list>` block) gets the wrong margin; (b) add an
+explicit signal a transcriber/source sets — e.g. `<list class="bai-bibliography">` wrapping
+the whole set of entries (so `maxLevel` can be computed across all of them even if split into
+several `<list>` elements) and a `class="bai-biblio-note"` on the annotation portion of an
+entry (so a continuous `<li>` can still be split into citation + annotation by the parser);
+(c) a heuristic — e.g. treat the first sentence-terminating "). " after which no further
+"(year)" pattern appears as the citation/annotation boundary — the same kind of approach Q-1
+tried and rejected for the caption/heading split (F-4), for the same reason: it is unlikely to
+survive contact with real bibliographies (parenthetical years, page ranges, and publisher
+names using periods and parentheses throughout a citation make a purely textual heuristic
+fragile). Which does Paul want, and is a dedicated bibliography feature worth building at all
+given how rarely braille bibliographies are *annotated* in practice, versus leaving 22.3.1/
+22.3.2 as a known, documented limitation?
+
+---
+
+**Q-58. Is genuine foreign-language braille (a real French/Spanish/Greek/etc. alphabet
+table, chosen automatically) worth building for BANA 22.2.4, or is a lesser stand-in
+acceptable?**
+
+BANA 22.2.4 requires a bibliography entirely in a foreign language to be transcribed
+uncontracted, in that language's own appropriate alphabet symbols. Emboss currently has:
+- **no** foreign-language braille tables wired up at all (`engine/louis.mjs`'s `TABLES`
+  exposes only English UEB, though the vendored liblouis distribution already ships tables
+  for many other languages, unused);
+- **no** automatic detection of "this bibliography/document is in French/Greek/etc." (an
+  `xml:lang` attribute is read once for the document's own `lang` field, but the formatter
+  and translator never consult it);
+- a generic "uncontracted" (grade-1) segment mechanism, built for code blocks and IPA, that
+  can be hand-applied to a bibliography entry via `class="uncontracted"` and happens to
+  produce readable (if not strictly correct) results for Latin-alphabet languages like
+  French, but produces garbage (literal `\Xhhhh` escape sequences embedded in the braille) for
+  a non-Latin alphabet like Greek or Russian (see `bibliographies-writeup.md` F-185 for the
+  probed evidence of both).
+
+Building real foreign-language support (selecting one of the vendored liblouis tables per
+`xml:lang`, for however many languages Paul wants to support, and testing each one) is a
+nontrivial, open-ended feature, not a small patch — its scope depends entirely on which
+languages Paul expects real transcription work to need.
+
+Options to put to Paul: (a) build real per-language table selection for a short list of
+languages Paul actually transcribes into (e.g. French, Spanish, German), driven by
+`xml:lang`, and leave anything else as a documented gap; (b) do the minimum — auto-apply the
+existing uncontracted-English mechanism whenever `xml:lang` marks a *Latin-alphabet*
+language (better than nothing, still not "the appropriate foreign alphabet symbols" the rule
+asks for, but avoids silently applying UEB Grade 2 English contractions to foreign words);
+(c) leave 22.2.4 entirely to the transcriber (a transcriber's note plus manual grade-1 marking
+per entry) and treat it as out of scope for automation. Which does Paul want, and which
+languages (if any) should a first build cover?
+
+---
+
+**Q-59. Should Emboss build a general transcriber-defined typeform/symbol allocator?**
+
+§18 alone needs a fresh, transcriber-chosen symbol for at least five distinct purposes:
+crossed-out words (18.6.3a), an unlimited set of parts-of-speech typeforms for linear
+diagrams (18.7.1 — Example 18-9 specifically needs a *second* underline style beyond
+Emboss's one), shape-diagram markers (18.7.3 — Sample 18-5 needs two: circled word, boxed
+word), the print-capitalization-convention marker shown in Example 18-2 (`.=@#2`), and the
+crossed-out-word marker in Example 18-6 (`.=^#1`). Today Emboss has exactly one
+transcriber-defined symbol in the entire codebase, hardcoded to one single use (the asterism
+section-break, `TD_SYMBOL_1`, `Emboss/format/document.mjs:94`) — see
+`assess-18/grammar-writeup.md` F-188.
+
+Building a general allocator (assign the next unused symbol on request, track what's been
+assigned per document, auto-generate the first-use explanatory note the way the asterism
+already does) would unblock several §18 rules at once, plus §16.11's marginal-label keying
+(F-119) and any other Formats section that turns out to need the same pattern. Is this worth
+building as shared infrastructure, and at what priority relative to the rest of the §18/§16
+gaps?
+
+---
+
+**Q-60. Is full sentence-diagramming (§18.7 linear, §18.8 spatial arrows) in scope for
+Emboss at all?**
+
+Unlike almost everything else assessed so far in Formats, §18.8's spatial arrow diagrams need
+a genuinely two-dimensional layout capability — placing a symbol (or a multi-cell "line mode"
+shaft) on the braille line *above* a sentence, aligned to a specific word's column on the line
+*below* it (Examples 18-11 through 18-14; see `assess-18/grammar-writeup.md` F-189). No
+other section of BANA Formats assessed to date has required anything like this. Building it
+would mean adding real spatial/column-aware positioning to a formatter that is currently
+entirely line-oriented.
+
+Given how narrow the use case is (grammar-textbook sentence diagrams specifically) relative to
+the engineering cost, does Paul want this built at all, or should §18.8 (and the 1-3-margin
+half of §18.7.1, and §18.4.1's analogy symbols, which share the same "no layout support"
+root cause) be recorded as a permanent, deliberate gap rather than a task-list item?
+
+---
+
+**Q-61. Should the keying/grouping-indicator work for §16.11 and §18.6 be built once, shared?**
+
+BANA 18.6.2b explicitly says "use the same keying technique as that used for text with
+marginal labels" (Formats §16.11), and §16.11 is already flagged wholly unimplemented
+(`standards-findings.md` F-119: no "braille grouping indicator" `.=<`/`.=>`/`;<`/`;>` construct
+of any kind exists). §18.6.2c/d/e and Sample 18-4 need the identical machinery: devise a
+key, enclose it in a transcriber's note, place the keyed mark after its word with a grouping
+indicator, keep it on the same line. Rather than building this twice (once for §16.11's
+marginal labels, once for §18.6's proofreading-mark corrections), should it be designed once
+as shared infrastructure? See `assess-18/grammar-writeup.md` F-187 for the plain
+(non-"mention") `;<`/`;>` form §18.6 needs, alongside F-119's `.=<`/`.=>` form.
+
+---
+
+**Q-62. Should Emboss build dedicated "Alphabetic Division" and "Guide Word" constructs
+(matching BrailleBlaster's own styles), rather than continuing to have neither?**
+
+`style-specification.md`'s Index Entry entry already flags this as open: "Q: add BB's
+Alphabetic Division and Guide Word styles?" Right now:
+- an alphabetical division letter has no representation of its own at all — the only way one
+  reaches the formatter is as an ordinary heading, which gets the blank-line-before-every-
+  heading default wrong for every division after the first (`references-writeup.md` F-191);
+- braille page guide words (required for every alphabetic reference except bibliographies,
+  §21.3.2) do not exist in any form (F-192) — no centring, no dash-joining, no shortening,
+  no "(cont.)".
+
+Both are substantial, self-contained features. Given the project's "keep costs reasonable"
+guidance, does Paul want these built as part of this section's remediation, or deferred (with
+indexes/glossaries continuing to omit page guide words, which §21.3.2 itself allows an agency
+to do for indexes specifically, but not for glossaries/thesauruses/dictionaries)?
+
+---
+
+**Q-63. Is a dedicated Thesaurus/Dictionary structure worth building, or is manual
+level-authoring (today's only option) acceptable transcriber practice?**
+
+No `thesaurus` or `dictionary` list/entry kind exists anywhere in Emboss (F-193); a
+transcriber's only way to get correct margins today is to pre-assign each entry's nested
+`level` by hand, rather than have Emboss infer subentry structure from print's own cues (bold
+vs. italic entries, numbered/lettered definitions, run-in derived forms, "see also"). The
+*margins*, once levels are assigned, are already correct (§21.7.2/21.7.3a's 1-3 / 1-5,3-5
+patterns fall out of the same generic nested-list mechanism ordinary lists use). Is manual
+level-assignment an acceptable normal transcriber workflow for thesauruses/dictionaries, or
+does Paul want Emboss to infer the structure automatically from print's typographic cues?
+
+---
+
+**Q-64. For simple glossaries, should Emboss ever insert punctuation (a colon) between
+term and definition that print did not have?**
+
+`glossarySegments` (`document.mjs`) currently inserts a colon whenever a glossary term does
+not already end in `:`/`—`/`-`, rather than the one-/two-blank-cell spacing §21.5.1c/d and
+§21.6.1 actually call for (F-194, same defect as F-183 found in §17). This looks like a
+straightforward bug rather than a genuine design question, but it is flagged here too because
+fixing it changes the appearance of every existing glossary a user has already authored with
+Emboss — is a silent behaviour change acceptable, or should this ship as an opt-in / migration
+note?
+
+---
+
+**Q-65. Is there a transcriber convention for resolving ambiguous English/foreign
+abbreviations (21.9.1b) that Emboss could read instead of requiring free-text judgement?**
+
+§21.9.1b gives "inf." (infinitive/infinitif) and "sing." (singular/singulier) as genuinely
+ambiguous examples requiring a transcriber to determine, from context, which language an
+abbreviation is in (`references-writeup.md` F-202 treats this as out of scope for
+automation, quoting the rule's own "it is important to determine…" wording). Do transcribers
+in practice mark this some other way in the source (e.g. always fully spelling out an
+ambiguous abbreviation's language via an explicit tag) that Emboss could read, so this need
+not be a manual step at format time?
+
+---
+
+**Q-66. Does Paul want a real Margin-Numbered-Paragraphs (§15.2) feature, distinct from
+line-numbered prose (§15.3-15.4)?**
+
+Right now a `<linenum>` at the start of an ordinary `<p>` is treated exactly like a
+line-numbered-PROSE marker: the number is moved to the right margin and the §15.4.1d
+three-blank-cell transcriber's note fires — both wrong for §15.2, which wants the number
+inline, before the paragraph's own text, with no such note (F-205). Building this properly
+needs: (a) a way to tell "this `<linenum>` is a margin-paragraph-number" from "this one is a
+line-numbered-prose number" in the source markup (a class? a different element?), and (b) a
+decision on Q-67 below for numbering paragraphs the print leaves unnumbered.
+
+---
+
+**Q-67. For a print source that numbers only *some* paragraphs/lines (§15.2.1c, §15.6.1a,
+and the already-"done" §15.4.1b), should Emboss auto-sequence the missing numbers, or is the
+DTBook/NIMAS source expected to arrive fully tagged?**
+
+Three rules in this section (15.2.1c "number every paragraph, even if only some are numbered in
+print"; 15.6.1a "every print line [of interspersed prose] is numbered"; and 15.4.1b, already
+marked "done" outside this reassessment, "every print line of prose is numbered…even when the
+lines are not numbered in print") all ask for MORE numbers in braille than print shows. Emboss
+never invents a number — it shows exactly what a `<linenum>` tag gives it (A30's "shows those
+numbers and does not invent the others"). Two readings:
+
+1. The DTBook is expected to already carry a `<linenum>` on every relevant paragraph/line
+   (sequentially numbered by whoever prepares it, even where print shows nothing there), and
+   Emboss's job is only to place what it's given — in which case all three rules are already
+   satisfied by the existing mechanism, and F-207 (15.6.1a) and half of F-205 (15.2.1c)
+   reduce to a documentation point (tell the transcriber to pre-tag every line/paragraph), not
+   a code gap.
+2. Emboss itself is expected to count/insert the missing sequential numbers from whatever the
+   print does show (e.g. every tenth line numbered in print → Emboss fills in 1-9, 11-19, …) —
+   in which case this is a real, shared feature gap across 15.2.1c, 15.4.1b and 15.6.1a, and
+   the already-"done" 15.4.1b row would need revisiting too.
+
+Which is intended? (If (1), please say so explicitly so 15.4.1b's "done" status is confirmed
+correct and 15.6.1a can be marked "done" the same way on the next pass.)
+
+---
+
+**Q-68. How should a verse-play "significant blank space" between speaker and dialogue
+(§15.5.2b) be authored, and does Emboss need to draft the required transcriber's note itself?**
+
+Nothing in the current play/verse markup distinguishes an ordinary inter-word space from print's
+own "significant" gap between a speaker's name and their first word of dialogue, and multiple
+literal spaces in the source text are collapsed to one by Emboss's normal whitespace handling
+before this could even be detected (F-206). Options: (a) a dedicated inline marker/element
+for "significant gap here" that the transcriber inserts (parallel to `<linenum>`); (b) preserve
+literal multiple-space runs in play-speaker/verse text as a signal (fragile — a stray double
+space in source text would misfire); (c) leave this entirely manual (transcriber inserts the
+three cells and writes the note by hand outside Emboss's normal text flow). Related: should
+15.9.3g's "note changes in print format" (F-209) get the same kind of automatic-note-drafting
+treatment as 15.4.1d already has, or is the existing free-form Transcriber's Notes page
+sufficient (in which case that row should be marked "done", not "partial")?
+
+---
+
+**Q-69. Should the auto-inserted §15.4.1d transcriber's note be conditioned on which §15
+construct actually triggered it?**
+
+`lineNumberInfo`/`lineNumberNote` (document.mjs) inject the same fixed wording ("Line numbers
+are shown at the right margin…Three blank cells…") before the first `<linenum>`-bearing
+paragraph anywhere in the document, regardless of whether that paragraph is genuine
+line-numbered prose (§15.4, where the wording is correct), a margin-numbered paragraph (§15.2,
+where it is wrong — F-205), or counted words (§15.8, which has its own different required
+wording per 15.8.1b, not this one). Should this note be selected per construct once §15.2/§15.8
+get their own markup (Q-66), or is a single generic note acceptable?
+
+---
+
+---
+
+**Q-70. Do "centred" Act/Scene titles and a play's own conclusion phrase need a heading
+tier independent of the document's general §4 heading hierarchy?**
+
+BANA §14.3.1a ("Titles and scene numbers are centered headings") and §14.8.1 (the "The End" /
+"The Curtain Falls" phrase is "centered and preceded and followed by a blank line") both want
+specific play-structural text centred *unconditionally*. Emboss has no dedicated block type
+for either; the only way to get centred text in the body of a document is to mark it as a
+`heading` at whatever level `banaHeadingTiers` (`Emboss/format/document.mjs:254-277`) resolves
+to the "centred" tier — and that resolution depends on every heading level used anywhere else
+in the *whole* document (BANA §4's own general rule).
+
+Probed (BANA 40×25, real liblouis): when a play's own title is the document's only `h1` and
+Acts/Scenes are `h2`, the Acts/Scenes render as **cell-5**, not centred — so §14.3.1a is only
+satisfied if the play is transcribed as its own standalone document with Act/Scene as the top
+(`h1`) heading level (no separate book-level title above it). Under that same structuring, a
+conclusion phrase marked as a further `h1` heading does render centred with a blank line
+before it (confirmed by probe) — but if something else immediately follows it as another
+heading, the general "no blank between two centred headings" rule (§4.3.3) would suppress the
+"followed by a blank line" half of §14.8.1, which won't matter if the conclusion is the last
+thing in the document but would if it isn't.
+
+Marked "done" in `standards-map.md` on the assumption that a play is transcribed as its own
+document with Act/Scene at the top heading level (matching Sample 14-2's own apparent
+structure). Is that the transcription convention Paul wants documented, or should Emboss gain
+a dedicated "always-centred, regardless of document heading depth" block for play titles/
+scene numbers and the conclusion phrase, independent of §4's general heading-tier algorithm?
+
+---
+
+**Q-71. Is the generic `caption` block's mandatory leading blank line acceptable for a
+single-frame cartoon's caption (14.10.4b)?**
+
+`formatCaption` (`Emboss/format/document.mjs:876-884`) — reused here for the cartoon's own
+7-5 margin caption, since there's no cartoon-specific caption type — always prepends a blank
+line (`out = ['', ...wrapCells(...)]`). BANA's own Example 14-10 (Elements of Single-Frame
+Cartoon) shows the scene-setting transcriber's note running straight into the caption's
+transcriber's note with no blank line between them. Marked "done" in `standards-map.md` for
+the 7-5 margin itself (the tested part of 14.10.4b), but the extra blank line this reuse
+introduces before every cartoon caption doesn't match that example. Worth a dedicated
+cartoon-caption path, or is the extra blank acceptable?
+
+---
+
+---
+
+**Q-72. Should "matching columns"/"word list" exercise content reuse Emboss's general
+`<table>` element, or does it need its own dedicated markup?**
+
+Neither BANA §10.7.2 (word lists for multiple questions) nor §10.9 (matching narrow/wide
+columns) has any dedicated `bai-exercise` markup of its own — the only exercise-specific
+convention Emboss's input parser recognises is `<li class="bai-exercise">`. Representing this
+content as a plain `<table>` instead already gets a lot right for free, by reusing the
+already-assessed §11 table engine: a blank line before/after, cell-1 column start, the
+default 2-cell gutter, and no inappropriate guide-dot fill for short-but-non-blank entries
+(confirmed in `probe-exercise-reassess.mjs`, parts E/F). But the over-wide fallback
+(`resolveTableLayout`'s "Listed" format, `document.mjs:1451-1498`) is BANA §11.16's general
+Listed Table Format, not a dedicated implementation of §10.9.2a/b's specific "convert to a
+list beginning in cell 1, with cell-5 headings" — the probe's over-wide matching-columns table
+came out with inconsistent indentation between rows rather than every list reliably starting
+in cell 1 (see `standards-map.md`, BANA 10.9.2a — marked `partial`). Is reusing the general
+table engine (with its own Listed fallback) an acceptable stand-in here, or does Paul want a
+dedicated matching-columns/word-list mechanism built to §10.7.2/10.9's own, simpler rules?
+
+---
+
+**Q-73. What markup should represent "a separate portion of an exercise shown as pictures"
+(BANA §10.11.1/§10.11.3)?**
+
+Right now an `<img>` placed inside a `bai-exercise` `<li>` is silently dropped by
+`inlineSegments` (`Emboss/input/parse.mjs:1937`) — no alt text, no transcriber's note, nothing
+in the output (see `standards-findings.md`/`exercise-writeup.md` F-229, reproduced in
+`probe-exercise-reassess.mjs` part H). Is an inline `<img>` inside an exercise item the
+representation Paul wants supported (converted to an embedded TN describing the picture, per
+§10.11.1), with a further, separate mechanism for §10.11.3's "cell-7 TN before the word
+'Pictures', closed after the last entry" case when a whole portion of an exercise is
+pictures — or is picture-only exercise content always expected to arrive as a top-level
+illustration/tactile-graphic block instead (which Emboss already handles via
+`traceOrFormatPrintImage`)?
+
+---
+
+**Q-74. Is omitting a print write-on-line device (BANA §10.5.1) a formatting job for Emboss,
+or a transcription-time content decision?**
+
+BANA §10.5.1 requires omitting "lines, dashes, circles, boxes, or other print devices printed
+before or after questions" solely to show where a student writes. Emboss has no code that
+recognises such a device (as opposed to a legitimate underscore blank *within* a sentence,
+§10.6.1, which must be *kept*) and would pass any literal dashes/underscores authored before
+or after a question straight through untouched (`standards-map.md`, BANA 10.5.1 — marked
+`not done`; `exercise-writeup.md` F-225). Since a well-prepared DTBook source likely
+wouldn't encode a purely-visual "blank line to write on" as text at all, is this really a gap
+worth closing in Emboss, or is it already handled correctly by construction whenever the
+source is prepared properly (i.e., a transcription-time responsibility, not a rendering one)?

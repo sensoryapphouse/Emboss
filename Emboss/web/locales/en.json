@@ -684,6 +684,7 @@
       "table_listed": "Listed Table",
       "print_page": "Print Page Indicator",
       "quote": "Blockquote",
+      "epigraph": "Epigraph",
       "break": "Document Break"
     },
     "spool": {

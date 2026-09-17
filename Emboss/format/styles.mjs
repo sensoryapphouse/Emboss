@@ -313,6 +313,22 @@ export const STYLE_DEFINITIONS = {
     blankAfter: true,
     description: 'Displayed / quoted material: BANA blocked 3-3 at the adjusted margin with a blank line before and after (Formats §9.2.2); UKAAF 7-5 with no blank lines (B004 App. B / App. G).',
   },
+  // F-94 — BANA Formats §9.3.1: "Do not treat epigraphs as displayed material" (9.3.1c) —
+  // an epigraph keeps its OWN print format instead of Blockquote's adjusted/blocked margin,
+  // e.g. the ordinary "3-1 margins for indented paragraphs" (9.3.1b's own example; a poem
+  // epigraph is routed to the Poem style instead, since parse.mjs walks a nested <poem> as
+  // itself) — with just its own blank line before and after (9.3.1d).
+  epigraph: {
+    id: 'epigraph',
+    name: 'Epigraph',
+    category: 'text',
+    xmlTag: 'epigraph',
+    firstCell: 3,
+    runoverCell: 1,
+    blankBefore: true,
+    blankAfter: true,
+    description: "BANA Formats §9.3.1b/c: an epigraph is not displayed material — ordinary 3-1 paragraph margin (or 1-1 if print's own paragraph is blocked, §1.9.3), with a blank line before and after (§9.3.1d).",
+  },
   break: {
     id: 'break',
     name: 'Document Break',
@@ -396,6 +412,7 @@ export function resolveStyleFromXml(tagName, className = '') {
   if (cls.includes('toc-entry') || cls.includes('bai-toc') || cls.includes('toc')) return 'toc';
   if (cls.includes('bai-index') || cls.includes('index')) return 'index';
   if (cls.includes('footnote') || tag === 'footnote') return 'footnote';
+  if (tag === 'epigraph' || cls.includes('epigraph')) return 'epigraph';   // F-94: checked before the quote rule
   if (cls.includes('quote') || tag === 'blockquote') return 'quote';
   if (tag === 'byline' || tag === 'author') return 'attribution';
   if (tag === 'dl' || cls.includes('glossary')) return 'glossary';

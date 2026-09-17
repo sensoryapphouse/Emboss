@@ -1,0 +1,34 @@
+{
+  "id": "sample-3-3-3-a",
+  "title": "Continuity Text Continues",
+  "pdfPages": [
+    102
+  ],
+  "textLines": [
+    3060,
+    3060
+  ],
+  "illustrates": {
+    "rule": "3.3.3",
+    "quote": "3.3.3   Continuity. Whenever narrative text is interrupted by a full print page or more of material (e.g., charts, graphs, boxed, or columned information), insert a transcriber’s note at the end of the narrative text, before the print page change indicator. Insert the continuation transcriber’s note before the narrative text continues (frequently on a new print page after the page change indicator)."
+  },
+  "print": {
+    "blocks": [],
+    "transcriberNote": "Text continues on page 834.",
+    "notes": "An anonymous 'Samples:' block item introduced by 3.3.3 (its own suggested wording, matching Example 3-4's own continuation note verbatim), given as plain print text with no braille rendering anywhere near this citing location.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed byte-for-byte and matched the source text (references/_text/braille-formats-2016.txt line 3060) directly; no change."
+}

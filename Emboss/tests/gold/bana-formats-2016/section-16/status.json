@@ -25,7 +25,7 @@
   },
   "example-16-2": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"\\\"<CRAFT;9\\\"0\\\">\" vs actual \"  \\\"<CRAFT;9^J\\\">\". line count differs by +1 (expected 2, actual 3)."
+    "note": "first differing line 1: expected \"\\\"<CRAFT;9\\\"0\\\">\" vs actual \"  \\\"<CRAFT;9\\\"0\\\">\". line count differs by +1 (expected 2, actual 3)."
   },
   "example-16-3": {
     "status": "not-representable",
@@ -61,7 +61,7 @@
   },
   "sample-16-02": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"          ,I L A LOOK ( ,AGONY      #BFH\" vs actual \"          ,I L A LOOK ( ,AGONY\". line count differs by -8 (expected 32, actual 24)."
+    "note": "first differing line 1: expected \"          ,I L A LOOK ( ,AGONY      #BFH\" vs actual \"          ,I L A LOOK ( ,AGONY\". line count differs by -7 (expected 32, actual 25)."
   },
   "sample-16-03": {
     "status": "mismatch",
@@ -89,11 +89,11 @@
   },
   "sample-16-09": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"              ,,TABLE #G4A            #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -1 (expected 20, actual 19). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-109); the marker is stripped and the cell built as plain text, the matching print.notes[] entry"
+    "note": "first differing line 1: expected \"              ,,TABLE #G4A            #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -2 (expected 20, actual 18). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-N4); the marker is stripped and the cell built as plain text, the matching print.notes[] entry"
   },
   "sample-16-10": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"              ,MA9 ,PRODUCTS ( !        #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +5 (expected 45, actual 50). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-109); the marker is stripped and the cell built as plain text, the matching print.notes[] ent"
+    "note": "first differing line 1: expected \"              ,MA9 ,PRODUCTS ( !        #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +5 (expected 44, actual 49). Input-model limitation: table has a [ref:MARK] token inside a cell — table cells have no noteref/segment support in this builder, and a footnote referenced from inside a table cell is already known not to place correctly (F-N4); the marker is stripped and the cell built as plain text, the matching print.notes[] ent"
   },
   "sample-16-11.1g": {
     "status": "no-braille",
@@ -101,7 +101,7 @@
   },
   "sample-16-11": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"                 ,NOTES              #GBG\" vs actual \"                 ,NOTES\". line count differs by +9 (expected 24, actual 33)."
+    "note": "first differing line 1: expected \"                 ,NOTES              #GBG\" vs actual \"                 ,NOTES\". line count differs by +8 (expected 24, actual 32)."
   },
   "sample-16-12": {
     "status": "not-representable",

@@ -1,5 +1,5 @@
 // Offline app shell + engine + tables. Cache-first for known assets.
-const CACHE = 'emboss-v88';
+const CACHE = 'emboss-v89';
 const ASSETS = [
   '/web/index.html', '/web/style.css', '/web/app.mjs', '/web/manifest.webmanifest', '/web/logo.svg',
   // manifest icons (PNG) so an installed app keeps its icon offline

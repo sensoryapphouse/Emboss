@@ -639,6 +639,14 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         const clsAttr = lvlClass ? ` class="quote${lvlClass}"` : ' class="quote"';
         return `${indent}<blockquote class="quote"><p${clsAttr}>${content}</p></blockquote>`;
       }
+      // F-94 / BANA §9.3.1c: an epigraph is NOT displayed material like <blockquote> — its
+      // own DTD element (dtbook-2005-3.dtd: <!ELEMENT epigraph (%flow;)*>), round-tripped by
+      // parse.mjs's `tag === 'epigraph'` branch and its 'p' dispatch's isInsideEpigraph check.
+      if (block.style === 'epigraph') {
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
+        const clsAttr = lvlClass ? ` class="${lvlClass.trim()}"` : '';
+        return `${indent}<epigraph><p${clsAttr}>${content}</p></epigraph>`;
+      }
       if (block.style === 'attribution') {
         const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<byline>${content}</byline>`;
@@ -1014,10 +1022,17 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     }
 
     case 'footnote': {
-      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       const reserved = block.id && idAlloc && idAlloc.noteIds ? idAlloc.noteIds.get(block.id) : null;
       const noteId = reserved || (idAlloc ? idAlloc.getId(block.id, 'note') : (block.id ? toNCName(block.id) : 'note-1'));
       const cls = block.kind === 'endnote' ? 'endnote' : 'footnote';
+      // F-113: a multi-paragraph note (block.blocks, from parse.mjs's pushNote) keeps each
+      // paragraph as its own <p>, round-tripping the paragraph break BANA 16.5.1d / B004 D
+      // need instead of collapsing back into one <p>.
+      if (Array.isArray(block.blocks) && block.blocks.length) {
+        const ps = block.blocks.map((cb) => `<p>${serializeInlineSegments(cb.segments, cb.text, idAlloc)}</p>`).join('');
+        return `${indent}<note id="${escapeXml(noteId)}" class="${cls}">${ps}</note>`;
+      }
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<note id="${escapeXml(noteId)}" class="${cls}"><p>${content}</p></note>`;
     }
 

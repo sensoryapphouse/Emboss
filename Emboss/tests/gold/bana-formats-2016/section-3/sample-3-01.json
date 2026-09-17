@@ -1,0 +1,110 @@
+{
+  "id": "sample-3-01",
+  "title": "Headings Added to Matching Exercise",
+  "pdfPages": [
+    103
+  ],
+  "textLines": [
+    3095,
+    3118
+  ],
+  "illustrates": {
+    "rule": "3.2.3",
+    "quote": "3.2.3   Embedded Transcriber’s Notes. An embedded transcriber’s note is seven words or fewer and may be shown within the text, either before or after the text, or standing alone, e.g., used as a heading."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "SAT Vocabulary Quiz:",
+        "features": "Centred title, first of two lines; modelled as its own heading block (not one block with an embedded newline) because Emboss's translate() collapses an embedded '\\n' to a plain space before formatHeading's own width-based wrap ever sees it, so a single two-line block's own print break is not reliably preserved — two separate, connected level-1 headings rely instead on document.mjs's own HEADING_JOIN_TIERS mechanism (the same one the section-4 gold precedent's title+byline pairs use) to join with no blank line between them."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Literary Terms",
+        "features": "Centred title, second line."
+      },
+      {
+        "kind": "attribution",
+        "text": "Directions: Match each term with the proper definition.",
+        "features": "Directions, printed at a fixed cell-5 margin (first line AND runover both indented 4 cells), confirmed directly against the given braille — not an ordinary paragraph's first-line/flush-runover margin. There is no dedicated 'instructions' block style in Emboss; this reuses the same fixed-cell-5 attribution block (BANA §9.4, formatAttribution) the section-9 gold precedent already reuses for its own non-authorship cell-5 content (source citations), matching the margin exactly."
+      },
+      {
+        "kind": "note",
+        "text": "Term",
+        "features": "Embedded transcriber's note (one word), standing alone as a column heading, per 3.2.3 ('standing alone, e.g., used as a heading')."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "marker": "a.", "text": "allegory" },
+          { "marker": "b.", "text": "allusion" },
+          { "marker": "c.", "text": "antagonist" },
+          { "marker": "d.", "text": "denouement" },
+          { "marker": "e.", "text": "hyperbole" },
+          { "marker": "f.", "text": "irony" },
+          { "marker": "g.", "text": "oxymoron" },
+          { "marker": "h.", "text": "protagonist" }
+        ],
+        "features": "First (full, eight-item) column of the matching test; the braille excerpt truncates this to a, b, c, ..., h with a '444' ellipsis in place of d-g (no print-side input to build that omission marker from)."
+      },
+      {
+        "kind": "note",
+        "text": "Definition",
+        "features": "Second embedded transcriber's note, standing alone as the other column heading."
+      },
+      {
+        "kind": "list",
+        "items": [
+          { "marker": "1.", "text": "a wild exaggeration; an overstatement" },
+          { "marker": "2.", "text": "a symbolic story or narrative" },
+          { "marker": "3.", "text": "an adversary; an opponent; a hero's enemy" },
+          { "marker": "4.", "text": "an implied reference in literature" },
+          { "marker": "5.", "text": "the outcome of a complex sequence of events" },
+          { "marker": "6.", "text": "the opposite of what would be expected" },
+          { "marker": "7.", "text": "a combination of contradictory words" },
+          { "marker": "8.", "text": "the main character in a literary work" }
+        ],
+        "features": "Second (full, eight-item) column; the braille excerpt truncates this to 1, 2, 3, ..., 8 with a '444' ellipsis in place of 4-7, same as the first column."
+      }
+    ],
+    "transcriberNote": "Term / Definition",
+    "notes": "Direct read of references/bana/braille-formats-2016.pdf p.103 (print 3-5): print's own matching exercise has EIGHT items in each column (a-h / 1-8, all spelled out in full). Both prior runs elided this to three-plus-ellipsis ('a. allegory / b. allusion / c. antagonist / ... / h. protagonist'), matching the EXCERPT'S OWN abbreviated braille rather than the actual print. Per the section-4 gold precedent (sample-4-01's own documented 'print is longer than the braille excerpt transcribes' limitation), this file models the FULL print content; the braille's own '444' truncation for the omitted middle items has no print-side input to build from and is an expected, documented over-production, not an Emboss defect. Also corrected 'Match each term TO the proper definition' (both runs) to 'Match each term WITH the proper definition' — confirmed by forward-translation.",
+    "surroundingText": "'(Return to Text)' immediately follows (line 3119), a hyperlink back to the citing rule text — excluded from textLines/braille as book-navigation furniture, not transcribed content.",
+    "printFeatures": "A centred two-line title, a directions paragraph, two embedded one-word transcriber's notes used as column headings, and two eight-item lettered/numbered lists."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,,sat ,vocabul>y ,quiz3",
+      "             ,lit]>y ,t]ms",
+      "",
+      "    ,direc;ns3 ,mat* ea* t]m ) ! prop]",
+      "    def9i;n4",
+      "",
+      "    @.<,t]m@.>",
+      "a4 allegory",
+      ";b4 allu.n",
+      ";c4 antagoni/",
+      "444",
+      ";h4 protagoni/",
+      "",
+      "    @.<,def9i;n@.>",
+      "#a4 a wild exa7]a;n2 an ov]/ate;t",
+      "#b4 a symbolic /ory or n>rative",
+      "#c4 an adv]s>y2 an oppon5t2 a h]o's 5emy",
+      "444",
+      "#h4 ! ma9 \"* 9 a lit]>y \"w"
+    ],
+    "pageBreaks": [],
+    "notes": "TNs added as column headings for clarity, using the 7-word-or-fewer embedded TN rule. The braille excerpt itself truncates each column to its first three items plus a closing item, joined by a single '444' line in place of the four omitted middle entries — the print (p.103) shows all eight items in full in each column. Both of this file's embedded notes ('Term', 'Definition') sit in the gold braille at the SAME 4-cell margin as the surrounding attribution/heading content, with no blank line before the list each one introduces — formatTranscriberNote's fixed 6-cell margin and the list formatter's own unconditional leading blank line both diverge from this (standards-findings.md F-163, new)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.blocks' two lists were rebuilt to the FULL eight-item print content (matching the section-4/sample-4-01 precedent for a braille excerpt that truncates longer print content with a '444' marker); 'Match each term...' corrected from 'to' to 'with'. Both changes confirmed by a direct read of references/bana/braille-formats-2016.pdf p.103 and by forward-translation against the agreed (unchanged) braille.lines: every one of the sixteen list-item translations (allegory...protagonist, the eight definitions) reproduces its own gold braille line exactly, and translate('Directions: Match each term with the proper definition.') reproduces ',direc;ns3 ,mat* ea* t]m ) ! prop] def9i;n4' EXACTLY (')' is UEB's whole-word sign for 'with'). See differences.md §5."
+}

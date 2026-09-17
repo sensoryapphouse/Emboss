@@ -51,11 +51,15 @@
 //                      print.blocks[] of {kind:'heading'|'paragraph'|'quote'|
 //                      'epigraph'|'attribution'|'source'|'list'|'box'|'other', ...};
 //                      see buildModel9 and tests/gold/bana-formats-2016/section-9/
-//                      README.md), and "b004-appendix-g" (UKAAF B004 Appendix G,
+//                      README.md), "b004-appendix-g" (UKAAF B004 Appendix G,
 //                      Quoted material — same schema as section-9, both gold files
 //                      no-braille prose-only "Examples"; gold files live under
 //                      tests/gold/ukaaf-b004/appendix-g/, see that directory's own
-//                      README.md).
+//                      README.md), and "section-3" (Transcriber's Notes —
+//                      print.blocks[] of {kind:'heading'|'paragraph'|'note'|'list'|
+//                      'pagenum'|'other', ...} plus a top-level print.transcriberNote
+//                      documentation field; see buildModel3 and tests/gold/
+//                      bana-formats-2016/section-3/README.md).
 // --sample <id>       run just one gold file (e.g. --sample sample-11-06)
 // --update-status     write status.json next to the gold files with the current
 //                      match/mismatch/not-representable/no-braille truth
@@ -1375,7 +1379,124 @@ function buildModel13(sample) {
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
 
-const MODEL_BUILDERS = { 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13 };
+// ---------------------------------------------------------------------------
+// Model building for section-3 (Transcriber's Notes) — from sample.print.blocks
+// (and, only when print.blocks is empty, sample.print.transcriberNote) ONLY.
+// ---------------------------------------------------------------------------
+// This section's gold schema (tests/gold/bana-formats-2016/section-3/README.md) is a flat
+// print.blocks[] list, each {kind, level, text, features, items, continuation}, PLUS a
+// separate top-level print.transcriberNote (a plain-English documentation copy of the
+// section's own primary note wording — this section's whole subject IS the transcriber's
+// note, unlike every other section's plain print.blocks[]-only schema):
+//   kind 'heading'   -> a document `heading` block (level as given), exactly as the
+//                       §4/§7/§8/§9/§13 precedents.
+//   kind 'paragraph' -> a document `para` block; `continuation:true` (matching buildModel1's
+//                       own convention, itself matching document.mjs's real formatPara
+//                       `continuation` field) marks a paragraph that is only a run-on
+//                       continuation of a sentence interrupted by an embedded note
+//                       (example-3-2's own "light and heat", directly after its own note).
+//   kind 'note'      -> BANA §3's own whole subject: a document `{type:'note', text}` block,
+//                       the SAME shape parse.mjs itself builds from a real <prodnote>/
+//                       <annotation> (parse.mjs:2647/2777/2782), formatted by document.mjs's
+//                       own formatTranscriberNote (document.mjs:819-826) — UEB's TN
+//                       indicators (TN_OPEN='@.<'/TN_CLOSE='@.>') wrapped at BANA's fixed 7-5
+//                       margins (tnMargins, document.mjs:793), UNCONDITIONALLY: there is no
+//                       narrower margin for a short "embedded" (≤7-word, 3.2.3) note, and no
+//                       way to give a note's own internal content (3.3.2's nested 1-3 symbol
+//                       list, example-3-3) a different margin from the rest of it. A note
+//                       block's POSITION in print.blocks[] is what carries whether it is a
+//                       "standard" note before/after other content (example-3-1, both of
+//                       example-3-4's notes) or a genuinely EMBEDDED, mid-sentence note
+//                       (example-3-2's "right arrow", spliced between two paragraph
+//                       fragments) or a note standing alone as a heading-like label
+//                       (sample-3-01's "Term"/"Definition" column headings) — this builder
+//                       does not distinguish these cases itself, only reproduces the note in
+//                       its given place, exactly as parse.mjs's own <prodnote> handling does.
+//   kind 'list'      -> a document `list` block; items[] may be plain strings (no markers —
+//                       example-3-3's three analogy lines) or {marker, text} objects
+//                       (sample-3-01's lettered/numbered matching-exercise columns), reusing
+//                       buildListItem exactly as the §7/§8/§9/§16 precedents do.
+//   kind 'pagenum'   -> BANA 1.11.3's mid-braille-page print-page-change indicator, reusing
+//                       the §1 gold precedent's own {type:'pagenum', page} document block
+//                       (example-3-4's two page turns, 833 then 834) — formatPageNum's BANA
+//                       output (document.mjs:1029-1043) is expected to build and compare
+//                       correctly; nothing section-3-specific about it.
+//   kind 'other'     -> never modelled; recorded as a limitation exactly like every other
+//                       section's own 'other' (not used by any of this section's own 9 files;
+//                       kept for schema consistency with every other builder).
+// Where print.blocks is empty (the four no-braille anonymous "Samples:" wordings under 3.3.3/
+// 3.4.1 — there is no OTHER print content at that citing location at all), a single
+// {type:'note', text} block is built from the top-level print.transcriberNote instead; this
+// never affects a sample's status either way, since expectedLinesFor's own empty-braille.lines
+// check classifies these "no-braille" before the model is even run (runOne, above).
+//
+// Three findings, all newly documented or reused during this reconciliation (standards-
+// findings.md F-157, F-158, and reused F-N2), make most of this section's own worked examples
+// diverge from their own gold braille independent of anything this builder does — see
+// tests/gold/bana-formats-2016/section-3/README.md's own "buildModel3" section for the full
+// account of each, and differences.md for the file-by-file evidence.
+function buildBlocks3(printBlocks, limitations) {
+  const blocks = [];
+  for (const b of (printBlocks || [])) {
+    if (!b || typeof b !== 'object') continue;
+    const kind = b.kind;
+    if (kind === 'heading') {
+      if (b.level == null) {
+        limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`);
+        continue;
+      }
+      const tos = textOrSegments(b.text);
+      blocks.push({ type: 'heading', level: b.level, ...tos });
+    } else if (kind === 'paragraph') {
+      const tos = textOrSegments(b.text);
+      const para = { type: 'para', ...tos };
+      if (b.continuation) para.continuation = true;
+      blocks.push(para);
+    } else if (kind === 'note') {
+      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+    } else if (kind === 'attribution') {
+      // A fixed cell-5 block (BANA §9.4, formatAttribution — first line AND runover both
+      // indented 4 cells, no blank line before, one blank line after), reused here exactly as
+      // the section-9 gold precedent reuses it for its own non-authorship cell-5 content
+      // (source citations) — sample-3-01's own "Directions:" line has this exact margin,
+      // confirmed directly against its gold braille, not an ordinary paragraph's margin.
+      blocks.push({ type: 'attribution', ...textOrSegments(b.text) });
+    } else if (kind === 'pagenum') {
+      const page = b.text != null ? String(b.text).trim() : '';
+      if (!page) {
+        limitations.push(`pagenum block has no text — not built.`);
+        continue;
+      }
+      blocks.push({ type: 'pagenum', page: esc(page) });
+    } else if (kind === 'list') {
+      const items = Array.isArray(b.items) ? b.items : [];
+      const built = items.map((it, i) => (typeof it === 'string' ? { text: esc(it) } : buildListItem(it, limitations, `list item ${i}`)));
+      blocks.push({ type: 'list', kind: 'list', items: built });
+    } else if (kind === 'other') {
+      limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
+    } else {
+      limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
+    }
+  }
+  return blocks;
+}
+function buildModel3(sample) {
+  const print = sample.print || {};
+  const printBlocks = Array.isArray(print.blocks) ? print.blocks : [];
+  const limitations = [];
+  let blocks;
+  if (printBlocks.length) {
+    blocks = buildBlocks3(printBlocks, limitations);
+  } else if (print.transcriberNote != null && String(print.transcriberNote).trim()) {
+    blocks = [{ type: 'note', ...textOrSegments(print.transcriberNote) }];
+  } else {
+    blocks = [];
+  }
+  const hasContent = blocks.length > 0;
+  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+}
+
+const MODEL_BUILDERS = { 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13, 'section-3': buildModel3 };
 function buildModel(sample) {
   const fn = MODEL_BUILDERS[SECTION];
   if (!fn) throw new Error(`No model builder registered for --section ${SECTION}`);
@@ -1543,9 +1664,16 @@ export function runOne(sample) {
     return { id: sample.id, status: 'no-braille', diagnosis: 'Standard gives no braille for this sample (print-only worked example).', model, expected, actual: { lines: [], pageBreaksAfter: [] }, diffOps: [] };
   }
   const actual = runModel(model.doc);
+  // Blank lines at the very end of either side carry no information (a worked example ends
+  // where the book's excerpt ends; a document's last block may legitimately be followed by
+  // its own trailing blank — e.g. a poem's blank line after it, BANA 13.3.1a). Trim them on
+  // both sides before comparing so an excerpt's end is never itself a difference.
+  const trimEnd = (ls) => { const out = [...ls]; while (out.length && out[out.length - 1] === '') out.pop(); return out; };
+  actual.lines = trimEnd(actual.lines);
+  expected.lines = trimEnd(expected.lines);
   const diffOps = diffLines(expected.lines, actual.lines);
   const isMatch = expected.lines.length === actual.lines.length && expected.lines.every((l, i) => l === actual.lines[i]);
-  const coreUnrepresentable = (SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j')
+  const coreUnrepresentable = (SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j' || SECTION === 'section-3')
     // §4/§7/§8/§1/§16/b004-6-9/b004-11/§9/b004-appendix-g: any recorded limitation means
     // some real print content was left out of the model (a heading with no level, a
     // bullet/column/box/colour-note Emboss has no mechanism for, a block kind this flat

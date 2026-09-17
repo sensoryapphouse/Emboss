@@ -1,0 +1,54 @@
+{
+  "id": "example-3-2",
+  "title": "Embedded Transcriber’s Note",
+  "pdfPages": [
+    101
+  ],
+  "textLines": [
+    3016,
+    3022
+  ],
+  "illustrates": {
+    "rule": "3.2.3",
+    "quote": "3.2.3   Embedded Transcriber’s Notes. An embedded transcriber’s note is seven words or fewer and may be shown within the text, either before or after the text, or standing alone, e.g., used as a heading."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Electrical energy →",
+        "features": "First half of a two-part energy-conversion key sentence; print itself uses a literal rightward-arrow glyph (→) between the two halves."
+      },
+      {
+        "kind": "note",
+        "text": "right arrow",
+        "features": "Embedded transcriber's note (two words, well under the seven-word limit), inserted immediately after the arrow it explains, per 3.2.3 ('shown within the text')."
+      },
+      {
+        "kind": "paragraph",
+        "text": "light and heat",
+        "features": "Second half of the same sentence, continuing directly after the embedded note with no break.",
+        "continuation": true
+      }
+    ],
+    "transcriberNote": "right arrow",
+    "notes": "Direct read of references/bana/braille-formats-2016.pdf p.101 (print 3-3): the ENTIRE print excerpt is the two-part key 'Electrical energy → light and heat' (a science-text energy-conversion diagram), with an embedded transcriber's note 'right arrow' inserted immediately after the arrow glyph. Both prior transcription runs (A and B) independently invented an unrelated print sentence ('Match the Presidents with their pets.') and an unrelated transcriberNote ('headings added'), neither of which appears anywhere on the cited PDF page and neither of which translates to anything resembling the agreed braille.lines.",
+    "surroundingText": "(See Sample 3-1: Headings Added to Matching Exercise on page 3-5.)",
+    "printFeatures": "A short print sentence containing a literal arrow glyph, with a two-word embedded transcriber's note ('right arrow') inserted immediately after the arrow, before the sentence continues — BANA 3.2.3's own example of a note 'shown within the text'."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",electrical 5]gy ;\\o @.<\"r >r[@.> li<t &",
+      "  h1t"
+    ],
+    "pageBreaks": [],
+    "notes": "The embedded note sits mid-sentence, immediately after the arrow's own braille rendering (;\\o, a standard UEB technical-symbol translation of → requiring no note of its own) and before 'light and heat'. Emboss's document model has no inline-note segment type (standards-findings.md F-107, 'No inline-note construct' — first documented for §16/B004 §11's inline placement notes) — any build necessarily renders a 'note' block on its own line, never fused into the middle of a running sentence; this is an expected reproduction of the same already-known gap, not a new one."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both run A and run B's print.blocks/transcriberNote for this file were unsupported by any translation evidence and did not appear anywhere on the cited PDF page; rebuilt entirely from references/bana/braille-formats-2016.pdf p.101 (print 3-3, pdfPages corrected from both runs' 100 to 101 — both runs' own summary.md already flagged this page-number error) plus forward-translation verification against the already-agreed (unchanged) braille.lines: translate('Electrical energy →') + ';\\o' + TN_OPEN + translate('right arrow') + TN_CLOSE + translate('light and heat') reproduces ',electrical 5]gy ;\\o @.<\"r >r[@.> li<t & h1t' EXACTLY. The note's own two-cell first word was independently cross-checked by reading the PDF's own braille dot-glyphs pixel-by-pixel (a 600dpi render of p.101, the shaded transcriber's-note callout box the source itself highlights): the pattern matches dots-(4)/(46)/(126) [the literal '@.<' TN-open indicator] followed by two more cells whose dot pattern, read directly, matches UEB's own 2-cell contraction for 'right' (not a bare letter 'r' as first guessed) — confirmed conclusively because translate('right arrow') reproduces the target string '\"r >r[' character-for-character, while every other single/short-word candidate tested did not. See differences.md §2 for the complete evidence trail, including the dot-pattern crop analysis."
+}

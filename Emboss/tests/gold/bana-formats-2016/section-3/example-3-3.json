@@ -1,0 +1,64 @@
+{
+  "id": "example-3-3",
+  "title": "Transcriber’s Note with List of Special Symbols",
+  "pdfPages": [
+    101
+  ],
+  "textLines": [
+    3036,
+    3049
+  ],
+  "illustrates": {
+    "rule": "3.3.2",
+    "quote": "3.3.2   Use 1-3 margins for identifications of two or more abbreviations or symbols, preceded and followed by a blank line. The closing transcriber’s note indicator follows the last item."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "This list shows some ways words can be related.",
+        "features": "Plain body paragraph."
+      },
+      {
+        "kind": "note",
+        "text": "Analogy symbols used:\n: is to\n:: as",
+        "features": "Standard transcriber's note; its own embedded two-item symbol list uses 1-3 margins, preceded and followed by a blank line, per 3.3.2 — defines the colon/double-colon symbols used in the list that follows."
+      },
+      {
+        "kind": "list",
+        "items": [
+          "hide : conceal :: close : shut",
+          "rough : smooth :: persist : quit",
+          "page : book :: tree : forest"
+        ],
+        "features": "Three-line list of analogies, printed using the colon symbols just defined; outside and after the transcriber's note."
+      }
+    ],
+    "transcriberNote": "Analogy symbols used: : is to; :: as",
+    "notes": "Direct read of references/bana/braille-formats-2016.pdf p.101 (print 3-3): the opening paragraph reads 'This list shows some ways words can be related.' Both prior transcription runs (A and B) independently wrote 'The list shows...' — refuted by forward-translation (see resolution). The transcriber's note itself has its own internal, 1-3-margin, blank-line-delimited two-item list ('is to' / 'as') per 3.3.2, closed before the (separate, ordinary) three-line analogy list begins.",
+    "surroundingText": null,
+    "printFeatures": "A paragraph, then a transcriber's note (1-3 margins internally) defining two symbols, then a three-line list of analogies using those symbols."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,? li/ %[s \"s ways ^ws c 2 relat$4",
+      "      @.<,analogy symbols us$3",
+      "",
+      ".=3 is to",
+      ".=33 z@.>",
+      "",
+      "hide 3 3c1l 33 close 3 %ut",
+      "r\\< 3 smoo? 33 p]si/ 3 quit",
+      "page 3 book 33 tree 3 =e/"
+    ],
+    "pageBreaks": [],
+    "notes": "List of two items inside the TN uses 1-3 margins, surrounded by blank lines. Each of the note's own two symbol-identification lines carries a dot-locator prefix (.=) on first use (RUEB §3.26.1) — the same generalised-symbol-locator gap noted for Example 3-1 (Emboss's document.mjs `tdSymbolNote` only implements this locator for the hard-coded asterism symbol, standards-findings.md F-138); expect both cells to be missing from Emboss's own output. Separately, formatTranscriberNote (document.mjs) takes one flat wrapped block with no nested-margin list of its own, so the note's internal 1-3-margin two-item list has no representation in the document model at all (standards-findings.md F-15, “No structural support for a key-list transcriber's note” — written for §11.8's larger key-list note but the identical gap, one flat margin pair per note block) — a second, distinct source of mismatch."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.blocks[0].text corrected from 'The list shows...' (both runs) to 'This list shows...', confirmed by forward-translation: translate('This list shows some ways words can be related.') reproduces the agreed braille's opening line ',? li/ %[s \"s ways ^ws c 2 relat$4' EXACTLY ('?' is UEB's 'th' groupsign, giving 'Th' + 'is' = 'This'); translate('The list shows...') instead produces ',! li/...' ('!' is the whole-word sign for 'the'), which does not match. print.blocks[1]/[2] were split into an explicit note+list pair (matching the given braille's own blank-line-delimited structure: TN opens, its own internal 1-3 list, TN closes, blank line, THEN the plain three-line analogy list) rather than run A/B's single free-text 'notes' field description of the same content. See differences.md §3."
+}

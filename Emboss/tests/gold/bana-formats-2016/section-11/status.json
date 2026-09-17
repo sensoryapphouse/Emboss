@@ -21,7 +21,7 @@
   },
   "example-11-6": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"               ,HABITAT ,POT5TIAL\" vs actual \",SPECIES    ,HABITAT    ,POT5TIAL\". line count differs by +3 (expected 5, actual 8). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; header row bold with a ruled line beneath it.\""
+    "note": "first differing line 2: expected \"               ,HABITAT ,POT5TIAL\" vs actual \",SPECIES    ,HABITAT    ,POT5TIAL\". line count differs by +2 (expected 5, actual 7). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; header row bold with a ruled line beneath it.\""
   },
   "example-11-7": {
     "status": "no-braille",
@@ -29,19 +29,19 @@
   },
   "example-11-8": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<,MODEL NUMB]S >E SPAC$ 9 PR9T4\" vs actual \",/OVE \\\"\\\"\\\"\\\" ,MODEL #CD #DCB #EFG\". line count differs by -3 (expected 8, actual 5). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, no header row; plain text, left-aligned.\""
+    "note": "first differing line 2: expected \"      @.<,MODEL NUMB]S >E SPAC$ 9 PR9T4\" vs actual \",/OVE \\\"\\\"\\\"\\\" ,MODEL #CD #DCB #EFG\". line count differs by -3 (expected 7, actual 4). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, no header row; plain text, left-aligned.\""
   },
   "example-11-9": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"        ,,,SAMPLE NUMB] TABLE,'\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +7 (expected 12, actual 19). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"        ,,,SAMPLE NUMB] TABLE,'\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +6 (expected 12, actual 18). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-01": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"      ,FIGURE #BD-#G ,! ,,APY IS !   #,-\" vs actual \"      ,FIGURE #BD-#G ,! ,,APY IS ! BE/\". line count differs by +1 (expected 11, actual 12). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, shaded blue background behind the header row area; header row (\"5.25%, compounded\" / \"APY\") bold. Below the box, \"Figure 24-7\" is bold, followed i"
+    "note": "first differing line 1: expected \"      ,FIGURE #BD-#G ,! ,,APY IS !   #,-\" vs actual \"      ,FIGURE #BD-#G ,! ,,APY IS ! BE/\". line count differs by +1 (expected 10, actual 11). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, shaded blue background behind the header row area; header row (\"5.25%, compounded\" / \"APY\") bold. Below the box, \"Figure 24-7\" is bold, followed i"
   },
   "sample-11-02": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"              ,TABLE #AA4A\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +3 (expected 15, actual 18). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"              ,TABLE #AA4A\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +3 (expected 14, actual 17). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-03": {
     "status": "mismatch",
@@ -49,7 +49,7 @@
   },
   "sample-11-04": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"               ,TABLE #D4\" vs actual \"  ,TABLE #D4 ,M9IMUM ,VIABLE ,POPULA;N\". line count differs by +9 (expected 19, actual 28). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 2: expected \"               ,TABLE #D4\" vs actual \"  ,TABLE #D4 ,M9IMUM ,VIABLE ,POPULA;N\". line count differs by +9 (expected 18, actual 27). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-05": {
     "status": "mismatch",
@@ -57,67 +57,67 @@
   },
   "sample-11-06": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"        ,P]C5TAGE ( ,PRACTI;N]S      #HJ\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +50 (expected 28, actual 78). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"        ,P]C5TAGE ( ,PRACTI;N]S      #HJ\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +50 (expected 27, actual 77). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-07": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"                  ,ANIMALS ,GROOM$\" vs actual \",ANIMALS ,GROOM+ _*     ,JUV5ILE ,9FANT\". line count differs by -1 (expected 9, actual 8). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; the corner cell contains a literal diagonal line dividing \"Animals Groomed\" (upper right, bold) from \"Animals Grooming\" (lower left, bold); row headings "
+    "note": "first differing line 2: expected \"                  ,ANIMALS ,GROOM$\" vs actual \",ANIMALS ,GROOM+ _*     ,JUV5ILE ,9FANT\". line count differs by -1 (expected 8, actual 7). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; the corner cell contains a literal diagonal line dividing \"Animals Groomed\" (upper right, bold) from \"Animals Grooming\" (lower left, bold); row headings "
   },
   "sample-11-08": {
     "status": "mismatch",
-    "note": "first differing line 3: expected \",PR(IT \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\" @S# C4EJ    #AJ.0\" vs actual \",PR(IT \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\" @S#C4EJ   #AJ.0\". line count differs by -1 (expected 9, actual 8). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"No box border; centered bold caption above a plain (unboxed) table; thin horizontal rules under the \"12.95\" and \"37%\" entries only, marking them"
+    "note": "first differing line 3: expected \",PR(IT \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\" @S# C4EJ    #AJ.0\" vs actual \",PR(IT \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\" @S#C4EJ   #AJ.0\". line count differs by -1 (expected 8, actual 7). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"No box border; centered bold caption above a plain (unboxed) table; thin horizontal rules under the \"12.95\" and \"37%\" entries only, marking them"
   },
   "sample-11-09": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"7777777777777777777777777777777777   #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 19, actual 16). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777   #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 18, actual 15). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-10": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<,GUIDE DOTS 9DICATE A SPACE =\" vs actual \",\\\"D       ,TEMP]ATURE AT #AJ3#JJ\". line count differs by -3 (expected 13, actual 10). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows; header row bold.\""
+    "note": "first differing line 2: expected \"      @.<,GUIDE DOTS 9DICATE A SPACE =\" vs actual \",\\\"D       ,TEMP]ATURE AT #AJ3#JJ\". line count differs by -3 (expected 12, actual 9). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows; header row bold.\""
   },
   "sample-11-11": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"7777777777777777777777777777777777   #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 23, actual 20). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777   #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -4 (expected 23, actual 19). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-12": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"              ,TABLE #D-#C          #BAC\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +2 (expected 13, actual 15). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"              ,TABLE #D-#C          #BAC\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +2 (expected 12, actual 14). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-13": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"     ARTICLE D=FINI\" vs actual \"         >TICL\". line count differs by +4 (expected 11, actual 15). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, two-row column heading (\"article défini\" spanning masc./fém. sub-columns); header cells bold.\""
+    "note": "first differing line 2: expected \"     ARTICLE D=FINI\" vs actual \"         >TICL\". line count differs by +4 (expected 10, actual 14). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, two-row column heading (\"article défini\" spanning masc./fém. sub-columns); header cells bold.\""
   },
   "sample-11-14": {
     "status": "mismatch",
-    "note": "first differing line 5: expected \"      @.<,FIGURES 9 ! TABLE >E\" vs actual \"               #AIIB    #AIIC    #AIID\". line count differs by -3 (expected 15, actual 12). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 5: expected \"      @.<,FIGURES 9 ! TABLE >E\" vs actual \"               #AIIB    #AIIC    #AIID\". line count differs by -3 (expected 14, actual 11). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-15": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"              ,TABLE #BA4A\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +21 (expected 15, actual 36). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"              ,TABLE #BA4A\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +21 (expected 14, actual 35). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-16": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +6 (expected 22, actual 28). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +6 (expected 21, actual 27). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-17": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,USE ! *>T 2L TO LI/ YR          #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 12, actual 9). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; all-caps bold header row; four empty ruled rows below it.\""
+    "note": "first differing line 1: expected \"    ,USE ! *>T 2L TO LI/ YR          #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 11, actual 8). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; all-caps bold header row; four empty ruled rows below it.\""
   },
   "sample-11-18": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<.=\\\\O ,\\\"R >R[@.>\" vs actual \",CAUSE           ;\\\\O ,E6ECT\". line count differs by -2 (expected 13, actual 11). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows; the arrow appears in its own narrow middle column in every row, filled or not.\""
+    "note": "first differing line 2: expected \"      @.<.=\\\\O ,\\\"R >R[@.>\" vs actual \",CAUSE           ;\\\\O ,E6ECT\". line count differs by -2 (expected 12, actual 10). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows; the arrow appears in its own narrow middle column in every row, filled or not.\""
   },
   "sample-11-19": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<,\\\"P ( ! TABLE IS OMITT$ 9 PR9T4\" vs actual \"      ,SUNRISE      ,SUNSET\". line count differs by -5 (expected 14, actual 9). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows, with a distinctive jagged/wavy rule (rather than a plain straight rule) marking the omitted-rows break between February and Novembe"
+    "note": "first differing line 2: expected \"      @.<,\\\"P ( ! TABLE IS OMITT$ 9 PR9T4\" vs actual \"      ,SUNRISE      ,SUNSET\". line count differs by -5 (expected 13, actual 8). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled lines between rows, with a distinctive jagged/wavy rule (rather than a plain straight rule) marking the omitted-rows break between February and Novembe"
   },
   "sample-11-20": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -8 (expected 18, actual 10). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -8 (expected 17, actual 9). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-21": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,! TABLE IS R1D ACR         #FJ\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -3 (expected 24, actual 21). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"      @.<,! TABLE IS R1D ACR         #FJ\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -4 (expected 24, actual 20). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-22": {
     "status": "match",
@@ -125,22 +125,22 @@
   },
   "sample-11-23": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<,COLUMNS & R[S >E 9T]*ANG$4@.>\" vs actual \"      @.<,TABLE IS DIVID$ V]TICALLY 9TO\". line count differs by +7 (expected 13, actual 20). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; two-row (Sunrise/Sunset), six-column (Jan-Jun) layout; header row (months) bold.\""
+    "note": "first differing line 2: expected \"      @.<,COLUMNS & R[S >E 9T]*ANG$4@.>\" vs actual \"      @.<,TABLE IS DIVID$ V]TICALLY 9TO\". line count differs by +7 (expected 12, actual 19). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box; two-row (Sunrise/Sunset), six-column (Jan-Jun) layout; header row (months) bold.\""
   },
   "sample-11-24": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +25 (expected 25, actual 50). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777    #,-\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +24 (expected 25, actual 49). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-25": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"      @.<,A S]IES ( ?REE DOT #ES\" vs actual \"      @.<,TABLE IS DIVID$ V]TICALLY 9TO\". line count differs by +15 (expected 18, actual 33). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled line under the header row; header row bold.\""
+    "note": "first differing line 2: expected \"      @.<,A S]IES ( ?REE DOT #ES\" vs actual \"      @.<,TABLE IS DIVID$ V]TICALLY 9TO\". line count differs by +15 (expected 17, actual 32). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered box, ruled line under the header row; header row bold.\""
   },
   "sample-11-26": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"              ,VIETNAM ,W>           #BCC\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +7 (expected 28, actual 35). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
+    "note": "first differing line 1: expected \"              ,VIETNAM ,W>           #BCC\" vs actual \"7777777777777777777777777777777777777777\". line count differs by +7 (expected 27, actual 34). Input-model limitation: print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b \"follow print\"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4."
   },
   "sample-11-27": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,TABLE *ANG$ Z FOLL[S3\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -9 (expected 25, actual 16). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Two separate bordered boxes stacked vertically, each with a centered, ruled subdivision-title row spanning the full width of the box; plain data rows beneath.\""
+    "note": "first differing line 1: expected \"      @.<,TABLE *ANG$ Z FOLL[S3\" vs actual \"7777777777777777777777777777777777777777\". line count differs by -10 (expected 25, actual 15). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Two separate bordered boxes stacked vertically, each with a centered, ruled subdivision-title row spanning the full width of the box; plain data rows beneath.\""
   }
 }
