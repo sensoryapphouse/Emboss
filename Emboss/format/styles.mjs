@@ -99,6 +99,18 @@ export const STYLE_DEFINITIONS = {
     blankAfter: false,
     description: 'Ordered numbered list with 1-3 margin.',
   },
+  plain: {
+    id: 'plain',
+    name: 'Plain List',
+    category: 'list',
+    xmlTag: 'list',
+    xmlType: 'pl',
+    firstCell: 1,
+    runoverCell: 3,
+    blankBefore: true,
+    blankAfter: true,
+    description: 'Unmarked list (DTBook <list type="pl">) with 1-3 margin; nested levels step in by 2 with all runovers two cells right of the deepest level (BANA Formats §8.5.1b; UKAAF B004 §10 / App C).',
+  },
   index: {
     id: 'index',
     name: 'Index Entry',
@@ -110,7 +122,7 @@ export const STYLE_DEFINITIONS = {
     runoverCell: 3,
     blankBefore: false,
     blankAfter: false,
-    description: 'Index entry with 1-3 margin for main entries and 3-5 for subentries per BANA §18.',
+    description: 'Index / alphabetic reference entry: main entry 1-3, each subentry level two cells further right with all runovers two cells right of the deepest level (1-5, 3-5); each index starts on a new braille page (BANA Formats §21.2.1, §21.4; UKAAF B004 App I).',
   },
   dialogue: {
     id: 'dialogue',
@@ -213,9 +225,9 @@ export const STYLE_DEFINITIONS = {
     xmlTag: 'byline',
     firstCell: 5,
     runoverCell: 5,
-    blankBefore: true,
-    blankAfter: false,
-    description: 'Source or author attribution indented 4 spaces (Cell 5) with blank line before.',
+    blankBefore: false,
+    blankAfter: true,
+    description: 'Source or author attribution blocked at Cell 5 (BANA Formats §9.4.1b), no blank line before and a blank line after (§9.4.1d).',
   },
   glossary: {
     id: 'glossary',
@@ -239,7 +251,7 @@ export const STYLE_DEFINITIONS = {
     blankBefore: true,
     blankAfter: true,
     hasBoxlines: true,
-    description: 'Multi-element callout box with BANA top (333...) and bottom (777...) boxlines.',
+    description: 'Multi-element callout box between BANA box lines (Formats §7.1.3): top 777..., bottom GGG... (exterior === when boxes are nested); heading on the line after the top line.',
   },
   'table-spatial': {
     id: 'table-spatial',
@@ -249,7 +261,7 @@ export const STYLE_DEFINITIONS = {
     xmlClass: 'bana-spatial',
     blankBefore: true,
     blankAfter: true,
-    description: '2D grid table with column headers, separator lines, and 2-cell gutters.',
+    description: '2D grid table: column headings over a dot-5/dots-25 ("333) separation line (Formats §11.4.2), 2-cell gutters, guide dots to fill short or blank entries (§11.6.1f, §11.6.4), numbers aligned by place value (§11.6.1d), runovers 2 cells in (§11.6.1a). In UKAAF mode an over-wide table falls back to B004 §12 paragraph form.',
   },
   'table-listed': {
     id: 'table-listed',
@@ -268,7 +280,7 @@ export const STYLE_DEFINITIONS = {
     name: 'Print Page Indicator',
     category: 'meta',
     xmlTag: 'pagenum',
-    description: 'Source print page break indicator.',
+    description: 'Source print page change indicator: UKAAF centred "3 + number (B004 §8); BANA a line of dots 36 ending in the number at the right margin (Formats §1.11.3).',
   },
   quote: {
     id: 'quote',
@@ -276,10 +288,10 @@ export const STYLE_DEFINITIONS = {
     category: 'text',
     xmlTag: 'blockquote',
     firstCell: 3,
-    runoverCell: 1,
+    runoverCell: 3,
     blankBefore: true,
     blankAfter: true,
-    description: 'Quoted block with BANA 3-1 paragraph margin and surrounding blank lines.',
+    description: 'Displayed / quoted material: BANA blocked 3-3 at the adjusted margin with a blank line before and after (Formats §9.2.2); UKAAF 7-5 with no blank lines (B004 App. B / App. G).',
   },
   break: {
     id: 'break',
@@ -312,16 +324,24 @@ export function getStyleMargins(styleId, profile = 'bana') {
   let runover = (def.runoverCell ?? 1) - 1;
 
   // UKAAF minor adjustments if applicable
+  let blankBefore = Boolean(def.blankBefore), blankAfter = Boolean(def.blankAfter);
   if (isUkaaf && styleId === 'h3') {
     first = 4; // Cell 5 in UKAAF
     runover = 4;
+  } else if (isUkaaf && styleId === 'quote') {
+    first = 6; // B004 App. B: quoted material 7-5, "no blank lines are used"
+    runover = 4;
+    blankBefore = false; blankAfter = false;
+  } else if (isUkaaf && styleId === 'note') {
+    first = 0; // B004 gives no TN margin; the house 1-3 is kept (BANA: 7-5, Formats §3.2.2)
+    runover = 2;
   }
 
   return {
     first: Math.max(0, first),
     runover: Math.max(0, runover),
-    blankBefore: Boolean(def.blankBefore),
-    blankAfter: Boolean(def.blankAfter),
+    blankBefore,
+    blankAfter,
   };
 }
 
@@ -332,7 +352,7 @@ export function getStyleMargins(styleId, profile = 'bana') {
  */
 export function isListStyle(styleId) {
   const def = STYLE_DEFINITIONS[styleId];
-  return def?.category === 'list' || styleId.startsWith('list') || styleId.startsWith('exercise') || styleId === 'toc' || styleId === 'glossary' || styleId === 'index';
+  return def?.category === 'list' || styleId.startsWith('list') || styleId.startsWith('exercise') || styleId === 'toc' || styleId === 'glossary' || styleId === 'index' || styleId === 'plain';
 }
 
 /**
@@ -383,15 +403,18 @@ export function resolveStyleFromXml(tagName, className = '') {
  * Example output: "Style: Play Dialogue (1-3) | Cell: 1 | Alignment: Left | Profile: BANA"
  * @param {string} styleId
  * @param {string} profile 'bana' | 'ukaaf'
+ * @param {(key: string, params: object, fallback: string) => string} [tr] interface translator
+ *   (keys app.inspector.* and app.style_names.<id>); English when omitted.
  * @returns {string}
  */
-export function formatStyleInspectorBadge(styleId, profile = 'bana') {
+export function formatStyleInspectorBadge(styleId, profile = 'bana', tr = null) {
+  const T = (key, fallback, params = {}) => (tr ? tr(key, params, fallback) : fallback.replace(/\{(\w+)\}/g, (_, k) => params[k] ?? ''));
   const normId = (styleId === 'p' || styleId === 'body') ? 'body'
     : (styleId === 'bullet' || styleId === 'ul') ? 'list-bullet'
     : (styleId === 'number' || styleId === 'ol') ? 'list-number'
     : (styleId === 'verse') ? 'poem'
     : (styleId === 'index') ? 'index'
-    : (styleId === 'plain') ? 'toc'
+    : (styleId === 'plain') ? 'plain'
     : (styleId === 'table') ? 'table-spatial'
     : (styleId === 'indicator') ? 'break'
     : (styleId === 'play') ? 'dialogue'
@@ -411,38 +434,45 @@ export function formatStyleInspectorBadge(styleId, profile = 'bana') {
   if (isUkaaf && normId === 'h3') {
     firstCell = 5;
     runoverCell = 5;
+  } else if (isUkaaf && normId === 'quote') {
+    firstCell = 7;       // B004 App. B quoted material 7-5
+    runoverCell = 5;
+  } else if (isUkaaf && normId === 'note') {
+    firstCell = 1;       // house 1-3 (BANA 7-5)
+    runoverCell = 3;
   }
 
   let marginTag = '';
   let cellStr = String(firstCell);
-  let alignStr = 'Left';
+  let alignStr = T('app.inspector.left', 'Left');
 
   if (def.align === 'centered') {
-    marginTag = '(Centered)';
-    cellStr = 'Centered';
-    alignStr = 'Center';
+    marginTag = `(${T('app.inspector.centered', 'Centered')})`;
+    cellStr = T('app.inspector.centered', 'Centered');
+    alignStr = T('app.inspector.center', 'Center');
   } else if (def.hasBoxlines) {
-    marginTag = '(Boxlines)';
+    marginTag = `(${T('app.inspector.boxlines', 'Boxlines')})`;
     cellStr = '1';
   } else if (normId === 'table-spatial') {
-    marginTag = '(Grid)';
+    marginTag = `(${T('app.inspector.grid', 'Grid')})`;
     cellStr = '1';
   } else if (normId === 'print-page') {
     marginTag = '';
     cellStr = '1';
   } else if (normId === 'h2' || normId === 'h3') {
-    marginTag = `(Cell ${firstCell})`;
+    marginTag = `(${T('app.inspector.cell_n', 'Cell {n}', { n: firstCell })})`;
     cellStr = String(firstCell);
   } else if (firstCell != null && runoverCell != null) {
     marginTag = `(${firstCell}-${runoverCell})`;
     cellStr = String(firstCell);
   } else if (firstCell != null) {
-    marginTag = `(Cell ${firstCell})`;
+    marginTag = `(${T('app.inspector.cell_n', 'Cell {n}', { n: firstCell })})`;
     cellStr = String(firstCell);
   }
 
-  const name = def.name || 'Body Text';
+  const name = T(`app.style_names.${normId.replace(/-/g, '_')}`, def.name || 'Body Text');
   const marginPart = marginTag ? ` ${marginTag}` : '';
-  return `Style: ${name}${marginPart} | Cell: ${cellStr} | Alignment: ${alignStr} | Profile: ${profileLabel}`;
+  return T('app.inspector.badge', 'Style: {name} | Cell: {cell} | Alignment: {align} | Profile: {profile}',
+    { name: `${name}${marginPart}`, cell: cellStr, align: alignStr, profile: profileLabel });
 }
 

@@ -14,7 +14,10 @@ const EMBOSS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.
 const ROOT = path.resolve(EMBOSS_DIR, '..');
 const DIST = path.join(ROOT, 'dist');
 const ARTIFACTS_DIR = '/Users/paulblenkhorn/.gemini/antigravity/brain/a9d212ee-9a89-4daf-86e5-37a9ce973028';
-const NIMAS_PATH = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const NIMAS_FIXTURE = path.join(EMBOSS_DIR, 'tests/nimas_samples/9780544087507NIMAS.xml');
+const NIMAS_DOWNLOADS = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+const NIMAS_PATH = fs.existsSync(NIMAS_FIXTURE) ? NIMAS_FIXTURE : NIMAS_DOWNLOADS;
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',

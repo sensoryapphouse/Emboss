@@ -1,4 +1,5 @@
 import { makeZip } from '/web/zip.mjs';
+import { cellSegments } from '../format/cell-markup.mjs';
 
 function escapeXml(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
@@ -9,6 +10,17 @@ function escapeXml(s) {
 function tfRunProps(tf) {
   const n = Number(tf) || 0;
   return (n & 4 ? '<w:b/>' : '') + (n & 1 ? '<w:i/>' : '') + (n & 2 ? '<w:u w:val="single"/>' : '');
+}
+
+// A table cell (markup or { text, segments }, format/cell-markup.mjs) as runs; `extraTf`
+// adds bold to header cells.
+const TF_BOLD_BIT = 4;
+function cellRuns(cell, extraTf) {
+  return cellSegments(cell).map((s) => {
+    if (s.type === 'math') return `<w:r><w:rPr><w:i/></w:rPr><w:t xml:space="preserve">$${escapeXml(s.latex || '')}$</w:t></w:r>`;
+    const tfPr = tfRunProps((s.tf || 0) | extraTf);
+    return `<w:r>${tfPr ? '<w:rPr>' + tfPr + '</w:rPr>' : ''}<w:t xml:space="preserve">${escapeXml(s.text || '')}</w:t></w:r>`;
+  }).join('');
 }
 
 export function exportToDocxBlob(model, title = 'Document') {
@@ -124,11 +136,11 @@ export function exportToDocxBlob(model, title = 'Document') {
       const rows = b.rows || [];
       const tblRows = [];
       if (headers.length) {
-        const hCells = headers.map(h => `<w:tc><w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${escapeXml(h)}</w:t></w:r></w:p></w:tc>`).join('');
+        const hCells = headers.map(h => `<w:tc><w:p>${cellRuns(h, TF_BOLD_BIT)}</w:p></w:tc>`).join('');
         tblRows.push(`<w:tr><w:trPr><w:tblHeader/></w:trPr>${hCells}</w:tr>`);
       }
       for (const row of rows) {
-        const rCells = (row || []).map(cell => `<w:tc><w:p><w:r><w:t xml:space="preserve">${escapeXml(cell)}</w:t></w:r></w:p></w:tc>`).join('');
+        const rCells = (row || []).map(cell => `<w:tc><w:p>${cellRuns(cell, 0)}</w:p></w:tc>`).join('');
         tblRows.push(`<w:tr>${rCells}</w:tr>`);
       }
       pXmls.push(`<w:tbl><w:tblPr><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/><w:left w:val="none"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/><w:right w:val="none"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="EEEEEE"/><w:insideV w:val="none"/></w:tblBorders></w:tblPr>${tblRows.join('')}</w:tbl>`);

@@ -203,9 +203,9 @@ function convertRun(el) {
 function convertFraction(el) {
   const num = firstChildByName(el, 'num');
   const den = firstChildByName(el, 'den');
-  const numMml = num ? wrapIfMultiple([convertChildren(num)]) || mrow('') : mrow('');
-  const denMml = den ? wrapIfMultiple([convertChildren(den)]) || mrow('') : mrow('');
-  return `<mfrac>${ensureSingleNode(numMml)}${ensureSingleNode(denMml)}</mfrac>`;
+  const numMml = num ? wrapAsSingleNode(convertChildren(num)) : mrow('');
+  const denMml = den ? wrapAsSingleNode(convertChildren(den)) : mrow('');
+  return `<mfrac>${numMml}${denMml}</mfrac>`;
 }
 
 // mfrac/msup/msub/etc require exactly two (or three) child *nodes*, not an

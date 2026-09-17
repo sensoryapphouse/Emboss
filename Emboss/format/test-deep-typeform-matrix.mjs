@@ -96,8 +96,9 @@ const check = (name, cond, detail = '') => {
     
     const bBrl = formatBlock(hBold, formatOptsBana).join(' ');
     const uBrl = formatBlock(hBold, formatOptsUkaaf).join(' ');
-    check(`Heading Level ${level} Bold [BANA]: emits bold indicator`, /\^1/.test(bBrl), bBrl);
-    check(`Heading Level ${level} Bold [UKAAF]: emits bold indicator`, /\^1/.test(uBrl), uBrl);
+    // Formats §4.3.7 / B004 §5: font attributes are ignored in centred, cell-5 and cell-7 headings.
+    check(`Heading Level ${level} Bold [BANA]: bold indicator dropped (§4.3.7)`, !/\^1/.test(bBrl), bBrl);
+    check(`Heading Level ${level} Bold [UKAAF]: bold indicator dropped (B004 §5)`, !/\^1/.test(uBrl), uBrl);
     verifyTraceInvariant(hBold, formatOptsBana, `Heading L${level} Bold`);
     verifyTraceInvariant(hItal, formatOptsUkaaf, `Heading L${level} Italic`);
   }
@@ -165,7 +166,8 @@ const check = (name, cond, detail = '') => {
 
   check('Play Dialogue Bold: emits bold indicator', /\^1/.test(formatBlock(playDialogue, formatOptsBana).join(' ')));
   check('Play Verse Italic: emits italic indicator', /\.1/.test(formatBlock(playVerse, formatOptsBana).join(' ')));
-  check('Stage Direction Underline: emits underline indicator', /_1/.test(formatBlock(stageDir, formatOptsBana).join(' ')));
+  // Formats §14.4.1c: font attributes used for stage directions are ignored.
+  check('Stage Direction Underline: underline indicator dropped (§14.4.1c)', !/_1/.test(formatBlock(stageDir, formatOptsBana).join(' ')));
   verifyTraceInvariant(playDialogue, formatOptsBana, 'Play Dialogue');
   verifyTraceInvariant(playVerse, formatOptsBana, 'Play Verse');
   verifyTraceInvariant(stageDir, formatOptsBana, 'Stage Direction');
@@ -184,9 +186,9 @@ const check = (name, cond, detail = '') => {
     ],
   };
   const sbOut = formatBlock(sidebarBox, formatOptsBana).join('\n');
-  check('Sidebar Box: Top border 333 present', sbOut.includes('333'), sbOut);
-  check('Sidebar Box: Bottom border 777 present', sbOut.includes('777'), sbOut);
-  check('Sidebar Box: Nested Heading retains bold indicator (^1)', /\^1/.test(sbOut), sbOut);
+  check('Sidebar Box: Top border 777 present (Formats §7.1.3)', sbOut.includes('7777777'), sbOut);
+  check('Sidebar Box: Bottom border GGG present (Formats §7.1.3)', sbOut.includes('GGGGGGG'), sbOut);
+  check('Sidebar Box: Nested Heading drops bold indicator (§4.3.7 applies inside boxes)', !/\^1/.test(sbOut), sbOut);
   check('Sidebar Box: Nested Para retains italic indicator (.1)', /\.1/.test(sbOut), sbOut);
   check('Sidebar Box: Nested List Item retains underline indicator (_1)', /_1/.test(sbOut), sbOut);
   verifyTraceInvariant(sidebarBox, formatOptsBana, 'Sidebar Box');

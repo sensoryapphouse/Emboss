@@ -23,7 +23,7 @@ import { formatDocument } from '../format/document.mjs';
 
 console.log('=== Running BANA Table Editor & Sync Test Suite (Phase 4C) ===\n');
 
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, skipped = 0;
 function check(name, cond, detail = '') {
   if (cond) {
     pass++;
@@ -525,7 +525,7 @@ const spatialDoc = {
   ]
 };
 const spatialText = formatDocument(spatialDoc, brailleOptions);
-check('Spatial braille contains column separator line (---)', spatialText.includes('---'));
+check('Spatial braille contains column separator line ("333, Formats §11.4.2b)', spatialText.includes('"333'));
 check('Spatial braille contains Paris', spatialText.includes('paris'));
 
 // 2. Switch Mode to Listed in Lexical and Re-render
@@ -540,7 +540,7 @@ const toggledAST = extractASTFromLexical(syncEditor);
 check('Toggled AST has format: listed', toggledAST.blocks[0].format === 'listed');
 
 const listedText = formatDocument(toggledAST, brailleOptions);
-check('Listed braille includes Transcriber Note', listedText.includes('table: listed table format'));
+check('Listed braille includes the §11.16 transcriber note', listedText.toLowerCase().includes('print format is changed'));
 check('Listed braille includes row key prefix (country:)', listedText.includes('country:') || listedText.includes('france'));
 check('Listed braille includes attribute prefix (capital: paris)', listedText.includes('capital: paris'));
 
@@ -549,12 +549,16 @@ check('Listed braille includes attribute prefix (capital: paris)', listedText.in
 // ----------------------------------------------------------------------------
 console.log('\n--- Section 5: Scale Test: All 154 Production Tables in Grade 7 Textbook ---');
 
-const textbookPath = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const TEXTBOOK_FIXTURE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'nimas_samples/9780544087507NIMAS.xml');
+const TEXTBOOK_DOWNLOADS = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+const textbookPath = fs.existsSync(TEXTBOOK_FIXTURE) ? TEXTBOOK_FIXTURE : TEXTBOOK_DOWNLOADS;
 let textbookXml = '';
 try {
   textbookXml = fs.readFileSync(textbookPath, 'utf8');
 } catch (e) {
-  console.error('Could not read textbook XML:', e.message);
+  skipped++;
+  console.warn(`SKIPPED: Section 5 (production table scale benchmark) — could not read ${textbookPath}: ${e.message}`);
 }
 
 if (textbookXml) {
@@ -614,5 +618,5 @@ if (textbookXml) {
   check(`100% of tables format cleanly in braille (${renderSuccess}/${productionTables.length})`, renderSuccess === productionTables.length);
 }
 
-console.log(`\nTable editor sync tests complete: ${pass} passed, ${fail} failed.`);
+console.log(`\nTable editor sync tests complete: ${pass} passed, ${fail} failed, ${skipped} skipped.`);
 if (fail > 0) process.exit(1);

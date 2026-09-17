@@ -28,6 +28,12 @@
       });
     })();
   </script>
+  <link rel="manifest" href="/web/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/web/logo.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/web/logo-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/web/logo-16.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/web/logo-512.png" />
+  <meta name="theme-color" content="#1f2a44" />
   <link rel="stylesheet" href="/web/style.css" />
   <style>
     :root {
@@ -819,6 +825,12 @@
       }
     }
     .doc-break { text-align:center; letter-spacing:.5em; color:var(--muted); margin:.5em 0; user-select:none; }
+    .doc-image-block { margin:.5em 0; padding:.5em .75em; border:1px dashed var(--muted); border-radius:6px; display:flex; gap:.75em; align-items:flex-start; user-select:none; }
+    .doc-image-block img { max-width:160px; max-height:120px; object-fit:contain; }
+    .doc-image-meta { display:flex; flex-direction:column; gap:.2em; min-width:0; }
+    .doc-image-src { color:var(--muted); font-size:.85em; overflow-wrap:anywhere; }
+    .doc-image-caption { font-style:italic; }
+    .doc-image-desc { color:var(--muted); font-size:.9em; }
     .doc-print-page {
       display: flex;
       align-items: center;
@@ -1315,7 +1327,7 @@
     .graphic-preview-svg-wrap.size-full { max-width: 100%; }
     .doc-graphic-block.size-full .graphic-preview-svg-wrap svg { max-height: 480px; }
 
-    /* Table Block Styling */
+    /* Table Block Styling (G15: tidy/readable widget, rich contenteditable cells, too-wide badge) */
     .doc-table-block {
       margin: 14px 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px;
       background: var(--panel, #fff); position: relative; overflow-x: auto;
@@ -1323,7 +1335,7 @@
     .doc-table-block:hover, .doc-table-block:focus-within { border-color: var(--accent); }
     .table-context-bar {
       display: flex; gap: 8px; align-items: center; padding: 4px 8px; margin-bottom: 8px;
-      background: var(--btn-bg, #f1f3f7); border-radius: 6px; font-size: .8rem;
+      background: var(--btn-bg, #f1f3f7); border-radius: 6px; font-size: .8rem; flex-wrap: wrap;
     }
     .table-context-btn {
       background: var(--panel, #fff); border: 1px solid var(--line); border-radius: 4px;
@@ -1332,15 +1344,46 @@
     .table-context-btn:hover { border-color: var(--accent); color: var(--accent); }
     .table-context-btn.danger { color: #dc2626; }
     .table-context-btn.danger:hover { border-color: #dc2626; background: #fee2e2; }
+    /* The too-wide warning badge: shown only when a 'spatial'/'auto' table actually falls
+       back to a listed (BANA) / paragraph (UKAAF) braille layout — tableLayout, G15. */
+    .table-warn-badge {
+      font: 600 .74rem/1.3 inherit; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+      background: #fff3d6; color: #8a5d00; border: 1px solid #f0c96b; cursor: help;
+    }
+    :root.dark .table-warn-badge { background: #4a3a0f; color: #ffd23f; border-color: #8a6d1f; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) .table-warn-badge { background: #4a3a0f; color: #ffd23f; border-color: #8a6d1f; }
+    }
     .editor-table-widget { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: .9rem; }
-    .editor-table-widget th, .editor-table-widget td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+    .editor-table-widget th, .editor-table-widget td { border: 1px solid var(--line); padding: 0; text-align: left; vertical-align: top; }
     .editor-table-widget th { background: var(--btn-bg, #f8fafc); font-weight: 600; color: var(--ink); }
     .editor-table-widget td { background: var(--panel, #fff); color: var(--ink); }
-    .editor-table-widget input.table-cell-input { width: 100%; border: 0; outline: none; background: transparent; font: inherit; color: var(--ink); }
-    .editor-table-widget input.table-cell-input:focus { outline: 2px solid var(--accent); border-radius: 2px; }
-    .editor-table-widget input.table-cell-input.table-cell-hl { background: #ffe08a; color: #000; outline: 2px solid #d99b00; border-radius: 2px; }
-    :root.dark .editor-table-widget input.table-cell-input.table-cell-hl,
-    :root:not(.light) .editor-table-widget input.table-cell-input.table-cell-hl { background: #5c4308; color: #ffd23f; outline: 2px solid #b8860b; }
+    /* A cell's contenteditable: no visible markup characters, just the real formatting
+       (segmentsToCellHtml, format/cell-dom.mjs). Padding/min-height live here (not on the
+       th/td) so the focus ring below hugs the text, not the whole cell. */
+    .editor-table-widget .table-cell-input {
+      display: block; min-height: 1.6em; padding: 6px 10px; outline: none; font: inherit; color: var(--ink);
+      white-space: pre-wrap; word-break: break-word; cursor: text;
+    }
+    .editor-table-widget .table-cell-input:empty::before { content: attr(data-placeholder); color: var(--muted); }
+    .editor-table-widget .table-cell-input:focus-visible,
+    .editor-table-widget .table-cell-input:focus { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 2px; background: var(--btn-bg); }
+    .editor-table-widget .table-cell-input.table-cell-hl { background: #ffe08a; color: #000; outline: 2px solid #d99b00; outline-offset: -2px; border-radius: 2px; }
+    :root.dark .editor-table-widget .table-cell-input.table-cell-hl { background: #5c4308; color: #ffd23f; outline: 2px solid #b8860b; }
+    @media (prefers-color-scheme: dark) {
+      :root:not(.light) .editor-table-widget .table-cell-input.table-cell-hl { background: #5c4308; color: #ffd23f; outline: 2px solid #b8860b; }
+    }
+    /* Uncontracted (grade-1) run and maths/note-reference chips inside a cell. */
+    .editor-table-widget .cell-code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: .95em; }
+    .editor-table-widget .cell-math-chip, .editor-table-widget .cell-noteref-chip {
+      display: inline-block; padding: 0 4px; margin: 0 1px; border-radius: 4px; font-size: .92em;
+      background: var(--btn-bg, #eef2f7); border: 1px solid var(--line); cursor: default; user-select: none;
+    }
+    /* Rendered MathML (G15 follow-up) takes its own math font; the monospace fallback is
+       only for the LaTeX text shown when there is no MathML, or it failed to render. */
+    .editor-table-widget .cell-math-chip:not(:has(math)) { font-family: 'SF Mono', Menlo, Consolas, monospace; }
+    .editor-table-widget .cell-math-chip math { vertical-align: middle; }
+    .editor-table-widget .cell-noteref-chip { vertical-align: super; font-size: .78em; padding: 0 3px; }
 
     /* Hardware Tactile Embosser Relief Simulation */
     .brl-tactile-graphic-view {
@@ -1374,6 +1417,69 @@
   <script defer src="/web/vendor/mathlive.min.js"></script>
   <!-- SumIt's equation speech-highlight engine: window.generateMathSpeech(latex) -->
   <script defer src="/web/vendor/speech-script.js"></script>
+  <!-- Offline support: register the service worker. Scope '/' so it also covers /engine,
+       /format, /input and /liblouis (the dev server sends Service-Worker-Allowed: / for
+       /web/sw.js; the dist build rewrites /web/ -> / and has sw.js at the root). A new
+       version is NOT activated behind the user's back: sw.js waits until this page posts
+       SKIP_WAITING from the "new version available" toast, then reloads on controllerchange. -->
+  <script>
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      var wantReload = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        // Only reload when the user asked for the update; the very first install also
+        // fires controllerchange (clients.claim) and must not bounce the page.
+        if (!wantReload) return;
+        wantReload = false;
+        location.reload();
+      });
+      function showUpdateToast(worker) {
+        if (document.getElementById('swUpdateToast')) return;
+        var toast = document.createElement('div');
+        toast.id = 'swUpdateToast';
+        toast.className = 'sw-update-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.setAttribute('lang', document.documentElement.lang || 'en');
+        document.body.appendChild(toast);
+        // Populate on the next frame so the live region announces the inserted text
+        // (content present at creation time is not reliably read out).
+        requestAnimationFrame(function () {
+          var msg = document.createElement('span');
+          msg.textContent = (window.embossT || function (k, p, f) { return f; })('app.update.available', {}, 'A new version of Emboss is available \u2014') + ' ';
+          var reload = document.createElement('button');
+          reload.type = 'button';
+          reload.textContent = (window.embossT || function (k, p, f) { return f; })('app.update.reload', {}, 'Reload');
+          reload.addEventListener('click', function () {
+            wantReload = true;
+            reload.disabled = true;
+            worker.postMessage({ type: 'SKIP_WAITING' });
+          });
+          var later = document.createElement('button');
+          later.type = 'button';
+          later.className = 'sw-update-later';
+          later.textContent = (window.embossT || function (k, p, f) { return f; })('app.update.later', {}, 'Later');
+          later.setAttribute('aria-label', (window.embossT || function (k, p, f) { return f; })('app.update.dismiss_aria', {}, 'Dismiss update notice'));
+          later.addEventListener('click', function () { toast.remove(); });
+          toast.appendChild(msg);
+          toast.appendChild(reload);
+          toast.appendChild(later);
+        });
+      }
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/web/sw.js', { scope: '/' }).then(function (reg) {
+          if (reg.waiting && navigator.serviceWorker.controller) showUpdateToast(reg.waiting);
+          reg.addEventListener('updatefound', function () {
+            var nw = reg.installing;
+            if (!nw) return;
+            nw.addEventListener('statechange', function () {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateToast(nw);
+            });
+          });
+        }).catch(function (err) { console.warn('[sw] registration failed:', err); });
+      });
+    })();
+  </script>
 </head>
 <body class="editor-page">
   <header>
@@ -1382,7 +1488,7 @@
         <div class="head-brand">
           <a class="app-logo-link" href="https://paigebraille.com"
              target="_blank" rel="noopener noreferrer" tabindex="-1"
-             aria-label="Paige Braille website, opens in a new tab">
+             aria-label="Paige Braille website, opens in a new tab" data-i18n-aria="app.header.site_link_aria">
             <img class="app-logo" src="/web/logo.svg" alt="" />
           </a>
           <div>
@@ -1393,7 +1499,7 @@
           <button type="button" id="backToSimple" class="pill-btn" data-i18n-title="toolbar.quick_mode" title="Switch to the drag-and-drop converter">← <span class="btn-lbl" data-i18n="toolbar.quick_mode">Quick Mode</span></button>
           <button type="button" id="btnRead" class="pill-btn" data-i18n-title="toolbar.read_aloud" title="Read document aloud (Ctrl/⌘ ⇧ Space)">▶ <span class="btn-lbl" data-i18n="toolbar.read_aloud">Read</span></button>
           <button type="button" id="loadFileBtn" class="pill-btn">📂 <span class="btn-lbl" data-i18n="common.load">Load</span></button>
-          <input type="file" id="loadFileInput" aria-label="Load document file" accept=".txt,.md,.markdown,.html,.htm,.docx,.rtf,.xml,.xhtml,.epub,.zip,.nimas,.dtbook" style="display:none;" />
+          <input type="file" id="loadFileInput" aria-label="Load document file" data-i18n-aria="app.header.load_file_aria" accept=".txt,.md,.markdown,.html,.htm,.docx,.rtf,.xml,.xhtml,.epub,.zip,.nimas,.dtbook" style="display:none;" />
           <button type="button" class="pill-btn" id="saveDocBtn" data-i18n-title="common.save" title="Save NIMAS Project (.xml) (Ctrl/⌘ S)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             <span class="btn-lbl" data-i18n="common.save">Save</span>
@@ -1403,7 +1509,7 @@
       </div>
       <div class="head-col-center">
         <div class="head-center-group">
-          <label class="toc-wrap" id="tocWrap" data-i18n-title="toolbar.toc" title="Include Table of Contents in document" style="display:none;" hidden><input type="checkbox" id="tocToggle" aria-label="Include Table of Contents in document" disabled /> <span class="btn-lbl" data-i18n="toolbar.toc">TOC</span></label>
+          <label class="toc-wrap" id="tocWrap" data-i18n-title="toolbar.toc" title="Include Table of Contents in document" style="display:none;" hidden><input type="checkbox" id="tocToggle" aria-label="Include Table of Contents in document" data-i18n-aria="app.header.toc_toggle_aria" disabled /> <span class="btn-lbl" data-i18n="toolbar.toc">TOC</span></label>
         </div>
       </div>
       <div class="head-col-right">
@@ -1418,6 +1524,7 @@
               <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl" data-i18n="toolbar.download_brf">Braille (BRF)</span></button>
               <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📄</span> <span class="menu-item-lbl" data-i18n="toolbar.download_pef">PEF 1.0 (.pef)</span></button>
               <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl" data-i18n="toolbar.download_ebrl">eBraille (.ebraille)</span></button>
+              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPackageItem"><span class="menu-item-icon">📦</span> <span class="menu-item-lbl" data-i18n="app.save.package_item">NIMAS package (.zip)</span></button>
             </div>
           </div>
         </div>
@@ -1439,15 +1546,15 @@
     </div>
 
     <div class="panes" id="panesLayout">
-      <section class="pane pane-editor" aria-label="Document text" style="position:relative">
+      <section class="pane pane-editor" aria-label="Document text" data-i18n-aria="app.editor.pane_aria" style="position:relative">
         <div class="pane-h pane-h-editor" id="editorHeader">
-          <span class="pane-label" id="editorLabel">Text</span>
-          <div class="toolbar" role="toolbar" aria-label="Formatting" id="toolbar">
+          <span class="pane-label" id="editorLabel" data-i18n="app.editor.label">Text</span>
+          <div class="toolbar" role="toolbar" aria-label="Formatting" data-i18n-aria="app.editor.toolbar_aria" id="toolbar">
             <button type="button" id="btnUndo" class="tb-btn" data-i18n-title="toolbar.undo" data-i18n-aria="toolbar.undo" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
             <button type="button" id="btnRedo" class="tb-btn" data-i18n-title="toolbar.redo" data-i18n-aria="toolbar.redo" title="Redo (Ctrl+Y / ⌘⇧Z)" aria-label="Redo" data-tb><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg></button>
             <span class="sep" aria-hidden="true"></span>
-            <label class="sr-only" for="blockStyle">Paragraph style</label>
-            <select id="blockStyle" class="block-sel" aria-label="Paragraph style" data-tb>
+            <label class="sr-only" for="blockStyle" data-i18n="app.editor.style_label">Paragraph style</label>
+            <select id="blockStyle" class="block-sel" aria-label="Paragraph style" data-i18n-aria="app.editor.style_label" data-tb>
               <option value="p" data-full="¶ Body Text" data-short="¶ Text" data-mini="¶">¶ Body Text</option>
               <option value="h1" data-full="H1 Heading" data-short="H1" data-mini="H1">H1 Heading</option>
               <option value="h2" data-full="H2 Subheading" data-short="H2" data-mini="H2">H2 Subheading</option>
@@ -1478,7 +1585,7 @@
             <span class="sep" aria-hidden="true"></span>
             <div class="insert-menu-wrap" id="insertMenuWrap">
               <button type="button" id="btnInsertMenu" class="tb-btn insert-btn" data-i18n-title="toolbar.insert" title="Insert Equation, Templates, Table, Graphic, Break" aria-haspopup="menu" aria-expanded="false" data-tb>
-                <span>➕</span> <span class="btn-lbl btn-lbl-full" data-i18n="toolbar.insert">Insert</span><span class="btn-lbl btn-lbl-short" style="display:none">Ins</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
+                <span>➕</span> <span class="btn-lbl btn-lbl-full" data-i18n="toolbar.insert">Insert</span><span class="btn-lbl btn-lbl-short" style="display:none" data-i18n="app.editor.insert_short">Ins</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.7;">▼</span>
               </button>
               <div class="insert-dropdown" id="insertDropdown" role="menu" hidden>
                 <button type="button" id="btnMath" class="insert-item" role="menuitem"><span class="insert-icon">∑</span> <span class="insert-lbl" data-i18n="toolbar.insert_equation">Equation</span></button>
@@ -1497,17 +1604,17 @@
         <div id="printTocContainer"></div>
         <div id="editor" class="editor" contenteditable="true" role="textbox" aria-multiline="true"
              aria-labelledby="editorLabel" spellcheck="false"></div>
-        <div id="slashMenu" class="slash-menu" role="listbox" aria-label="Slash Commands" hidden>
-          <div class="slash-menu-head">Commands</div>
+        <div id="slashMenu" class="slash-menu" role="listbox" aria-label="Slash Commands" data-i18n-aria="app.editor.slash_menu_aria" hidden>
+          <div class="slash-menu-head" data-i18n="app.editor.slash_menu_head">Commands</div>
           <div id="slashList"></div>
         </div>
       </section>
-      <section class="pane pane-braille" aria-label="Braille preview">
+      <section class="pane pane-braille" aria-label="Braille preview" data-i18n-aria="app.braille.pane_aria">
         <h2 class="pane-h pane-h-row" id="brailleLabel">
           <div class="braille-view-tabs" role="tablist" style="display:inline-flex; gap:4px; align-items:center;">
             <button type="button" id="tabViewBraille" class="tb-btn tab-btn active" role="tab" aria-selected="true" title="Standard embossed braille page view" data-i18n-title="toolbar.braille">⠿ <span data-i18n="toolbar.braille">Braille View</span></button>
-            <button type="button" id="tabViewMonarch" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="APH Monarch Dynamic Display (32×10 Braille grid)">📟 Monarch</button>
-            <button type="button" id="tabViewDotPad" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="DotPad 320 Tactile Display (20×10 + 20-cell reading line)">📟 DotPad</button>
+            <button type="button" id="tabViewMonarch" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="APH Monarch Dynamic Display (32×10 Braille grid)" data-i18n-title="app.braille.tab_monarch_title">📟 Monarch</button>
+            <button type="button" id="tabViewDotPad" class="tb-btn tab-btn" role="tab" aria-selected="false" style="display:none;" title="DotPad 320 Tactile Display (20×10 + 20-cell reading line)" data-i18n-title="app.braille.tab_dotpad_title">📟 DotPad</button>
           </div>
           <span class="pane-h-right">
             <button type="button" id="proofBadge" class="proof-badge warn" hidden
@@ -1515,7 +1622,7 @@
           </span>
         </h2>
         <div id="braille" class="braille" aria-labelledby="brailleLabel"></div>
-        <div id="monarchPanel" class="dotpad-panel monarch-panel" style="display:none;" aria-label="APH Monarch 32×10 Emulator">
+        <div id="monarchPanel" class="dotpad-panel monarch-panel" style="display:none;" aria-label="APH Monarch 32×10 Emulator" data-i18n-aria="app.braille.monarch_aria">
           <div class="dotpad-device-frame monarch-device-frame">
             <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px; font-size:0.78rem; color:#94a3b8;">
               <span id="monarchPanelTitle" style="font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:6px;">
@@ -1523,10 +1630,10 @@
               </span>
               <span id="monarchPanelSubtitle" style="color:#cbd5e1;">Lines 1–10 of 25</span>
             </div>
-            <canvas id="monarchPanelCanvas" width="680" height="260" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="APH Monarch: 32×10 Braille cell grid"></canvas>
+            <canvas id="monarchPanelCanvas" width="680" height="260" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="APH Monarch: 32×10 Braille cell grid" data-i18n-title="app.braille.monarch_canvas_title"></canvas>
           </div>
         </div>
-        <div id="dotpadPanel" class="dotpad-panel" style="display:none;" aria-label="DotPad 320 Emulator">
+        <div id="dotpadPanel" class="dotpad-panel" style="display:none;" aria-label="DotPad 320 Emulator" data-i18n-aria="app.braille.dotpad_aria">
           <div class="dotpad-device-frame">
             <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px; font-size:0.78rem; color:#94a3b8;">
               <span id="dotpadPanelTitle" style="font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:6px;">
@@ -1534,16 +1641,16 @@
               </span>
               <span id="dotpadPanelSubtitle" style="color:#cbd5e1;">Page 1 of 1</span>
             </div>
-            <canvas id="dotpadPanelCanvas" width="520" height="340" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Upper display: 60×40 tactile pin matrix"></canvas>
+            <canvas id="dotpadPanelCanvas" width="520" height="340" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Upper display: 60×40 tactile pin matrix" data-i18n-title="app.braille.dotpad_canvas_title"></canvas>
             <div class="dotpad-hardware-strip" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:6px; padding:2px 0;">
-              <button type="button" id="dotpadBtnLP" class="dotpad-hw-btn" title="Left Pan: Previous Page" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">◀ LP</button>
-              <button type="button" id="dotpadBtnF1" class="dotpad-hw-btn" title="F1: Speak Page Aloud" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F1</button>
-              <button type="button" id="dotpadBtnF2" class="dotpad-hw-btn" title="F2: Jump to Top (Page 1)" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F2</button>
-              <button type="button" id="dotpadBtnF3" class="dotpad-hw-btn" title="F3: Toggle Mode" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F3</button>
-              <button type="button" id="dotpadBtnF4" class="dotpad-hw-btn" title="F4: Refresh / Re-sync" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F4</button>
-              <button type="button" id="dotpadBtnRP" class="dotpad-hw-btn" title="Right Pan: Next Page" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">RP ▶</button>
+              <button type="button" id="dotpadBtnLP" class="dotpad-hw-btn" title="Left Pan: Previous Page" data-i18n-title="app.braille.dotpad_left" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">◀ LP</button>
+              <button type="button" id="dotpadBtnF1" class="dotpad-hw-btn" title="F1: Speak Page Aloud" data-i18n-title="app.braille.dotpad_f1" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F1</button>
+              <button type="button" id="dotpadBtnF2" class="dotpad-hw-btn" title="F2: Jump to Top (Page 1)" data-i18n-title="app.braille.dotpad_f2" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F2</button>
+              <button type="button" id="dotpadBtnF3" class="dotpad-hw-btn" title="F3: Toggle Mode" data-i18n-title="app.braille.dotpad_f3" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F3</button>
+              <button type="button" id="dotpadBtnF4" class="dotpad-hw-btn" title="F4: Refresh / Re-sync" data-i18n-title="app.braille.dotpad_f4" style="flex:1; padding:7px 0; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; text-align:center;">F4</button>
+              <button type="button" id="dotpadBtnRP" class="dotpad-hw-btn" title="Right Pan: Next Page" data-i18n-title="app.braille.dotpad_right" style="flex:1.3; padding:7px 0; background:#1e293b; color:#f8fafc; border:1px solid #334155; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:center;">RP ▶</button>
             </div>
-            <canvas id="dotpadTextCanvas" width="520" height="70" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Lower display: 20-cell Braille text reading row"></canvas>
+            <canvas id="dotpadTextCanvas" width="520" height="70" style="width:100%; height:auto; background:#020617; border:1px solid #1e293b; border-radius:8px; cursor:pointer;" title="Lower display: 20-cell Braille text reading row" data-i18n-title="app.braille.dotpad_text_title"></canvas>
           </div>
         </div>
       </section>
@@ -1551,17 +1658,17 @@
     <div class="sb-grab-rail">
       <button type="button" class="sb-grab" id="sbGrab"
               role="separator" aria-orientation="horizontal" tabindex="0"
-              aria-label="Resize the explanation bar"
-              title="Drag, or use the up and down arrow keys, to resize the explanation bar"></button>
+              aria-label="Resize the explanation bar" data-i18n-aria="app.status.resize_aria"
+              title="Drag, or use the up and down arrow keys, to resize the explanation bar" data-i18n-title="app.status.resize_title"></button>
     </div>
     <footer id="statusBar" class="rule-info">
-      <span id="styleInspector" class="style-inspector-badge" role="status" aria-live="polite" tabindex="0" title="Active block style and BANA margins. Press Alt+Up/Down to cycle styles." style="display:none;"></span>
-      <span id="ruleInfoBody" style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap; min-width:0; flex:1 1 auto;"><span class="sb-hint">Click a word in either panel to see the braille rules used.</span></span>
+      <span id="styleInspector" class="style-inspector-badge" role="status" aria-live="polite" tabindex="0" title="Active block style and margins. Press Alt+Up/Down to cycle styles." data-i18n-title="app.status.style_inspector_title" style="display:none;"></span>
+      <span id="ruleInfoBody" style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap; min-width:0; flex:1 1 auto;"><span class="sb-hint" data-i18n="app.status.rule_hint">Click a word in either panel to see the braille rules used.</span></span>
       <span class="doc-stats" id="docStats"></span>
       <span id="tactileDisplayBadge" style="display:none; margin-left:auto; align-items:center; gap:6px; font-size:0.75rem; background:rgba(56,189,248,0.15); color:var(--accent); border:1px solid rgba(56,189,248,0.3); border-radius:4px; padding:2px 8px;">
         <span id="tactileDisplayLbl">Monarch (1-10)</span>
-        <button type="button" id="tactilePrevBtn" class="icon-btn" title="Previous 10 lines" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▲</button>
-        <button type="button" id="tactileNextBtn" class="icon-btn" title="Next 10 lines" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▼</button>
+        <button type="button" id="tactilePrevBtn" class="icon-btn" title="Previous 10 lines" data-i18n-title="app.status.tactile_prev" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▲</button>
+        <button type="button" id="tactileNextBtn" class="icon-btn" title="Next 10 lines" data-i18n-title="app.status.tactile_next" style="padding:0 4px; font-size:0.75rem; min-width:auto; height:18px;">▼</button>
       </span>
     </footer>
     <div id="announce" class="sr-only" aria-live="polite"></div>
@@ -1569,9 +1676,9 @@
 
   <dialog id="settingsDialog" class="dialog">
     <form method="dialog" class="dialog-body">
-      <div class="dialog-head"><h2 data-i18n="settings.title">Settings</h2><button value="close" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2 data-i18n="settings.title">Settings</h2><button value="close" aria-label="Close" data-i18n-aria="common.close">✕</button></div>
       <div class="settings-layout">
-        <nav class="settings-nav" role="tablist" aria-label="Settings Categories">
+        <nav class="settings-nav" role="tablist" aria-label="Settings Categories" data-i18n-aria="app.dialog.settings_nav_aria">
           <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 <span data-i18n="settings.tab_rules">Rules &amp; Standards</span></button>
           <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 <span data-i18n="settings.tab_embosser">Embosser &amp; Hardware</span></button>
           <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 <span data-i18n="settings.tab_interface">User Interface</span></button>
@@ -1599,26 +1706,26 @@
               </select></div>
             <div class="field"><label for="set-mathCode" data-i18n="settings.math_code_label">Math Braille Code</label>
               <select id="set-mathCode">
-                <option value="auto">Follow layout standard (UKAAF → UEB maths, BANA → Nemeth)</option>
-                <option value="ueb">UEB Math (Unified English Braille - UK / AU / NZ / US)</option>
-                <option value="nemeth">Nemeth Code (US STEM Standard)</option>
+                <option value="auto" data-i18n="settings.math_auto">Follow layout standard (UKAAF → UEB maths, BANA → Nemeth)</option>
+                <option value="ueb" data-i18n="settings.math_ueb">UEB Math (Unified English Braille - UK / AU / NZ / US)</option>
+                <option value="nemeth" data-i18n="settings.math_nemeth">Nemeth Code (US STEM Standard)</option>
               </select></div>
             <div class="field"><label for="set-mode" data-i18n="settings.standard_label">Layout Standard</label>
               <select id="set-mode">
-                <option value="ukaaf">UKAAF (UK Standard)</option>
-                <option value="bana">BANA (US Standard)</option>
+                <option value="ukaaf" data-i18n="settings.standard_ukaaf">UKAAF (UK Standard)</option>
+                <option value="bana" data-i18n="settings.standard_bana">BANA (US Standard)</option>
               </select></div>
             <div class="field"><label for="set-paragraphStyle" data-i18n="settings.paragraph_style_label">Paragraph Style</label>
-              <select id="set-paragraphStyle"><option value="indented">Indented (3-1, standard)</option><option value="block">Block (1-1, blank lines)</option></select></div>
+              <select id="set-paragraphStyle"><option value="indented" data-i18n="settings.paragraph_indented">Indented (3-1, standard)</option><option value="block" data-i18n="settings.paragraph_block">Block (1-1, blank lines)</option></select></div>
             <div class="field"><label for="set-quoteStyle" data-i18n="settings.quote_style_label">Quotation Marks</label>
-              <select id="set-quoteStyle"><option value="faithful">Faithful to print</option><option value="exchange">Exchange single → double</option></select></div>
+              <select id="set-quoteStyle"><option value="faithful" data-i18n="settings.quote_faithful">Faithful to print</option><option value="exchange" data-i18n="settings.quote_exchange">Exchange single → double</option></select></div>
             <div class="field"><label for="set-listStyle" data-i18n="settings.list_style_label">List Format</label>
-              <select id="set-listStyle"><option value="spaced">Blank-line list (1-3)</option><option value="compact">Compact list (5-1)</option></select></div>
+              <select id="set-listStyle"><option value="spaced" data-i18n="app.settings.list_spaced">Blank-line list (1-3)</option><option value="compact" data-i18n="app.settings.list_compact">Compact list (5-1)</option></select></div>
             <div class="field"><label for="set-tableFormat" data-i18n="settings.table_format_label">Table Layout</label>
               <select id="set-tableFormat">
-                <option value="auto">Auto (Listed if wide, Columnar if small)</option>
-                <option value="listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
-                <option value="columnar">Columnar Table Format</option>
+                <option value="auto" data-i18n="settings.table_auto">Auto (Listed if wide, Columnar if small)</option>
+                <option value="listed" data-i18n="settings.table_listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
+                <option value="columnar" data-i18n="settings.table_columnar">Columnar Table Format</option>
               </select></div>
           </div>
 
@@ -1626,17 +1733,17 @@
             <h3 data-i18n="settings.tab_embosser">Embosser Hardware &amp; Connection</h3>
             <div class="field"><label for="set-connectionType" data-i18n="settings.connection_type_label">Connection Mode</label>
               <select id="set-connectionType">
-                <option value="serial">USB Serial / Direct Cable (WebSerial)</option>
-                <option value="hid">USB HID / Driverless (Universal WebHID)</option>
-                <option value="ble">Wireless Bluetooth Low Energy (Web Bluetooth)</option>
-                <option value="network">Network / Wi-Fi (REST / WebSocket / IP)</option>
+                <option value="serial" data-i18n="settings.conn_serial">USB Serial / Direct Cable (WebSerial)</option>
+                <option value="hid" data-i18n="settings.conn_hid">USB HID / Driverless (Universal WebHID)</option>
+                <option value="ble" data-i18n="settings.conn_ble">Wireless Bluetooth Low Energy (Web Bluetooth)</option>
+                <option value="network" data-i18n="settings.conn_network">Network / Wi-Fi (REST / WebSocket / IP)</option>
               </select></div>
             <div class="field"><label for="set-embosser" data-i18n="settings.embosser_preset_label">Embosser Preset Model</label>
               <select id="set-embosser">
-                <option value="generic">Generic BRF / Standard Embosser (38x25)</option>
+                <option value="generic" data-i18n="app.settings.embosser_generic">Generic BRF / Standard Embosser (38x25)</option>
                 <option value="monarch">APH Monarch Dynamic Display (32x10)</option>
                 <option value="dotpad">DotPad Dynamic Display (20x10 + 20 Braille)</option>
-                <option value="custom">Simple One-Page Braille Printer (30x20)</option>
+                <option value="custom" data-i18n="app.settings.embosser_custom">Simple One-Page Braille Printer (30x20)</option>
                 <option value="aph">APH PageBlaster / PixBlaster (34x25)</option>
                 <option value="viewplus">ViewPlus Columbia / Premier (40x25)</option>
                 <option value="braillo">Braillo 300 / 600 (42x25)</option>
@@ -1644,20 +1751,20 @@
                 <option value="romeo">Romeo 60 / Enabling Juliet 120 (40x25)</option>
               </select></div>
             <div id="networkSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
-              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Network Embosser (REST / Port 9100 / IP)</h4>
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);" data-i18n="app.settings.network_heading">Network Embosser (REST / Port 9100 / IP)</h4>
               <div class="field-row">
                 <div class="field"><label for="set-networkHost" data-i18n="settings.network_host_label">IP Address or Hostname</label><input id="set-networkHost" type="text" placeholder="192.168.1.150" value="192.168.1.150" /></div>
                 <div class="field" style="max-width:110px;"><label for="set-networkPort" data-i18n="settings.network_port_label">Port</label><input id="set-networkPort" type="number" min="1" max="65535" value="9100" /></div>
               </div>
-              <small style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Supports modern HTTP REST /api/print endpoints or raw TCP port 9100.</small>
+              <small style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;" data-i18n="app.settings.network_hint">Supports modern HTTP REST /api/print endpoints or raw TCP port 9100.</small>
             </div>
             <div id="bleSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
-              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Wireless Bluetooth Low Energy (BLE)</h4>
-              <small style="color:var(--muted); font-size:.78rem; display:block;">Direct wireless pairing with custom GATT 0xFEB0, DotPad, or Nordic UART embossers without cables or OS drivers.</small>
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);" data-i18n="app.settings.ble_heading">Wireless Bluetooth Low Energy (BLE)</h4>
+              <small style="color:var(--muted); font-size:.78rem; display:block;" data-i18n="app.settings.ble_hint">Direct wireless pairing with custom GATT 0xFEB0, DotPad, or Nordic UART embossers without cables or OS drivers.</small>
             </div>
             <div id="hidSettingsGroup" style="display:none; background:var(--btn-bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; margin-bottom:12px;">
-              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);">Driverless Universal USB (WebHID)</h4>
-              <small style="color:var(--muted); font-size:.78rem; display:block;">Connect directly to custom microcontroller embossers (ESP32-S3, RP2040/RP2350, STM32, Arduino) bypassing OS printer-driver lockouts.</small>
+              <h4 style="margin:0 0 8px 0; font-size:.9rem; color:var(--ink);" data-i18n="app.settings.hid_heading">Driverless Universal USB (WebHID)</h4>
+              <small style="color:var(--muted); font-size:.78rem; display:block;" data-i18n="app.settings.hid_hint">Connect directly to custom microcontroller embossers (ESP32-S3, RP2040/RP2350, STM32, Arduino) bypassing OS printer-driver lockouts.</small>
             </div>
             <div class="field"><label for="set-embosserDuplex" data-i18n="settings.duplex_label">Duplex Mode</label>
               <select id="set-embosserDuplex">
@@ -1666,29 +1773,29 @@
               </select></div>
             <div id="serialBaudGroup" class="field" style="display:none;"><label for="set-baudRate" data-i18n="settings.baud_rate_label">Hardware Serial Baud Rate</label>
               <select id="set-baudRate">
-                <option value="9600">9600 bps (Standard)</option>
+                <option value="9600" data-i18n="app.settings.baud_standard">9600 bps (Standard)</option>
                 <option value="19200">19200 bps</option>
                 <option value="38400">38400 bps</option>
-                <option value="115200">115200 bps (High Speed)</option>
+                <option value="115200" data-i18n="app.settings.baud_high">115200 bps (High Speed)</option>
               </select></div>
             <div class="field field-check" style="margin-top:8px;">
               <label class="check-label" for="set-tactileGraphics">
                 <input type="checkbox" id="set-tactileGraphics" checked />
                 <span data-i18n="settings.tactile_graphics_label">Enable Tactile Graphics Mode (Tiger &amp; Index rasterization)</span>
               </label>
-              <small style="display:block; margin-left:24px; color:var(--muted); font-size:.78rem;">When unchecked, diagrams are exported as accessible Transcriber's Note descriptions for text-only embossers and braille displays.</small>
+              <small style="display:block; margin-left:24px; color:var(--muted); font-size:.78rem;" data-i18n="app.settings.graphics_hint">When unchecked, diagrams are exported as accessible Transcriber's Note descriptions for text-only embossers and braille displays.</small>
             </div>
             <div class="field" style="margin-top:16px;border-top:1px solid var(--line);padding-top:12px;">
-              <div class="field-label" style="font-weight:600;font-size:0.88rem;color:var(--ink);">Tactile Display Live Stream (APH Monarch / DotPad / HID)</div>
+              <div class="field-label" style="font-weight:600;font-size:0.88rem;color:var(--ink);" data-i18n="app.settings.tactile_heading">Tactile Display Live Stream (APH Monarch / DotPad / HID)</div>
               <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap;">
-                <button type="button" id="btnConnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--accent);color:#fff;border-radius:7px;font-weight:600;cursor:pointer;">📶 Connect Bluetooth (DotPad BLE)</button>
-                <button type="button" id="btnConnectHid" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">🔌 Connect USB / HID (Monarch)</button>
-                <button type="button" id="btnDisconnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;display:none;">Disconnect Display</button>
-                <button type="button" id="btnSimulateTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">Test Simulated Monarch (32×10)</button>
-                <button type="button" id="btnSimulateDotPad" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;">Test Simulated DotPad (20×10 + 20)</button>
-                <span id="tactileConnStatus" style="font-size:0.84rem;color:var(--muted);font-weight:500;">No display connected</span>
+                <button type="button" id="btnConnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--accent);color:#fff;border-radius:7px;font-weight:600;cursor:pointer;" data-i18n="app.settings.tactile_connect_ble">📶 Connect Bluetooth (DotPad BLE)</button>
+                <button type="button" id="btnConnectHid" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;" data-i18n="app.settings.tactile_connect_hid">🔌 Connect USB / HID (Monarch)</button>
+                <button type="button" id="btnDisconnectTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;display:none;" data-i18n="app.settings.tactile_disconnect">Disconnect Display</button>
+                <button type="button" id="btnSimulateTactile" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;" data-i18n="app.settings.tactile_sim_monarch">Test Simulated Monarch (32×10)</button>
+                <button type="button" id="btnSimulateDotPad" class="tb-btn" style="padding:7px 14px;background:var(--pill-bg);border:1px solid var(--line);color:var(--ink);border-radius:7px;font-weight:600;cursor:pointer;" data-i18n="app.settings.tactile_sim_dotpad">Test Simulated DotPad (20×10 + 20)</button>
+                <span id="tactileConnStatus" style="font-size:0.84rem;color:var(--muted);font-weight:500;" data-i18n="app.settings.tactile_none">No display connected</span>
               </div>
-              <small style="display:block;margin-top:6px;color:var(--muted);font-size:.78rem;">Streams the live braille viewport and tactile graphics directly over WebBluetooth (DotPad BLE UART) or WebHID (Monarch/USB) without external drivers.</small>
+              <small style="display:block;margin-top:6px;color:var(--muted);font-size:.78rem;" data-i18n="app.settings.tactile_hint">Streams the live braille viewport and tactile graphics directly over WebBluetooth (DotPad BLE UART) or WebHID (Monarch/USB) without external drivers.</small>
             </div>
           </div>
 
@@ -1712,18 +1819,18 @@
             <div class="field field-check">
               <label class="check-label" for="set-sixkey">
                 <input type="checkbox" id="set-sixkey" />
-                <span><strong data-i18n="toolbar.toggle_perkins">Perkins 6-Key Input</strong> — type braille with SDF and JKL keys</span>
+                <span><strong data-i18n="toolbar.toggle_perkins">Perkins 6-Key Input</strong> <span data-i18n="app.settings.perkins_hint">— type braille with SDF and JKL keys</span></span>
               </label>
             </div>
             <div class="field field-check">
               <label class="check-label" for="set-asciiBraille">
                 <input type="checkbox" id="set-asciiBraille" />
-                <span><strong data-i18n="toolbar.toggle_brf">Display as ASCII Braille</strong> — show raw ASCII braille characters</span>
+                <span><strong data-i18n="toolbar.toggle_brf">Display as ASCII Braille</strong> <span data-i18n="app.settings.ascii_hint">— show raw ASCII braille characters</span></span>
               </label>
             </div>
             <div class="field-row" style="margin-top:14px; padding-top:10px; border-top:1px solid var(--line);">
-              <div class="field"><label for="set-voice">Reading Voice</label><select id="set-voice"></select></div>
-              <div class="field"><label for="set-rate">Reading Speed <span id="rateVal" class="rate-val"></span></label>
+              <div class="field"><label for="set-voice" data-i18n="settings.voice_label">Reading Voice</label><select id="set-voice"></select></div>
+              <div class="field"><label for="set-rate"><span data-i18n="settings.speed_label">Reading Speed</span> <span id="rateVal" class="rate-val"></span></label>
                 <input id="set-rate" type="range" min="0.5" max="2" step="0.1" value="1" /></div>
             </div>
           </div>
@@ -1739,7 +1846,7 @@
             <div class="field">
               <label class="check-label" for="set-includeCovers">
                 <input type="checkbox" id="set-includeCovers" />
-                <span><strong data-i18n="settings.include_covers">Tactile Volume Covers</strong> — embossed title covers when splitting books</span>
+                <span><strong data-i18n="settings.include_covers">Tactile Volume Covers</strong> <span data-i18n="app.settings.covers_hint">— embossed title covers when splitting books</span></span>
               </label>
             </div>
           </div>
@@ -1751,7 +1858,7 @@
 
   <dialog id="helpDialog" class="dialog">
     <div class="dialog-body">
-      <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2>Help &amp; Documentation</h2><button id="helpClose" aria-label="Close" data-i18n-aria="common.close">✕</button></div>
       <div class="help-content">
         <h3>Two Ways to Work</h3>
         <p>Emboss provides two integrated operating modes, sharing your translation standards, language tables, contraction grades, and page geometry:</p>
@@ -1764,7 +1871,7 @@
         <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
         <p>Emboss is fully internationalized to support transcribers, educators, and blind students worldwide:</p>
         <ul>
-          <li><strong>112 Interface Languages:</strong> Switch the complete user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) into 112 languages via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. Common languages (English, Spanish, French, and your local system language) are pinned to the top of the list for quick access.</li>
+          <li><strong>7 Interface Languages:</strong> The user interface (buttons, menus, dialogs, tooltips, and screen reader announcements) is translated into <strong>7 languages</strong> — German, Spanish, French, Italian, Portuguese, Arabic and Hebrew (the last two with right-to-left layout) — switch via <strong>Settings ⚙ &gt; User Interface &gt; Language</strong>. The language list offers all <strong>112 languages</strong> that have braille translation tables; choosing one that is not yet translated keeps the interface in English. The interface language does not change the braille code — choose that separately in the braille settings.</li>
           <li><strong>Native Right-to-Left (RTL) Support:</strong> When selecting Arabic, Hebrew, Persian, or Urdu, the entire editor layout and document panes automatically adjust to Right-to-Left orientation with mirrored toolbars and bidirectional caret tracking.</li>
           <li><strong>142+ Document Braille Codes:</strong> Independently select your document's braille translation tables and contraction level (UEB Grade 1/2, Spanish, French, German, Arabic, Welsh, Gaelic, Hindi, Chinese, etc.) in <strong>Settings ⚙ &gt; Rules &amp; Standards</strong>.</li>
         </ul>
@@ -1931,17 +2038,17 @@
     <div class="dialog-body">
       <div class="dialog-head">
         <h2 id="formulaTitle" data-i18n="formulas.title">Formula &amp; Equation Templates</h2>
-        <button type="button" id="formulaClose" aria-label="Close formula templates dialog">✕</button>
+        <button type="button" id="formulaClose" aria-label="Close formula templates dialog" data-i18n-aria="app.dialog.formula_close">✕</button>
       </div>
       <div class="field" style="margin: 8px 0 10px;">
-        <label for="formulaSearch" class="sr-only">Search formulas</label>
-        <input type="search" id="formulaSearch" aria-label="Search formula and equation templates" data-i18n-placeholder="formulas.search_placeholder" placeholder="Search formulas, e.g. quadratic, energy, integral, matrix, pH..." autocomplete="off"
+        <label for="formulaSearch" class="sr-only" data-i18n="app.dialog.formula_search_label">Search formulas</label>
+        <input type="search" id="formulaSearch" aria-label="Search formula and equation templates" data-i18n-aria="app.dialog.formula_search_aria" data-i18n-placeholder="formulas.search_placeholder" placeholder="Search formulas, e.g. quadratic, energy, integral, matrix, pH..." autocomplete="off"
                aria-controls="formulaList" aria-autocomplete="list"
                style="width:100%; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
       </div>
       <div id="formulaStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-      <nav id="formulaCats" class="formula-cats" aria-label="Formula Categories"></nav>
-      <div id="formulaList" class="formula-list" role="listbox" aria-label="Math formula templates">
+      <nav id="formulaCats" class="formula-cats" aria-label="Formula Categories" data-i18n-aria="app.dialog.formula_cats"></nav>
+      <div id="formulaList" class="formula-list" role="listbox" aria-label="Math formula templates" data-i18n-aria="app.dialog.formula_list">
         <!-- Populated dynamically from SumIt's formula library with category filtering -->
       </div>
       <div class="dialog-foot" style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
@@ -1955,26 +2062,26 @@
     <div class="dialog-body">
       <div class="dialog-head">
         <h2 id="graphicTitle" data-i18n="tactile.library_title">Tactile Graphic Diagrams</h2>
-        <button type="button" id="graphicClose" aria-label="Close graphics dialog">✕</button>
+        <button type="button" id="graphicClose" aria-label="Close graphics dialog" data-i18n-aria="app.dialog.graphic_close">✕</button>
       </div>
       <div style="display:flex; gap:12px; margin: 10px 0 6px;">
-        <input type="search" id="graphicSearch" aria-label="Search tactile graphics diagram library" data-i18n-placeholder="tactile.search_placeholder" placeholder="Search diagrams, e.g. triangle, cell, circuit, compass, pie chart..." autocomplete="off"
+        <input type="search" id="graphicSearch" aria-label="Search tactile graphics diagram library" data-i18n-aria="app.dialog.graphic_search_aria" data-i18n-placeholder="tactile.search_placeholder" placeholder="Search diagrams, e.g. triangle, cell, circuit, compass, pie chart..." autocomplete="off"
                aria-controls="graphicList" aria-autocomplete="list"
                style="flex:1; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font:inherit; font-size:.9rem;" />
         <label for="graphicUploadInput" class="tb-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1px solid var(--line); border-radius:8px; background:var(--btn-bg); color:var(--ink); font-size:.88rem; font-weight:600;">
           <span data-i18n="tactile.upload_svg">📁 Upload SVG</span>
-          <input type="file" id="graphicUploadInput" aria-label="Upload custom tactile SVG diagram" accept=".svg,image/svg+xml" style="display:none;" />
+          <input type="file" id="graphicUploadInput" aria-label="Upload custom tactile SVG diagram" data-i18n-aria="app.dialog.graphic_upload_aria" accept=".svg,image/svg+xml" style="display:none;" />
         </label>
       </div>
       <div style="display:flex; align-items:center; gap:8px; margin: 0 0 10px 0; font-size:.82rem; color:var(--muted); flex-wrap:wrap;">
         <span data-i18n="tactile.open_repositories">🌐 Open Tactile Repositories:</span>
-        <a href="https://btactile.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">BTactile (Free) ↗</a> ·
-        <a href="https://imagelibrary.aph.org/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">APH TGIL (1,800+ Templates) ↗</a> ·
+        <a href="https://btactile.com" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;" data-i18n="app.dialog.btactile_link">BTactile (Free) ↗</a> ·
+        <a href="https://imagelibrary.aph.org/" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;" data-i18n="app.dialog.tgil_link">APH TGIL (1,800+ Templates) ↗</a> ·
         <a href="https://github.com/benetech/AccessibleImageSampleBook" target="_blank" rel="noopener" style="color:var(--accent); text-decoration:none; font-weight:600;">Benetech DIAGRAM (GitHub) ↗</a>
       </div>
       <div id="graphicStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-      <nav id="graphicCats" class="formula-cats" aria-label="Graphic Categories"></nav>
-      <div id="graphicList" class="graphic-list" role="listbox" aria-label="Tactile graphic diagrams" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; max-height:360px; overflow-y:auto; padding:4px 2px;">
+      <nav id="graphicCats" class="formula-cats" aria-label="Graphic Categories" data-i18n-aria="app.dialog.graphic_cats"></nav>
+      <div id="graphicList" class="graphic-list" role="listbox" aria-label="Tactile graphic diagrams" data-i18n-aria="app.dialog.graphic_list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; max-height:360px; overflow-y:auto; padding:4px 2px;">
         <!-- Populated dynamically from TACTILE_SVG_LIBRARY -->
       </div>
       <div class="dialog-foot" style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid var(--line);">
@@ -1996,6 +2103,6 @@
     </div>
   </div>
 
-  <script type="module" src="/web/editor/editor.mjs?v=20260915_172000"></script>
+  <script type="module" src="/web/editor/editor.mjs?v=20260918_110500"></script>
 </body>
 </html>

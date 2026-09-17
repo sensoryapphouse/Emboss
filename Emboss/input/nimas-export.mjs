@@ -2,29 +2,52 @@
 // Provides pure, deterministic serialization from the internal Document Model AST
 // ({ title, blocks, metadata }) into standard ANSI/NISO Z39.86-2005 (DTBook 2005-3) XML.
 
+import { cellSegments, cellPlainText } from '../format/cell-markup.mjs';
+
 const TF_ITALIC = 1;
 const TF_UNDERLINE = 2;
 const TF_BOLD = 4;
 
 /**
+ * Coerces an arbitrary string into an XML NCName (`[A-Za-z_][\w.-]*`) so it is
+ * usable as a DTD `ID` attribute value. Illegal characters become `_`; a
+ * leading digit/`-`/`.` gets an `id_` prefix; empty input yields `id`.
+ * @param {string} value
+ * @returns {string}
+ */
+export function toNCName(value) {
+  let v = String(value ?? '').trim().replace(/[^A-Za-z0-9_.\-]/g, '_');
+  if (!v) return 'id';
+  if (!/^[A-Za-z_]/.test(v)) v = `id_${v}`;
+  return v;
+}
+
+/**
  * Deterministic ID allocator to guarantee uniqueness of XML ID attributes.
+ * All ids handed out (and all ids registered) are sanitised to NCNames.
  */
 export class IdAllocator {
   constructor() {
     this.usedIds = new Set();
   }
+  /** Reserve an id that already exists in pass-through markup (e.g. MathML). */
+  register(id) {
+    if (id == null || id === '') return;
+    this.usedIds.add(toNCName(id));
+  }
   getId(preferred, prefix = 'id') {
-    if (preferred && !this.usedIds.has(preferred)) {
-      this.usedIds.add(preferred);
-      return preferred;
+    const wanted = preferred ? toNCName(preferred) : '';
+    if (wanted && !this.usedIds.has(wanted)) {
+      this.usedIds.add(wanted);
+      return wanted;
     }
-    let base = preferred || prefix;
-    let counter = 1;
-    let candidate = preferred ? `${base}-${counter}` : `${base}-${counter}`;
-    if (!preferred && !this.usedIds.has(base)) {
+    const base = wanted || toNCName(prefix);
+    if (!wanted && !this.usedIds.has(base)) {
       this.usedIds.add(base);
       return base;
     }
+    let counter = 1;
+    let candidate = `${base}-${counter}`;
     while (this.usedIds.has(candidate)) {
       counter++;
       candidate = `${base}-${counter}`;
@@ -34,18 +57,324 @@ export class IdAllocator {
   }
 }
 
+// Characters that are not legal anywhere in an XML 1.0 document (even escaped):
+// C0 controls other than TAB/LF/CR, plus U+FFFE and U+FFFF.
+// eslint-disable-next-line no-control-regex
+const XML_ILLEGAL_RE = /[\x00-\x08\x0B\x0C\x0E-\x1F￾￿]/g;
+// Lone surrogates (a high surrogate not followed by a low one, or a low one not preceded by a high one).
+const LONE_SURROGATE_RE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g;
+
 /**
- * Escapes characters with special meaning in XML.
+ * Removes characters that cannot appear in a well-formed XML 1.0 document
+ * (illegal control characters, U+FFFE/U+FFFF, and lone surrogates).
+ * @param {string} str
+ * @returns {string}
+ */
+export function stripXmlIllegalChars(str) {
+  if (str == null) return '';
+  return String(str).replace(XML_ILLEGAL_RE, '').replace(LONE_SURROGATE_RE, '');
+}
+
+/**
+ * Escapes characters with special meaning in XML (for both text and attribute
+ * values) after stripping characters XML cannot represent at all.
  * @param {string} str
  * @returns {string}
  */
 export function escapeXml(str) {
   if (str == null) return '';
-  return String(str)
+  return stripXmlIllegalChars(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+// ---------------------------------------------------------------------------
+// MathML helpers
+// ---------------------------------------------------------------------------
+
+const MATH_OPEN_RE = /<(m:|mml:|mathml:)?math\b/;
+
+/**
+ * Normalises a pass-through MathML fragment so that it validates against the
+ * DAISY "MathML in DTBook" modular extension: every MathML element is written
+ * with the `m:` prefix (bound once on the <dtbook> root), stray namespace
+ * declarations are removed, `altimg`/`alttext` are guaranteed on <m:math>,
+ * ids are coerced to NCNames, and a <semantics> whose first child is an
+ * <annotation> gets a presentation <mrow> so the content model holds.
+ * @param {string} raw
+ * @param {string} altFallback
+ * @returns {string}
+ */
+export function normalizeMathMl(raw, altFallback = 'math expression') {
+  let m = stripXmlIllegalChars(raw).trim();
+  if (!m) return m;
+  // The editor's maths nodes carry presentation fragments (`<mrow>…</mrow>`) without a
+  // <math> root; DTBook only admits MathML inside <m:math>, so give every fragment one.
+  if (!MATH_OPEN_RE.test(m)) {
+    if (!m.startsWith('<')) return m;
+    m = `<math>${m}</math>`;
+  }
+
+  // Re-prefix every element tag to `m:` and drop xmlns declarations for the
+  // MathML namespace (the DTD binds xmlns:m as a #FIXED attribute).
+  m = m.replace(/<(\/?)(?:(?:m|mml|mathml):)?([A-Za-z][\w.-]*)((?:\s[^<>]*?)?)(\/?)>/g, (all, slash, local, attrs, selfClose) => {
+    let a = attrs
+      .replace(/\s+xmlns(?::(?:m|mml|mathml|xlink))?\s*=\s*"[^"]*"/g, '')
+      .replace(/\s+xmlns(?::(?:m|mml|mathml|xlink))?\s*=\s*'[^']*'/g, '');
+    if (selfClose) a = a.replace(/\s+$/, '');
+    return `<${slash}m:${local}${a}${selfClose ? '/' : ''}>`;
+  });
+
+  m = wrapBareMathText(m);
+
+  // Sanitise ids so they are legal ID tokens.
+  m = m.replace(/(\sid\s*=\s*)"([^"]*)"/g, (all, pre, v) => `${pre}"${toNCName(v)}"`);
+
+  if (!/<m:math\b[^>]*\saltimg\s*=/.test(m)) {
+    m = m.replace(/<m:math\b/, '$& altimg="math.png"');
+  }
+  if (!/<m:math\b[^>]*\salttext\s*=/.test(m)) {
+    m = m.replace(/<m:math\b/, `$& alttext="${escapeXml(altFallback || 'math expression')}"`);
+  }
+  if (/<m:semantics\b[^>]*>\s*<m:annotation\b/.test(m)) {
+    m = m.replace(/(<m:semantics\b[^>]*>)\s*(<m:annotation\b[^>]*>)([\s\S]*?)(<\/m:annotation>)/g, (all, semTag, annOpen, innerText, annClose) => {
+      return `${semTag}<m:mrow><m:mtext>${innerText}</m:mtext></m:mrow>${annOpen}${innerText}${annClose}`;
+    });
+  }
+  return m;
+}
+
+// MathML 2 elements whose content model admits character data; everywhere else
+// (mtd, mrow, mstyle, math…) text must sit inside a token element.
+const MATH_TEXT_ELEMENTS = new Set(['mi', 'mn', 'mo', 'mtext', 'ms', 'annotation', 'annotation-xml', 'ci', 'cn', 'csymbol', 'mglyph']);
+
+/**
+ * Wraps character data that sits directly inside a non-token MathML element
+ * (e.g. `<m:mtd>Total</m:mtd>`, emitted by the editor's LaTeX converter) in
+ * `<m:mtext>`, which is the only way MathML 2 allows it. Expects m:-prefixed input.
+ * @param {string} m
+ * @returns {string}
+ */
+function wrapBareMathText(m) {
+  const stack = [];
+  return m.replace(/(<[^>]+>)|([^<]+)/g, (all, tag, text) => {
+    if (tag) {
+      const t = tag.match(/^<(\/?)m:([\w.-]+)[^>]*?(\/?)>$/);
+      if (t) {
+        if (t[1]) stack.pop();
+        else if (!t[3]) stack.push(t[2]);
+      }
+      return tag;
+    }
+    const parent = stack[stack.length - 1];
+    if (!parent || MATH_TEXT_ELEMENTS.has(parent) || !text.trim()) return text;
+    const lead = text.match(/^\s*/)[0];
+    const trail = text.match(/\s*$/)[0];
+    return `${lead}<m:mtext>${text.trim()}</m:mtext>${trail}`;
+  });
+}
+
+/**
+ * Builds a minimal MathML island from LaTeX source.
+ * @param {string} latex
+ * @returns {string}
+ */
+function mathMlFromLatex(latex) {
+  const esc = escapeXml(latex);
+  return `<m:math alttext="${esc}" altimg="math.png"><m:semantics><m:mrow><m:mtext>${esc}</m:mtext></m:mrow><m:annotation encoding="application/x-tex">${esc}</m:annotation></m:semantics></m:math>`;
+}
+
+/**
+ * Serialises one math segment/block to a normalised <m:math> island.
+ * @param {{mathml?: string, latex?: string, text?: string}} seg
+ * @returns {string}
+ */
+export function serializeMathMl(seg) {
+  if (!seg) return '';
+  if (seg.mathml) return normalizeMathMl(seg.mathml, seg.latex || seg.text || 'math expression');
+  if (seg.latex) return mathMlFromLatex(seg.latex);
+  return '';
+}
+
+/**
+ * Returns every `id="…"` value found in a markup string.
+ * @param {string} markup
+ * @returns {string[]}
+ */
+function extractIds(markup) {
+  const ids = [];
+  const re = /\sid\s*=\s*"([^"]*)"/g;
+  let mt;
+  while ((mt = re.exec(markup)) !== null) ids.push(mt[1]);
+  return ids;
+}
+
+/**
+ * Walks the document model and reserves every id that lives inside
+ * pass-through MathML so generated ids (notes, sidebars, pagenums) never
+ * collide with them.
+ * @param {Array<object>} blocks
+ * @param {IdAllocator} idAlloc
+ */
+export function registerMathIds(blocks, idAlloc) {
+  if (!idAlloc || !Array.isArray(blocks)) return;
+  const visitSegments = (segments) => {
+    if (!Array.isArray(segments)) return;
+    for (const seg of segments) {
+      if (seg && seg.type === 'math' && seg.mathml) {
+        for (const id of extractIds(normalizeMathMl(seg.mathml))) idAlloc.register(id);
+      }
+    }
+  };
+  const visit = (list) => {
+    if (!Array.isArray(list)) return;
+    for (const b of list) {
+      if (!b) continue;
+      if (b.type === 'math' && b.mathml) {
+        for (const id of extractIds(normalizeMathMl(b.mathml))) idAlloc.register(id);
+      }
+      visitSegments(b.segments);
+      if (Array.isArray(b.items)) {
+        for (const it of b.items) {
+          if (!it) continue;
+          visitSegments(it.segments);
+          visitSegments(it.termSegments);
+          visitSegments(it.defSegments);
+        }
+      }
+      if (b.type === 'table') {
+        for (const cell of [...(b.headers || []), ...(b.rows || []).flat()]) {
+          if (cell && typeof cell === 'object') visitSegments(cell.segments);
+        }
+      }
+      if (Array.isArray(b.blocks)) visit(b.blocks);
+    }
+  };
+  visit(blocks);
+}
+
+// ---------------------------------------------------------------------------
+// Graphics helpers
+// ---------------------------------------------------------------------------
+
+function utf8ToBase64(str) {
+  if (typeof Buffer !== 'undefined' && typeof Buffer.from === 'function') {
+    return Buffer.from(str, 'utf8').toString('base64');
+  }
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(bin);
+}
+
+/**
+ * Encodes SVG markup as a `data:image/svg+xml;base64,…` URI.
+ * @param {string} svg
+ * @returns {string}
+ */
+export function svgToDataUri(svg) {
+  if (!svg || typeof svg !== 'string') return '';
+  return `data:image/svg+xml;base64,${utf8ToBase64(svg)}`;
+}
+
+/**
+ * Resolves the `src` for a graphic block: an explicit src wins; otherwise a
+ * tactile graphic carrying `svg` is embedded as a data URI.
+ * @param {object} block
+ * @returns {string}
+ */
+function graphicSrc(block) {
+  if (block.src) return String(block.src);
+  if (typeof block.svg === 'string' && block.svg.trim()) return svgToDataUri(block.svg);
+  return '';
+}
+
+/**
+ * True for a block that is a caption in the model (either a dedicated caption
+ * block or a paragraph styled as one).
+ * @param {object} block
+ * @returns {boolean}
+ */
+function isCaptionBlock(block) {
+  return !!block && (block.type === 'caption' || (block.type === 'para' && block.style === 'caption'));
+}
+
+/**
+ * A caption that is not attached to a table cannot be a bare <caption> in
+ * DTBook (it is only allowed inside <table> and <imggroup>). It is emitted as
+ * a figure caption inside an <imggroup>, which is valid both at block level
+ * and inside sidebars/list items, and which parse.mjs restores as a caption
+ * block.
+ * @param {object} block
+ * @param {string} indent
+ * @returns {string}
+ */
+function serializeOrphanCaption(block, indent, idAlloc = null) {
+  const content = serializeInlineSegments(block.segments, block.text, idAlloc);
+  return `${indent}<imggroup><caption>${content}</caption></imggroup>`;
+}
+
+/**
+ * <pagenum> for a print page turn block. The DTBook @page type comes from the parsed
+ * source when known (block.pageType), otherwise it is inferred from the value.
+ */
+function pagenumXml(block, idAlloc = null) {
+  const pageVal = block.page || block.text || '1';
+  const cleanPage = String(pageVal).trim().replace(/[^a-zA-Z0-9_-]/g, '') || '1';
+  const pageId = idAlloc ? idAlloc.getId(block.id, `p-${cleanPage}`) : (block.id || `p-${cleanPage}`);
+  const trimmedVal = String(pageVal).trim();
+  let pageType = block.pageType;
+  if (pageType !== 'front' && pageType !== 'normal' && pageType !== 'special') {
+    if (/^\d+$/.test(trimmedVal)) pageType = 'normal';
+    else if (/^[ivxlcdm]+$/i.test(trimmedVal)) pageType = 'front';
+    else pageType = 'special';
+  }
+  return `<pagenum id="${escapeXml(pageId)}" page="${pageType}">${escapeXml(pageVal)}</pagenum>`;
+}
+
+/**
+ * The parser splits a paragraph around a print page turn into
+ * para{continued} · pagenum · para{continuation} so the formatter can resume the text in
+ * cell 1. On export the pieces are rejoined into the single <p> the source had, with the
+ * <pagenum> inline — otherwise the round trip would turn one paragraph into two.
+ */
+export function mergePageTurnContinuations(blocks) {
+  if (!Array.isArray(blocks)) return blocks;
+  const toSegs = (b) => (Array.isArray(b.segments) && b.segments.length ? b.segments : [{ type: 'text', text: b.text ?? '' }]);
+  const out = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (!b || b.type !== 'para' || !b.continued) { out.push(b); continue; }
+    // Gather: this para, then (pagenum+ para{continuation})* while the chain holds.
+    const merged = { ...b };
+    delete merged.continued;
+    const segs = [...toSegs(b)];
+    let j = i + 1;
+    let joined = false;
+    while (j < blocks.length && blocks[j] && blocks[j].type === 'pagenum') {
+      const pns = [];
+      while (j < blocks.length && blocks[j] && blocks[j].type === 'pagenum') pns.push(blocks[j++]);
+      const next = blocks[j];
+      if (!next || next.type !== 'para' || !next.continuation) { j -= pns.length; break; }
+      segs.push({ type: 'text', text: ' ' });
+      for (const pn of pns) segs.push({ type: 'pagenum', block: pn });
+      segs.push({ type: 'text', text: ' ' });
+      segs.push(...toSegs(next));
+      joined = true;
+      j++;
+      if (!next.continued) break;
+    }
+    if (!joined) { out.push(b); continue; }
+    merged.segments = segs;
+    merged.text = segs.map((s) => (s.type === 'text' ? s.text : '')).join('').replace(/\s+/g, ' ').trim();
+    out.push(merged);
+    i = j - 1;
+  }
+  return out;
 }
 
 /**
@@ -54,7 +383,7 @@ export function escapeXml(str) {
  * @param {string} fallbackText
  * @returns {string}
  */
-export function serializeInlineSegments(segments, fallbackText = '') {
+export function serializeInlineSegments(segments, fallbackText = '', idAlloc = null) {
   if (!segments || !Array.isArray(segments) || segments.length === 0) {
     return escapeXml(fallbackText);
   }
@@ -62,26 +391,28 @@ export function serializeInlineSegments(segments, fallbackText = '') {
   let out = '';
   for (const seg of segments) {
     if (!seg) continue;
+    if (seg.type === 'pagenum') {
+      // A print page turn inside running text (see mergePageTurnContinuations).
+      out += pagenumXml(seg.block || seg, idAlloc);
+      continue;
+    }
     if (seg.type === 'math') {
-      if (seg.mathml) {
-        let m = seg.mathml;
-        if (!m.includes('altimg=')) {
-          m = m.replace(/<m:math|<math|<mml:math/, '$& altimg="math.png"');
-        }
-        if (!m.includes('alttext=')) {
-          const alt = escapeXml(seg.latex || seg.text || 'math expression');
-          m = m.replace(/<m:math|<math|<mml:math/, `$& alttext="${alt}"`);
-        }
-        if (/<([a-zA-Z0-9_:]*semantics[^>]*)>\s*<([a-zA-Z0-9_:]*annotation)/.test(m)) {
-          m = m.replace(/<([a-zA-Z0-9_:]*semantics[^>]*)>\s*<([a-zA-Z0-9_:]*annotation)([^>]*)>([\s\S]*?)<\/\2>/g, (match, semTag, annTagName, annAttrs, innerText) => {
-            const prefix = annTagName.includes(':') ? annTagName.split(':')[0] + ':' : '';
-            return `<${semTag}><${prefix}mrow><${prefix}mtext>${innerText}</${prefix}mtext></${prefix}mrow><${annTagName}${annAttrs}>${innerText}</${annTagName}>`;
-          });
-        }
-        out += m;
-      } else if (seg.latex) {
-        out += `<m:math alttext="${escapeXml(seg.latex)}" altimg="math.png"><m:semantics><m:mrow><m:mtext>${escapeXml(seg.latex)}</m:mtext></m:mrow><m:annotation encoding="application/x-tex">${escapeXml(seg.latex)}</m:annotation></m:semantics></m:math>`;
-      }
+      out += serializeMathMl(seg);
+      continue;
+    }
+    if (seg.type === 'linenum') {
+      // A print line number in prose (A30): DTBook's <linenum> belongs to <line>, so prose
+      // keeps the class-marked span the source uses.
+      if (String(seg.text ?? '').trim()) out += `<span class="linenum">${escapeXml(String(seg.text).trim())}</span>`;
+      continue;
+    }
+    if (seg.type === 'noteref') {
+      // A reference to a note in this document keeps its link; one whose note is not in
+      // the document (a dangling idref is not valid NIMAS) is kept as a marked span, so it
+      // stays a note mark ("HTf" + "33", not "HTf33"; A2).
+      const target = seg.idref && idAlloc && idAlloc.noteIds ? idAlloc.noteIds.get(seg.idref) : null;
+      const tag = seg.annoref ? 'annoref' : 'noteref';
+      out += target ? `<${tag} idref="#${escapeXml(target)}">${escapeXml(seg.text ?? '')}</${tag}>` : `<span class="${tag}">${escapeXml(seg.text ?? '')}</span>`;
       continue;
     }
 
@@ -107,6 +438,181 @@ export function serializeInlineSegments(segments, fallbackText = '') {
   return out;
 }
 
+// --- Nested-list marker helpers (A31) ---------------------------------------
+// DTBook's @enum on <list type="ol"> selects how a reading system spells out
+// numbering: "a"/"A" (letters), "i"/"I" (roman numerals), or the digit default.
+// Both nimas-export (deciding @enum from markers already on an item) and
+// parse.mjs (synthesizing a marker from a counter + @enum on reload) share
+// these conversions so the two stay in lock-step.
+const ROMAN_VALUES = { i: 1, v: 5, x: 10, l: 50, c: 100, d: 500, m: 1000 };
+const ROMAN_TABLE = [[1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'],
+  [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']];
+
+/** Converts a positive integer to a lowercase roman numeral ("" for n<=0). */
+export function intToRoman(n) {
+  let res = '';
+  let x = n | 0;
+  if (x <= 0) return res;
+  for (const [v, s] of ROMAN_TABLE) {
+    while (x >= v) { res += s; x -= v; }
+  }
+  return res;
+}
+
+/** Parses a lowercase roman numeral back to an integer, or null if not valid. */
+export function romanToInt(s) {
+  const str = String(s || '').toLowerCase();
+  if (!str || !/^[ivxlcdm]+$/.test(str)) return null;
+  let total = 0, prev = 0;
+  for (let i = str.length - 1; i >= 0; i--) {
+    const v = ROMAN_VALUES[str[i]];
+    if (v < prev) total -= v; else { total += v; prev = v; }
+  }
+  return intToRoman(total) === str ? total : null;   // reject malformed forms ("iiii")
+}
+
+/** 1 -> "a", 2 -> "b", … (26-letter wrap only; beyond that the digit is kept). */
+export function numberToLetter(n) {
+  return n >= 1 && n <= 26 ? String.fromCharCode(96 + n) : String(n);
+}
+
+/** Inverse of numberToLetter for a single a-z/A-Z character. */
+export function letterToNumber(letter) {
+  return String(letter || '').toLowerCase().charCodeAt(0) - 96;
+}
+
+/**
+ * Synthesizes the marker text a reading system would show for position `counter`
+ * of a <list type="ol"> with the given @enum ("a"/"A"/"i"/"I"/null=digits).
+ * Mirrors the punctuation ("N.") nimas-export uses when it keeps markers implicit.
+ */
+export function synthesizeOrderedMarker(counter, enumAttr) {
+  switch (enumAttr) {
+    case 'a': return `${numberToLetter(counter)}.`;
+    case 'A': return `${numberToLetter(counter).toUpperCase()}.`;
+    case 'i': return `${intToRoman(counter)}.`;
+    case 'I': return `${intToRoman(counter).toUpperCase()}.`;
+    default: return `${counter}.`;
+  }
+}
+
+/**
+ * Groups a flat, level-tagged item array into a tree so a list's structure can
+ * be written as real nested <list> elements (A31) instead of flat class="level-N"
+ * siblings. Each item is attached under the nearest preceding item whose level
+ * is smaller (the "deepest open item"); an item deeper by more than one level
+ * still nests this way — nimas-export then writes an explicit class="level-N" on
+ * it (see renderListGroup) since one step of nesting alone can't record the jump.
+ * @param {Array<object>} items
+ * @returns {Array<{item: object, children: Array}>}
+ */
+export function buildListItemTree(items) {
+  const roots = [];
+  const stack = [];   // { level, node }
+  for (const item of items || []) {
+    const lvl = item.level || 0;
+    const node = { item, children: [] };
+    while (stack.length && stack[stack.length - 1].level >= lvl) stack.pop();
+    (stack.length ? stack[stack.length - 1].node.children : roots).push(node);
+    stack.push({ level: lvl, node });
+  }
+  return roots;
+}
+
+/**
+ * Decides the DTBook @type/@enum/@start for a <list> wrapping `items` (a group
+ * of sibling list items, top-level or nested) purely from their own markers, and
+ * whether the marker text must stay embedded in the item text (A31). Only a
+ * marker ending "." that forms a clean digit/letter/roman run starting at
+ * `start` is turned into implicit (@enum + @start) numbering; anything else
+ * (bullets, gaps, ")" punctuation, mixed forms) keeps its literal text so the
+ * exact source marker always survives the round trip.
+ * @param {Array<object>} items
+ * @returns {{tagOpen: string, keepMarkers: boolean}}
+ */
+export function classifyOrderedMarkerGroup(items) {
+  if (items.every((it) => !it.marker || it.marker === '•')) {
+    return { tagOpen: '<list type="ul">', keepMarkers: false };
+  }
+  const bodies = items.map((it) => (it.marker && /^(.+)\.$/.test(it.marker)) ? it.marker.slice(0, -1) : null);
+  if (bodies.some((b) => b == null)) return { tagOpen: '<list type="ol">', keepMarkers: true };
+
+  if (bodies.every((b) => /^\d+$/.test(b))) {
+    const nums = bodies.map(Number);
+    const first = nums[0];
+    if (nums.every((n, i) => n === first + i)) {
+      return { tagOpen: first !== 1 ? `<list type="ol" start="${first}">` : '<list type="ol">', keepMarkers: false };
+    }
+    return { tagOpen: '<list type="ol">', keepMarkers: true };
+  }
+
+  // Roman numerals are tried before single letters: "i", "v", "x"… are valid as either.
+  if (bodies.every((b) => /^[ivxlcdmIVXLCDM]+$/.test(b))) {
+    const isUpper = /^[A-Z]+$/.test(bodies[0]);
+    const vals = bodies.map((b) => romanToInt(b));
+    if (vals.every((v, i) => v != null && intToRoman(v) === bodies[i].toLowerCase())) {
+      const first = vals[0];
+      if (vals.every((v, i) => v === first + i)) {
+        const enumAttr = isUpper ? 'I' : 'i';
+        return { tagOpen: `<list type="ol" enum="${enumAttr}"${first !== 1 ? ` start="${first}"` : ''}>`, keepMarkers: false };
+      }
+    }
+  }
+
+  if (bodies.every((b) => /^[a-zA-Z]$/.test(b))) {
+    const isUpper = /^[A-Z]$/.test(bodies[0]);
+    const vals = bodies.map((b) => letterToNumber(b));
+    const first = vals[0];
+    if (vals.every((v, i) => v === first + i)) {
+      const enumAttr = isUpper ? 'A' : 'a';
+      return { tagOpen: `<list type="ol" enum="${enumAttr}"${first !== 1 ? ` start="${first}"` : ''}>`, keepMarkers: false };
+    }
+  }
+
+  return { tagOpen: '<list type="ol">', keepMarkers: true };
+}
+
+/**
+ * Renders a group of sibling list items (from buildListItemTree) as one <list>,
+ * recursing into a nested <list> for any item with children (A31). `parentLevel`
+ * is the resolved level of the <li> this group lives inside (-1 for the root
+ * group), so a level that isn't exactly parentLevel+1 — a jump of more than one
+ * level — gets an explicit class="level-N" override (DTBook's <li> has no
+ * @level attribute) that parse.mjs's getElementLevel already honours as a
+ * fallback ahead of nesting depth, the same way it reads an older flat list.
+ * @param {Array<{item: object, children: Array}>} nodes
+ * @param {number} parentLevel
+ * @param {number} indentLevel
+ * @param {IdAllocator|null} idAlloc
+ * @param {{tagOpen: string, keepMarkers: boolean}|null} topTag decision to use in place of classifyOrderedMarkerGroup (top-level list only)
+ * @returns {string}
+ */
+export function renderListGroup(nodes, parentLevel, indentLevel, idAlloc, topTag = null) {
+  const { tagOpen, keepMarkers } = topTag || classifyOrderedMarkerGroup(nodes.map((n) => n.item));
+  const indent = ' '.repeat(indentLevel);
+  const itemIndent = ' '.repeat(indentLevel + 2);
+  const lines = [`${indent}${tagOpen}`];
+  for (const node of nodes) {
+    const item = node.item;
+    const trueLevel = item.level || 0;
+    // DTBook's <li> has no @level attribute (only @class is legal there), so a jump of more
+    // than one level -- nesting alone can't record it -- falls back to the same class="level-N"
+    // form older flat lists used; getElementLevel reads it ahead of the nesting depth.
+    const levelAttr = trueLevel !== parentLevel + 1 ? ` class="level-${trueLevel}"` : '';
+    const marker = keepMarkers && item.marker && item.marker !== '\u0000' ? `${escapeXml(item.marker)} ` : '';
+    const bodyContent = marker + serializeInlineSegments(item.segments, item.text, idAlloc);
+    if (node.children.length) {
+      lines.push(`${itemIndent}<li${levelAttr}>${bodyContent}`);
+      lines.push(renderListGroup(node.children, trueLevel, indentLevel + 4, idAlloc));
+      lines.push(`${itemIndent}</li>`);
+    } else {
+      lines.push(`${itemIndent}<li${levelAttr}>${bodyContent}</li>`);
+    }
+  }
+  lines.push(`${indent}</list>`);
+  return lines.join('\n');
+}
+
 /**
  * Serializes an individual AST block into DTBook XML element(s).
  * @param {object} block
@@ -123,47 +629,47 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     case 'heading':
     case 'title': {
       const lvl = Math.max(1, Math.min(6, block.level || 1));
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<h${lvl}>${content}</h${lvl}>`;
     }
 
     case 'para': {
       if (block.style === 'quote' || block.style === 'blockquote') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         const clsAttr = lvlClass ? ` class="quote${lvlClass}"` : ' class="quote"';
         return `${indent}<blockquote class="quote"><p${clsAttr}>${content}</p></blockquote>`;
       }
       if (block.style === 'attribution') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<byline>${content}</byline>`;
       }
       if (block.style === 'dialogue' || block.style === 'play' || block.style === 'play-speaker') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<p class="bai-play${lvlClass}">${content}</p>`;
       }
       if (block.style === 'verse' || block.style === 'poem' || block.style === 'play-verse') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<p class="bai-verse${lvlClass}">${content}</p>`;
       }
       if (block.style === 'stage' || block.style === 'play-stage') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<p class="bai-stage${lvlClass}">${content}</p>`;
       }
       if (block.style === 'caption') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         return `${indent}<caption>${content}</caption>`;
       }
       if (block.style === 'footnote') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         const noteId = idAlloc ? idAlloc.getId(block.id, 'note') : (block.id || 'note-1');
         return `${indent}<note id="${escapeXml(noteId)}" class="footnote"><p>${content}</p></note>`;
       }
       if (block.style === 'note') {
-        const content = serializeInlineSegments(block.segments, block.text);
+        const content = serializeInlineSegments(block.segments, block.text, idAlloc);
         const renderAttr = block.render ? ` render="${escapeXml(block.render)}"` : ' render="optional"';
         return `${indent}<prodnote${renderAttr}>${content}</prodnote>`;
       }
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       if (lvlClass) {
         return `${indent}<p class="${lvlClass.trim()}">${content}</p>`;
       }
@@ -172,6 +678,8 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
 
     case 'list': {
       const kind = block.kind || block.style || '';
+      // DTD: <list> and <dl> both require at least one child; an empty list has nothing to say.
+      if (!Array.isArray(block.items) || block.items.length === 0) return '';
       if (kind === 'glossary') {
         const lines = [`${indent}<dl>`];
         const itemIndent = ' '.repeat(indentLevel + 2);
@@ -179,15 +687,15 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
           let termContent = '';
           let defContent = '';
           if (item.term != null && item.def != null && (item.term || item.def)) {
-            termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term) : escapeXml(item.term);
-            defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def) : escapeXml(item.def);
+            termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term, idAlloc) : escapeXml(item.term);
+            defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def, idAlloc) : escapeXml(item.def);
           } else if (item.text) {
             const sepIdx = item.text.indexOf(' — ');
             if (sepIdx !== -1) {
               termContent = escapeXml(item.text.slice(0, sepIdx));
               defContent = escapeXml(item.text.slice(sepIdx + 3));
             } else {
-              termContent = serializeInlineSegments(item.segments, item.text);
+              termContent = serializeInlineSegments(item.segments, item.text, idAlloc);
             }
           }
           lines.push(`${itemIndent}<dt>${termContent}</dt>`);
@@ -199,7 +707,42 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         return lines.join('\n');
       }
 
+      // A generic (non-toc/exercise/index/plain/glossary) list nests real <list>
+      // elements for deeper items (A31) so numbering/bulleting can't run together
+      // across levels on reload -- see buildListItemTree/renderListGroup above.
+      // toc/exercise/index/plain already round-trip correctly with flat
+      // class="level-N" siblings (their items carry no position-derived marker),
+      // so they, and an item with a <lic> page component, keep that simpler form.
+      const isGeneric = kind !== 'toc' && kind !== 'exercise' && kind !== 'index' && kind !== 'plain';
+      const hasPageItems = (block.items || []).some((it) => it.page);
+      if (isGeneric && !hasPageItems) {
+        const tree = buildListItemTree(block.items);
+        // The root group is whatever buildListItemTree actually treats as top-level
+        // siblings, not every item with level 0 — a list whose top <li>s carry no text
+        // of their own (only a nested <list>, e.g. two empty wrapper levels) can end up
+        // with no level-0 items at all, and rootItems.every(...) on an empty array is
+        // vacuously true, which used to mis-detect a "clean" run and drop real markers.
+        const rootItems = tree.map((n) => n.item);
+        const isOl = block.ordered || block.style === 'ordered' || rootItems.some((it) => it.marker && /^\d+/.test(it.marker));
+        let topTag;
+        if (!isOl) {
+          topTag = { tagOpen: '<list type="ul">', keepMarkers: false };
+        } else if (!rootItems.length) {
+          topTag = { tagOpen: '<list type="ol">', keepMarkers: false };
+        } else {
+          // Numbers that run on from N (a list split around a page turn starts at 2...) are
+          // written as start="N"; any other markers ("b.", nested numbering) stay in the item
+          // text, where the parser reads them back (A2: they were lost on save).
+          const nums = rootItems.map((it) => /^(\d+)\.$/.exec(it.marker || ''));
+          const first = nums[0] ? Number(nums[0][1]) : 1;
+          const inOrder = nums.every((m, i) => m && Number(m[1]) === first + i);
+          topTag = { tagOpen: inOrder && first !== 1 ? `<list type="ol" start="${first}">` : '<list type="ol">', keepMarkers: !inOrder };
+        }
+        return renderListGroup(tree, -1, indentLevel, idAlloc, topTag);
+      }
+
       let listTagOpen = '<list>';
+      let keepMarkers = false;
       if (kind === 'toc') {
         listTagOpen = '<list type="pl" class="toc">';
       } else if (kind === 'exercise') {
@@ -211,6 +754,16 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
       } else {
         const isOl = block.ordered || block.style === 'ordered' || (block.items || []).some((it) => it.marker && /^\d+/.test(it.marker));
         listTagOpen = isOl ? '<list type="ol">' : '<list type="ul">';
+        if (isOl) {
+          // Numbers that run on from N (a list split around a page turn starts at 2...) are
+          // written as start="N"; any other markers ("b.", nested numbering) stay in the item
+          // text, where the parser reads them back (A2: they were lost on save).
+          const nums = (block.items || []).map((it) => /^(\d+)\.$/.exec(it.marker || ''));
+          const first = nums[0] ? Number(nums[0][1]) : 1;
+          const inOrder = nums.every((m, i) => m && Number(m[1]) === first + i);
+          if (inOrder && first !== 1) listTagOpen = `<list type="ol" start="${first}">`;
+          if (!inOrder) keepMarkers = true;
+        }
       }
 
       const itemsXml = [];
@@ -218,20 +771,26 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
       for (const item of block.items || []) {
         const itemLvlClass = item.level ? ` level-${item.level}` : '';
         if (kind === 'toc') {
-          const textContent = serializeInlineSegments(item.segments, item.text);
+          const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
           if (item.page) {
             itemsXml.push(`${itemIndent}<li class="bai-toc-entry${itemLvlClass}"><lic class="bai-toc-text">${textContent}</lic><lic class="bai-toc-page">${escapeXml(item.page)}</lic></li>`);
           } else {
             itemsXml.push(`${itemIndent}<li class="bai-toc-entry${itemLvlClass}">${textContent}</li>`);
           }
         } else if (kind === 'exercise') {
-          const textContent = serializeInlineSegments(item.segments, item.text);
+          const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
           itemsXml.push(`${itemIndent}<li class="bai-exercise${itemLvlClass}">${textContent}</li>`);
+        } else if (item.page) {
+          // An index (or other) entry with page references keeps them as a page component (A2).
+          const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
+          const cls = kind === 'index' ? `bai-index${itemLvlClass}` : itemLvlClass.trim();
+          itemsXml.push(`${itemIndent}<li${cls ? ` class="${cls}"` : ''}><lic class="bai-index-text">${textContent}</lic><lic class="bai-index-page">${escapeXml(item.page)}</lic></li>`);
         } else if (kind === 'index') {
-          const textContent = serializeInlineSegments(item.segments, item.text);
+          const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
           itemsXml.push(`${itemIndent}<li class="bai-index${itemLvlClass}">${textContent}</li>`);
         } else {
-          const textContent = serializeInlineSegments(item.segments, item.text);
+          const marker = keepMarkers && item.marker && item.marker !== '\u0000' ? `${escapeXml(item.marker)} ` : '';
+          const textContent = marker + serializeInlineSegments(item.segments, item.text, idAlloc);
           if (itemLvlClass) {
             itemsXml.push(`${itemIndent}<li class="${itemLvlClass.trim()}">${textContent}</li>`);
           } else {
@@ -245,16 +804,19 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
 
     case 'box':
     case 'sidebar': {
-      const sideId = block.id ? (idAlloc ? idAlloc.getId(block.id, 'sidebar') : block.id) : null;
+      if (Array.isArray(block.blocks)) block = { ...block, blocks: mergePageTurnContinuations(block.blocks) };
+      const sideId = block.id ? (idAlloc ? idAlloc.getId(block.id, 'sidebar') : toNCName(block.id)) : null;
       const idAttr = sideId ? ` id="${escapeXml(sideId)}"` : '';
-      const renderAttr = block.render ? ` render="${escapeXml(block.render)}"` : '';
+      // DTD: render (required | optional) #REQUIRED — boxed material is required reading by default.
+      const renderVal = block.render === 'optional' ? 'optional' : 'required';
+      const renderAttr = ` render="${renderVal}"`;
       const lines = [`${indent}<sidebar${idAttr}${renderAttr}>`];
       let titleBlockHandled = false;
 
       // When the first child block is a heading, serialize its full formatted content into <hd>
       if (block.blocks && Array.isArray(block.blocks) && block.blocks.length > 0 && block.blocks[0]?.type === 'heading') {
         const firstHead = block.blocks[0];
-        const content = serializeInlineSegments(firstHead.segments, firstHead.text || block.title);
+        const content = serializeInlineSegments(firstHead.segments, firstHead.text || block.title, idAlloc);
         lines.push(`${' '.repeat(indentLevel + 2)}<hd>${content}</hd>`);
         titleBlockHandled = true;
       } else if (block.title) {
@@ -265,14 +827,20 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         for (let idx = 0; idx < block.blocks.length; idx++) {
           if (idx === 0 && titleBlockHandled) continue;
           const child = block.blocks[idx];
-          if (child.type === 'caption' && idx + 1 < block.blocks.length && block.blocks[idx + 1]?.type === 'table') {
-            if (!block.blocks[idx + 1].caption && !block.blocks[idx + 1].title) {
-              block.blocks[idx + 1].caption = child.text;
+          if (!child) continue;
+          if (isCaptionBlock(child)) {
+            if (idx + 1 < block.blocks.length && block.blocks[idx + 1]?.type === 'table') {
+              if (!block.blocks[idx + 1].caption && !block.blocks[idx + 1].title) {
+                block.blocks[idx + 1].caption = child.text;
+              }
+              continue;
             }
+            // <caption> is not allowed loose inside <sidebar>.
+            lines.push(serializeOrphanCaption(child, ' '.repeat(indentLevel + 2), idAlloc));
             continue;
           }
           if (child.type === 'heading' || child.type === 'title') {
-            const content = serializeInlineSegments(child.segments, child.text);
+            const content = serializeInlineSegments(child.segments, child.text, idAlloc);
             lines.push(`${' '.repeat(indentLevel + 2)}<hd>${content}</hd>`);
             continue;
           }
@@ -291,9 +859,13 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
       const lines = [];
       const subIndent = ' '.repeat(indentLevel + 2);
       const rowIndent = ' '.repeat(indentLevel + 4);
+      // A cell's markup or { text, segments } becomes inline DTBook (em/strong/code/MathML).
+      const cellXml = (cell) => (cell == null ? '' : serializeInlineSegments(cellSegments(cell), cellPlainText(cell), idAlloc));
 
       if (block.tabletn) {
-        lines.push(`${indent}<prodnote render="optional" class="tabletn">${escapeXml(block.tabletn)}</prodnote>`);
+        // Table transcriber notes are always a <prodnote class="tabletn"> (there is no <tabletn> element in DTBook).
+        const tnRender = block.tabletnRender === 'required' ? 'required' : 'optional';
+        lines.push(`${indent}<prodnote render="${tnRender}" class="tabletn">${escapeXml(block.tabletn)}</prodnote>`);
       }
 
       lines.push(`${indent}<table${cls}>`);
@@ -306,7 +878,7 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         lines.push(`${subIndent}<thead>`);
         lines.push(`${rowIndent}<tr>`);
         for (const h of block.headers) {
-          lines.push(`${rowIndent}  <th>${escapeXml(h)}</th>`);
+          lines.push(`${rowIndent}  <th>${cellXml(h)}</th>`);
         }
         lines.push(`${rowIndent}</tr>`);
         lines.push(`${subIndent}</thead>`);
@@ -317,7 +889,7 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         for (const row of block.rows) {
           lines.push(`${rowIndent}<tr>`);
           for (const cell of row) {
-            lines.push(`${rowIndent}  <td>${escapeXml(cell)}</td>`);
+            lines.push(`${rowIndent}  <td>${cellXml(cell)}</td>`);
           }
           lines.push(`${rowIndent}</tr>`);
         }
@@ -331,6 +903,13 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
         }
         lines.push(`${rowIndent}</tr>`);
         lines.push(`${subIndent}</tbody>`);
+      } else {
+        // DTD: table requires (tbody+ | (tr|pagenum)+) — keep an empty table well-formed and valid.
+        lines.push(`${subIndent}<tbody>`);
+        lines.push(`${rowIndent}<tr>`);
+        lines.push(`${rowIndent}  <td></td>`);
+        lines.push(`${rowIndent}</tr>`);
+        lines.push(`${subIndent}</tbody>`);
       }
 
       lines.push(`${indent}</table>`);
@@ -338,27 +917,28 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     }
 
     case 'quote': {
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       const clsAttr = lvlClass ? ` class="quote${lvlClass}"` : ' class="quote"';
       return `${indent}<blockquote class="quote"><p${clsAttr}>${content}</p></blockquote>`;
     }
 
     case 'glossary': {
+      if (!Array.isArray(block.items) || block.items.length === 0) return '';
       const lines = [`${indent}<dl>`];
       const itemIndent = ' '.repeat(indentLevel + 2);
       for (const item of block.items || []) {
         let termContent = '';
         let defContent = '';
         if (item.term != null && item.def != null && (item.term || item.def)) {
-          termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term) : escapeXml(item.term);
-          defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def) : escapeXml(item.def);
+          termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term, idAlloc) : escapeXml(item.term);
+          defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def, idAlloc) : escapeXml(item.def);
         } else if (item.text) {
           const sepIdx = item.text.indexOf(' — ');
           if (sepIdx !== -1) {
             termContent = escapeXml(item.text.slice(0, sepIdx));
             defContent = escapeXml(item.text.slice(sepIdx + 3));
           } else {
-            termContent = serializeInlineSegments(item.segments, item.text);
+            termContent = serializeInlineSegments(item.segments, item.text, idAlloc);
           }
         }
         lines.push(`${itemIndent}<dt>${termContent}</dt>`);
@@ -371,8 +951,10 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     }
 
     case 'note': {
-      const content = serializeInlineSegments(block.segments, block.text);
-      const renderAttr = block.render ? ` render="${escapeXml(block.render)}"` : ' render="optional"';
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
+      // DTD: render (required | optional) #REQUIRED — never omit it.
+      const renderVal = block.render === 'required' ? 'required' : 'optional';
+      const renderAttr = ` render="${renderVal}"`;
       if (block.kind === 'tabletn') {
         return `${indent}<prodnote class="tabletn"${renderAttr}>${content}</prodnote>`;
       }
@@ -380,18 +962,20 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     }
 
     case 'footnote': {
-      const content = serializeInlineSegments(block.segments, block.text);
-      const noteId = idAlloc ? idAlloc.getId(block.id, 'note') : (block.id || 'note-1');
-      return `${indent}<note id="${escapeXml(noteId)}" class="footnote"><p>${content}</p></note>`;
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
+      const reserved = block.id && idAlloc && idAlloc.noteIds ? idAlloc.noteIds.get(block.id) : null;
+      const noteId = reserved || (idAlloc ? idAlloc.getId(block.id, 'note') : (block.id ? toNCName(block.id) : 'note-1'));
+      const cls = block.kind === 'endnote' ? 'endnote' : 'footnote';
+      return `${indent}<note id="${escapeXml(noteId)}" class="${cls}"><p>${content}</p></note>`;
     }
 
     case 'caption': {
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<caption>${content}</caption>`;
     }
 
     case 'attribution': {
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<byline>${content}</byline>`;
     }
 
@@ -399,57 +983,49 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
     case 'poem':
     case 'play': {
       const cls = (block.subtype === 'verse' || block.style === 'verse' || block.style === 'poem' || block.style === 'play-verse' || block.type === 'verse' || block.type === 'poem') ? 'bai-verse' : 'bai-play';
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<p class="${cls}${lvlClass}">${content}</p>`;
     }
 
     case 'stage': {
-      const content = serializeInlineSegments(block.segments, block.text);
+      const content = serializeInlineSegments(block.segments, block.text, idAlloc);
       return `${indent}<p class="bai-stage${lvlClass}">${content}</p>`;
     }
 
     case 'graphic': {
-      return `${indent}<img src="${escapeXml(block.src || '')}" alt="${escapeXml(block.alt || '')}"/>`;
+      // <img> is both a %block; and a %special; inline element in DTBook, so a
+      // bare <img> is valid at level, sidebar, list-item and note level alike.
+      const src = graphicSrc(block);
+      const alt = block.alt || '';
+      const img = `<img src="${escapeXml(src)}" alt="${escapeXml(alt)}"/>`;
+      if (typeof block.svg === 'string' && block.svg.trim() && alt) {
+        // Tactile graphic: group the embedded SVG with its required description.
+        return `${indent}<imggroup>${img}<prodnote render="required">${escapeXml(alt)}</prodnote></imggroup>`;
+      }
+      // A print image with its caption and/or description (A26): <imggroup> keeps them together.
+      const hasCaption = block.caption && String(block.caption).trim();
+      const hasDescription = block.description && String(block.description).trim();
+      if (hasCaption || hasDescription) {
+        // A source group with only a caption/production note has no image to write (A29).
+        const parts = src || alt ? [img] : [];
+        if (hasCaption) parts.push(`<caption>${serializeInlineSegments(block.captionSegments, block.caption, idAlloc)}</caption>`);
+        if (hasDescription) parts.push(`<prodnote render="optional">${escapeXml(block.description)}</prodnote>`);
+        return `${indent}<imggroup>${parts.join('')}</imggroup>`;
+      }
+      return `${indent}${img}`;
     }
 
-    case 'pagenum': {
-      const pageVal = block.page || block.text || '1';
-      const cleanPage = String(pageVal).trim().replace(/[^a-zA-Z0-9_-]/g, '') || '1';
-      const pageId = idAlloc ? idAlloc.getId(block.id, `p-${cleanPage}`) : (block.id || `p-${cleanPage}`);
-      const trimmedVal = String(pageVal).trim();
-      let pageType = 'normal';
-      if (/^\d+$/.test(trimmedVal)) {
-        pageType = 'normal';
-      } else if (/^[ivxlcdm]+$/i.test(trimmedVal)) {
-        pageType = 'front';
-      } else {
-        pageType = 'special';
-      }
-      return `${indent}<pagenum id="${escapeXml(pageId)}" page="${pageType}">${escapeXml(pageVal)}</pagenum>`;
-    }
+    case 'pagenum':
+      return indent + pagenumXml(block, idAlloc);
 
     case 'math': {
-      if (block.mathml) {
-        let m = block.mathml;
-        if (!m.includes('altimg=')) {
-          m = m.replace(/<m:math|<math|<mml:math/, '$& altimg="math.png"');
-        }
-        if (!m.includes('alttext=')) {
-          const alt = escapeXml(block.latex || block.text || 'math expression');
-          m = m.replace(/<m:math|<math|<mml:math/, `$& alttext="${alt}"`);
-        }
-        if (/<([a-zA-Z0-9_:]*semantics[^>]*)>\s*<([a-zA-Z0-9_:]*annotation)/.test(m)) {
-          m = m.replace(/<([a-zA-Z0-9_:]*semantics[^>]*)>\s*<([a-zA-Z0-9_:]*annotation)([^>]*)>([\s\S]*?)<\/\2>/g, (match, semTag, annTagName, annAttrs, innerText) => {
-            const prefix = annTagName.includes(':') ? annTagName.split(':')[0] + ':' : '';
-            return `<${semTag}><${prefix}mrow><${prefix}mtext>${innerText}</${prefix}mtext></${prefix}mrow><${annTagName}${annAttrs}>${innerText}</${annTagName}>`;
-          });
-        }
-        return `${indent}${m}`;
+      let m = serializeMathMl(block);
+      if (!m) return '';
+      if (!/<m:math\b[^>]*\sdisplay\s*=/.test(m)) {
+        m = m.replace(/<m:math\b/, '$& display="block"');
       }
-      if (block.latex) {
-        return `${indent}<m:math alttext="${escapeXml(block.latex)}" altimg="math.png"><m:semantics><m:mrow><m:mtext>${escapeXml(block.latex)}</m:mtext></m:mrow><m:annotation encoding="application/x-tex">${escapeXml(block.latex)}</m:annotation></m:semantics></m:math>`;
-      }
-      return '';
+      // m:math is an %externalFlow; element: block-level math lives inside <p>.
+      return `${indent}<p>${m}</p>`;
     }
 
     case 'indicator':
@@ -459,6 +1035,9 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
       }
       if (block.kind === 'asterisks') {
         return `${indent}<p class="bana-break-asterisks">***</p>`;
+      }
+      if (block.kind === 'asterism') {
+        return `${indent}<p class="bana-break-asterism">⁂ ⁂ ⁂</p>`;
       }
       if (block.kind === 'dot2s') {
         return `${indent}<p class="bana-break-dot2s">&#x2802;&#x2802;&#x2802;</p>`;
@@ -484,6 +1063,7 @@ export function serializeBlock(block, indentLevel = 4, idAlloc = null) {
  * @returns {string} XML string
  */
 export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Emboss Document', idAlloc = null) {
+  blocks = mergePageTurnContinuations(blocks);
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
     const ind = ' '.repeat(indentBase);
     const pInd = ' '.repeat(indentBase + 2);
@@ -520,7 +1100,7 @@ export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Em
       lines.push(`${indent}<level${l}>`);
       if (l === targetLvl && headingBlock) {
         const hIndent = ' '.repeat(l * 2 + indentBase);
-        const content = serializeInlineSegments(headingBlock.segments, headingBlock.text);
+        const content = serializeInlineSegments(headingBlock.segments, headingBlock.text, idAlloc);
         lines.push(`${hIndent}<h${l}>${content}</h${l}>`);
       }
     }
@@ -535,7 +1115,8 @@ export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Em
   for (let idx = 0; idx < blocks.length; idx++) {
     const block = blocks[idx];
     if (!block) continue;
-    if (block.type === 'caption' && idx + 1 < blocks.length && blocks[idx + 1]?.type === 'table') {
+    const captionForTable = isCaptionBlock(block) && idx + 1 < blocks.length && blocks[idx + 1]?.type === 'table';
+    if (captionForTable) {
       if (!blocks[idx + 1].caption && !blocks[idx + 1].title) {
         blocks[idx + 1].caption = block.text;
       }
@@ -550,7 +1131,9 @@ export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Em
         levelHasChildren[levelHasChildren.length - 1] = true;
       }
       const currentIndent = stack[stack.length - 1] * 2 + indentBase;
-      const xml = serializeBlock(block, currentIndent, idAlloc);
+      const xml = isCaptionBlock(block)
+        ? serializeOrphanCaption(block, ' '.repeat(currentIndent), idAlloc)
+        : serializeBlock(block, currentIndent, idAlloc);
       if (xml) lines.push(xml);
     }
   }
@@ -570,6 +1153,65 @@ export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Em
 }
 
 /**
+ * Internal DTD subset that enables the DAISY "MathML in DTBook" modular
+ * extension (Z39.86-2005 §3 "Modular Extension to the DTD"). The parameter
+ * entities are the ones documented at
+ * https://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html and used by
+ * the DAISY Pipeline; %Schema.prefix; / %XLINK.prefix; move the MathML DTD's
+ * xsi/xlink namespace attributes onto non-clashing prefixes.
+ *
+ * NOTE: MathML validation only works when the validator honours the internal
+ * subset (xmllint --valid with an XML catalog); see references/dtd/README.md.
+ */
+export const NIMAS_INTERNAL_SUBSET = `  <!ENTITY % MATHML.prefixed "INCLUDE">
+  <!ENTITY % MATHML.prefix "m">
+  <!ENTITY % Schema.prefix "sch">
+  <!ENTITY % XLINK.prefix "xlp">
+  <!ENTITY % MATHML.Common.attrib "xlink:href CDATA #IMPLIED xlink:type CDATA #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED id ID #IMPLIED xref IDREF #IMPLIED other CDATA #IMPLIED xmlns:dtbook CDATA #FIXED 'http://www.daisy.org/z3986/2005/dtbook/' dtbook:smilref CDATA #IMPLIED">
+  <!ENTITY % mathML2 PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
+  %mathML2;
+  <!ENTITY % externalFlow "| m:math">
+  <!ENTITY % externalNamespaces "xmlns:m CDATA #FIXED 'http://www.w3.org/1998/Math/MathML'">`;
+
+/**
+ * Builds the <head> metadata block. Dublin Core values come from
+ * docModel.metadata when present so a parsed NIMAS file round-trips its
+ * original identifiers; dc:Format stays the DTBook value mandated by
+ * Z39.86-2005 §8.1 ("ANSI/NISO Z39.86-2005") unless the source carried its own.
+ * Any nimas-* metas captured by the parser are emitted verbatim.
+ * @param {object} meta
+ * @param {{title:string, uid:string, lang:string, date:string}} core
+ * @returns {string}
+ */
+function buildHeadMetadata(meta, core) {
+  const m = meta && typeof meta === 'object' ? meta : {};
+  const lines = [];
+  const push = (name, value) => {
+    if (value == null) return;
+    const v = String(value).trim();
+    if (!v) return;
+    lines.push(`    <meta name="${escapeXml(name)}" content="${escapeXml(v)}" />`);
+  };
+  push('dtb:uid', core.uid);
+  push('dc:Title', core.title);
+  push('dc:Creator', m.creator || m.author || m.docauthor);
+  push('dc:Identifier', m.identifier || core.uid);
+  push('dc:Language', m.language || core.lang);
+  push('dc:Publisher', m.publisher || 'Emboss Braille Editor');
+  push('dc:Date', m.date || core.date);
+  push('dc:Format', m.format || 'ANSI/NISO Z39.86-2005');
+  push('dc:Source', m.source);
+  push('dc:Rights', m.rights);
+  push('dc:Subject', m.subject);
+  if (m.nimas && typeof m.nimas === 'object') {
+    for (const key of Object.keys(m.nimas).sort()) {
+      if (/^nimas-[A-Za-z0-9_.:-]+$/.test(key)) push(key, m.nimas[key]);
+    }
+  }
+  return lines.join('\n');
+}
+
+/**
  * Serializes a full Document Model AST into complete, valid DTBook/NIMAS XML.
  * @param {object|Array<object>} docModel
  * @param {object} options
@@ -577,187 +1219,44 @@ export function buildDtbookHierarchy(blocks, indentBase = 6, fallbackTitle = 'Em
  */
 export function exportToNimasXml(docModel, options = {}) {
   const blocks = Array.isArray(docModel) ? docModel : (docModel?.blocks || []);
-  const title = (typeof docModel === 'object' && !Array.isArray(docModel) ? docModel.title : null) || 'Emboss Document';
-  const lang = options.lang || docModel?.metadata?.lang || 'en-US';
-  const uid = options.uid || docModel?.metadata?.uid || `emboss-${Date.now()}`;
+  const isModel = typeof docModel === 'object' && docModel !== null && !Array.isArray(docModel);
+  const meta = (isModel && docModel.metadata && typeof docModel.metadata === 'object') ? docModel.metadata : {};
+  const title = (isModel ? docModel.title : null) || meta.title || 'Emboss Document';
+  const lang = options.lang || meta.lang || 'en-US';
+  const uid = options.uid || meta.uid || `emboss-${Date.now()}`;
   const date = options.date || new Date().toISOString().slice(0, 10);
+  const author = options.author || meta.author || meta.docauthor || null;
   const idAlloc = new IdAllocator();
 
+  // Reserve ids that already exist inside pass-through MathML before allocating our own.
+  registerMathIds(blocks, idAlloc);
+  // Notes get their ids first, so every <noteref> can point at its note's final id.
+  idAlloc.noteIds = new Map();
+  (function reserveNotes(list) {
+    for (const b of list || []) {
+      if (!b || typeof b !== 'object') continue;
+      if (b.type === 'footnote' && b.id && !idAlloc.noteIds.has(b.id)) idAlloc.noteIds.set(b.id, idAlloc.getId(b.id, 'note'));
+      reserveNotes(b.blocks);
+    }
+  })(blocks);
+
   const bodyXml = buildDtbookHierarchy(blocks, 6, title, idAlloc);
+  const headXml = buildHeadMetadata(meta, { title, uid, lang, date });
+  // Every author of the source (<docauthor> may repeat), unless the caller names one.
+  const authors = !options.author && Array.isArray(meta.docauthors) && meta.docauthors.length ? meta.docauthors : (author ? [author] : []);
+  const docauthorXml = authors.map((a) => `\n      <docauthor>${escapeXml(a)}</docauthor>`).join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" [
-  <!ENTITY % externalNamespaces "xmlns:m CDATA #IMPLIED xmlns:mml CDATA #IMPLIED xmlns:mathml CDATA #IMPLIED xmlns:dtbook CDATA #IMPLIED">
-  <!ENTITY % externalFlow "| m:math | math | mml:math">
-  <!ATTLIST prodnote render (required | optional) #IMPLIED>
-  <!ATTLIST sidebar render (required | optional) #IMPLIED>
-  <!ELEMENT tabletn ANY>
-  <!ELEMENT m:math ANY>
-  <!ATTLIST m:math xmlns:m CDATA #IMPLIED xmlns:mml CDATA #IMPLIED xmlns:mathml CDATA #IMPLIED xmlns:dtbook CDATA #IMPLIED alttext CDATA #IMPLIED altimg CDATA #IMPLIED display CDATA #IMPLIED id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:math ANY>
-  <!ATTLIST mml:math xmlns:mml CDATA #IMPLIED xmlns:m CDATA #IMPLIED xmlns:mathml CDATA #IMPLIED xmlns:dtbook CDATA #IMPLIED alttext CDATA #IMPLIED altimg CDATA #IMPLIED display CDATA #IMPLIED id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT math ANY>
-  <!ATTLIST math xmlns CDATA #IMPLIED xmlns:m CDATA #IMPLIED xmlns:mml CDATA #IMPLIED xmlns:mathml CDATA #IMPLIED xmlns:dtbook CDATA #IMPLIED alttext CDATA #IMPLIED altimg CDATA #IMPLIED display CDATA #IMPLIED id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:semantics ANY>
-  <!ATTLIST m:semantics id ID #IMPLIED class CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:annotation ANY>
-  <!ATTLIST m:annotation encoding CDATA #IMPLIED id ID #IMPLIED class CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mstyle ANY>
-  <!ATTLIST m:mstyle id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED displaystyle CDATA #IMPLIED scriptlevel CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:ms ANY>
-  <!ATTLIST m:ms id ID #IMPLIED class CDATA #IMPLIED lquote CDATA #IMPLIED rquote CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mrow ANY>
-  <!ATTLIST m:mrow id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mi ANY>
-  <!ATTLIST m:mi id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mn ANY>
-  <!ATTLIST m:mn id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mo ANY>
-  <!ATTLIST m:mo id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED lspace CDATA #IMPLIED rspace CDATA #IMPLIED fence CDATA #IMPLIED separator CDATA #IMPLIED stretchy CDATA #IMPLIED symmetric CDATA #IMPLIED largeop CDATA #IMPLIED movablelimits CDATA #IMPLIED accent CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:msup ANY>
-  <!ATTLIST m:msup id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:msub ANY>
-  <!ATTLIST m:msub id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:msubsup ANY>
-  <!ATTLIST m:msubsup id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mover ANY>
-  <!ATTLIST m:mover id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accent CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:munder ANY>
-  <!ATTLIST m:munder id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accentunder CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:munderover ANY>
-  <!ATTLIST m:munderover id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accent CDATA #IMPLIED accentunder CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:menclose ANY>
-  <!ATTLIST m:menclose id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED notation CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mpadded ANY>
-  <!ATTLIST m:mpadded id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED voffset CDATA #IMPLIED width CDATA #IMPLIED lspace CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mphantom ANY>
-  <!ATTLIST m:mphantom id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mfrac ANY>
-  <!ATTLIST m:mfrac id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED linethickness CDATA #IMPLIED bevelled CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:msqrt ANY>
-  <!ATTLIST m:msqrt id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mroot ANY>
-  <!ATTLIST m:mroot id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mtable ANY>
-  <!ATTLIST m:mtable id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED rowspacing CDATA #IMPLIED columnspacing CDATA #IMPLIED displaystyle CDATA #IMPLIED equalrows CDATA #IMPLIED equalcolumns CDATA #IMPLIED width CDATA #IMPLIED frame CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mtr ANY>
-  <!ATTLIST m:mtr id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mtd ANY>
-  <!ATTLIST m:mtd id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED columnspan CDATA #IMPLIED rowspan CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mtext ANY>
-  <!ATTLIST m:mtext id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT m:mspace ANY>
-  <!ATTLIST m:mspace id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED width CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mstyle ANY>
-  <!ATTLIST mml:mstyle id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:ms ANY>
-  <!ATTLIST mml:ms id ID #IMPLIED class CDATA #IMPLIED lquote CDATA #IMPLIED rquote CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:semantics ANY>
-  <!ATTLIST mml:semantics id ID #IMPLIED class CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:annotation ANY>
-  <!ATTLIST mml:annotation encoding CDATA #IMPLIED id ID #IMPLIED class CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mrow ANY>
-  <!ATTLIST mml:mrow id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mi ANY>
-  <!ATTLIST mml:mi id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mn ANY>
-  <!ATTLIST mml:mn id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mo ANY>
-  <!ATTLIST mml:mo id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED lspace CDATA #IMPLIED rspace CDATA #IMPLIED fence CDATA #IMPLIED separator CDATA #IMPLIED stretchy CDATA #IMPLIED symmetric CDATA #IMPLIED largeop CDATA #IMPLIED movablelimits CDATA #IMPLIED accent CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:msup ANY>
-  <!ATTLIST mml:msup id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:msub ANY>
-  <!ATTLIST mml:msub id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:msubsup ANY>
-  <!ATTLIST mml:msubsup id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mover ANY>
-  <!ATTLIST mml:mover id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accent CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:munder ANY>
-  <!ATTLIST mml:munder id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accentunder CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:munderover ANY>
-  <!ATTLIST mml:munderover id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED accent CDATA #IMPLIED accentunder CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:menclose ANY>
-  <!ATTLIST mml:menclose id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED notation CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mpadded ANY>
-  <!ATTLIST mml:mpadded id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED voffset CDATA #IMPLIED width CDATA #IMPLIED lspace CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mphantom ANY>
-  <!ATTLIST mml:mphantom id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mfrac ANY>
-  <!ATTLIST mml:mfrac id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED linethickness CDATA #IMPLIED bevelled CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:msqrt ANY>
-  <!ATTLIST mml:msqrt id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mroot ANY>
-  <!ATTLIST mml:mroot id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mtable ANY>
-  <!ATTLIST mml:mtable id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED rowspacing CDATA #IMPLIED columnspacing CDATA #IMPLIED displaystyle CDATA #IMPLIED equalrows CDATA #IMPLIED equalcolumns CDATA #IMPLIED width CDATA #IMPLIED frame CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mtr ANY>
-  <!ATTLIST mml:mtr id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mtd ANY>
-  <!ATTLIST mml:mtd id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED columnspan CDATA #IMPLIED rowspan CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mtext ANY>
-  <!ATTLIST mml:mtext id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathbackground CDATA #IMPLIED mathvariant CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mml:mspace ANY>
-  <!ATTLIST mml:mspace id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED width CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED smilref CDATA #IMPLIED dtbook:smilref CDATA #IMPLIED>
-  <!ELEMENT mstyle ANY>
-  <!ATTLIST mstyle id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED mathsize CDATA #IMPLIED mathcolor CDATA #IMPLIED mathvariant CDATA #IMPLIED>
-  <!ELEMENT ms ANY>
-  <!ATTLIST ms id ID #IMPLIED class CDATA #IMPLIED lquote CDATA #IMPLIED rquote CDATA #IMPLIED>
-  <!ELEMENT semantics ANY>
-  <!ATTLIST semantics id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mrow ANY>
-  <!ATTLIST mrow id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED>
-  <!ELEMENT mi ANY>
-  <!ATTLIST mi id ID #IMPLIED class CDATA #IMPLIED mathvariant CDATA #IMPLIED>
-  <!ELEMENT mn ANY>
-  <!ATTLIST mn id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mo ANY>
-  <!ATTLIST mo id ID #IMPLIED class CDATA #IMPLIED style CDATA #IMPLIED lspace CDATA #IMPLIED rspace CDATA #IMPLIED fence CDATA #IMPLIED separator CDATA #IMPLIED stretchy CDATA #IMPLIED symmetric CDATA #IMPLIED largeop CDATA #IMPLIED movablelimits CDATA #IMPLIED accent CDATA #IMPLIED>
-  <!ELEMENT msup ANY>
-  <!ATTLIST msup id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT msub ANY>
-  <!ATTLIST msub id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT msubsup ANY>
-  <!ATTLIST msubsup id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mover ANY>
-  <!ATTLIST mover id ID #IMPLIED class CDATA #IMPLIED accent CDATA #IMPLIED>
-  <!ELEMENT munder ANY>
-  <!ATTLIST munder id ID #IMPLIED class CDATA #IMPLIED accentunder CDATA #IMPLIED>
-  <!ELEMENT munderover ANY>
-  <!ATTLIST munderover id ID #IMPLIED class CDATA #IMPLIED accent CDATA #IMPLIED accentunder CDATA #IMPLIED>
-  <!ELEMENT menclose ANY>
-  <!ATTLIST menclose id ID #IMPLIED class CDATA #IMPLIED notation CDATA #IMPLIED>
-  <!ELEMENT mpadded ANY>
-  <!ATTLIST mpadded id ID #IMPLIED class CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED voffset CDATA #IMPLIED width CDATA #IMPLIED lspace CDATA #IMPLIED>
-  <!ELEMENT mphantom ANY>
-  <!ATTLIST mphantom id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mfrac ANY>
-  <!ATTLIST mfrac id ID #IMPLIED class CDATA #IMPLIED linethickness CDATA #IMPLIED bevelled CDATA #IMPLIED>
-  <!ELEMENT msqrt ANY>
-  <!ATTLIST msqrt id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mroot ANY>
-  <!ATTLIST mroot id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mtable ANY>
-  <!ATTLIST mtable id ID #IMPLIED class CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED rowspacing CDATA #IMPLIED columnspacing CDATA #IMPLIED>
-  <!ELEMENT mtr ANY>
-  <!ATTLIST mtr id ID #IMPLIED class CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED>
-  <!ELEMENT mtd ANY>
-  <!ATTLIST mtd id ID #IMPLIED class CDATA #IMPLIED rowalign CDATA #IMPLIED columnalign CDATA #IMPLIED columnspan CDATA #IMPLIED rowspan CDATA #IMPLIED>
-  <!ELEMENT mtext ANY>
-  <!ATTLIST mtext id ID #IMPLIED class CDATA #IMPLIED>
-  <!ELEMENT mspace ANY>
-  <!ATTLIST mspace id ID #IMPLIED class CDATA #IMPLIED width CDATA #IMPLIED height CDATA #IMPLIED depth CDATA #IMPLIED>
+${NIMAS_INTERNAL_SUBSET}
 ]>
-<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:mathml="http://www.w3.org/1998/Math/MathML" version="2005-3" xml:lang="${escapeXml(lang)}">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:m="http://www.w3.org/1998/Math/MathML" version="2005-3" xml:lang="${escapeXml(lang)}">
   <head>
-    <meta name="dtb:uid" content="${escapeXml(uid)}" />
-    <meta name="dc:Title" content="${escapeXml(title)}" />
-    <meta name="dc:Publisher" content="Emboss Braille Editor" />
-    <meta name="dc:Date" content="${escapeXml(date)}" />
-    <meta name="dc:Format" content="ANSI/NISO Z39.86-2005" />
+${headXml}
   </head>
   <book>
     <frontmatter>
-      <doctitle>${escapeXml(title)}</doctitle>
+      <doctitle>${escapeXml(title)}</doctitle>${docauthorXml}
     </frontmatter>
     <bodymatter>
 ${bodyXml}
@@ -768,3 +1267,4 @@ ${bodyXml}
 }
 
 export const exportToNimas = exportToNimasXml;
+

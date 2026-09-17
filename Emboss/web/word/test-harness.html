@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microsoft Word + Emboss Add-in Simulation Harness</title>
+  <!-- Liblouis WASM glue & Temml -->
+  <script src="/engine/liblouis-wasm.js"></script>
+  <script src="/web/vendor/temml.min.js"></script>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    @font-face {
+      font-family: "APHfont";
+      src: url("/web/fonts/APH_Braille_Shadows.woff2") format("woff2"),
+           url("/web/fonts/APH_Braille_Shadows.woff") format("woff"),
+           url("/web/fonts/APH_Braille_Shadows.ttf") format("truetype");
+      font-weight: normal; font-style: normal; font-display: swap;
+      unicode-range: U+2800-28FF;
+    }
+    :root {
+      --word-blue: #2b579a;
+      --word-ribbon-bg: #f3f2f1;
+      --word-border: #e1dfdd;
+      --bg: #0d1117;
+      --bg-panel: #161b22;
+      --bg-card: #21262d;
+      --line: #30363d;
+      --text: #e6edf3;
+      --text-dim: #8b949e;
+      --braille-font: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      display: flex;
+      height: 100vh;
+      background: #f3f3f3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
+    /* Word Host Simulation (Left flex) */
+    .word-container {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid #ccc;
+      background: #f8f9fa;
+    }
+    .word-ribbon {
+      background: var(--word-blue);
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .word-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .word-ribbon-tabs {
+      background: var(--word-ribbon-bg);
+      border-bottom: 1px solid var(--word-border);
+      padding: 6px 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .ribbon-tab-btn {
+      padding: 5px 12px;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      color: #323130;
+      cursor: pointer;
+    }
+    .ribbon-tab-btn.active {
+      background: #fff;
+      border-color: var(--word-border);
+      border-bottom-color: #fff;
+      color: var(--word-blue);
+      font-weight: 600;
+    }
+    .word-actions-bar {
+      background: #fff;
+      border-bottom: 1px solid #e1dfdd;
+      padding: 6px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .word-btn {
+      background: #f3f2f1;
+      border: 1px solid #c8c6c4;
+      border-radius: 3px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .word-btn:hover { background: #edebe9; }
+    .word-doc-canvas {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      background: #e5e5e5;
+    }
+    .word-page {
+      width: 650px;
+      min-height: 800px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 40px 50px;
+      color: #000;
+      font-family: Calibri, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      outline: none;
+    }
+    .word-page h1 { font-size: 22px; margin-bottom: 12px; color: var(--word-blue); }
+    .word-page h2 { font-size: 18px; margin-top: 16px; margin-bottom: 8px; color: var(--word-blue); }
+    .word-page p { margin-bottom: 12px; }
+    .word-page ol, .word-page ul { margin-left: 24px; margin-bottom: 12px; }
+    .word-page li { margin-bottom: 4px; }
+    
+    /* Emboss Task Pane (Right 380px) */
+    .taskpane-wrapper {
+      width: 380px;
+      flex-shrink: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    header.taskpane-header {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .brand svg { width: 18px; height: 18px; fill: currentColor; }
+    .status-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(46, 160, 67, 0.2);
+      color: #3fb950;
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .toolbar {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--line);
+      padding: 6px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .select-sm {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 11px;
+      outline: none;
+      flex: 1;
+      min-width: 120px;
+    }
+    .btn-sm {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-sm:hover { background: #30363d; border-color: #8b949e; }
+    .btn-primary { background: #238636; border-color: rgba(240, 246, 252, 0.1); color: #fff; }
+    .btn-primary:hover { background: #2ea043; }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 8px;
+      gap: 8px;
+    }
+    .braille-card {
+      flex: 1;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .braille-card-header {
+      background: #12151a;
+      border-bottom: 1px solid var(--line);
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .braille-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      font-family: var(--braille-font);
+      font-size: 20px;
+      line-height: 1.5;
+      color: #58a6ff;
+      letter-spacing: 2px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      user-select: text;
+    }
+    .braille-viewport.mode-ascii {
+      font-family: "SimBraille", "Lucida Console", Monaco, monospace;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .braille-line {
+      display: flex;
+      padding: 1px 0;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .braille-line:hover { background: rgba(88, 166, 255, 0.1); }
+    .braille-line.active { background: rgba(88, 166, 255, 0.25); border-left: 2px solid #58a6ff; }
+    .info-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .deliverables-grid button { justify-content: center; padding: 6px 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- Word Simulation Container -->
+  <div class="word-container">
+    <div class="word-ribbon">
+      <div class="word-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8l3 8 3-6 3 6 3-8"/></svg>
+        <span>Document1 — Microsoft Word (Office.js Simulation)</span>
+      </div>
+      <span style="font-size:12px; opacity:0.85;">Interactive DevTools Test Harness</span>
+    </div>
+
+    <div class="word-ribbon-tabs">
+      <button class="ribbon-tab-btn">Home</button>
+      <button class="ribbon-tab-btn">Insert</button>
+      <button class="ribbon-tab-btn">Layout</button>
+      <button class="ribbon-tab-btn active">Emboss Braille</button>
+    </div>
+
+    <div class="word-actions-bar">
+      <span style="font-size:11px; font-weight:600; color:#555;">Quick Test Snippets:</span>
+      <button id="btnSnippetScience" class="word-btn">🧪 Science Exam</button>
+      <button id="btnSnippetMath" class="word-btn">∑ Math Equations</button>
+      <button id="btnSnippetPoem" class="word-btn">📜 Poetry / Verse</button>
+      <button id="btnSnippetClear" class="word-btn">🗑 Clear Text</button>
+    </div>
+
+    <div class="word-doc-canvas">
+      <div id="wordEditor" class="word-page" contenteditable="true" spellcheck="false">
+        <h1>Introduction to Physics &amp; Chemistry</h1>
+        <p>Welcome to this accessible science document prepared in Microsoft Word.</p>
+        <h2>Practice Questions (BANA §10 Format)</h2>
+        <ol>
+          <li>What is the chemical formula for water?</li>
+          <li style="margin-left: 20px;">Describe how hydrogen bonds form between polar water molecules.</li>
+          <li style="margin-left: 40px;">Explain why ice floats on liquid water.</li>
+          <li>Calculate the gravitational force between two 5 kg objects placed 2 meters apart.</li>
+        </ol>
+        <p>As you type or modify this Word document, the Emboss Task Pane on the right instantly re-translates and formats the Braille preview in real time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emboss Task Pane Host -->
+  <div class="taskpane-wrapper">
+    <header class="taskpane-header">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><circle cx="7" cy="6" r="2.5"/><circle cx="7" cy="12" r="2.5"/><circle cx="7" cy="18" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="17" cy="18" r="2.5"/></svg>
+        <span>Emboss</span>
+      </div>
+      <div id="statusBadge" class="status-badge">
+        <span class="status-dot"></span>
+        <span id="statusText">Word Connected</span>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <select id="selBrailleCode" class="select-sm" title="Braille Translation Table">
+        <option value="en-ueb-g2" selected>English (UEB Contracted)</option>
+        <option value="en-ueb-g1">English (UEB Uncontracted)</option>
+        <option value="en-us-g2">English (US Nemeth Math)</option>
+        <option value="es-g1">Spanish Braille</option>
+        <option value="fr-g1">French Braille</option>
+        <option value="de-g1">German Braille</option>
+      </select>
+      <select id="selDisplayMode" class="select-sm" style="max-width: 105px;" title="Display Font Mode">
+        <option value="aph" selected>⠿ APH Braille</option>
+        <option value="ascii">Aa ASCII BRF</option>
+      </select>
+      <button id="btnRefresh" class="btn-sm" title="Force re-sync from Word document">🔄 Refresh</button>
+    </div>
+
+    <div class="main-content">
+      <div id="errorMsg" style="display:none; background:rgba(248,81,73,0.15); border:1px solid #f85149; color:#ff7b72; padding:6px; border-radius:4px; font-size:11px;"></div>
+
+      <div class="braille-card">
+        <div class="braille-card-header">
+          <span>Live Formatted Braille (BRF)</span>
+          <span id="pageStats">0 cells · 0 lines</span>
+        </div>
+        <div id="brailleView" class="braille-viewport" tabindex="0" role="region" aria-label="Live Braille Preview">
+          Generating braille...
+        </div>
+      </div>
+
+      <div class="info-bar">
+        <span id="styleInspector">Style: BANA Standard</span>
+        <span id="proofreadSummary" style="color:#3fb950; font-weight:600;">✓ Word Live Sync</span>
+      </div>
+
+      <div class="deliverables-grid">
+        <button id="btnCopyBraille" class="btn-sm">📋 Copy BRF</button>
+        <button id="btnDownloadBrf" class="btn-sm btn-primary">💾 Save BRF</button>
+        <button id="btnDownloadPef" class="btn-sm">📄 PEF 1.0</button>
+        <button id="btnDownloadEbraille" class="btn-sm">📱 eBraille</button>
+        <button id="btnEmboss" class="btn-sm" style="grid-column: span 2; justify-content: center; background: #1f6feb; color: #fff; border-color: rgba(240, 246, 252, 0.1);">🖨 Emboss Document</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as louis from '/engine/louis-browser.mjs';
+    import { resolveTable, makeTranslators, UEB_TABLES } from '/web/braille-table.mjs';
+    import { styledTranslate } from '/format/text-style.mjs';
+    import { brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
+    import * as maths from '/engine/maths.mjs';
+    import { initMaths, isMathsReady } from '/engine/maths.mjs';
+    import { formatDocument } from '/format/document.mjs';
+    import { parseHtml, parseText } from '/input/parse.mjs';
+    import { exportToPef } from '/format/pef.mjs';
+    import { exportToEbraille } from '/format/ebraille.mjs';
+    import { spoolToEmbosser } from '/format/spooler.mjs';
+
+    const wordEditor = document.getElementById('wordEditor');
+    let lastFormattedDoc = null;
+    let lastBlockModel = null;
+    let activeBrailleCode = 'en-ueb-g2';
+    let syncTimer = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    async function init() {
+      try {
+        await initMaths();
+        await louis.init({ tablesBaseUrl: '/liblouis/tables' });
+        await syncFromWord();
+      } catch (err) {
+        console.error('Init error:', err);
+      }
+    }
+
+    async function syncFromWord() {
+      try {
+        const html = wordEditor.innerHTML;
+        lastBlockModel = await parseHtml(html);
+        await renderBraille();
+      } catch (e) {
+        console.error('Word sync error:', e);
+      }
+    }
+
+    async function renderBraille() {
+      if (!lastBlockModel) return;
+
+      const tableCode = $('selBrailleCode')?.value || activeBrailleCode;
+      const table = resolveTable({ brailleCode: tableCode });
+      await louis.ensureTables(table);
+
+      const tr = makeTranslators(louis, table);
+      const translate = styledTranslate((t, tf) => tr.translate(t, tf), 'faithful');
+      const translateG1 = /en-ueb/.test(table) ? (t) => makeTranslators(louis, UEB_TABLES.g1).translate(t) : undefined;
+
+      const formatOpts = {
+        mode: 'ukaaf',
+        width: 40,
+        depth: 25,
+        paragraphStyle: 'indented',
+        listStyle: 'spaced',
+        tableFormat: 'auto',
+        translate,
+        translateG1,
+        mathToBrf: isMathsReady() ? (seg) => maths.mathToBrf(seg, 'ueb') : null,
+        generateVolCover: false,
+        generateToc: false
+      };
+
+      try {
+        const brf = formatDocument(lastBlockModel, formatOpts);
+        lastFormattedDoc = { brf, opts: formatOpts };
+
+        const viewport = $('brailleView');
+        if (!viewport) return;
+        viewport.innerHTML = '';
+
+        const lines = brf.split('\n');
+        let totalCells = 0;
+        const mode = $('selDisplayMode')?.value || 'aph';
+
+        lines.forEach((lineText, idx) => {
+          totalCells += lineText.trim().length;
+          const lineEl = document.createElement('div');
+          lineEl.className = 'braille-line';
+          lineEl.dataset.lineIdx = String(idx);
+          const formatted = mode === 'aph' ? (brfToUnicodeBraille(lineText) || ' ') : (lineText || ' ');
+          lineEl.textContent = formatted;
+          viewport.appendChild(lineEl);
+        });
+
+        $('pageStats').textContent = `${totalCells} cells · ${lines.length} lines`;
+        $('styleInspector').textContent = `Style: BANA Standard · Table: ${tableCode}`;
+      } catch (err) {
+        console.error('Braille render error:', err);
+      }
+    }
+
+    $('selDisplayMode')?.addEventListener('change', (e) => {
+      const isAscii = e.target.value === 'ascii';
+      $('brailleView')?.classList.toggle('mode-ascii', isAscii);
+      renderBraille();
+    });
+
+    // Keystroke listeners
+    wordEditor.addEventListener('input', () => {
+      if (syncTimer) clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => syncFromWord(), 250);
+    });
+
+    $('selBrailleCode')?.addEventListener('change', (e) => {
+      activeBrailleCode = e.target.value;
+      renderBraille();
+    });
+
+    $('btnRefresh')?.addEventListener('click', () => syncFromWord());
+
+    $('btnCopyBraille')?.addEventListener('click', async () => {
+      if (!lastFormattedDoc?.brf) return;
+      await navigator.clipboard.writeText(lastFormattedDoc.brf);
+      const btn = $('btnCopyBraille');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    });
+
+    // Snippet buttons
+    $('btnSnippetScience')?.addEventListener('click', () => {
+      wordEditor.innerHTML = `<h1>Chemistry & Physics Exam</h1><p>Answer all questions below carefully.</p><h2>Section A: Exercises</h2><ol><li>Explain conservation of energy.</li><li style="margin-left:20px;">Give an everyday example of kinetic to thermal energy transfer.</li><li style="margin-left:40px;">State the thermodynamic efficiency formula.</li><li>Calculate the molar mass of sulfuric acid (H2SO4).</li></ol>`;
+      syncFromWord();
+    });
+
+    $('btnSnippetMath')?.addEventListener('click', () => {
+      wordEditor.innerHTML = `<h1>Algebra & Calculus</h1><p>Solve the following equations:</p><p>1. The quadratic formula is x = (-b ± √(b² - 4ac)) / (2a).</p><p>2. The area under the curve is defined by the definite integral from a to b.</p>`;
+      syncFromWord();
+    });
+
+    $('btnSnippetPoem')?.addEventListener('click', () => {
+      wordEditor.innerHTML = `<h1>The Road Not Taken</h1><p>Two roads diverged in a yellow wood,<br/>And sorry I could not travel both<br/>And be one traveler, long I stood<br/>And looked down one as far as I could<br/>To where it bent in the undergrowth.</p>`;
+      syncFromWord();
+    });
+
+    $('btnSnippetClear')?.addEventListener('click', () => {
+      wordEditor.innerHTML = `<p>Type here...</p>`;
+      syncFromWord();
+    });
+
+    init();
+  </script>
+</body>
+</html>

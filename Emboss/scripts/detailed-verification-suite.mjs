@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseNimasXml } from '../input/parse.mjs';
 import { formatDocument } from '../format/document.mjs';
+import { makeMathToBrf } from '../format/node-maths-helper.mjs';
 import { DOMParser } from '@xmldom/xmldom';
 
 globalThis.DOMParser = DOMParser;
@@ -12,6 +13,11 @@ const __dirname = path.dirname(__filename);
 const SAMPLES_DIR = path.join(__dirname, '../tests/nimas_samples');
 
 const xmlFiles = fs.readdirSync(SAMPLES_DIR).filter((f) => f.endsWith('.xml')).sort();
+
+// The app always supplies a maths translator; without one a maths-only
+// document (bb_math_*_input.xml) legitimately formats to nothing, which
+// would be a harness gap rather than a formatter failure.
+const mathToBrf = makeMathToBrf('bana');
 
 console.log('='.repeat(95));
 console.log('FULL VERIFICATION SUITE: LINE-BY-LINE AND STRUCTURAL AUDIT (18 DOCUMENTS)');
@@ -35,6 +41,7 @@ for (const xmlFile of xmlFiles) {
     width: 40,
     depth: 25,
     translate: (t) => t,
+    mathToBrf,
   });
 
   const bbLines = bbBrf ? bbBrf.split(/\r?\n/).filter((l) => l.trim().length > 0) : [];
@@ -74,3 +81,11 @@ console.log('\n' + '='.repeat(95));
 console.log('FINAL AUDIT TABLE:');
 console.table(results);
 console.log('='.repeat(95));
+
+const failed = results.filter((r) => r.status === 'FAILED');
+if (failed.length > 0) {
+  console.error(`FAIL: ${failed.length}/${results.length} document(s) produced no braille lines: ${failed.map((r) => r.file).join(', ')}`);
+  process.exitCode = 1;
+} else {
+  console.log(`OK: all ${results.length} documents produced braille output.`);
+}

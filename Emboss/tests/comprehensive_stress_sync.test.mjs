@@ -15,7 +15,11 @@ import { exportToNimas } from '../input/nimas-export.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SAMPLES_DIR = path.resolve(__dirname, 'nimas_samples');
+// The committed fixture tests/nimas_samples/9780544087507NIMAS.xml is always part of SAMPLES_DIR;
+// the ~/Downloads copy is an optional extra that is only added when it exists on this machine.
 const USER_DOWNLOADS_FILE = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+// Production textbook for the in-place edit stress test: committed fixture first, Downloads copy as fallback.
+const PRODUCTION_TEXTBOOK = [path.join(SAMPLES_DIR, '9780544087507NIMAS.xml'), USER_DOWNLOADS_FILE].find((p) => fs.existsSync(p));
 
 // Mock translation function for Node.js test environment
 const mockTranslate = (s) => s.toUpperCase();
@@ -34,6 +38,8 @@ test('Comprehensive Multi-File Batch Loading & Stress Test across all NIMAS file
   const fileList = sampleFiles.map(f => path.join(SAMPLES_DIR, f));
   if (fs.existsSync(USER_DOWNLOADS_FILE)) {
     fileList.push(USER_DOWNLOADS_FILE);
+  } else {
+    console.log(`SKIPPED: optional extra file ${USER_DOWNLOADS_FILE} not present; using the ${fileList.length} committed fixtures only`);
   }
 
   let totalBlocksProcessed = 0;
@@ -210,10 +216,14 @@ test('Rapid Document Swapping & Memory Isolation Stress Test', () => {
   }
 });
 
-test('Heavy In-Place Edit Stress Test on 5,000+ Block Production Textbook', () => {
-  if (!fs.existsSync(USER_DOWNLOADS_FILE)) return;
+test('Heavy In-Place Edit Stress Test on 5,000+ Block Production Textbook', (t) => {
+  if (!PRODUCTION_TEXTBOOK) {
+    const reason = `SKIPPED: production textbook not found (looked for tests/nimas_samples/9780544087507NIMAS.xml and ${USER_DOWNLOADS_FILE})`;
+    console.log(reason);
+    return t.skip(reason);
+  }
 
-  const xmlContent = fs.readFileSync(USER_DOWNLOADS_FILE, 'utf8');
+  const xmlContent = fs.readFileSync(PRODUCTION_TEXTBOOK, 'utf8');
   const doc = parseDtbook(xmlContent);
   assert.ok(doc.blocks.length >= 5000, `Loaded ${doc.blocks.length} blocks`);
 
@@ -224,9 +234,19 @@ test('Heavy In-Place Edit Stress Test on 5,000+ Block Production Textbook', () =
     translatePos: mockTranslatePos
   };
 
-  // Perform 20 in-place edits throughout the document
+  // Perform 20 in-place edits throughout the document. The edit rewrites the
+  // block's TEXT, so the target must be a block whose braille is rendered
+  // from its text (para/heading/note/play/box/list). pagenum blocks render
+  // from `.page` and tables from their cells, so editing `.text` on those
+  // would never show up in the trace — step forward to the next text block.
+  const isTextBlock = (b) => b && (
+    (typeof b.text === 'string' && !['pagenum', 'table', 'graphic', 'math', 'break', 'indicator'].includes(b.type)) ||
+    (b.type === 'box' && Array.isArray(b.blocks) && b.blocks.length > 0 && typeof b.blocks[0].text === 'string') ||
+    (b.type === 'list' && Array.isArray(b.items) && b.items.length > 0)
+  );
   for (let editIndex = 0; editIndex < 20; editIndex++) {
-    const targetBlockIndex = (editIndex * 250) % doc.blocks.length;
+    let targetBlockIndex = (editIndex * 250) % doc.blocks.length;
+    while (!isTextBlock(doc.blocks[targetBlockIndex])) targetBlockIndex = (targetBlockIndex + 1) % doc.blocks.length;
     const origBlock = doc.blocks[targetBlockIndex];
 
     const updatedText = `[EDIT ${editIndex}] Updated content [VERIFIED]`;

@@ -1,5 +1,5 @@
 // Systematic Round-Trip Test Suite for Phase 4B: NIMAS XML Table Serialization
-// Tests AST <-> DTBook XML serialization across synthetic cases and all 154 production textbook tables.
+// Tests AST <-> DTBook XML serialization across synthetic cases and all 164 production textbook tables (9 inside list items, 1 inside a sidebar).
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +13,7 @@ import { exportToNimasXml } from '../input/nimas-export.mjs';
 
 console.log('=== Running NIMAS Table Serialization & Round-Trip Test Suite (Phase 4B) ===\n');
 
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, skipped = 0;
 function check(name, cond, detail = '') {
   if (cond) {
     pass++;
@@ -113,26 +113,31 @@ check('Headers parsed correctly', complexTbl?.headers?.length === 4 && complexTb
 check('Row 1 row-header and colspan padded', complexTbl?.rows[0]?.length === 4 && complexTbl.rows[0][0] === 'Widgets' && complexTbl.rows[0][1] === 'Merged' && complexTbl.rows[0][2] === '');
 check('Row 2 row-header and cells aligned', complexTbl?.rows[1]?.length === 4 && complexTbl.rows[1][0] === 'Gadgets' && complexTbl.rows[1][3] === '30');
 
-// --- Section 4: Scale Test: All 154 Real Production Tables ---
-console.log('\n--- Section 4: Production Scale Test (All 154 Tables in Grade 7 Textbook) ---');
+// --- Section 4: Scale Test: All 164 Real Production Tables ---
+console.log('\n--- Section 4: Production Scale Test (All 164 Tables in Grade 7 Textbook) ---');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PRIMARY_PATH = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
-const FALLBACK_PATH = path.join(__dirname, 'nimas_samples/9780544087507NIMAS.xml');
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const PRIMARY_PATH = path.join(__dirname, 'nimas_samples/9780544087507NIMAS.xml');
+const FALLBACK_PATH = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
 const TARGET_PATH = fs.existsSync(PRIMARY_PATH) ? PRIMARY_PATH : FALLBACK_PATH;
 
 if (fs.existsSync(TARGET_PATH)) {
   const rawXml = fs.readFileSync(TARGET_PATH, 'utf8');
   const tbDoc = parseDtbook(rawXml);
-  const tbTables = tbDoc.blocks.filter(b => b.type === 'table');
-  check(`Extracted all production tables: found ${tbTables.length} tables`, tbTables.length === 154);
+  // Every <table> in the book, including those in sidebars (tables inside list items are
+  // split out of the list as their own blocks).
+  const allTables = (blocks, out = []) => { for (const b of blocks) { if (b.type === 'table') out.push(b); if (Array.isArray(b.blocks)) allTables(b.blocks, out); } return out; };
+  const SOURCE_TABLES = (rawXml.match(/<table\b/g) || []).length;
+  const tbTables = allTables(tbDoc.blocks);
+  check(`Extracted all production tables: found ${tbTables.length} tables`, tbTables.length === SOURCE_TABLES && SOURCE_TABLES === 164);
 
   // Roundtrip all tables
-  const scaleDoc = { blocks: tbTables };
-  const scaleXml = exportToNimasXml(scaleDoc);
+  // The whole book is saved (a note reference in a cell needs its note in the document).
+  const scaleXml = exportToNimasXml(tbDoc);
   const reParsedDoc = parseDtbook(scaleXml);
-  const reParsedTables = reParsedDoc.blocks.filter(b => b.type === 'table');
+  const reParsedTables = allTables(reParsedDoc.blocks);
 
-  check('Re-parsed table count matches exactly 154', reParsedTables.length === 154);
+  check('Re-parsed table count matches exactly 164', reParsedTables.length === 164);
 
   let headerMatches = 0, rowMatches = 0, cellMatches = 0, totalCells = 0;
   for (let i = 0; i < tbTables.length; i++) {
@@ -160,12 +165,13 @@ if (fs.existsSync(TARGET_PATH)) {
     }
   }
 
-  check('100% of table headers match across round-trip', headerMatches === 154, `${headerMatches}/154`);
-  check('100% of table row structures match across round-trip', rowMatches === 154, `${rowMatches}/154`);
-  check('100% of table cell contents match across round-trip', cellMatches === 154, `${cellMatches}/154 (${totalCells} cells verified)`);
+  check('100% of table headers match across round-trip', headerMatches === 164, `${headerMatches}/164`);
+  check('100% of table row structures match across round-trip', rowMatches === 164, `${rowMatches}/164`);
+  check('100% of table cell contents match across round-trip', cellMatches === 164, `${cellMatches}/164 (${totalCells} cells verified)`);
 } else {
-  console.warn('Production sample file not found at:', TARGET_PATH);
+  skipped++;
+  console.warn(`SKIPPED: Section 4 (production scale test) — textbook XML not found at ${TARGET_PATH}`);
 }
 
-console.log(`\nTable round-trip tests complete: ${pass} passed, ${fail} failed.`);
+console.log(`\nTable round-trip tests complete: ${pass} passed, ${fail} failed, ${skipped} skipped.`);
 process.exit(fail ? 1 : 0);

@@ -157,13 +157,20 @@ console.log('=== TEST SUITE: Print Page Numbers (UKAAF B004 & BANA Formats 2016)
   // Page 2 started on print page 1, so Line 1 is continuation "A#A"
   ok(pages[1][0].endsWith('A#A'), `BANA Page 2 Line 1 starts with continuation "A#A" (got: "${pages[1][0]}")`);
 
-  // Page 2 body contains the mid-page transition line: "3----- #B
-  const transLine = pages[1].find(l => l.startsWith('"3-'));
+  // Page 2 body contains the mid-page page change indicator (Formats §1.11.3,
+  // Example 1-9): unspaced dots 36 from the left margin ending with the page
+  // number at the right margin, no space before the number, no "3 prefix:
+  // -------------------------------------#B
+  const isPageChange = (l) => /^-{3,}[^-\s]\S*$/.test(l);
+  const transLine = pages[1].find(isPageChange);
   ok(transLine != null, `BANA Page 2 body contains mid-page transition line`);
   if (transLine) {
     ok(transLine.length === 40, `BANA transition line spans 40 cells (got ${transLine.length})`);
-    ok(transLine.endsWith(' #B'), `BANA transition line ends with " #B" (got "${transLine}")`);
+    ok(transLine.endsWith('-#B'), `BANA transition line ends with "-#B" — no space before the number (got "${transLine}")`);
+    ok(!transLine.startsWith('"3') && !transLine.includes(' '), `BANA transition line has no "3 prefix and no spaces (got "${transLine}")`);
+    ok(transLine === '-'.repeat(40 - 2) + '#B', `BANA transition line is all dots 36 then the number (got "${transLine}")`);
   }
+  ok(!pages.flat().some(l => l.startsWith('"3-')), 'BANA never emits the old "3--- form');
 
   // Page 3 started on print page 2 (which began on Page 2), so Page 3 Line 1 is continuation "A#B"
   ok(pages[2][0].endsWith('A#B'), `BANA Page 3 Line 1 is continuation "A#B" (got: "${pages[2][0]}")`);
@@ -195,8 +202,8 @@ console.log('=== TEST SUITE: Print Page Numbers (UKAAF B004 & BANA Formats 2016)
   // Page 2 Line 1 should be fresh print page 2: "#B" (not continuation "A#A" or "A#B")
   ok(pages[1][0].endsWith('#B'), `BANA Page 2 Line 1 is "#B" (got: "${pages[1][0]}")`);
 
-  // Page 2 body should NOT contain a transition line "3----- #B
-  const transLineInPage2 = pages[1].find(l => l.startsWith('"3-'));
+  // Page 2 body should NOT contain a transition line ------#B
+  const transLineInPage2 = pages[1].find(l => /^-{3,}[^-\s]\S*$/.test(l));
   ok(transLineInPage2 == null, `BANA Page 2 suppressed the transition line in body (got: "${transLineInPage2}")`);
 }
 
@@ -289,15 +296,15 @@ console.log('=== TEST SUITE: Print Page Numbers (UKAAF B004 & BANA Formats 2016)
   const page1 = pages[0];
   const page2 = pages[1];
 
-  // Page 1 should NOT contain a transition line "3- at the bottom
-  const transLineInPage1 = page1.find(l => l.includes('"3-'));
+  // Page 1 should NOT contain a transition line ------#B at the bottom
+  const transLineInPage1 = page1.find(l => /^-{3,}[^-\s]\S*$/.test(l));
   ok(transLineInPage1 == null, `BANA Page 1 has no orphaned transition line at bottom (got: "${transLineInPage1}")`);
   ok(page1[0].endsWith('#A'), 'BANA Page 1 Line 1 is print page #A');
   ok(page1[page1.length - 1].endsWith('#A'), 'BANA Page 1 Line 25 is braille page #A');
 
   // Page 2 should have print page #B on Line 1 and body text on Line 2 (transition suppressed)
   ok(page2[0].endsWith('#B'), `BANA Page 2 Line 1 is print page #B (got: "${page2[0]}")`);
-  const transLineInPage2 = page2.find(l => l.includes('"3-'));
+  const transLineInPage2 = page2.find(l => /^-{3,}[^-\s]\S*$/.test(l));
   ok(transLineInPage2 == null, `BANA Page 2 suppressed top-of-page transition line (got: "${transLineInPage2}")`);
   ok(page2[page2.length - 1].endsWith('#B'), 'BANA Page 2 Line 25 is braille page #B');
 }

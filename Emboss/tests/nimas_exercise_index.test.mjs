@@ -1,5 +1,7 @@
-// Dedicated Automated Test Suite for Exercise Hierarchies (BANA §10) and Index Lists (BANA §18).
+// Dedicated Automated Test Suite for Exercise Hierarchies (BANA Formats §10.4.2b) and Index Lists (§21.2.1b / §21.4).
 // Tests 3-level question hierarchies, 3-level index lists, BANA margins, cell trace mapping, and lossless XML export.
+// Both take the nested-list pattern: each level begins two cells right of the previous one and ALL
+// runovers begin two cells right of the deepest level — three levels: 1-7, 3-7, 5-7.
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,7 +12,7 @@ import { DOMParser } from '@xmldom/xmldom';
 
 globalThis.DOMParser = DOMParser;
 
-test('Exercise Hierarchies (BANA §10): 3-level question formatting with 1-5, 3-5, and 5-7 margins', () => {
+test('Exercise Hierarchies (BANA §10.4.2b): 3-level question formatting with 1-7, 3-7, and 5-7 margins', () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book>
@@ -46,27 +48,30 @@ test('Exercise Hierarchies (BANA §10): 3-level question formatting with 1-5, 3-
 
   const lines = brf.split(/\r?\n/).filter(l => l.trim() && !l.includes('#A'));
 
-  // Level 0 (1-5): Cell 1 start (0 spaces), Cell 5 runover (4 spaces)
+  // Three levels (§10.4.2b): 1-7, 3-7, 5-7 — every runover in cell 7 (6 spaces).
+  // Level 0 (1-7): Cell 1 start (0 spaces), Cell 7 runover
   const q0Line1 = lines.find(l => l.startsWith('1. ANALYZE'));
   assert.ok(q0Line1, 'Level 0 question starts at Cell 1');
-  const q0Line2 = lines.find(l => l.includes('ADAPTATIONS OF NOCTURNAL DESERT'));
+  const q0Line2 = lines.find(l => l.includes('ADAPTATIONS OF NOCTURNAL'));
   assert.ok(q0Line2, 'Level 0 question wraps to line 2');
-  assert.equal(q0Line2.startsWith('    '), true, 'Level 0 runover is Cell 5 (4 spaces)');
-  assert.equal(q0Line2.startsWith('     '), false, 'Level 0 runover is not 5 or more spaces');
+  assert.equal(q0Line2.startsWith('      '), true, 'Level 0 runover is Cell 7 (6 spaces)');
+  assert.equal(q0Line2.startsWith('       '), false, 'Level 0 runover is not 7 or more spaces');
 
-  // Level 1 (3-5): Cell 3 start (2 spaces), Cell 5 runover (4 spaces)
+  // Level 1 (3-7): Cell 3 start (2 spaces), Cell 7 runover
   const q1Line1 = lines.find(l => l.startsWith('  A. IDENTIFY'));
   assert.ok(q1Line1, 'Level 1 question starts at Cell 3 (2 spaces)');
-  const q1Line2 = lines.find(l => l.includes('PHYSIOLOGICAL MECHANISMS FOR'));
+  const q1Line2 = lines.find(l => l.includes('PHYSIOLOGICAL MECHANISMS'));
   assert.ok(q1Line2, 'Level 1 question wraps to line 2');
-  assert.equal(q1Line2.startsWith('    '), true, 'Level 1 runover is Cell 5 (4 spaces)');
+  assert.equal(q1Line2.startsWith('      '), true, 'Level 1 runover is Cell 7 (6 spaces)');
+  assert.equal(q1Line2.startsWith('       '), false, 'Level 1 runover is not 7 or more spaces');
 
-  // Level 2 (5-7): Cell 5 start (4 spaces), Cell 7 runover (6 spaces)
+  // Level 2 (5-7): Cell 5 start (4 spaces), Cell 7 runover
   const q2Line1 = lines.find(l => l.startsWith('    (1) EXPLAIN'));
   assert.ok(q2Line1, 'Level 2 question starts at Cell 5 (4 spaces)');
-  const q2Line2 = lines.find(l => l.includes('COUNTERCURRENT MULTIPLIER'));
+  const q2Line2 = lines.find(l => l.includes('COUNTERCURRENT'));
   assert.ok(q2Line2, 'Level 2 question wraps to line 2');
   assert.equal(q2Line2.startsWith('      '), true, 'Level 2 runover is Cell 7 (6 spaces)');
+  assert.equal(q2Line2.startsWith('       '), false, 'Level 2 runover is not 7 or more spaces');
 
   // Roundtrip export and re-parse
   const exportedXml = exportToNimasXml(doc);
@@ -83,7 +88,7 @@ test('Exercise Hierarchies (BANA §10): 3-level question formatting with 1-5, 3-
   assert.equal(reparsedList.items[2].level, 2);
 });
 
-test('Index Lists (BANA §18): 3-level index formatting with 1-3, 3-5, and 5-7 margins', () => {
+test('Index Lists (BANA §21.2.1b / §21.4): 3-level index formatting with 1-7, 3-7, and 5-7 margins', () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book>
@@ -119,27 +124,31 @@ test('Index Lists (BANA §18): 3-level index formatting with 1-3, 3-5, and 5-7 m
 
   const lines = brf.split(/\r?\n/).filter(l => l.trim() && !l.includes('#A'));
 
-  // Level 0 (1-3): Cell 1 start (0 spaces), Cell 3 runover (2 spaces)
+  // Three levels (§21.2.1b): 1-7, 3-7, 5-7 — "all runovers begin two cells to the right
+  // of the farthest indented subentry" (B004 App I: all entries share one runover start).
+  // Level 0 (1-7): Cell 1 start (0 spaces), Cell 7 runover
   const e0Line1 = lines.find(l => l.startsWith('AERODYNAMICS,'));
   assert.ok(e0Line1, 'Level 0 entry starts at Cell 1');
-  const e0Line2 = lines.find(l => l.includes('PRACTICAL FLIGHT CALCULATIONS'));
+  const e0Line2 = lines.find(l => l.includes('PRACTICAL FLIGHT'));
   assert.ok(e0Line2, 'Level 0 entry wraps to line 2');
-  assert.equal(e0Line2.startsWith('  '), true, 'Level 0 runover is Cell 3 (2 spaces)');
-  assert.equal(e0Line2.startsWith('   '), false, 'Level 0 runover is not 3 or more spaces');
+  assert.equal(e0Line2.startsWith('      '), true, 'Level 0 runover is Cell 7 (6 spaces)');
+  assert.equal(e0Line2.startsWith('       '), false, 'Level 0 runover is not 7 or more spaces');
 
-  // Level 1 (3-5): Cell 3 start (2 spaces), Cell 5 runover (4 spaces)
+  // Level 1 (3-7): Cell 3 start (2 spaces), Cell 7 runover
   const e1Line1 = lines.find(l => l.startsWith('  BOUNDARY LAYER'));
   assert.ok(e1Line1, 'Level 1 entry starts at Cell 3 (2 spaces)');
   const e1Line2 = lines.find(l => l.includes('DRAG COEFFICIENT'));
   assert.ok(e1Line2, 'Level 1 entry wraps to line 2');
-  assert.equal(e1Line2.startsWith('    '), true, 'Level 1 runover is Cell 5 (4 spaces)');
+  assert.equal(e1Line2.startsWith('      '), true, 'Level 1 runover is Cell 7 (6 spaces)');
+  assert.equal(e1Line2.startsWith('       '), false, 'Level 1 runover is not 7 or more spaces');
 
-  // Level 2 (5-7): Cell 5 start (4 spaces), Cell 7 runover (6 spaces)
+  // Level 2 (5-7): Cell 5 start (4 spaces), Cell 7 runover
   const e2Line1 = lines.find(l => l.startsWith('    LAMINAR FLOW'));
   assert.ok(e2Line1, 'Level 2 entry starts at Cell 5 (4 spaces)');
   const e2Line2 = lines.find(l => l.includes('MODIFICATIONS, 107'));
   assert.ok(e2Line2, 'Level 2 entry wraps to line 2');
   assert.equal(e2Line2.startsWith('      '), true, 'Level 2 runover is Cell 7 (6 spaces)');
+  assert.equal(e2Line2.startsWith('       '), false, 'Level 2 runover is not 7 or more spaces');
 
   // Roundtrip export and re-parse
   const exportedXml = exportToNimasXml(doc);

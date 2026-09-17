@@ -500,7 +500,7 @@ math-field {
   vertical-align: middle;
   display: inline-flex;
 }
-math-field::part(virtual-keyboard-toggle),
+/* MathLive menu hidden (print styling only); the virtual-keyboard toggle stays visible (G11). */
 math-field::part(menu-toggle) {
   display: none !important;
 }
@@ -509,7 +509,6 @@ math-field:focus, math-field:focus-within, math-field[focused] {
   outline-offset: 1px !important;
   background: rgba(42, 125, 225, 0.12) !important;
 }
-:root.dark math-field,
 @media (prefers-color-scheme: dark) {
   :root:not(.light) math-field {
     color: #e6edf3;
@@ -543,6 +542,48 @@ math-field:focus, math-field:focus-within, math-field[focused] {
     --keycap-modifier-background: #161b22;
     --keycap-modifier-border: #30363d;
   }
+}
+/* Same colours when dark mode is forced with the theme toggle (class on <html>). */
+:root.dark math-field {
+  color: #e6edf3;
+  --math-mode-color: #e6edf3;
+  --text-color: #e6edf3;
+  --caret-color: #387df5;
+}
+:root.dark math-field:focus,
+:root.dark math-field:focus-within,
+:root.dark math-field[focused] {
+  outline: 2px solid #387df5 !important;
+  background: rgba(56, 125, 245, 0.22) !important;
+  color: #f0f6fc !important;
+  --math-mode-color: #f0f6fc !important;
+  --text-color: #f0f6fc !important;
+}
+:root.dark math-virtual-keyboard,
+:root.dark .ML__keyboard,
+:root.dark .MLK__backdrop {
+  --keyboard-background: #161b22;
+  --keyboard-toolbar-text: #e6edf3;
+  --keyboard-toolbar-text-active: #387df5;
+  --keyboard-toolbar-background: #0d1117;
+  --keycap-background: #21262d;
+  --keycap-background-active: #30363d;
+  --keycap-background-hover: #30363d;
+  --keycap-text: #e6edf3;
+  --keycap-secondary-text: #8b949e;
+  --keycap-border: #30363d;
+  --keycap-border-bottom: #21262d;
+  --keycap-modifier-background: #161b22;
+  --keycap-modifier-border: #30363d;
+}
+
+
+/* Paragraph resumed after a print page turn (parser split it; braille resumes in cell 1) */
+.ed-p.bana-continuation,
+p.bana-continuation {
+  text-indent: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  padding-top: 2px;
 }
 
 /* BANA Block Style Indicators in Print View Editor */
@@ -1023,3 +1064,21 @@ aside.bana-style-sidebar > :last-child {
   }
 }
 
+
+/* Service-worker "new version available" toast (created by the inline registration
+   script in index.html and editor/index.html; role=status so it is announced). */
+.sw-update-toast {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 10000;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  max-width: calc(100vw - 32px); padding: 10px 14px;
+  background: var(--panel-head, #fff); color: var(--ink, #171d1c);
+  border: 1px solid var(--line, #eaebec); border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18); font-size: 0.95rem;
+}
+.sw-update-toast:empty { display: none; }
+.sw-update-toast button {
+  font: inherit; padding: 6px 12px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--accent, #2a7de1); background: var(--accent, #2a7de1); color: var(--accent-ink, #fff);
+}
+.sw-update-toast button.sw-update-later { background: transparent; color: var(--ink, #171d1c); border-color: var(--line, #eaebec); }
+.sw-update-toast button:focus-visible { outline: 3px solid var(--linkb, #f5b700); outline-offset: 2px; }

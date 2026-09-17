@@ -1,13 +1,18 @@
 // Offline app shell + engine + tables. Cache-first for known assets.
-const CACHE = 'emboss-v42';
+const CACHE = 'emboss-v83';
 const ASSETS = [
   '/web/index.html', '/web/style.css', '/web/app.mjs', '/web/manifest.webmanifest', '/web/logo.svg',
+  // manifest icons (PNG) so an installed app keeps its icon offline
+  '/web/logo-64.png', '/web/logo-128.png', '/web/logo-512.png',
+  // UI localisation: imported by both app.mjs and editor.mjs; the dictionary is fetched
+  // with a ?v= cache-buster, which the shell fallback below ignores (ignoreSearch)
+  '/web/i18n.mjs', '/web/locales-data.mjs', '/web/locales/en.json',
   '/web/settings.mjs', '/web/braille-table.mjs', '/web/braille-render.mjs', '/web/proofread.mjs', '/web/zip.mjs', '/web/tts.mjs',
   '/web/handoff-db.mjs', '/web/docx-export.mjs', '/web/formulas.js', '/web/tactile-library.js', '/web/tactile-browser.mjs',
   // output + hardware layer (imported by both modes — without these an offline first
   // load of app.mjs fails at import time even though the shell itself is cached)
   '/format/spooler.mjs', '/format/pef.mjs', '/format/ebraille.mjs', '/format/cover.mjs',
-  '/format/tactile-display.mjs',
+  '/format/tactile-display.mjs', '/format/cell-markup.mjs', '/format/cell-dom.mjs',
   // the eBraille export is an adapter over the shared writer (2026-09-02); offline
   // export needs the writer and its unzip cached too
   '/Translate/ebraille.mjs', '/Translate/unmxl.mjs',
@@ -26,7 +31,9 @@ const ASSETS = [
   '/engine/maths.mjs', '/engine/brf-ascii.mjs',
   '/engine/mathcat/pkg-web/emboss_mathcat.js', '/engine/mathcat/pkg-web/emboss_mathcat_bg.wasm',
   '/format/layout.mjs', '/format/page.mjs', '/format/document.mjs', '/format/text-style.mjs',
-  '/input/parse.mjs', '/input/omml.mjs',
+  '/format/styles.mjs', '/engine/mathml-to-latex.mjs', '/input/nimas-export.mjs',
+  '/Translate/nemeth-rules.mjs', '/Translate/mathnode.mjs',
+  '/input/parse.mjs', '/input/omml.mjs', '/input/load-audit.mjs', '/input/nimas-package.mjs',
   '/liblouis/tables/braille-patterns.cti', '/liblouis/tables/en-ueb-chardefs.uti',
   '/liblouis/tables/en-ueb-g1.ctb', '/liblouis/tables/en-ueb-g2.ctb',
   '/liblouis/tables/en-ueb-math.ctb', '/liblouis/tables/en-us-brf.dis',
@@ -40,8 +47,14 @@ self.addEventListener('install', (e) => {
   // NO offline cache. Here one bad URL is logged but the rest still cache.
   e.waitUntil(caches.open(CACHE)
     .then((c) => Promise.all(ASSETS.map((u) => c.add(u).catch((err) => console.warn('[sw] precache failed:', u, err)))))
-    .then(() => self.skipWaiting())
     .catch((err) => console.warn('[sw] install failed:', err)));
+  // No skipWaiting() here: a freshly installed worker WAITS until the page asks for it
+  // (SKIP_WAITING message below, sent from the "new version available — Reload" toast).
+  // Activating immediately used to swap the cache underneath a running page, so an
+  // open editor could load a new module against an old one mid-session.
+});
+self.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));

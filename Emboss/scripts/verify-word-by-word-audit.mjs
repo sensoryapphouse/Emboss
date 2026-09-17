@@ -1,8 +1,70 @@
 import fs from 'node:fs';
+import path from 'node:path';
 
-const bbPath = '/Users/paulblenkhorn/Downloads/Example/9780544087507NIMAS-13206938299211938699.brf';
-const emPath = '/Users/paulblenkhorn/Downloads/Example/9780544087507NIMAS_emboss.brf';
-const reportPath = '/Users/paulblenkhorn/Downloads/Example/word_by_word_diff_report.txt';
+// Word-by-word BRF comparison: BrailleBlaster output vs Emboss output.
+//
+// Usage:
+//   node scripts/verify-word-by-word-audit.mjs <input-dir> <output-dir> [bb.brf] [emboss.brf]
+//
+//   <input-dir>   directory holding the two .brf files to compare
+//   <output-dir>  directory the report (word_by_word_diff_report.txt) is written to
+//                 (created if missing)
+//   [bb.brf]      basename of the BrailleBlaster .brf inside <input-dir>
+//   [emboss.brf]  basename of the Emboss .brf inside <input-dir>
+//
+// If the two basenames are omitted the script looks for exactly one pair of
+// "<stem>_emboss.brf" + "<stem>.brailleblaster_out.brf" (or "<stem>-<digits>.brf",
+// BrailleBlaster's export naming) in <input-dir>. The committed fixture pair
+// lives in tests/nimas_samples, e.g.:
+//   node scripts/verify-word-by-word-audit.mjs tests/nimas_samples /tmp/audit \
+//        9780544087507NIMAS.brailleblaster_out.brf 9780544087507NIMAS_emboss.brf
+//
+// Exit codes: 0 report written; 2 usage error (missing args / files not found).
+
+function usage(msg) {
+  if (msg) console.error(`ERROR: ${msg}\n`);
+  console.error('Usage: node scripts/verify-word-by-word-audit.mjs <input-dir> <output-dir> [bb.brf] [emboss.brf]');
+  console.error('  <input-dir>   directory containing the BrailleBlaster and Emboss .brf files');
+  console.error('  <output-dir>  directory to write word_by_word_diff_report.txt into');
+  console.error('  [bb.brf]      optional basename of the BrailleBlaster .brf in <input-dir>');
+  console.error('  [emboss.brf]  optional basename of the Emboss .brf in <input-dir>');
+  process.exit(2);
+}
+
+const [inputDirArg, outputDirArg, bbNameArg, emNameArg] = process.argv.slice(2);
+if (!inputDirArg || !outputDirArg) usage('both <input-dir> and <output-dir> are required');
+const inputDir = path.resolve(inputDirArg);
+const outputDir = path.resolve(outputDirArg);
+if (!fs.existsSync(inputDir) || !fs.statSync(inputDir).isDirectory()) usage(`input dir not found: ${inputDir}`);
+
+let bbPath, emPath;
+if (bbNameArg || emNameArg) {
+  if (!bbNameArg || !emNameArg) usage('give both [bb.brf] and [emboss.brf] basenames, or neither');
+  bbPath = path.join(inputDir, bbNameArg);
+  emPath = path.join(inputDir, emNameArg);
+} else {
+  const files = fs.readdirSync(inputDir).filter((f) => f.toLowerCase().endsWith('.brf'));
+  const pairs = [];
+  for (const f of files) {
+    const m = f.match(/^(.*)_emboss\.brf$/i);
+    if (!m) continue;
+    const stem = m[1];
+    const bb = files.find((g) => g !== f && (g === `${stem}.brailleblaster_out.brf` || (g.startsWith(`${stem}-`) && /-\d+\.brf$/i.test(g))));
+    if (bb) pairs.push({ bb, em: f });
+  }
+  if (pairs.length !== 1) {
+    usage(`expected exactly one <stem>_emboss.brf / <stem>.brailleblaster_out.brf pair in ${inputDir}, found ${pairs.length}${pairs.length ? ': ' + pairs.map((p) => p.em).join(', ') : ''} — pass the two basenames explicitly`);
+  }
+  bbPath = path.join(inputDir, pairs[0].bb);
+  emPath = path.join(inputDir, pairs[0].em);
+}
+if (!fs.existsSync(bbPath)) usage(`BrailleBlaster .brf not found: ${bbPath}`);
+if (!fs.existsSync(emPath)) usage(`Emboss .brf not found: ${emPath}`);
+fs.mkdirSync(outputDir, { recursive: true });
+const reportPath = path.join(outputDir, 'word_by_word_diff_report.txt');
+
+console.log(`BrailleBlaster BRF: ${bbPath}`);
+console.log(`Emboss BRF:         ${emPath}`);
 
 const bbBrf = fs.readFileSync(bbPath, 'utf8');
 const emBrf = fs.readFileSync(emPath, 'utf8');
@@ -101,7 +163,8 @@ while (bi < bbWords.length && ei < emWords.length) {
 const reportLines = [];
 reportLines.push('================================================================================');
 reportLines.push('EXHAUSTIVE WORD-BY-WORD COMPARISON AUDIT: EMBOSS vs BRAILLEBLASTER');
-reportLines.push('Document: Collections, Grade 7 (NIMAS XML)');
+reportLines.push(`BrailleBlaster: ${path.basename(bbPath)}`);
+reportLines.push(`Emboss:         ${path.basename(emPath)}`);
 reportLines.push(`Generated at: ${new Date().toISOString()}`);
 reportLines.push('================================================================================\n');
 reportLines.push(`Total BrailleBlaster Word Tokens: ${bbWords.length.toLocaleString()}`);

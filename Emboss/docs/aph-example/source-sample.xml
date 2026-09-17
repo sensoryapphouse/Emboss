@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" [
+  <!ENTITY % externalNamespaces "xmlns:m CDATA #IMPLIED">
+  <!ENTITY % MATHML.prefixed "INCLUDE">
+  <!ENTITY % MATHML.prefix "m">
+  <!ENTITY % mathml SYSTEM "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
+  %mathml;
+  <!ENTITY % externalinline "| m:math">
+]>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:m="http://www.w3.org/1998/Math/MathML" version="2005-3" xml:lang="en-US">
+  <head>
+    <meta name="dtb:uid" content="NIMAS-SAMPLE-COMPREHENSIVE-2026" />
+    <meta name="dtb:generator" content="Emboss Accessibility Test Suite" />
+    <meta name="dc:Title" content="Comprehensive NIMAS Structural Showcase" />
+    <meta name="dc:Creator" content="Accessible Education Consortium" />
+    <meta name="dc:Publisher" content="Sensory App House" />
+    <meta name="dc:Date" content="2026-09-14" />
+    <meta name="dc:Language" content="en-US" />
+    <meta name="dc:Identifier" content="978-0-123456-78-9" />
+    <meta name="nimas-version" content="1.1" />
+  </head>
+  <book>
+    <frontmatter>
+      <doctitle>Comprehensive NIMAS Structural Showcase</doctitle>
+      <docauthor>Accessible Education Consortium</docauthor>
+      <level1 class="toc">
+        <h1>Table of Contents</h1>
+        <list class="toc" type="pl">
+          <li>
+            <lic class="toc-text"><a href="#p1">Chapter 1: Prose, Formatting &amp; Math</a></lic>
+            <lic class="toc-page"><a href="#p1">1</a></lic>
+          </li>
+          <li>
+            <lic class="toc-text"><a href="#p2">Chapter 2: Lists, Tables &amp; Sidebars</a></lic>
+            <lic class="toc-page"><a href="#p2">2</a></lic>
+          </li>
+          <li>
+            <lic class="toc-text"><a href="#p3">Chapter 3: Drama, Poetry &amp; Notes</a></lic>
+            <lic class="toc-page"><a href="#p3">3</a></lic>
+          </li>
+        </list>
+      </level1>
+    </frontmatter>
+
+    <bodymatter>
+      <!-- ================================================================= -->
+      <!-- CHAPTER 1: Standard Prose, Inline Emphasis & MathML               -->
+      <!-- ================================================================= -->
+      <level1 id="ch1">
+        <pagenum id="p1" page="normal">1</pagenum>
+        <h1>Chapter 1: Prose, Typography &amp; Inline Mathematics</h1>
+        
+        <level2>
+          <h2>1.1 Semantic Text &amp; Typeforms</h2>
+          <p>
+            This paragraph illustrates full typography support under BANA and UEB formatting standards.
+            Words can have <strong>bold emphasis</strong>, <em>italic emphasis</em>, or <span class="underline">underline styling</span>.
+            Multiple typeforms can also be combined such as <strong><em>bold italicized terms</em></strong>.
+          </p>
+        </level2>
+
+        <level2>
+          <h2>1.2 Inline and Display Mathematics (MathML 3)</h2>
+          <p>
+            Mathematical expressions are encoded with standard W3C MathML:
+            The quadratic formula is represented as 
+            <m:math display="inline" alttext="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}" altimg="images/math-quadratic-formula.png">
+              <m:mi>x</m:mi>
+              <m:mo>=</m:mo>
+              <m:mfrac>
+                <m:mrow>
+                  <m:mo>−</m:mo>
+                  <m:mi>b</m:mi>
+                  <m:mo>±</m:mo>
+                  <m:msqrt>
+                    <m:mrow>
+                      <m:msup><m:mi>b</m:mi><m:mn>2</m:mn></m:msup>
+                      <m:mo>−</m:mo>
+                      <m:mn>4</m:mn><m:mi>a</m:mi><m:mi>c</m:mi>
+                    </m:mrow>
+                  </m:msqrt>
+                </m:mrow>
+                <m:mrow>
+                  <m:mn>2</m:mn><m:mi>a</m:mi>
+                </m:mrow>
+              </m:mfrac>
+            </m:math>, 
+            and the Pythagorean identity is <m:math display="inline" alttext="a^2 + b^2 = c^2" altimg="images/math-pythagorean-identity.png"><m:msup><m:mi>a</m:mi><m:mn>2</m:mn></m:msup><m:mo>+</m:mo><m:msup><m:mi>b</m:mi><m:mn>2</m:mn></m:msup><m:mo>=</m:mo><m:msup><m:mi>c</m:mi><m:mn>2</m:mn></m:msup></m:math>.
+          </p>
+
+          <div class="doc-break">
+            <p class="break">⁂ ⁂ ⁂</p>
+          </div>
+        </level2>
+      </level1>
+
+      <!-- ================================================================= -->
+      <!-- CHAPTER 2: Lists, Spatial/Listed Tables & Sidebars                -->
+      <!-- ================================================================= -->
+      <level1 id="ch2">
+        <pagenum id="p2" page="normal">2</pagenum>
+        <h1>Chapter 2: Structural Collections, Tables &amp; Sidebars</h1>
+
+        <level2>
+          <h2>2.1 Hierarchical Lists</h2>
+          <p>Key science exploration topics:</p>
+          <list type="ul">
+            <li><strong>Astronomy:</strong> Stellar evolution, black holes, and spectroscopy.</li>
+            <li><strong>Geology:</strong> Plate tectonics, mineral crystallization, and seismic fault lines.</li>
+            <li><strong>Biology:</strong> Cellular respiration, photosynthesis, and genetics.</li>
+          </list>
+
+          <p>Chronological lab sequence:</p>
+          <list type="ol" enum="1">
+            <li>Calibrate the electronic analytical balance.</li>
+            <li>Measure 25.0 mL of aqueous sodium bicarbonate.</li>
+            <li>Record temperature fluctuations over 10-second intervals.</li>
+          </list>
+        </level2>
+
+        <level2>
+          <h2>2.2 Data Table (BANA §11 Format)</h2>
+          <table border="1">
+            <caption>Table 2.1: Physical Properties of Laboratory Reagents</caption>
+            <thead>
+              <tr>
+                <th>Substance</th>
+                <th>Formula</th>
+                <th>Molar Mass (g/mol)</th>
+                <th>Melting Pt (°C)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sodium Chloride</td>
+                <td>NaCl</td>
+                <td>58.44</td>
+                <td>801</td>
+              </tr>
+              <tr>
+                <td>Sucrose</td>
+                <td>C12H22O11</td>
+                <td>342.30</td>
+                <td>186</td>
+              </tr>
+              <tr>
+                <td>Ethanol</td>
+                <td>C2H5OH</td>
+                <td>46.07</td>
+                <td>-114</td>
+              </tr>
+            </tbody>
+          </table>
+        </level2>
+
+        <level2>
+          <h2>2.3 Sidebar Callout Card (BANA §12 Boxlines)</h2>
+          <sidebar id="sidebar-1" render="required">
+            <hd>Discovery Spotlight: Deep Sea Hydrothermal Vents</hd>
+            <p>
+              Hydrothermal vents host unique ecosystems powered by <em>chemosynthesis</em> rather than solar photosynthesis.
+            </p>
+            <list type="ul">
+              <li><strong>Organisms:</strong> Giant tube worms, vent crabs, and thermophilic archaebacteria.</li>
+              <li><strong>Energy Source:</strong> Hydrogen sulfide oxidation from geothermal subterranean fissures.</li>
+            </list>
+          </sidebar>
+        </level2>
+      </level1>
+
+      <!-- ================================================================= -->
+      <!-- CHAPTER 3: Drama, Poetry, Transcriber Notes & Figures             -->
+      <!-- ================================================================= -->
+      <level1 id="ch3">
+        <pagenum id="p3" page="normal">3</pagenum>
+        <h1>Chapter 3: Plays, Poetry, Annotations &amp; Transcriber Notes</h1>
+
+        <level2>
+          <h2>3.1 Drama &amp; Dialogue (BANA §13)</h2>
+          <div class="dialogue">
+            <p class="stage"><em>[Setting: A high terrace overlooking the ocean at sunset. Enter ELENA and MARCUS.]</em></p>
+            <p class="speaker"><strong>ELENA:</strong> Have you observed the navigation stars tonight? The horizon is completely clear.</p>
+            <p class="speaker"><strong>MARCUS:</strong> <em>(Consulting the marine astrolabe)</em> The coordinates align precisely with the northern chart.</p>
+            <p class="stage"><em>[He marks the parchment chart with a brass compass.]</em></p>
+          </div>
+        </level2>
+
+        <level2>
+          <h2>3.2 Poetry &amp; Stanza Layout (BANA §13)</h2>
+          <poem>
+            <linegroup>
+              <line>The tide retreats across the silver sand,</line>
+              <line>Leaving smooth echoes where the breakers rolled;</line>
+              <line>Night casts its quiet shadow on the land,</line>
+              <line>And turns the ocean foam to gleaming gold.</line>
+            </linegroup>
+          </poem>
+        </level2>
+
+        <level2>
+          <h2>3.3 Transcriber Notes &amp; Footnotes</h2>
+          <prodnote class="transcriber" render="required">
+            <p><em>[Transcriber's Note: The tactile diagram illustrating the astrolabe geometry has been magnified 1.5x on the facing embossed plate.]</em></p>
+          </prodnote>
+
+          <blockquote>
+            <p>“Science is a way of thinking much more than it is a body of knowledge.”</p>
+            <byline>— Carl Sagan, <cite>Broca's Brain</cite> (1979)<noteref idref="#fn1">1</noteref></byline>
+          </blockquote>
+
+          <note id="fn1" class="footnote">
+            <p>1. Originally presented in chapter 1 of <cite>Broca's Brain: Reflections on the Romance of Science</cite>.</p>
+          </note>
+        </level2>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

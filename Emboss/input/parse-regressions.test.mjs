@@ -51,7 +51,9 @@ const docXml = `<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="${W}"
 const dd = await P.parseDocx(await zipBuf([{ name: 'word/document.xml', text: docXml }]));
 check(3, 'docx hyperlink text kept with bold run', J(dd.blocks[0]) === J({ type: 'para', segments: [{ type: 'text', text: 'Bold', tf: 4 }, { type: 'text', text: ' link text tail' }] }), J(dd.blocks[0]));
 
-// #4 NIMAS <lic> columns outside a TOC become item text
+// #4 NIMAS <lic> pairs whose last component is a bare page number are contents entries
+//    (D2, Paul 16 Sep: real NIMAC books mark contents this way; nothing is lost, and outside
+//    contents the page follows the entry in braille)
 const nim = `<?xml version="1.0"?><!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3"><book><bodymatter>
 <level1><pagenum id="p1" page="normal">12</pagenum><h1>Chapter</h1>
@@ -65,7 +67,7 @@ const nim = `<?xml version="1.0"?><!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2
 </level1></bodymatter></book></dtbook>`;
 const nd = P.parseNimasXml(nim);
 const by = (type) => nd.blocks.filter((b) => b.type === type);
-check(4, 'NIMAS lic pairs → text items', J(by('list')[0]) === J({ type: 'list', items: [{ text: 'Item one 5' }, { text: 'Item two 9' }] }), J(by('list')[0]));
+check(4, 'NIMAS lic pairs → contents entries', J(by('list')[0]) === J({ type: 'list', items: [{ text: 'Item one', page: '5' }, { text: 'Item two', page: '9' }], kind: 'toc', style: 'toc' }), J(by('list')[0]));
 
 // #5 named entities decoded; unknown ones kept visible
 check(5, 'named entities', by('para')[0]?.text === 'Café & crème — ok &bogus;', J(by('para')[0]));
@@ -83,7 +85,7 @@ check(5, 'named entities', by('para')[0]?.text === 'Café & crème — ok &bogus
   globalThis.__od = od;
   const want = J([{ text: 'Alpha' }, { text: 'Beta', level: 1 }, { text: 'Gamma' }]);
   const box = by('box')[0];
-  check(6, 'nested lists not duplicated', J(h.items) === want && J(od.blocks[0].items) === want && J(by('list')[1].items) === want && J(box.blocks[1].items) === J([{ text: 'x 3' }]),
+  check(6, 'nested lists not duplicated', J(h.items) === want && J(od.blocks[0].items) === want && J(by('list')[1].items) === want && J(box.blocks[1].items) === J([{ text: 'x', page: '3' }]),
     `html=${J(h.items)} odt=${J(od.blocks[0].items)} nimas=${J(by('list')[1].items)} box=${J(box.blocks[1])}`);
 }
 
@@ -147,7 +149,7 @@ check(7, 'stripLeadingBullet keeps -3 and *Note*', P.stripLeadingBullet('-3 is l
 }
 
 // #14 <pagenum> → pagenum block
-check(14, 'pagenum block', J(nd.blocks[0]) === J({ type: 'pagenum', text: '12' }) && !nd.blocks.some((b) => b.type === 'para' && b.text === '12'), J(nd.blocks[0]));
+check(14, 'pagenum block', nd.blocks[0]?.type === 'pagenum' && nd.blocks[0].text === '12' && nd.blocks[0].page === '12' && nd.blocks[0].pageType === 'normal' && !nd.blocks.some((b) => b.type === 'para' && b.text === '12'), J(nd.blocks[0]));
 
 // #15 .xhtml routed to the HTML parser
 check(15, '.xhtml routing', J((await P.parseFile('ch1.xhtml', '<html><body><p>Hello</p></body></html>')).blocks) === J([{ type: 'para', text: 'Hello' }]), J((await P.parseFile('ch1.xhtml', '<p>Hello</p>')).blocks));

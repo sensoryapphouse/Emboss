@@ -80,14 +80,24 @@ function check(name, cond, detail = '') {
     check(`${mode} deep list: trace generated for all items`, trace && trace.some(t => t.src && t.src.some(c => c && c.u === 4)));
   }
 
-  // Test 1.2: Compact List Mode (5-1, 7-1, 9-1, 11-1, 13-1)
-  for (const mode of ['ukaaf', 'bana']) {
-    const opts = baseOpts({ mode, listStyle: 'compact' });
+  // Test 1.2: Compact List Mode (5-1, 7-1, 9-1, 11-1, 13-1) — a UKAAF house style
+  // (B004 §10 Ex2 / App C Ex2); BANA Formats §8 has no equivalent, so the option is
+  // ignored in BANA mode and the list keeps the §8.5.1b nested pattern.
+  {
+    const opts = baseOpts({ mode: 'ukaaf', listStyle: 'compact' });
     const blockLines = formatBlock(deepListBlock, opts).filter(l => l.trim().length > 0);
 
-    check(`${mode} compact list: L0 starts cell 5`, blockLines[0] && blockLines[0].startsWith('    ') && !blockLines[0].startsWith('     '));
-    check(`${mode} compact list: L1 starts cell 7`, blockLines[1] && blockLines[1].startsWith('      ') && !blockLines[1].startsWith('       '));
-    check(`${mode} compact list: L2 starts cell 9`, blockLines[2] && blockLines[2].startsWith('        ') && !blockLines[2].startsWith('         '));
+    check('ukaaf compact list: L0 starts cell 5', blockLines[0] && blockLines[0].startsWith('    ') && !blockLines[0].startsWith('     '));
+    check('ukaaf compact list: L1 starts cell 7', blockLines[1] && blockLines[1].startsWith('      ') && !blockLines[1].startsWith('       '));
+    check('ukaaf compact list: L2 starts cell 9', blockLines[2] && blockLines[2].startsWith('        ') && !blockLines[2].startsWith('         '));
+  }
+  {
+    const opts = baseOpts({ mode: 'bana', listStyle: 'compact' });
+    const blockLines = formatBlock(deepListBlock, opts).filter(l => l.trim().length > 0);
+
+    check('bana ignores compact: L0 starts cell 1', blockLines[0] && !blockLines[0].startsWith(' '));
+    check('bana ignores compact: L1 starts cell 3', blockLines[1] && blockLines[1].startsWith('  ') && !blockLines[1].startsWith('   '));
+    check('bana ignores compact: L2 starts cell 5', blockLines[2] && blockLines[2].startsWith('    ') && !blockLines[2].startsWith('     '));
   }
 
   // Test 1.3: Numbered and Mixed Nested Lists with Segments / Formatting

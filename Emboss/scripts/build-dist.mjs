@@ -9,31 +9,50 @@ const EMBOSS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.
 const ROOT = path.resolve(EMBOSS_DIR, '..');
 const DIST = path.join(ROOT, 'dist');
 
-const TABLES = [
-  'braille-patterns.cti', 'en-ueb-chardefs.uti', 'en-ueb-g1.ctb', 'en-ueb-g2.ctb',
-  'en-ueb-math.ctb', 'en-us-brf.dis', 'latinLetterDef6Dots.uti',
-  'latinUppercaseComp6.uti', 'spaces.uti', 'text_nabcc.dis', 'unicode.dis',
-];
+// Every liblouis table ships (dist/tables, ~14 MB): louis-browser.mjs loads
+// tables on demand by name, and any of the 112 locales may ask for any of them.
+// scripts/check-dist.mjs verifies the core UEB set is present after the build.
 
 // Rewrite the two path prefixes that differ between the project layout and the
 // self-contained dist layout: /web/* -> /*  and  /liblouis/tables -> /tables .
+//
+// The /web/ rewrite is deliberately NOT a blind replaceAll over the file: it
+// only touches path strings the app itself resolves — quoted string literals
+// (import specifiers, fetch()/URL arguments, src/href attribute values, the
+// service-worker precache list) and CSS url() — that BEGIN with /web/. An
+// external URL that merely contains "/web/" somewhere in its path is left alone.
+const WEB_PREFIX = /(['"`]|url\()\/web\//g;
 const rewrite = (s) => s
-  .replaceAll('/web/', '/')
+  .replace(WEB_PREFIX, '$1/')
+  // A module under input/ or format/ that imports the app's own files relatively
+  // (`../web/zip.mjs`, resolved to /web/… in the project) reaches them at the dist root.
+  .replace(/(['"`])\.\.\/web\//g, '$1../')
   .replaceAll('/liblouis/tables', '/tables');
 
+const die = (msg) => { console.error(`build-dist: ${msg}`); process.exit(1); };
+
+// A listed source that is not on disk is a build failure, never a silent gap:
+// a missing runtime file would otherwise only surface as a 404 in the field.
+async function mustExist(src) {
+  try {
+    return await fs.stat(src);
+  } catch (err) {
+    if (err.code === 'ENOENT') die(`missing source file: ${src}\n  (remove it from the copy list if it is genuinely gone, or restore it)`);
+    throw err;
+  }
+}
 async function copyRewrite(src, dest) {
+  await mustExist(src);
   await fs.mkdir(path.dirname(dest), { recursive: true });
   await fs.writeFile(dest, rewrite(await fs.readFile(src, 'utf8')));
 }
 async function copyRaw(src, dest) {
-  try {
-    await fs.mkdir(path.dirname(dest), { recursive: true });
-    await fs.copyFile(src, dest);
-  } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
-  }
+  await mustExist(src);
+  await fs.mkdir(path.dirname(dest), { recursive: true });
+  await fs.copyFile(src, dest);
 }
 async function copyDir(srcDir, destDir) {
+  if (!(await mustExist(srcDir)).isDirectory()) die(`not a directory: ${srcDir}`);
   await fs.mkdir(destDir, { recursive: true });
   for (const entry of await fs.readdir(srcDir, { withFileTypes: true })) {
     const srcPath = path.join(srcDir, entry.name);
@@ -75,6 +94,8 @@ for (const [s, d] of [
   ['web/tactile-browser.mjs', 'tactile-browser.mjs'],
   ['web/editor/index.html', 'editor/index.html'],
   ['web/editor/editor.mjs', 'editor/editor.mjs'],
+  ['web/word/index.html', 'word/index.html'],
+  ['web/word/word.mjs', 'word/word.mjs'],
   ['engine/louis-browser.mjs', 'engine/louis-browser.mjs'],
   ['engine/maths.mjs', 'engine/maths.mjs'],
   ['engine/brf-ascii.mjs', 'engine/brf-ascii.mjs'],
@@ -113,29 +134,40 @@ for (const [s, d] of [
   ['input/parse.mjs', 'input/parse.mjs'],
   ['input/nimas-export.mjs', 'input/nimas-export.mjs'],
   ['input/omml.mjs', 'input/omml.mjs'],
+  // Added in Sep 2026 (A25, A2, A4, G15). check-dist.mjs now also resolves every import
+  // in the build, so a module missing from this list fails the build instead of the site.
+  ['format/cell-markup.mjs', 'format/cell-markup.mjs'],
+  ['format/cell-dom.mjs', 'format/cell-dom.mjs'],
+  ['input/load-audit.mjs', 'input/load-audit.mjs'],
+  ['input/nimas-package.mjs', 'input/nimas-package.mjs'],
 ]) await copyRewrite(resolveSrc(s), path.join(DIST, d));
 
 await copyRaw(path.join(EMBOSS_DIR, 'web/logo.svg'), path.join(DIST, 'logo.svg'));
+for (const sz of [16, 32, 64, 80, 128, 512]) {
+  await copyRaw(path.join(EMBOSS_DIR, `web/logo-${sz}.png`), path.join(DIST, `logo-${sz}.png`));
+}
+// Sample NIMAS book (used by tests/nimas_*.test.mjs against a served dist).
 await copyRaw(path.join(EMBOSS_DIR, 'web/large-nimas.xml'), path.join(DIST, 'large-nimas.xml'));
-await copyRaw(path.join(EMBOSS_DIR, 'web/large-nimas.xml'), path.join(DIST, 'web/large-nimas.xml'));
 await copyRaw(path.join(EMBOSS_DIR, 'web/vendor/temml.min.js'), path.join(DIST, 'vendor/temml.min.js'));
 // editor: Lexical bundle + MathLive (with its fonts/sounds)
 await copyRaw(path.join(EMBOSS_DIR, 'web/editor/vendor-lexical.mjs'), path.join(DIST, 'editor/vendor-lexical.mjs'));
-await copyRaw(path.join(EMBOSS_DIR, 'web/editor/nimas_slice.json'), path.join(DIST, 'editor/nimas_slice.json'));
-await copyRaw(path.join(EMBOSS_DIR, 'web/editor/nimas_full.json'), path.join(DIST, 'editor/nimas_full.json'));
 await copyRaw(path.join(EMBOSS_DIR, 'web/vendor/mathlive.min.js'), path.join(DIST, 'vendor/mathlive.min.js'));
 await copyRaw(path.join(EMBOSS_DIR, 'web/vendor/speech-script.js'), path.join(DIST, 'vendor/speech-script.js'));
 await copyDir(path.join(EMBOSS_DIR, 'web/fonts'), path.join(DIST, 'fonts'));
 await copyDir(path.join(EMBOSS_DIR, 'web/vendor/fonts'), path.join(DIST, 'vendor/fonts'));
 await copyDir(path.join(EMBOSS_DIR, 'web/vendor/sounds'), path.join(DIST, 'vendor/sounds'));
 await copyDir(path.join(EMBOSS_DIR, 'web/tactile-assets'), path.join(DIST, 'tactile-assets'));
+// i18n.mjs tries `/web/locales/<lang>.json` then `/locales/<lang>.json`; the
+// rewrite above turns the first into the second, so only dist/locales is fetched.
 await copyDir(path.join(EMBOSS_DIR, 'web/locales'), path.join(DIST, 'locales'));
-await copyDir(path.join(EMBOSS_DIR, 'web/locales'), path.join(DIST, 'web/locales'));
 await copyRaw(path.join(EMBOSS_DIR, 'engine/liblouis-wasm.js'), path.join(DIST, 'engine/liblouis-wasm.js'));
 await copyRaw(path.join(EMBOSS_DIR, 'engine/liblouis-wasm.wasm'), path.join(DIST, 'engine/liblouis-wasm.wasm'));
 await copyRaw(path.join(EMBOSS_DIR, 'engine/mathcat/pkg-web/emboss_mathcat.js'), path.join(DIST, 'engine/mathcat/pkg-web/emboss_mathcat.js'));
 await copyRaw(path.join(EMBOSS_DIR, 'engine/mathcat/pkg-web/emboss_mathcat_bg.wasm'), path.join(DIST, 'engine/mathcat/pkg-web/emboss_mathcat_bg.wasm'));
 await copyDir(path.join(ROOT, 'liblouis/tables'), path.join(DIST, 'tables'));
+// Third-party notices and full licence texts (licences/NOTICE-EMBOSS.md names
+// each shipped component); they travel with every build, not just the repo.
+await copyDir(path.join(ROOT, 'licences'), path.join(DIST, 'licences'));
 
 // a tiny server that serves ITS OWN directory as the web root, with correct MIME
 const SERVER = `// Emboss local server. Run:  node serve.mjs
@@ -206,3 +238,15 @@ Everything runs locally in the browser; no document leaves the machine.
 await fs.writeFile(path.join(DIST, 'README.txt'), README);
 
 console.log('built dist/ at', DIST);
+
+// Last step: verify the build is complete and self-contained (required files
+// present, no /web/ or /liblouis/tables path left unrewritten). A failed check
+// fails the build, so a broken dist is never deployed by deploy-emboss.sh.
+const { checkDist } = await import('./check-dist.mjs');
+const problems = await checkDist(DIST);
+if (problems.length) {
+  console.error(`build-dist: check-dist found ${problems.length} problem(s):`);
+  for (const p of problems) console.error('  - ' + p);
+  process.exit(1);
+}
+console.log('check-dist: ok');

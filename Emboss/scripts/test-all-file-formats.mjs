@@ -32,7 +32,10 @@ console.log('='.repeat(95));
 const results = [];
 
 function record(name, format, blocks, pages, lines, err = null) {
-  const status = !err && (blocks > 0 || lines > 0) ? 'PASSED' : 'FAILED';
+  // PASS requires: no error, at least one block extracted, AND at least one
+  // non-empty braille output line (a parse that yields blocks but formats to
+  // nothing is a failure, as is output with no blocks behind it).
+  const status = !err && blocks > 0 && lines > 0 ? 'PASSED' : 'FAILED';
   results.push({ name, format, blocks, pages, lines, status, error: err || 'None' });
   console.log(`\n📄 [${format.toUpperCase()}] ${name}`);
   console.log(`   - Blocks Extracted: ${blocks}`);
@@ -228,6 +231,17 @@ Jupiter, Saturn, Uranus, Neptune.
   console.log('SUMMARY TABLE FOR ALL FILE FORMATS:');
   console.table(results);
   console.log('='.repeat(95));
+
+  const failed = results.filter((r) => r.status === 'FAILED');
+  if (failed.length > 0) {
+    console.error(`FAIL: ${failed.length}/${results.length} format check(s) failed: ${failed.map((r) => `${r.format}:${r.name}`).join(', ')}`);
+    process.exitCode = 1;
+  } else {
+    console.log(`OK: all ${results.length} format checks passed (blocks > 0 and braille lines > 0).`);
+  }
 }
 
-runTests();
+runTests().catch((e) => {
+  console.error('FAIL: test-all-file-formats threw:', e && e.stack || e);
+  process.exitCode = 1;
+});

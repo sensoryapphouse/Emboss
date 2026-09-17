@@ -248,7 +248,7 @@ function check(name, cond, detail = '') {
 
   const nestedBrf = formatDocument(sidebarWithTableDoc, baseOpts());
   check('3.1.1 Sidebar containing a structured table formats without error', nestedBrf.length > 0);
-  check('3.1.2 Top border 333 and bottom border 777 generated', nestedBrf.includes('333') && nestedBrf.includes('777'));
+  check('3.1.2 Top border 777 and bottom border GGG generated (Formats §7.1.3)', nestedBrf.includes('7777777') && nestedBrf.includes('GGGGGGG'));
 
   // 3.2 List containing Transcriber Notes and Math Equations
   const listWithTnDoc = {

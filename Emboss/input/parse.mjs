@@ -9,6 +9,9 @@
 import { ommlElementToMathML, MATH_NS } from './omml.mjs';
 import { SCRIPT_MARKS } from '../format/text-style.mjs';
 import { mathmlToLatex } from '../engine/mathml-to-latex.mjs';
+import { cellFromSegments } from '../format/cell-markup.mjs';
+import { loadWarnings } from './load-audit.mjs';
+import { synthesizeOrderedMarker } from './nimas-export.mjs';
 
 // ---------- $-delimited LaTeX (shared by parseText / parseMarkdown) ----------
 //
@@ -235,13 +238,13 @@ export function parseHtml(str) {
         if (hasInlineElements(node)) {
           const segments = htmlParagraphSegments(node);
           const hasEmphOrMath = segments.some((s) => s.type === 'math' || (s.text && (s.text.includes(SCRIPT_MARKS.subOpen) || s.text.includes(SCRIPT_MARKS.supOpen))));
-          if (hasEmphOrMath) blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), segments, text });
+          if (hasEmphOrMath) blocks.push({ type: 'heading', level: Number(tag[1]), segments, text });
           else {
             const flat = segments.map((s) => s.text || '').join('').replace(/\s+/g, ' ').trim();
-            blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), text: flat || text });
+            blocks.push({ type: 'heading', level: Number(tag[1]), text: flat || text });
           }
         } else {
-          blocks.push({ type: 'heading', level: Math.min(3, Number(tag[1])), text });
+          blocks.push({ type: 'heading', level: Number(tag[1]), text });
         }
       } else if (tag === 'p') {
         const img = node.getElementsByTagName ? node.getElementsByTagName('img')[0] : null;
@@ -430,14 +433,21 @@ async function inflateRaw(bytes) {
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
-// Minimal ZIP: read the central directory to locate & extract one entry.
-async function unzipEntry(buf, wanted) {
-  let ab = buf;
-  if (buf && buf.buffer instanceof ArrayBuffer && !(buf instanceof ArrayBuffer)) {
-    ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-  }
-  const dv = new DataView(ab);
-  const u8 = new Uint8Array(ab);
+// Normalise to a Uint8Array view over a real ArrayBuffer (accepts an ArrayBuffer or any
+// typed-array view over one).
+function zipBytes(buf) {
+  if (buf instanceof ArrayBuffer) return new Uint8Array(buf);
+  if (buf && buf.buffer instanceof ArrayBuffer) return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+  return new Uint8Array(buf);
+}
+
+// Minimal ZIP reader: scan the central directory once and list every entry (name, storage
+// method, compressed size, local-header offset). Shared by unzipEntry (docx/odt/epub, below)
+// and, since A3, the NIMAS package importer, which needs to probe/list entries rather than
+// just pull one out by name.
+function listZipEntries(buf) {
+  const u8 = zipBytes(buf);
+  const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
   // find End Of Central Directory (sig 0x06054b50), scanning back
   let eocd = -1;
   for (let i = u8.length - 22; i >= 0; i--) {
@@ -447,6 +457,7 @@ async function unzipEntry(buf, wanted) {
   const count = dv.getUint16(eocd + 10, true);
   let off = dv.getUint32(eocd + 16, true);
   const dec = new TextDecoder();
+  const entries = [];
   for (let n = 0; n < count; n++) {
     if (dv.getUint32(off, true) !== 0x02014b50) break;
     const method = dv.getUint16(off + 10, true);
@@ -456,16 +467,27 @@ async function unzipEntry(buf, wanted) {
     const commentLen = dv.getUint16(off + 32, true);
     const localOff = dv.getUint32(off + 42, true);
     const name = dec.decode(u8.subarray(off + 46, off + 46 + nameLen));
-    if (name === wanted) {
-      const lNameLen = dv.getUint16(localOff + 26, true);
-      const lExtraLen = dv.getUint16(localOff + 28, true);
-      const dataStart = localOff + 30 + lNameLen + lExtraLen;
-      const data = u8.subarray(dataStart, dataStart + compSize);
-      return method === 0 ? data : inflateRaw(data);
-    }
+    entries.push({ name, method, compSize, localOff });
     off += 46 + nameLen + extraLen + commentLen;
   }
-  throw new Error(`entry not found in zip: ${wanted}`);
+  return entries;
+}
+
+// Extract one already-located entry's bytes (inflating if needed).
+async function extractZipEntry(buf, entry) {
+  const u8 = zipBytes(buf);
+  const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+  const lNameLen = dv.getUint16(entry.localOff + 26, true);
+  const lExtraLen = dv.getUint16(entry.localOff + 28, true);
+  const dataStart = entry.localOff + 30 + lNameLen + lExtraLen;
+  const data = u8.subarray(dataStart, dataStart + entry.compSize);
+  return entry.method === 0 ? data : inflateRaw(data);
+}
+
+async function unzipEntry(buf, wanted) {
+  const entry = listZipEntries(buf).find((e) => e.name === wanted);
+  if (!entry) throw new Error(`entry not found in zip: ${wanted}`);
+  return extractZipEntry(buf, entry);
 }
 
 // Direct child element by namespace + local name. Uses childNodes (not
@@ -827,7 +849,7 @@ export async function parseDocx(arrayBuffer) {
     flushList();
     if (style === 'title') { title = title || text; blocks.push({ type: 'title', text }); }  // title: text only
     else if (/^heading([1-9])/.test(style)) {
-      const level = Math.min(3, Number(style.match(/^heading([1-9])/)[1]));
+      const level = Math.min(6, Number(style.match(/^heading([1-9])/)[1]));
       blocks.push(hasSeg ? { type: 'heading', level, segments, text } : { type: 'heading', level, text });
     } else {
       blocks.push(hasSeg ? { type: 'para', segments } : { type: 'para', text });
@@ -1005,7 +1027,7 @@ export function parseMarkdown(str) {
         title = text;
         blocks.push(hasEmphOrMath && segs.length ? { type: 'title', segments: segs, text } : { type: 'title', text });
       } else {
-        blocks.push(hasEmphOrMath && segs.length ? { type: 'heading', level: Math.min(3, level), segments: segs, text } : { type: 'heading', level: Math.min(3, level), text });
+        blocks.push(hasEmphOrMath && segs.length ? { type: 'heading', level, segments: segs, text } : { type: 'heading', level, text });
       }
     } else if (/^\s*\|?\s*[: -]+(?:\s*\|\s*[: -]+)+\s*\|?\s*$/.test(line)) {
       flush(); // skip table separator | --- | --- |
@@ -1257,7 +1279,7 @@ export async function parseOdt(arrayBuffer) {
       if (ln === 'h') {
         if (!text) continue;
         const lvl = Number(node.getAttributeNS(TEXT, 'outline-level') || 1);
-        blocks.push({ type: 'heading', level: Math.min(3, lvl || 1), text });
+        blocks.push({ type: 'heading', level: Math.min(6, lvl || 1), text });
       } else if (ln === 'p') {
         if (!text) continue;
         const style = (node.getAttributeNS(TEXT, 'style-name') || '').toLowerCase();
@@ -1346,6 +1368,40 @@ export async function parseEpub(arrayBuffer) {
 }
 
 // ---------- DAISY 3 / NIMAS DTBook XML ----------
+
+/**
+ * Decodes a `data:image/svg+xml[;base64],…` URI (as written by the NIMAS
+ * exporter for tactile graphics) back into SVG markup. Returns null for any
+ * other src.
+ * @param {string} src
+ * @returns {string|null}
+ */
+function svgFromDataUri(src) {
+  if (typeof src !== 'string' || !/^data:image\/svg\+xml/i.test(src)) return null;
+  const comma = src.indexOf(',');
+  if (comma === -1) return null;
+  const header = src.slice(5, comma);
+  const payload = src.slice(comma + 1);
+  try {
+    let svg;
+    if (/;base64/i.test(header)) {
+      if (typeof Buffer !== 'undefined' && typeof Buffer.from === 'function') {
+        svg = Buffer.from(payload, 'base64').toString('utf8');
+      } else {
+        const bin = atob(payload);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        svg = new TextDecoder('utf-8').decode(bytes);
+      }
+    } else {
+      svg = decodeURIComponent(payload);
+    }
+    return svg && /<svg[\s>]/i.test(svg) ? svg : null;
+  } catch {
+    return null;
+  }
+}
+
 export function parseDtbook(xmlStr) {
   const doc = parseXml(xmlStr);
   const root = doc.documentElement;
@@ -1356,19 +1412,45 @@ export function parseDtbook(xmlStr) {
     if (lang) metadata.lang = lang;
   }
   const doctitle = doc.getElementsByTagName ? (doc.getElementsByTagName('doctitle')[0] || doc.getElementsByTagName('title')[0]) : null;
-  let title = doctitle?.textContent?.replace(/\s+/g, ' ').trim() || null;
+  // Line breaks (<br/>) in a title separate words (A28: "UIRNTTDINCOO<br/>À" ran together).
+  const textOf = (el) => {
+    let t = '';
+    (function walk(n) { for (let k = n.firstChild; k; k = k.nextSibling) { if (k.nodeType === 3) t += k.nodeValue; else if (k.nodeType === 1) { if ((k.localName || k.tagName || '').toLowerCase() === 'br') t += ' '; else walk(k); } } })(el);
+    return t.replace(/\s+/g, ' ').trim();
+  };
+  let title = (doctitle && textOf(doctitle)) || null;
   if (doc.getElementsByTagName) {
     const metaTags = [...doc.getElementsByTagName('meta')];
     for (const m of metaTags) {
       const name = m.getAttribute ? m.getAttribute('name') : null;
       const content = m.getAttribute ? (m.getAttribute('content') || '').trim() : '';
       if (!name || !content) continue;
-      if (name === 'dtb:uid') metadata.uid = content;
-      else if (name === 'dc:Title') {
+      const lname = name.toLowerCase();
+      if (lname === 'dtb:uid') metadata.uid = content;
+      else if (lname === 'dc:title') {
         metadata.title = content;
         if (!title) title = content;
-      } else if (name === 'dc:Publisher') metadata.publisher = content;
-      else if (name === 'dc:Date') metadata.date = content;
+      } else if (lname === 'dc:publisher') metadata.publisher = content;
+      else if (lname === 'dc:date') metadata.date = content;
+      else if (lname === 'dc:creator') metadata.creator = content;
+      else if (lname === 'dc:identifier') metadata.identifier = content;
+      else if (lname === 'dc:language') metadata.language = content;
+      else if (lname === 'dc:source') metadata.source = content;
+      else if (lname === 'dc:rights') metadata.rights = content;
+      else if (lname === 'dc:format') metadata.format = content;
+      else if (lname === 'dc:subject') metadata.subject = content;
+      else if (lname.startsWith('nimas-')) {
+        if (!metadata.nimas) metadata.nimas = {};
+        metadata.nimas[name] = content;
+      }
+    }
+    if (!metadata.lang && metadata.language) metadata.lang = metadata.language;
+    // <docauthor> is book content (the exporter writes it back from metadata.docauthor).
+    // Every <docauthor> (a book may have several; A28).
+    const docauthors = [...doc.getElementsByTagName('docauthor')].map((el) => textOf(el)).filter(Boolean);
+    if (docauthors.length) {
+      metadata.docauthor = docauthors[0];
+      if (docauthors.length > 1) metadata.docauthors = docauthors;
     }
   }
   const blocks = [];
@@ -1386,6 +1468,43 @@ export function parseDtbook(xmlStr) {
 
   const BLOCK_TAGS = new Set(['p', 'div', 'li', 'lic', 'tr', 'td', 'th', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'sidebar', 'note', 'caption', 'prodnote', 'dt', 'dd', 'line', 'ln', 'speaker', 'stage', 'blockquote', 'byline', 'author', 'cite', 'attrib']);
   const LIST_TAGS = new Set(['list', 'ul', 'ol']);
+  const INLINE_IN_TEXT = new Set(['cite', 'author']);
+  const TEXT_PARENTS = new Set(['p', 'li', 'lic', 'td', 'th', 'dd', 'dt', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'caption', 'line', 'ln', 'span', 'em', 'strong', 'q', 'a', 'sent', 'w', 'dfn', 'sub', 'sup']);
+  const LIST_AND_TABLE_TAGS = new Set(['list', 'ul', 'ol', 'table', 'note']);
+  const LI_SPLIT_TAGS = new Set(['note', 'imggroup', 'img', 'image']); // split out of a list item (tables are skipped by inlineSegments already)
+  const IMAGE_TAGS = new Set(['imggroup', 'img', 'image']);
+  // A print line number: <linenum>, or an element classed "linenum" / "line-number".
+  const isLinenumEl = (el) => {
+    const t = (el.localName || el.tagName || '').toLowerCase();
+    const c = ((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
+    return t === 'linenum' || c.includes('linenum') || c.includes('line-number');
+  };
+  const findLinenum = (el) => {
+    for (let k = el.firstChild; k; k = k.nextSibling) {
+      if (k.nodeType !== 1) continue;
+      if (isLinenumEl(k)) return k;
+      const inner = findLinenum(k);
+      if (inner) return inner;
+    }
+    return null;
+  };
+  // Verse lines carry their number as a prefix (parsePoem); elsewhere it is a segment (A30).
+  const inVerseLine = (el) => {
+    for (let p = el.parentNode; p && p.nodeType === 1; p = p.parentNode) {
+      const t = (p.localName || p.tagName || '').toLowerCase();
+      if (t === 'line' || t === 'ln') return true;
+    }
+    return false;
+  };
+  const guessedPages = new WeakMap();                     // contents item → its text before a trailing number was taken as the page
+  // Inline (phrase) elements; any other child element starts a block.
+  const INLINE_TAGS = new Set(['a', 'abbr', 'acronym', 'annoref', 'author', 'b', 'bdo', 'big', 'br', 'cite', 'code', 'dfn', 'em', 'i', 'kbd', 'linenum', 'math', 'noteref', 'q', 'samp', 'sent', 'small', 'span', 'strong', 'sub', 'sup', 'tt', 'u', 'var', 'w']);
+  const hasBlockChild = (el) => [...(el.childNodes || [])].some((n) => {
+    if (n.nodeType !== 1) return false;
+    const t = (n.localName || n.tagName || '').toLowerCase();
+    return !INLINE_TAGS.has(t) && !PAGENUM_TAGS.has(t) && !t.endsWith(':math');
+  });
+  const PAGENUM_TAGS = new Set(['pagenum', 'print-page']);
   function getCleanText(el, excludeTags = null) {
     if (!el) return '';
     const hasExclude = excludeTags && typeof excludeTags.has === 'function';
@@ -1396,10 +1515,17 @@ export function parseDtbook(xmlStr) {
           text += child.nodeValue || '';
         } else if (child.nodeType === 1) {
           const tag = (child.localName || child.tagName || '').toLowerCase();
-          if (hasExclude && excludeTags.has(tag)) continue;
+          if (hasExclude && excludeTags.has(tag)) { if (IMAGE_TAGS.has(tag)) text += ' '; continue; }
           const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
+          if (tag === 'img' || tag === 'image') { text += ' '; continue; }
           if (tag === 'brl' || tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) continue;
-          const isBlock = BLOCK_TAGS.has(tag);
+          // A print page turn is never part of the running text ("…know, xxixtake a moment…");
+          // pagenumBlock() / inlineSegments() carry it as its own block or segment instead.
+          if (PAGENUM_TAGS.has(tag)) continue;
+          // <cite>/<author> are inline inside running text ("…of <cite>Broca's Brain</cite>."
+          // must not become "Brain ."); as a direct child of a blockquote/poem they are lines.
+          const parentTag = (node.localName || node.tagName || '').toLowerCase();
+          const isBlock = BLOCK_TAGS.has(tag) && !(INLINE_IN_TEXT.has(tag) && TEXT_PARENTS.has(parentTag));
           if (isBlock) text += ' ';
           collect(child);
           if (isBlock) text += ' ';
@@ -1408,6 +1534,266 @@ export function parseDtbook(xmlStr) {
     }
     collect(el);
     return text.replace(/\s+/g, ' ').trim();
+  }
+
+  // A page column: several linked references side by side (<a>p. 98</a><a>p. 101</a>) are
+  // separate references, joined with ", " (they ran together as "p. 98p. 101").
+  function pageColumnText(el, excludeTags = null) {
+    const kids = [...(el.childNodes || [])];
+    const links = kids.filter((k) => k.nodeType === 1 && (k.localName || k.tagName || '').toLowerCase() === 'a');
+    const onlyLinks = kids.every((k) => (k.nodeType === 3 ? !k.nodeValue.trim() : k.nodeType !== 1 || links.includes(k)));
+    if (links.length > 1 && onlyLinks) return links.map((a) => getCleanText(a, excludeTags)).filter(Boolean).join(', ');
+    return getCleanText(el, excludeTags);
+  }
+
+  // ---- print page turns (<pagenum>) inside running text ----
+  // DTBook allows <pagenum> anywhere a print page changes: between blocks, but also inside
+  // <p>, <h2>, <li>, <td>… The formatter needs it as a block (BANA §1.11.3 page change
+  // indicator; B004 §8 print page turn indicator), so the helpers below lift it out of
+  // inline content: a paragraph is split around it (text resumes in cell 1 — both standards),
+  // anything that cannot be split (heading, verse line, note, list item) gets the turn hoisted
+  // before it when it precedes all content, otherwise after it.
+  function pagenumBlock(el) {
+    if (!el) return null;
+    const attr = (name) => (el.getAttribute ? (el.getAttribute(name) || '') : '');
+    let value = getCleanText(el);
+    if (!value) {
+      // Empty element: the number is often only in the id ("page_12", "p-xiv").
+      const m = attr('id').match(/(\d+|[ivxlcdm]+)\s*$/i);
+      value = m ? m[1] : '';
+    }
+    if (!value) return null;
+    const block = { type: 'pagenum', text: value, page: value };
+    const id = attr('id').trim();
+    if (id) block.id = id;                              // kept so a round trip preserves the source ids
+    const pageType = attr('page').toLowerCase();       // front | normal | special (DTBook @page)
+    if (pageType === 'front' || pageType === 'normal' || pageType === 'special') block.pageType = pageType;
+    return block;
+  }
+
+  // Trim leading/trailing whitespace-only text at the edges of a segment run (in place).
+  function trimSegmentEdges(split) {
+    while (split.length > 0 && split[0].type === 'text' && !split[0].tf && !split[0].uncontracted && /^\s*$/.test(split[0].text || '')) {
+      split.shift();
+    }
+    if (split.length > 0 && split[0].type === 'text' && split[0].text) {
+      split[0].text = split[0].text.replace(/^\s+/, '');
+      if (!split[0].text) split.shift();
+    }
+    while (split.length > 0 && split[split.length - 1].type === 'text' && !split[split.length - 1].tf && !split[split.length - 1].uncontracted && /^\s*$/.test(split[split.length - 1].text || '')) {
+      split.pop();
+    }
+    if (split.length > 0 && split[split.length - 1].type === 'text' && split[split.length - 1].text) {
+      split[split.length - 1].text = split[split.length - 1].text.replace(/\s+$/, '');
+      if (!split[split.length - 1].text) split.pop();
+    }
+    return split;
+  }
+
+  function segsHavePagenum(segs) {
+    return segs.some((s) => s && s.type === 'pagenum');
+  }
+
+  // For content whose page turns are collected separately (collectPagenums): drop the
+  // pagenum segments so they are not also carried inside the block's segments.
+  function segsWithoutPagenums(segs) {
+    return segsHavePagenum(segs) ? trimSegmentEdges(segs.filter((s) => s.type !== 'pagenum')) : segs;
+  }
+
+  function segsHaveEmphOrMath(segs) {
+    return segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || (s.text && s.text.includes('\n')));
+  }
+
+  function segsText(segs) {
+    return segs.map((s) => (s.type === 'math' ? (s.latex || '') : (s.text || ''))).join('').replace(/\s+/g, ' ').trim();
+  }
+
+  // Page turns before any content → `before`; all others → `after`; `segs` is the content.
+  function hoistPagenums(segs) {
+    const before = [], after = [], rest = [];
+    let seen = false;
+    for (const s of segs) {
+      if (s.type === 'pagenum') (seen ? after : before).push(s.block);
+      else { seen = true; rest.push(s); }
+    }
+    return { before, after, segs: trimSegmentEdges(rest) };
+  }
+
+  // Split a paragraph's segments around its page turns and push the pieces:
+  // para … pagenum … para(continuation). makeBlock(text, segmentsOrUndefined) builds each
+  // piece; pieces on either side of a turn are linked with `continued` / `continuation` so
+  // the formatter resumes in cell 1 and the exporter can rejoin them into one <p>.
+  function pushParaParts(segs, target, makeBlock) {
+    let cur = [];
+    let prevPara = null;
+    const flushCur = () => {
+      const part = trimSegmentEdges(cur);
+      cur = [];
+      const t = segsText(part);
+      if (!t) return;
+      const blk = makeBlock(t, segsHaveEmphOrMath(part) && part.length ? part : undefined);
+      if (!blk) return;
+      if (prevPara) { prevPara.continued = true; blk.continuation = true; }
+      target.push(blk);
+      prevPara = blk;
+    };
+    for (const s of segs) {
+      if (s.type === 'pagenum') { flushCur(); target.push(s.block); }
+      else cur.push(s);
+    }
+    flushCur();
+  }
+
+  // Page turns anywhere under `el` (document order) for elements whose content is only read
+  // with getCleanText(); nested block containers listed in `skipTags` handle their own.
+  function collectPagenums(el, skipTags = null) {
+    const before = [], after = [];
+    let seen = false;
+    function visit(node) {
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType === 3) {
+          if ((child.nodeValue || '').trim()) seen = true;
+        } else if (child.nodeType === 1) {
+          const tag = (child.localName || child.tagName || '').toLowerCase();
+          if (skipTags && skipTags.has(tag)) continue;
+          if (PAGENUM_TAGS.has(tag)) {
+            const pn = pagenumBlock(child);
+            if (pn) (seen ? after : before).push(pn);
+            continue;
+          }
+          visit(child);
+        }
+      }
+    }
+    visit(el);
+    return { before, after };
+  }
+
+  // Emit one block built from an element's inline content, with its page turns hoisted
+  // around it. build(text, segmentsOrUndefined) returns the block (or null to emit nothing).
+  function pushAtomic(target, el, build, opts = {}) {
+    const pn = hoistPagenums(inlineSegments(el, !!opts.skipLists, opts.excludeTags || null));
+    const t = getCleanText(el, opts.excludeTags || null);
+    target.push(...pn.before);
+    const blk = build(t, segsHaveEmphOrMath(pn.segs) && pn.segs.length ? pn.segs : undefined);
+    if (blk) target.push(blk);
+    target.push(...pn.after);
+  }
+
+  // <imggroup> (A26): one graphic block per image, the group's caption(s) and production
+  // note(s) on the first — caption with its inline segments (note references…), the prodnote
+  // as the image description (BANA Formats §6.2–6.3). A caption-only group (the exporter's
+  // loose figure caption) stays a caption block.
+  function parseImgGroup(el, target) {
+    const kids = [];
+    (function walk(n) {
+      for (let k = n.firstChild; k; k = k.nextSibling) {
+        if (k.nodeType !== 1) continue;
+        const t = (k.localName || k.tagName || '').toLowerCase();
+        if (t === 'img' || t === 'image' || t === 'caption' || t === 'prodnote' || PAGENUM_TAGS.has(t)) kids.push([t, k]);
+        else walk(k);
+      }
+    })(el);
+    const imgs = kids.filter(([t]) => t === 'img' || t === 'image').map(([, k]) => k);
+    const caps = kids.filter(([t]) => t === 'caption').map(([, k]) => k);
+    const notes = kids.filter(([t]) => t === 'prodnote').map(([, k]) => k);
+    if (!imgs.length && caps.length && !notes.length) {
+      for (const cap of caps) pushAtomic(target, cap, (t, segs) => (t ? (segs ? { type: 'caption', text: t, segments: segs } : { type: 'caption', text: t }) : null));
+      return;
+    }
+    const pn = collectPagenums(el);
+    target.push(...pn.before);
+    const graphics = imgs.map((img) => {
+      const src = (img.getAttribute && img.getAttribute('src')) || '';
+      const alt = (img.getAttribute && img.getAttribute('alt')) || '';
+      const g = { type: 'graphic', src, alt };
+      const svg = svgFromDataUri(src);
+      if (svg) g.svg = svg;                                  // the editor's tactile graphic
+      return g;
+    });
+    const first = graphics[0] || { type: 'graphic', src: '', alt: (el.getAttribute && el.getAttribute('alt')) || '' };
+    if (caps.length) {
+      const joined = caps.flatMap((cap, i) => [...(i ? [{ type: 'text', text: ' ' }] : []), ...segsWithoutPagenums(inlineSegments(cap))]);
+      const segs = [];                                       // adjacent runs of the same form merge (as a re-parse does)
+      for (const g of joined) {
+        const last = segs[segs.length - 1];
+        if (g.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (g.tf || 0) && !!last.uncontracted === !!g.uncontracted) segs[segs.length - 1] = { ...last, text: last.text + g.text };
+        else segs.push(g);
+      }
+      const text = caps.map((cap) => getCleanText(cap)).filter(Boolean).join(' ');
+      if (text) {
+        first.caption = text;
+        if (segsHaveEmphOrMath(segs)) first.captionSegments = segs;
+      }
+    }
+    const description = notes.map((n) => getCleanText(n)).filter(Boolean).join(' ');
+    // The exporter writes a tactile graphic's alt text as its prodnote: not a separate description.
+    if (description && !(first.svg && description === first.alt)) first.description = description;
+    if (!graphics.length) {
+      if (first.caption || first.description) target.push(first);
+    } else target.push(...graphics);
+    target.push(...pn.after);
+  }
+
+  // An <imggroup>, or a loose <img>, as graphic blocks.
+  function pushImage(target, el) {
+    const t = (el.localName || el.tagName || '').toLowerCase();
+    if (t === 'imggroup') { parseImgGroup(el, target); return; }
+    const src = (el.getAttribute && el.getAttribute('src')) || '';
+    const alt = (el.getAttribute && el.getAttribute('alt')) || '';
+    const g = { type: 'graphic', src, alt };
+    const svg = svgFromDataUri(src);
+    if (svg) g.svg = svg;
+    target.push(g);
+  }
+
+  // The images inside a text element (a heading, a sidebar sentence…): the outermost
+  // imggroups and loose imgs, in document order, as graphic blocks (A29).
+  function imagesWithin(el) {
+    const out = [];
+    (function walk(n) {
+      for (let k = n.firstChild; k; k = k.nextSibling) {
+        if (k.nodeType !== 1) continue;
+        if (IMAGE_TAGS.has((k.localName || k.tagName || '').toLowerCase())) pushImage(out, k);
+        else walk(k);
+      }
+    })(el);
+    return out;
+  }
+
+  // A DTBook <note> is always a footnote or endnote (transcriber's notes are <prodnote>):
+  // kept with its id (the target of <noteref>) and its inline segments.
+  function pushNote(target, el) {
+    const cls = ((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
+    const id = (el.getAttribute && el.getAttribute('id')) || '';
+    pushAtomic(target, el, (t, segs) => {
+      if (!t) return null;
+      const blk = { type: 'footnote', text: t };
+      if (segs) blk.segments = segs;
+      if (id) blk.id = id;
+      if (cls.includes('endnote') || cls.includes('rearnote')) blk.kind = 'endnote';
+      return blk;
+    }, { excludeTags: NOTE_SPLIT_TAGS });
+    // A note's tables and images follow it as their own blocks (A2).
+    (function split(n) {
+      for (let k = n.firstChild; k; k = k.nextSibling) {
+        if (k.nodeType !== 1) continue;
+        const t = (k.localName || k.tagName || '').toLowerCase();
+        if (t === 'table') parseTable(k, target);
+        else if (IMAGE_TAGS.has(t)) pushImage(target, k);
+        else split(k);
+      }
+    })(el);
+  }
+  const NOTE_SPLIT_TAGS = new Set(['table', 'imggroup', 'img', 'image']);
+
+  // Same for elements read only with getCleanText() (notes, captions, definitions…).
+  function pushTextOnly(target, el, build, skipTags = null) {
+    const pn = collectPagenums(el, skipTags);
+    target.push(...pn.before);
+    const blk = build(getCleanText(el));
+    if (blk) target.push(blk);
+    target.push(...pn.after);
   }
 
   const PHONETIC_KEY_REGEX = /\(([a-zA-Z\u0080-\u02FF\u0300-\u036F\u0400-\u04FF\s\u00B4\u0060\-\/]+)\)/g;
@@ -1474,7 +1860,15 @@ export function parseDtbook(xmlStr) {
       }
     }
 
+    // A block-level child (a <p> or <div> in a list item…) is a word boundary (A2: "amberbq").
+    function breakWord() {
+      if (text) { if (!/\s$/.test(text)) text += ' '; return; }
+      const last = segments[segments.length - 1];
+      if (last && last.type === 'text' && last.text && !/\s$/.test(last.text)) last.text += ' ';
+    }
+
     function walkInline(node, parentTf, parentUnc) {
+      const parentTag = (node.localName || node.tagName || '').toLowerCase();
       for (let child = node.firstChild; child; child = child.nextSibling) {
         if (child.nodeType === 3) {
           let val = child.nodeValue;
@@ -1494,19 +1888,50 @@ export function parseDtbook(xmlStr) {
           const tag = (child.localName || child.tagName || '').toLowerCase();
           const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
           if (tag === 'table' || tag === 'sidebar' || tag === 'brl' || (skipLists && (tag === 'list' || tag === 'ul' || tag === 'ol'))) continue;
-          if (hasExclude && excludeTags.has(tag)) continue;
+          if (hasExclude && excludeTags.has(tag)) { if (IMAGE_TAGS.has(tag)) breakWord(); continue; }   // "kr<img/>n" is not "krn"
+          if (PAGENUM_TAGS.has(tag)) {
+            flush();
+            const pn = pagenumBlock(child);
+            if (pn) segments.push({ type: 'pagenum', block: pn });
+            continue;
+          }
           let nextTf = parentTf;
           let nextUnc = parentUnc;
 
           if (tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) {
+            // A print line number in prose (BANA Formats §15.4; A30) is kept as a segment.
+            const num = (child.textContent || '').replace(/\s+/g, ' ').trim();
+            if (num && !inVerseLine(child)) {
+              flush();
+              segments.push({ type: 'linenum', text: num });
+            }
             continue;
           }
+          if (tag === 'img' || tag === 'image') { breakWord(); continue; }
 
-          if (tag === 'lic' && text && !text.endsWith(' ')) {
+          // Separate list-item components and inline production notes from the text around them.
+          const spaced = tag === 'lic' || tag === 'prodnote' || tag === 'annotation';
+          if (spaced && text && !text.endsWith(' ')) {
             flush();
             text += ' ';
           }
 
+          const unlinkedRef = tag === 'span' && /(^|\s)(noteref|annoref)(\s|$)/.test(cls);   // the exporter's unlinked reference
+          if (tag === 'noteref' || tag === 'annoref' || unlinkedRef) {
+            // A note reference keeps its mark and target (A5): braille superscripts it
+            // (BANA Formats §16.2.2) and the save writes it back as <noteref>.
+            const mark = (child.textContent || '').replace(/\s+/g, ' ').trim();
+            // BrailleBlaster's own files put the target in @id; DTBook uses @idref="#…".
+            const idref = String((child.getAttribute && (child.getAttribute('idref') || child.getAttribute('id'))) || '').replace(/^#/, '');
+            if (mark) {
+              flush();
+              const seg = { type: 'noteref', text: mark };
+              if (idref) seg.idref = idref;
+              if (tag === 'annoref' || (unlinkedRef && cls.includes('annoref'))) seg.annoref = true;
+              segments.push(seg);
+            }
+            continue;
+          }
           if (tag === 'b' || tag === 'strong') nextTf |= TF_BOLD;
           else if (tag === 'i' || tag === 'em') nextTf |= TF_ITALIC;
           else if (tag === 'u' || cls.includes('underline')) nextTf |= TF_UNDERLINE;
@@ -1529,7 +1954,11 @@ export function parseDtbook(xmlStr) {
             segments.push(mathSeg);
             continue;
           }
+          const blockChild = !spaced && tag !== 'br' && BLOCK_TAGS.has(tag) && !(INLINE_IN_TEXT.has(tag) && TEXT_PARENTS.has(parentTag));
+          if (blockChild) breakWord();
           walkInline(child, nextTf, nextUnc);
+          if (blockChild) breakWord();
+          if (spaced && (tag === 'prodnote' || tag === 'annotation') && text && !text.endsWith(' ')) text += ' ';
         }
       }
     }
@@ -1542,21 +1971,7 @@ export function parseDtbook(xmlStr) {
         seg.text = seg.text.replace(/[^\S\r\n]+/g, ' ');
       }
     }
-    while (split.length > 0 && split[0].type === 'text' && !split[0].tf && !split[0].uncontracted && /^\s*$/.test(split[0].text || '')) {
-      split.shift();
-    }
-    if (split.length > 0 && split[0].type === 'text' && split[0].text) {
-      split[0].text = split[0].text.replace(/^\s+/, '');
-      if (!split[0].text) split.shift();
-    }
-    while (split.length > 0 && split[split.length - 1].type === 'text' && !split[split.length - 1].tf && !split[split.length - 1].uncontracted && /^\s*$/.test(split[split.length - 1].text || '')) {
-      split.pop();
-    }
-    if (split.length > 0 && split[split.length - 1].type === 'text' && split[split.length - 1].text) {
-      split[split.length - 1].text = split[split.length - 1].text.replace(/\s+$/, '');
-      if (!split[split.length - 1].text) split.pop();
-    }
-    return split;
+    return trimSegmentEdges(split);
   }
 
   function getElementLevel(node) {
@@ -1573,18 +1988,17 @@ export function parseDtbook(xmlStr) {
     const listClass = (child.getAttribute ? child.getAttribute('class') : '') || '';
     const listTypeAttr = (child.getAttribute ? child.getAttribute('type') : '') || '';
     const isOl = listTypeAttr.toLowerCase() === 'ordered' || listTypeAttr.toLowerCase() === 'ol' || (child.getAttribute && child.getAttribute('enum') != null);
-    
+    // @enum ("a"/"A"/"i"/"I") picks letters/roman numerals over plain digits when a
+    // marker has to be synthesized below (A31: nimas-export writes it for a clean
+    // nested run instead of embedding the marker text in every item).
+    const enumAttr = (child.getAttribute && child.getAttribute('enum')) || null;
+
     // Check for child <hd> / heading inside <list> and emit it as a preceding heading
     for (let c = child.firstChild; c; c = c.nextSibling) {
       if (c.nodeType !== 1) continue;
       const cTag = (c.localName || c.tagName || '').toLowerCase();
       if (cTag === 'hd' || cTag === 'title' || /^h[1-6]$/.test(cTag)) {
-        const t = getCleanText(c);
-        if (t && targetBlocks) {
-          const segs = inlineSegments(c);
-          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-          targetBlocks.push(hasEmph && segs.length ? { type: 'heading', level: 3, text: t, segments: segs } : { type: 'heading', level: 3, text: t });
-        }
+        if (targetBlocks) pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'heading', level: 3, text: t, segments: segs } : { type: 'heading', level: 3, text: t }) : null));
       }
     }
     
@@ -1610,8 +2024,11 @@ export function parseDtbook(xmlStr) {
           for (let sib = child.previousSibling; sib; sib = sib.previousSibling) {
             if (sib.nodeType === 1) {
               const sTag = (sib.localName || sib.tagName || '').toLowerCase();
+              // A contents/index heading governs only the list that directly follows it:
+              // once another list (or table/box) intervenes, this one is ordinary.
+              if (sTag === 'list' || sTag === 'dl' || sTag === 'table' || sTag === 'sidebar') break;
               if (sTag === 'hd' || /^h[1-6]$/.test(sTag)) {
-                const hdText = (sib.textContent || '').toLowerCase().trim();
+                const hdText = getCleanText(sib).toLowerCase();
                 if (/^index\b/i.test(hdText)) isIndex = true;
                 if (/^(table of contents|contents|toc)$/i.test(hdText) || /^contents\b/i.test(hdText)) isToc = true;
                 break;
@@ -1623,17 +2040,63 @@ export function parseDtbook(xmlStr) {
         p = p.parentNode;
       }
     }
-    const items = [];
-    let counter = 1;
+    // Index components (<lic class="index-line">/<lic class="index-pg">) make an index (A2).
+    if (!isToc && !isIndex) {
+      isIndex = [...(child.childNodes || [])].some((li) => li.nodeType === 1 && [...(li.childNodes || [])].some((c) => c.nodeType === 1
+        && (c.localName || c.tagName || '').toLowerCase() === 'lic' && /(^|[-_\s])index([-_\s]|$)/.test(((c.getAttribute && c.getAttribute('class')) || '').toLowerCase())));
+    }
+    let items = [];
+    let counter = isOl ? (parseInt((child.getAttribute && child.getAttribute('start')) || '1', 10) || 1) : 1;   // DTBook @start
     let detectedKind = isToc ? 'toc' : (isIndex ? 'index' : (listTypeAttr.toLowerCase() === 'pl' ? 'plain' : null));
     let lastTopItem = null;
+
+    // Print page turns (and tables) inside a list: a list cannot hold a pagenum or table block, so the list is
+    // split around it (BANA §8.3.3b puts a blank line between the indicator and a list
+    // anyway). Nested calls (targetBlocks === null) cannot emit blocks, so they hand the
+    // turn up to the parent as a `{ pagenum }` marker item.
+    const emitListBlock = () => {
+      if (items.length && targetBlocks) {
+        const listBlock = { type: 'list', items };
+        if (detectedKind) {
+          listBlock.kind = detectedKind;
+          listBlock.style = detectedKind;
+        }
+        if (isOl && detectedKind !== 'toc' && detectedKind !== 'index') listBlock.ordered = true;   // contents and index lists are not numbered
+        targetBlocks.push(listBlock);
+        items = [];
+      }
+    };
+    const emitPagenum = (pn) => {
+      if (!pn) return;
+      if (targetBlocks) { emitListBlock(); targetBlocks.push(pn); }
+      else items.push({ pagenum: pn });
+    };
+    const addSubItems = (subItems) => {
+      for (const si of subItems) {
+        if (si && si.pagenum) emitPagenum(si.pagenum);
+        else items.push(si);
+      }
+    };
 
     const NUMBER_PREFIX_RE = /^\s*(\d+|[a-zA-Z]|[ivxlcdm]+)[\.\)]\s+/;
     const BULLET_PREFIX_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7]+\s+/;
 
     for (let li = child.firstChild; li; li = li.nextSibling) {
+      if (li.nodeType === 3 && li.nodeValue.trim()) {           // loose text in a list (invalid, but kept; A2)
+        const item = { text: li.nodeValue.replace(/\s+/g, ' ').trim() };
+        if (listLvl > 0) item.level = listLvl;
+        items.push(item);
+        continue;
+      }
       if (li.nodeType !== 1) continue;
       const liTag = (li.localName || li.tagName || '').toLowerCase();
+      if (PAGENUM_TAGS.has(liTag)) { emitPagenum(pagenumBlock(li)); continue; }
+      if (liTag === 'prodnote' || liTag === 'annotation') {   // a list's production note (A2)
+        const out = [];
+        pushTextOnly(out, li, (t) => (t ? { type: 'note', text: t } : null));
+        out.forEach(emitPagenum);
+        continue;
+      }
       if (liTag !== 'li' && liTag !== 'item') continue;
 
       const liClass = (li.getAttribute ? li.getAttribute('class') : '') || '';
@@ -1647,37 +2110,96 @@ export function parseDtbook(xmlStr) {
         }
       }
 
-      const lics = li.getElementsByTagName ? [...li.getElementsByTagName('lic')] : [];
-      const hasLics = lics.length > 0;
+      // Tables in the item (not in its sub-lists) become their own blocks, split out of the
+      // list like page turns: those before the first sub-list follow the item's text, the
+      // rest follow its sub-lists. They were dropped before, with any maths in them.
+      const liTables = { before: [], after: [] };
+      (function findTables(node, afterList) {
+        for (let c = node.firstChild; c; c = c.nextSibling) {
+          if (c.nodeType !== 1) continue;
+          const t = (c.localName || c.tagName || '').toLowerCase();
+          if (LIST_TAGS.has(t)) { afterList = true; continue; }
+          if (t === 'table' || t === 'note' || t === 'sidebar' || IMAGE_TAGS.has(t)) (afterList ? liTables.after : liTables.before).push(c);
+          else afterList = findTables(c, afterList);
+        }
+        return afterList;
+      })(li, false);
+      // Tables and notes (a DTBook <note> may sit in a list item) are split out the same way.
+      const emitTables = (els) => {
+        for (const el of els) {
+          const out = [];
+          const t = (el.localName || el.tagName || '').toLowerCase();
+          if (t === 'note') pushNote(out, el);
+          else if (IMAGE_TAGS.has(t)) pushImage(out, el);
+          else if (t === 'sidebar') parseSidebar(el, out);
+          else parseTable(el, out);
+          out.forEach(emitPagenum);
+        }
+      };
+
+      // This item's own components — not those of its sub-lists (an entry took the page of
+      // its last nested entry, A28).
+      const lics = li.getElementsByTagName ? [...li.getElementsByTagName('lic')].filter((l) => {
+        for (let p = l.parentNode; p && p !== li; p = p.parentNode) if (LIST_TAGS.has((p.localName || p.tagName || '').toLowerCase())) return false;
+        return true;
+      }) : [];
+      const PAGE_CLASS = /(^|[-_\s])(page|pagenum|pg|pageno)([-_\s]|$)/;
+      // <lic> is DTBook's general "list item component": it makes a contents entry only when
+      // one component is a page reference (class or pagenum), or the list is a contents list,
+      // or the last of several components is a bare page number. "1." + an equation is an
+      // ordinary numbered item (its maths was lost when every <lic> item was read as contents).
+      const hasMathml = (el) => !!(el.getElementsByTagNameNS && el.getElementsByTagNameNS('http://www.w3.org/1998/Math/MathML', 'math').length);
+      const licIsPage = (l) => {
+        const c = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
+        return c.includes('page') || PAGE_CLASS.test(c) || (l.getElementsByTagName && (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0));
+      };
+      const PAGE_NO = /^\s*[\divxlcdm]+[a-z]?\s*$/i;           // "12", "xiv", "12a"
+      const ITEM_NO = /^\s*[\divxlcdm]+[.)]\s*$/i;              // "1." / "iv)" — an item number, not a page
+      const lastLic = lics[lics.length - 1];
+      const licsAreContents = lics.length >= 2 && !hasMathml(lastLic) && PAGE_NO.test(getCleanText(lastLic)) && !ITEM_NO.test(getCleanText(lics[0]));
+      const hasLics = lics.length > 0 && (isToc || lics.some(licIsPage) || licsAreContents);
       const isLiToc = isToc || liClass.includes('toc-entry') || liClass.includes('bai-toc-entry') || hasLics;
+      // Page turns in this item (nested lists handle their own): before the item's text
+      // → emitted before it; anywhere else → after it (an item cannot be split).
+      const liPn = collectPagenums(li, LIST_AND_TABLE_TAGS);
+      for (const b of liPn.before) emitPagenum(b);
 
       if (liClass.includes('bai-toc-center')) {
-        const t = getCleanText(li, LIST_TAGS);
-        if (t && targetBlocks) targetBlocks.push({ type: 'heading', level: 1, text: t });
+        const t = getCleanText(li, LIST_AND_TABLE_TAGS);
+        if (t && targetBlocks) { emitListBlock(); targetBlocks.push({ type: 'heading', level: 1, text: t }); }
+        emitTables(liTables.after);
+        for (const b of liPn.after) emitPagenum(b);
         continue;
       }
 
       if (liClass.includes('toc-page') || liClass.includes('bai-toc-page')) {
-        detectedKind = 'toc';
-        const pVal = getCleanText(li, LIST_TAGS);
-        if (pVal) {
-          if (lastTopItem) {
-            lastTopItem.page = pVal;
-          } else if (items.length > 0) {
-            items[items.length - 1].page = pVal;
+        detectedKind = isIndex ? 'index' : 'toc';
+        const pVal = getCleanText(li, LIST_AND_TABLE_TAGS);
+        const target = lastTopItem || items[items.length - 1];
+        if (pVal && target) {
+          // The entry's own trailing number ("…November 21, 1963") was not its page (A2).
+          const g = guessedPages.get(target);
+          if (g && g.text.endsWith(target.page || '')) {
+            target.text = g.text;
+            if (target.segments) target.segments = g.segs;
+            guessedPages.delete(target);
           }
+          target.page = pVal;
         }
+        emitTables(liTables.before);
         for (const cl of childLists) {
-          const subItems = parseSingleList(cl, effLevel + 1, null);
-          items.push(...subItems);
+          addSubItems(parseSingleList(cl, effLevel + 1, null));
         }
+        emitTables(liTables.after);
+        for (const b of liPn.after) emitPagenum(b);
         continue;
       }
 
       if (isLiToc) {
-        detectedKind = 'toc';
+        detectedKind = isIndex ? 'index' : 'toc';
         let itemText = '';
         let pageVal = null;
+        let guessed = null;                                   // page read from the end of the text
         let textTargetNode = li;
         let textEl = null;
         let pageEl = null;
@@ -1691,7 +2213,7 @@ export function parseDtbook(xmlStr) {
           pageEl = lics.find(l => {
             const cls = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
             const hasPageTag = l.getElementsByTagName ? (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0) : false;
-            return cls.includes('toc-page') || cls.includes('bai-toc-page') || cls.includes('page') || cls.includes('pagenum') || hasPageTag;
+            return cls.includes('toc-page') || cls.includes('bai-toc-page') || cls.includes('page') || cls.includes('pagenum') || PAGE_CLASS.test(cls) || hasPageTag;
           });
           if (!textEl && !pageEl) {
             if (lics.length >= 2) {
@@ -1711,26 +2233,20 @@ export function parseDtbook(xmlStr) {
             textTargetNode = textEl;
           }
           if (pageEl) {
-            pageVal = getCleanText(pageEl, TOC_EXCLUDE);
+            pageVal = pageColumnText(pageEl, TOC_EXCLUDE);
           }
         }
 
-        const directPageNode = li.getElementsByTagName ? (li.getElementsByTagName('pagenum')[0] || li.getElementsByTagName('print-page')[0]) : null;
-        if (!pageVal && directPageNode) {
-          pageVal = (directPageNode.textContent || '').trim();
-          if (!textEl) {
-            itemText = getCleanText(li, TOC_EXCLUDE);
-          }
-        }
-
-        const segs = inlineSegments(textTargetNode, true, directPageNode && !textEl ? TOC_EXCLUDE : null);
+        // A <pagenum> inside a contents entry is a print page turn, not the entry's page
+        // column (that is <lic class="pagenum">); it is hoisted around the item like any other.
+        const segs = inlineSegments(textTargetNode, true, TOC_EXCLUDE);
         
         if (!itemText) {
           const directText = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim();
           const pageMatch = directText.match(/\s+(\d+|[ivxlcdm]+)$/i);
           if (pageMatch) {
             itemText = directText.slice(0, pageMatch.index).trim();
-            if (!pageVal) pageVal = pageMatch[1];
+            if (!pageVal) { pageVal = pageMatch[1]; guessed = { text: directText, segs: segs.map((g) => ({ ...g })) }; }
           } else {
             itemText = directText || getCleanText(li, TOC_EXCLUDE);
           }
@@ -1746,58 +2262,65 @@ export function parseDtbook(xmlStr) {
             }
           }
         }
-        const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'linenum' || (s.text && s.text.includes('\n')));
         const item = { text: itemText };
         if (pageVal) item.page = pageVal;
         if (effLevel > 0) item.level = effLevel;
         if (segs.length && hasEmphOrMath) item.segments = segs;
+        if (guessed) guessedPages.set(item, guessed);
         items.push(item);
         lastTopItem = item;
 
+        emitTables(liTables.before);
         for (const cl of childLists) {
-          const subItems = parseSingleList(cl, effLevel + 1, null);
-          items.push(...subItems);
+          addSubItems(parseSingleList(cl, effLevel + 1, null));
         }
+        emitTables(liTables.after);
+        for (const b of liPn.after) emitPagenum(b);
         continue;
       }
 
       if (liClass.includes('bai-exercise')) {
         detectedKind = 'exercise';
-        const segs = inlineSegments(li, true);
-        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_TAGS);
+        const segs = segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS));
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_AND_TABLE_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'linenum' || (s.text && s.text.includes('\n')))) item.segments = segs;
         items.push(item);
         lastTopItem = item;
 
+        emitTables(liTables.before);
         for (const cl of childLists) {
-          const subItems = parseSingleList(cl, effLevel + 1, null);
-          items.push(...subItems);
+          addSubItems(parseSingleList(cl, effLevel + 1, null));
         }
+        emitTables(liTables.after);
+        for (const b of liPn.after) emitPagenum(b);
         continue;
       }
 
       if (liClass.includes('bai-index')) {
         detectedKind = 'index';
-        const segs = inlineSegments(li, true);
-        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_TAGS);
+        const segs = segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS));
+        const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_AND_TABLE_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'linenum' || (s.text && s.text.includes('\n')))) item.segments = segs;
         items.push(item);
         lastTopItem = item;
 
+        emitTables(liTables.before);
         for (const cl of childLists) {
-          const subItems = parseSingleList(cl, effLevel + 1, null);
-          items.push(...subItems);
+          addSubItems(parseSingleList(cl, effLevel + 1, null));
         }
+        emitTables(liTables.after);
+        for (const b of liPn.after) emitPagenum(b);
         continue;
       }
 
-      const segs = inlineSegments(li, true);
+      const segs = segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS));
       let directText = segs.map(s => s.text || (s.latex ? s.latex : (s.mathml ? s.mathml.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : ''))).join('').replace(/\s+/g, ' ').trim();
-      if (!directText) directText = getCleanText(li);
+      if (!directText) directText = getCleanText(li, LIST_AND_TABLE_TAGS);
 
       let itemMarker = null;
       if (isOl) {
@@ -1809,7 +2332,7 @@ export function parseDtbook(xmlStr) {
             segs[0].text = segs[0].text.replace(NUMBER_PREFIX_RE, '');
           }
         } else {
-          itemMarker = `${counter}.`;
+          itemMarker = synthesizeOrderedMarker(counter, enumAttr);
         }
         counter++;
       } else if (detectedKind !== 'plain' && !isToc) {
@@ -1823,35 +2346,50 @@ export function parseDtbook(xmlStr) {
         }
       }
 
-      const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+      const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || (s.text && s.text.includes('\n')));
       if (directText) {
-        const item = (hasEmphOrMath && segs.length > 0 && childLists.length === 0) ? { segments: segs, text: directText } : { text: directText };
+        // segs already excludes nested lists (inlineSegments(li, true, …)), so an item that has
+        // a sub-list keeps its own emphasis and maths too (they were dropped before).
+        const item = (hasEmphOrMath && segs.length > 0) ? { segments: segs, text: directText } : { text: directText };
         if (itemMarker) item.marker = itemMarker;
         if (effLevel > 0) item.level = effLevel;
         items.push(item);
         lastTopItem = item;
       }
 
+      emitTables(liTables.before);
       for (const cl of childLists) {
-        const subItems = parseSingleList(cl, effLevel + 1, null);
-        items.push(...subItems);
+        addSubItems(parseSingleList(cl, effLevel + 1, null));
       }
+      emitTables(liTables.after);
+      for (const b of liPn.after) emitPagenum(b);
     }
 
-    if (items.length && targetBlocks) {
-      const listBlock = { type: 'list', items };
-      if (detectedKind) {
-        listBlock.kind = detectedKind;
-        listBlock.style = detectedKind;
-      }
-      if (isOl) listBlock.ordered = true;
-      targetBlocks.push(listBlock);
-    }
+    emitListBlock();
     return items;
   }
 
   function parseDefinitionList(dlEl, targetBlocks = blocks) {
-    const items = [];
+    let items = [];
+    // A table inside a definition becomes its own block after that definition, splitting
+    // the glossary around it (it was folded into the definition's text before).
+    // Tables and images inside a definition are split out after it (A28/A29: the Coyotes
+    // glossary's pictures were dropped and their captions folded into the definition).
+    const SPLIT = new Set(['table', 'imggroup', 'img', 'image']);
+    const tablesIn = (el) => {
+      const out = [];
+      (function walk(n) {
+        for (let k = n.firstChild; k; k = k.nextSibling) {
+          if (k.nodeType !== 1) continue;
+          if (SPLIT.has((k.localName || k.tagName || '').toLowerCase())) out.push(k); else walk(k);
+        }
+      })(el);
+      return out;
+    };
+    const flushGlossary = () => {
+      if (items.length && targetBlocks) targetBlocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items });
+      items = [];
+    };
     let curTerm = null;
     let curTermSegs = null;
     for (let c = dlEl.firstChild; c; c = c.nextSibling) {
@@ -1872,10 +2410,10 @@ export function parseDtbook(xmlStr) {
           items.push(item);
         }
         curTerm = getCleanText(c);
-        curTermSegs = inlineSegments(c);
+        curTermSegs = segsWithoutPagenums(inlineSegments(c));
       } else if (cTag === 'dd') {
-        const defText = getCleanText(c);
-        const defSegs = inlineSegments(c);
+        const defText = getCleanText(c, SPLIT);
+        const defSegs = segsWithoutPagenums(inlineSegments(c, false, SPLIT));
         if (curTerm || defText) {
           const item = {
             term: curTerm || '',
@@ -1891,6 +2429,22 @@ export function parseDtbook(xmlStr) {
           curTerm = null;
           curTermSegs = null;
         }
+        const ddTables = targetBlocks ? tablesIn(c) : [];
+        if (ddTables.length) {
+          flushGlossary();
+          for (const t of ddTables) {
+            const tag = (t.localName || t.tagName || '').toLowerCase();
+            if (tag === 'table') parseTable(t, targetBlocks);
+            else if (tag === 'imggroup') parseImgGroup(t, targetBlocks);
+            else {
+              const src = (t.getAttribute && t.getAttribute('src')) || '';
+              const g = { type: 'graphic', src, alt: (t.getAttribute && t.getAttribute('alt')) || '' };
+              const svg = svgFromDataUri(src);
+              if (svg) g.svg = svg;
+              targetBlocks.push(g);
+            }
+          }
+        }
       }
     }
     if (curTerm) {
@@ -1905,9 +2459,10 @@ export function parseDtbook(xmlStr) {
       }
       items.push(item);
     }
-    if (items.length && targetBlocks) {
-      targetBlocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items });
-    }
+    const pn = targetBlocks ? collectPagenums(dlEl, SPLIT) : { before: [], after: [] };
+    if (targetBlocks) targetBlocks.push(...pn.before);
+    flushGlossary();
+    if (targetBlocks) targetBlocks.push(...pn.after);
   }
 
   function parsePoem(poemEl, targetBlocks = blocks) {
@@ -1918,22 +2473,14 @@ export function parseDtbook(xmlStr) {
       const cCls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
 
       if (cTag === 'title' || cTag === 'hd' || /^h[1-6]$/.test(cTag)) {
-        const t = getCleanText(c);
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : (/^h[1-6]$/.test(cTag) ? parseInt(cTag.slice(1), 10) : 2);
-        const segs = inlineSegments(c);
-        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        if (t && targetBlocks) targetBlocks.push(hasEmph && segs.length ? { type: 'heading', level: lvl, text: t, segments: segs } : { type: 'heading', level: lvl, text: t });
-      } else if (cTag === 'pagenum') {
-        const pageVal = (c.textContent || '').trim();
-        if (pageVal && targetBlocks) targetBlocks.push({ type: 'pagenum', text: pageVal });
+        if (targetBlocks) pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'heading', level: lvl, text: t, segments: segs } : { type: 'heading', level: lvl, text: t }) : null));
+      } else if (PAGENUM_TAGS.has(cTag)) {
+        const pn = pagenumBlock(c);
+        if (pn && targetBlocks) targetBlocks.push(pn);
       } else if (cTag === 'byline' || cTag === 'author' || cTag === 'cite' || cTag === 'attrib') {
-        const segs = inlineSegments(c);
-        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(c);
-        if (t && targetBlocks) {
-          targetBlocks.push(hasEmph && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
-        }
+        if (targetBlocks) pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
       } else if (cTag === 'linegroup' || cTag === 'stanza' || (cTag === 'div' && (cCls.includes('stanza') || cCls.includes('linegroup') || cCls.includes('line-group') || cCls.includes('verse') || cCls.includes('poem')))) {
         let stanzaLinenum = '';
         let hasLinesInGroup = false;
@@ -1941,25 +2488,25 @@ export function parseDtbook(xmlStr) {
           if (ln.nodeType !== 1) continue;
           const lnTag = (ln.localName || ln.tagName || '').toLowerCase();
           const lnCls = (ln.getAttribute ? (ln.getAttribute('class') || '') : '').toLowerCase();
-          if (lnTag === 'pagenum') {
-            const pageVal = (ln.textContent || '').trim();
-            if (pageVal && targetBlocks) targetBlocks.push({ type: 'pagenum', text: pageVal });
+          if (PAGENUM_TAGS.has(lnTag)) {
+            const pn = pagenumBlock(ln);
+            if (pn && targetBlocks) targetBlocks.push(pn);
           } else if (lnTag === 'linenum' || lnCls.includes('linenum')) {
             stanzaLinenum = (ln.textContent || '').trim();
           } else if (lnTag === 'title' || lnTag === 'hd' || /^h[1-6]$/.test(lnTag)) {
-            const t = getCleanText(ln);
-            if (t && targetBlocks) targetBlocks.push({ type: 'heading', level: 3, text: t });
+            if (targetBlocks) pushTextOnly(targetBlocks, ln, (t) => (t ? { type: 'heading', level: 3, text: t } : null));
           } else if (lnTag === 'line' || lnTag === 'ln' || lnTag === 'p') {
             if (lnCls.includes('bai-stanza-break') || lnCls.includes('stanza-break')) {
               if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
             } else {
               const lvlAttr = ln.getAttribute ? ln.getAttribute('level') : null;
               const lnLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-              let segs = inlineSegments(ln);
+              const pn = hoistPagenums(inlineSegments(ln));
+              let segs = pn.segs;
               let t = getCleanText(ln);
               let innerLinenum = '';
               if (ln.getElementsByTagName) {
-                const numNode = ln.getElementsByTagName('linenum')[0] || (ln.getElementsByClassName ? ln.getElementsByClassName('linenum')[0] : null);
+                const numNode = findLinenum(ln);
                 if (numNode) innerLinenum = (numNode.textContent || '').trim();
               }
               if (innerLinenum || stanzaLinenum) {
@@ -1970,26 +2517,27 @@ export function parseDtbook(xmlStr) {
                 }
                 stanzaLinenum = '';
               }
+              if (targetBlocks) targetBlocks.push(...pn.before);
               if (t && targetBlocks) {
-                const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-                const blk = hasEmph && segs.length
+                const blk = segsHaveEmphOrMath(segs) && segs.length
                   ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
                   : { type: 'play', subtype: 'verse', style: 'verse', text: t };
                 if (lnLvl > 0) blk.level = lnLvl;
                 targetBlocks.push(blk);
                 hasLinesInGroup = true;
               }
+              if (targetBlocks) targetBlocks.push(...pn.after);
             }
           } else if (lnTag === 'byline' || lnTag === 'author' || lnTag === 'cite' || lnTag === 'attrib' || lnCls.includes('attribution') || lnCls.includes('byline')) {
-            const segs = inlineSegments(ln);
-            const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-            const t = getCleanText(ln);
-            if (t && targetBlocks) {
-              targetBlocks.push(hasEmph && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
-            }
-          } else if (lnTag === 'note' || lnTag === 'prodnote') {
-            const t = getCleanText(ln);
-            if (t && targetBlocks) targetBlocks.push({ type: 'note', text: t });
+            if (targetBlocks) pushAtomic(targetBlocks, ln, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
+          } else if (lnTag === 'note') {
+            if (targetBlocks) pushNote(targetBlocks, ln);
+          } else if (lnTag === 'prodnote') {
+            if (targetBlocks) pushTextOnly(targetBlocks, ln, (t) => (t ? { type: 'note', text: t } : null));
+          } else if (targetBlocks && !INLINE_TAGS.has(lnTag) && lnTag !== 'brl') {
+            // Any other child keeps its content (A2): a container is read like a poem, text as a line.
+            if (hasBlockChild(ln)) parsePoem(ln, targetBlocks);
+            else pushAtomic(targetBlocks, ln, (t, segs) => (t ? (segs ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs } : { type: 'play', subtype: 'verse', style: 'verse', text: t }) : null));
           }
         }
         let nextSibling = c.nextSibling;
@@ -2011,11 +2559,12 @@ export function parseDtbook(xmlStr) {
       } else if (cTag === 'line' || cTag === 'ln') {
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lnLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        let segs = inlineSegments(c);
+        const pn = hoistPagenums(inlineSegments(c));
+        let segs = pn.segs;
         let t = getCleanText(c);
         let innerLinenum = '';
         if (c.getElementsByTagName) {
-          const numNode = c.getElementsByTagName('linenum')[0] || (c.getElementsByClassName ? c.getElementsByClassName('linenum')[0] : null);
+          const numNode = findLinenum(c);
           if (numNode) innerLinenum = (numNode.textContent || '').trim();
         }
         if (innerLinenum || pendingLinenum) {
@@ -2026,35 +2575,57 @@ export function parseDtbook(xmlStr) {
           }
           pendingLinenum = '';
         }
+        if (targetBlocks) targetBlocks.push(...pn.before);
         if (t && targetBlocks) {
-          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-          const blk = hasEmph && segs.length
+          const blk = segsHaveEmphOrMath(segs) && segs.length
             ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
             : { type: 'play', subtype: 'verse', style: 'verse', text: t };
           if (lnLvl > 0) blk.level = lnLvl;
           targetBlocks.push(blk);
         }
+        if (targetBlocks) targetBlocks.push(...pn.after);
       } else if (cTag === 'linenum' || cCls.includes('linenum')) {
         pendingLinenum = (c.textContent || '').trim();
       } else if (cTag === 'p') {
         if (cCls.includes('bai-stanza-break') || cCls.includes('stanza-break')) {
           if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
-        } else {
+        } else if (targetBlocks) {
           const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
           const pLvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-          const segs = inlineSegments(c);
-          const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-          const t = getCleanText(c);
-          if (t && targetBlocks) {
-            const blk = hasEmph && segs.length
+          pushAtomic(targetBlocks, c, (t, segs) => {
+            if (!t) return null;
+            const blk = segs
               ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
               : { type: 'play', subtype: 'verse', style: 'verse', text: t };
             if (pLvl > 0) blk.level = pLvl;
-            targetBlocks.push(blk);
-          }
+            return blk;
+          });
         }
       } else if (cTag === 'sidebar') {
         parseSidebar(c, targetBlocks);
+      } else if (!targetBlocks) {
+        // (nothing to emit into)
+      } else if (cTag === 'imggroup') {                     // other block content a poem may hold (A28)
+        parseImgGroup(c, targetBlocks);
+      } else if (cTag === 'img' || cTag === 'image') {
+        const src = (c.getAttribute && c.getAttribute('src')) || '';
+        const alt = (c.getAttribute && c.getAttribute('alt')) || '';
+        const g = { type: 'graphic', src, alt };
+        const svg = svgFromDataUri(src);
+        if (svg) g.svg = svg;
+        targetBlocks.push(g);
+      } else if (cTag === 'note') {
+        pushNote(targetBlocks, c);
+      } else if (cTag === 'prodnote' || cTag === 'annotation') {
+        pushTextOnly(targetBlocks, c, (t) => (t ? { type: 'note', text: t } : null));
+      } else if (cTag === 'list') {
+        parseSingleList(c, 0, targetBlocks);
+      } else if (cTag === 'table') {
+        parseTable(c, targetBlocks);
+      } else if (cTag === 'epigraph' || cTag === 'blockquote') {
+        pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t }) : null));
+      } else if (c.textContent && c.textContent.trim()) {     // dateline and anything else with text
+        pushAtomic(targetBlocks, c, (t, segs) => (t ? (segs ? { type: 'para', text: t, segments: segs } : { type: 'para', text: t }) : null));
       }
     }
   }
@@ -2075,71 +2646,90 @@ export function parseDtbook(xmlStr) {
         }
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : (/^h[1-6]$/.test(cTag) ? parseInt(cTag.slice(1), 10) : 2);
-        const segs = inlineSegments(c);
-        const hasEmph = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        innerBlocks.push(hasEmph && segs.length ? { type: 'heading', level: lvl, text: hdText, segments: segs } : { type: 'heading', level: lvl, text: hdText });
+        pushAtomic(innerBlocks, c, (t, segs) => (segs ? { type: 'heading', level: lvl, text: t, segments: segs } : { type: 'heading', level: lvl, text: t }), { excludeTags: IMAGE_TAGS });
+        innerBlocks.push(...imagesWithin(c));
       } else if (cTag === 'p') {
         const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
         const pLevel = getElementLevel(c);
-        const segs = inlineSegments(c);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        for (const im of (c.getElementsByTagName ? [...c.getElementsByTagName('img'), ...c.getElementsByTagName('image')] : [])) {
+          innerBlocks.push({ type: 'graphic', src: (im.getAttribute && im.getAttribute('src')) || '', alt: (im.getAttribute && im.getAttribute('alt')) || '' });
+        }
+        const rawSegs = inlineSegments(c);
+        const makeP = (t, segs) => {
+          if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker')) {
+            return { type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem')) {
+            return { type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage')) {
+            return { type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+            return { type: 'indicator', kind: 'line' };
+          } else if (cls.includes('bana-break-asterisks')) {
+            return { type: 'break', kind: 'asterisks' };
+          } else if (cls.includes('bana-break-dot2s')) {
+            return { type: 'break', kind: 'dot2s' };
+          } else if (t) {
+            return segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+          }
+          return null;
+        };
         const t = getCleanText(c);
-        if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker')) {
-          innerBlocks.push({ type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem')) {
-          innerBlocks.push({ type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage')) {
-          innerBlocks.push({ type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
-          innerBlocks.push({ type: 'indicator', kind: 'line' });
-        } else if (cls.includes('bana-break-asterisks')) {
-          innerBlocks.push({ type: 'break', kind: 'asterisks' });
-        } else if (cls.includes('bana-break-dot2s')) {
-          innerBlocks.push({ type: 'break', kind: 'dot2s' });
-        } else if (t) {
-          innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t });
+        if (rawSegs.length === 1 && rawSegs[0].type === 'math') {   // displayed equation in its own <p>
+          const mathBlock = { type: 'math', mathml: rawSegs[0].mathml };
+          if (rawSegs[0].latex) mathBlock.latex = rawSegs[0].latex;
+          innerBlocks.push(mathBlock);
+          continue;
+        }
+        if (segsHavePagenum(rawSegs)) {
+          const probe = makeP(t, undefined);
+          if (probe && probe.type === 'para') {
+            pushParaParts(rawSegs, innerBlocks, makeP);
+          } else {
+            const pn = hoistPagenums(rawSegs);
+            innerBlocks.push(...pn.before);
+            const blk = makeP(t, segsHaveEmphOrMath(pn.segs) && pn.segs.length ? pn.segs : undefined);
+            if (blk) innerBlocks.push(blk);
+            innerBlocks.push(...pn.after);
+          }
+        } else {
+          const blk = makeP(t, segsHaveEmphOrMath(rawSegs) && rawSegs.length ? rawSegs : undefined);
+          if (blk) innerBlocks.push(blk);
         }
       } else if (cTag === 'speaker') {
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(c);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(c);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length)
+        pushAtomic(innerBlocks, c, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'play', subtype: 'prose', style: 'play-speaker', text: t, segments: segs }
             : { type: 'play', subtype: 'prose', style: 'play-speaker', text: t };
           if (lvl > 0) blk.level = lvl;
-          innerBlocks.push(blk);
-        }
+          return blk;
+        });
       } else if (cTag === 'stage') {
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(c);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(c);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length)
+        pushAtomic(innerBlocks, c, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'stage', style: 'play-stage', text: t, segments: segs }
             : { type: 'stage', style: 'play-stage', text: t };
           if (lvl > 0) blk.level = lvl;
-          innerBlocks.push(blk);
-        }
+          return blk;
+        });
       } else if (cTag === 'poem' || cTag === 'linegroup') {
         parsePoem(c, innerBlocks);
       } else if (cTag === 'line' || cTag === 'ln') {
         const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(c);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(c);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length)
+        pushAtomic(innerBlocks, c, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'play', subtype: 'verse', style: 'verse', text: t, segments: segs }
             : { type: 'play', subtype: 'verse', style: 'verse', text: t };
           if (lvl > 0) blk.level = lvl;
-          innerBlocks.push(blk);
-        }
+          return blk;
+        });
       } else if (cTag === 'list' || cTag === 'ul' || cTag === 'ol') {
         parseSingleList(c, 0, innerBlocks);
       } else if (cTag === 'dl') {
@@ -2147,23 +2737,18 @@ export function parseDtbook(xmlStr) {
       } else if (cTag === 'table') {
         parseTable(c, innerBlocks);
       } else if (cTag === 'caption') {
-        const t = getCleanText(c);
-        if (t) innerBlocks.push({ type: 'caption', text: t });
-      } else if (cTag === 'note' || cTag === 'prodnote' || cTag === 'annotation') {
+        pushTextOnly(innerBlocks, c, (t) => (t ? { type: 'caption', text: t } : null));
+      } else if (cTag === 'note') {
+        pushNote(innerBlocks, c);
+      } else if (cTag === 'prodnote' || cTag === 'annotation') {
         const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
-        const t = getCleanText(c);
-        if (t) {
-          if (cls.includes('footnote')) innerBlocks.push({ type: 'footnote', text: t });
-          else if (cls.includes('tabletn')) innerBlocks.push({ type: 'note', kind: 'tabletn', text: t });
-          else innerBlocks.push({ type: 'note', text: t });
-        }
+        pushTextOnly(innerBlocks, c, (t) => {
+          if (!t) return null;
+          if (cls.includes('tabletn')) return { type: 'note', kind: 'tabletn', text: t };
+          return { type: 'note', text: t };
+        });
       } else if (cTag === 'byline' || cTag === 'author' || cTag === 'cite' || cTag === 'attrib') {
-        const segs = inlineSegments(c);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(c);
-        if (t) {
-          innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t });
-        }
+        pushAtomic(innerBlocks, c, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
       } else if (cTag === 'sidebar' || (cTag === 'div' && (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase().includes('sidebar'))) {
         parseSidebar(c, innerBlocks);
       } else if (cTag === 'math' || cTag.endsWith(':math')) {
@@ -2178,51 +2763,53 @@ export function parseDtbook(xmlStr) {
         if (latex) mathBlock.latex = latex;
         innerBlocks.push(mathBlock);
       } else if (cTag === 'imggroup') {
-        const img = c.getElementsByTagName ? (c.getElementsByTagName('img')[0] || c.getElementsByTagName('image')[0]) : null;
-        const alt = (img?.getAttribute ? img.getAttribute('alt') : '') || (c.getAttribute ? c.getAttribute('alt') : '') || '';
-        const caption = c.getElementsByTagName ? (c.getElementsByTagName('caption')[0] || c.getElementsByTagName('prodnote')[0]) : null;
-        const capText = caption ? getCleanText(caption) : '';
-        const noteText = alt ? ('Image: ' + alt + (capText ? ' - ' + capText : '')) : (capText ? 'Image: ' + capText : 'Image');
-        innerBlocks.push({ type: 'note', kind: 'image', text: noteText });
-        if (img) {
-          const src = (img.getAttribute ? img.getAttribute('src') : '') || '';
-          innerBlocks.push({ type: 'graphic', src, alt });
-        }
+        parseImgGroup(c, innerBlocks);
       } else if (cTag === 'img' || cTag === 'image' || cTag === 'graphic') {
         const src = (c.getAttribute ? c.getAttribute('src') : '') || '';
         const alt = (c.getAttribute ? c.getAttribute('alt') : '') || '';
-        innerBlocks.push({ type: 'graphic', src, alt });
+        const graphic = { type: 'graphic', src, alt };
+        const svg = svgFromDataUri(src);
+        if (svg) graphic.svg = svg;
+        innerBlocks.push(graphic);
       } else if (cTag === 'blockquote') {
         const hasElements = Array.from(c.childNodes || []).some((childNode) => childNode.nodeType === 1);
         if (hasElements) {
           for (let bcn = c.firstChild; bcn; bcn = bcn.nextSibling) {
             if (bcn.nodeType !== 1) continue;
             const bcnTag = (bcn.localName || bcn.tagName || '').toLowerCase();
-            const bcnText = getCleanText(bcn);
-            if (!bcnText) continue;
-            const bcnSegs = inlineSegments(bcn);
-            const bcnHasEmph = bcnSegs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+            if (PAGENUM_TAGS.has(bcnTag)) {
+              const pn = pagenumBlock(bcn);
+              if (pn) innerBlocks.push(pn);
+              continue;
+            }
             if (bcnTag === 'byline' || bcnTag === 'author' || bcnTag === 'cite' || bcnTag === 'attrib') {
-              innerBlocks.push(bcnHasEmph && bcnSegs.length ? { type: 'attribution', text: bcnText, segments: bcnSegs } : { type: 'attribution', text: bcnText });
+              pushAtomic(innerBlocks, bcn, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
             } else {
-              innerBlocks.push(bcnHasEmph && bcnSegs.length ? { type: 'para', style: 'quote', text: bcnText, segments: bcnSegs } : { type: 'para', style: 'quote', text: bcnText });
+              pushParaParts(inlineSegments(bcn), innerBlocks, (t, segs) => (segs ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t }));
             }
           }
         } else {
-          const segs = inlineSegments(c);
-          const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-          const t = getCleanText(c);
-          if (t) innerBlocks.push(hasEmphOrMath && segs.length ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t });
+          pushParaParts(inlineSegments(c), innerBlocks, (t, segs) => (segs ? { type: 'para', style: 'quote', text: t, segments: segs } : { type: 'para', style: 'quote', text: t }));
         }
-      } else if (cTag === 'pagenum' || cTag === 'print-page') {
-        const pVal = getCleanText(c) || (c.getAttribute ? c.getAttribute('page') : '') || '';
-        if (pVal) innerBlocks.push({ type: 'pagenum', text: pVal });
+      } else if (PAGENUM_TAGS.has(cTag)) {
+        const pn = pagenumBlock(c);
+        if (pn) innerBlocks.push(pn);
       } else if (cTag === 'hr' || cTag === 'break') {
         const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
         if (cls.includes('stanza')) innerBlocks.push({ type: 'indicator', kind: 'line' });
         else if (cls.includes('asterisks')) innerBlocks.push({ type: 'break', kind: 'asterisks' });
         else if (cls.includes('dot2s')) innerBlocks.push({ type: 'break', kind: 'dot2s' });
         else innerBlocks.push({ type: 'break', kind: 'line' });
+      } else if (!INLINE_TAGS.has(cTag) && cTag !== 'brl') {
+        // Any other child (<div>, <epigraph>, <address>…) keeps its content (A2): a container
+        // is read like a sidebar body, anything else is a paragraph.
+        if (hasBlockChild(c)) {
+          const tmp = [];
+          parseSidebar(c, tmp);
+          innerBlocks.push(...(tmp[0].blocks || []));
+        } else {
+          pushParaParts(inlineSegments(c), innerBlocks, (t, segs) => (t ? (segs ? { type: 'para', text: t, segments: segs } : { type: 'para', text: t }) : null));
+        }
       }
     }
 
@@ -2259,6 +2846,31 @@ export function parseDtbook(xmlStr) {
       targetBlocks.push({ type: 'caption', text: captionText });
     }
 
+    // A cell keeps its emphasis and maths (A25): plain text stays a string, anything
+    // richer becomes { text, segments } (see format/cell-markup.mjs).
+    const cellValue = (el) => {
+      const segs = segsWithoutPagenums(inlineSegments(el, false, new Set(['pagenum'])))
+        .map((g) => (g.type === 'text' ? { ...g, text: g.text.replace(/\s+/g, ' ') } : g))
+        .filter((g) => g.type !== 'text' || g.text);
+      if (segs.length && segs[0].type === 'text') segs[0] = { ...segs[0], text: segs[0].text.replace(/^\s+/, '') };
+      const last = segs.length - 1;
+      if (last >= 0 && segs[last].type === 'text') segs[last] = { ...segs[last], text: segs[last].text.replace(/\s+$/, '') };
+      const kept = [];
+      for (const g of segs) {
+        if (g.type === 'text' && !g.text) continue;
+        const last = kept[kept.length - 1];
+        if (g.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (g.tf || 0) && !!last.uncontracted === !!g.uncontracted) {
+          kept[kept.length - 1] = { ...last, text: (last.text + g.text).replace(/\s+/g, ' ') };
+        } else kept.push(g);
+      }
+      if (!kept.some((g) => g.type === 'math')) {
+        const plain = getCleanText(el);
+        return cellFromSegments(plain, kept.some((g) => g.tf || g.uncontracted || g.type === 'noteref') ? kept : null);
+      }
+      const plain = kept.map((g) => (g.type === 'math' ? (g.latex || '') : g.text)).join('');
+      return cellFromSegments(plain, kept);
+    };
+
     const cls = tableEl.getAttribute ? (tableEl.getAttribute('class') || '') : '';
     let format = null;
     if (cls.includes('bana-listed') || cls.includes('listed')) format = 'listed';
@@ -2271,20 +2883,34 @@ export function parseDtbook(xmlStr) {
     const thead = tableEl.getElementsByTagName ? tableEl.getElementsByTagName('thead')[0] : null;
     let headerRowFound = false;
 
+    const extraHeadRows = [];                                // further <thead> rows lead the body (A28)
     if (thead) {
       const theadTrs = [...thead.getElementsByTagName('tr')];
+      for (const tr of theadTrs.slice(1)) {
+        const rowCells = [];
+        for (let c = tr.firstChild; c; c = c.nextSibling) {
+          if (c.nodeType !== 1) continue;
+          const tag = (c.localName || c.tagName || '').toLowerCase();
+          if (tag !== 'th' && tag !== 'td') continue;
+          rowCells.push(cellValue(c));
+          const colspan = parseInt(c.getAttribute ? (c.getAttribute('colspan') || '1') : '1', 10) || 1;
+          for (let k = 1; k < colspan; k++) rowCells.push('');
+        }
+        if (rowCells.some((v) => (typeof v === 'string' ? v : v.text))) extraHeadRows.push(rowCells);
+      }
       if (theadTrs.length) {
         for (let c = theadTrs[0].firstChild; c; c = c.nextSibling) {
           if (c.nodeType !== 1) continue;
           const tag = (c.localName || c.tagName || '').toLowerCase();
           if (tag === 'th' || tag === 'td') {
-            headers.push(getCleanText(c));
+            headers.push(cellValue(c));
           }
         }
         headerRowFound = true;
       }
     }
 
+    rows.push(...extraHeadRows);
     for (let i = 0; i < trs.length; i++) {
       const tr = trs[i];
       if (thead && tr.parentNode === thead) continue;
@@ -2298,20 +2924,23 @@ export function parseDtbook(xmlStr) {
       }
 
       if (!headerRowFound && cells.length && cells.every(c => (c.localName || c.tagName || '').toLowerCase() === 'th')) {
-        headers.push(...cells.map(getCleanText));
+        headers.push(...cells.map(cellValue));
         headerRowFound = true;
       } else {
         const rowCells = [];
         for (const cell of cells) {
-          const cellText = getCleanText(cell);
+          const cellText = cellValue(cell);
           const colspan = parseInt(cell.getAttribute ? (cell.getAttribute('colspan') || '1') : '1', 10) || 1;
           rowCells.push(cellText);
           for (let k = 1; k < colspan; k++) rowCells.push('');
         }
-        if (rowCells.some(Boolean)) rows.push(rowCells);
+        if (rowCells.some((v) => (typeof v === 'string' ? v : v.text))) rows.push(rowCells);
       }
     }
 
+    // Cells cannot be split: page turns inside the table are placed before/after it.
+    const pn = collectPagenums(tableEl);
+    targetBlocks.push(...pn.before);
     if (headers.length || rows.length) {
       const tblBlock = { type: 'table', headers, rows };
       if (format) {
@@ -2320,6 +2949,22 @@ export function parseDtbook(xmlStr) {
       }
       targetBlocks.push(tblBlock);
     }
+    targetBlocks.push(...imagesWithin(tableEl));           // a cell holds text only: its images follow the table (A2)
+    targetBlocks.push(...pn.after);
+  }
+
+  // <hd> (a DTBook "generic heading", used inside <level1>...<level6> containers,
+  // <sidebar>, <list>, etc.) carries no level of its own — its level is implied by
+  // how deep its nearest <levelN> ancestor nests. Walk up to the first level1..level6
+  // and use N; if <hd> isn't inside any <levelN> (e.g. a bare <sidebar>/<list> box),
+  // keep the pre-existing default of 2.
+  function nearestLevelDepth(node, fallback) {
+    for (let p = node.parentNode; p && p.nodeType === 1; p = p.parentNode) {
+      const pTag = (p.localName || p.tagName || '').toLowerCase();
+      const m = pTag.match(/^level([1-6])$/);
+      if (m) return parseInt(m[1], 10);
+    }
+    return fallback;
   }
 
   function walk(node) {
@@ -2328,22 +2973,15 @@ export function parseDtbook(xmlStr) {
       const tag = (child.localName || child.tagName || '').toLowerCase();
       const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
       if (tag === 'doctitle' || tag === 'docauthor' || tag === 'head') continue;
-      
+
       if (/^h[1-6]$/.test(tag) || tag === 'hd' || tag === 'bridgehead') {
-        const lvl = tag === 'bridgehead' ? 2 : (tag === 'hd' ? 2 : Math.min(3, parseInt(tag.slice(1), 10) || 1));
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(child);
-        if (t) {
-          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'heading', level: lvl, segments: segs, text: t });
-          else blocks.push({ type: 'heading', level: lvl, text: t });
-        }
+        const lvl = tag === 'bridgehead' ? 2 : (tag === 'hd' ? nearestLevelDepth(child, 2) : (parseInt(tag.slice(1), 10) || 1));
+        pushAtomic(blocks, child, (t, segs) => (t ? (segs ? { type: 'heading', level: lvl, segments: segs, text: t } : { type: 'heading', level: lvl, text: t }) : null), { excludeTags: IMAGE_TAGS });
+        blocks.push(...imagesWithin(child));                 // an image in a heading follows it (A29)
       } else if (tag === 'caption' || tag === 'figcaption') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'caption', text: t });
+        pushTextOnly(blocks, child, (t) => (t ? { type: 'caption', text: t } : null));
       } else if (tag === 'tabletn' || tag === 'bai-tabletn') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'note', kind: 'tabletn', text: t });
+        pushTextOnly(blocks, child, (t) => (t ? { type: 'note', kind: 'tabletn', text: t } : null));
       } else if (tag === 'sidebar') {
         parseSidebar(child);
       } else if (tag === 'table') {
@@ -2355,56 +2993,39 @@ export function parseDtbook(xmlStr) {
       } else if (tag === 'speaker') {
         const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(child);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length > 0)
+        pushAtomic(blocks, child, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'play', subtype: 'prose', style: 'play-speaker', text: t, segments: segs }
             : { type: 'play', subtype: 'prose', style: 'play-speaker', text: t };
           if (lvl > 0) blk.level = lvl;
-          blocks.push(blk);
-        }
+          return blk;
+        });
       } else if (tag === 'stage') {
         const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(child);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length > 0)
+        pushAtomic(blocks, child, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'stage', style: 'play-stage', text: t, segments: segs }
             : { type: 'stage', style: 'play-stage', text: t };
           if (lvl > 0) blk.level = lvl;
-          blocks.push(blk);
-        }
+          return blk;
+        });
       } else if (tag === 'blockquote') {
-        const hasElements = Array.from(child.childNodes || []).some((c) => c.nodeType === 1);
+        const hasElements = Array.from(child.childNodes || []).some((c) => c.nodeType === 1 && !PAGENUM_TAGS.has((c.localName || c.tagName || '').toLowerCase()));
         if (hasElements) {
           walk(child);
         } else {
           const segs = inlineSegments(child);
-          const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-          const t = getCleanText(child);
-          if (t) {
-            if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', style: 'quote', segments: segs, text: t });
-            else blocks.push({ type: 'para', style: 'quote', text: t });
-          }
+          pushParaParts(segs, blocks, (t, partSegs) => (partSegs ? { type: 'para', style: 'quote', segments: partSegs, text: t } : { type: 'para', style: 'quote', text: t }));
         }
       } else if (tag === 'dt' || tag === 'dfn') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'para', style: 'dt', text: t });
+        pushTextOnly(blocks, child, (t) => (t ? { type: 'para', style: 'dt', text: t } : null));
       } else if (tag === 'dd') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'para', style: 'dd', text: t });
+        pushTextOnly(blocks, child, (t) => (t ? { type: 'para', style: 'dd', text: t } : null));
       } else if (tag === 'byline' || tag === 'author' || tag === 'cite' || tag === 'attrib') {
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(child);
-        if (t) {
-          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'attribution', text: t, segments: segs });
-          else blocks.push({ type: 'attribution', text: t });
-        }
+        pushAtomic(blocks, child, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
       } else if (tag === 'math' || tag.endsWith(':math')) {
         const mathml = mathOuterXml(child);
         const alttext = child.getAttribute ? child.getAttribute('alttext') : null;
@@ -2419,31 +3040,23 @@ export function parseDtbook(xmlStr) {
       } else if (tag === 'line' || tag === 'ln') {
         const lvlAttr = child.getAttribute ? child.getAttribute('level') : null;
         const lvl = lvlAttr ? parseInt(lvlAttr, 10) : 0;
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
-        const t = getCleanText(child);
-        if (t) {
-          const blk = (hasEmphOrMath && segs.length > 0)
+        pushAtomic(blocks, child, (t, segs) => {
+          if (!t) return null;
+          const blk = segs
             ? { type: 'play', subtype: 'verse', style: 'verse', segments: segs, text: t }
             : { type: 'play', subtype: 'verse', style: 'verse', text: t };
           if (lvl > 0) blk.level = lvl;
-          blocks.push(blk);
-        }
+          return blk;
+        });
       } else if (tag === 'imggroup') {
-        const img = child.getElementsByTagName ? (child.getElementsByTagName('img')[0] || child.getElementsByTagName('image')[0]) : null;
-        const alt = (img?.getAttribute ? img.getAttribute('alt') : '') || (child.getAttribute ? child.getAttribute('alt') : '') || '';
-        const caption = child.getElementsByTagName ? (child.getElementsByTagName('caption')[0] || child.getElementsByTagName('prodnote')[0]) : null;
-        const capText = caption ? getCleanText(caption) : '';
-        const noteText = alt ? ('Image: ' + alt + (capText ? ' - ' + capText : '')) : (capText ? 'Image: ' + capText : 'Image');
-        blocks.push({ type: 'note', kind: 'image', text: noteText });
-        if (img) {
-          const src = (img.getAttribute ? img.getAttribute('src') : '') || '';
-          blocks.push({ type: 'graphic', src, alt });
-        }
+        parseImgGroup(child, blocks);
       } else if (tag === 'img' || tag === 'image') {
         const src = (child.getAttribute ? child.getAttribute('src') : '') || '';
         const alt = (child.getAttribute ? child.getAttribute('alt') : '') || '';
-        blocks.push({ type: 'graphic', src, alt });
+        const graphic = { type: 'graphic', src, alt };
+        const svg = svgFromDataUri(src);
+        if (svg) graphic.svg = svg;
+        blocks.push(graphic);
       } else if (tag === 'p') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
         const pLevel = getElementLevel(child);
@@ -2458,29 +3071,59 @@ export function parseDtbook(xmlStr) {
 
         const directPText = getCleanText(child);
 
-        const segs = inlineSegments(child);
-        const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || (s.text && s.text.includes('\n')));
+        const rawSegs = inlineSegments(child);
         const hasSpeakerChild = (child.getElementsByTagName ? child.getElementsByTagName('speaker').length > 0 : false) || (child.getElementsByClassName ? child.getElementsByClassName('speaker').length > 0 : false);
         const hasStageChild = (child.getElementsByTagName ? child.getElementsByTagName('stage').length > 0 : false) || (child.getElementsByClassName ? child.getElementsByClassName('stage').length > 0 : false);
-        if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker') || hasSpeakerChild) {
-          blocks.push({ type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem') || cls.includes('line')) {
-          blocks.push({ type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage') || hasStageChild) {
-          blocks.push({ type: 'stage', style: 'play-stage', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('byline') || cls.includes('attribution') || cls.includes('author')) {
-          blocks.push({ type: 'attribution', text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('quote') || cls.includes('blockquote') || cls.includes('extract') || isInsideQuote) {
-          blocks.push({ type: 'para', style: 'quote', level: pLevel, text: directPText, segments: (hasEmphOrMath && segs.length ? segs : undefined) });
-        } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
-          blocks.push({ type: 'indicator', kind: 'line' });
-        } else if (cls.includes('bana-break-asterisks') || cls.includes('doc-break') || cls === 'break' || directPText === '⁂ ⁂ ⁂' || directPText === '* * *' || directPText === '∗ ∗ ∗') {
-          blocks.push({ type: 'break', kind: 'asterisks' });
-        } else if (cls.includes('bana-break-dot2s')) {
-          blocks.push({ type: 'break', kind: 'dot2s' });
-        } else if (directPText) {
-          if (hasEmphOrMath && segs.length > 0) blocks.push({ type: 'para', segments: segs, text: directPText });
-          else blocks.push({ type: 'para', text: directPText });
+        // Builds the block for this <p> from (text, segments-or-undefined); null = nothing.
+        const makeP = (t, segs) => {
+          if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker') || hasSpeakerChild) {
+            return { type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem') || cls.includes('line')) {
+            return { type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage') || hasStageChild) {
+            return { type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('byline') || cls.includes('attribution') || cls.includes('author')) {
+            return { type: 'attribution', text: t, segments: segs };
+          } else if (cls.includes('quote') || cls.includes('blockquote') || cls.includes('extract') || isInsideQuote) {
+            return { type: 'para', style: 'quote', level: pLevel, text: t, segments: segs };
+          } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+            return { type: 'indicator', kind: 'line' };
+          } else if (cls.includes('bana-break-asterism') || ((cls.includes('doc-break') || cls === 'break') && /^[⁂\s]+$/.test(t || '') && t.includes('⁂')) || /^⁂(\s+⁂)*$/.test(t || '')) {
+            // A print asterism (⁂) is kept as its own kind: BANA Formats §1.9.5 follows the
+            // print symbol (a transcriber-defined symbol in braille); UKAAF uses asterisks.
+            return { type: 'break', kind: 'asterism' };
+          } else if (cls.includes('bana-break-asterisks') || cls.includes('doc-break') || cls === 'break' || t === '* * *' || t === '∗ ∗ ∗') {
+            return { type: 'break', kind: 'asterisks' };
+          } else if (cls.includes('bana-break-dot2s')) {
+            return { type: 'break', kind: 'dot2s' };
+          } else if (t) {
+            return segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
+          }
+          return null;
+        };
+        // Display maths: DTBook only allows <m:math> inline, so the exporter (and many
+        // producers) wrap a displayed equation in a <p> of its own. Keep it a math block.
+        if (rawSegs.length === 1 && rawSegs[0].type === 'math') {
+          const mathBlock = { type: 'math', mathml: rawSegs[0].mathml };
+          if (rawSegs[0].latex) mathBlock.latex = rawSegs[0].latex;
+          blocks.push(mathBlock);
+          continue;
+        }
+        if (segsHavePagenum(rawSegs)) {
+          const probe = makeP(directPText, undefined);
+          if (probe && probe.type === 'para') {
+            // Ordinary paragraph: split around the page turn(s), text resumes in cell 1.
+            pushParaParts(rawSegs, blocks, makeP);
+          } else {
+            const pn = hoistPagenums(rawSegs);
+            blocks.push(...pn.before);
+            const blk = makeP(directPText, segsHaveEmphOrMath(pn.segs) && pn.segs.length ? pn.segs : undefined);
+            if (blk) blocks.push(blk);
+            blocks.push(...pn.after);
+          }
+        } else {
+          const blk = makeP(directPText, segsHaveEmphOrMath(rawSegs) && rawSegs.length ? rawSegs : undefined);
+          if (blk) blocks.push(blk);
         }
       } else if (tag === 'hr' || tag === 'break') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
@@ -2491,34 +3134,19 @@ export function parseDtbook(xmlStr) {
       } else if (tag === 'list') {
         parseSingleList(child);
       } else if (tag === 'note') {
-        const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
-        const t = getCleanText(child);
-        if (t) {
-          if (cls.includes('footnote') || (child.getAttribute && child.getAttribute('role') === 'doc-footnote')) {
-            blocks.push({ type: 'footnote', text: t });
-          } else {
-            blocks.push({ type: 'note', text: t });
-          }
-        }
+        pushNote(blocks, child);
       } else if (tag === 'annotation' || tag === 'prodnote') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
-        const t = getCleanText(child);
-        if (t) {
-          if (cls.includes('tabletn')) {
-            blocks.push({ type: 'note', kind: 'tabletn', text: t });
-          } else {
-            blocks.push({ type: 'note', text: t });
-          }
-        }
-      } else if (tag === 'pagenum' || tag === 'print-page') {
-        const pVal = getCleanText(child) || (child.getAttribute ? child.getAttribute('page') : '') || (child.getAttribute ? child.getAttribute('id') : '') || '';
-        if (pVal) blocks.push({ type: 'pagenum', text: pVal });
+        pushTextOnly(blocks, child, (t) => (t ? (cls.includes('tabletn') ? { type: 'note', kind: 'tabletn', text: t } : { type: 'note', text: t }) : null));
+      } else if (PAGENUM_TAGS.has(tag)) {
+        const pn = pagenumBlock(child);
+        if (pn) blocks.push(pn);
       } else if (tag === 'page') {
-        const t = getCleanText(child);
-        if (t) blocks.push({ type: 'para', text: t });
+        pushTextOnly(blocks, child, (t) => (t ? { type: 'para', text: t } : null));
       } else {
         const hasElementChild = Array.from(child.childNodes || []).some((c) => c.nodeType === 1);
         if (hasElementChild) {
+          wrapInlineRuns(child);
           walk(child);
         } else {
           const t = getCleanText(child);
@@ -2528,6 +3156,34 @@ export function parseDtbook(xmlStr) {
     }
   }
 
+  // A container the walker does not know (div, a, span, sent…) may hold running text next to
+  // (or instead of) block elements — "<div><a> Part A <code>…</code> Part B</a></div>". The
+  // walker only visits elements, so each run of inline content is wrapped in a synthetic <p>
+  // first; block children are left for the walker as before.
+  // DTBook 2005-3 inline elements (%inline; minus the ones the walker handles itself) and
+  // their common HTML equivalents.
+  const INLINE_CHILD = new Set(['a', 'abbr', 'acronym', 'bdo', 'cite', 'code', 'dfn', 'em', 'i', 'b', 'u', 'strong', 'kbd', 'q', 'samp', 'span', 'sub', 'sup', 'sent', 'w', 'noteref', 'annoref', 'br', 'linenum', 'small', 'big', 'tt', 'var', 'mark', 'ins', 'del', 's', 'time', 'label']);
+  function wrapInlineRuns(el) {
+    const kids = Array.from(el.childNodes || []);
+    const isInline = (n) => n.nodeType === 3 || (n.nodeType === 1 && INLINE_CHILD.has((n.localName || n.tagName || '').toLowerCase()));
+    const hasText = (run) => run.some((n) => (n.nodeType === 3 ? n.nodeValue : n.textContent || '').trim());
+    // Only when some inline content carries text: plain element-only containers keep the old path.
+    if (!kids.some((n) => isInline(n) && hasText([n]))) return;
+    let run = [];
+    const flush = () => {
+      if (run.length && hasText(run) && el.ownerDocument && el.ownerDocument.createElementNS) {
+        const p = el.ownerDocument.createElementNS(el.namespaceURI || null, 'p');
+        el.insertBefore(p, run[0]);
+        for (const n of run) p.appendChild(n);
+      }
+      run = [];
+    };
+    for (const n of kids) {
+      if (isInline(n)) run.push(n); else flush();
+    }
+    flush();
+  }
+
   const book = doc.getElementsByTagName('book')[0] || doc.documentElement;
   walk(book);
   if (!title && blocks.length && blocks[0].type === 'heading') {
@@ -2535,53 +3191,249 @@ export function parseDtbook(xmlStr) {
   }
   const result = { title, blocks };
   if (Object.keys(metadata).length > 0) result.metadata = metadata;
+  // Nothing is dropped silently (A2): anything the model lacks is reported to the user.
+  if (rootTag === 'dtbook') {
+    try {
+      const warnings = loadWarnings(doc, result);
+      if (warnings.length) result.warnings = warnings;
+    } catch { /* the check never stops a load */ }
+  }
   return result;
 }
 
 export const parseNimasXml = parseDtbook;
 
-export async function parseNimasZip(arrayBuffer) {
-  const dv = new DataView(arrayBuffer);
-  const u8 = new Uint8Array(arrayBuffer);
-  let eocd = -1;
-  for (let i = u8.length - 22; i >= 0; i--) {
-    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+// ---------- NIMAS package (zip of OPF + DTBook + images; A3) ----------
+
+// Decode a possibly percent-encoded href, drop any #fragment, and collapse "./" / "../"
+// segments *within the href itself* — the "folder-relative" form used for model.resources
+// paths and the graphic's own src (A3d).
+function normalizeHref(href) {
+  let raw = String(href || '').split('#')[0];
+  try { raw = decodeURIComponent(raw); } catch { /* keep literal % sequences that aren't valid escapes */ }
+  const out = [];
+  for (const part of raw.split('/')) {
+    if (part === '' || part === '.') continue;
+    if (part === '..') { if (out.length && out[out.length - 1] !== '..') out.pop(); else out.push('..'); }
+    else out.push(part);
   }
-  if (eocd < 0) throw new Error('not a zip (no EOCD)');
-  const count = dv.getUint16(eocd + 10, true);
-  let off = dv.getUint32(eocd + 16, true);
-  const dec = new TextDecoder();
-  const xmlEntries = [];
-  let opfEntry = null;
-  for (let n = 0; n < count; n++) {
-    if (dv.getUint32(off, true) !== 0x02014b50) break;
-    const nameLen = dv.getUint16(off + 28, true);
-    const extraLen = dv.getUint16(off + 30, true);
-    const commentLen = dv.getUint16(off + 32, true);
-    const name = dec.decode(u8.subarray(off + 46, off + 46 + nameLen));
-    if (name.endsWith('.opf')) opfEntry = name;
-    else if (name.endsWith('.xml') && !name.includes('container.xml')) xmlEntries.push(name);
-    off += 46 + nameLen + extraLen + commentLen;
-  }
-  let targetXml = xmlEntries[0];
-  if (opfEntry) {
-    try {
-      const opfBytes = await unzipEntry(arrayBuffer, opfEntry);
-      const opfDoc = parseXml(dec.decode(opfBytes));
-      for (const it of opfDoc.getElementsByTagNameNS('*', 'item')) {
-        const mediaType = (it.getAttribute('media-type') || '').toLowerCase();
-        const href = it.getAttribute('href') || '';
-        if (mediaType.includes('dtbook') || mediaType.includes('xml') || href.endsWith('.xml')) {
-          const base = opfEntry.includes('/') ? opfEntry.slice(0, opfEntry.lastIndexOf('/') + 1) : '';
-          targetXml = base + href;
-          break;
-        }
+  return out.join('/');
+}
+
+// Resolve an href against a zip-internal base folder (no trailing slash) into the zip entry
+// name that actually holds it.
+function resolveZipPath(baseDir, href) {
+  const rel = normalizeHref(href);
+  if (!rel) return '';
+  return baseDir ? normalizeHref(`${baseDir}/${rel}`) : rel;
+}
+
+// Every descendant element (any depth, any namespace) whose local name matches, case-
+// insensitively: OPF metadata mixes OEB 1.2's <dc:Title> with OPF 2's lowercase <dc:title>,
+// and the manifest's <item> needs the same tolerance for stray casing (A3a/c).
+function elementsByLocalName(root, name) {
+  const out = [];
+  const ln = name.toLowerCase();
+  (function walk(n) {
+    for (let c = n && n.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType === 1) {
+        if ((c.localName || c.tagName || '').toLowerCase() === ln) out.push(c);
+        walk(c);
       }
-    } catch { /* fallback to first xml entry */ }
+    }
+  })(root);
+  return out;
+}
+
+// dc-metadata / x-metadata from an OEB/OPF package document: dc: fields (creators joined
+// with "; "), nimas-* metas, and any other named meta kept for reference (A3c); plus a few
+// simple dc: attributes NIMAS's own package-doc-common.sch checks for structurally
+// (dc:Date/@event="DCTERMS.created", dc:Creator/@role, dc:Identifier/@scheme — A4).
+function readOpfMetadata(opfDoc) {
+  const textOf = (el) => (el && el.textContent ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+  const byLocal = (name) => elementsByLocalName(opfDoc.documentElement, name);
+  const first = (name) => textOf(byLocal(name)[0]);
+  const attrOf = (name, attr) => { const el = byLocal(name)[0]; return (el && el.getAttribute && el.getAttribute(attr)) || ''; };
+  const dc = {
+    title: first('title'),
+    creator: byLocal('creator').map(textOf).filter(Boolean).join('; '),
+    publisher: first('publisher'),
+    date: first('date'),
+    identifier: first('identifier'),
+    language: first('language'),
+    rights: first('rights'),
+    source: first('source'),
+    subject: first('subject'),
+    format: first('format'),
+  };
+  const dcAttrs = {};
+  const dateEvent = attrOf('date', 'event'); if (dateEvent) dcAttrs.dateEvent = dateEvent;
+  const creatorRole = attrOf('creator', 'role'); if (creatorRole) dcAttrs.creatorRole = creatorRole;
+  const identifierScheme = attrOf('identifier', 'scheme'); if (identifierScheme) dcAttrs.identifierScheme = identifierScheme;
+
+  // x-metadata metas (nimas-* and everything else, e.g. DCTERMS.*): a name that repeats
+  // (the CAST corpus has two DCTERMS.description.note) becomes an array, in source order;
+  // empty content (nimas-SourceEdition="" in the CAST corpus) is kept, not dropped, so A4's
+  // save can write the same, structurally-complete x-metadata back out.
+  const nimas = {}, opfMeta = {};
+  const addMeta = (bucket, name, content) => {
+    if (Object.prototype.hasOwnProperty.call(bucket, name)) {
+      bucket[name] = Array.isArray(bucket[name]) ? [...bucket[name], content] : [bucket[name], content];
+    } else {
+      bucket[name] = content;
+    }
+  };
+  for (const m of byLocal('meta')) {
+    const name = m.getAttribute ? m.getAttribute('name') : null;
+    if (!name) continue;
+    const content = m.getAttribute ? (m.getAttribute('content') || '').trim() : '';
+    addMeta(name.toLowerCase().startsWith('nimas-') ? nimas : opfMeta, name, content);
   }
-  if (!targetXml) throw new Error('nimas zip: no XML content document found');
-  const xmlBytes = await unzipEntry(arrayBuffer, targetXml);
-  return parseDtbook(dec.decode(xmlBytes));
+  return { dc, dcAttrs, nimas, opfMeta };
+}
+
+const IMAGE_MIME_BY_EXT = {
+  jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif',
+  svg: 'image/svg+xml', webp: 'image/webp', bmp: 'image/bmp', tif: 'image/tiff', tiff: 'image/tiff',
+};
+function mimeForPath(path) {
+  const ext = (path.split('.').pop() || '').toLowerCase();
+  return IMAGE_MIME_BY_EXT[ext] || 'application/octet-stream';
+}
+
+// Every graphic block anywhere in the model — nested in a box/sidebar's `blocks`, a list
+// item, a table cell, wherever — via the same generic object walk load-audit.mjs uses to
+// count images, rather than duplicating the block tree's shape here (A3d).
+function collectGraphics(blocks) {
+  const out = [];
+  const seen = new Set();
+  (function deep(v) {
+    if (!v || typeof v !== 'object' || seen.has(v)) return;
+    seen.add(v);
+    if (v.type === 'graphic') out.push(v);
+    for (const k in v) if (v[k] && typeof v[k] === 'object') deep(v[k]);
+  })(blocks);
+  return out;
+}
+
+export async function parseNimasZip(arrayBuffer) {
+  const entries = listZipEntries(arrayBuffer);
+  const entryByName = new Map(entries.filter((e) => !e.name.endsWith('/')).map((e) => [e.name, e]));
+  const dec = new TextDecoder();
+
+  // The OPF (there should be exactly one; NIMAS/DAISY packages don't carry more).
+  const opfEntry = entries.find((e) => /\.opf$/i.test(e.name));
+  let opfDoc = null, opfPath = null, opfDir = '';
+  if (opfEntry) {
+    opfPath = opfEntry.name;
+    opfDir = opfPath.includes('/') ? opfPath.slice(0, opfPath.lastIndexOf('/')) : '';
+    try { opfDoc = parseXml(dec.decode(await extractZipEntry(arrayBuffer, opfEntry))); }
+    catch { /* a broken .opf still leaves the <dtbook> fallback below */ }
+  }
+
+  // Choose the book: the manifest's DTBook item (by media-type, else its first plain-XML
+  // item), resolved against the OPF's folder and checked against what's actually in the zip
+  // — a package can *claim* a book file it doesn't include (the opf-exemplar test package).
+  let bookPath = null;
+  if (opfDoc) {
+    const items = elementsByLocalName(opfDoc.documentElement, 'item')
+      .map((it) => ({ href: it.getAttribute('href') || '', mediaType: (it.getAttribute('media-type') || '').toLowerCase() }))
+      .filter((it) => it.href);
+    const dtbookItem = items.find((it) => it.mediaType.includes('dtbook'))
+      || items.find((it) => /\.xml$/i.test(it.href) && !/\.(opf|ncx|smil)$/i.test(it.href));
+    if (dtbookItem) {
+      const resolved = resolveZipPath(opfDir, dtbookItem.href);
+      if (entryByName.has(resolved)) bookPath = resolved;
+    }
+  }
+  if (!bookPath) {
+    // No usable OPF, or its manifest entry is missing from the zip: fall back to whichever
+    // .xml entry actually has a <dtbook> root (a package can carry other XML — an NCX, a
+    // math exemplar fragment — that isn't the book itself).
+    for (const e of entries) {
+      if (!/\.xml$/i.test(e.name) || e.name.toLowerCase().endsWith('container.xml')) continue;
+      try {
+        const root = parseXml(dec.decode(await extractZipEntry(arrayBuffer, e))).documentElement;
+        if (root && (root.localName || root.tagName || '').toLowerCase() === 'dtbook') { bookPath = e.name; break; }
+      } catch { /* not well-formed XML: not the book */ }
+    }
+  }
+  if (!bookPath) {
+    const names = entries.filter((e) => !e.name.endsWith('/')).map((e) => e.name.split('/').pop()).slice(0, 6);
+    throw new Error(`This package has no DTBook book file (it contains: ${names.join(', ')}). A NIMAS package must include the book's .xml file.`);
+  }
+
+  const bookDir = bookPath.includes('/') ? bookPath.slice(0, bookPath.lastIndexOf('/')) : '';
+  const model = parseDtbook(dec.decode(await extractZipEntry(arrayBuffer, entryByName.get(bookPath))));
+
+  // OPF metadata fills in whatever the DTBook <head> left empty — the DTBook always wins.
+  const metadata = model.metadata || (model.metadata = {});
+  if (opfDoc) {
+    const { dc, dcAttrs, nimas, opfMeta } = readOpfMetadata(opfDoc);
+    for (const [k, v] of Object.entries(dc)) if (v && !metadata[k]) metadata[k] = v;
+    if (Object.keys(dcAttrs).length) metadata.dcAttrs = { ...dcAttrs, ...(metadata.dcAttrs || {}) };
+    if (Object.keys(nimas).length) metadata.nimas = { ...nimas, ...(metadata.nimas || {}) };
+    if (Object.keys(opfMeta).length) metadata.opfMeta = opfMeta;
+    if (!metadata.lang && metadata.language) metadata.lang = metadata.language;
+    if (!model.title && dc.title) model.title = dc.title;
+  }
+  metadata.package = { opf: opfPath, book: bookPath };
+
+  // Images: pull every graphic's bytes out of the zip and point its src at a package-
+  // relative path; saving the package back out is A4.
+  const resources = [];
+  const resourceByPath = new Map();
+  let missingImages = 0;
+  for (const g of collectGraphics(model.blocks)) {
+    const src = g.src || '';
+    if (!src || /^(data:|https?:|blob:)/i.test(src)) continue;
+    const relPath = normalizeHref(src);
+    if (!relPath) continue;
+    if (resourceByPath.has(relPath)) { g.src = relPath; continue; }
+    const entry = entryByName.get(resolveZipPath(bookDir, src));
+    if (!entry) { missingImages++; continue; }
+    const bytes = new Uint8Array(await extractZipEntry(arrayBuffer, entry));
+    const resource = { path: relPath, mime: mimeForPath(relPath), bytes };
+    resources.push(resource);
+    resourceByPath.set(relPath, resource);
+    g.src = relPath;
+  }
+  // The package's own source PDF(s) (A4 writes them back out on save): the OPF manifest's
+  // application/pdf item(s), resolved against the OPF's folder like any other manifest href;
+  // failing that (no usable OPF), any .pdf entry that sits in the book's own folder. Kept
+  // with a package-relative path (like an image's), so save can put it back at the same spot.
+  const pdfZipPaths = new Set();
+  if (opfDoc) {
+    const pdfItems = elementsByLocalName(opfDoc.documentElement, 'item')
+      .map((it) => ({ href: it.getAttribute('href') || '', mediaType: (it.getAttribute('media-type') || '').toLowerCase() }))
+      .filter((it) => it.href && it.mediaType.includes('pdf'));
+    for (const it of pdfItems) {
+      const resolved = resolveZipPath(opfDir, it.href);
+      if (entryByName.has(resolved)) pdfZipPaths.add(resolved);
+    }
+  }
+  if (!pdfZipPaths.size) {
+    for (const e of entries) {
+      if (!/\.pdf$/i.test(e.name)) continue;
+      const dir = e.name.includes('/') ? e.name.slice(0, e.name.lastIndexOf('/')) : '';
+      if (dir === bookDir) pdfZipPaths.add(e.name);
+    }
+  }
+  for (const zipPath of pdfZipPaths) {
+    const entry = entryByName.get(zipPath);
+    if (!entry) continue;
+    const bookPrefix = bookDir ? `${bookDir}/` : '';
+    const relPath = bookPrefix && zipPath.startsWith(bookPrefix) ? zipPath.slice(bookPrefix.length) : zipPath;
+    const bytes = new Uint8Array(await extractZipEntry(arrayBuffer, entry));
+    resources.push({ path: relPath, mime: 'application/pdf', bytes, role: 'source-pdf' });
+  }
+
+  if (resources.length) model.resources = resources;
+  if (missingImages) {
+    (model.warnings || (model.warnings = [])).push(
+      `${missingImages} image${missingImages === 1 ? '' : 's'} referenced by the book ${missingImages === 1 ? 'is' : 'are'} missing from the package`);
+  }
+  return model;
 }
 
 // Formats that need the raw bytes (ArrayBuffer) rather than text.

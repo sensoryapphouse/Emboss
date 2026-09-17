@@ -2,15 +2,33 @@
   "name": "Emboss",
   "short_name": "Emboss",
   "description": "Convert Word, ODT, EPUB, HTML, Markdown and text documents into properly formatted BRF braille (UEB, UKAAF/BANA).",
-  "start_url": "index.html",
-  "scope": ".",
+  "start_url": "/web/index.html",
+  "scope": "/web/",
   "display": "standalone",
   "background_color": "#f4f5f8",
   "theme_color": "#1f2a44",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%231f2a44'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='66' cy='60' r='14'/%3E%3Ccircle cx='66' cy='132' r='14'/%3E%3Ccircle cx='118' cy='60' r='14'/%3E%3C/g%3E%3C/svg%3E",
-      "sizes": "192x192",
+      "src": "/web/logo-64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/web/logo-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/web/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/web/logo.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     }

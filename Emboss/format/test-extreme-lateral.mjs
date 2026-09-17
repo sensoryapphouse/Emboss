@@ -223,8 +223,8 @@ function check(name, cond, detail = '') {
     const brf = formatDocument(multiPageBoxDoc, baseOpts({ width: 38, depth: 25, trace }));
     const pages = brf.split('\x0c');
     check('3.2 Massive box spans across >= 3 pages', pages.length >= 3, `pages: ${pages.length}`);
-    check('3.2 Top border present on page 1', pages[0].includes('333'));
-    check('3.2 Bottom border present on final page', pages[pages.length - 1].includes('777'));
+    check('3.2 Top border present on page 1', pages[0].includes('7'.repeat(38)));
+    check('3.2 Bottom border present on final page', pages[pages.length - 1].includes('G'.repeat(38)));
   } catch (e) {
     check('3.2 Multi-page box crash', false, e.message);
   }

@@ -41,7 +41,7 @@ test('Step 1: <bridgehead> is parsed as level-2 heading and formatted at Cell 5 
   assert.equal(headingLine.indexOf('ANALYZE THE TEXT'), 4, 'Heading should start at cell 5 (4 spaces)');
 });
 
-test('Step 1: <byline> is parsed as attribution and formatted with blank line and Cell 5 indent', () => {
+test('Step 1: <byline> is parsed as attribution and formatted at Cell 5 with a blank line after (Formats §9.4.1)', () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book>
@@ -181,7 +181,7 @@ test('Step 3: Exercise lists (bai-exercise) are formatted with 1-5 margin for ma
   assert.notEqual(qaLine1.startsWith('   '), true, 'Sub-question should not have 3 or more spaces');
 });
 
-test('Step 3: Index lists (bai-index) are formatted with 1-3 margin for main entries and 3-5 for sub-entries', () => {
+test('Step 3: Index lists (bai-index) with one sub-entry level are formatted 1-5 / 3-5 (BANA §21.2.1b)', () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book>
@@ -210,18 +210,20 @@ test('Step 3: Index lists (bai-index) are formatted with 1-3 margin for main ent
 
   const lines = brf.split(/\r?\n/).filter((l) => l.trim() && !l.includes('#A'));
 
-  // Main entry (level 0): starts in cell 1 (0 spaces), runover in cell 3 (2 spaces)
+  // Two levels (§21.2.1b "Two levels: 1-5, 3-5"): all runovers two cells right of the
+  // deepest sub-entry. Main entry (level 0): cell 1, runover cell 5 (4 spaces).
   const e1Line1 = lines.find((l) => l.startsWith('AERONAUTICS,'));
   assert.ok(e1Line1, 'Main entry line 1 starts in cell 1');
   const e1Line2 = lines.find((l) => l.includes('DEVELOPMENTS AND MAJOR'));
   assert.ok(e1Line2, 'Main entry line 2 should exist');
-  assert.equal(e1Line2.startsWith('  '), true, 'Main entry runover is cell 3 (2 spaces)');
-  assert.notEqual(e1Line2.startsWith('   '), true, 'Main entry runover should not be 3 or more spaces');
+  assert.equal(e1Line2.startsWith('    '), true, 'Main entry runover is cell 5 (4 spaces)');
+  assert.notEqual(e1Line2.startsWith('     '), true, 'Main entry runover should not be 5 or more spaces');
 
   // Sub-entry (level 1): starts in cell 3 (2 spaces), runover in cell 5 (4 spaces)
   const e2Line1 = lines.find((l) => l.includes('EARLY GLIDERS AND FLIGHT'));
   assert.ok(e2Line1, 'Sub-entry line 1 should exist');
   assert.equal(e2Line1.startsWith('  '), true, 'Sub-entry line 1 starts in cell 3 (2 spaces)');
+  assert.notEqual(e2Line1.startsWith('   '), true, 'Sub-entry line 1 should not be 3 or more spaces');
 });
 
 test('Step 4: Centered TOC Headings (bai-toc-center) and TOC entries (bai-toc-entry)', () => {
@@ -371,7 +373,10 @@ test('Step 1 (Parity): formatDocument passes typeform bits to translate for inli
 
   const italicCall = receivedTfs.find(c => c.str.includes('italic emphasis'));
   assert.ok(italicCall, 'Translator should receive italic emphasis string with tf array');
-  assert.ok(italicCall.tf.every(b => (b & 1) === 1), 'All characters in italic emphasis should have italic bit 1');
+  // The paragraph is translated as one run (A27a): only the emphasised characters carry the italic bit.
+  const at = italicCall.str.indexOf('italic emphasis');
+  assert.ok(italicCall.tf.slice(at, at + 15).every(b => (b & 1) === 1), 'All characters in italic emphasis should have italic bit 1');
+  assert.ok(italicCall.tf.slice(0, at).every(b => (b & 1) === 0), 'Plain text before it has no italic bit');
 });
 
 test('Step 2 (Parity): Multi-element <sidebar> preserves distinct child paragraphs, lists, and formatting inside boxlines', () => {
@@ -408,11 +413,13 @@ test('Step 2 (Parity): Multi-element <sidebar> preserves distinct child paragrap
   });
 
   const lines = brf.split(/\r?\n/).map(l => l.replace(/\s+$/, ''));
-  assert.ok(lines.some(l => l.startsWith('333 SCIENCE SPOTLIGHT')), 'Should have top boxline with title');
+  const topIdx = lines.indexOf('7'.repeat(40));                       // BANA Formats §7.1.3 top box line
+  assert.ok(topIdx >= 0, 'Should have top boxline');
+  assert.ok(lines[topIdx + 1].includes('SCIENCE SPOTLIGHT'), `Title heading on the line after the top box line (§4.3.5), got "${lines[topIdx + 1]}"`);
   assert.ok(lines.some(l => l.includes('PARAGRAPH ONE')), 'Should have paragraph one');
   assert.ok(lines.some(l => l.includes('FACT A')), 'Should have list items');
   assert.ok(lines.some(l => l.includes('PARAGRAPH TWO')), 'Should have paragraph two');
-  assert.ok(lines.some(l => l.startsWith('77777777')), 'Should have bottom boxline');
+  assert.ok(lines.includes('G'.repeat(40)), 'Should have bottom boxline (dots 12356)');
 });
 
 test('Step 3 (Parity): Table of Contents entries generate BANA dot leaders connecting to right-margin page numbers', () => {

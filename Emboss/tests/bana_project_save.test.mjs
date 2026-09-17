@@ -73,7 +73,8 @@ test('serializeInlineSegments preserves inline MathML and LaTeX equations', () =
   ];
   const xml = serializeInlineSegments(segments);
   assert.ok(xml.includes('<m:math alttext="x^2 + y^2 = r^2" altimg="math.png"><m:semantics><m:mrow><m:mtext>x^2 + y^2 = r^2</m:mtext></m:mrow><m:annotation encoding="application/x-tex">x^2 + y^2 = r^2</m:annotation></m:semantics></m:math>'));
-  assert.ok(xml.includes('<mi>r</mi><mo>&gt;</mo><mn>0</mn></math>'));
+  // DAISY "MathML in DTBook": every element carries the m: prefix bound on <dtbook>.
+  assert.ok(xml.includes('<m:mi>r</m:mi><m:mo>&gt;</m:mo><m:mn>0</m:mn></m:math>'));
 });
 
 // -----------------------------------------------------------------------------
@@ -198,7 +199,7 @@ test('Serializes Sidebars / Boxes with nested blocks', () => {
     ]
   };
   const xml = serializeBlock(boxBlock, 0);
-  assert.ok(xml.includes('<sidebar>'));
+  assert.ok(xml.includes('<sidebar render="required">'));
   assert.ok(xml.includes('<hd>KEY VOCABULARY</hd>'));
   assert.ok(xml.includes('<p>Photosynthesis: the process by which green plants make food.</p>'));
   assert.ok(xml.includes('<list type="ul">'));
@@ -444,7 +445,7 @@ test('Complex Sidebar Box Round-Trip with Nested Headings, Lists, and Paragraphs
     ]
   };
   const xml = exportToNimasXml(sidebarDoc);
-  assert.ok(xml.includes('<sidebar>'));
+  assert.ok(xml.includes('<sidebar render="required">'));
   assert.ok(xml.includes('<hd>DID YOU KNOW?</hd>'));
   const parsed = parseDtbook(xml);
   const box = parsed.blocks.find(b => b.type === 'box');
@@ -477,7 +478,7 @@ test('Inline Text Formatting (Bold, Italic, MathML) Round-Trip Parity', () => {
   const xml = exportToNimasXml(formattedDoc);
   assert.ok(xml.includes('<strong>bold emphasis</strong>'));
   assert.ok(xml.includes('<em>italic emphasis</em>'));
-  assert.ok(xml.includes('<math><msup><mi>x</mi><mn>2</mn></msup></math>') || xml.includes('<msup><mi>x</mi><mn>2</mn></msup></math>'));
+  assert.ok(xml.includes('<m:msup><m:mi>x</m:mi><m:mn>2</m:mn></m:msup></m:math>'));   // DAISY MathML-in-DTBook m: prefix
   const parsed = parseDtbook(xml);
   const p = parsed.blocks.find(b => b.type === 'para');
   assert.ok(p);

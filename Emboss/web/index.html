@@ -5,12 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Emboss</title>
   <link rel="manifest" href="/web/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/web/logo.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/web/logo-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/web/logo-16.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/web/logo-512.png" />
   <meta name="theme-color" content="#1f2a44" />
   <link rel="stylesheet" href="/web/style.css" />
   <!-- liblouis WASM glue: exposes globalThis.createLiblouis -->
   <script src="/engine/liblouis-wasm.js"></script>
   <!-- Temml (LaTeX -> MathML), for $-delimited maths in text/markdown input -->
   <script src="/web/vendor/temml.min.js"></script>
+  <!-- Offline support: register the service worker. Scope '/' so it also covers /engine,
+       /format, /input and /liblouis (the dev server sends Service-Worker-Allowed: / for
+       /web/sw.js; the dist build rewrites /web/ -> / and has sw.js at the root). A new
+       version is NOT activated behind the user's back: sw.js waits until this page posts
+       SKIP_WAITING from the "new version available" toast, then reloads on controllerchange. -->
+  <script>
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      var wantReload = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        // Only reload when the user asked for the update; the very first install also
+        // fires controllerchange (clients.claim) and must not bounce the page.
+        if (!wantReload) return;
+        wantReload = false;
+        location.reload();
+      });
+      function showUpdateToast(worker) {
+        if (document.getElementById('swUpdateToast')) return;
+        var toast = document.createElement('div');
+        toast.id = 'swUpdateToast';
+        toast.className = 'sw-update-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.setAttribute('lang', 'en');
+        document.body.appendChild(toast);
+        // Populate on the next frame so the live region announces the inserted text
+        // (content present at creation time is not reliably read out).
+        requestAnimationFrame(function () {
+          var msg = document.createElement('span');
+          msg.textContent = 'A new version of Emboss is available \u2014 ';
+          var reload = document.createElement('button');
+          reload.type = 'button';
+          reload.textContent = 'Reload';
+          reload.addEventListener('click', function () {
+            wantReload = true;
+            reload.disabled = true;
+            worker.postMessage({ type: 'SKIP_WAITING' });
+          });
+          var later = document.createElement('button');
+          later.type = 'button';
+          later.className = 'sw-update-later';
+          later.textContent = 'Later';
+          later.setAttribute('aria-label', 'Dismiss update notice');
+          later.addEventListener('click', function () { toast.remove(); });
+          toast.appendChild(msg);
+          toast.appendChild(reload);
+          toast.appendChild(later);
+        });
+      }
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/web/sw.js', { scope: '/' }).then(function (reg) {
+          if (reg.waiting && navigator.serviceWorker.controller) showUpdateToast(reg.waiting);
+          reg.addEventListener('updatefound', function () {
+            var nw = reg.installing;
+            if (!nw) return;
+            nw.addEventListener('statechange', function () {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateToast(nw);
+            });
+          });
+        }).catch(function (err) { console.warn('[sw] registration failed:', err); });
+      });
+    })();
+  </script>
 </head>
 <body>
   <header>
@@ -259,8 +326,8 @@
           <li>Click <strong>Download .brf</strong> (or choose eBraille / PEF in the editor) to save your deliverable.</li>
         </ol>
 
-        <h3>🌐 Global Localisation &amp; 112 International Languages</h3>
-        <p>Emboss supports full user interface localization in <strong>112 international languages</strong> (with Right-to-Left orientation for Arabic, Hebrew, Persian, and Urdu) and over <strong>142 braille translation tables</strong>. Customize your preferred UI language and document translation tables in <strong>Settings&nbsp;⚙</strong>.</p>
+        <h3>🌐 Localisation &amp; Braille Languages</h3>
+        <p>The Emboss user interface is translated into <strong>7 languages</strong> — German, Spanish, French, Italian, Portuguese, Arabic and Hebrew (the last two with right-to-left layout). The language picker lists all <strong>112 languages</strong> that have braille translation tables; choosing one that is not yet translated keeps the interface in English (and keeps the page language as English so screen readers use the right voice). The interface language does not change the braille code — choose that separately in the braille settings. Over <strong>142 braille translation tables</strong> are available. Customize your preferred UI language and document translation tables in <strong>Settings&nbsp;⚙</strong>.</p>
 
         <h3>Working with Document Structure</h3>
         <p>Emboss reads document <em>structure</em> rather than visual styling. In Word, apply <strong>Title</strong> and <strong>Heading&nbsp;1–3</strong> styles for headings, and standard bulleted/numbered lists for lists. In Markdown or HTML, use semantic heading and list tags. House-style choices (indented 3-1 vs block paragraphs, quotation mark exchange, and list formats) can be customized in <strong>Settings&nbsp;⚙</strong>.</p>

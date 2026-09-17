@@ -1,5 +1,5 @@
 // Production Benchmark & Validation Suite for Collections Grade 7 Textbook
-// Target file: /Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml
+// Target file: tests/nimas_samples/9780544087507NIMAS.xml (committed fixture; ~/Downloads copy is a fallback only)
 
 import fs from 'node:fs';
 import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
@@ -8,6 +8,7 @@ if (!globalThis.XMLSerializer) globalThis.XMLSerializer = XMLSerializer;
 
 import { parseDtbook, parseNimasXml } from '../input/parse.mjs';
 import { exportToNimasXml } from '../input/nimas-export.mjs';
+import { cellPlainText } from '../format/cell-markup.mjs';
 import { formatDocument } from '../format/document.mjs';
 import {
   createEditor, $getRoot, $createTextNode, registerList, registerRichText,
@@ -20,8 +21,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PRIMARY_PATH = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
-const FALLBACK_PATH = path.join(__dirname, 'nimas_samples/9780544087507NIMAS.xml');
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const PRIMARY_PATH = path.join(__dirname, 'nimas_samples/9780544087507NIMAS.xml');
+const FALLBACK_PATH = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
 const TARGET_PATH = fs.existsSync(PRIMARY_PATH) ? PRIMARY_PATH : FALLBACK_PATH;
 
 console.log(`=============================================================`);
@@ -75,7 +77,7 @@ const getWordCount = (doc) => {
   let count = 0;
   const countText = (str) => {
     if (!str) return;
-    const words = str.trim().split(/\s+/).filter(Boolean);
+    const words = cellPlainText(str).trim().split(/\s+/).filter(Boolean);
     count += words.length;
   };
   const walkBlock = (b) => {
@@ -173,7 +175,8 @@ check('All tables formatted successfully in both Spatial and Listed modes', tabl
 console.log('\n--- Section 4: Sidebar & Container Verification ---');
 const sidebars = doc1.blocks.filter(b => b.type === 'box');
 console.log(`Found ${sidebars.length} sidebars/callout boxes in the document`);
-check('Sidebars identified accurately', sidebars.length === 422, `Found ${sidebars.length}`);
+// 423 top-level sidebars (429 minus 6 nested); one inside a list item was dropped before A2.
+check('Sidebars identified accurately', sidebars.length === 423, `Found ${sidebars.length}`);
 
 let sidebarsWithTitles = 0;
 let totalSidebarChildren = 0;
@@ -327,8 +330,8 @@ console.log(`Formatted full ${words1.toLocaleString()}-word document to BANA Bra
 const pages = brailleDoc.split('\x0c');
 console.log(`Total Braille pages generated: ${pages.length}`);
 check('Full document formats to Braille without errors', pages.length > 500, `Generated ${pages.length} pages`);
-check('Top boxlines present across Braille output', brailleDoc.includes('333'), 'Boxlines formatted');
-check('Bottom boxlines present across Braille output', brailleDoc.includes('7777777'), 'Bottom boxlines formatted');
+check('Top boxlines present across Braille output', brailleDoc.includes('7777777'), 'Boxlines formatted');
+check('Bottom boxlines present across Braille output', brailleDoc.includes('GGGGGGG'), 'Bottom boxlines formatted');
 
 // -------------------------------------------------------------
 // Section 7: TOC Coordinate Tracing & Word Sync Verification

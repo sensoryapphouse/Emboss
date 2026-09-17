@@ -2,6 +2,7 @@
 import path from 'path';
 import * as louis from '../engine/louis.mjs';
 import { formatDocument, formatVolumes } from './document.mjs';
+import { brailleNumber } from './page.mjs';
 import { styledTranslate } from './text-style.mjs';
 
 await louis.init(path.join(process.cwd(), 'liblouis', 'tables'));
@@ -39,11 +40,21 @@ for (const v of vols) {
   ok(/,VOLUME/i.test(pages[0]) || /VOL/i.test(pages[0]) || pages[0].includes(louis.translate('Volume', louis.TABLES.uebG2)), `vol ${v.volume}: title page names the volume`);
 }
 
-// 3) Body page numbering is CONTINUOUS across volumes (not restarted). The last
-// content page of the whole doc must appear in the last volume.
-const lastWholePage = whole.split('\f').slice(-1)[0];
-const lastVolPage = vols.slice(-1)[0].brf.split('\f').slice(-1)[0];
-ok(lastWholePage === lastVolPage, 'last page of the book == last page of the last volume (continuous numbering)');
+// 3) Braille page numbering RESTARTS at 1 in every volume (B004 §7 "Braille page
+// numbering must always start at 1 (for each volume)"; Formats §1.15.1d). Apart
+// from that number each volume's body pages are the whole-document pages in order.
+const wholePagesArr = whole.split('\f');
+const noNum = (p) => { const a = p.split('\r\n'); a[0] = a[0].replace(/#[A-J]+$/, '').replace(/\s+$/, ''); return a.join('\r\n'); };
+let wi = 0;
+for (const v of vols) {
+  v.brf.split('\f').slice(1).forEach((pg, k) => {                       // minus the title page
+    const line1 = pg.split('\r\n')[0];
+    ok(line1.endsWith(brailleNumber(k + 1)), `vol ${v.volume} page ${k + 1}: line 1 ends with ${brailleNumber(k + 1)} (got "${line1}")`);
+    ok(noNum(pg) === noNum(wholePagesArr[wi]), `vol ${v.volume} page ${k + 1}: same page as whole-doc page ${wi + 1} apart from the number`);
+    wi++;
+  });
+}
+ok(vols[1].brf.split('\f')[1].split('\r\n')[0].endsWith('#A'), 'volume 2 body starts at braille page #A');
 
 // 4) Total body pages across volumes == whole-doc pages (title pages are extra).
 const bodyAcross = vols.reduce((n, v) => n + v.brf.split('\f').length - 1, 0);  // minus the title page each

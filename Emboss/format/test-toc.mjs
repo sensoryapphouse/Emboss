@@ -71,6 +71,23 @@ const check = (name, cond, detail = '') => {
   const noToc = formatDocument(model, opts);
   check('without o.toc there is no Contents page', !noToc.includes(contentsBrl));
 
+  // --- BANA contents pages are exactly `depth` lines with no entry on line 1 or
+  // line 25 (Formats §2.10.5). Was 26 lines: depth−1 entries plus two furniture lines.
+  {
+    const blocks = [];
+    for (let i = 1; i <= 40; i++) { blocks.push({ type: 'heading', level: 2, text: `Heading ${i}` }); blocks.push({ type: 'para', text: `Body ${i}.` }); }
+    const brf = formatDocument({ blocks }, { mode: 'bana', width: 40, depth: 25, translate: tr, toc: true });
+    const pages = brf.split('\f').map((p) => { const a = p.split('\r\n'); a.pop(); return a; });
+    const toc = pages.filter((p) => /P#[A-J]+$/.test(p[p.length - 1]));
+    check('BANA: several P-numbered contents pages', toc.length >= 2, `toc pages=${toc.length}`);
+    check('BANA: every contents page is exactly depth (25) lines', toc.every((p) => p.length === 25), toc.map((p) => p.length).join(','));
+    check('BANA: every page of the document is ≤ depth lines', pages.every((p) => p.length <= 25), pages.map((p) => p.length).join(','));
+    check('BANA: contents line 1 carries no entry', toc.every((p) => p[0] === ''));
+    check('BANA: contents line 25 is the braille page number only', toc.every((p) => /^\s+P#[A-J]+$/.test(p[24])));
+    check('BANA: contents pages are numbered P#A, P#B ...', toc.every((p, i) => p[24].endsWith('P' + brailleNumber(i + 1))));
+    check('BANA: all 40 entries present', toc.flat().filter((l) => /^\s{2}\S/.test(l) && /#[A-J]+$/.test(l)).length === 40);
+  }
+
   console.log(`\nTOC gate: ${pass}/${pass + fail} checks pass`);
   process.exit(fail ? 1 : 0);
 })();

@@ -453,7 +453,7 @@ test('Nested Sidebar Cards and Multi-level Lists survive round-trip with structu
   };
 
   const xml = exportToNimasXml(complexAst);
-  assert.ok(xml.includes('<sidebar>'));
+  assert.ok(xml.includes('<sidebar render="required">'));
   assert.ok(xml.includes('<hd>LAB SAFETY NOTE</hd>'));
   assert.ok(xml.includes('<list type="ol">'));
 

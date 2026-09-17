@@ -49,7 +49,8 @@ const check = (name, cond, detail = '') => {
   const body = brf.replace(/\r\n/g, ' ');
   check('formatter emits bold indicator before "important"', /\^1IMPORTANT/.test(body), body);
   check('formatter emits italic indicator before "emphasised"', /\.1EMPHASIS/.test(body), body);
-  check('punctuation stays tight after emphasis (no spurious space)', /IMPORTANT1/.test(body), body);
+  // UEB §9: an unemphasised comma after a bold word needs the bold terminator (^'), with no space.
+  check('punctuation stays tight after emphasis, after the terminator (no spurious space)', /IMPORTANT\^'1/.test(body), body);
 
   // ---- 3. a plain paragraph (text, not segments) is byte-identical with/without the tf-aware translate ----
   const plainModel = { title: null, blocks: [{ type: 'para', text: 'This word is important, and this is emphasised.' }] };

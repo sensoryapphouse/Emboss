@@ -4,6 +4,7 @@
 // Speaking block-by-block — rather than one giant utterance — keeps the boundary
 // char offsets local to a block so they map cleanly back to that block's DOM, and
 // lets us highlight the current block via the same link machinery as feature A.
+import { cellSegments } from '../format/cell-markup.mjs';
 
 export function speechAvailable() {
   return typeof globalThis.speechSynthesis !== 'undefined' && typeof globalThis.SpeechSynthesisUtterance !== 'undefined';
@@ -220,15 +221,11 @@ export function buildSpokenItems(model, mathSpeech) {
       const rawRows = (Array.isArray(b.rows) ? b.rows : []).map((r) => (Array.isArray(r) ? r : (r == null ? [] : [r])));
       const colCount = Math.max(rawHeaders.length, ...rawRows.map((r) => r.length));
       const headerCount = rawHeaders.length;
-      for (let ci = 0; ci < headerCount; ci++) {
-        const t = collapse(rawHeaders[ci] != null ? String(rawHeaders[ci]) : '');
-        if (t.trim()) items.push(ident(idx, t, ci));
-      }
+      // A cell is markup or { text, segments } (format/cell-markup.mjs): speak its segments.
+      for (let ci = 0; ci < headerCount; ci++) processSegments(cellSegments(rawHeaders[ci]), idx, ci);
       rawRows.forEach((r, ri) => {
         for (let ci = 0; ci < colCount; ci++) {
-          const unit = headerCount + ri * colCount + ci;
-          const t = collapse((r && r[ci] != null) ? String(r[ci]) : '');
-          if (t.trim()) items.push(ident(idx, t, unit));
+          processSegments(cellSegments(r && r[ci]), idx, headerCount + ri * colCount + ci);
         }
       });
       if (headerCount === 0 && rawRows.length === 0 && (b.title || b.caption)) {

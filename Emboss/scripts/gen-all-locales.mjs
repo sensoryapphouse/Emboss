@@ -1,4 +1,14 @@
 // Tool to generate all 112 Liblouis locale dictionaries and update SUPPORTED_LOCALES metadata
+//
+//   node scripts/gen-all-locales.mjs               write missing web/locales/*.json from DICTIONARIES + locales-data.mjs
+//                                                  (existing files are the master copies and are kept)
+//   node scripts/gen-all-locales.mjs --stamp-only  leave the dictionaries' strings alone; only (re)compute
+//                                                  the "_meta" coverage block in each file and the
+//                                                  "translated" flag in locales-data.mjs
+//
+// Every locale file carries a top-level "_meta": { translated, machineCopy } block (see
+// computeMeta below). i18n.mjs keeps <html lang="en"> for machineCopy locales so screen
+// readers do not switch voice for a UI that is still in English.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,7 +21,52 @@ if (!fs.existsSync(LOCALES_DIR)) {
   fs.mkdirSync(LOCALES_DIR, { recursive: true });
 }
 
+const STAMP_ONLY = process.argv.includes('--stamp-only');
+
 const en = JSON.parse(fs.readFileSync(path.join(LOCALES_DIR, 'en.json'), 'utf8'));
+
+// Flatten a nested dictionary to "a.b.c" -> string, skipping the _meta block.
+function flattenDict(dict, prefix = '', out = {}) {
+  for (const [k, v] of Object.entries(dict || {})) {
+    if (k === '_meta') continue;
+    if (v && typeof v === 'object') flattenDict(v, prefix + k + '.', out);
+    else out[prefix + k] = v;
+  }
+  return out;
+}
+const EN_FLAT = flattenDict(en);
+const EN_KEY_COUNT = Object.keys(EN_FLAT).length;
+
+// Translation coverage of one dictionary against en.json:
+//   translated  — fraction of English keys whose value in this dictionary exists AND differs
+//                 from the English string (a key that is missing falls back to English at
+//                 runtime, so it counts as English, not as translated)
+//   identical   — 1 - translated: fraction of the UI that will display in English
+//   machineCopy — true when >= 90% of the UI is English, i.e. the file is (near enough) a
+//                 copy of en.json rather than a real translation
+export function computeMeta(dict, code) {
+  if (code === 'en') return { translated: 1, identical: 0, machineCopy: false, keys: EN_KEY_COUNT };
+  const flat = flattenDict(dict);
+  let translated = 0;
+  for (const [k, v] of Object.entries(EN_FLAT)) {
+    const t = flat[k];
+    if (typeof t === 'string' && t.trim() !== '' && t !== v) translated++;
+  }
+  const fraction = EN_KEY_COUNT ? translated / EN_KEY_COUNT : 0;
+  const identical = 1 - fraction;
+  return {
+    translated: Number(fraction.toFixed(3)),
+    identical: Number(identical.toFixed(3)),
+    machineCopy: identical >= 0.9,
+    keys: EN_KEY_COUNT,
+  };
+}
+
+// Put _meta first (so it is visible at the top of the file) and return the stamped dict.
+function stampMeta(dict, code) {
+  const { _meta, ...rest } = dict;
+  return { _meta: computeMeta(rest, code), ...rest };
+}
 
 const RTL_LANGS = new Set(['ar', 'he', 'fa', 'ckb', 'ur', 'syc', 'uga', 'yi', 'hbo', 'ks']);
 
@@ -139,6 +194,18 @@ for (const c of CODES) {
 
 const displayNamesEn = new Intl.DisplayNames(['en'], { type: 'language' });
 
+// The locale codes are liblouis table prefixes, not language tags. LANG_TAGS gives the
+// BCP 47 tag for <html lang> (screen readers choose their voice from it): "be" here is
+// Bengali (India), not Belarusian; "aw", "br", "kh", "np", "pu", "ks"… are not tags at all.
+const LANG_TAGS = {
+  afr: 'af', aw: 'awa', be: 'bn-IN', bel: 'be', bh: 'bho', br: 'bra', eth: 'gez', kh: 'kha',
+  mao: 'mi', np: 'ne-IN', pt: 'pt-BR', pu: 'pa-IN', si: 'si-IN', sin: 'si', sot: 'st',
+  tsn: 'tn', zh: 'zh-Hant', zhc: 'zh-Hans', no: 'nb', dra: 'dra', mun: 'mun', smi: 'smi',
+};
+// Not offered as interface languages (Paul, 16 Sep): historical and liturgical languages,
+// language families, and regional duplicates of languages already listed.
+const NOT_UI_LANGUAGES = new Set(['uga', 'cop', 'grc', 'hbo', 'syc', 'eth', 'pi', 'sa', 'dra', 'mun', 'np', 'si', 'smi']);
+
 const localesList = [];
 for (const [lang, codes] of langMap.entries()) {
   const special = SPECIAL_ENDONYMS[lang] || {};
@@ -160,6 +227,7 @@ for (const [lang, codes] of langMap.entries()) {
   const isRtl = RTL_LANGS.has(lang);
   localesList.push({
     code: lang,
+    lang: LANG_TAGS[lang] || lang,
     name: nameEn,
     nativeName: nativeName,
     dir: isRtl ? 'rtl' : 'ltr',
@@ -1967,31 +2035,52 @@ export const DICTIONARIES = {
 
 // Generate locale files for all 112 languages
 let writtenCount = 0;
-for (const locale of localesList) {
-  const code = locale.code;
-  const filePath = path.join(LOCALES_DIR, `${code}.json`);
-  let dict = null;
-  if (DICTIONARIES[code]) {
-    dict = DICTIONARIES[code];
-  } else if (code === 'en') {
-    dict = en;
-  } else {
-    // Clone English as full base structure and customize common elements if available
-    dict = JSON.parse(JSON.stringify(en));
-    if (dict.settings) {
-      dict.settings.language_label = `${locale.nativeName} (${locale.name})`;
+if (!STAMP_ONLY) {
+  for (const locale of localesList) {
+    const code = locale.code;
+    const filePath = path.join(LOCALES_DIR, `${code}.json`);
+    let dict = null;
+    // The files in web/locales are the master copies (translations are completed there and
+    // checked with scripts/check-locale.mjs): an existing file is never overwritten.
+    if (code === 'en' || fs.existsSync(filePath)) continue;
+    if (DICTIONARIES[code]) {
+      dict = DICTIONARIES[code];
+    } else {
+      // No translation: no file (D3, Paul 16 Sep — English copies are not offered).
+      continue;
     }
+    fs.writeFileSync(filePath, JSON.stringify(dict, null, 2), 'utf8');
+    writtenCount++;
   }
-  fs.writeFileSync(filePath, JSON.stringify(dict, null, 2), 'utf8');
-  writtenCount++;
+  console.log(`Successfully generated ${writtenCount} locale dictionary files in ${LOCALES_DIR}`);
 }
 
-console.log(`Successfully generated ${writtenCount} locale dictionary files in ${LOCALES_DIR}`);
+// Stamp every locale file with its "_meta" coverage block and carry the verdict into the
+// picker metadata as "translated" (true = real translation, false = English copy).
+let stamped = 0, real = 0;
+for (const locale of localesList) {
+  const filePath = path.join(LOCALES_DIR, `${locale.code}.json`);
+  if (!fs.existsSync(filePath)) { locale.translated = false; continue; }
+  const dict = stampMeta(JSON.parse(fs.readFileSync(filePath, 'utf8')), locale.code);
+  fs.writeFileSync(filePath, JSON.stringify(dict, null, 2) + '\n', 'utf8');
+  locale.translated = !dict._meta.machineCopy;
+  stamped++;
+  if (locale.translated) real++;
+}
+console.log(`Stamped _meta into ${stamped} locale files (${real} carry real translations, ${stamped - real} are English copies)`);
+
+// Only languages with a real translation are offered in the interface picker (D3).
+const offered = localesList.filter((l) => l.code === 'en' || (l.translated && !NOT_UI_LANGUAGES.has(l.code)));
+for (const l of localesList) {
+  const filePath = path.join(LOCALES_DIR, `${l.code}.json`);
+  if (!offered.includes(l) && fs.existsSync(filePath)) fs.unlinkSync(filePath);
+}
 
 // Output SUPPORTED_LOCALES export snippet
 const localesModulePath = path.join(__dirname, '..', 'web', 'locales-data.mjs');
-const localesModuleContent = `// Auto-generated 112 Liblouis locales metadata
-export const ALL_SUPPORTED_LOCALES = ${JSON.stringify(localesList, null, 2)};
+const localesModuleContent = `// Auto-generated by scripts/gen-all-locales.mjs: the interface languages with a real
+// translation (English copies are not offered; D3). Braille tables are chosen separately.
+export const ALL_SUPPORTED_LOCALES = ${JSON.stringify(offered, null, 2)};
 `;
 fs.writeFileSync(localesModulePath, localesModuleContent, 'utf8');
 console.log(`Generated ${localesModulePath}`);

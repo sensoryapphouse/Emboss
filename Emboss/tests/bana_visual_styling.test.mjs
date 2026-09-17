@@ -19,7 +19,7 @@ import { parseNimasXml } from '../input/parse.mjs';
 
 console.log('=== Running BANA Visual Styling, Boxlines & Style Inspector Test Suite (Phase 5D) ===\n');
 
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, skipped = 0;
 function check(name, cond, detail = '') {
   if (cond) {
     pass++;
@@ -62,7 +62,7 @@ const EXPECTED_INSPECTOR_BADGES_BANA = [
   { style: 'h2', expected: 'Style: Heading 2 (Subheading) (Cell 5) | Cell: 5 | Alignment: Left | Profile: BANA' },
   { style: 'h3', expected: 'Style: Heading 3 (Sub-subheading) (Cell 7) | Cell: 7 | Alignment: Left | Profile: BANA' },
   { style: 'toc', expected: 'Style: TOC Entry (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
-  { style: 'plain', expected: 'Style: TOC Entry (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
+  { style: 'plain', expected: 'Style: Plain List (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'list-bullet', expected: 'Style: Bullet List (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'bullet', expected: 'Style: Bullet List (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'ul', expected: 'Style: Bullet List (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
@@ -82,7 +82,7 @@ const EXPECTED_INSPECTOR_BADGES_BANA = [
   { style: 'table-spatial', expected: 'Style: Spatial Columnar Table (Grid) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'table', expected: 'Style: Spatial Columnar Table (Grid) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'table-listed', expected: 'Style: Listed Table (1-3) | Cell: 1 | Alignment: Left | Profile: BANA' },
-  { style: 'quote', expected: 'Style: Blockquote (3-1) | Cell: 3 | Alignment: Left | Profile: BANA' },
+  { style: 'quote', expected: 'Style: Blockquote (3-3) | Cell: 3 | Alignment: Left | Profile: BANA' },   // Formats §9.2.2 displayed material, blocked 3-3
   { style: 'break', expected: 'Style: Document Break (1-1) | Cell: 1 | Alignment: Left | Profile: BANA' },
   { style: 'print-page', expected: 'Style: Print Page Indicator | Cell: 1 | Alignment: Left | Profile: BANA' },
 ];
@@ -98,6 +98,18 @@ check('UKAAF Style Inspector format for h3 (Cell 5)', actualUkaafH3 === 'Style: 
 
 const actualUkaafBody = formatStyleInspectorBadge('body', 'ukaaf');
 check('UKAAF Style Inspector format for body', actualUkaafBody === 'Style: Body Text (3-1) | Cell: 3 | Alignment: Left | Profile: UKAAF');
+
+// B004 App. B: quoted material 7-5 in UKAAF; TN keeps the house 1-3 there (BANA 7-5, Formats §3.2.2)
+const actualUkaafQuote = formatStyleInspectorBadge('quote', 'ukaaf');
+check('UKAAF Style Inspector format for quote (7-5)', actualUkaafQuote === 'Style: Blockquote (7-5) | Cell: 7 | Alignment: Left | Profile: UKAAF', `Got: "${actualUkaafQuote}"`);
+const actualUkaafNote = formatStyleInspectorBadge('note', 'ukaaf');
+check('UKAAF Style Inspector format for note (1-3)', actualUkaafNote === "Style: Transcriber's Note (1-3) | Cell: 1 | Alignment: Left | Profile: UKAAF", `Got: "${actualUkaafNote}"`);
+const ukaafQuoteMargins = getStyleMargins('quote', 'ukaaf');
+check('UKAAF quote margins are 6/4 with no blank lines', ukaafQuoteMargins.first === 6 && ukaafQuoteMargins.runover === 4 && !ukaafQuoteMargins.blankBefore && !ukaafQuoteMargins.blankAfter);
+const banaQuoteMargins = getStyleMargins('quote', 'bana');
+check('BANA quote margins are 2/2 with blank lines before and after', banaQuoteMargins.first === 2 && banaQuoteMargins.runover === 2 && banaQuoteMargins.blankBefore && banaQuoteMargins.blankAfter);
+const banaAttribMargins = getStyleMargins('attribution', 'bana');
+check('BANA attribution: no blank before, blank after (Formats §9.4.1d)', !banaAttribMargins.blankBefore && banaAttribMargins.blankAfter);
 
 // ----------------------------------------------------------------------------
 // Section 3: CSS Visual Styling & Sidebar Boxline Verification (Task 5.4)
@@ -194,12 +206,16 @@ check('Backward cycle wraps back to start (p)', cur === 'p');
 // ----------------------------------------------------------------------------
 console.log('\n--- Section 6: Scale Verification against Full Textbook ---');
 
-const textbookPath = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const TEXTBOOK_FIXTURE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'nimas_samples/9780544087507NIMAS.xml');
+const TEXTBOOK_DOWNLOADS = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+const textbookPath = fs.existsSync(TEXTBOOK_FIXTURE) ? TEXTBOOK_FIXTURE : TEXTBOOK_DOWNLOADS;
 let textbookXml = '';
 try {
   textbookXml = fs.readFileSync(textbookPath, 'utf8');
 } catch (e) {
-  console.error('Could not read textbook XML:', e.message);
+  skipped++;
+  console.warn(`SKIPPED: Section 6 (textbook scale verification) — could not read ${textbookPath}: ${e.message}`);
 }
 
 if (textbookXml) {
@@ -221,5 +237,5 @@ if (textbookXml) {
   check(`100% style inspector coverage across all ${mappedCount} textbook blocks`, inspectorBadgesGenerated === mappedCount && mappedCount >= 5000);
 }
 
-console.log(`\nPhase 5D test suite complete: ${pass} passed, ${fail} failed.`);
+console.log(`\nPhase 5D test suite complete: ${pass} passed, ${fail} failed, ${skipped} skipped.`);
 if (fail > 0) process.exit(1);

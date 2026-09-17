@@ -65,10 +65,14 @@ test('Multi-element Sidebar: <hd>, <p>, <list>, and <table>', () => {
   const brf = formatDocument(doc, { mode: 'bana', width: 40, depth: 25, translate: (s) => s.toUpperCase() });
   const allLines = brf.split(/\r?\n/);
 
-  // Top border contains dots 2-5 ('3') and title
-  assert.ok(allLines.some(l => l.startsWith('333 ') && l.includes('SCIENCE IN CONTEXT')), 'Top boxline border rendered');
-  // Bottom border contains dots 2-3-5-6 ('7')
-  assert.ok(allLines.some(l => l.startsWith('7777777')), 'Bottom boxline border rendered');
+  // Top box line is dots 2356 ('7') full width (BANA Formats §7.1.3), and the
+  // sidebar heading sits on the line after it with no blank between (§4.3.5)
+  const topIdx = allLines.indexOf('7'.repeat(40));
+  assert.ok(topIdx >= 0, 'Top boxline border rendered');
+  assert.ok(allLines[topIdx + 1].includes('SCIENCE IN CONTEXT'), `Heading follows the top box line (got "${allLines[topIdx + 1]}")`);
+  assert.ok(!allLines.some(l => l.startsWith('333 ')), 'Title is no longer spliced into the top box line');
+  // Bottom box line is dots 12356 ('G') full width
+  assert.ok(allLines.includes('G'.repeat(40)), 'Bottom boxline border rendered');
 
   // Verify XML round-trip
   const exportedXml = exportToNimas(doc);
@@ -133,7 +137,7 @@ test('Sidebar Containing Poetry & Verse with Author Byline', () => {
 
   // Roundtrip export
   const exportedXml = exportToNimas(doc);
-  assert.ok(exportedXml.includes('<sidebar id="sb_poem_01">'));
+  assert.ok(exportedXml.includes('<sidebar id="sb_poem_01" render="required">'));
   assert.ok(exportedXml.includes('<byline>— Carl Sandburg</byline>'));
 
   const reparsed = parseDtbook(exportedXml);
@@ -171,7 +175,7 @@ test('Sidebar Containing Dramatic Play & Stage Directions', () => {
 
   // Roundtrip export
   const exportedXml = exportToNimas(doc);
-  assert.ok(exportedXml.includes('<sidebar id="sb_drama_01">'));
+  assert.ok(exportedXml.includes('<sidebar id="sb_drama_01" render="required">'));
   assert.ok(exportedXml.includes('<p class="bai-stage">'));
   assert.ok(exportedXml.includes('<em>(Bowing low)</em>'));
 
@@ -257,8 +261,8 @@ test('Nested Sidebars & Multi-level Box Containers', () => {
   assert.equal(innerBox.title, 'Lab Safety Warning');
 
   const exportedXml = exportToNimas(doc);
-  assert.ok(exportedXml.includes('<sidebar id="outer_box">'));
-  assert.ok(exportedXml.includes('<sidebar id="inner_box_01">'));
+  assert.ok(exportedXml.includes('<sidebar id="outer_box" render="required">'));
+  assert.ok(exportedXml.includes('<sidebar id="inner_box_01" render="required">'));
   assert.ok(exportedXml.includes('<hd>Lab Safety Warning</hd>'));
 
   const reparsed = parseDtbook(exportedXml);
@@ -308,8 +312,8 @@ test('Sidebar Word-Level Tracing (traceBlock): Accurate coordinates for child bl
 });
 
 test('Production Textbook Sidebar Audit: Full fidelity on large-nimas.xml sidebars', () => {
-  const largeNimasPath = path.resolve(__dirname, '../../test_files/large-nimas.xml');
-  if (!fs.existsSync(largeNimasPath)) return;
+  const largeNimasPath = path.resolve(__dirname, '../web/large-nimas.xml');
+  assert.ok(fs.existsSync(largeNimasPath), `Production textbook fixture must exist at ${largeNimasPath}`);
 
   const xmlContent = fs.readFileSync(largeNimasPath, 'utf8');
   const doc = parseDtbook(xmlContent);

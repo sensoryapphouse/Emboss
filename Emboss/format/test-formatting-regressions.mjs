@@ -32,7 +32,8 @@ const ok = (c, m) => { if (c) pass++; else { fail++; console.log('  FAIL:', m); 
   ok(lines.includes(';;;') && lines.includes(";'"), '#1 code block is a grade-1 passage (;;; … ;\')');
   const listed = formatDocument({ blocks: [{ type: 'table', headers: ['Name', 'Age', 'City'], rows: [['Ann', '31', 'Leeds'], ['Bob', '', 'York']] }] }, base('ukaaf', { tableFormat: 'listed' }));
   ok(badChars(listed).length === 0, `#1 listed table emits only BRF chars, got ${JSON.stringify(badChars(listed))}`);
-  ok(listed.includes('@.<' + translate('Table: Listed Table Format') + '@.>'), '#1 listed-table TN is translated and wrapped in @.< … @.>');
+  // BANA Formats §11.16l note (translated), opened by @.< and closed by @.> after the blank-entry paragraph (h).
+  ok(listed.includes('@.<' + translate('Print').trim()) && /@\.>\r?\n/.test(listed) && badChars(listed).length === 0, '#1 listed-table TN is translated and wrapped in @.< … @.>');
 }
 
 // #2 Unicode braille (tactile raster, cover borders) mapped to BRF ASCII
@@ -59,8 +60,10 @@ const ok = (c, m) => { if (c) pass++; else { fail++; console.log('  FAIL:', m); 
 // #4 transcriber's note indicators are UEB @.< … @.> in both modes, text translated
 for (const mode of ['ukaaf', 'bana']) {
   const brf = formatDocument({ blocks: [{ type: 'note', text: 'Image: a cat' }] }, base(mode));
-  const line = allLines(brf).find((l) => l.startsWith('@.<'));
-  ok(line === '@.<' + translate('Image: a cat') + '@.>', `#4 ${mode} TN = ${JSON.stringify(allLines(brf))}`);
+  const line = allLines(brf).find((l) => l.trim().startsWith('@.<'));
+  ok(line && line.trim() === '@.<' + translate('Image: a cat') + '@.>', `#4 ${mode} TN = ${JSON.stringify(allLines(brf))}`);
+  // margins: BANA 7-5 (Formats §3.2.2 / Example 3-1), UKAAF house 1-3
+  ok(line && line.indexOf('@.<') === (mode === 'bana' ? 6 : 0), `#4 ${mode} TN starts in cell ${mode === 'bana' ? 7 : 1}: ${JSON.stringify(line)}`);
 }
 
 // #5 the colon is translated (UEB dots 25 = "3"), not a raw ":" cell
@@ -145,12 +148,19 @@ for (const mode of ['ukaaf', 'bana']) {
   ok(pagesOf(tall[0].brf).every((pg) => pg.length <= 10), `#10 cover page capped at depth (${pagesOf(tall[0].brf)[0].length} lines)`);
 }
 
-// #11 a columnar table that cannot fit falls back to listed instead of losing columns
+// #11 a columnar table that cannot fit falls back to a non-columnar format instead of losing
+// columns: BANA listed (Formats §11.9), UKAAF paragraph form (B004 §12 Example 2)
 {
   const headers = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu'];
-  const brf = formatDocument({ blocks: [{ type: 'table', headers, rows: [Array(12).fill('longish value here')] }] }, base('ukaaf', { tableFormat: 'columnar' }));
-  ok(brf.includes('@.<'), '#11 over-wide forced-columnar table falls back to the listed format');
-  ok(brf.includes(translate('Mu: longish value here')), '#11 the last column is not sliced off');
+  const doc = { blocks: [{ type: 'table', headers, rows: [Array(12).fill('longish value here')] }] };
+  const bana = formatDocument(doc, base('bana', { tableFormat: 'columnar' }));
+  ok(bana.includes('@.<'), '#11 BANA over-wide forced-columnar table falls back to the listed format');
+  ok(bana.includes(translate('Mu: longish value here')), '#11 BANA: the last column is not sliced off');
+  const uk = formatDocument(doc, base('ukaaf', { tableFormat: 'columnar' }));
+  const flat = allLines(uk).join(' ');
+  ok(flat.includes('@.<' + translate('The following table is brailled in paragraph form. Each entry gives: ' + headers.join('; ') + '.') + '@.>'), '#11 UKAAF over-wide table falls back to paragraph form with the B004 §12 TN');
+  ok(flat.split(translate('longish value here')).length - 1 === 12, '#11 UKAAF paragraph form keeps all 12 entries');
+  ok(allLines(uk).some((l) => l.startsWith('  ') && l.trim().startsWith(translate('longish value here;').trim())), '#11 UKAAF paragraph-form row is a 3-1 paragraph with semicolon separators');
 }
 
 // #12 BANA centred heading keeps >= 3 blank cells each side (Formats 4.4.2)
@@ -191,6 +201,101 @@ for (const mode of ['ukaaf', 'bana']) {
   const expected = raw('ab ', [0, 0, 0]) + 'A' + raw(' cd', [0, 4, 4]);
   ok(got === expected, `#15 typeform sliced per chunk: got ${JSON.stringify(got)} expected ${JSON.stringify(expected)}`);
   ok(got !== translate(text, null), '#15 the emphasis is actually present');
+}
+
+// #16 BANA page change indicator (Formats §1.11.3 / Example 1-9): unspaced dots 36
+// from the left margin, page number at the right margin, no space, no "3 prefix.
+// UKAAF keeps its centred "3#BB (B004 §8). §1.11.3d: only one blank line (after)
+// when a blank would be required both before and after the indicator.
+{
+  const num = translate('22').trim();
+  const brf = formatDocument({ blocks: [{ type: 'para', text: 'Text' }, { type: 'pagenum', page: '22' }, { type: 'para', text: 'More' }] }, base('bana'));
+  const line = allLines(brf).find((l) => l.startsWith('-'));
+  ok(line === '-'.repeat(40 - num.length) + num, `#16 BANA indicator is dots 36 to the number at the right margin: ${JSON.stringify(line)}`);
+  ok(!allLines(brf).some((l) => l.includes('"3')), '#16 BANA has no "3 line-indicator prefix');
+  const uk = formatDocument({ blocks: [{ type: 'para', text: 'Text' }, { type: 'pagenum', page: '22' }, { type: 'para', text: 'More' }] }, base('ukaaf'));
+  const ukLine = allLines(uk).find((l) => l.includes('"3'));
+  ok(ukLine != null && ukLine.trim() === '"3' + num && ukLine.length - ukLine.trim().length === Math.floor((38 - ukLine.trim().length) / 2), `#16 UKAAF form unchanged: ${JSON.stringify(ukLine)}`);
+  const seq = formatDocument({ blocks: [{ type: 'list', items: [{ text: 'migrate' }] }, { type: 'pagenum', page: '22' }, { type: 'heading', level: 2, text: 'Order' }] }, base('bana'));
+  const ls = allLines(seq); const at = ls.findIndex((l) => l.startsWith('-'));
+  ok(at > 0 && ls[at - 1] !== '' && ls[at + 1] === '' && ls[at + 2].trim() === translate('Order').trim(), `#16 one blank line, after the indicator (§1.11.3d / Example 1-10): ${JSON.stringify(ls.slice(at - 1, at + 3))}`);
+  const seq2 = formatDocument({ blocks: [{ type: 'list', items: [{ text: 'migrate' }] }, { type: 'pagenum', page: '22' }, { type: 'para', text: 'plain' }] }, base('bana'));
+  const ls2 = allLines(seq2); const at2 = ls2.findIndex((l) => l.startsWith('-'));
+  ok(at2 > 0 && ls2[at2 - 1] === '' && ls2[at2 + 1] !== '', `#16 blank before the indicator when only the list needs one (§1.11.3b): ${JSON.stringify(ls2.slice(at2 - 1, at2 + 2))}`);
+}
+
+// #17 a 'break' block (the editor's Document Break / <hr>) is rendered like an
+// 'indicator' instead of being dropped (Formats §1.9.5 centred break symbol).
+{
+  for (const mode of ['bana', 'ukaaf']) {
+    const brf = formatDocument({ blocks: [{ type: 'para', text: 'Before' }, { type: 'break', kind: 'asterisks' }, { type: 'para', text: 'After' }] }, base(mode));
+    const ls = allLines(brf).filter((l) => l.trim());
+    ok(ls.some((l) => l.trim() === '"9 "9 "9'), `#17 ${mode}: centred asterisk break emitted`);
+    const brl = formatDocument({ blocks: [{ type: 'para', text: 'Before' }, { type: 'break', kind: 'line' }, { type: 'para', text: 'After' }] }, base(mode));
+    const same = formatDocument({ blocks: [{ type: 'para', text: 'Before' }, { type: 'indicator', kind: 'line' }, { type: 'para', text: 'After' }] }, base(mode));
+    ok(brl === same, `#17 ${mode}: break renders exactly like indicator`);
+    ok(allLines(brl).some((l, i, a) => l === '' && i > 0 && a[i - 1].includes(translate('Before'))), `#17 ${mode}: line break is a blank line`);
+  }
+}
+
+// #18 box lines (Formats §7.1.3, Example 4-6): top `7`, bottom `G`; exterior `=` for
+// a nested set; heading on the line after the top line with no blank (§4.3.5);
+// no blank after the top / before the bottom line (§7.2.1c/d) but the blank a
+// list needs (§8.3.2a) is kept. UKAAF has no box rule and takes the same form.
+{
+  const box = { type: 'box', title: 'Care', blocks: [{ type: 'heading', level: 2, text: 'Care' }, { type: 'para', text: 'Sit up.' }, { type: 'list', items: [{ text: 'one' }] }, { type: 'para', text: 'Tail.' }] };
+  for (const mode of ['bana', 'ukaaf']) {
+    const w = mode === 'bana' ? 40 : 38;
+    const ls = allLines(formatDocument({ blocks: [{ type: 'para', text: 'Lead.' }, box, { type: 'para', text: 'Trail.' }] }, base(mode)));
+    const t = ls.indexOf('7'.repeat(w)), b = ls.indexOf('G'.repeat(w));
+    ok(t > 0 && b > t, `#18 ${mode}: 7 top line and G bottom line present (${t},${b})`);
+    ok(ls[t - 1] === '' && ls[b + 1] === '', `#18 ${mode}: blank line before and after the box (§7.2.1)`);
+    // BANA cell-5 heading (Formats §4.5); UKAAF L2 heading in cell 1 (B004 §5)
+    ok(ls[t + 1].trim() === translate('Care').trim() && ls[t + 1].startsWith(mode === 'bana' ? '    ' : ','), `#18 ${mode}: heading on the line after the top box line, no blank (§4.3.5): ${JSON.stringify(ls[t + 1])}`);
+    ok(ls[b - 1] !== '' && ls[t + 1] !== '', '#18 no blank after top / before bottom line (§7.2.1c/d)');
+    ok(ls.slice(t, b).includes('') , `#18 ${mode}: interior blank line around the list kept (§8.3.2a): ${JSON.stringify(ls.slice(t, b + 1))}`);
+    ok(!ls.some((l) => /^3{5}/.test(l) || l.startsWith('333 ')), `#18 ${mode}: no old-style 333 border`);
+  }
+  const nested = { type: 'box', blocks: [{ type: 'para', text: 'Outer.' }, { type: 'box', blocks: [{ type: 'para', text: 'Inner.' }] }, { type: 'para', text: 'Outer tail.' }] };
+  const nl = allLines(formatDocument({ blocks: [nested] }, base('bana')));
+  const eq = nl.filter((l) => l === '='.repeat(40)).length;
+  ok(eq === 2 && nl.indexOf('7'.repeat(40)) > nl.indexOf('='.repeat(40)) && nl.lastIndexOf('='.repeat(40)) > nl.indexOf('G'.repeat(40)), `#18 nested: exterior = borders enclose interior 7/G (§7.6.1): ${JSON.stringify(nl)}`);
+  ok(nl[nl.indexOf('7'.repeat(40)) - 1] === '' && nl[nl.indexOf('G'.repeat(40)) + 1] === '', '#18 nested: blank before interior top / after interior bottom when not adjacent to the border (§7.6.1c/d)');
+}
+
+// #19 page boundaries for boxes (Formats §7.3.5): a top box line is never the last
+// line of text on a page and a bottom box line is never the first.
+{
+  const w = 40, depth = 25;
+  for (let k = 12; k <= 30; k++) {
+    const blocks = [];
+    for (let i = 0; i < k; i++) blocks.push({ type: 'para', text: `Line ${i + 1}.` });
+    blocks.push({ type: 'box', blocks: [{ type: 'para', text: 'Inside one.' }, { type: 'para', text: 'Inside two.' }] });
+    blocks.push({ type: 'para', text: 'After.' });
+    const pages = pagesOf(formatDocument({ blocks }, base('bana', { depth })));
+    for (const pg of pages) {
+      const body = pg.slice(0, depth - 1);                                   // BANA, no furniture: lines 1..24 are text
+      const text = body.filter((l) => l !== '');
+      ok(text[text.length - 1] !== '7'.repeat(w), `#19 k=${k}: top box line not last on a page (§7.3.5a)`);
+      ok(text[0] !== 'G'.repeat(w), `#19 k=${k}: bottom box line not first on a page (§7.3.5b)`);
+    }
+    ok(pages.every((p) => p.length === depth), `#19 k=${k}: every page is ${depth} lines`);
+  }
+}
+
+// #20 braille page numbers restart at 1 in each volume (Formats §1.15.1d; B004 §7).
+{
+  const blocks = [];
+  for (let i = 1; i <= 120; i++) blocks.push({ type: 'para', text: `Paragraph ${i}.` });
+  for (const mode of ['bana', 'ukaaf']) {
+    const vols = formatVolumes({ title: 'Book', blocks }, base(mode, { volumePages: 2 }));
+    ok(vols.length >= 3, `#20 ${mode}: split into ${vols.length} volumes`);
+    for (const v of vols) {
+      const body = pagesOf(v.brf).slice(1);                                   // minus the volume title page
+      const nums = body.map((pg) => (mode === 'bana' ? pg[pg.length - 1] : pg[0]).trim().match(/#[A-J]+$/)?.[0]);
+      ok(nums.join(',') === body.map((_, i) => `#${'ABCDEFGHIJ'[i]}`).join(','), `#20 ${mode} vol ${v.volume}: pages numbered from #A (got ${nums.join(',')})`);
+    }
+  }
 }
 
 console.log(`\nformatting-regressions gate: ${pass}/${pass + fail} checks pass`);

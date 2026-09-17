@@ -25,7 +25,7 @@ import { parseDtbook, parseNimasXml } from '../input/parse.mjs';
 
 console.log('=== Running BANA Markdown Shortcut Triggers Test Suite (Phase 5C) ===\n');
 
-let pass = 0, fail = 0;
+let pass = 0, fail = 0, skipped = 0;
 function check(name, cond, detail = '') {
   if (cond) {
     pass++;
@@ -476,7 +476,10 @@ for (const nc of NEGATIVE_CASES) {
 // ----------------------------------------------------------------------------
 console.log('\n--- Section 8: Real-World NIMAS XML Textbook Coverage ---');
 
-const xmlPath = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+// Primary source is the committed fixture; the Downloads copy is only a fallback if it exists.
+const TEXTBOOK_FIXTURE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'nimas_samples/9780544087507NIMAS.xml');
+const TEXTBOOK_DOWNLOADS = '/Users/paulblenkhorn/Downloads/9780544087507NIMAS 2.xml';
+const xmlPath = fs.existsSync(TEXTBOOK_FIXTURE) ? TEXTBOOK_FIXTURE : TEXTBOOK_DOWNLOADS;
 if (fs.existsSync(xmlPath)) {
   const xmlContent = fs.readFileSync(xmlPath, 'utf8');
   const parsed = parseNimasXml(xmlContent);
@@ -488,7 +491,7 @@ if (fs.existsSync(xmlPath)) {
   for (const b of blocks) {
     if (b.type === 'heading') headingCount++;
     if (b.type === 'list') listCount++;
-    if (b.type === 'note' || b.style === 'note') noteCount++;
+    if (b.type === 'note' || b.style === 'note' || (b.type === 'graphic' && b.description)) noteCount++;   // image descriptions are transcriber's notes in braille (A26)
     if (b.style === 'quote') quoteCount++;
   }
 
@@ -496,11 +499,12 @@ if (fs.existsSync(xmlPath)) {
   check(`Textbook contains lists (${listCount}) representable via * / 1.`, listCount > 0);
   check(`Textbook contains notes (${noteCount}) representable via [tn`, noteCount > 0);
 } else {
-  console.warn(`Large XML file not found at ${xmlPath}, skipping Section 8 textbook verification.`);
+  skipped++;
+  console.warn(`SKIPPED: Section 8 (textbook coverage) — textbook XML not found at ${xmlPath}`);
 }
 
 console.log(`\n=============================================`);
-console.log(`Phase 5C Test Results: ${pass} passed, ${fail} failed`);
+console.log(`Phase 5C Test Results: ${pass} passed, ${fail} failed, ${skipped} skipped`);
 console.log(`=============================================\n`);
 
 if (fail > 0) {

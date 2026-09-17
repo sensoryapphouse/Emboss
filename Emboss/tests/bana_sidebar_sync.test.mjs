@@ -1,6 +1,6 @@
 // Systematic Test Harness for Step 3C: SidebarNode & Container Visual Cards
 // Tests AST <-> Lexical <-> NIMAS XML synchronization, BANA Boxline formatting,
-// and all 422 real production sidebars from Collections Grade 7 textbook.
+// and all 423 real production sidebars from Collections Grade 7 textbook. (423 top-level: a sidebar inside a list item was dropped before A2.)
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -436,7 +436,7 @@ const untitledBraille = formatDocument(untitledBoxDoc, {
   standard: 'bana'
 });
 const untitledLines = untitledBraille.split('\n');
-check('Untitled box top line is continuous 333 symbols', untitledLines.some(l => l.includes('3333333333333333')));
+check('Untitled box top line is continuous 777 symbols (Formats §7.1.3)', untitledLines.some(l => l.includes('7777777777777777')));
 
 // --- Section 3: Complex Children Inside Sidebars ---
 console.log('\n--- Section 3: Complex Children Inside Sidebars ---');
@@ -506,7 +506,7 @@ editor.update(() => {
 // --- Section 4: NIMAS XML Round-Trip ---
 console.log('\n--- Section 4: NIMAS XML Export & Re-Parse ---');
 const xmlOut = exportToNimasXml(sourceAst);
-check('Exported XML contains <sidebar>', xmlOut.includes('<sidebar>'));
+check('Exported XML contains <sidebar render=…> (DTD: render is #REQUIRED)', /<sidebar[^>]*\srender="(required|optional)"/.test(xmlOut));
 check('Exported XML contains <hd>Focus on Science</hd>', xmlOut.includes('<hd>Focus on Science</hd>'));
 
 const parsedDoc = parseDtbook(xmlOut);
@@ -529,9 +529,9 @@ const brailleResult = formatDocument(sourceAst, {
   trace
 });
 
-check('Top boxline contains 333 symbols', brailleResult.includes('333'));
-check('Bottom boxline contains 777 symbols', brailleResult.includes('7777777'));
-check('Boxline title formatted in braille', brailleResult.includes('FOCUS ON SCIENCE') || brailleResult.includes('333'));
+check('Top boxline contains 777 symbols', brailleResult.includes('7777777'));
+check('Bottom boxline contains GGG symbols', brailleResult.includes('GGGGGGG'));
+check('Boxline title formatted in braille', brailleResult.includes('FOCUS ON SCIENCE'));
 
 const sidebarRowIndices = [];
 (trace.rows || []).forEach((bi, rowIdx) => {
@@ -539,8 +539,8 @@ const sidebarRowIndices = [];
 });
 check('Trace rows map to sidebar block index', sidebarRowIndices.length >= 3);
 
-// --- Section 6: Scale Test across All 422 Real Textbook Sidebars ---
-console.log('\n--- Section 6: Scale Test: All 422 Real Textbook Sidebars ---');
+// --- Section 6: Scale Test across All 423 Real Textbook Sidebars ---
+console.log('\n--- Section 6: Scale Test: All 423 Real Textbook Sidebars ---');
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const textbookXmlPath = path.join(HERE, 'nimas_samples/9780544087507NIMAS.xml');
 
@@ -548,13 +548,13 @@ if (fs.existsSync(textbookXmlPath)) {
   const tbXml = fs.readFileSync(textbookXmlPath, 'utf8');
   const tbDoc = parseDtbook(tbXml);
   const tbBoxes = tbDoc.blocks.filter(b => b.type === 'box');
-  check(`Loaded textbook sidebars: found ${tbBoxes.length} boxes`, tbBoxes.length === 422);
+  check(`Loaded textbook sidebars: found ${tbBoxes.length} boxes`, tbBoxes.length === 423);
 
   const scaleDoc = { blocks: tbBoxes };
   modelToLexicalInEditor(editor, scaleDoc);
   const extractedScale = buildModelFromEditor(editor);
 
-  check('Extracted all 422 sidebars from Lexical', extractedScale.blocks.length === 422);
+  check('Extracted all 423 sidebars from Lexical', extractedScale.blocks.length === 423);
 
   let titlesMatched = 0, childCountMatched = 0;
   for (let i = 0; i < tbBoxes.length; i++) {
@@ -564,8 +564,8 @@ if (fs.existsSync(textbookXmlPath)) {
     if ((origBox.blocks?.length || 0) === (extBox.blocks?.length || 0)) childCountMatched++;
   }
 
-  check('All 422 sidebar titles matched perfectly', titlesMatched === 422, `${titlesMatched}/422`);
-  check('All 422 sidebars preserved 100% of child elements', childCountMatched === 422, `${childCountMatched}/422`);
+  check('All 423 sidebar titles matched perfectly', titlesMatched === 423, `${titlesMatched}/423`);
+  check('All 423 sidebars preserved 100% of child elements', childCountMatched === 423, `${childCountMatched}/423`);
 } else {
   console.warn('Textbook sample file not found at:', textbookXmlPath);
 }

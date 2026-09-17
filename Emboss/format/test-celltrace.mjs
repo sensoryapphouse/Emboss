@@ -150,5 +150,33 @@ function cellsForWord(block, o, unit, wordStart, wordEnd) {
   }
 }
 
+// Table cells with emphasis, grade-1 runs and maths (A25): markup strings and
+// { text, segments } objects, in every table format and both modes, with a stub maths
+// translator so the maths cells take part.
+{
+  const richCells = (format) => ({
+    type: 'table', format,
+    headers: [{ text: 'Term', segments: [{ type: 'text', text: 'Term', tf: 4 }] }, 'Value *(units)*'],
+    rows: [
+      ['**Area** of a circle', { text: 'pi r^2', segments: [{ type: 'math', latex: '\\pi r^2' }, { type: 'text', text: ' square units' }] }],
+      ['`www.example.com`', 'plain 5 \\* 3'],
+      [{ text: 'x', segments: [{ type: 'text', text: 'the ' }, { type: 'text', text: 'first', tf: 1 }, { type: 'text', text: ' entry' }] }, ''],
+    ],
+  });
+  for (const mode of ['ukaaf', 'bana']) {
+    const o = baseOpts({ mode, mathToBrf: (seg) => `_${seg.latex.length}` });
+    for (const format of ['spatial', 'listed', 'paragraph']) {
+      const tb = richCells(format);
+      const real = formatBlock(tb, o);
+      const traced = traceBlock(tb, o);
+      ok(traced.length === real.length && traced.every((t, i) => t.s === real[i]),
+        `rich-cell table no drift: ${format}/${mode}\n    real:   ${JSON.stringify(real)}\n    traced: ${JSON.stringify(traced.map((t) => t.s))}`);
+      traced.forEach((t) => { for (let i = 0; i < t.s.length; i++) if (t.src[i] != null) ok(t.s[i] !== ' ', `rich-cell src on non-space cell (${format}/${mode})`); });
+      ok(cellsForWord(tb, o, 2, 2, 6).length > 0, `bold "Area" maps to cells (${format}/${mode})`);
+      ok(!real.join('\n').includes('**'), `no literal markup in braille (${format}/${mode})`);
+    }
+  }
+}
+
 console.log(`\ncell-trace gate: ${pass}/${pass + fail} checks pass`);
 process.exit(fail ? 1 : 0);

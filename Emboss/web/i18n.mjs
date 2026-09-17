@@ -39,7 +39,8 @@ export function registerLocale(code, dictionary, info = null) {
 export function getLocaleInfo(code = currentLocale) {
   const normalized = normalizeCode(code);
   const base = normalized.split('-')[0];
-  return SUPPORTED_LOCALES.find(l => l.code === normalized || l.code === base) || SUPPORTED_LOCALES[0];
+  return SUPPORTED_LOCALES.find(l => l.code === normalized || l.code === base)
+    || SUPPORTED_LOCALES.find(l => l.code === 'en') || SUPPORTED_LOCALES[0];
 }
 
 /**
@@ -87,6 +88,19 @@ export function getOrderedLocales(currentCode = currentLocale) {
  */
 export function getLocale() {
   return currentLocale;
+}
+
+/**
+ * Translation coverage of the active dictionary, from the `_meta` block that
+ * scripts/gen-all-locales.mjs stamps into every web/locales/*.json:
+ *   translated  — fraction of UI strings that differ from English (0..1)
+ *   machineCopy — true when >= 90% of the UI would show in English
+ * A dictionary without `_meta` (e.g. one passed to registerLocale) is assumed translated.
+ */
+export function getLocaleMeta() {
+  const m = activeDictionary && typeof activeDictionary._meta === 'object' ? activeDictionary._meta : null;
+  if (currentLocale === 'en' || !m) return { translated: 1, machineCopy: false };
+  return { translated: typeof m.translated === 'number' ? m.translated : 1, machineCopy: m.machineCopy === true };
 }
 
 /**
@@ -150,7 +164,7 @@ async function loadLocaleDictionary(code) {
     ];
     for (const p of candidatePaths) {
       try {
-        const res = await fetch(`${p}?v=20260915_171500`, { cache: 'no-cache' });
+        const res = await fetch(`${p}?v=20260918_050000`, { cache: 'no-cache' });
         if (res.ok) {
           const dict = await res.json();
           localeCache.set(normalized, dict);
@@ -232,7 +246,9 @@ export function translateDOM(root = null) {
  * Set active UI language and trigger dynamic DOM & event updates
  */
 export async function setLocale(code) {
-  const normalized = normalizeCode(code);
+  let normalized = normalizeCode(code);
+  // A language that is no longer offered (only real translations are; D3) falls back to English.
+  if (!SUPPORTED_LOCALES.some(l => l.code === normalized || l.code === normalized.split('-')[0])) normalized = 'en';
   const info = getLocaleInfo(normalized);
 
   // Ensure fallback 'en' is loaded
@@ -259,9 +275,19 @@ export async function setLocale(code) {
   currentLocale = normalized;
   activeDictionary = targetDict || fallbackDictionary;
 
+  // Only advertise the chosen locale as the document language when the dictionary
+  // really is in that language. Most locale files are English copies stamped
+  // _meta.machineCopy by scripts/gen-all-locales.mjs (and a locale whose file failed
+  // to load is plain English too). Setting lang="ja" on an English UI makes screen
+  // readers switch to a Japanese synthesiser voice and read English text unintelligibly,
+  // so those stay lang="en". Direction still follows the locale so RTL layouts work.
+  const meta = getLocaleMeta();
+  // info.lang is the BCP 47 tag (locale codes are braille-table prefixes: "be" is Bengali here).
+  const langAttr = (normalized !== 'en' && (activeDictionary === fallbackDictionary || meta.machineCopy)) ? 'en' : (info.lang || normalized);
+
   // Update HTML tag direction and lang attributes in browser
   if (typeof document !== 'undefined') {
-    document.documentElement.lang = normalized;
+    document.documentElement.lang = langAttr;
     document.documentElement.dir = info.dir || 'ltr';
     translateDOM();
   }
@@ -269,7 +295,7 @@ export async function setLocale(code) {
   // Dispatch custom event for reactive listeners
   if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
     try {
-      window.dispatchEvent(new CustomEvent('i18n:localechange', { detail: { locale: normalized, info } }));
+      window.dispatchEvent(new CustomEvent('i18n:localechange', { detail: { locale: normalized, info, lang: langAttr, translated: meta.translated, machineCopy: meta.machineCopy } }));
     } catch (_) {}
   }
 

@@ -16,35 +16,41 @@ const $isTextNode = (n) => n instanceof TextNode;
 const $isElementNode = (n) => typeof n?.getChildren === 'function';
 const $isQuoteNode = (n) => n instanceof QuoteNode;
 const $isListItemNode = (n) => n instanceof ListItemNode;
-import { formatDocument, formatDocumentAsync, formatVolumes } from '/format/document.mjs?v=20260915_173000';
-import { formatStyleInspectorBadge, STYLE_DEFINITIONS, getStyleMargins } from '/format/styles.mjs';
-import { exportToNimasXml } from '/input/nimas-export.mjs?v=20260915_170500';
+import { formatDocument, formatDocumentAsync, formatVolumes, tableLayout } from '/format/document.mjs?v=20260918_100000';
+import { formatStyleInspectorBadge, STYLE_DEFINITIONS, getStyleMargins } from '/format/styles.mjs?v=20260918_050000';
+import { exportToNimasXml } from '/input/nimas-export.mjs?v=20260918_090000';
+import { buildNimasPackage } from '/input/nimas-package.mjs?v=20260918_090000';
+import { cellSegments, cellPlainText, cellToMarkup } from '/format/cell-markup.mjs?v=20260918_100000';
+// Table cell rich editing (G15): segments <-> the small HTML string a contenteditable
+// table cell shows/edits, so a cell displays real bold/italic/underline/uncontracted
+// formatting and atomic maths/note-reference chips instead of markup characters.
+import { cellToEditableHtml, cellHtmlToSegments, cellFromEditableHtml } from '/format/cell-dom.mjs?v=20260918_110000';
 import { makeZip } from '/web/zip.mjs';
 import { exportToDocxBlob } from '/web/docx-export.mjs';
 import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs?v=20260914_192000';
 import * as louis from '/engine/louis-browser.mjs';
 import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs?v=20260915_102500';
 import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs?v=20260912_180700';
-import { parseFile, BINARY_EXTS } from '/input/parse.mjs?v=20260915_173000';
+import { parseFile, BINARY_EXTS } from '/input/parse.mjs?v=20260918_090000';
 import { BRF64, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
 import * as maths from '/engine/maths.mjs';
 import { mathmlToLatex } from '/engine/mathml-to-latex.mjs';
 import { styledTranslate, exchangeQuotes } from '/format/text-style.mjs';
 import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, isGraphicsSupported, effectiveMathCode } from '/web/settings.mjs';
 import { resolveTable, makeTranslators, UEB_TABLES } from '/web/braille-table.mjs';
-import { spoolToEmbosser, spoolToNetworkEmbosser, isWebSerialSupported, initEmbosserAutoDetect } from '/format/spooler.mjs';
+import { spoolToEmbosser, spoolToNetworkEmbosser, isWebSerialSupported, initEmbosserAutoDetect } from '/format/spooler.mjs?v=20260918_050000';
 import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs?v=20260915_142000';
 import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs?v=20260915_142000';
 import { TACTILE_SVG_LIBRARY, TACTILE_SVG_CATEGORIES } from '/web/tactile-library.js';
 import { exportToPef } from '/format/pef.mjs';
 import { exportToEbraille } from '/format/ebraille.mjs';
 import { tactileDisplay, rasterizeSvgToDotPadCells, rasterizeSvgToMonarchCells, charToDotMask } from '/format/tactile-display.mjs?v=20260915_142000';
-import { openTactileSymbolBrowser } from '/web/tactile-browser.mjs';
+import { openTactileSymbolBrowser } from '/web/tactile-browser.mjs?v=20260918_050000';
 import { CODES } from '/Translate/braille-codes.mjs';
 import { describeUebMaths } from '/Translate/ueb-maths-to-latex.mjs';
 import { describeNemeth } from '/Translate/nemeth-symbols.mjs';
 import { getAndClearHandoffDoc } from '/web/handoff-db.mjs';
-import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs?v=20260915_171500';
+import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs?v=20260918_050000';
 
 if (typeof window !== 'undefined') {
   window.parseFile = parseFile;
@@ -119,8 +125,19 @@ function updateCaretLocation(blockIdx = null, rowIdx = null, colIdx = null) {
     rIdx = lastTrace.rows.indexOf(bIdx);
   }
   
-  const bPage = rIdx >= 0 ? Math.floor(rIdx / lpp) + 1 : 1;
-  const bLine = rIdx >= 0 ? (rIdx % lpp) + 1 : 1;
+  // Braille page and line come from the formatted pages themselves (running heads, page
+  // number lines, contents pages and suppressed blank lines make row ÷ lines-per-page drift).
+  let bPage = 1, bLine = 1;
+  const starts = lastPageLineStarts;
+  if (rIdx >= 0 && Array.isArray(starts) && starts.length) {
+    let p = 0;
+    while (p + 1 < starts.length && starts[p + 1] <= rIdx) p++;
+    bPage = p + 1;
+    bLine = rIdx - starts[p] + 1;
+  } else if (rIdx >= 0) {
+    bPage = Math.floor(rIdx / lpp) + 1;
+    bLine = (rIdx % lpp) + 1;
+  }
   const bCell = typeof colIdx === 'number' && colIdx >= 0 ? colIdx + 1 : (activeCaretCol >= 0 ? activeCaretCol + 1 : 1);
   
   const locStr = printPage
@@ -129,16 +146,44 @@ function updateCaretLocation(blockIdx = null, rowIdx = null, colIdx = null) {
     
   setStatus(locStr);
 }
-const announce = (msg) => { const a = $id('announce'); if (!a) return; a.textContent = ''; setTimeout(() => { a.textContent = msg; }, 30); };
+// Live-region announcer. The region is cleared, then set ~30 ms later so that repeating
+// the same text is still spoken. Rapid calls (slash-menu filtering announces on every
+// keystroke) coalesce: while one message is pending, a newer one *replaces* it — latest
+// wins — so the final message is always the one announced, never an arbitrary earlier one.
+const announce = (() => {
+  let pending = null;      // message waiting for the clear→set gap
+  let timerId = 0;
+  return (msg) => {
+    const a = $id('announce'); if (!a) return;
+    pending = msg;
+    if (timerId) return;                     // a flush is already scheduled; it will pick up `pending`
+    a.textContent = '';
+    timerId = setTimeout(() => {
+      timerId = 0;
+      const m = pending; pending = null;
+      if (m != null) a.textContent = m;
+    }, 30);
+  };
+})();
 const TF = louis.TYPEFORM;   // single source of truth (italic=1, underline=2, bold=4)
 
 // BANA / UKAAF style metadata prototype extensions on core Lexical nodes
 ParagraphNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
 ParagraphNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+// A paragraph the source split around a print page turn: 'continued' = the page turn follows
+// it, 'continuation' = it resumes after one (formatted from cell 1, BANA §1.11.3 / B004 §8).
+// The NIMAS exporter rejoins the pieces into one <p> with the <pagenum> inline.
+ParagraphNode.prototype.getPageTurn = function() { return this.getLatest().__pageTurn || null; };
+ParagraphNode.prototype.setPageTurn = function(v) { this.getWritable().__pageTurn = v || null; return this; };
+// A footnote paragraph keeps its note id (the target of note references, A5) and kind.
+ParagraphNode.prototype.getNote = function() { return this.getLatest().__note || null; };
+ParagraphNode.prototype.setNote = function(v) { this.getWritable().__note = v && v.id ? { id: String(v.id), kind: v.kind || null } : null; return this; };
 const origParaClone = ParagraphNode.prototype.afterCloneFrom;
 ParagraphNode.prototype.afterCloneFrom = function(prev) {
   if (origParaClone) origParaClone.call(this, prev);
   this.__banaStyle = prev.__banaStyle || null;
+  this.__pageTurn = prev.__pageTurn || null;
+  this.__note = prev.__note || null;
 };
 const origParaCreateDOM = ParagraphNode.prototype.createDOM;
 ParagraphNode.prototype.createDOM = function(config) {
@@ -148,6 +193,8 @@ ParagraphNode.prototype.createDOM = function(config) {
     dom.classList.add(`bana-style-${style}`);
     dom.dataset.banaStyle = style;
   }
+  const turn = this.getPageTurn();
+  if (turn === 'continuation' || turn === 'both') dom.classList.add('bana-continuation');
   return dom;
 };
 const origParaUpdateDOM = ParagraphNode.prototype.updateDOM;
@@ -163,6 +210,12 @@ ParagraphNode.prototype.updateDOM = function(prevNode, dom, config) {
     } else {
       delete dom.dataset.banaStyle;
     }
+    updated = true;
+  }
+  const prevTurn = prevNode ? prevNode.getPageTurn() : null;
+  const nextTurn = this.getPageTurn();
+  if (prevTurn !== nextTurn) {
+    dom.classList.toggle('bana-continuation', nextTurn === 'continuation' || nextTurn === 'both');
     updated = true;
   }
   return updated;
@@ -181,18 +234,30 @@ ParagraphNode.prototype.exportJSON = function() {
   };
   const style = this.getBanaStyle();
   if (style) json.banaStyle = style;
+  const turn = this.getPageTurn();
+  if (turn) json.pageTurn = turn;
+  const note = this.getNote();
+  if (note) json.note = note;
   return json;
 };
 const origParaUpdateFromJSON = ParagraphNode.prototype.updateFromJSON;
 ParagraphNode.prototype.updateFromJSON = function(serializedNode) {
   const node = origParaUpdateFromJSON ? origParaUpdateFromJSON.call(this, serializedNode) : this;
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
+  if (serializedNode?.note) node.setNote(serializedNode.note);
   return node;
 };
-const origParaImportJSON = ParagraphNode.importJSON;
+// A node class's own static importJSON, or null. Lexical nodes declared with $config()
+// inherit LexicalNode.importJSON, which always throws — calling that from a wrapper made
+// every undo/redo drop the document from the first list onwards (G7).
+const ownImportJSON = (Klass) => (Object.prototype.hasOwnProperty.call(Klass, 'importJSON') ? Klass.importJSON : null);
+const origParaImportJSON = ownImportJSON(ParagraphNode);
 ParagraphNode.importJSON = function(serializedNode) {
-  const node = origParaImportJSON ? origParaImportJSON(serializedNode) : $createParagraphNode().updateFromJSON(serializedNode);
+  const node = origParaImportJSON ? origParaImportJSON.call(this, serializedNode) : $createParagraphNode().updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
+  if (serializedNode?.note) node.setNote(serializedNode.note);
   return node;
 };
 
@@ -264,9 +329,9 @@ ListNode.prototype.updateFromJSON = function(serializedNode) {
   if (serializedNode?.listKind) node.setListKind(serializedNode.listKind);
   return node;
 };
-const origListImportJSON = ListNode.importJSON;
+const origListImportJSON = ownImportJSON(ListNode);
 ListNode.importJSON = function(serializedNode) {
-  const node = origListImportJSON ? origListImportJSON(serializedNode) : $createListNode(serializedNode?.listType, serializedNode?.start).updateFromJSON(serializedNode);
+  const node = origListImportJSON ? origListImportJSON.call(this, serializedNode) : $createListNode(serializedNode?.listType, serializedNode?.start).updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.listKind) node.setListKind(serializedNode.listKind);
   return node;
@@ -274,6 +339,15 @@ ListNode.importJSON = function(serializedNode) {
 
 ListItemNode.prototype.getPage = function() { return this.getLatest().__page || null; };
 ListItemNode.prototype.setPage = function(p) { this.getWritable().__page = p || null; return this; };
+// The print marker a loaded item had ("3.", "b)") — kept so braille and the save follow print
+// (A26); items typed in the editor have none and are numbered by position.
+const NO_MARKER = '\u0000';                    // a loaded item that had no print marker
+ListItemNode.prototype.getMarker = function() { return this.getLatest().__marker || null; };
+// A literal bullet the print text starts with ("• ") is hidden in the editor (the list shows
+// its own) but kept here and put back on save, so the text is not changed (A26).
+ListItemNode.prototype.getBulletPrefix = function() { return this.getLatest().__bulletPrefix || null; };
+ListItemNode.prototype.setBulletPrefix = function(p) { this.getWritable().__bulletPrefix = p ? (typeof p === 'string' ? { text: p, tf: 0 } : p) : null; return this; };
+ListItemNode.prototype.setMarker = function(m) { this.getWritable().__marker = m || null; return this; };
 ListItemNode.prototype.getLevel = function() {
   const latest = this.getLatest();
   if (latest.__level != null) return latest.__level;
@@ -294,6 +368,8 @@ ListItemNode.prototype.afterCloneFrom = function(prev) {
   if (origItemClone) origItemClone.call(this, prev);
   this.__banaStyle = prev.__banaStyle || null;
   this.__page = prev.__page || null;
+  this.__marker = prev.__marker || null;
+  this.__bulletPrefix = prev.__bulletPrefix || null;
   this.__level = prev.__level != null ? prev.__level : (prev.__indent != null ? prev.__indent : null);
 };
 const origItemCreateDOM = ListItemNode.prototype.createDOM;
@@ -357,6 +433,10 @@ ListItemNode.prototype.exportJSON = function() {
   if (style) json.banaStyle = style;
   const page = this.getPage();
   if (page != null) json.page = page;
+  const marker = this.getMarker();
+  if (marker) json.marker = marker;
+  const bullet = this.getBulletPrefix();
+  if (bullet) json.bulletPrefix = bullet;
   const level = this.getLevel();
   if (level != null && level !== 0) json.level = level;
   return json;
@@ -366,14 +446,18 @@ ListItemNode.prototype.updateFromJSON = function(serializedNode) {
   const node = origItemUpdateFromJSON ? origItemUpdateFromJSON.call(this, serializedNode) : this;
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.marker) node.setMarker(serializedNode.marker);
+  if (serializedNode?.bulletPrefix) node.setBulletPrefix(serializedNode.bulletPrefix);
   if (serializedNode?.level != null) node.setLevel(serializedNode.level);
   return node;
 };
-const origItemImportJSON = ListItemNode.importJSON;
+const origItemImportJSON = ownImportJSON(ListItemNode);
 ListItemNode.importJSON = function(serializedNode) {
-  const node = origItemImportJSON ? origItemImportJSON(serializedNode) : $createListItemNode(serializedNode?.checked).updateFromJSON(serializedNode);
+  const node = origItemImportJSON ? origItemImportJSON.call(this, serializedNode) : $createListItemNode(serializedNode?.checked).updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.marker) node.setMarker(serializedNode.marker);
+  if (serializedNode?.bulletPrefix) node.setBulletPrefix(serializedNode.bulletPrefix);
   if (serializedNode?.level != null) node.setLevel(serializedNode.level);
   return node;
 };
@@ -433,9 +517,9 @@ HeadingNode.prototype.updateFromJSON = function(serializedNode) {
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   return node;
 };
-const origHeadingImportJSON = HeadingNode.importJSON;
+const origHeadingImportJSON = ownImportJSON(HeadingNode);
 HeadingNode.importJSON = function(serializedNode) {
-  const node = origHeadingImportJSON ? origHeadingImportJSON(serializedNode) : $createHeadingNode(serializedNode?.tag || 'h1').updateFromJSON(serializedNode);
+  const node = origHeadingImportJSON ? origHeadingImportJSON.call(this, serializedNode) : $createHeadingNode(serializedNode?.tag || 'h1').updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   return node;
 };
@@ -502,10 +586,67 @@ const $createBanaParagraphNode = (style) => {
 };
 
 // ---- custom nodes ----
+// An equation. The editor edits LaTeX (MathLive), but an equation loaded from a document
+// also keeps its original MathML: until the user changes it, that MathML is what is saved
+// and brailled. Converting MathML → LaTeX → MathML on every save lost equations the
+// converters could not round-trip (41 of 852 in a real textbook; matrices came back with
+// "?" and invalid <munder>). `__srcLatex` is the LaTeX the node was created with, so
+// "unchanged" is exact; any real edit makes getSourceMathml() return null.
+// A note reference (DTBook <noteref>/<annoref>, A5): an atomic superscript mark that keeps
+// its target note id, so braille superscripts it (BANA Formats §16.2.2) and the save
+// writes <noteref idref="#…"> again.
+class NoteRefNode extends TextNode {
+  static getType() { return 'emboss-noteref'; }
+  static clone(n) { return new NoteRefNode(n.__text, n.__idref, n.__annoref, n.__key); }
+  constructor(text = '', idref = null, annoref = false, key) {
+    super(text, key);
+    this.__idref = idref || null;
+    this.__annoref = !!annoref;
+  }
+  getIdref() { return this.getLatest().__idref; }
+  isAnnoref() { return this.getLatest().__annoref; }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-noteref');
+    dom.style.verticalAlign = 'super';
+    dom.style.fontSize = '0.75em';
+    if (this.__idref) dom.dataset.noteref = this.__idref;
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-noteref', version: 1, idref: this.__idref, annoref: this.__annoref }; }
+  static importJSON(j) { return new NoteRefNode(j.text || '', j.idref || null, !!j.annoref).updateFromJSON(j).setMode('token'); }
+}
+const $createNoteRefNode = (text, idref = null, annoref = false) => new NoteRefNode(text, idref, annoref).setMode('token');
+const $isNoteRefNode = (n) => n instanceof NoteRefNode;
+// A print line number in prose (A30): an atomic mark, shown small in the margin colour;
+// braille puts it at the right margin (BANA Formats §15.3) and the save writes
+// <span class="linenum"> again.
+class LineNumberNode extends TextNode {
+  static getType() { return 'emboss-linenum'; }
+  static clone(n) { return new LineNumberNode(n.__text, n.__key); }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-linenum');
+    dom.style.fontSize = '0.75em';
+    dom.style.opacity = '0.7';
+    dom.title = t('app.editor.print_line_number');
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-linenum', version: 1 }; }
+  static importJSON(j) { return new LineNumberNode(j.text || '').updateFromJSON(j).setMode('token'); }
+}
+const $createLineNumberNode = (text) => new LineNumberNode(text).setMode('token');
+const $isLineNumberNode = (n) => n instanceof LineNumberNode;
+
 class MathNode extends DecoratorNode {
   static getType() { return 'emboss-math'; }
-  static clone(n) { return new MathNode(n.__latex, n.__key); }
-  constructor(latex = '', key) { super(key); this.__latex = latex; }
+  static clone(n) { return new MathNode(n.__latex, n.__key, n.__mathml, n.__srcLatex); }
+  constructor(latex = '', key, mathml = null, srcLatex = null) {
+    super(key);
+    this.__latex = latex;
+    this.__mathml = mathml || null;
+    this.__srcLatex = mathml ? (srcLatex ?? latex) : null;
+  }
   createDOM() {
     const s = document.createElement('span');
     s.className = 'math-embed';
@@ -513,15 +654,27 @@ class MathNode extends DecoratorNode {
     return s;
   }
   updateDOM() { return false; }
-  setLatex(l) { this.getWritable().__latex = l; }
+  setLatex(l) { if (l !== this.getLatest().__latex) this.getWritable().__latex = l; }
   getLatex() { return this.getLatest().__latex; }
+  // The original MathML while the equation is unedited, else null.
+  getSourceMathml() {
+    const n = this.getLatest();
+    return n.__mathml && n.__latex === n.__srcLatex ? n.__mathml : null;
+  }
   decorate() { return this.getLatest().__latex; }
   isInline() { return true; }
   isKeyboardSelectable() { return true; }
-  exportJSON() { return { type: 'emboss-math', version: 1, latex: this.__latex }; }
-  static importJSON(j) { return new MathNode(j.latex); }
+  exportJSON() {
+    const j = { type: 'emboss-math', version: 1, latex: this.__latex };
+    if (this.__mathml) { j.mathml = this.__mathml; j.srcLatex = this.__srcLatex; }
+    return j;
+  }
+  static importJSON(j) { return new MathNode(j.latex, undefined, j.mathml || null, j.srcLatex ?? null); }
 }
-const $createMathNode = (latex) => new MathNode(latex);
+// Placeholder shown in the maths field when MathML cannot be converted to LaTeX for
+// editing; the original MathML is still what gets saved and brailled.
+const UNEDITABLE_MATH_LATEX = '\\text{[equation]}';
+const $createMathNode = (latex, mathml = null) => new MathNode(latex || (mathml ? UNEDITABLE_MATH_LATEX : ''), undefined, mathml);
 const $isMathNode = (n) => n instanceof MathNode;
 
 class BreakNode extends DecoratorNode {
@@ -537,7 +690,7 @@ class BreakNode extends DecoratorNode {
   createDOM() {
     const d = document.createElement('div');
     d.className = 'doc-break';
-    d.textContent = this.__kind === 'line' ? '————————' : '∗ ∗ ∗';
+    d.textContent = this.__kind === 'line' ? '————————' : (this.__kind === 'asterism' ? '⁂ ⁂ ⁂' : '∗ ∗ ∗');
     return d;
   }
   updateDOM() { return false; }
@@ -551,10 +704,12 @@ const $isBreakNode = (n) => n instanceof BreakNode;
 
 class PrintPageNode extends DecoratorNode {
   static getType() { return 'emboss-print-page'; }
-  static clone(n) { return new PrintPageNode(n.__page, n.__key); }
+  static clone(n) { const c = new PrintPageNode(n.__page, n.__key); c.__pnId = n.__pnId || null; c.__pageType = n.__pageType || null; return c; }
   constructor(page = '1', key) {
     super(key);
     this.__page = String(page);
+    this.__pnId = null;          // the source <pagenum> id and page type, kept for the save (A26)
+    this.__pageType = null;
   }
   createDOM() {
     const d = document.createElement('div');
@@ -566,10 +721,11 @@ class PrintPageNode extends DecoratorNode {
   getPage() { return this.getLatest().__page; }
   decorate() { return { type: 'print-page', page: this.getPage() }; }
   isInline() { return false; }
-  exportJSON() { return { type: 'emboss-print-page', version: 1, page: this.__page }; }
-  static importJSON(j) { return new PrintPageNode(j.page); }
+  getSource() { const n = this.getLatest(); return { id: n.__pnId, pageType: n.__pageType }; }
+  exportJSON() { return { type: 'emboss-print-page', version: 1, page: this.__page, ...(this.__pnId ? { id: this.__pnId } : {}), ...(this.__pageType ? { pageType: this.__pageType } : {}) }; }
+  static importJSON(j) { const n = new PrintPageNode(j.page); n.__pnId = j.id || null; n.__pageType = j.pageType || null; return n; }
 }
-const $createPrintPageNode = (page) => new PrintPageNode(page);
+const $createPrintPageNode = (page, src = null) => { const n = new PrintPageNode(page); if (src) { n.__pnId = src.id || null; n.__pageType = src.pageType || null; } return n; };
 const $isPrintPageNode = (n) => n instanceof PrintPageNode;
 
 class GraphicNode extends DecoratorNode {
@@ -595,7 +751,7 @@ class GraphicNode extends DecoratorNode {
     const d = document.createElement('div');
     d.className = 'doc-graphic-block size-' + this.__size;
     d.setAttribute('role', 'figure');
-    d.setAttribute('aria-label', this.__alt || 'Tactile diagram');
+    d.setAttribute('aria-label', this.__alt || t('app.editor.tactile_diagram_aria'));
     return d;
   }
   // Returning true makes Lexical recreate the element when the node changes, so the
@@ -642,6 +798,58 @@ class GraphicNode extends DecoratorNode {
 const $createGraphicNode = (svg, alt, title, textures, brailleLabels, size) => new GraphicNode(svg, alt, title, textures, brailleLabels, size);
 const $isGraphicNode = (n) => n instanceof GraphicNode;
 
+// A print image (A26): keeps its source, alt text, print caption (with inline segments such
+// as note references) and description, so the save writes <img>/<imggroup> back and braille
+// follows BANA Formats §6. Shown as a card; the image itself only when its source can load.
+class ImageNode extends DecoratorNode {
+  static getType() { return 'emboss-image'; }
+  static clone(n) { return new ImageNode({ ...n.__image }, n.__key); }
+  constructor(image = {}, key) {
+    super(key);
+    this.__image = {
+      src: String(image.src || ''), alt: String(image.alt || ''),
+      caption: image.caption ? String(image.caption) : '',
+      captionSegments: Array.isArray(image.captionSegments) ? image.captionSegments : null,
+      description: image.description ? String(image.description) : '',
+    };
+  }
+  getImage() { return this.getLatest().__image; }
+  createDOM() {
+    const img = this.__image;
+    const d = document.createElement('figure');
+    d.className = 'doc-image-block';
+    d.contentEditable = 'false';
+    const label = img.caption || img.alt || img.description || 'Image';
+    d.setAttribute('aria-label', t('app.editor.image_aria', { label }));
+    // A NIMAS package's own image (A3): src is the package-relative path (kept as-is so the
+    // save writes it back), shown here via the object URL setLoadedDocInfo built for it.
+    const packageUrl = loadedDocInfo.resourceUrls.get(img.src);
+    const displaySrc = packageUrl || (/^(data:image\/|https?:|blob:)/i.test(img.src) ? img.src : null);
+    if (displaySrc) {
+      const el = document.createElement('img');
+      el.src = displaySrc; el.alt = img.alt;
+      el.onerror = () => el.remove();
+      d.appendChild(el);
+    }
+    const meta = document.createElement('div');
+    meta.className = 'doc-image-meta';
+    const line = (cls, text) => { if (!text) return; const x = document.createElement('div'); x.className = cls; x.textContent = text; meta.appendChild(x); };
+    line('doc-image-src', `🖼 ${img.src ? img.src.replace(/^data:[^,]*,.*/, 'embedded image') : 'image'}`);
+    line('doc-image-caption', img.caption);
+    line('doc-image-desc', img.description || (img.alt ? `Alt: ${img.alt}` : ''));
+    if (!img.caption && !img.description && !img.alt) line('doc-image-desc', t('app.editor.decorative_image'));
+    d.appendChild(meta);
+    return d;
+  }
+  updateDOM() { return true; }
+  decorate() { return null; }
+  isInline() { return false; }
+  exportJSON() { return { type: 'emboss-image', version: 1, image: this.__image }; }
+  static importJSON(j) { return new ImageNode(j?.image || {}); }
+}
+const $createImageNode = (image) => new ImageNode(image);
+const $isImageNode = (n) => n instanceof ImageNode;
+
 class TableNode extends DecoratorNode {
   __headers = [];
   __rows = [];
@@ -665,7 +873,7 @@ class TableNode extends DecoratorNode {
     const d = document.createElement('div');
     d.className = 'doc-table-block';
     d.setAttribute('role', 'region');
-    d.setAttribute('aria-label', 'Table data block');
+    d.setAttribute('aria-label', t('app.editor.table_block_aria'));
     return d;
   }
   // Only recreate DOM when structural dimensions change (+Row / +Col / -Row / -Col).
@@ -698,18 +906,21 @@ class TableNode extends DecoratorNode {
   getRows() { return this.getLatest().__rows; }
   setHeaders(h) { this.getWritable().__headers = h; }
   setRows(r) { this.getWritable().__rows = r; }
-  setCell(ri, ci, val) {
+  // `html` is the cell's contenteditable innerHTML (format/cell-dom.mjs, G15): a maths or
+  // note-reference chip carries its own MathML/idref in data attributes, so it round-trips
+  // exactly with no "was this cell edited?" comparison against the previous value needed.
+  setCell(ri, ci, html) {
     const w = this.getWritable();
     if (ri === -1) {
       const h = [...(w.__headers || [])];
       while (h.length <= ci) h.push('');
-      h[ci] = val;
+      h[ci] = cellFromEditableHtml(html);
       w.__headers = h;
     } else {
       const rows = (w.__rows || []).map(r => [...r]);
       while (rows.length <= ri) rows.push([]);
       while (rows[ri].length <= ci) rows[ri].push('');
-      rows[ri][ci] = val;
+      rows[ri][ci] = cellFromEditableHtml(html);
       w.__rows = rows;
     }
   }
@@ -786,7 +997,11 @@ class SidebarNode extends ElementNode {
     if (super.afterCloneFrom) super.afterCloneFrom(prevNode);
     this.__title = prevNode.__title || '';
     this.__banaStyle = prevNode.__banaStyle || 'sidebar';
+    this.__source = prevNode.__source || null;
   }
+  // The source <sidebar> id and render value, kept for the save (A26).
+  getSource() { return this.getLatest().__source || null; }
+  setSource(src) { this.getWritable().__source = src && (src.id || src.render) ? { id: src.id || null, render: src.render || null } : null; return this; }
   getTitle() { return this.getLatest().__title || ''; }
   setTitle(t) { this.getWritable().__title = t || ''; return this; }
   getBanaStyle() { return 'sidebar'; }
@@ -798,11 +1013,13 @@ class SidebarNode extends ElementNode {
       version: 1,
       title: this.__title,
       banaStyle: this.__banaStyle,
+      ...(this.__source ? { source: this.__source } : {}),
     };
   }
   updateFromJSON(serializedNode) {
     if (super.updateFromJSON) super.updateFromJSON(serializedNode);
     this.__title = serializedNode.title || '';
+    this.__source = serializedNode.source || null;
     return this;
   }
   static importJSON(j) {
@@ -817,40 +1034,122 @@ const $isSidebarNode = (n) => n instanceof SidebarNode;
 // ---- editor ----
 const editor = createEditor({
   namespace: 'emboss',
-  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, BreakNode, GraphicNode, TableNode, PrintPageNode, SidebarNode],
+  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode],
   onError: (e) => { console.warn('Lexical non-fatal state warning:', e); },
   theme: { heading: { h1: 'ed-h1', h2: 'ed-h2', h3: 'ed-h3' }, list: { ul: 'ed-ul', ol: 'ed-ol' }, paragraph: 'ed-p',
     text: { bold: 'ed-b', italic: 'ed-i', underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
 });
 editor.setRootElement($id('editor'));
 window.editor = editor;
+// Lexical's core line-break node (not exported by the vendored bundle; registered on every editor).
+const $createLineBreakNode = () => new (editor._nodes.get('linebreak').klass)();
+const $isLineBreakNode = (n) => !!n && typeof n.getType === 'function' && n.getType() === 'linebreak';
 registerRichText(editor);
 registerList(editor);
 
 // ---- Document Dirty Tracking & Save State ----
-let lastSavedStateSignature = null;
+// O(1) per keystroke: an update listener flips `contentChangedSinceClean` whenever a
+// content (not selection-only) update commits. The full-state signature is only computed
+// lazily — when something actually asks (beforeunload / load / clear) — so that an undo
+// back to the saved state still reads as clean without stringifying on every update.
+let lastSavedStateSignature = null;      // hash of the state at the last save/load
+let lastSavedEditorState = null;         // the EditorState object at that moment (identity fast-path)
+let contentChangedSinceClean = false;
+
+// FNV-1a 32-bit over the string: a cheap structural signature of a JSON snapshot.
+export function hashString(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36) + ':' + s.length;
+}
 
 export function getEditorStateSignature() {
   try {
-    return JSON.stringify(editor.getEditorState().toJSON());
+    return hashString(JSON.stringify(editor.getEditorState().toJSON()));
   } catch {
     return '';
   }
 }
 
 export function markDocumentClean() {
+  lastSavedEditorState = editor.getEditorState();
   lastSavedStateSignature = getEditorStateSignature();
+  contentChangedSinceClean = false;
 }
 
 export function isDocumentDirty() {
   if (!lastSavedStateSignature) return false;
-  return getEditorStateSignature() !== lastSavedStateSignature;
+  if (!contentChangedSinceClean) return false;
+  const cur = editor.getEditorState();
+  if (cur === lastSavedEditorState) { contentChangedSinceClean = false; return false; }
+  // Something changed since the save; check (lazily, only now) whether an undo/redo has
+  // brought the content back to exactly the saved state.
+  const same = getEditorStateSignature() === lastSavedStateSignature;
+  if (same) { lastSavedEditorState = cur; contentChangedSinceClean = false; }
+  return !same;
 }
+
+editor.registerUpdateListener(({ dirtyElements, dirtyLeaves }) => {
+  if (contentChangedSinceClean) return;
+  if (dirtyElements.size === 0 && dirtyLeaves.size === 0) return;   // selection-only update
+  contentChangedSinceClean = true;
+});
 
 if (typeof window !== 'undefined') {
   window.getEditorStateSignature = getEditorStateSignature;
   window.markDocumentClean = markDocumentClean;
   window.isDocumentDirty = isDocumentDirty;
+}
+
+// G15: the too-wide warning badge in a table's toolbar — shown when the table's format is
+// 'auto' or 'spatial' but the formatter actually falls back to a listed (BANA) / paragraph
+// (UKAAF) table. tableLayout (format/document.mjs) is formatTable's own width computation,
+// so this can never disagree with what the table actually braillies as; called with the
+// editor's current width/mode settings (currentFormatOpts, defined below — hoisted),
+// matching what render() itself uses.
+function updateTableWarningBadge(bar, headers, rows, format) {
+  if (!bar) return;
+  const fmt = format || 'spatial';
+  let badge = bar.querySelector('.table-warn-badge');
+  if (fmt === 'listed') { if (badge) badge.remove(); return; }   // an explicit listed table isn't "too wide" — that's what was asked for
+  const o = currentFormatOpts();
+  const layout = tableLayout({ headers: headers || [], rows: rows || [], format: fmt }, o);
+  if (layout === 'columnar') { if (badge) badge.remove(); return; }
+  const bana = o.mode === 'bana';
+  const msg = t(bana ? 'app.table.too_wide_listed' : 'app.table.too_wide_paragraph');
+  const desc = t(bana ? 'app.table.too_wide_listed_title' : 'app.table.too_wide_paragraph_title');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'table-warn-badge';
+    bar.appendChild(badge);
+  }
+  badge.textContent = msg;
+  badge.title = desc;
+  badge.setAttribute('aria-label', `${msg}. ${desc}`);
+}
+// Every TableNode in the document, wherever nested (a sidebar's own table included), for
+// refreshing warning badges when settings change width/mode without touching the Lexical
+// tree (so the table decorator itself never re-fires) — called from render().
+function forEachTableNode(cb) {
+  editor.getEditorState().read(() => {
+    const walk = (nodes) => {
+      for (const n of nodes) {
+        if ($isTableNode(n)) cb(n);
+        else if (typeof n.getChildren === 'function') walk(n.getChildren());
+      }
+    };
+    walk($getRoot().getChildren());
+  });
+}
+function refreshAllTableBadges() {
+  forEachTableNode((n) => {
+    const el = editor.getElementByKey(n.getKey());
+    const bar = el && el.querySelector('.table-context-bar');
+    if (bar) updateTableWarningBadge(bar, n.getHeaders(), n.getRows(), n.getFormat());
+  });
 }
 
 // mount a MathLive <math-field> or Graphic preview into each node's DOM
@@ -879,7 +1178,7 @@ editor.registerDecoratorListener((decorators) => {
       const sizeLabels = { compact: '📐 Size: Compact', half: '📐 Size: Half Page', full: '📐 Size: Full Page' };
       const currentSize = val.size || 'half';
       btnSize.textContent = sizeLabels[currentSize] || '📐 Size: Half Page';
-      btnSize.title = 'Cycle diagram size on embosser: Compact -> Half Page -> Full Page';
+      btnSize.title = t('app.graphic.size_title');
       btnSize.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -899,7 +1198,7 @@ editor.registerDecoratorListener((decorators) => {
       btnTextures.type = 'button';
       btnTextures.className = 'graphic-context-btn';
       btnTextures.textContent = val.textures ? '🎨 Textures: ON' : '🎨 Textures: OFF';
-      btnTextures.title = 'Toggle color-to-tactile texture mapping';
+      btnTextures.title = t('app.graphic.textures_title');
       btnTextures.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -917,7 +1216,7 @@ editor.registerDecoratorListener((decorators) => {
       btnLabels.type = 'button';
       btnLabels.className = 'graphic-context-btn';
       btnLabels.textContent = val.brailleLabels ? '⠿ Braille: ON' : '⠿ Braille: OFF';
-      btnLabels.title = 'Toggle automatic Braille label transcription';
+      btnLabels.title = t('app.graphic.labels_title');
       btnLabels.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -934,8 +1233,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnLeadLine = document.createElement('button');
       btnLeadLine.type = 'button';
       btnLeadLine.className = 'graphic-context-btn';
-      btnLeadLine.textContent = '🏷 + Label';
-      btnLeadLine.title = 'Add tactile Braille callout label with BANA lead line';
+      btnLeadLine.textContent = `🏷 + ${t('app.graphic.add_label')}`;
+      btnLeadLine.title = t('app.graphic.add_label_title');
       btnLeadLine.addEventListener('click', (e) => {
         e.stopPropagation();
         const text = window.prompt("Enter label text (e.g. 'Vertex', 'Nucleus', 'Resistor'):", 'Feature');
@@ -961,8 +1260,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnDel = document.createElement('button');
       btnDel.type = 'button';
       btnDel.className = 'graphic-context-btn danger';
-      btnDel.textContent = '🗑 Delete';
-      btnDel.title = 'Remove tactile diagram';
+      btnDel.textContent = `🗑 ${t('common.delete')}`;
+      btnDel.title = t('app.graphic.delete_title');
       btnDel.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1000,7 +1299,9 @@ editor.registerDecoratorListener((decorators) => {
       el.style.gap = '4px';
 
       const mf = document.createElement('math-field');
-      mf.setAttribute('math-virtual-keyboard-policy', 'onfocus');
+      // Virtual keyboard only on request (its toggle is visible); the MathLive menu stays
+      // hidden because its options are print styling that braille ignores (G11).
+      mf.setAttribute('math-virtual-keyboard-policy', 'manual');
       mf.setAttribute('smart-mode', '');
       if (val) {
         mf.setAttribute('data-latex', val);
@@ -1011,8 +1312,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnPlot = document.createElement('button');
       btnPlot.type = 'button';
       btnPlot.className = 'math-plot-btn';
-      btnPlot.textContent = '📈 Plot';
-      btnPlot.title = 'Plot tactile coordinate graph for this math equation';
+      btnPlot.textContent = `📈 ${t('app.graphic.plot')}`;
+      btnPlot.title = t('app.graphic.plot_title');
       btnPlot.style.cssText = 'display:none; padding:2px 6px; font-size:.75rem; font-weight:600; background:var(--accent); color:#fff; border:0; border-radius:4px; cursor:pointer; vertical-align:middle;';
       btnPlot.addEventListener('mousedown', (e) => e.preventDefault());
       btnPlot.addEventListener('click', (e) => {
@@ -1059,21 +1360,21 @@ editor.registerDecoratorListener((decorators) => {
       const headerCount = (val.headers && val.headers.length) || 0;
 
       if (el.querySelector('.editor-table-widget')) {
-        const allInputs = el.querySelectorAll('input.table-cell-input');
-        allInputs.forEach((inp) => {
-          if (inp === document.activeElement) return;
-          const u = parseInt(inp.dataset.unit, 10);
+        // In-cell edits return false from updateDOM (the comment on TableNode.updateDOM),
+        // so the widget's DOM survives and only needs its *other* cells re-synced — never
+        // the focused one, or the caret/in-progress edit would be clobbered mid-keystroke.
+        const allCells = el.querySelectorAll('.table-cell-input');
+        allCells.forEach((cellEl) => {
+          if (cellEl === document.activeElement) return;
+          const u = parseInt(cellEl.dataset.unit, 10);
           if (isNaN(u)) return;
-          if (u < headerCount) {
-            const hVal = val.headers[u] || '';
-            if (inp.value !== hVal) inp.value = hVal;
-          } else {
-            const rowIdx = Math.floor((u - headerCount) / colCount);
-            const colIdx = (u - headerCount) % colCount;
-            const rVal = (val.rows[rowIdx] && val.rows[rowIdx][colIdx]) || '';
-            if (inp.value !== rVal) inp.value = rVal;
-          }
+          const html = u < headerCount
+            ? cellToEditableHtml(val.headers[u])
+            : cellToEditableHtml(val.rows[Math.floor((u - headerCount) / colCount)]?.[(u - headerCount) % colCount]);
+          if (cellEl.innerHTML !== html) cellEl.innerHTML = html;
         });
+        const bar = el.querySelector('.table-context-bar');
+        if (bar) updateTableWarningBadge(bar, val.headers, val.rows, val.format);
         continue;
       }
       el.innerHTML = '';
@@ -1083,21 +1384,28 @@ editor.registerDecoratorListener((decorators) => {
 
       const curFormat = val.format || 'spatial';
       const titleSpan = document.createElement('strong');
-      titleSpan.textContent = `📊 Table (${colCount} cols × ${rowCount} rows)`;
+      titleSpan.textContent = `📊 ${t('app.table.title', { cols: colCount, rows: rowCount })}`;
       titleSpan.style.marginRight = 'auto';
       bar.appendChild(titleSpan);
+      updateTableWarningBadge(bar, val.headers, val.rows, val.format);   // G15: too-wide warning
 
       const btnFormat = document.createElement('button');
       btnFormat.type = 'button';
       btnFormat.className = 'table-context-btn';
-      btnFormat.textContent = curFormat === 'listed' ? '📋 Listed' : '📊 Spatial';
-      btnFormat.title = `Format: ${curFormat === 'listed' ? 'Listed Table (click to switch to Spatial)' : 'Spatial Columnar (click to switch to Listed)'}`;
+      const FORMAT_LABEL = { auto: `🔀 ${t('app.table.fmt_auto')}`, spatial: `📊 ${t('app.table.fmt_spatial')}`, listed: `📋 ${t('app.table.fmt_listed')}` };
+      const FORMAT_TITLE = {
+        auto: t('app.table.fmt_auto_title'),
+        spatial: t('app.table.fmt_spatial_title'),
+        listed: t('app.table.fmt_listed_title'),
+      };
+      btnFormat.textContent = FORMAT_LABEL[curFormat] || FORMAT_LABEL.spatial;
+      btnFormat.title = t('app.table.fmt_title', { format: FORMAT_TITLE[curFormat] || FORMAT_TITLE.spatial });
       btnFormat.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
           const n = $getNodeByKey(key);
           if ($isTableNode(n)) {
-            const nextFmt = n.getFormat() === 'listed' ? 'spatial' : 'listed';
+            const nextFmt = { auto: 'spatial', spatial: 'listed', listed: 'auto' }[n.getFormat()] || 'listed';
             n.setFormat(nextFmt);
           }
         });
@@ -1107,8 +1415,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnAddRow = document.createElement('button');
       btnAddRow.type = 'button';
       btnAddRow.className = 'table-context-btn';
-      btnAddRow.textContent = '+ Row';
-      btnAddRow.title = 'Add row below';
+      btnAddRow.textContent = `+ ${t('app.table.add_row')}`;
+      btnAddRow.title = t('app.table.add_row_title');
       btnAddRow.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1121,8 +1429,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnAddCol = document.createElement('button');
       btnAddCol.type = 'button';
       btnAddCol.className = 'table-context-btn';
-      btnAddCol.textContent = '+ Col';
-      btnAddCol.title = 'Add column to the right';
+      btnAddCol.textContent = `+ ${t('app.table.add_col')}`;
+      btnAddCol.title = t('app.table.add_col_title');
       btnAddCol.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1135,8 +1443,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnDelRow = document.createElement('button');
       btnDelRow.type = 'button';
       btnDelRow.className = 'table-context-btn';
-      btnDelRow.textContent = '- Row';
-      btnDelRow.title = 'Remove bottom row';
+      btnDelRow.textContent = `- ${t('app.table.add_row')}`;
+      btnDelRow.title = t('app.table.del_row_title');
       btnDelRow.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1151,8 +1459,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnDelCol = document.createElement('button');
       btnDelCol.type = 'button';
       btnDelCol.className = 'table-context-btn';
-      btnDelCol.textContent = '- Col';
-      btnDelCol.title = 'Remove rightmost column';
+      btnDelCol.textContent = `- ${t('app.table.add_col')}`;
+      btnDelCol.title = t('app.table.del_col_title');
       btnDelCol.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1168,8 +1476,8 @@ editor.registerDecoratorListener((decorators) => {
       const btnDelete = document.createElement('button');
       btnDelete.type = 'button';
       btnDelete.className = 'table-context-btn danger';
-      btnDelete.textContent = '🗑 Delete';
-      btnDelete.title = 'Delete table';
+      btnDelete.textContent = `🗑 ${t('common.delete')}`;
+      btnDelete.title = t('app.table.delete_title');
       btnDelete.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1189,44 +1497,8 @@ editor.registerDecoratorListener((decorators) => {
         const tr = document.createElement('tr');
         val.headers.forEach((h, ci) => {
           const th = document.createElement('th');
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.className = 'table-cell-input table-header-input';
-          input.value = h;
-          input.placeholder = `Header ${ci + 1}`;
-          input.dataset.unit = String(ci);
-          input.addEventListener('input', () => {
-            editor.update(() => {
-              const n = $getNodeByKey(key);
-              if ($isTableNode(n)) n.setCell(-1, ci, input.value);
-            });
-            handleTableCellEvent(input, ci);
-          });
-          input.addEventListener('pointerup', () => handleTableCellEvent(input, ci));
-          input.addEventListener('keyup', () => handleTableCellEvent(input, ci));
-          input.addEventListener('focus', () => {
-            lastActiveTableCellInput = input;
-            handleTableCellEvent(input, ci);
-          });
-          input.addEventListener('mousedown', () => {
-            lastActiveTableCellInput = input;
-          });
-          input.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-              const k = e.key.toLowerCase();
-              if (k === 'b') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'bold');
-              } else if (k === 'i') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'italic');
-              } else if (k === 'u') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'underline');
-              }
-            }
-          });
-          th.appendChild(input);
+          const label = t('app.table.header_n', { n: ci + 1 });
+          th.appendChild(makeTableCell(key, h, -1, ci, ci, 'table-cell-input table-header-input', label, label));
           tr.appendChild(th);
         });
         thead.appendChild(tr);
@@ -1238,45 +1510,12 @@ editor.registerDecoratorListener((decorators) => {
         const tr = document.createElement('tr');
         for (let ci = 0; ci < colCount; ci++) {
           const td = document.createElement('td');
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.className = 'table-cell-input';
-          input.value = row[ci] || '';
-          input.placeholder = '...';
           const unit = headerCount + ri * colCount + ci;
-          input.dataset.unit = String(unit);
-          input.addEventListener('input', () => {
-            editor.update(() => {
-              const n = $getNodeByKey(key);
-              if ($isTableNode(n)) n.setCell(ri, ci, input.value);
-            });
-            handleTableCellEvent(input, unit);
-          });
-          input.addEventListener('pointerup', () => handleTableCellEvent(input, unit));
-          input.addEventListener('keyup', () => handleTableCellEvent(input, unit));
-          input.addEventListener('focus', () => {
-            lastActiveTableCellInput = input;
-            handleTableCellEvent(input, unit);
-          });
-          input.addEventListener('mousedown', () => {
-            lastActiveTableCellInput = input;
-          });
-          input.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-              const k = e.key.toLowerCase();
-              if (k === 'b') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'bold');
-              } else if (k === 'i') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'italic');
-              } else if (k === 'u') {
-                e.preventDefault();
-                applyFormattingToInput(input, 'underline');
-              }
-            }
-          });
-          td.appendChild(input);
+          const headerLabel = cellPlainText(val.headers && val.headers[ci]).trim();
+          const label = headerLabel
+            ? t('app.table.cell_aria_named', { header: headerLabel, row: ri + 1 })
+            : t('app.table.cell_aria', { col: ci + 1, row: ri + 1 });
+          td.appendChild(makeTableCell(key, row[ci], ri, ci, unit, 'table-cell-input', label, '...'));
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -1292,14 +1531,14 @@ editor.registerDecoratorListener((decorators) => {
 
       const badge = document.createElement('span');
       badge.className = 'page-badge';
-      badge.innerHTML = '📄 Print Page';
+      badge.textContent = `📄 ${t('app.printpage.badge')}`;
 
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'page-num-input';
       input.value = val.page || '1';
-      input.setAttribute('aria-label', 'Print page number');
-      input.title = 'Edit source print page number';
+      input.setAttribute('aria-label', t('app.printpage.input_aria'));
+      input.title = t('app.printpage.input_title');
 
       input.addEventListener('input', (e) => {
         const newPage = e.target.value;
@@ -1318,8 +1557,8 @@ editor.registerDecoratorListener((decorators) => {
       btnDel.type = 'button';
       btnDel.className = 'page-del-btn';
       btnDel.textContent = '✕';
-      btnDel.title = 'Remove print page indicator';
-      btnDel.setAttribute('aria-label', 'Remove print page indicator');
+      btnDel.title = t('app.printpage.remove');
+      btnDel.setAttribute('aria-label', t('app.printpage.remove'));
       btnDel.addEventListener('click', (e) => {
         e.stopPropagation();
         editor.update(() => {
@@ -1328,7 +1567,7 @@ editor.registerDecoratorListener((decorators) => {
         });
         clearTranslationCache();
         scheduleRender();
-        announce('Removed print page number');
+        announce(t('app.printpage.removed'));
       });
 
       el.appendChild(badge);
@@ -1371,7 +1610,7 @@ function applyBlockStyle(v) {
             targetNode = targetNode.getParent ? targetNode.getParent() : null;
           }
           if (listNode) {
-            const lKind = (norm === 'plain' ? 'index' : norm);
+            const lKind = norm;                       // 'plain' is its own list style (DTBook <list type="pl">), not an index
             listNode.setListKind(lKind);
             listNode.setBanaStyle(lKind);
             if (norm === 'index' || norm === 'plain') {
@@ -1445,7 +1684,7 @@ function applyBlockStyle(v) {
         editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
         insertTable(3, 3, targetFmt);
       } else {
-        announce(`Table format changed to ${targetFmt}`);
+        announce(t('app.table.format_changed', { format: t(`app.table.fmt_${targetFmt}`) }));
       }
     } else {
       // Default to paragraph for 'p' or any unrecognized style
@@ -1539,7 +1778,7 @@ document.addEventListener('selectionchange', () => {
   refreshToolbar();
 }, { passive: true });
 
-function insertMathEquation(latex = '', label = 'Equation inserted — type the maths') {
+function insertMathEquation(latex = '', label = t('app.editor.equation_inserted')) {
   let key = null;
   editor.update(() => {
     const node = $createMathNode(latex);
@@ -1667,7 +1906,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-$id('btnMath')?.addEventListener('click', () => insertMathEquation('', 'Equation inserted — type the maths'));
+$id('btnMath')?.addEventListener('click', () => insertMathEquation('', t('app.editor.equation_inserted')));
 $id('btnFormula')?.addEventListener('click', () => openFormulaDialog());
 $id('btnTable')?.addEventListener('click', () => insertTable(3, 3));
 $id('btnBreak')?.addEventListener('click', () => {
@@ -1676,25 +1915,63 @@ $id('btnBreak')?.addEventListener('click', () => {
     if ($isRangeSelection(sel)) $insertNodeToNearestRoot($createBreakNode());
     else $getRoot().append($createBreakNode());
   });
-  announce('Document break inserted');
+  announce(t('app.editor.break_inserted'));
 });
 
 $id('btnSidebar')?.addEventListener('click', () => insertSidebar());
 
+// The print page that follows `raw`: a trailing number is incremented keeping any prefix
+// and zero padding ("R64" → "R65", "A-9" → "A-10"); roman numerals stay roman in the same
+// case ("xiv" → "xv"); a single letter advances ("a" → "b"). Anything else gets "".
+const ROMAN = [[1000, 'm'], [900, 'cm'], [500, 'd'], [400, 'cd'], [100, 'c'], [90, 'xc'], [50, 'l'], [40, 'xl'], [10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']];
+function romanToInt(s) {
+  const t = s.toLowerCase();
+  let i = 0, n = 0;
+  for (const [v, r] of ROMAN) while (t.startsWith(r, i)) { n += v; i += r.length; }
+  return i === t.length && n > 0 ? n : 0;
+}
+function intToRoman(n) {
+  let out = '';
+  for (const [v, r] of ROMAN) while (n >= v) { out += r; n -= v; }
+  return out;
+}
+export function nextPrintPage(raw) {
+  const s = String(raw ?? '').trim();
+  if (!s) return '';
+  const num = s.match(/^(.*?)(\d+)$/);
+  if (num) {
+    const next = String(parseInt(num[2], 10) + 1);
+    return num[1] + (num[2].startsWith('0') ? next.padStart(num[2].length, '0') : next);
+  }
+  if (/^[ivxlcdm]+$/i.test(s)) {
+    const n = romanToInt(s);
+    if (n) {
+      const r = intToRoman(n + 1);
+      return s === s.toUpperCase() ? r.toUpperCase() : r;
+    }
+  }
+  if (/^[a-y]$/i.test(s)) return String.fromCharCode(s.charCodeAt(0) + 1);
+  return '';
+}
+
 function insertPrintPage(pageVal) {
   let p = pageVal;
   if (!p) {
-    // Find last page number in document to auto-increment
+    // Number from the print page *before the insertion point* (not the last one in the
+    // document): inserting after page 95 in a long book gives 96, not the book's last page + 1.
     editor.getEditorState().read(() => {
-      let lastPageNum = null;
-      for (const node of $getRoot().getChildren()) {
-        if ($isPrintPageNode(node)) {
-          const raw = node.getPage().trim();
-          const match = raw.match(/(\d+)$/);
-          if (match) lastPageNum = parseInt(match[1], 10);
-        }
+      const sel = $getSelection();
+      let stopAt = null;
+      if ($isRangeSelection(sel)) {
+        const anchor = sel.anchor.getNode();
+        stopAt = anchor ? (anchor.getTopLevelElement ? anchor.getTopLevelElement() : null) || anchor : null;
       }
-      p = (lastPageNum != null && !isNaN(lastPageNum)) ? String(lastPageNum + 1) : '1';
+      let previous = null;
+      for (const node of $getRoot().getChildren()) {
+        if ($isPrintPageNode(node)) previous = node.getPage();
+        if (stopAt && node.is(stopAt)) break;
+      }
+      p = previous != null ? nextPrintPage(previous) : '1';
     });
   }
   if (!p) p = '1';
@@ -1704,81 +1981,131 @@ function insertPrintPage(pageVal) {
     if ($isRangeSelection(sel)) $insertNodeToNearestRoot(node);
     else $getRoot().append(node);
   });
-  announce(`Print page ${p} inserted`);
+  announce(t('app.printpage.inserted', { page: p }));
 }
 window.insertPrintPage = insertPrintPage;
 $id('btnInsertPrintPage')?.addEventListener('click', () => insertPrintPage());
 $id('tocToggle')?.addEventListener('change', (e) => {
   settings = saveSettings({ toc: e.target.checked });
   clearTranslationCache();
-  announce('Table of contents ' + (e.target.checked ? 'on' : 'off'));
+  announce(t(e.target.checked ? 'app.editor.toc_on' : 'app.editor.toc_off'));
   render();
 });
 
 let lastActiveTableCellInput = null;
+const isTableCellEl = (el) => !!(el && el.classList && el.classList.contains('table-cell-input'));
 
-function applyFormattingToInput(input, format) {
-  if (!input) return;
-  const start = input.selectionStart ?? 0;
-  const end = input.selectionEnd ?? 0;
-  const val = input.value || '';
-  const marker = format === 'bold' ? '**' : (format === 'italic' ? '*' : (format === 'underline' ? '<u>' : ''));
-  const closeMarker = format === 'underline' ? '</u>' : marker;
-  if (!marker) return;
+// One table cell's contenteditable widget (G15): shows the cell's segments as real
+// bold/italic/underline/uncontracted formatting and atomic maths/note-reference chips
+// (format/cell-dom.mjs) instead of markup characters, and keeps it wired the way the old
+// <input> cell was — the braille cell trace, Tab/Shift+Tab, and the Bold/Italic/Underline
+// toolbar (see applyCellFormat below).
+function makeTableCell(key, cell, ri, ci, unit, className, ariaLabel, placeholder) {
+  const div = document.createElement('div');
+  div.className = className;
+  div.contentEditable = 'true';
+  div.setAttribute('role', 'textbox');
+  div.setAttribute('aria-multiline', 'false');
+  div.setAttribute('aria-label', ariaLabel);
+  if (placeholder) div.dataset.placeholder = placeholder;
+  div.tabIndex = 0;
+  div.dataset.unit = String(unit);
+  div.dataset.row = String(ri);
+  div.dataset.col = String(ci);
+  div.innerHTML = cellToEditableHtml(cell);
 
-  const mLen = marker.length;
-  const cLen = closeMarker.length;
-  let newVal, newStart, newEnd;
-
-  if (start !== end) {
-    const selected = val.slice(start, end);
-    if (selected.startsWith(marker) && selected.endsWith(closeMarker) && selected.length >= (mLen + cLen)) {
-      const unwrapped = selected.slice(mLen, selected.length - cLen);
-      newVal = val.slice(0, start) + unwrapped + val.slice(end);
-      newStart = start;
-      newEnd = start + unwrapped.length;
-    } else if (start >= mLen && end <= val.length - cLen && val.slice(start - mLen, start) === marker && val.slice(end, end + cLen) === closeMarker) {
-      newVal = val.slice(0, start - mLen) + selected + val.slice(end + cLen);
-      newStart = start - mLen;
-      newEnd = newStart + selected.length;
-    } else {
-      newVal = val.slice(0, start) + marker + selected + closeMarker + val.slice(end);
-      newStart = start + mLen;
-      newEnd = end + mLen;
+  div.addEventListener('input', () => {
+    // Deleting all a cell's text can leave a stray <br> behind (Chrome keeps one so the
+    // caret stays visible); clear it so :empty::before shows the placeholder again.
+    if (!div.textContent && div.innerHTML !== '') div.innerHTML = '';
+    editor.update(() => {
+      const n = $getNodeByKey(key);
+      if ($isTableNode(n)) n.setCell(ri, ci, div.innerHTML);
+    });
+    handleTableCellEvent(div, unit);
+  });
+  div.addEventListener('pointerup', () => handleTableCellEvent(div, unit));
+  div.addEventListener('keyup', () => handleTableCellEvent(div, unit));
+  div.addEventListener('focus', () => {
+    lastActiveTableCellInput = div;
+    handleTableCellEvent(div, unit);
+  });
+  div.addEventListener('mousedown', () => { lastActiveTableCellInput = div; });
+  // Paste as plain text only — no pasted-in markup or formatting (build item 1); a pasted
+  // newline becomes a space, so a cell stays single-line like the old <input>.
+  div.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = ((e.clipboardData || window.clipboardData).getData('text/plain') || '').replace(/\r\n|\r|\n/g, ' ');
+    document.execCommand('insertText', false, text);
+  });
+  div.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      // Never insert a newline (build item 1): move to the cell below in the same
+      // column, or do nothing past the last row.
+      e.preventDefault();
+      e.stopPropagation();
+      focusTableCellAt(div, Number(div.dataset.row) + 1, Number(div.dataset.col));
+      return;
     }
-  } else {
-    let wStart = start, wEnd = start;
-    while (wStart > 0 && /[\w'-]/.test(val[wStart - 1])) wStart--;
-    while (wEnd < val.length && /[\w'-]/.test(val[wEnd])) wEnd++;
-    if (wEnd > wStart) {
-      const word = val.slice(wStart, wEnd);
-      newVal = val.slice(0, wStart) + marker + word + closeMarker + val.slice(wEnd);
-      newStart = wStart + mLen;
-      newEnd = wEnd + mLen;
-    } else {
-      newVal = val.slice(0, start) + marker + closeMarker + val.slice(end);
-      newStart = start + mLen;
-      newEnd = newStart;
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      e.stopPropagation();
+      focusAdjacentTableCell(div, e.shiftKey ? -1 : 1);
+      return;
     }
-  }
-
-  input.value = newVal;
-  input.setSelectionRange(newStart, newEnd);
-  input.dispatchEvent(new Event('input', { bubbles: true }));
-  input.focus();
+    if (e.ctrlKey || e.metaKey) {
+      const k = e.key.toLowerCase();
+      if (k === 'b') { e.preventDefault(); e.stopPropagation(); applyCellFormat(div, 'bold'); }
+      else if (k === 'i') { e.preventDefault(); e.stopPropagation(); applyCellFormat(div, 'italic'); }
+      else if (k === 'u') { e.preventDefault(); e.stopPropagation(); applyCellFormat(div, 'underline'); }
+    }
+  });
+  return div;
+}
+// Enter: the cell at (row, col) in the same table, or nothing past the last row.
+function focusTableCellAt(cell, row, col) {
+  const table = cell.closest('table.editor-table-widget');
+  const target = table && table.querySelector(`.table-cell-input[data-row="${row}"][data-col="${col}"]`);
+  if (target) { target.focus(); placeCaretAtEnd(target); }
+}
+// Tab / Shift+Tab: the next/previous cell in reading order. A contenteditable element is
+// not in the browser's own Tab order the way an <input> is, so this is done explicitly.
+function focusAdjacentTableCell(cell, dir) {
+  const table = cell.closest('table.editor-table-widget');
+  if (!table) return;
+  const cells = Array.from(table.querySelectorAll('.table-cell-input'));
+  const next = cells[cells.indexOf(cell) + dir];
+  if (next) { next.focus(); placeCaretAtEnd(next); }
+}
+function placeCaretAtEnd(el) {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  range.collapse(false);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+// Bold/Italic/Underline for a table cell's selection: execCommand is deprecated but still
+// the simplest reliable way to toggle *nested* inline formatting in a small, self-contained
+// contenteditable — a table cell is decorator content, not part of Lexical's own node tree,
+// so Lexical's FORMAT_TEXT_COMMAND cannot reach it. Chrome fires the cell's own 'input'
+// listener for the DOM change, which commits it and refreshes the cell trace.
+function applyCellFormat(cell, format) {
+  cell.focus();
+  document.execCommand(format, false, null);
 }
 
 // ---- toolbar: emphasis ----
 function fmtBtn(id, format, label) {
   $id(id).addEventListener('click', () => {
     const active = document.activeElement;
-    if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
-      applyFormattingToInput(active, format);
+    if (isTableCellEl(active)) {
+      applyCellFormat(active, format);
       announce(label + ' toggled');
       return;
     }
     if (lastActiveTableCellInput && document.contains(lastActiveTableCellInput) && (lastActiveTableCellInput === document.activeElement || document.activeElement === $id(id))) {
-      applyFormattingToInput(lastActiveTableCellInput, format);
+      applyCellFormat(lastActiveTableCellInput, format);
       announce(label + ' toggled');
       return;
     }
@@ -1823,6 +2150,12 @@ function fmtBtn(id, format, label) {
   });
 }
 fmtBtn('btnBold', 'bold', 'Bold'); fmtBtn('btnItalic', 'italic', 'Italic'); fmtBtn('btnUnderline', 'underline', 'Underline');
+// A table cell's DOM selection (unlike a Lexical selection) is lost the instant focus
+// moves to the button, so keep focus in the cell on mousedown — the click still fires
+// fmtBtn's handler right afterwards, with the cell's selection still intact.
+['btnBold', 'btnItalic', 'btnUnderline'].forEach((id) => {
+  $id(id)?.addEventListener('mousedown', (e) => { if (isTableCellEl(document.activeElement)) e.preventDefault(); });
+});
 
 export function indentCurrentItem() {
   let changed = false;
@@ -1865,8 +2198,8 @@ export function indentCurrentItem() {
   if (changed) {
     editor.focus();
     refreshToolbar();
-    const lvlNames = ['1 (main)', '2 (sub-item a, b, c)', '3 (sub-item i, ii, iii)', '4 (sub-item A, B, C)', '5'];
-    announce(`List item indented to level ${lvlNames[newLevelAnnounce] || newLevelAnnounce + 1}`);
+    const lvlNames = [t('app.list.level_1'), t('app.list.level_2'), t('app.list.level_3'), t('app.list.level_4'), '5'];
+    announce(t('app.list.indented', { level: lvlNames[newLevelAnnounce] || newLevelAnnounce + 1 }));
   }
   return changed;
 }
@@ -1912,8 +2245,8 @@ export function outdentCurrentItem() {
   if (changed) {
     editor.focus();
     refreshToolbar();
-    const lvlNames = ['1 (main)', '2 (sub-item a, b, c)', '3 (sub-item i, ii, iii)', '4 (sub-item A, B, C)', '5'];
-    announce(`List item outdented to level ${lvlNames[newLevelAnnounce] || newLevelAnnounce + 1}`);
+    const lvlNames = [t('app.list.level_1'), t('app.list.level_2'), t('app.list.level_3'), t('app.list.level_4'), '5'];
+    announce(t('app.list.outdented', { level: lvlNames[newLevelAnnounce] || newLevelAnnounce + 1 }));
   }
   return changed;
 }
@@ -1954,13 +2287,43 @@ function nodeToRuns(node) {
   for (const child of node.getChildren()) {
     if ($isMathNode(child)) {
       const latex = (child.getLatex() || '').trim();
-      if (latex) {
+      const source = child.getSourceMathml();
+      if (source) {
+        // Unedited equation from the loaded document: keep its MathML exactly.
+        const run = { type: 'math', mathml: source };
+        if (latex && latex !== UNEDITABLE_MATH_LATEX) run.latex = latex;
+        runs.push(run);
+        hasMath = true;
+      } else if (latex) {
         const mathml = convertLatexCached(latex);
-        if (mathml) {
-          runs.push({ type: 'math', mathml, latex });
-          hasMath = true;
-        }
+        // If LaTeX → MathML fails, keep the equation as LaTeX (braille uses latexToBrf,
+        // the exporter writes it with a TeX annotation) instead of dropping it.
+        runs.push(mathml ? { type: 'math', mathml, latex } : { type: 'math', latex });
+        hasMath = true;
       }
+      continue;
+    }
+    if ($isLineNumberNode(child)) {
+      const num = child.getTextContent().trim();
+      if (num) { runs.push({ type: 'linenum', text: num }); hasEmph = true; }   // keep segments so the number survives
+      continue;
+    }
+    if ($isNoteRefNode(child)) {
+      const mark = child.getTextContent().trim();
+      if (mark) {
+        const run = { type: 'noteref', text: mark };
+        if (child.getIdref()) run.idref = child.getIdref();
+        if (child.isAnnoref()) run.annoref = true;
+        runs.push(run);
+        hasEmph = true;                                  // keep segments so the reference survives
+      }
+      continue;
+    }
+    if ($isLineBreakNode(child)) {
+      // A break inside emphasised text belongs to it ("EXPLAIN / THE PHENOMENON" is one bold run).
+      const prev = runs[runs.length - 1];
+      runs.push({ type: 'text', text: '\n', tf: prev && prev.type === 'text' ? prev.tf || 0 : 0 });
+      hasEmph = true;                                    // keep segments so the break survives
       continue;
     }
     const rawText = child.getTextContent();
@@ -1968,13 +2331,17 @@ function nodeToRuns(node) {
     const text = rawText.replace(/\s+/g, ' ');
     if (!text) continue;
     let tf = 0;
+    let unc = false;
     if (typeof child.hasFormat === 'function') {
       if (child.hasFormat('bold')) tf |= TF.bold;
       if (child.hasFormat('italic')) tf |= TF.italic;
       if (child.hasFormat('underline')) tf |= TF.underline;
+      unc = child.hasFormat('code');
     }
-    if (tf) hasEmph = true;
-    runs.push({ type: 'text', text, tf });
+    if (tf || unc) hasEmph = true;
+    const last = runs[runs.length - 1];
+    if (last && last.type === 'text' && (last.tf || 0) === tf && !!last.uncontracted === unc) last.text += text;   // one run per form
+    else runs.push(unc ? { type: 'text', text, tf, uncontracted: true } : { type: 'text', text, tf });
   }
   return { runs, hasEmph, hasMath };
 }
@@ -1982,13 +2349,29 @@ function paraBlock(node) {
   const { runs, hasEmph, hasMath } = nodeToRuns(node);
   if (!runs.length) return null;
   const banaStyle = typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null;
+  // A plain paragraph holding one equation and nothing else is displayed maths (A26): the
+  // parser reads such a <p> as a math block, so save it as one (display="block").
+  const solid = runs.filter((r) => r.type !== 'text' || r.text.trim());
+  if ((!banaStyle || banaStyle === 'body') && solid.length === 1 && solid[0].type === 'math' && !node.getPageTurn?.()) {
+    const m = { type: 'math' };
+    if (solid[0].mathml) m.mathml = solid[0].mathml;
+    if (solid[0].latex) m.latex = solid[0].latex;
+    return m;
+  }
   const block = (hasMath || hasEmph) ? { type: 'para', segments: runs }
     : { type: 'para', text: node.getTextContent().replace(/\s+/g, ' ').trim() };
+  const turn = typeof node.getPageTurn === 'function' ? node.getPageTurn() : null;
+  if (turn === 'continued' || turn === 'both') block.continued = true;
+  if (turn === 'continuation' || turn === 'both') block.continuation = true;
   if (banaStyle && banaStyle !== 'body') {
     block.style = banaStyle;
     if (banaStyle === 'note') block.type = 'note';
     else if (banaStyle === 'caption') block.type = 'caption';
-    else if (banaStyle === 'footnote') block.type = 'footnote';
+    else if (banaStyle === 'footnote') {
+      block.type = 'footnote';
+      const note = typeof node.getNote === 'function' ? node.getNote() : null;
+      if (note) { block.id = note.id; if (note.kind) block.kind = note.kind; }
+    }
     else if (banaStyle === 'attribution') block.type = 'attribution';
     else if (banaStyle === 'stage' || banaStyle === 'play-stage') block.type = 'stage';
     else if (banaStyle === 'dialogue' || banaStyle === 'play-speaker' || banaStyle === 'speaker') { block.type = 'play'; block.subtype = 'prose'; }
@@ -1997,164 +2380,219 @@ function paraBlock(node) {
   }
   return block;
 }
+// SVG markup → `data:image/svg+xml;base64,…` (UTF-8 safe: braille cells / non-ASCII labels).
+function svgToDataUri(svg) {
+  if (!svg) return '';
+  try {
+    let b64;
+    if (typeof TextEncoder !== 'undefined') {
+      const bytes = new TextEncoder().encode(String(svg));
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      b64 = btoa(bin);
+    } else {
+      b64 = btoa(unescape(encodeURIComponent(String(svg))));
+    }
+    return 'data:image/svg+xml;base64,' + b64;
+  } catch { return ''; }
+}
+
+// The loaded document's own title and metadata (A17): the save (<doctitle>, dc:Title …) and
+// the braille title / running head use them; only a document with none (typed from scratch)
+// falls back to its first heading. Replaced on every load; kept across Clear (undoable).
+// A NIMAS package (A3) also carries its images as model.resources; those get object URLs
+// here so ImageNode can show them (the node itself keeps the package-relative src, so saving
+// still writes that path — packaging the bytes back out is A4).
+let loadedDocInfo = { title: null, metadata: null, resources: [], resourceUrls: new Map() };
+function setLoadedDocInfo(model) {
+  const title = model && model.title != null ? String(model.title).trim() : '';
+  for (const url of loadedDocInfo.resourceUrls.values()) URL.revokeObjectURL(url);
+  const resources = Array.isArray(model && model.resources) ? model.resources : [];
+  const resourceUrls = new Map();
+  for (const r of resources) {
+    if (!r || !r.path || !r.bytes) continue;
+    resourceUrls.set(r.path, URL.createObjectURL(new Blob([r.bytes], { type: r.mime || 'application/octet-stream' })));
+  }
+  loadedDocInfo = {
+    title: title || null,
+    metadata: model && model.metadata && typeof model.metadata === 'object' ? model.metadata : null,
+    resources, resourceUrls,
+  };
+}
+
+// A glossary entry is shown as "term — definition" (the parser's form): split it back so the
+// save writes <dt>/<dd> again (A26). Returns null when the entry has no separator.
+const GLOSSARY_SEP = ' — ';
+function glossaryItem(runs) {
+  const i = runs.findIndex((r) => r.type === 'text' && r.text.includes(GLOSSARY_SEP));
+  if (i < 0) return null;
+  const at = runs[i].text.indexOf(GLOSSARY_SEP);
+  const before = runs[i].text.slice(0, at), after = runs[i].text.slice(at + GLOSSARY_SEP.length);
+  const termSegs = [...runs.slice(0, i), ...(before ? [{ ...runs[i], text: before }] : [])];
+  const defSegs = [...(after ? [{ ...runs[i], text: after }] : []), ...runs.slice(i + 1)];
+  const plain = (segs) => segs.map((g) => (g.type === 'math' ? (g.latex || '') : (g.text || ''))).join('').replace(/\s+/g, ' ').trim();
+  const rich = (segs) => segs.some((g) => g.tf || g.uncontracted || g.type !== 'text' || g.text.includes('\n'));
+  const term = plain(termSegs), def = plain(defSegs);
+  const item = { term, def, text: `${term}${GLOSSARY_SEP}${def}` };
+  if (rich(termSegs) || rich(defSegs)) {
+    const norm = (segs) => segs.map((g) => (g.type === 'text' && !g.tf ? (({ tf, ...rest }) => rest)(g) : g));
+    item.termSegments = norm(termSegs);
+    item.defSegments = norm(defSegs);
+    item.segments = [...item.termSegments, { type: 'text', text: GLOSSARY_SEP }, ...item.defSegments];
+  }
+  return item;
+}
+
+function imageBlock(node) {
+  const img = node.getImage();
+  const g = { type: 'graphic', src: img.src, alt: img.alt };
+  if (img.caption) { g.caption = img.caption; if (img.captionSegments) g.captionSegments = img.captionSegments; }
+  if (img.description) g.description = img.description;
+  return g;
+}
+
+// One editor node → model block(s) appended to `blocks` (the document or a sidebar's blocks).
+function nodeToBlocks(node, blocks) {
+  const nodeKey = node.getKey();
+  if ($isBreakNode(node)) {
+    blocks.push({ type: 'indicator', kind: typeof node.getKind === 'function' ? node.getKind() : 'asterisks', _key: nodeKey });
+  } else if ($isPrintPageNode(node)) {
+    const src = node.getSource();
+    blocks.push({ type: 'pagenum', page: node.getPage(), ...(src.id ? { id: src.id } : {}), ...(src.pageType ? { pageType: src.pageType } : {}), _key: nodeKey });
+  } else if ($isSidebarNode(node)) {
+    const innerBlocks = [];
+    for (const child of node.getChildren()) nodeToBlocks(child, innerBlocks);   // same rules inside a sidebar, nested sidebars too (A26)
+    const boxSrc = node.getSource();
+    blocks.push({
+      type: 'box',
+      ...(boxSrc && boxSrc.id ? { id: boxSrc.id } : {}),
+      ...(boxSrc && boxSrc.render ? { render: boxSrc.render } : {}),
+      title: node.getTitle() || undefined,
+      blocks: innerBlocks.length ? innerBlocks : undefined,
+      _key: nodeKey
+    });
+  } else if ($isTableNode(node)) {
+    const format = typeof node.getFormat === 'function' ? node.getFormat() : 'spatial';
+    const tblBlock = {
+      type: 'table',
+      headers: node.getHeaders(),
+      rows: node.getRows(),
+      _key: nodeKey
+    };
+    if (format && format !== 'auto') {
+      tblBlock.format = format;
+      tblBlock.style = `table-${format}`;
+    }
+    blocks.push(tblBlock);
+  } else if ($isImageNode(node)) {
+    blocks.push({ ...imageBlock(node), _key: nodeKey });
+  } else if ($isGraphicNode(node)) {
+    const sz = node.getSize();
+    const hLines = sz === 'compact' ? 8 : (sz === 'full' ? Math.min(24, (settings.lines || 25) - 1) : 15);
+    const svg = node.getSvg();
+    blocks.push({
+      type: 'graphic',
+      svg,
+      // The NIMAS exporter writes `<img src="${block.src}">`; without a src the tactile
+      // graphic silently vanished on Save. Embed the SVG as a data URI so it round-trips.
+      src: svgToDataUri(svg),
+      alt: node.getAlt(),
+      title: node.getTitle(),
+      textures: node.getTextures(),
+      brailleLabels: node.getBrailleLabels(),
+      size: sz,
+      widthCells: settings.cells || 38,
+      heightLines: hLines,
+      _key: nodeKey
+    });
+  } else if ($isHeadingNode(node)) {
+    const { runs, hasEmph, hasMath } = nodeToRuns(node);
+    const text = node.getTextContent().replace(/\s+/g, ' ').trim();
+    if (runs.length && (hasEmph || hasMath)) {
+      blocks.push({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, segments: runs, text, _key: nodeKey });
+    } else if (text) {
+      blocks.push({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, text, _key: nodeKey });
+    }
+  } else if ($isListNode(node)) {
+    const listType = typeof node.getListType === 'function' ? node.getListType() : null;
+    const listKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) ||
+                     (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
+    const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
+    const isExercise = listKind === 'exercise' || (typeof node.getBanaStyle === 'function' && node.getBanaStyle() === 'exercise');
+    const ordered = listType === 'number' || (isExercise && !isPlain);
+    const items = [];
+    const counters = Array(10).fill(0);
+    for (const li of node.getChildren()) {
+      const { runs, hasEmph, hasMath } = nodeToRuns(li);        // keep list-item emphasis + inline maths
+      if (!runs.length) continue;
+      const lvl = Math.max(0, Math.min(9, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));   // sources nest deeper than 4 (A28)
+      counters[lvl]++;
+      for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
+      const count = counters[lvl];
+      let marker = null;
+      if (ordered && !isPlain) {
+        if (lvl === 0) marker = `${count}.`;
+        else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
+        else if (lvl === 2) {
+          const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
+          marker = `${romans[count - 1] || count}.`;
+        } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
+        else marker = `(${count})`;
+      }
+      let item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
+      const bullet = typeof li.getBulletPrefix === 'function' ? li.getBulletPrefix() : null;
+      if (bullet) {                                    // put the print bullet back, in its own form
+        const first = item.segments && item.segments[0];
+        if (item.text != null && !bullet.tf) item.text = bullet.text + item.text;
+        else if (item.text != null) item.segments = [{ type: 'text', text: bullet.text, tf: bullet.tf }, { type: 'text', text: item.text, tf: 0 }];
+        else if (first && first.type === 'text' && (first.tf || 0) === bullet.tf && !first.uncontracted) item.segments = [{ ...first, text: bullet.text + first.text }, ...item.segments.slice(1)];
+        else item.segments = [{ type: 'text', text: bullet.text, tf: bullet.tf }, ...item.segments];
+      }
+      if (listKind === 'glossary') item = glossaryItem(runs) || item;
+      const kept = ordered && !isPlain && typeof li.getMarker === 'function' ? li.getMarker() : null;
+      if (kept !== NO_MARKER && (kept || marker)) item.marker = kept || marker;
+      const page = typeof li.getPage === 'function' ? li.getPage() : null;
+      if (page) item.page = page;
+      if (lvl > 0) item.level = lvl;
+      items.push(item);
+    }
+    if (items.length) {
+      const blk = { type: 'list', items, _key: nodeKey };
+      if (ordered && !isPlain) blk.ordered = true;
+      if (listKind && listKind !== 'number') { blk.kind = listKind; blk.style = listKind; }   // 'number' is the list type, not a style
+      else if (isPlain) { blk.kind = 'toc'; blk.style = 'toc'; }
+      blocks.push(blk);
+    }
+  } else {
+    const b = paraBlock(node);
+    if (b) {
+      b._key = nodeKey;
+      blocks.push(b);
+    }
+  }
+}
+
 function buildModel() {
   const blocks = [];
   const keys = [];                                     // parallel: the Lexical node key that produced blocks[i]
   for (const node of $getRoot().getChildren()) {
     const before = blocks.length;
-    const nodeKey = node.getKey();
-    if ($isBreakNode(node)) {
-      blocks.push({ type: 'indicator', kind: typeof node.getKind === 'function' ? node.getKind() : 'asterisks', _key: nodeKey });
-    } else if ($isPrintPageNode(node)) {
-      blocks.push({ type: 'pagenum', page: node.getPage(), _key: nodeKey });
-    } else if ($isSidebarNode(node)) {
-      const innerBlocks = [];
-      for (const child of node.getChildren()) {
-        const cKey = child.getKey();
-        if ($isHeadingNode(child)) {
-          const { runs, hasEmph, hasMath } = nodeToRuns(child);
-          const text = child.getTextContent().replace(/\s+/g, ' ').trim();
-          if (runs.length && (hasEmph || hasMath)) {
-            innerBlocks.push({ type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), segments: runs, text, _key: cKey });
-          } else if (text) {
-            innerBlocks.push({ type: 'heading', level: Math.min(3, Number(child.getTag().slice(1)) || 2), text, _key: cKey });
-          }
-        } else if ($isListNode(child)) {
-          const listType = typeof child.getListType === 'function' ? child.getListType() : null;
-          const listKind = (typeof child.getListKind === 'function' ? child.getListKind() : null) || (typeof child.getBanaStyle === 'function' ? child.getBanaStyle() : null);
-          const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
-          const isExercise = listKind === 'exercise' || (typeof child.getBanaStyle === 'function' && child.getBanaStyle() === 'exercise');
-          const ordered = listType === 'number' || (isExercise && !isPlain);
-          const items = [];
-          const counters = [0, 0, 0, 0, 0];
-          for (const li of child.getChildren()) {
-            const { runs, hasEmph, hasMath } = nodeToRuns(li);
-            if (!runs.length) continue;
-            const lvl = Math.max(0, Math.min(4, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));
-            counters[lvl]++;
-            for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
-            const count = counters[lvl];
-            let marker = null;
-            if (ordered && !isPlain) {
-              if (lvl === 0) marker = `${count}.`;
-              else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
-              else if (lvl === 2) {
-                const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
-                marker = `${romans[count - 1] || count}.`;
-              } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
-              else marker = `(${count})`;
-            }
-            const item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
-            if (marker) item.marker = marker;
-            const page = typeof li.getPage === 'function' ? li.getPage() : null;
-            if (page) item.page = page;
-            if (lvl > 0) item.level = lvl;
-            items.push(item);
-          }
-          if (items.length) {
-            const blk = { type: 'list', items, _key: cKey };
-            if (listKind) { blk.kind = listKind; blk.style = listKind; }
-            innerBlocks.push(blk);
-          }
-        } else if ($isTableNode(child)) {
-          innerBlocks.push({ type: 'table', headers: child.getHeaders(), rows: child.getRows(), format: child.getFormat(), _key: cKey });
-        } else {
-          const b = paraBlock(child);
-          if (b) { b._key = cKey; innerBlocks.push(b); }
-        }
-      }
-      blocks.push({
-        type: 'box',
-        title: node.getTitle() || undefined,
-        blocks: innerBlocks.length ? innerBlocks : undefined,
-        _key: nodeKey
-      });
-    } else if ($isTableNode(node)) {
-      const format = typeof node.getFormat === 'function' ? node.getFormat() : 'spatial';
-      const tblBlock = {
-        type: 'table',
-        headers: node.getHeaders(),
-        rows: node.getRows(),
-        _key: nodeKey
-      };
-      if (format && format !== 'auto') {
-        tblBlock.format = format;
-        tblBlock.style = `table-${format}`;
-      }
-      blocks.push(tblBlock);
-    } else if ($isGraphicNode(node)) {
-      const sz = node.getSize();
-      const hLines = sz === 'compact' ? 8 : (sz === 'full' ? Math.min(24, (settings.lines || 25) - 1) : 15);
-      blocks.push({
-        type: 'graphic',
-        svg: node.getSvg(),
-        alt: node.getAlt(),
-        title: node.getTitle(),
-        textures: node.getTextures(),
-        brailleLabels: node.getBrailleLabels(),
-        size: sz,
-        widthCells: settings.cells || 38,
-        heightLines: hLines,
-        _key: nodeKey
-      });
-    } else if ($isHeadingNode(node)) {
-      const { runs, hasEmph, hasMath } = nodeToRuns(node);
-      const text = node.getTextContent().replace(/\s+/g, ' ').trim();
-      if (runs.length && (hasEmph || hasMath)) {
-        blocks.push({ type: 'heading', level: Math.min(3, Number(node.getTag().slice(1)) || 1), segments: runs, text, _key: nodeKey });
-      } else if (text) {
-        blocks.push({ type: 'heading', level: Math.min(3, Number(node.getTag().slice(1)) || 1), text, _key: nodeKey });
-      }
-    } else if ($isListNode(node)) {
-      const listType = typeof node.getListType === 'function' ? node.getListType() : null;
-      const listKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) ||
-                       (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
-      const isPlain = listType === 'plain' || listKind === 'toc' || listKind === 'index' || listKind === 'plain';
-      const isExercise = listKind === 'exercise' || (typeof node.getBanaStyle === 'function' && node.getBanaStyle() === 'exercise');
-      const ordered = listType === 'number' || (isExercise && !isPlain);
-      const items = [];
-      const counters = [0, 0, 0, 0, 0];
-      for (const li of node.getChildren()) {
-        const { runs, hasEmph, hasMath } = nodeToRuns(li);        // keep list-item emphasis + inline maths
-        if (!runs.length) continue;
-        const lvl = Math.max(0, Math.min(4, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));
-        counters[lvl]++;
-        for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
-        const count = counters[lvl];
-        let marker = null;
-        if (ordered && !isPlain) {
-          if (lvl === 0) marker = `${count}.`;
-          else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
-          else if (lvl === 2) {
-            const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
-            marker = `${romans[count - 1] || count}.`;
-          } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
-          else marker = `(${count})`;
-        }
-        const item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
-        if (marker) item.marker = marker;
-        const page = typeof li.getPage === 'function' ? li.getPage() : null;
-        if (page) item.page = page;
-        if (lvl > 0) item.level = lvl;
-        items.push(item);
-      }
-      if (items.length) {
-        const blk = { type: 'list', items, _key: nodeKey };
-        if (listKind) { blk.kind = listKind; blk.style = listKind; }
-        else if (isPlain) { blk.kind = 'toc'; blk.style = 'toc'; }
-        blocks.push(blk);
-      }
-    } else {
-      const b = paraBlock(node);
-      if (b) {
-        b._key = nodeKey;
-        blocks.push(b);
-      }
-    }
-    if (blocks.length > before) keys.push(nodeKey);
+    nodeToBlocks(node, blocks);
+    if (blocks.length > before) keys.push(node.getKey());
   }
-  const firstHeading = blocks.find((b) => b.type === 'heading');   // → running head on page 2+
-  return { title: firstHeading ? firstHeading.text : null, blocks, keys };
+  const firstHeading = blocks.find((b) => b.type === 'heading');   // fallback title for a new document
+  const model = { title: loadedDocInfo.title || (firstHeading ? firstHeading.text : null), blocks, keys };
+  if (loadedDocInfo.metadata) model.metadata = loadedDocInfo.metadata;
+  // A NIMAS package's own images/PDF (A3), so a save can package them back out (A4).
+  if (loadedDocInfo.resources.length) model.resources = loadedDocInfo.resources;
+  return model;
+}
+
+// Save/Ctrl+S writes a NIMAS package (A4) — not a bare .xml — once the loaded document either
+// carries package resources (images/PDF) or was itself imported from a package (A3), so a
+// package round-trips without the user having to remember to pick "NIMAS package" by hand.
+function saveFormat() {
+  return (loadedDocInfo.resources.length || loadedDocInfo.metadata?.package) ? 'package' : 'xml';
 }
 
 // ---- toolbar state ----
@@ -2271,8 +2709,7 @@ function refreshToolbar(explicitTarget) {
         if ($isListNode(node)) {
           const lKind = (typeof node.getListKind === 'function' ? node.getListKind() : null) || (typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null);
           const rawType = (typeof node.getListType === 'function' ? node.getListType() : null);
-          const mappedKind = (lKind === 'plain' ? 'index' : lKind);
-          detectedBlock = mappedKind || (rawType === 'plain' ? 'index' : rawType) || 'bullet';
+          detectedBlock = lKind || rawType || 'bullet';   // a plain list reports as 'plain', not 'index'
           break;
         }
         if ($isQuoteNode(node)) {
@@ -2290,7 +2727,7 @@ function refreshToolbar(explicitTarget) {
         if (typeof node.getBanaStyle === 'function') {
           const bs = node.getBanaStyle();
           if (bs && bs !== 'body' && bs !== 'sidebar') {
-            detectedBlock = (bs === 'plain' ? 'index' : bs);
+            detectedBlock = bs;
             break;
           }
         }
@@ -2318,7 +2755,7 @@ function refreshToolbar(explicitTarget) {
         const banaEl = activeDomNode.closest('[data-bana-style]:not(aside):not(.emboss-sidebar-card):not(.emboss-box-card)');
         if (banaEl) {
           const bs = banaEl.dataset.banaStyle;
-          detectedBlock = (bs === 'plain' ? 'index' : bs);
+          detectedBlock = bs;
         } else {
           const hEl = activeDomNode.closest('h1, h2, h3, h4, h5, h6');
           if (hEl) {
@@ -2327,9 +2764,8 @@ function refreshToolbar(explicitTarget) {
             const listEl = activeDomNode.closest('ul, ol');
             if (listEl) {
               const lk = listEl.dataset.listKind || listEl.dataset.banaStyle;
-              const mappedLk = (lk === 'plain' ? 'index' : lk);
               const rawType = listEl.dataset.listType;
-              detectedBlock = mappedLk || (rawType === 'plain' ? 'index' : (listEl.tagName === 'OL' ? 'number' : 'bullet'));
+              detectedBlock = lk || (rawType === 'plain' ? 'plain' : (listEl.tagName === 'OL' ? 'number' : 'bullet'));
             } else if (activeDomNode.closest('blockquote')) {
               detectedBlock = 'quote';
             } else if (activeDomNode.closest('.doc-break')) {
@@ -2361,7 +2797,7 @@ function refreshToolbar(explicitTarget) {
     }
     const si = $id('styleInspector');
     if (si) {
-      si.textContent = formatStyleInspectorBadge(block, settings.profile || settings.mode || 'bana');
+      si.textContent = formatStyleInspectorBadge(block, settings.profile || settings.mode || 'bana', uiText);
     }
     $id('btnBold')?.setAttribute('aria-pressed', String(b));
     $id('btnItalic')?.setAttribute('aria-pressed', String(i));
@@ -2401,6 +2837,7 @@ let lastBrf = '';
 let lastModel = null;      // for the volume-aware download
 let lastFormatOpts = null;
 let lastTrace = null;
+let lastPageLineStarts = null;                     // set by render(): first trace row of each braille page
 let timer = null;
 let isManualZoom = false;
 let brailleCellW = Number(settings.brailleCellW) || 18;   // dot-cell size (the legibility control)
@@ -2437,7 +2874,7 @@ async function activateTable() {
     activeTable = want;
   } catch (e) {
     console.warn('braille code unavailable, keeping', activeTable, e);
-    setStatus(`Could not load the tables for "${settings.brailleCode}" — still using the previous braille code.`);
+    setStatus(t('app.render.table_failed', { code: settings.brailleCode }));
   }
   return activeTable;
 }
@@ -2468,17 +2905,25 @@ function currentFormatOpts() {
       blockCache: blockTranslationCache,
     };
 }
+// Renders are async and may overlap (a keystroke lands while a large document is still
+// formatting). Each call takes a generation number; after every await a call that is no
+// longer the newest bails out, so lastModel/lastBrf/lastKeys and the braille pane always
+// reflect the most recent editor state and never a stale, slower render that finished last.
+let renderGen = 0;
 async function render() {
   if (timer) {
     clearTimeout(timer);
     timer = null;
   }
+  const gen = ++renderGen;
   try {
     const model = editor.getEditorState().read(buildModel);
     const table = activeTable;
     const o = currentFormatOpts();
     const trace = {};
     const brf = await formatDocumentAsync(model, { ...o, trace });
+    if (gen !== renderGen) return;                  // superseded by a newer render
+    refreshAllTableBadges();          // G15: covers a settings change (width/mode) too, not just a table edit
     lastModel = model; lastFormatOpts = o;
     lastTrace = trace;
     lastBrf = brf;
@@ -2496,11 +2941,14 @@ async function render() {
       return '';
     };
     const allBrfLines = [];
+    const pageLineStarts = [];                     // index into allBrfLines where each braille page begins
     (brf.split('\f')).forEach((page) => {
       const lines = page.split(/\r\n|\n/);
       if (lines.length && lines[lines.length - 1] === '') lines.pop();
+      pageLineStarts.push(allBrfLines.length);
       allBrfLines.push(...lines);
     });
+    lastPageLineStarts = pageLineStarts;
     const rowPrintText = new Array(allBrfLines.length).fill('');
     let prevBi = -1;
     let listItemIdx = 0;
@@ -2585,6 +3033,7 @@ async function render() {
           const startLine = lineIdx >= 0 ? lineIdx : 0;
           const matrix = await rasterizeSvgToDotPadCells(b.svg);
           const monarchMatrix = await rasterizeSvgToMonarchCells(b.svg);
+          if (gen !== renderGen) return;            // superseded while rasterising
           const m = String(b.svg).match(/data-braille-line=["']([^"']+)["']/);
           const title = (m && m[1]) || (b.title || b.alt || 'Graphic');
           const uebTitle = (m && m[1]) ? m[1] : (defaultBrailleTranslator ? defaultBrailleTranslator(title).slice(0, 20).padEnd(20, '⠀') : title.slice(0, 20));
@@ -2592,7 +3041,9 @@ async function render() {
         }
       }
     }
+    if (gen !== renderGen) return;                  // superseded before the device push
     await tactileDisplay.updateBraille(allBrfLines, null, graphicMap);
+    if (gen !== renderGen) return;
     if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
       drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
     } else if (currentBrailleTab === 'dotpad' && typeof drawDotPadEmulator === 'function') {
@@ -2600,10 +3051,10 @@ async function render() {
     }
   } catch (e) {
     console.error(e);
+    if (gen !== renderGen) return;                  // a newer render owns the pane now
     const msg = String((e && e.message) || e);       // tolerate a non-Error throw (no .message)
-    brailleEl.textContent = '⚠ Braille could not be generated.\n\n' + msg +
-      '\n\n(If this says the engine is not initialised, the braille engine did not load — hard-refresh with Cmd/Ctrl+Shift+R.)';
-    setStatus('Render error: ' + msg);
+    brailleEl.textContent = `${t('app.render.failed')}\n\n${msg}\n\n${t('app.render.failed_hint')}`;
+    setStatus(t('app.render.error_status', { message: msg }));
   }
 }
 const scheduleRender = () => { clearTimeout(timer); timer = setTimeout(render, 200); };
@@ -2980,12 +3431,12 @@ function buildCellText(model) {
       const colCount = Math.max(rawHeaders.length, ...rawRows.map((r) => r.length));
       const headerCount = rawHeaders.length;
       for (let ci = 0; ci < headerCount; ci++) {
-        cellText[`${i}:${ci}`] = rawHeaders[ci] != null ? String(rawHeaders[ci]) : '';
+        cellText[`${i}:${ci}`] = flatSegText(cellSegments(rawHeaders[ci]));
       }
       rawRows.forEach((r, ri) => {
         for (let ci = 0; ci < colCount; ci++) {
           const unit = headerCount + ri * colCount + ci;
-          cellText[`${i}:${unit}`] = (r && r[ci] != null) ? String(r[ci]) : '';
+          cellText[`${i}:${unit}`] = flatSegText(cellSegments(r && r[ci]));
         }
       });
       if (headerCount === 0 && rawRows.length === 0 && (b.title || b.caption)) {
@@ -3013,13 +3464,13 @@ function buildCellText(model) {
   });
   updatePrintToc();
 }
-// The print element for a (block, unit): the block, its unit-th <li> for a list, or its unit-th <input> for a table.
+// The print element for a (block, unit): the block, its unit-th <li> for a list, or its unit-th cell for a table.
 function printUnitEl(block, unit) {
   const be = editorEl.querySelector(`[data-block-idx="${block}"]`);
   if (!be) return null;
   const lis = be.querySelectorAll('li');
   if (be.tagName !== 'ASIDE' && !be.classList.contains('emboss-sidebar-card') && lis.length) return lis[unit] || be;
-  const tableInputs = be.querySelectorAll('input.table-cell-input');
+  const tableInputs = be.querySelectorAll('.table-cell-input');
   if (tableInputs.length) return tableInputs[unit] || be;
   if (be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card')) {
     if (unit >= 1000) {
@@ -3088,6 +3539,17 @@ function resolveBlockUnit(target) {
   }
   return { block, unit, unitEl, be };
 }
+// The caret's offset into `cellEl`'s flat text (matching flatSegText's own $latex$
+// wrapping for maths), or 0 when the selection is not inside the cell — e.g. right after
+// a click that also moved focus elsewhere, or during a programmatic .focus() before the
+// browser has placed a caret.
+function tableCellCaretOffset(cellEl) {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return 0;
+  const range = sel.getRangeAt(0);
+  if (!cellEl.contains(range.startContainer)) return 0;
+  return domOffsetOfNode(cellEl, range.startContainer, range.startOffset);
+}
 function handleTableCellEvent(input, unit) {
   if (!input) return;
   const be = input.closest('[data-block-idx]');
@@ -3096,8 +3558,10 @@ function handleTableCellEvent(input, unit) {
   if (Number.isNaN(block)) return;
 
   refreshToolbar();
-  const text = input.value || '';
-  const caretPos = (typeof input.selectionStart === 'number') ? input.selectionStart : 0;
+  // Read straight from the cell's live DOM (not the model/cellText, which only catches up
+  // after the next debounced render) so the cell trace tracks every keystroke.
+  const text = flatSegText(cellHtmlToSegments(input.innerHTML));
+  const caretPos = tableCellCaretOffset(input);
   if (!text.trim()) {
     clearWordLink();
     linkByBlock(block, false);
@@ -3158,7 +3622,8 @@ function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s
       }
       acc += L;
     } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD') {
+      // A table cell's atomic maths chip (G15) counts as `$latex$`, matching flatSegText.
+      if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD' || node.classList?.contains('cell-math-chip')) {
         const mf = node.querySelector?.('math-field') || (node.tagName === 'MATH-FIELD' ? node : null);
         const latex = node.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
         const mathLen = (latex ? `$${latex}$` : '⟨equation⟩').length;
@@ -3185,11 +3650,11 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 function showIdleStatus() {
   const body = $id('ruleInfoBody');
   if (body) {
-    body.innerHTML = `<span class="sb-hint">Click a word in either panel to see the braille rules used.</span>`;
+    body.innerHTML = `<span class="sb-hint">${escapeHtml(t('app.status.rule_hint'))}</span>`;
   } else {
     const sb = $id('statusBar') || $id('ruleInfo');
     if (sb) {
-      sb.innerHTML = `<span class="sb-hint">Click a word in either panel to see the braille rules used.</span>` +
+      sb.innerHTML = `<span class="sb-hint">${escapeHtml(t('app.status.rule_hint'))}</span>` +
         (currentStatusText ? `<span class="doc-stats" id="docStats">${escapeHtml(currentStatusText)}</span>` : `<span class="doc-stats" id="docStats"></span>`);
     }
   }
@@ -3325,12 +3790,19 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
 
   const pe = printUnitEl(block, unit) || editorEl.querySelector(`[data-block-idx="${block}"]`);
   if (pe) {
-    if (pe.tagName === 'INPUT') {
+    if (isTableCellEl(pe)) {
       pe.classList.add('table-cell-hl');
       if (source === 'braille') {
+        // A contenteditable cell has no .setSelectionRange; place a real DOM Range/
+        // Selection instead (charRangeInEl already treats a maths chip as one unit).
         try {
           pe.focus();
-          pe.setSelectionRange(s, e);
+          const r = charRangeInEl(pe, s, e);
+          if (r) {
+            const domSel = window.getSelection();
+            domSel.removeAllRanges();
+            domSel.addRange(r);
+          }
         } catch {}
       }
       if (!isElementVisibleIn(pe, editorEl, 40)) {
@@ -3712,7 +4184,7 @@ function domOffsetOfNode(el, targetNode, targetOffset) {
           const c = children[i];
           if (c.nodeType === Node.TEXT_NODE) childAcc += c.nodeValue.length;
           else if (c.nodeType === Node.ELEMENT_NODE) {
-            if (c.classList?.contains('math-embed') || c.tagName === 'MATH-FIELD') {
+            if (c.classList?.contains('math-embed') || c.tagName === 'MATH-FIELD' || c.classList?.contains('cell-math-chip')) {
               const mf = c.querySelector?.('math-field') || (c.tagName === 'MATH-FIELD' ? c : null);
               const latex = c.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
               childAcc += (latex ? `$${latex}$` : '⟨equation⟩').length;
@@ -3729,7 +4201,7 @@ function domOffsetOfNode(el, targetNode, targetOffset) {
     if (node.nodeType === Node.TEXT_NODE) {
       acc += node.nodeValue.length;
     } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD') {
+      if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD' || node.classList?.contains('cell-math-chip')) {
         const mf = node.querySelector?.('math-field') || (node.tagName === 'MATH-FIELD' ? node : null);
         const latex = node.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
         acc += (latex ? `$${latex}$` : '⟨equation⟩').length;
@@ -3921,15 +4393,16 @@ function updatePrintToc() {
     return;
   }
 
-  const countText = `${headings.length} section${headings.length === 1 ? '' : 's'}`;
-  const toggleLabel = isTocBoxCollapsed ? 'Expand ▾' : 'Shrink ▴';
+  const countText = headings.length === 1 ? t('app.toc.section_one') : t('app.toc.sections', { count: headings.length });
+  const toggleLabel = isTocBoxCollapsed ? `${t('app.toc.expand')} ▾` : `${t('app.toc.shrink')} ▴`;
+  const toggleAria = escapeHtml(isTocBoxCollapsed ? t('app.toc.expand_aria') : t('app.toc.shrink_aria'));
   const ariaExpanded = !isTocBoxCollapsed;
 
   container.innerHTML = `
     <div class="print-toc-box ${isTocBoxCollapsed ? 'collapsed' : ''}" id="printTocBox">
-      <div class="print-toc-head" id="printTocHead" role="button" tabindex="0" aria-expanded="${ariaExpanded}" aria-controls="printTocList" title="${isTocBoxCollapsed ? 'Expand Table of Contents' : 'Shrink Table of Contents'}">
-        <h3>📑 Table of Contents <span class="print-toc-count">(${countText})</span></h3>
-        <button type="button" class="print-toc-toggle-btn" id="printTocToggleBtn" aria-label="${isTocBoxCollapsed ? 'Expand Table of Contents' : 'Shrink Table of Contents'}">${toggleLabel}</button>
+      <div class="print-toc-head" id="printTocHead" role="button" tabindex="0" aria-expanded="${ariaExpanded}" aria-controls="printTocList" title="${toggleAria}">
+        <h3>📑 ${escapeHtml(t('app.toc.title'))} <span class="print-toc-count">(${escapeHtml(countText)})</span></h3>
+        <button type="button" class="print-toc-toggle-btn" id="printTocToggleBtn" aria-label="${toggleAria}">${escapeHtml(toggleLabel)}</button>
       </div>
       <ul class="print-toc-list" id="printTocList">
         ${headings.map(h => `<li style="margin-left:${(h.level - 1) * 1.2}em"><a data-jump-block="${h.blockIdx}">${escapeHtml(h.text)}</a></li>`).join('')}
@@ -3986,7 +4459,7 @@ function syncCaretWithBraille(immediate = false) {
       handleMathFieldSelect(mf);
       return;
     }
-    if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
+    if (isTableCellEl(active)) {
       const unit = Number(active.dataset.unit || 0);
       handleTableCellEvent(active, unit);
       return;
@@ -4038,29 +4511,29 @@ window.syncCaretWithBraille = syncCaretWithBraille;
 
 function describeCaretWord() {
   const active = document.activeElement;
-  if (active && active.tagName === 'INPUT' && active.classList.contains('table-cell-input')) {
+  if (isTableCellEl(active)) {
     const unit = Number(active.dataset.unit || 0);
     handleTableCellEvent(active, unit);
     const be = active.closest('[data-block-idx]');
     const block = be ? Number(be.dataset.blockIdx) : 0;
-    const text = cellText[`${block}:${unit}`] || active.value || '';
-    const [s, en] = wordRangeAt(text, active.selectionStart || 0);
+    const text = cellText[`${block}:${unit}`] || flatSegText(cellHtmlToSegments(active.innerHTML));
+    const [s, en] = wordRangeAt(text, tableCellCaretOffset(active));
     announce(lastRuleSpoken || text.slice(s, en));
     return;
   }
   const sel = window.getSelection();
   const node = sel && sel.anchorNode;
-  if (!node || !editorEl.contains(node)) { announce('Place the caret in the text first.'); return; }
+  if (!node || !editorEl.contains(node)) { announce(t('app.editor.caret_first')); return; }
   let targetChild = null;
   if (node.nodeType === 1 && typeof sel.anchorOffset === 'number' && sel.anchorOffset < node.childNodes.length) {
     targetChild = node.childNodes[sel.anchorOffset];
   }
   const target = targetChild || node;
   const resolved = resolveBlockUnit(target);
-  if (!resolved) { announce('Place the caret in the text first.'); return; }
+  if (!resolved) { announce(t('app.editor.caret_first')); return; }
   const { block, unit, unitEl } = resolved;
   const text = cellText[`${block}:${unit}`];
-  if (text == null) { announce('No braille mapping for this line.'); return; }
+  if (text == null) { announce(t('app.editor.no_mapping')); return; }
   const [s, en] = wordRangeAt(text, domOffsetInEl(unitEl, node, sel.anchorOffset));
   highlightWord(block, unit, s, en, null, 'caret');
   showRuleInfo(text.slice(s, en));
@@ -4071,7 +4544,7 @@ function describeCaretWord() {
 function blockDisplayText(b) {
   if (!b) return '';
   if (b.type === 'heading') return b.text || '';
-  if (b.type === 'indicator') return '* * *';
+  if (b.type === 'indicator') return b.kind === 'asterism' ? '⁂ ⁂ ⁂' : '* * *';
   if (b.type === 'list') return (b.items || []).map((it) => it.text).join(' • ');
   if (b.type === 'para') {
     if (b.segments) return b.segments.map((s) => (s.type === 'math' ? '⟨maths⟩' : (s.text || ''))).join('');
@@ -4269,12 +4742,12 @@ function skKeyup(e) {
 }
 function toggleSixKey(on) {
   const want = on == null ? !sixKeyOn : on;
-  if (want && settings.sixKeyInput === false) { announce('SDF JKL braille input is turned off in Settings.'); return; }
+  if (want && settings.sixKeyInput === false) { announce(t('app.sixkey.disabled_in_settings')); return; }
   sixKeyOn = want;
   $id('btnSixKey')?.setAttribute('aria-pressed', String(sixKeyOn));
   skHeld.clear(); skChord = 0;
-  if (sixKeyOn) { skUpdatePending(); editorEl.focus(); announce('Braille direct input on. Type chords with S D F and J K L.'); }
-  else { skUpdatePending(); announce('Braille direct input off.'); }
+  if (sixKeyOn) { skUpdatePending(); editorEl.focus(); announce(t('app.sixkey.on')); }
+  else { skUpdatePending(); announce(t('app.sixkey.off')); }
 }
 // Screen reader mode: braille pane is real cells for a display (see renderBraille),
 // and six-key input is hidden + disabled (it fights a display user's own braille input).
@@ -4454,7 +4927,7 @@ const reader = new Reader({
     }
   },
   onEnd: () => { clearReading(); updateReadButtons(); },
-  onStuck: () => { announce('Read-aloud could not start — your browser’s speech engine may be stuck. Try fully quitting and reopening the browser.'); setStatus('Read-aloud did not start (browser speech engine stuck — restart the browser).'); },
+  onStuck: () => { announce(t('app.tts.stuck')); setStatus(t('app.tts.stuck_status')); },
 });
 // play / pause / resume + stop, with the play arrow, pause bars, and a stop square
 function updateReadButtons() {                       // one button: ▶ play (from caret) ⇄ ⏹ stop
@@ -4510,7 +4983,7 @@ function moveCaretToKey(key) {                      // so the next Play resumes 
   editor.update(() => { const n = $getNodeByKey(key); if (n && n.selectStart) n.selectStart(); });
 }
 function startReading(fromBlock) {
-  if (!speechAvailable()) { announce('Text-to-speech is not available in this browser.'); return; }
+  if (!speechAvailable()) { announce(t('app.tts.unavailable')); return; }
   const model = editor.getEditorState().read(buildModel);
   const all = buildSpokenItems(model, mathSpeech);
   // Play (no arg) → from the caret word; double-click a braille line → from that block.
@@ -4519,10 +4992,10 @@ function startReading(fromBlock) {
   // Caret past the last word (nothing after it) → read its block from the start, so Play
   // always does something instead of announcing "Nothing to read".
   if (!items.length && all.length) items = sliceItemsFrom(all, { block: pos.block, unit: 0, offset: 0 });
-  if (!items.length) { announce('Nothing to read.'); return; }
+  if (!items.length) { announce(t('app.tts.nothing')); return; }
   reader.rate = Number(settings.ttsRate) || 1;
   reader.voice = pickVoice(settings.ttsVoice);
-  announce('Reading aloud.');
+  announce(t('app.tts.reading'));
   reader.speak(items);
   updateReadButtons();
 }
@@ -4586,15 +5059,15 @@ function populateVoices() {
   shown.forEach((v) => {
     const o = document.createElement('option');
     o.value = v.name;
-    o.textContent = `${v.name} (${v.lang})${v.default ? ' — default' : ''}`;
+    o.textContent = `${v.name} (${v.lang})${v.default ? ` — ${t('app.tts.default_voice')}` : ''}`;
     sel.appendChild(o);
   });
 
   if (!voicesExpanded && restVoices.length) {
-    const o = document.createElement('option'); o.value = '__more_voices__'; o.textContent = `… more voices (${restVoices.length})`; sel.appendChild(o);
+    const o = document.createElement('option'); o.value = '__more_voices__'; o.textContent = t('app.tts.more_voices', { count: restVoices.length }); sel.appendChild(o);
   }
   if (!noveltyExpanded && novelty.length) {
-    const o = document.createElement('option'); o.value = '__novelty_voices__'; o.textContent = `… novelty voices (${novelty.length})`; sel.appendChild(o);
+    const o = document.createElement('option'); o.value = '__novelty_voices__'; o.textContent = t('app.tts.novelty_voices', { count: novelty.length }); sel.appendChild(o);
   }
 
   const chosen = pickVoice(settings.ttsVoice); if (chosen) sel.value = chosen.name;
@@ -4642,18 +5115,64 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---- ARIA toolbar: roving tabindex + Left/Right navigation ----
+// WAI-ARIA toolbar pattern: exactly one control is in the Tab sequence (tabindex=0), the
+// rest are tabindex=-1; Left/Right move focus (wrapping), Home/End jump to the ends, and
+// the last-focused control stays the Tab stop so Shift+Tab/Tab returns to where you were.
+// Disabled or hidden controls (Undo at start-up, Six-key when off) are skipped and never
+// left as the Tab stop, otherwise the whole toolbar would be unreachable from the keyboard.
 function initToolbar() {
   const toolbar = $id('toolbar');
-  const items = () => [...toolbar.querySelectorAll('[data-tb]')];
-  items().forEach((el, i) => { el.tabIndex = i === 0 ? 0 : -1; });
-  toolbar.addEventListener('keydown', (e) => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    const list = items(); const cur = list.indexOf(document.activeElement);
-    if (cur < 0) return;
-    e.preventDefault();
-    const next = (cur + (e.key === 'ArrowRight' ? 1 : -1) + list.length) % list.length;
-    list[cur].tabIndex = -1; list[next].tabIndex = 0; list[next].focus();
+  if (!toolbar) { initResponsiveTextToolbar(); return; }
+  // Every focusable control in the toolbar shares the single Tab stop (WAI-ARIA toolbar
+  // pattern) — not only the [data-tb] formatting buttons, or the Insert/Table/Style
+  // controls stay as eight separate stops between the header and the editor.
+  const allItems = () => [...toolbar.querySelectorAll('button, select, input, [data-tb]')];
+  const usable = (el) => !el.disabled && !el.hidden && el.getAttribute('aria-hidden') !== 'true' &&
+    !(el.offsetParent === null && getComputedStyle(el).position !== 'fixed');
+  const items = () => allItems().filter(usable);
+  let current = null;                                  // the control that owns tabindex=0
+  const setCurrent = (el) => {
+    current = el;
+    allItems().forEach((it) => { const v = it === el ? 0 : -1; if (it.tabIndex !== v) it.tabIndex = v; });
+  };
+  const ensureTabStop = () => {
+    const list = items();
+    if (!list.length) return;
+    if (current && list.includes(current)) { setCurrent(current); return; }
+    setCurrent(list[0]);
+  };
+  ensureTabStop();
+  // Focus by mouse or programmatically (e.g. the Insert button after a dialog) also
+  // "remembers" that control as the Tab stop.
+  toolbar.addEventListener('focusin', (e) => {
+    const el = e.target.closest ? e.target.closest('button, select, input, [data-tb]') : null;
+    if (el && toolbar.contains(el) && el !== current) setCurrent(el);
   });
+  toolbar.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const k = e.key;
+    if (k !== 'ArrowLeft' && k !== 'ArrowRight' && k !== 'Home' && k !== 'End') return;
+    const active = document.activeElement;
+    const el = active && active.closest ? active.closest('button, select, input, [data-tb]') : null;
+    if (!el || !toolbar.contains(el)) return;
+    if (el.tagName === 'SELECT' && (k === 'ArrowLeft' || k === 'ArrowRight')) return;   // leave value cycling to the select
+    const list = items();
+    if (!list.length) return;
+    const cur = Math.max(0, list.indexOf(el));
+    let next;
+    if (k === 'Home') next = 0;
+    else if (k === 'End') next = list.length - 1;
+    else next = (cur + (k === 'ArrowRight' ? 1 : -1) + list.length) % list.length;
+    e.preventDefault();
+    setCurrent(list[next]);
+    list[next].focus();
+  });
+  // Keep a valid Tab stop when controls are enabled/disabled or shown/hidden later.
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(ensureTabStop).observe(toolbar, {
+      subtree: true, attributes: true, attributeFilter: ['disabled', 'hidden', 'aria-hidden', 'style', 'class'],
+    });
+  }
   initResponsiveTextToolbar();
 }
 
@@ -4666,21 +5185,26 @@ function initResponsiveTextToolbar() {
 
   function getStyleLabels() {
     return {
-      p:        { full: `¶ ${t('styles.body') || 'Body Text'}`,            short: '¶ Text',      mini: '¶' },
+      p:        { full: `¶ ${t('styles.body') || 'Body Text'}`,            short: `¶ ${t('app.styles.short_text')}`, mini: '¶' },
       h1:       { full: `${t('styles.h1') || 'H1 Heading'}`,               short: 'H1',          mini: 'H1' },
       h2:       { full: `${t('styles.h2') || 'H2 Subheading'}`,            short: 'H2',          mini: 'H2' },
       h3:       { full: `${t('styles.h3') || 'H3 Sub-subheading'}`,        short: 'H3',          mini: 'H3' },
-      bullet:   { full: `• ${t('styles.bullet_list') || 'Bullet List'}`,    short: '• List',      mini: '•' },
-      number:   { full: `1. ${t('styles.number_list') || 'Numbered List'}`, short: '1. List',     mini: '1.' },
-      toc:      { full: `📑 ${t('styles.toc_entry') || 'TOC Entry'}`,      short: 'TOC',         mini: 'TOC' },
-      dialogue: { full: `🎭 ${t('styles.dialogue') || 'Play Dialogue'}`,    short: 'Play',        mini: 'Play' },
-      stage:    { full: `🎬 ${t('styles.stage') || 'Stage Direction'}`,    short: 'Stage',       mini: 'Stage' },
-      poem:     { full: `📜 ${t('styles.poem') || 'Poetry / Verse'}`,      short: 'Poem',        mini: 'Poem' },
-      exercise: { full: `❓ ${t('styles.exercise') || 'Exercise Question'}`, short: 'Exercise',   mini: 'Ex' },
-      caption:  { full: `💬 ${t('styles.caption') || 'Caption'}`,          short: 'Caption',     mini: 'Cap' },
-      footnote: { full: `📝 ${t('styles.footnote') || 'Footnote'}`,        short: 'Footnote',    mini: 'Fn' },
-      note:     { full: `📋 ${t('styles.note') || "Transcriber's Note"}`,   short: 'Note',        mini: 'TN' },
-      quote:    { full: `“ ${t('styles.quote') || 'Blockquote'}`,          short: 'Quote',       mini: 'Quote' }
+      bullet:   { full: `• ${t('styles.bullet_list') || 'Bullet List'}`,    short: `• ${t('app.styles.short_list')}`, mini: '•' },
+      number:   { full: `1. ${t('styles.number_list') || 'Numbered List'}`, short: `1. ${t('app.styles.short_list')}`, mini: '1.' },
+      toc:      { full: `📑 ${t('styles.toc_entry') || 'TOC Entry'}`,      short: t('app.styles.short_toc'), mini: t('app.styles.short_toc') },
+      dialogue: { full: `🎭 ${t('styles.dialogue') || 'Play Dialogue'}`,    short: t('app.styles.short_play'), mini: t('app.styles.short_play') },
+      stage:    { full: `🎬 ${t('styles.stage') || 'Stage Direction'}`,    short: t('app.styles.short_stage'), mini: t('app.styles.short_stage') },
+      poem:     { full: `📜 ${t('styles.poem') || 'Poetry / Verse'}`,      short: t('app.styles.short_poem'), mini: t('app.styles.short_poem') },
+      exercise: { full: `❓ ${t('styles.exercise') || 'Exercise Question'}`, short: t('app.styles.short_exercise'), mini: t('app.styles.mini_exercise') },
+      caption:  { full: `💬 ${t('styles.caption') || 'Caption'}`,          short: t('app.styles.short_caption'), mini: t('app.styles.mini_caption') },
+      footnote: { full: `📝 ${t('styles.footnote') || 'Footnote'}`,        short: t('app.styles.short_footnote'), mini: t('app.styles.mini_footnote') },
+      note:     { full: `📋 ${t('styles.note') || "Transcriber's Note"}`,   short: t('app.styles.short_note'), mini: t('app.styles.mini_note') },
+      quote:    { full: `“ ${t('styles.quote') || 'Blockquote'}`,          short: t('app.styles.short_quote'), mini: t('app.styles.mini_quote') },
+      index:    { full: `📇 ${t('app.styles.index')}`,                     short: t('app.styles.short_index'), mini: t('app.styles.mini_index') },
+      attribution: { full: `✍️ ${t('app.styles.attribution')}`,           short: t('app.styles.short_attribution'), mini: t('app.styles.mini_attribution') },
+      sidebar:  { full: `📦 ${t('app.styles.sidebar')}`,                   short: t('app.styles.short_sidebar'), mini: t('app.styles.mini_sidebar') },
+      'table-spatial': { full: `📊 ${t('app.styles.table_spatial')}`,      short: t('app.styles.short_table'), mini: t('app.styles.mini_table') },
+      'table-listed':  { full: `📋 ${t('app.styles.table_listed')}`,       short: t('app.styles.short_table_listed'), mini: t('app.styles.mini_table_listed') }
     };
   }
 
@@ -4989,7 +5513,7 @@ function openFormulaDialog() {
     window.renderFormulaList('');
   }
   const total = (window.FORMULAS || []).length;
-  announce(`Formula and Equation Templates dialog opened. ${total} formulas available. Type to search, pick a category, or press Down Arrow to browse.`);
+  announce(t('app.formulas.opened', { count: total }));
 }
 
 function initFormulaDialog() {
@@ -5047,7 +5571,7 @@ function initFormulaDialog() {
       const catLabel = t(`formulas.cat_${c.id}`) || c.label;
       btn.textContent = catLabel;
       btn.setAttribute('aria-pressed', String(isActive));
-      btn.setAttribute('aria-label', `${catLabel} category`);
+      btn.setAttribute('aria-label', t('app.formulas.category_aria', { category: catLabel }));
       btn.addEventListener('click', () => {
         activeCat = c.id;
         renderCategories();
@@ -5187,7 +5711,7 @@ function initFormulaDialog() {
       empty.style.padding = '14px';
       empty.style.color = 'var(--muted)';
       empty.style.fontStyle = 'italic';
-      empty.textContent = 'No matching formulas found in library.';
+      empty.textContent = t('app.formulas.none');
       listEl.appendChild(empty);
       return;
     }
@@ -5213,7 +5737,7 @@ function initFormulaDialog() {
     clearTimeout(searchDebounceTimer);
     searchDebounceTimer = setTimeout(() => {
       const count = filtered.length;
-      announce(`${count} formula${count === 1 ? '' : 's'} matching search`);
+      announce(count === 1 ? t('app.formulas.matching_one') : t('app.formulas.matching', { count }));
     }, 450);
   });
 
@@ -5225,7 +5749,7 @@ function initFormulaDialog() {
         firstItem.focus();
         if (filtered[0]) {
           const speech = getFormulaSpeech(filtered[0]);
-          announce(`${filtered[0].name}. ${speech}. Option 1 of ${filtered.length}`);
+          announce(t('app.formulas.option', { name: filtered[0].name, speech, n: 1, total: filtered.length }));
         }
       }
     } else if (e.key === 'Enter') {
@@ -5248,7 +5772,7 @@ function initFormulaDialog() {
       const curItem = filtered[next];
       if (curItem) {
         const speech = getFormulaSpeech(curItem);
-        announce(`${curItem.name}. ${speech}. Option ${next + 1} of ${items.length}`);
+        announce(t('app.formulas.option', { name: curItem.name, speech, n: next + 1, total: items.length }));
       }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -5261,7 +5785,7 @@ function initFormulaDialog() {
       const curItem = filtered[prev];
       if (curItem) {
         const speech = getFormulaSpeech(curItem);
-        announce(`${curItem.name}. ${speech}. Option ${prev + 1} of ${items.length}`);
+        announce(t('app.formulas.option', { name: curItem.name, speech, n: prev + 1, total: items.length }));
       }
     } else if (e.key === 'Enter') {
       e.preventDefault();
@@ -5468,11 +5992,11 @@ function plotAndInsertGraph(latex, targetNodeKey) {
       else $getRoot().append(graphNode);
     });
 
-    announce(`Plotted tactile graph for ${latex}`);
+    announce(t('app.graphic.plotted', { latex }));
     ding();
   } catch (err) {
     console.error('Plot error:', err);
-    announce(`Could not plot function: ${err.message}`);
+    announce(t('app.graphic.plot_failed', { message: err.message }));
   }
 }
 
@@ -5501,7 +6025,7 @@ async function insertGraphicDiagram(rawSvg, meta = {}) {
     else $getRoot().append(node);
   });
 
-  announce(`Inserted tactile diagram: ${meta.title || meta.alt || 'Graphic'}`);
+  announce(t('app.graphic.inserted', { title: meta.title || meta.alt || t('app.graphic.default_title') }));
   ding();
 }
 window.insertGraphicDiagram = insertGraphicDiagram;
@@ -5514,7 +6038,7 @@ function insertSidebar(title = 'Sidebar Title') {
     const h = $createHeadingNode('h2');
     h.append($createTextNode(title));
     const p = $createParagraphNode();
-    p.append($createTextNode('Sidebar content paragraph.'));
+    p.append($createTextNode(t('app.editor.sidebar_placeholder')));
     node.append(h, p);
 
     const sel = $getSelection();
@@ -5523,7 +6047,7 @@ function insertSidebar(title = 'Sidebar Title') {
     createdKey = node.getKey();
     h.select(0, title.length);
   });
-  announce('Inserted sidebar box');
+  announce(t('app.editor.sidebar_inserted'));
   const domEl = editor.getElementByKey(createdKey || '');
   refreshToolbar(domEl);
 }
@@ -5542,16 +6066,16 @@ function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
     else $getRoot().append(node);
     createdKey = node.getKey();
   });
-  announce(`Inserted ${format} table: ${numCols} columns by ${numRows} rows`);
+  announce(t('app.table.inserted', { format: t(`app.table.fmt_${format}`) === `app.table.fmt_${format}` ? format : t(`app.table.fmt_${format}`), cols: numCols, rows: numRows }));
   const styleVal = (format === 'listed' || format === 'table-listed') ? 'table-listed' : 'table-spatial';
   const bs = $id('blockStyle');
   if (bs) bs.value = styleVal;
   const si = $id('styleInspector');
-  if (si) si.textContent = formatStyleInspectorBadge(styleVal, settings.profile || settings.mode || 'bana');
+  if (si) si.textContent = formatStyleInspectorBadge(styleVal, settings.profile || settings.mode || 'bana', uiText);
   setTimeout(() => {
     const tables = editorEl.querySelectorAll('.doc-table-block');
     const lastTable = tables[tables.length - 1];
-    const firstInput = lastTable?.querySelector('input.table-cell-input');
+    const firstInput = lastTable?.querySelector('.table-cell-input');
     if (firstInput) {
       firstInput.focus();
       refreshToolbar(firstInput);
@@ -5573,7 +6097,8 @@ const SLASH_COMMANDS = [
   { id: 'ol', title: 'Numbered List', desc: 'Create numbered list items (1-3)', icon: '1.', keywords: ['ol', 'number', 'numbered', 'list', 'ordered'], action: () => setBlockStyle('number') },
   { id: 'indent', title: 'Indent / Nest Sub-item', desc: 'Nest list item or exercise deeper (Tab)', icon: '⇥', keywords: ['indent', 'nest', 'subitem', 'subquestion', 'sub', 'tab', 'level'], action: () => indentCurrentItem() },
   { id: 'outdent', title: 'Outdent / Promote Item', desc: 'Promote list item or exercise higher (Shift+Tab)', icon: '⇤', keywords: ['outdent', 'promote', 'unindent', 'unnest', 'shift-tab', 'back'], action: () => outdentCurrentItem() },
-  { id: 'index', title: 'Index Entry', desc: 'BANA Index entry (1-3 main, 3-5 subentry)', icon: '📇', keywords: ['index', 'entry', 'subentry', 'plain', 'skill', 'skills'], action: () => setBlockStyle('index') },
+  { id: 'plain', title: 'Plain List', desc: 'Unmarked list, DTBook <list type="pl"> (1-3; nested 1-5, 3-5)', icon: '≡', keywords: ['plain', 'pl', 'list', 'unmarked', 'simple', 'no bullets'], action: () => setBlockStyle('plain') },
+  { id: 'index', title: 'Index Entry', desc: 'BANA §21 index entry (1-3; nested 1-5, 3-5; new braille page)', icon: '📇', keywords: ['index', 'entry', 'subentry', 'alphabetic', 'reference', 'skill', 'skills'], action: () => setBlockStyle('index') },
   { id: 'toc', title: 'TOC Entry', desc: 'Table of Contents entry with dot leaders (1-3)', icon: '📑', keywords: ['toc', 'table of contents', 'contents', 'dot leaders', 'leader'], action: () => setBlockStyle('toc') },
   { id: 'dialogue', title: 'Play Dialogue', desc: 'Prose drama dialogue speaker line (1-3)', icon: '🎭', keywords: ['dialogue', 'play', 'drama', 'speaker', 'character', 'line', 'script', 'speech'], action: () => setBlockStyle('dialogue') },
   { id: 'stage', title: 'Stage Direction', desc: 'Drama stage direction indented (7-7)', icon: '🎬', keywords: ['stage', 'direction', 'play', 'drama', 'setting', 'action', 'parenthetical'], action: () => setBlockStyle('stage') },
@@ -5642,13 +6167,11 @@ function initSlashMenu() {
 
       const title = document.createElement('span');
       title.className = 'slash-title';
-      const transTitle = t(`slash.${cmd.id}_title`);
-      title.textContent = (transTitle && transTitle !== `slash.${cmd.id}_title`) ? transTitle : cmd.title;
+      title.textContent = slashText(cmd, 'title');
 
       const desc = document.createElement('span');
       desc.className = 'slash-desc';
-      const transDesc = t(`slash.${cmd.id}_desc`);
-      desc.textContent = (transDesc && transDesc !== `slash.${cmd.id}_desc`) ? transDesc : cmd.desc;
+      desc.textContent = slashText(cmd, 'desc');
 
       info.appendChild(title);
       info.appendChild(desc);
@@ -5688,7 +6211,7 @@ function initSlashMenu() {
     renderSlashList();
     showSlashMenu();
     const cur = filteredCommands[0];
-    if (cur) announce(`${cur.title}, ${cur.desc} (1 of ${filteredCommands.length})`);
+    if (cur) announce(t('app.slash.option', { title: slashText(cur, 'title'), desc: slashText(cur, 'desc'), n: 1, total: filteredCommands.length }));
   }
 
   function positionSlashMenu() {
@@ -5733,7 +6256,14 @@ function initSlashMenu() {
     }
   }
 
-  function executeCommand(cmd) {
+  // A slash command's title / description in the interface language (slash.<id>_title / _desc).
+function slashText(cmd, part) {
+  const key = `slash.${cmd.id}_${part}`;
+  const v = t(key);
+  return v && v !== key ? v : cmd[part];
+}
+
+function executeCommand(cmd) {
     if (!cmd || typeof cmd.action !== 'function') {
       hideSlashMenu();
       return;
@@ -5743,7 +6273,7 @@ function initSlashMenu() {
     setTimeout(() => {
       try {
         cmd.action();
-        announce(`Applied ${cmd.title}`);
+        announce(t('app.slash.applied', { title: slashText(cmd, 'title') }));
       } catch (err) {
         console.warn(`Safe recovery: Slash command "${cmd.title}" encountered an error:`, err);
       }
@@ -5780,7 +6310,7 @@ function initSlashMenu() {
       selectedIndex = (selectedIndex + 1) % filteredCommands.length;
       renderSlashList();
       const cur = filteredCommands[selectedIndex];
-      if (cur) announce(`${cur.title}, ${cur.desc} (${selectedIndex + 1} of ${filteredCommands.length})`);
+      if (cur) announce(t('app.slash.option', { title: slashText(cur, 'title'), desc: slashText(cur, 'desc'), n: selectedIndex + 1, total: filteredCommands.length }));
       return;
     }
 
@@ -5789,7 +6319,7 @@ function initSlashMenu() {
       selectedIndex = (selectedIndex - 1 + filteredCommands.length) % filteredCommands.length;
       renderSlashList();
       const cur = filteredCommands[selectedIndex];
-      if (cur) announce(`${cur.title}, ${cur.desc} (${selectedIndex + 1} of ${filteredCommands.length})`);
+      if (cur) announce(t('app.slash.option', { title: slashText(cur, 'title'), desc: slashText(cur, 'desc'), n: selectedIndex + 1, total: filteredCommands.length }));
       return;
     }
 
@@ -5803,7 +6333,7 @@ function initSlashMenu() {
     if (e.key === 'Escape') {
       e.preventDefault();
       hideSlashMenu();
-      announce('Menu closed');
+      announce(t('app.slash.closed'));
       return;
     }
   }, true);
@@ -5884,22 +6414,42 @@ function seed() {
 // Reuses the converter's parsers (parseFile → the same block model the formatter
 // eats) and rebuilds it as Lexical nodes. Structure + inline maths from LaTeX
 // sources import fully; docx/OMML equations (MathML, no LaTeX) come in as a marker.
-function applyEmphasis(node, tf) {
+function applyEmphasis(node, tf, uncontracted = false) {
   if (tf & TF.bold) node.toggleFormat('bold');
   if (tf & TF.italic) node.toggleFormat('italic');
   if (tf & TF.underline) node.toggleFormat('underline');
+  if (uncontracted) node.toggleFormat('code');           // uncontracted (grade 1) run, e.g. a pronunciation (A26)
   return node;
+}
+function safeMathmlToLatex(mathml) {
+  try { return mathmlToLatex(mathml) || ''; }
+  catch (e) { console.warn('[maths] MathML could not be converted to LaTeX for editing; original kept:', (e && e.message) || e); return ''; }
 }
 function fillFromBlock(parent, b) {
   if (!b) return;
+  if (b.type === 'math' && !b.segments) {
+    // A display equation inside a container (sidebar) — previously dropped here.
+    const latex = b.latex || (b.mathml ? safeMathmlToLatex(b.mathml) : '');
+    if (latex || b.mathml) parent.append($createMathNode(latex, b.mathml || null));
+    return;
+  }
   if (b.segments) {
     for (const s of b.segments) {
       if (s.type === 'math') {
-        const latex = s.latex || (s.mathml ? mathmlToLatex(s.mathml) : '');
-        if (latex) parent.append($createMathNode(latex));
+        const latex = s.latex || (s.mathml ? safeMathmlToLatex(s.mathml) : '');
+        if (latex || s.mathml) parent.append($createMathNode(latex, s.mathml || null));
         else parent.append($createTextNode('⟨equation⟩'));
       }
-      else if (s.text) parent.append(applyEmphasis($createTextNode(s.text.replace(/\s+/g, ' ')), s.tf || 0));
+      else if (s.type === 'noteref') { if (s.text) parent.append($createNoteRefNode(s.text, s.idref || null, !!s.annoref)); }
+      else if (s.type === 'linenum') { if (s.text) parent.append($createLineNumberNode(s.text)); }
+      else if (s.text) {
+        // A forced line break (<br/>, '\n') stays a line break (A26); other space runs collapse.
+        String(s.text).split('\n').forEach((part, k) => {
+          if (k > 0) parent.append($createLineBreakNode());
+          const t = part.replace(/\s+/g, ' ');
+          if (t) parent.append(applyEmphasis($createTextNode(t), s.tf || 0, !!s.uncontracted));
+        });
+      }
     }
   } else if (Array.isArray(b.lines) && b.lines.length > 0) {
     b.lines.forEach((l, idx) => {
@@ -5927,15 +6477,13 @@ const LEADING_BULLET_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25A
 function stripLeadingListBullet(it) {
   if (!it) return it;
   if (typeof it === 'string') return it.replace(LEADING_BULLET_RE, '');
-  if (it.text) return { ...it, text: it.text.replace(LEADING_BULLET_RE, '') };
-  if (it.segments && it.segments.length > 0) {
-    const first = it.segments[0];
-    if (first.text) {
-      const newFirst = { ...first, text: first.text.replace(LEADING_BULLET_RE, '') };
-      return { ...it, segments: [newFirst, ...it.segments.slice(1)] };
-    }
+  // Segments are what the editor shows, so strip them too (an item carries both).
+  const out = { ...it };
+  if (typeof out.text === 'string') out.text = out.text.replace(LEADING_BULLET_RE, '');
+  if (out.segments && out.segments.length > 0 && out.segments[0].text) {
+    out.segments = [{ ...out.segments[0], text: out.segments[0].text.replace(LEADING_BULLET_RE, '') }, ...out.segments.slice(1)];
   }
-  return it;
+  return out;
 }
 
 export function getBlockBanaStyle(b) {
@@ -5957,110 +6505,105 @@ export function getBlockBanaStyle(b) {
   return null;
 }
 
+// Set by the undo/redo system: forget the history and make the current document the
+// undo floor (G7 — undo after a load must not step back into the previous document).
+let resetUndoHistory = () => {};
+
+// One model block → editor node(s) appended to `parent` (the root or a sidebar).
+function appendBlock(parent, b) {
+  if (!b) return;
+  if (b.type === 'heading' || b.type === 'title') {
+    const lvl = b.type === 'title' ? 1 : Math.min(6, b.level || 1);
+    const h = $createHeadingNode('h' + lvl);
+    fillFromBlock(h, b);
+    parent.append(h);
+  } else if (b.type === 'list') {
+    const listKind = b.kind || b.style || (b.ordered ? 'number' : null);
+    const isPlain = listKind === 'toc' || listKind === 'index' || listKind === 'plain' || b.kind === 'plain';
+    const isOrdered = b.ordered || listKind === 'number' || (b.items && b.items.some((it) => it.marker));
+    const listType = isPlain ? 'plain' : (isOrdered ? 'number' : 'bullet');
+    const list = $createListNode(listType);
+    const effectiveKind = listKind || (isPlain ? 'plain' : null);   // plain stays plain (its own style)
+    if (effectiveKind) {
+      list.setListKind(effectiveKind);
+      list.setBanaStyle(effectiveKind);
+    }
+    for (const it of (b.items || [])) {
+      const li = $createListItemNode();
+      const cleanItem = stripLeadingListBullet(it);
+      const firstSeg = typeof it === 'object' && it.segments ? it.segments[0] : null;
+      const rawFirst = typeof it === 'string' ? it : (it.segments ? ((firstSeg && firstSeg.text) || '') : (it.text || ''));
+      const bullet = String(rawFirst).match(LEADING_BULLET_RE);
+      if (bullet) li.setBulletPrefix({ text: bullet[0], tf: (firstSeg && firstSeg.tf) || 0 });
+      fillFromBlock(li, cleanItem);
+      if (it.page) li.setPage(it.page);
+      if (isOrdered && !isPlain) li.setMarker(it.marker || NO_MARKER);
+      if (it.level != null) li.setLevel(it.level);
+      if (effectiveKind) li.setBanaStyle(effectiveKind);
+      if (li.getChildrenSize()) list.append(li);
+    }
+    // Lexical joins neighbouring lists of the same type: keep separate source lists apart
+    // with an empty paragraph (buildModel skips it), or numbering would run on (A26).
+    if (list.getChildrenSize()) {
+      const prev = parent.getLastChild();
+      if (prev && $isListNode(prev)) parent.append($createParagraphNode());
+      parent.append(list);
+    }
+  } else if (b.type === 'indicator' || b.type === 'break') {
+    parent.append($createBreakNode(b.kind || 'asterisks'));
+  } else if (b.type === 'pagenum') {
+    parent.append($createPrintPageNode(b.page || b.text || '1', b));
+  } else if (b.type === 'graphic') {
+    if (b.svg) {
+      const transpiled = transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });
+      parent.append($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true));
+    } else {
+      parent.append($createImageNode(b));
+    }
+  } else if (b.type === 'box' || b.type === 'sidebar') {
+    const sidebar = $createSidebarNode(b.title || '');
+    if (b.id || b.render) sidebar.setSource(b);
+    if (Array.isArray(b.blocks) && b.blocks.length) {
+      for (const cb of b.blocks) appendBlock(sidebar, cb);         // same rules inside a sidebar, nested sidebars too (A26)
+    } else if (b.text) {
+      const p = $createParagraphNode();
+      fillFromBlock(p, b);
+      if (p.getChildrenSize()) sidebar.append(p);
+    }
+    if (sidebar.getChildrenSize()) parent.append(sidebar);
+  } else if (b.type === 'table') {
+    // A table the source did not mark keeps 'auto' (columns when they fit, else the
+    // listed / paragraph fallback) — it was forced to spatial on load (A26).
+    parent.append($createTableNode(b.headers || [], b.rows || [], b.format || 'auto'));
+  } else if (b.type === 'math') {
+    const latex = b.latex || (b.mathml ? safeMathmlToLatex(b.mathml) : '');
+    const p = $createParagraphNode();
+    if (latex || b.mathml) p.append($createMathNode(latex, b.mathml || null));
+    else p.append($createTextNode('⟨equation⟩'));
+    parent.append(p);
+  } else if ((b.type === 'verse' || b.style === 'verse' || b.style === 'poem' || b.type === 'poem' || b.type === 'poetry') && Array.isArray(b.lines) && b.lines.length > 0) {
+    for (const line of b.lines) {
+      const p = $createBanaParagraphNode('poem');
+      p.append($createTextNode(String(line)));
+      parent.append(p);
+    }
+  } else {
+    const style = getBlockBanaStyle(b);
+    const p = $createBanaParagraphNode(style);
+    if (b.type === 'footnote' && b.id) p.setNote({ id: b.id, kind: b.kind });
+    fillFromBlock(p, b);
+    if (b.continued || b.continuation) p.setPageTurn(b.continued && b.continuation ? 'both' : (b.continued ? 'continued' : 'continuation'));
+    parent.append(p);
+  }
+}
+
 function modelToLexical(model) {
   window.modelToLexical = modelToLexical;
   clearTranslationCache();
   editor.update(() => {
     const root = $getRoot();
     root.clear();
-    for (const b of (model.blocks || [])) {
-      if (!b) continue;
-      if (b.type === 'heading' || b.type === 'title') {
-        const lvl = b.type === 'title' ? 1 : Math.min(3, b.level || 1);
-        const h = $createHeadingNode('h' + lvl);
-        fillFromBlock(h, b);
-        root.append(h);
-      } else if (b.type === 'list') {
-        const listKind = b.kind || b.style || (b.ordered ? 'number' : null);
-        const isPlain = listKind === 'toc' || listKind === 'index' || listKind === 'plain' || b.kind === 'plain';
-        const isOrdered = b.ordered || listKind === 'number' || (b.items && b.items.some((it) => it.marker));
-        const listType = isPlain ? 'plain' : (isOrdered ? 'number' : 'bullet');
-        const list = $createListNode(listType);
-        const effectiveKind = (listKind === 'plain' ? 'index' : listKind) || (isPlain ? 'index' : null);
-        if (effectiveKind) {
-          list.setListKind(effectiveKind);
-          list.setBanaStyle(effectiveKind);
-        }
-        for (const it of (b.items || [])) {
-          const li = $createListItemNode();
-          const cleanItem = stripLeadingListBullet(it);
-          fillFromBlock(li, cleanItem);
-          if (it.page) li.setPage(it.page);
-          if (it.level != null) li.setLevel(it.level);
-          if (effectiveKind) li.setBanaStyle(effectiveKind);
-          if (li.getChildrenSize()) list.append(li);
-        }
-        if (list.getChildrenSize()) root.append(list);
-      } else if (b.type === 'indicator' || b.type === 'break') {
-        root.append($createBreakNode(b.kind || 'asterisks'));
-      } else if (b.type === 'pagenum') {
-        root.append($createPrintPageNode(b.page || b.text || '1'));
-      } else if (b.type === 'graphic') {
-        if (b.svg) {
-          const transpiled = transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });
-          root.append($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true));
-        } else {
-          const p = $createParagraphNode();
-          p.append($createTextNode(`[Tactile graphic: ${b.alt || 'Diagram'}]`));
-          root.append(p);
-        }
-      } else if (b.type === 'box' || b.type === 'sidebar') {
-        const sidebar = $createSidebarNode(b.title || '');
-        if (Array.isArray(b.blocks) && b.blocks.length) {
-          for (const cb of b.blocks) {
-            if (cb.type === 'heading' || cb.type === 'title') {
-              const h = $createHeadingNode('h' + Math.min(3, cb.level || 2));
-              fillFromBlock(h, cb);
-              sidebar.append(h);
-            } else if (cb.type === 'list') {
-              const isOrdered = cb.ordered || (cb.items && cb.items.some((it) => it.marker));
-              const list = $createListNode(isOrdered ? 'number' : 'bullet');
-              if (cb.kind) list.setListKind(cb.kind);
-              for (const it of (cb.items || [])) {
-                const li = $createListItemNode();
-                const cleanItem = stripLeadingListBullet(it);
-                fillFromBlock(li, cleanItem);
-                if (it.page) li.setPage(it.page);
-                if (it.level != null) li.setLevel(it.level);
-                if (li.getChildrenSize()) list.append(li);
-              }
-              if (list.getChildrenSize()) sidebar.append(list);
-            } else if (cb.type === 'table') {
-              sidebar.append($createTableNode(cb.headers || [], cb.rows || [], cb.format || 'spatial'));
-            } else {
-              const style = getBlockBanaStyle(cb);
-              const p = $createBanaParagraphNode(style);
-              fillFromBlock(p, cb);
-              if (p.getChildrenSize()) sidebar.append(p);
-            }
-          }
-        } else if (b.text) {
-          const p = $createParagraphNode();
-          fillFromBlock(p, b);
-          if (p.getChildrenSize()) sidebar.append(p);
-        }
-        if (sidebar.getChildrenSize()) root.append(sidebar);
-      } else if (b.type === 'table') {
-        root.append($createTableNode(b.headers || [], b.rows || [], b.format || 'spatial'));
-      } else if (b.type === 'math') {
-        const latex = b.latex || (b.mathml ? mathmlToLatex(b.mathml) : '');
-        const p = $createParagraphNode();
-        if (latex) p.append($createMathNode(latex));
-        else p.append($createTextNode('⟨equation⟩'));
-        root.append(p);
-      } else if ((b.type === 'verse' || b.style === 'verse' || b.style === 'poem' || b.type === 'poem' || b.type === 'poetry') && Array.isArray(b.lines) && b.lines.length > 0) {
-        for (const line of b.lines) {
-          const p = $createBanaParagraphNode('poem');
-          p.append($createTextNode(String(line)));
-          root.append(p);
-        }
-      } else {
-        const style = getBlockBanaStyle(b);
-        const p = $createBanaParagraphNode(style);
-        fillFromBlock(p, b);
-        root.append(p);
-      }
-    }
+    for (const b of (model.blocks || [])) appendBlock(root, b);
     if (!root.getFirstChild()) root.append($createParagraphNode());
   }, { discrete: true });
 }
@@ -6131,7 +6674,7 @@ async function importFile(file) {
   try {
     if (reader.speaking) reader.stop();
     hideParseWarning();
-    setStatus(`Importing ${file.name}…`);
+    setStatus(t('app.import.importing', { name: file.name }));
     
     if (ext === 'svg') {
       const svgText = await file.text();
@@ -6139,7 +6682,7 @@ async function importFile(file) {
       active = false;
       clearInterval(timerId);
       setLoadingProgress(100, t('common.done') || 'Done');
-      announce(`Imported tactile SVG: ${file.name}`);
+      announce(t('app.import.svg_done', { name: file.name }));
       await new Promise((r) => setTimeout(r, 200));
       return;
     }
@@ -6154,6 +6697,7 @@ async function importFile(file) {
     await new Promise((r) => setTimeout(r, 10));
     
     // Build Lexical editor model
+    setLoadedDocInfo(model);
     modelToLexical(model);
     await new Promise((r) => setTimeout(r, 10));
     
@@ -6166,9 +6710,10 @@ async function importFile(file) {
     clearInterval(timerId);
     setLoadingProgress(100, t('loading.complete') || 'Formatting complete!');
     markDocumentClean();
-    announce(`Imported ${file.name}.`);
+    resetUndoHistory();
+    announce(t('app.import.done', { name: file.name }));
     if (model.warnings && model.warnings.length) {
-      showParseWarning(`Notice: ${model.warnings.join('; ')}`);
+      showParseWarning(t('app.import.notice', { message: model.warnings.join('; ') }));
     }
     // Hold at 100% for 200ms so user clearly sees 100% complete
     await new Promise((resolve) => setTimeout(resolve, 200));
@@ -6177,9 +6722,9 @@ async function importFile(file) {
     clearInterval(timerId);
     console.error(err);
     const msg = String((err && err.message) || err);
-    setStatus('Import notice: ' + msg);
-    showParseWarning(`Could not fully parse structure for "${file.name}": ${msg}. You can continue editing or typing below.`);
-    announce('Import notice: ' + msg);
+    setStatus(t('app.import.notice_status', { message: msg }));
+    showParseWarning(t('app.import.partial', { name: file.name, message: msg.replace(/\.\s*$/, '') }));
+    announce(t('app.import.notice_status', { message: msg }));
   } finally {
     active = false;
     clearInterval(timerId);
@@ -6212,6 +6757,14 @@ if (loadFileBtn && loadFileInput) {
 const parseWarningBanner = $id('parseWarningBanner');
 const parseWarningText = $id('parseWarningText');
 const parseWarningClose = $id('parseWarningClose');
+
+// Interface text for scripts that cannot import i18n (the service-worker update prompt,
+// format/ modules): the translation, or the given English fallback (A33).
+function uiText(key, params = {}, fallback = '') {
+  const v = t(key, params);
+  return v && v !== key ? v : String(fallback).replace(/\{(\w+)\}/g, (_, k) => params[k] ?? '');
+}
+window.embossT = uiText;
 
 function showParseWarning(msg) {
   if (parseWarningBanner && parseWarningText) {
@@ -6291,10 +6844,10 @@ function populateLanguageDropdown() {
   sel.innerHTML = '';
   for (const c of shownCodes) {
     const label = getLanguageLabel(c);
-    sel.appendChild(new Option(c.shipped !== false ? label : `${label} (needs internet first time)`, c.id));
+    sel.appendChild(new Option(c.shipped !== false ? label : t('app.codes.needs_internet', { label }), c.id));
   }
   if (!codesExpanded && restCount > 0) {
-    sel.appendChild(new Option(`… more languages (${restCount})`, '__more__'));
+    sel.appendChild(new Option(t('app.codes.more', { count: restCount }), '__more__'));
   }
   if (inUseCode && CODES.some((c) => c.id === inUseCode)) {
     sel.value = inUseCode;
@@ -6493,7 +7046,7 @@ function drawMonarchEmulator(activeFrame) {
 
   const startLine = activeFrame.startLine || 0;
   const endLine = Math.min(activeFrame.totalLines || 1, startLine + 10);
-  const subtitle = `Lines ${startLine + 1}–${endLine} of ${activeFrame.totalLines || 1} (Page ${activeFrame.pageNumber || 1} of ${activeFrame.totalPages || 1})`;
+  const subtitle = t('app.panels.monarch_subtitle', { from: startLine + 1, to: endLine, lines: activeFrame.totalLines || 1, page: activeFrame.pageNumber || 1, pages: activeFrame.totalPages || 1 });
 
   if ($id('monarchPanelSubtitle')) $id('monarchPanelSubtitle').textContent = subtitle;
 }
@@ -6741,8 +7294,8 @@ function drawDotPadEmulator(activeFrame) {
   drawDotPadTextCanvas($id('dotpadTextCanvas'), activeFrame);
 
   const isGraphic = activeFrame.isGraphic && activeFrame.graphicMatrix;
-  const typeLabel = isGraphic ? 'Tactile Graphic' : 'Text Stream';
-  const subtitle = `Page ${activeFrame.pageNumber || 1} of ${activeFrame.totalPages || 1} (${typeLabel})`;
+  const typeLabel = isGraphic ? t('app.panels.tactile_graphic') : t('app.panels.text_stream');
+  const subtitle = t('app.panels.dotpad_subtitle', { page: activeFrame.pageNumber || 1, pages: activeFrame.totalPages || 1, type: typeLabel });
 
   if ($id('dotpadPanelSubtitle')) $id('dotpadPanelSubtitle').textContent = subtitle;
 }
@@ -6884,7 +7437,7 @@ export function updateGraphicsSupportUI() {
   const btn = $id('btnGraphic');
   if (btn) {
     btn.disabled = false;
-    btn.title = 'Insert Tactile Graphic Diagram (/graphic)';
+    btn.title = `${t('toolbar.insert_graphic')} (/graphic)`;
     btn.style.opacity = '';
     btn.style.cursor = 'pointer';
   }
@@ -7054,12 +7607,12 @@ function wireControls() {
     settings = saveSettings(profile.presets);
     applySettingsToUI();
     render();
-    const msg = `🔌 Detected ${profile.name} — configured to ${profile.presets.cells}×${profile.presets.lines} at ${profile.presets.baudRate || 9600} baud.`;
+    const msg = t('app.spool.detected', { name: profile.name, cells: profile.presets.cells, lines: profile.presets.lines, baud: profile.presets.baudRate || 9600 });
     setStatus(msg);
     announce(msg);
   }, () => {
-    setStatus('Embosser disconnected.');
-    announce('Embosser disconnected.');
+    setStatus(t('spooler.status_disconnected'));
+    announce(t('spooler.status_disconnected'));
   });
 
   const handleEmbossPrint = async () => {
@@ -7067,8 +7620,8 @@ function wireControls() {
 
     if (settings.connectionType === 'network') {
       try {
-        announce(`Sending braille to network embosser at ${settings.networkHost || '192.168.1.150'}…`);
-        setStatus(`Sending braille to network embosser at ${settings.networkHost || '192.168.1.150'}…`);
+        announce(t('app.embosser.sending_network', { host: settings.networkHost || '192.168.1.150' }));
+        setStatus(t('app.embosser.sending_network', { host: settings.networkHost || '192.168.1.150' }));
         const res = await spoolToNetworkEmbosser(lastBrf, {
           host: settings.networkHost || '192.168.1.150',
           port: settings.networkPort || 9100,
@@ -7077,6 +7630,7 @@ function wireControls() {
           width: settings.cells || 38,
           depth: settings.lines || 25,
           onStatus: (msg) => { setStatus(msg); announce(msg); },
+          text: uiText,
         });
         if (res.message) {
           setStatus(res.message);
@@ -7084,21 +7638,21 @@ function wireControls() {
         }
       } catch (err) {
         console.warn('Network embosser error:', err);
-        setStatus(`Network error: ${err.message}`);
-        announce(`Network error: ${err.message}`);
+        setStatus(t('app.embosser.network_error', { message: err.message }));
+        announce(t('app.embosser.network_error', { message: err.message }));
       }
       return;
     }
 
     if (!isWebSerialSupported()) {
-      const msg = 'Direct serial spooling requires a browser with WebSerial (Chrome, Edge, Opera). You can download the .brf file to emboss with your print manager, or use Network (Port 9100) mode in Settings.';
+      const msg = t('app.spool.needs_webserial');
       setStatus(msg);
       announce(msg);
       return;
     }
     try {
-      announce('Connecting to embosser…');
-      setStatus('Connecting to embosser…');
+      announce(t('spooler.status_connecting'));
+      setStatus(t('spooler.status_connecting'));
       const res = await spoolToEmbosser(lastBrf, {
         embosser: settings.embosser || 'generic',
         duplex: settings.embosserDuplex || 'double',
@@ -7106,18 +7660,19 @@ function wireControls() {
         depth: settings.lines || 25,
         baudRate: settings.baudRate || 9600,
         onStatus: (msg) => { setStatus(msg); announce(msg); },
+        text: uiText,
       });
       if (res.success) {
         setStatus(res.message);
         announce(res.message);
       } else if (res.method === 'cancelled') {
-        setStatus('Embosser port selection cancelled.');
-        announce('Embosser port selection cancelled.');
+        setStatus(t('app.embosser.cancelled'));
+        announce(t('app.embosser.cancelled'));
       }
     } catch (err) {
       console.warn('Embosser hardware communication error:', err);
-      setStatus(`Embosser error: ${err.message}`);
-      announce(`Embosser error: ${err.message}`);
+      setStatus(t('spooler.status_error', { message: err.message }));
+      announce(t('spooler.status_error', { message: err.message }));
     }
   };
   $id('embossBtn')?.addEventListener('click', handleEmbossPrint);
@@ -7152,7 +7707,7 @@ function wireControls() {
     const lbl = $id('tactileDisplayLbl');
     if (lbl) {
       const p = (typeof tactileDisplay.getCurrentPage === 'function') ? tactileDisplay.getCurrentPage() : 1;
-      lbl.textContent = `Monarch (${(p - 1) * 10 + 1}-${p * 10})`;
+      lbl.textContent = t('app.panels.monarch_lines', { from: (p - 1) * 10 + 1, to: p * 10 });
     }
   });
   $id('tactileNextBtn')?.addEventListener('click', () => {
@@ -7160,7 +7715,7 @@ function wireControls() {
     const lbl = $id('tactileDisplayLbl');
     if (lbl) {
       const p = (typeof tactileDisplay.getCurrentPage === 'function') ? tactileDisplay.getCurrentPage() : 2;
-      lbl.textContent = `Monarch (${(p - 1) * 10 + 1}-${p * 10})`;
+      lbl.textContent = t('app.panels.monarch_lines', { from: (p - 1) * 10 + 1, to: p * 10 });
     }
   });
 
@@ -7285,7 +7840,7 @@ function wireControls() {
   });
   $id('dotpadBtnF4')?.addEventListener('click', () => {
     scheduleRender();
-    announce('DotPad display refreshed.');
+    announce(t('app.tactile.dotpad_refreshed'));
   });
 
   // Click interaction on emulator canvases for bidirectional caret & word synchronization
@@ -7476,12 +8031,12 @@ function wireControls() {
   });
 
   btnConnectTactile?.addEventListener('click', async () => {
-    if (tactileConnStatus) tactileConnStatus.textContent = 'Scanning Bluetooth LE devices...';
+    if (tactileConnStatus) tactileConnStatus.textContent = t('app.tactile.scanning_ble');
     const res = await tactileDisplay.connect({ transport: 'bluetooth', target: 'dotpad' });
     if (!res.success) {
       if (tactileConnStatus) tactileConnStatus.textContent = res.error || 'Connection cancelled';
     } else {
-      announce(`Connected to ${res.name}`);
+      announce(t('spooler.status_connected', { device: res.name }));
       const isDot = res.profile?.id === 'dotpad';
       const targetEmbosser = isDot ? 'dotpad' : 'monarch';
       if (settings.embosser !== targetEmbosser) {
@@ -7496,12 +8051,12 @@ function wireControls() {
   });
 
   btnConnectHid?.addEventListener('click', async () => {
-    if (tactileConnStatus) tactileConnStatus.textContent = 'Scanning USB / HID tactile displays...';
+    if (tactileConnStatus) tactileConnStatus.textContent = t('app.tactile.scanning_hid');
     const res = await tactileDisplay.connect({ transport: 'hid', target: 'monarch' });
     if (!res.success) {
       if (tactileConnStatus) tactileConnStatus.textContent = res.error || 'Connection cancelled';
     } else {
-      announce(`Connected to ${res.name}`);
+      announce(t('spooler.status_connected', { device: res.name }));
       if (settings.embosser !== 'monarch') {
         if ($id('set-embosser')) $id('set-embosser').value = 'monarch';
         const p = EMBOSSER_PRESETS['monarch'];
@@ -7514,13 +8069,13 @@ function wireControls() {
 
   btnDisconnectTactile?.addEventListener('click', async () => {
     await tactileDisplay.disconnect();
-    announce('Disconnected tactile display.');
+    announce(t('app.tactile.disconnected'));
     updateTactileDisplayUI();
   });
 
   btnSimulateTactile?.addEventListener('click', async () => {
     await tactileDisplay.connect({ transport: 'simulated', target: 'monarch' });
-    announce('Connected to Simulated Monarch (32x10).');
+    announce(t('app.tactile.sim_monarch'));
     if (settings.embosser !== 'monarch') {
       if ($id('set-embosser')) $id('set-embosser').value = 'monarch';
       const p = EMBOSSER_PRESETS['monarch'];
@@ -7532,7 +8087,7 @@ function wireControls() {
 
   btnSimulateDotPad?.addEventListener('click', async () => {
     await tactileDisplay.connect({ transport: 'dotpad-simulated', target: 'dotpad' });
-    announce('Connected to Simulated DotPad (30x10 + 20 Braille).');
+    announce(t('app.tactile.sim_dotpad'));
     if (settings.embosser !== 'dotpad') {
       if ($id('set-embosser')) $id('set-embosser').value = 'dotpad';
       const p = EMBOSSER_PRESETS['dotpad'];
@@ -7546,7 +8101,7 @@ function wireControls() {
   // Attempt silent background auto-reconnection to any previously paired tactile display
   tactileDisplay.autoReconnect('dotpad').then((res) => {
     if (res && res.success) {
-      announce(`Auto-reconnected to ${res.name}`);
+      announce(t('app.tactile.reconnected', { device: res.name }));
       const isDot = res.profile?.id === 'dotpad';
       const targetEmbosser = isDot ? 'dotpad' : 'monarch';
       if (settings.embosser !== targetEmbosser) {
@@ -7560,28 +8115,77 @@ function wireControls() {
   }).catch(() => {});
 
   // ---- Undo & Redo History System ----
-  const historyStack = [];
+  // Snapshots are serialised JSON strings (what parseEditorState takes) keyed by a cheap
+  // FNV hash, so "did anything change?" is a string compare, not a second stringify of
+  // the whole document. Snapshots are taken at most once per HISTORY_DEBOUNCE_MS burst of
+  // updates (plus always on blur, save, undo/redo and clear), not on every keystroke.
+  const HISTORY_DEBOUNCE_MS = 400;
+  const HISTORY_MAX = 80;
+  const historyStack = [];      // [{ state: <json string>, hash, desc, ref: EditorState }]
   let historyIndex = -1;
   let isHistoryUpdating = false;
+  let historyTimer = 0;
+  let pendingHistoryDesc = null;
 
   function recordHistoryState(description = 'edit') {
     if (isHistoryUpdating) return;
+    if (historyTimer) { clearTimeout(historyTimer); historyTimer = 0; pendingHistoryDesc = null; }
     try {
       const editorState = editor.getEditorState();
-      const json = editorState.toJSON();
+      const cur = historyStack[historyIndex];
+      // Identity fast-path: the exact EditorState we last snapshotted → nothing to record.
+      if (cur && cur.ref === editorState) return;
+      const json = JSON.stringify(editorState.toJSON());
+      const hash = hashString(json);
+      // Same content as the current history position (e.g. a selection-only update).
+      if (cur && cur.hash === hash && cur.state === json) { cur.ref = editorState; return; }
       if (historyIndex < historyStack.length - 1) {
-        historyStack.splice(historyIndex + 1);
+        historyStack.splice(historyIndex + 1);          // a new edit after undo drops the redo branch
       }
-      const last = historyStack[historyStack.length - 1];
-      if (last && JSON.stringify(last.state) === JSON.stringify(json)) return;
-      historyStack.push({ state: json, desc: description });
-      if (historyStack.length > 80) historyStack.shift();
+      historyStack.push({ state: json, hash, desc: description, ref: editorState });
+      if (historyStack.length > HISTORY_MAX) historyStack.shift();
       historyIndex = historyStack.length - 1;
       updateUndoRedoUI();
     } catch (e) {
       console.warn('recordHistoryState recovery:', e);
     }
   }
+
+  // Coalesce a burst of updates into one snapshot, taken HISTORY_DEBOUNCE_MS after the last one.
+  function scheduleHistorySnapshot(description = 'typing') {
+    if (isHistoryUpdating) return;
+    if (historyStack.length === 0) { recordHistoryState('initial'); return; }   // baseline is immediate
+    pendingHistoryDesc = description;
+    if (historyTimer) clearTimeout(historyTimer);
+    historyTimer = setTimeout(() => {
+      historyTimer = 0;
+      const d = pendingHistoryDesc || 'typing';
+      pendingHistoryDesc = null;
+      recordHistoryState(d);
+    }, HISTORY_DEBOUNCE_MS);
+  }
+
+  // Take any pending snapshot *now* (before undo/redo/save/clear, and on blur) so nothing
+  // typed in the last few hundred ms is lost from the undo stack.
+  function flushHistorySnapshot() {
+    if (!historyTimer) return;
+    clearTimeout(historyTimer); historyTimer = 0;
+    const d = pendingHistoryDesc || 'typing';
+    pendingHistoryDesc = null;
+    recordHistoryState(d);
+  }
+  // Leaving the editor (clicking a toolbar button, a dialog, another pane) ends the burst.
+  $id('editor')?.addEventListener('blur', flushHistorySnapshot);
+
+  // A newly loaded document is the undo floor. Deferred so the load's editor update has
+  // been committed before the baseline snapshot is taken.
+  resetUndoHistory = () => {
+    if (historyTimer) { clearTimeout(historyTimer); historyTimer = 0; pendingHistoryDesc = null; }
+    historyStack.length = 0;
+    historyIndex = -1;
+    updateUndoRedoUI();
+    setTimeout(() => recordHistoryState('loaded document'), 0);
+  };
 
   function updateUndoRedoUI() {
     const btnUndo = $id('btnUndo');
@@ -7595,6 +8199,7 @@ function wireControls() {
   }
 
   function performUndo() {
+    flushHistorySnapshot();                 // anything typed in the last burst is undone first
     if (historyIndex > 0) {
       historyIndex--;
       const item = historyStack[historyIndex];
@@ -7603,8 +8208,9 @@ function wireControls() {
         try {
           const state = editor.parseEditorState(item.state);
           editor.setEditorState(state);
-          announce(`Undo applied`);
-          setStatus(`Undo applied (${item.desc || 'change'}).`);
+          item.ref = editor.getEditorState();    // identity fast-path for the next snapshot attempt
+          announce(t('app.history.undo'));
+          setStatus(t('app.history.undo_status', { what: item.desc || t('app.history.change') }));
           ding();
         } finally {
           isHistoryUpdating = false;
@@ -7612,11 +8218,12 @@ function wireControls() {
         }
       }
     } else {
-      announce('Nothing to undo');
+      announce(t('app.history.nothing_undo'));
     }
   }
 
   function performRedo() {
+    flushHistorySnapshot();
     if (historyIndex < historyStack.length - 1) {
       historyIndex++;
       const item = historyStack[historyIndex];
@@ -7625,8 +8232,9 @@ function wireControls() {
         try {
           const state = editor.parseEditorState(item.state);
           editor.setEditorState(state);
-          announce(`Redo applied`);
-          setStatus(`Redo applied (${item.desc || 'change'}).`);
+          item.ref = editor.getEditorState();
+          announce(t('app.history.redo'));
+          setStatus(t('app.history.redo_status', { what: item.desc || t('app.history.change') }));
           ding();
         } finally {
           isHistoryUpdating = false;
@@ -7634,7 +8242,7 @@ function wireControls() {
         }
       }
     } else {
-      announce('Nothing to redo');
+      announce(t('app.history.nothing_redo'));
     }
   }
 
@@ -7654,8 +8262,8 @@ function wireControls() {
       root.append(p);
     });
     recordHistoryState('clear');
-    announce('Document cleared. Click Undo or press Ctrl+Z to restore.');
-    setStatus('Document cleared. Click Undo or press Ctrl+Z to restore.');
+    announce(t('app.history.cleared'));
+    setStatus(t('app.history.cleared'));
     ding();
     editor.focus();
   });
@@ -7708,12 +8316,12 @@ function wireControls() {
     // Only the document's own undo stack: a text field in a dialog, a table cell input
     // or a MathLive field has its own undo and must keep it.
     const t = e.target;
-    const inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.tagName === 'MATH-FIELD' || (t.closest && t.closest('math-field, dialog[open]')));
+    const inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.tagName === 'MATH-FIELD' || (t.closest && t.closest('math-field, dialog[open], .table-cell-input')));
     if (inField) return;
     if (mod && !e.altKey) {
       if (e.key.toLowerCase() === "s") {
         e.preventDefault();
-        exportTextDocument("xml");
+        exportTextDocument(saveFormat());
         return;
       }
       if (e.key.toLowerCase() === 'z' && !e.shiftKey) {
@@ -7726,14 +8334,33 @@ function wireControls() {
     }
   });
 
-  editor.registerUpdateListener(() => {
-    recordHistoryState('typing');
+  // Debounced: a selection-only update (no dirty nodes) never schedules a snapshot, and a
+  // burst of keystrokes becomes one snapshot HISTORY_DEBOUNCE_MS after the last one.
+  editor.registerUpdateListener(({ dirtyElements, dirtyLeaves }) => {
+    if (isHistoryUpdating) return;
+    if (dirtyElements.size === 0 && dirtyLeaves.size === 0) return;
+    scheduleHistorySnapshot('typing');
   });
 
   // ---- Save / Export Text Document ----
   function exportTextDocument(format) {
+    flushHistorySnapshot();                 // the saved state is always an undo point
     const title = (lastModel?.title || "document").trim();
     const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
+    if (format === 'package') {
+      let currentDocModel = null;
+      editor.getEditorState().read(() => {
+        currentDocModel = buildModel();
+      });
+      const doc = currentDocModel || lastModel || { title, blocks: [] };
+      const pkg = buildNimasPackage(doc);
+      saveBlob(makeZip(pkg.files), pkg.zipName);
+      // Like the .xml project save, this download IS the saved document.
+      markDocumentClean();
+      announce(t('app.save.saved', { file: pkg.zipName }));
+      setStatus(t('app.save.package', { file: pkg.zipName, count: pkg.imageCount }));
+      return;
+    }
     if (format === "xml" || format === "nimas") {
       let currentDocModel = null;
       editor.getEditorState().read(() => {
@@ -7742,8 +8369,11 @@ function wireControls() {
       const doc = currentDocModel || lastModel || { title, blocks: [] };
       const xmlString = exportToNimasXml(doc, { title: doc.title || title });
       saveBlob(new Blob([xmlString], { type: "application/xml;charset=utf-8" }), `${baseName}.xml`);
-      announce(`Saved ${baseName}.xml`);
-      setStatus(`Saved ${baseName}.xml NIMAS project document.`);
+      // The project file is the one download that *is* the saved document: baseline the
+      // dirty tracking on it once the download has been triggered.
+      markDocumentClean();
+      announce(t('app.save.saved', { file: `${baseName}.xml` }));
+      setStatus(t('app.save.nimas', { file: `${baseName}.xml` }));
       return;
     }
     if (format === 'json') {
@@ -7755,8 +8385,8 @@ function wireControls() {
         lexical: editor.getEditorState().toJSON()
       };
       saveBlob(new Blob([JSON.stringify(docObj, null, 2)], { type: 'application/json;charset=utf-8' }), `${baseName}.json`);
-      announce(`Saved ${baseName}.json`);
-      setStatus(`Exported ${baseName}.json native document.`);
+      announce(t('app.save.saved', { file: `${baseName}.json` }));
+      setStatus(t('app.save.native', { file: `${baseName}.json` }));
       return;
     }
     if (format === 'md') {
@@ -7787,11 +8417,11 @@ function wireControls() {
           const headers = b.headers || [];
           const rows = b.rows || [];
           if (headers.length) {
-            lines.push(`| ${headers.join(' | ')} |`);
+            lines.push(`| ${headers.map(cellToMarkup).join(' | ')} |`);
             lines.push(`| ${headers.map(() => '---').join(' | ')} |`);
           }
           for (const row of rows) {
-            lines.push(`| ${(row || []).join(' | ')} |`);
+            lines.push(`| ${(row || []).map(cellToMarkup).join(' | ')} |`);
           }
           lines.push('');
         } else if (b.type === 'indicator') {           // buildModel emits 'indicator' for a section break
@@ -7805,8 +8435,8 @@ function wireControls() {
         }
       });
       saveBlob(new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' }), `${baseName}.md`);
-      announce(`Saved ${baseName}.md`);
-      setStatus(`Exported ${baseName}.md markdown document.`);
+      announce(t('app.save.saved', { file: `${baseName}.md` }));
+      setStatus(t('app.save.markdown', { file: `${baseName}.md` }));
       return;
     }
     if (format === 'txt') {
@@ -7823,22 +8453,22 @@ function wireControls() {
         } else if (b.type === 'table') {
           const headers = b.headers || [];
           const rows = b.rows || [];
-          if (headers.length) lines.push(headers.join('\t'));
-          for (const r of rows) lines.push((r || []).join('\t'));
+          if (headers.length) lines.push(headers.map(cellPlainText).join('\t'));
+          for (const r of rows) lines.push((r || []).map(cellPlainText).join('\t'));
           lines.push('');
         } else if (b.type === 'indicator') lines.push('\n* * *\n');
         else if (b.type === 'note') lines.push(`\n[Note: ${b.text || ''}]\n`);
       });
       saveBlob(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }), `${baseName}.txt`);
-      announce(`Saved ${baseName}.txt`);
-      setStatus(`Exported ${baseName}.txt plain text.`);
+      announce(t('app.save.saved', { file: `${baseName}.txt` }));
+      setStatus(t('app.save.text', { file: `${baseName}.txt` }));
       return;
     }
     if (format === 'docx') {
       const blob = exportToDocxBlob(lastModel, title);
       saveBlob(blob, `${baseName}.docx`);
-      announce(`Saved ${baseName}.docx`);
-      setStatus(`Exported ${baseName}.docx Word document.`);
+      announce(t('app.save.saved', { file: `${baseName}.docx` }));
+      setStatus(t('app.save.word', { file: `${baseName}.docx` }));
       return;
     }
     if (format === 'html') {
@@ -7868,8 +8498,8 @@ function wireControls() {
         } else if (b.type === 'table') {
           const headers = b.headers || [];
           const rows = b.rows || [];
-          const headHtml = headers.length ? `<thead><tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead>` : '';
-          const bodyHtml = `<tbody>${rows.map(r => `<tr>${(r || []).map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+          const headHtml = headers.length ? `<thead><tr>${headers.map(h => `<th>${segToHtml(cellSegments(h))}</th>`).join('')}</tr></thead>` : '';
+          const bodyHtml = `<tbody>${rows.map(r => `<tr>${(r || []).map(c => `<td>${segToHtml(cellSegments(c))}</td>`).join('')}</tr>`).join('')}</tbody>`;
           htmlBody.push(`<table>${headHtml}${bodyHtml}</table>`);
         } else if (b.type === 'indicator') {
           htmlBody.push('<hr />');
@@ -7883,23 +8513,26 @@ function wireControls() {
       });
       const docHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:800px;margin:2rem auto;line-height:1.6;padding:0 1rem;}table{border-collapse:collapse;width:100%;margin:1rem 0;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;}.transcriber-note{background:#f8f9fa;border-left:4px solid #0284c7;padding:8px 16px;margin:1rem 0;}</style></head><body>${htmlBody.join('\n')}</body></html>`;
       saveBlob(new Blob([docHtml], { type: 'text/html;charset=utf-8' }), `${baseName}.html`);
-      announce(`Saved ${baseName}.html`);
-      setStatus(`Exported ${baseName}.html document.`);
+      announce(t('app.save.saved', { file: `${baseName}.html` }));
+      setStatus(t('app.save.html', { file: `${baseName}.html` }));
       return;
     }
   }
 
+  // Triggers a browser download. Deliberately does NOT touch the dirty flag: a BRF/PEF/
+  // eBraille/HTML/Markdown export is a *derived* output, so downloading one must not
+  // disable the unsaved-changes guards. Only the NIMAS project save (exportTextDocument
+  // 'xml') marks the document clean — see there.
   const saveBlob = (blob, name) => {
     const url = URL.createObjectURL(blob); const a = document.createElement('a');
     a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    markDocumentClean();
   };
 
   const saveDocBtn = $id('saveDocBtn');
   saveDocBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     closeAllDropdownMenus();
-    exportTextDocument('xml');
+    exportTextDocument(saveFormat());
   });
 
   const downloadMenuBtn = $id('downloadBtn');
@@ -7942,16 +8575,16 @@ function wireControls() {
     if (format === 'pef') {
       const pefXml = exportToPef(lastModel || { title: 'Document', blocks: [] }, opts);
       saveBlob(new Blob([pefXml], { type: 'application/x-pef+xml' }), `${baseName}.pef`);
-      announce('Downloaded PEF 1.0 XML document.');
-      setStatus(`Exported ${baseName}.pef XML document.`);
+      announce(t('app.save.pef_downloaded'));
+      setStatus(t('app.save.pef', { file: `${baseName}.pef` }));
       return;
     }
     if (format === 'ebrl' || format === 'ebrf') {
       const bytes = exportToEbraille(lastModel || { title: 'Document', blocks: [] },
         { ...opts, language: (navigator.language || 'en') });
       saveBlob(new Blob([bytes], { type: 'application/epub+zip' }), `${baseName}.ebrl`);
-      announce(`Saved ${baseName}.ebrl`);
-      setStatus(`Exported ${baseName}.ebrl eBraille 1.0 publication.`);
+      announce(t('app.save.saved', { file: `${baseName}.ebrl` }));
+      setStatus(t('app.save.ebraille', { file: `${baseName}.ebrl` }));
       return;
     }
     const maxV = Math.max(0, Number(settings.volumePages) || 0);
@@ -7959,12 +8592,13 @@ function wireControls() {
     if (vols.length <= 1) { saveBlob(new Blob([vols[0].brf || ''], { type: 'application/octet-stream' }), `${baseName}.brf`); return; }
     const files = vols.map((v) => ({ name: `${baseName}-v${v.volume}-of-${v.of}.brf`, text: v.brf }));
     saveBlob(makeZip(files), `${baseName}-braille-volumes.zip`);
-    announce(`Downloaded ${vols.length} braille volumes as a zip.`);
+    announce(t('app.save.volumes', { count: vols.length }));
   }
 
   $id('downloadBrfItem')?.addEventListener('click', () => triggerDownloadFormat('brf'));
   $id('downloadPefItem')?.addEventListener('click', () => triggerDownloadFormat('pef'));
   $id('downloadEbrlItem')?.addEventListener('click', () => triggerDownloadFormat('ebrl'));
+  $id('downloadPackageItem')?.addEventListener('click', () => { closeAllDropdownMenus(); exportTextDocument('package'); });
   const resize = (delta) => {
     isManualZoom = true;
     brailleCellW = Math.max(9, Math.min(40, getEffectiveCellW() + delta));
@@ -7982,7 +8616,7 @@ function wireControls() {
       if (pe) {
         pe.scrollIntoView({ behavior: 'smooth', block: 'center' });
         highlightWord(issue.idx, issue.itemIdx || 0, issue.start, issue.end);
-        announce(`Review issue ${proofIssueIdx} of ${lastProofIssues.length}: ${issue.word || issue.src || ''}`);
+        announce(t('app.proof.issue', { n: proofIssueIdx, total: lastProofIssues.length, word: issue.word || issue.src || '' }));
       }
     }
   });
@@ -8012,8 +8646,8 @@ function wireControls() {
   wireControls();
   wireReadingControls();
   updateReadButtons();
-  setStatus('Loading braille engine…');
-  brailleEl.textContent = 'Loading braille engine…';
+  setStatus(t('app.engine.loading'));
+  brailleEl.textContent = t('app.engine.loading');
   try {
     const [ver] = await Promise.all([
       louis.init({ tablesBaseUrl: '/liblouis/tables' }),
@@ -8024,9 +8658,8 @@ function wireControls() {
   }
   catch (e) {
     console.error(e);
-    brailleEl.textContent = '⚠ Braille engine failed to load.\n\n' + e.message +
-      '\n\nHard-refresh with Cmd/Ctrl+Shift+R. If it persists, open the browser console (View ▸ Developer) and send the errors.';
-    setStatus('Engine failed to load: ' + e.message);
+    brailleEl.textContent = `${t('app.engine.failed')}\n\n${e.message}\n\n${t('app.engine.failed_hint')}`;
+    setStatus(t('app.engine.failed_status', { message: e.message }));
     return;
   }
   initToolbar();
@@ -8042,11 +8675,12 @@ function wireControls() {
   } catch (e) {
     console.warn('handoff retrieval error:', e);
   }
-  if (handoff && (handoff.blocks || []).length) modelToLexical(handoff); else seed();
+  if (handoff && (handoff.blocks || []).length) { setLoadedDocInfo(handoff); modelToLexical(handoff); } else seed();
   clearTranslationCache();
   render();
   refreshToolbar();
   markDocumentClean();
+  resetUndoHistory();
   // once MathCAT and MathLive are ready, re-render so the seeded equation transcribes
   Promise.resolve(maths.initMaths()).then(() => {
     clearTranslationCache();
@@ -8056,5 +8690,5 @@ function wireControls() {
     clearTranslationCache();
     render();
   }).catch(() => {});
-  setStatus('Ready — type or format on the left; braille updates live.');
+  setStatus(t('app.engine.ready'));
 })();

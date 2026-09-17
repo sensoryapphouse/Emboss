@@ -201,7 +201,11 @@ function check(name, cond, detail = '') {
   const localesDir = path.join(projectRoot, 'web/locales');
   if (fs.existsSync(localesDir)) {
     const localeFiles = fs.readdirSync(localesDir).filter(f => f.endsWith('.json'));
-    check('5.1 Locales directory contains 100+ languages', localeFiles.length >= 100, `count: ${localeFiles.length}`);
+    // D3 (Paul, 16 Sep): only real translations are shipped — every locale file is one the
+    // picker offers, and the picker offers no language without a file.
+    const { ALL_SUPPORTED_LOCALES } = await import('../web/locales-data.mjs');
+    const offered = ALL_SUPPORTED_LOCALES.map((l) => `${l.code}.json`).sort();
+    check('5.1 Locale files are exactly the offered languages (no English copies)', JSON.stringify([...localeFiles].sort()) === JSON.stringify(offered) && localeFiles.includes('en.json'), `files: ${localeFiles.join(',')}`);
 
     const enJson = JSON.parse(fs.readFileSync(path.join(localesDir, 'en.json'), 'utf-8'));
     let totalEnKeys = 0;
@@ -238,7 +242,7 @@ function check(name, cond, detail = '') {
     }
 
     check('5.3 All 100+ locale files are 100% valid JSON', allLocalesValidJson, corruptedLocale ? `failed on ${corruptedLocale}` : '');
-    check('5.4 RTL locales (Arabic, Hebrew, Persian, Urdu, etc.) verified present', rtlLocalesFound >= 5, `found: ${rtlLocalesFound}`);
+    check('5.4 RTL locales (Arabic, Hebrew) verified present', rtlLocalesFound >= 2, `found: ${rtlLocalesFound}`);
   }
 
   // =========================================================================

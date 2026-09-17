@@ -218,27 +218,27 @@ describe('Nested List Creation & Indentation Suite', () => {
     assert.equal(items[7].marker, 'a.');
   });
 
-  test('BANA Braille Formatter applies stepped margins: 1-3 for lvl 0, 3-5 for lvl 1, 5-7 for lvl 2', () => {
+  test('BANA Braille Formatter applies the §8.5.1b nested pattern: three levels 1-7, 3-7, 5-7', () => {
     const listBlock = {
       type: 'list',
       ordered: true,
       items: [
-        { marker: '1.', text: 'Main Item One', level: 0 },
-        { marker: 'a.', text: 'Sub-item Alpha', level: 1 },
-        { marker: 'i.', text: 'Sub-sub-item Roman', level: 2 },
+        { marker: '1.', text: 'Main Item One that is long enough to need a second braille line', level: 0 },
+        { marker: 'a.', text: 'Sub-item Alpha that is long enough to need a second braille line', level: 1 },
+        { marker: 'i.', text: 'Sub-sub-item Roman that is long enough to need a second braille line', level: 2 },
         { marker: '2.', text: 'Main Item Two', level: 0 },
       ]
     };
 
-    const brf = formatDocument({ blocks: [listBlock] }, { cells: 38, lines: 25, grade: 2, translate: s => s });
+    const brf = formatDocument({ blocks: [listBlock] }, { mode: 'bana', width: 38, depth: 25, translate: s => s });
     assert(brf.length > 0);
 
-    const lines = brf.split('\n').filter(l => l.trim().length > 0);
-    assert(lines.length >= 4);
+    const lines = brf.split(/\r?\n/).filter(l => l.trim().length > 0);
+    assert(lines.length >= 7);
 
-    const l0 = lines.find(l => l.includes('1.'));
-    const l1 = lines.find(l => l.includes('a.'));
-    const l2 = lines.find(l => l.includes('i.'));
+    const l0 = lines.find(l => l.includes('1. Main'));
+    const l1 = lines.find(l => l.includes('a. Sub-item'));
+    const l2 = lines.find(l => l.includes('i. Sub-sub'));
 
     assert(l0, 'Found level 0 line');
     assert(l1, 'Found level 1 line');
@@ -247,6 +247,26 @@ describe('Nested List Creation & Indentation Suite', () => {
     assert(l0.startsWith('1.'), 'Level 0 starts at Cell 1');
     assert(l1.startsWith('  a.'), 'Level 1 starts at Cell 3 (2 leading spaces)');
     assert(l2.startsWith('    i.'), 'Level 2 starts at Cell 5 (4 leading spaces)');
+
+    // §8.5.1b: "All runovers begin two cells to the right of the farthest indented subentry"
+    // — with three levels every runover is in cell 7 (6 leading spaces).
+    for (const [idx, label] of [[l0, 'Level 0'], [l1, 'Level 1'], [l2, 'Level 2']].map(([l, n]) => [lines.indexOf(l), n])) {
+      const runover = lines[idx + 1];
+      assert(runover.startsWith('      ') && !runover.startsWith('       '), `${label} runover is Cell 7: ${JSON.stringify(runover)}`);
+    }
+  });
+
+  test('BANA §8.5.1b: a one-level list is 1-3 and a two-level list is 1-5, 3-5', () => {
+    const o = { mode: 'bana', width: 20, depth: 25, translate: s => s };
+    const one = formatDocument({ blocks: [{ type: 'list', items: [{ text: 'alpha beta gamma delta epsilon', level: 0 }] }] }, o)
+      .split(/\r?\n/).filter(l => l.trim());
+    assert(one[0].startsWith('alpha') && one[1].startsWith('  ') && !one[1].startsWith('   '), `one level 1-3: ${JSON.stringify(one)}`);
+    const two = formatDocument({ blocks: [{ type: 'list', items: [
+      { text: 'alpha beta gamma delta epsilon', level: 0 },
+      { text: 'zeta eta theta iota kappa', level: 1 },
+    ] }] }, o).split(/\r?\n/).filter(l => l.trim());
+    assert(two[0].startsWith('alpha') && two[1].startsWith('    ') && !two[1].startsWith('     '), `two levels main 1-5: ${JSON.stringify(two)}`);
+    assert(two[2].startsWith('  zeta') && two[3].startsWith('    ') && !two[3].startsWith('     '), `two levels sub 3-5: ${JSON.stringify(two)}`);
   });
 
   test('NIMAS Round-trip preserves nested list levels perfectly', () => {
@@ -267,8 +287,10 @@ describe('Nested List Creation & Indentation Suite', () => {
     };
 
     const xml = exportToNimasXml(doc);
-    assert(xml.includes('level="1"'), 'XML exports level="1"');
-    assert(xml.includes('level="2"'), 'XML exports level="2"');
+    // A31: nesting depth is now carried by real nested <list> elements (not a
+    // flat class="level-N" sibling list), so three levels means two nested <list>s.
+    assert.equal((xml.match(/<list\b/g) || []).length, 3, 'Three levels of nesting means three nested <list> elements');
+    assert(!xml.includes('level-1') && !xml.includes('level-2'), 'Nesting depth is no longer carried by a level-N class');
 
     const parsed = parseNimasXml(xml);
     const list = parsed.blocks.find(b => b.type === 'list');

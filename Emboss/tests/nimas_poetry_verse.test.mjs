@@ -84,7 +84,38 @@ test('Poetry & Verse (BANA §13): Multi-stanza poem with <title>, <linegroup>, <
   }
 });
 
-test('Poetry Margins (BANA §13.2.1): Multi-level verse margins (Level 0 = 1-3, Level 1 = 3-5, Level 2 = 5-7)', () => {
+test('Poetry Margins (BANA §13.3.1): the pattern is based on the entire poem — three levels 1-7, 3-7, 5-7', () => {
+  const o = { width: 30, mode: 'bana', depth: 25, translate: (s) => s.toUpperCase() };
+  const line = (level, text) => ({ type: 'play', subtype: 'verse', style: 'verse', level, text });
+  const doc = { blocks: [
+    line(0, 'The wind was a torrent of darkness among the gusty trees'),
+    line(1, 'And the moon was a ghostly galleon tossed upon cloudy seas'),
+    { type: 'indicator', kind: 'stanza' },                                   // a stanza break stays inside the poem
+    line(2, 'The road was a ribbon of moonlight over the purple moor'),
+    line(0, 'And the highwayman came riding'),
+  ] };
+  const lines = formatDocument(doc, o).split(/\r?\n/).filter(l => l.trim() && !l.includes('#A'));
+  const at = (prefix) => lines.findIndex(l => l.startsWith(prefix));
+  const i0 = at('THE WIND'), i1 = at('  AND THE MOON'), i2 = at('    THE ROAD');
+  assert.ok(i0 >= 0 && i1 >= 0 && i2 >= 0, `entries in cells 1, 3, 5: ${JSON.stringify(lines)}`);
+  for (const [i, label] of [[i0, 'Level 0'], [i1, 'Level 1'], [i2, 'Level 2']]) {
+    assert.equal(lines[i + 1].startsWith('      ') && !lines[i + 1].startsWith('       '), true, `${label} runover in Cell 7: ${JSON.stringify(lines[i + 1])}`);
+  }
+  // A poem with one level keeps 1-3 (§13.3.1 "One level: 1-3").
+  const single = formatDocument({ blocks: [line(0, 'The wind was a torrent of darkness among the gusty trees')] }, o)
+    .split(/\r?\n/).filter(l => l.trim() && !l.includes('#A'));
+  assert.equal(single[1].startsWith('  ') && !single[1].startsWith('   '), true, `single-level runover in Cell 3: ${JSON.stringify(single)}`);
+});
+
+test('Poetry Margins (UKAAF B004 App J): a verse line begins in cell 1 and its runover in cell 5', () => {
+  const o = { width: 30, mode: 'ukaaf', depth: 25, translate: (s) => s.toUpperCase() };
+  const lines = formatDocument({ blocks: [{ type: 'play', subtype: 'verse', style: 'verse', level: 0, text: 'The wind was a torrent of darkness among the gusty trees' }] }, o)
+    .split(/\r?\n/).filter(l => l.trim() && !l.includes('#A'));
+  assert.equal(lines[0].startsWith('THE WIND'), true, 'line in cell 1');
+  assert.equal(lines[1].startsWith('    ') && !lines[1].startsWith('     '), true, `runover in cell 5: ${JSON.stringify(lines[1])}`);
+});
+
+test('Poetry Margins: a lone verse block (no poem context) falls back to its own level (Level 1 = 3-5, Level 2 = 5-7)', () => {
   const o = {
     width: 30,
     mode: 'bana',

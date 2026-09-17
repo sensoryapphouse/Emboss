@@ -129,4 +129,104 @@ function wrapCellsSrc(braille, src, width, firstIndent, runoverIndent) {
   return { lines, srcs };
 }
 
-export { wrapCells, wrapCellsSrc, formatParagraph };
+// Line-numbered text (BANA Formats §15.3–15.4; A30). A print line number travels in the
+// braille stream as LN_OPEN + number + LN_CLOSE, a word of its own, in front of the word
+// that begins the numbered print line. wrapNumbered() wraps the text so that
+//  - the text ends at least two blank cells before the widest line number (numWidth)
+//    (§15.3.1c), and the number stands at the right margin of the braille line on which
+//    its print line begins (§15.3.1b); it is not repeated on runover lines (§15.3.1d);
+//  - only one numbered print line begins on a braille line (§15.4.1e);
+//  - a numbered print line that begins in the middle of a braille line is preceded by
+//    three blank cells (§15.4.1c). Only the lines print numbers are known, so only those
+//    are marked (a transcriber's note says so).
+// `src` (optional) is the per-cell source array of the cell trace; the result is
+// { lines, srcs } with srcs parallel to lines (null for spacing and numbers).
+const LN_OPEN = String.fromCharCode(1), LN_CLOSE = String.fromCharCode(2);
+const LN_ANY = new RegExp(`${LN_OPEN}([^${LN_CLOSE}]*)${LN_CLOSE}`, 'g');
+const LN_WORD = new RegExp(`^${LN_OPEN}([^${LN_CLOSE}]*)${LN_CLOSE}$`);
+const hasLineNumbers = (braille) => typeof braille === 'string' && braille.includes(LN_OPEN);
+const stripLineNumbers = (braille) => String(braille).replace(new RegExp(`[ ]*${LN_OPEN}[^${LN_CLOSE}]*${LN_CLOSE}[ ]*`, 'g'), ' ').replace(/^ +| +$/g, '');
+function lineNumberWidth(braille) {
+  let w = 0;
+  for (const m of String(braille).matchAll(LN_ANY)) w = Math.max(w, m[1].length);
+  return w;
+}
+function wrapNumbered(braille, src, width, firstIndent, runoverIndent, numWidth) {
+  width = Math.max(1, Number(width) || 38);
+  const numW = Math.max(numWidth || 0, lineNumberWidth(braille));
+  const textW = Math.max(8, width - numW - 2);
+  firstIndent = Math.min(Math.max(0, firstIndent | 0), textW - 1);
+  runoverIndent = Math.min(Math.max(0, runoverIndent | 0), textW - 1);
+  // Words (with their sources) and forced breaks; a number attaches to the next word.
+  const words = [];
+  let pending = null;
+  for (let i = 0; i < braille.length;) {
+    const ch = braille[i];
+    if (ch === ' ') { i++; continue; }
+    if (ch === '\n') { words.push({ br: true }); i++; continue; }
+    let j = i; while (j < braille.length && braille[j] !== ' ' && braille[j] !== '\n') j++;
+    const w = braille.slice(i, j);
+    const m = w.match(LN_WORD);
+    if (m) pending = m[1];
+    else {
+      // A number glued inside a word (no space in print) still marks that word.
+      let text = w, ks = [];
+      for (let k = i; k < j; k++) ks.push(k);
+      const a = w.indexOf(LN_OPEN);
+      if (a >= 0) {
+        const b = w.indexOf(LN_CLOSE, a) + 1;
+        if (pending == null) pending = w.slice(a + 1, b - 1);
+        text = w.slice(0, a) + w.slice(b);
+        ks = ks.filter((_, x) => x < a || x >= b);
+      }
+      if (text) { words.push({ w: text, src: src ? ks.map((k) => src[k] ?? null) : [], num: pending }); pending = null; }
+    }
+    i = j;
+  }
+  if (pending != null) words.push({ w: '', src: [], num: pending });   // a number after the last word
+  const lines = [], srcs = [];
+  let indent = firstIndent, cur = '', curSrc = [], curNum = null;
+  const flush = () => {
+    let line = ' '.repeat(indent) + cur;
+    const ls = [...Array(indent).fill(null), ...curSrc];
+    if (curNum != null) {
+      const pad = Math.max(2, width - curNum.length - line.length);
+      line += ' '.repeat(pad) + curNum;
+      ls.push(...Array(pad + curNum.length).fill(null));
+    }
+    lines.push(line); srcs.push(ls);
+    cur = ''; curSrc = []; curNum = null; indent = runoverIndent;
+  };
+  const add = (w, ws) => {
+    if (cur === '') { cur = w; curSrc = [...ws]; return; }
+    cur += ' ' + w; curSrc.push(null, ...ws);
+  };
+  for (const x of words) {
+    if (x.br) { if (cur || curNum != null) flush(); indent = runoverIndent; continue; }
+    if (x.num != null) {
+      // A second numbered print line on this braille line, or no room for the three blank
+      // cells and the word: the numbered print line starts a new braille line.
+      if (curNum != null || (cur !== '' && cur.length + 3 + x.w.length > textW - indent)) flush();
+      curNum = x.num;
+      if (!x.w) continue;
+      if (cur === '') { cur = x.w; curSrc = [...x.src]; }
+      else { cur += '   ' + x.w; curSrc.push(null, null, null, ...x.src); }
+      continue;
+    }
+    let w = x.w, ws = x.src;
+    while (w.length > textW - (cur === '' ? indent : runoverIndent)) {    // hard-chunk an over-long word
+      if (cur !== '') flush();
+      const size = Math.max(1, textW - indent);
+      cur = w.slice(0, size); curSrc = ws.slice(0, size);
+      flush();
+      w = w.slice(size); ws = ws.slice(size);
+    }
+    if (!w) continue;
+    if (cur === '' || cur.length + 1 + w.length <= textW - indent) add(w, ws);
+    else { flush(); add(w, ws); }
+  }
+  if (cur !== '' || curNum != null) flush();
+  return { lines, srcs };
+}
+
+export { wrapCells, wrapCellsSrc, formatParagraph, LN_OPEN, LN_CLOSE, hasLineNumbers, stripLineNumbers, lineNumberWidth, wrapNumbered };

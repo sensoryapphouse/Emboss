@@ -314,8 +314,6 @@ async function runBrowserTests(browserType, browserName) {
     // -------------------------------------------------------------------------
     console.log(`\n--- [11] Testing Save NIMAS XML Project & Braille Deliverables ---`);
     await page.click('#saveDocBtn');
-    await page.waitForTimeout(100);
-    await page.click('#saveXmlItem');
     await page.waitForTimeout(150);
     recordTest('Save Document triggered for NIMAS .xml without error', true);
 

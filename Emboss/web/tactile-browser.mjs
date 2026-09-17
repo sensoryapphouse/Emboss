@@ -1,5 +1,11 @@
 import { renderTactileDotCanvas } from '/format/tactile-svg.mjs';
 
+// Interface text (A33): the editor's translations via window.embossT, English otherwise.
+const T = (key, fallback, params = {}) => (typeof window !== 'undefined' && window.embossT
+  ? window.embossT(`app.symbols.${key}`, params, fallback)
+  : fallback.replace(/\{(\w+)\}/g, (_, k) => params[k] ?? ''));
+const TH = (key, fallback, params) => T(key, fallback, params).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
 let catalogIndex = null;
 const loadedPacks = new Map();
 let currentFilterDomain = 'all';
@@ -17,30 +23,30 @@ function getDevicePreviewInfo(targetDevice) {
     } catch { /* ignore */ }
   }
   if (t === 'tiger' || t === 'viewplus') {
-    return { id: 'tiger', name: 'ViewPlus Columbia / Premier (Tiger 8-Height)', badge: '🖨 ViewPlus Tiger · 8-Height Relief', supportsGraphics: true };
+    return { id: 'tiger', name: 'ViewPlus Columbia / Premier (Tiger 8-Height)', badge: `🖨 ViewPlus Tiger · ${T('badge_tiger', "8-Height Relief")}`, supportsGraphics: true };
   }
   if (t === 'aph') {
-    return { id: 'aph', name: 'APH PageBlaster / PixBlaster', badge: '🖨 APH PageBlaster · Tactile Relief', supportsGraphics: true };
+    return { id: 'aph', name: 'APH PageBlaster / PixBlaster', badge: `🖨 APH PageBlaster · ${T('badge_aph', "Tactile Relief")}`, supportsGraphics: true };
   }
   if (t === 'swell' || t === 'piaf') {
-    return { id: 'swell', name: 'Swell Paper / PIAF (Heat Fuser)', badge: '📄 Swell Paper · Vector Relief', supportsGraphics: true };
+    return { id: 'swell', name: 'Swell Paper / PIAF (Heat Fuser)', badge: `📄 Swell Paper · ${T('badge_swell', "Vector Relief")}`, supportsGraphics: true };
   }
   if (t === 'monarch') {
-    return { id: 'monarch', name: 'APH Monarch Dynamic Display (32×10)', badge: '📱 APH Monarch · 32×10 Pin Grid', supportsGraphics: true };
+    return { id: 'monarch', name: 'APH Monarch Dynamic Display (32×10)', badge: `📱 APH Monarch · ${T('badge_monarch', "32\u00d710 Pin Grid")}`, supportsGraphics: true };
   }
   if (t === 'dotpad') {
-    return { id: 'dotpad', name: 'Dot Pad 320 Dynamic Display', badge: '⚡ Dot Pad 320 · Dynamic Matrix', supportsGraphics: true };
+    return { id: 'dotpad', name: 'Dot Pad 320 Dynamic Display', badge: `⚡ Dot Pad 320 · ${T('badge_dotpad', "Dynamic Matrix")}`, supportsGraphics: true };
   }
   if (t === 'braillo') {
-    return { id: 'generic', name: 'Braillo 300 / 600', badge: '🖨 Braillo · Text Only', supportsGraphics: false };
+    return { id: 'generic', name: 'Braillo 300 / 600', badge: `🖨 Braillo · ${T('badge_text_only', "Text Only")}`, supportsGraphics: false };
   }
   if (t === 'romeo') {
-    return { id: 'generic', name: 'Romeo 60 / Enabling Juliet 120', badge: '🖨 Romeo / Juliet · Text Only', supportsGraphics: false };
+    return { id: 'generic', name: 'Romeo 60 / Enabling Juliet 120', badge: `🖨 Romeo / Juliet · ${T('badge_text_only', "Text Only")}`, supportsGraphics: false };
   }
   if (t === 'generic' || t === 'custom') {
-    return { id: 'generic', name: 'Generic BRF / Standard Embosser', badge: '🖨 Generic BRF · Text Only', supportsGraphics: false };
+    return { id: 'generic', name: 'Generic BRF / Standard Embosser', badge: `🖨 Generic BRF · ${T('badge_text_only', "Text Only")}`, supportsGraphics: false };
   }
-  return { id: 'index', name: 'Index Basic-D / Everest-D V5', badge: '🖨 Index Braille · Dot Matrix', supportsGraphics: true };
+  return { id: 'index', name: 'Index Basic-D / Everest-D V5', badge: `🖨 Index Braille · ${T('badge_index', "Dot Matrix")}`, supportsGraphics: true };
 }
 
 /**
@@ -137,20 +143,20 @@ function createModalElement() {
           </div>
           <div>
             <h2 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">
-              Tactile Symbol Library
+              ${TH('title', "Tactile Symbol Library")}
             </h2>
-            <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Search 1,400+ curriculum tactile graphics for Swell Paper, Tiger 3D, Monarch, Dot Pad & Index.</p>
+            <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">${TH('subtitle', "Search 1,400+ curriculum tactile graphics for Swell Paper, Tiger 3D, Monarch, Dot Pad & Index.")}</p>
           </div>
         </div>
-        <button id="tsb-close-btn" style="border: 0; background: transparent; cursor: pointer; padding: 6px 10px; font-size: 18px; color: #64748b; border-radius: 6px;" aria-label="Close">✕</button>
+        <button id="tsb-close-btn" style="border: 0; background: transparent; cursor: pointer; padding: 6px 10px; font-size: 18px; color: #64748b; border-radius: 6px;" aria-label="${TH('close', 'Close')}">✕</button>
       </div>
 
       <!-- Toolbar & Filters -->
       <div style="padding: 10px 20px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 12px; align-items: center; background: #ffffff;">
-        <input type="text" id="tsb-search-input" placeholder="Search 1,400+ tactile graphics (e.g. beaker, decagon, compass, cell, microscope)..." 
+        <input type="text" id="tsb-search-input" placeholder="${TH('search_placeholder', 'Search 1,400+ tactile graphics (e.g. beaker, decagon, compass, cell, microscope)...')}" 
                style="flex: 1; padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none;" />
         <div id="tsb-text-only-badge" style="display: none; flex: 1; align-items: center; gap: 8px; padding: 8px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px; color: #991b1b; font-weight: 600;">
-          <span>🚫 Text-Only Embosser Mode</span>
+          <span>🚫 ${TH('text_only', "Text-Only Embosser Mode")}</span>
         </div>
         
         <select id="tsb-target-select" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-weight: 600; background: #f8fafc; color: #334155;">
@@ -160,23 +166,23 @@ function createModalElement() {
           <option value="monarch">📱 APH Monarch Dynamic Display (32×10)</option>
           <option value="braillo">🖨 Braillo 300 / 600</option>
           <option value="romeo">🖨 Romeo 60 / Enabling Juliet 120</option>
-          <option value="swell">📄 Swell Paper / PIAF (Heat Fuser)</option>
+          <option value="swell">📄 ${TH('swell_option', 'Swell Paper / PIAF (Heat Fuser)')}</option>
           <option value="dotpad">⚡ Dot Pad 320 Dynamic Display</option>
-          <option value="generic">🖨 Generic BRF / Standard Embosser</option>
+          <option value="generic">🖨 ${TH('generic_option', 'Generic BRF / Standard Embosser')}</option>
         </select>
       </div>
 
       <!-- Domain Category Chips (All clearly visible without horizontal cut-off) -->
       <div id="tsb-cat-bar" style="padding: 8px 20px; border-bottom: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 6px 8px; background: #f8fafc;">
-        <button class="tsb-cat-btn active" data-domain="all" style="padding: 4px 12px; border-radius: 16px; border: 0; font-size: 12px; font-weight: 600; cursor: pointer; background: #0284c7; color: #ffffff;">All</button>
-        <button class="tsb-cat-btn" data-domain="maths-geometry" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">📐 Maths & Geometry</button>
-        <button class="tsb-cat-btn" data-domain="science-stem" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🔬 Science & STEM</button>
-        <button class="tsb-cat-btn" data-domain="tools-technology" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🔧 Tools & Tech</button>
-        <button class="tsb-cat-btn" data-domain="living-world" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🌿 Living World</button>
-        <button class="tsb-cat-btn" data-domain="school-classroom" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🏫 School & Classroom</button>
-        <button class="tsb-cat-btn" data-domain="food-drink" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🍎 Food & Drink</button>
-        <button class="tsb-cat-btn" data-domain="geography-transport" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🌍 Geography & Transport</button>
-        <button class="tsb-cat-btn" data-domain="everyday-life" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🏠 Everyday Life</button>
+        <button class="tsb-cat-btn active" data-domain="all" style="padding: 4px 12px; border-radius: 16px; border: 0; font-size: 12px; font-weight: 600; cursor: pointer; background: #0284c7; color: #ffffff;">${TH('cat_all', "All")}</button>
+        <button class="tsb-cat-btn" data-domain="maths-geometry" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">📐 ${TH('cat_maths', "Maths & Geometry")}</button>
+        <button class="tsb-cat-btn" data-domain="science-stem" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🔬 ${TH('cat_science', "Science & STEM")}</button>
+        <button class="tsb-cat-btn" data-domain="tools-technology" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🔧 ${TH('cat_tools', "Tools & Tech")}</button>
+        <button class="tsb-cat-btn" data-domain="living-world" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🌿 ${TH('cat_living', "Living World")}</button>
+        <button class="tsb-cat-btn" data-domain="school-classroom" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🏫 ${TH('cat_school', "School & Classroom")}</button>
+        <button class="tsb-cat-btn" data-domain="food-drink" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🍎 ${TH('cat_food', "Food & Drink")}</button>
+        <button class="tsb-cat-btn" data-domain="geography-transport" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🌍 ${TH('cat_geography', "Geography & Transport")}</button>
+        <button class="tsb-cat-btn" data-domain="everyday-life" style="padding: 4px 12px; border-radius: 16px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 500; cursor: pointer; background: #ffffff; color: #334155;">🏠 ${TH('cat_everyday', "Everyday Life")}</button>
       </div>
 
       <!-- Symbols Grid Container (Zero vertical scrollbar; stepped page layout) -->
@@ -186,29 +192,29 @@ function createModalElement() {
         </div>
         <div id="tsb-empty-state" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0; color: #94a3b8; flex: 1;">
           <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
-          <p style="font-size: 13px; font-weight: 500; margin: 0;">No symbols match the current search or filter.</p>
+          <p style="font-size: 13px; font-weight: 500; margin: 0;">${TH('empty', "No symbols match the current search or filter.")}</p>
         </div>
 
         <!-- Centered Non-Graphics State View -->
         <div id="tsb-no-graphics-state" style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 30px; flex: 1;">
           <div style="width: 60px; height: 60px; border-radius: 50%; background: #fee2e2; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);">🚫</div>
-          <h3 id="tsb-no-graphics-title" style="font-size: 19px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0;">Graphics not available for Braillo 300 / 600</h3>
-          <p style="font-size: 13px; color: #64748b; max-width: 480px; line-height: 1.6; margin: 0 0 24px 0;">This embosser model is configured for volume braille text and does not support tactile graphic rendering. To browse and insert tactile graphics, switch to a graphics-capable embosser or swell paper:</p>
+          <h3 id="tsb-no-graphics-title" style="font-size: 19px; font-weight: 700; color: #0f172a; margin: 0 0 8px 0;">${TH('no_graphics_title', 'Graphics not available for {device}', { device: 'Braillo 300 / 600' })}</h3>
+          <p style="font-size: 13px; color: #64748b; max-width: 480px; line-height: 1.6; margin: 0 0 24px 0;">${TH('no_graphics_text', "This embosser model is configured for volume braille text and does not support tactile graphic rendering. To browse and insert tactile graphics, switch to a graphics-capable embosser or swell paper:")}</p>
           <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
             <button id="tsb-switch-vp-btn" style="padding: 9px 18px; border-radius: 8px; border: 0; background: #0284c7; color: #ffffff; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(2,132,199,0.25);">🖨 ViewPlus Tiger</button>
             <button id="tsb-switch-index-btn" style="padding: 9px 18px; border-radius: 8px; border: 0; background: #1e293b; color: #ffffff; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(30,41,59,0.25);">🖨 Index Braille V5</button>
-            <button id="tsb-switch-swell-btn" style="padding: 9px 18px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">📄 Swell Paper</button>
+            <button id="tsb-switch-swell-btn" style="padding: 9px 18px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">📄 ${TH('swell_paper', 'Swell Paper')}</button>
           </div>
         </div>
       </div>
 
       <!-- Footer & Pagination with Arrows -->
       <div id="tsb-footer" style="padding: 10px 20px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; font-size: 12px; color: #64748b;">
-        <div id="tsb-count-label">Showing 0 of 0 symbols</div>
+        <div id="tsb-count-label">${TH('showing', 'Showing {from}–{to} of {total} symbols', { from: 0, to: 0, total: 0 })}</div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          <button id="tsb-prev-btn" style="padding: 5px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; color: #1e293b;">&larr; Previous</button>
-          <span id="tsb-page-label" style="font-weight: 600; color: #334155; min-width: 80px; text-align: center;">Page 1 of 1</span>
-          <button id="tsb-next-btn" style="padding: 5px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; color: #1e293b;">Next &rarr;</button>
+          <button id="tsb-prev-btn" style="padding: 5px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; color: #1e293b;">&larr; ${TH('previous', 'Previous')}</button>
+          <span id="tsb-page-label" style="font-weight: 600; color: #334155; min-width: 80px; text-align: center;">${TH('page', 'Page {page} of {pages}', { page: 1, pages: 1 })}</span>
+          <button id="tsb-next-btn" style="padding: 5px 14px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; color: #1e293b;">${TH('next', 'Next')} &rarr;</button>
         </div>
       </div>
 
@@ -224,7 +230,7 @@ function createModalElement() {
       <div style="width: 196px; min-height: 120px; border-radius: 8px; overflow: hidden; background: #1e293b; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); border: 1px solid #334155; margin: 2px 0;">
         <canvas id="tsb-tt-canvas" style="width: 196px; height: 120px; display: block; border-radius: 6px;"></canvas>
       </div>
-      <div style="font-size: 10px; color: #94a3b8; margin-top: 6px; text-align: center;">Simulated Embosser Output · Click to insert</div>
+      <div style="font-size: 10px; color: #94a3b8; margin-top: 6px; text-align: center;">${TH('tooltip_footer', "Simulated Embosser Output · Click to insert")}</div>
     </div>
   `;
 
@@ -350,7 +356,7 @@ async function renderSymbolGrid() {
     if (noGraphicsState) {
       noGraphicsState.style.display = 'flex';
       if (noGraphicsTitle) {
-        noGraphicsTitle.textContent = `Graphics not available for ${devInfo.name}`;
+        noGraphicsTitle.textContent = T('no_graphics_title', 'Graphics not available for {device}', { device: devInfo.name });
       }
     }
     const tt = modal.querySelector('#tsb-hover-tooltip');
@@ -409,8 +415,8 @@ function matchesTactileSearch(item, query) {
   const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
   if (currentPage > totalPages) currentPage = totalPages;
 
-  countLabel.textContent = `Showing ${totalItems === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1}–${Math.min(totalItems, currentPage * PAGE_SIZE)} of ${totalItems} symbols`;
-  pageLabel.textContent = `Page ${currentPage} of ${totalPages}`;
+  countLabel.textContent = T('showing', 'Showing {from}–{to} of {total} symbols', { from: totalItems === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1, to: Math.min(totalItems, currentPage * PAGE_SIZE), total: totalItems });
+  pageLabel.textContent = T('page', 'Page {page} of {pages}', { page: currentPage, pages: totalPages });
   prevBtn.disabled = currentPage <= 1;
   nextBtn.disabled = currentPage >= totalPages;
 
@@ -470,7 +476,7 @@ function matchesTactileSearch(item, query) {
       activeHoverId = item.id;
       const devInfo = getDevicePreviewInfo(currentFilterTarget);
       if (ttName) ttName.textContent = item.name;
-      if (ttDomain) ttDomain.textContent = item.domain || 'graphic';
+      if (ttDomain) ttDomain.textContent = item.domain || T('graphic', 'graphic');
       if (ttBadge) ttBadge.textContent = devInfo.badge;
 
       const rect = card.getBoundingClientRect();
@@ -510,7 +516,7 @@ function matchesTactileSearch(item, query) {
     card.innerHTML = `
       <div style="width: 76px; height: 76px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 4px;">
         <div style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;" class="tsb-svg-holder">
-          ${rawSvg ? rawSvg : '<div style="font-size: 10px; color: #94a3b8;">Loading...</div>'}
+          ${rawSvg ? rawSvg : `<div style="font-size: 10px; color: #94a3b8;">${TH('loading', 'Loading...')}</div>`}
         </div>
       </div>
       <span style="font-size: 11px; font-weight: 600; color: #1e293b; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2;" title="${item.name}">${item.name}</span>

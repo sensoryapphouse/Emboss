@@ -47,7 +47,8 @@ const spatialOut = clean(formatDocument(spatialDoc, {
 
 const spatialLines = spatialOut.split('\n').filter(l => l.length > 0);
 check('Spatial table has header line with 2-space gutter', spatialLines.some(l => l.includes('NAME  AGE')));
-check('Spatial table has separator line with hyphens under columns', spatialLines.some(l => l.includes('----  ---')));
+// BANA §11.4.2b: the separation line is dot 5 followed by dots 25 ("3333) across each column's full width
+check('Spatial table has "333 separation line under each column (§11.4.2b)', spatialLines.some(l => l === '"333  "33'), `lines: ${JSON.stringify(spatialLines)}`);
 check('Spatial table has row 1 data', spatialLines.some(l => l.includes('ANN   3')));
 check('Spatial table has row 2 data', spatialLines.some(l => l.includes('BOB   5')));
 // Single-line rows should not have blank lines between them
@@ -87,7 +88,7 @@ const row2LineIdx = rawMultiLines.findIndex(l => l.includes('BIOME'));
 const linesBetween = rawMultiLines.slice(row1LineIdx + 1, row2LineIdx);
 check('Multi-line spatial table has blank line between data rows (BANA §11.3.4)', linesBetween.includes(''), `lines between: ${JSON.stringify(linesBetween)}`);
 
-// --- Test 3: Listed Table Format (BANA §11.4) ---
+// --- Test 3: Listed Table Format (BANA Formats §11.16, Sample 11-24) ---
 console.log('\n--- Test 3: Listed Table Format (Forced via format: listed) ---');
 const listedDoc = {
   blocks: [
@@ -112,12 +113,12 @@ const listedOut = clean(formatDocument(listedDoc, {
 }));
 
 const listedLines = listedOut.split('\n');
-check('Listed table includes standard TN announcing format', listedLines.some(l => l.includes('@.<TABLE: LISTED TABLE FORMAT@.>')));
-check('Listed table Row 1 label starts in Cell 1', listedLines.some(l => l.startsWith('ASPECT')));
-check('Listed table Row 1 attribute line starts in Cell 3 with header prefix', listedLines.some(l => l.startsWith('  PART OF SPEECH: NOUN')));
-check('Listed table Row 1 second attribute starts in Cell 3 with header prefix', listedLines.some(l => l.startsWith('  DEFINITION: A PARTICULAR')));
-check('Listed table Row 2 label starts in Cell 1', listedLines.some(l => l.startsWith('TRAIT')));
-check('Listed table has blank line separating row entries', listedOut.includes('SOMETHING\n\nTRAIT'));
+check('Listed table TN explains the print-format change (§11.16l)', listedLines.some(l => l.includes('@.<PRINT FORMAT IS CHANGED.')));
+check('Row 1: first column heading + row heading as a cell-5 heading (§11.16e)', listedLines.some(l => l.startsWith('    WORD: ASPECT')));
+check('Row 1: other headings with entries in 1-3 (§11.16f)', listedLines.some(l => l.startsWith('PART OF SPEECH: NOUN')));
+check('Row 1: second heading in 1-3', listedLines.some(l => l.startsWith('DEFINITION: A PARTICULAR')));
+check('Row 2 heading in cell 5', listedLines.some(l => l.startsWith('    WORD: TRAIT')));
+check('Blank line before each row (§11.16k)', listedOut.includes('SOMETHING\n\n    WORD: TRAIT'));
 
 // --- Test 4: Wide Table Auto-Switching to Listed Format ---
 console.log('\n--- Test 4: Wide Table Auto-Switching ---');
@@ -143,10 +144,10 @@ const wideOut = clean(formatDocument(wideTableDoc, {
   standard: 'bana'
 }));
 
-check('Wide table exceeding page width automatically formats as Listed table', wideOut.includes('@.<TABLE: LISTED TABLE FORMAT@.>'));
+check('Wide table exceeding page width automatically formats as Listed table', wideOut.includes('@.<PRINT FORMAT IS CHANGED.'));
 check('Wide table extracts row 1 in listed format', wideOut.includes('UNITED STATES OF AMERICA'));
 
-// --- Test 5: Sparse / Empty Cells in Listed Table (BANA §11.4.3) ---
+// --- Test 5: Sparse / Empty Cells in Listed Table (BANA Formats §11.16h) ---
 console.log('\n--- Test 5: Sparse / Empty Cells in Listed Table ---');
 const sparseDoc = {
   blocks: [
@@ -170,7 +171,8 @@ const sparseOut = clean(formatDocument(sparseDoc, {
   standard: 'bana'
 }));
 
-check('Omitted cell in listed table produces dash (---)', sparseOut.includes('VARIANT: ---'));
+check('Blank entry is three unspaced guide dots', sparseOut.includes('VARIANT: """'));
+check('Blank entries are explained in the TN', sparseOut.includes('THREE GUIDE DOTS'));
 
 // --- Test 6: Table Title and Custom Transcriber Note ---
 console.log('\n--- Test 6: Table Title and Custom Transcriber Note ---');
@@ -198,7 +200,7 @@ const titledOut = clean(formatDocument(titledDoc, {
 }));
 
 check('Table title is centred above table', titledOut.includes('VOCABULARY TERMS TABLE'));
-check('Custom transcriber note is formatted in TN symbols', titledOut.includes('@.<TABLE: LISTED FORMAT FOR CHAPTER 1 TERMS.@.>'));
+check('Custom transcriber note is formatted in TN symbols', titledOut.includes('@.<TABLE: LISTED FORMAT FOR CHAPTER 1 TERMS.') && titledOut.includes('PRINT FORMAT IS CHANGED.'));
 
 // --- Test 7: Table without Headers ---
 console.log('\n--- Test 7: Table without Headers ---');

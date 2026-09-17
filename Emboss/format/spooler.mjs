@@ -12,6 +12,13 @@ import { unicodeBrailleToBrf } from '../engine/brf-ascii.mjs';
 
 export { rasterizeSvgToTiger, rasterizeSvgToIndex };
 
+// Messages shown to the user go through options.text(key, params, fallback) when the caller
+// provides it (the editor's translations, keys app.spool.*; A33), else the English fallback.
+function say(options, key, fallback, params = {}) {
+  if (options && typeof options.text === 'function') return options.text(`app.spool.${key}`, params, fallback);
+  return fallback.replace(/\{(\w+)\}/g, (_, k) => params[k] ?? '');
+}
+
 export function isWebSerialSupported() {
   return typeof globalThis !== 'undefined' && Boolean(globalThis.navigator?.serial);
 }
@@ -213,7 +220,7 @@ export async function spoolViaWebBluetooth(formattedStream, options = {}) {
   if (!isWebBluetoothSupported()) throw new Error('Web Bluetooth is not supported in this browser.');
   const onStatus = typeof options.onStatus === 'function' ? options.onStatus : () => {};
 
-  onStatus('Please select your Bluetooth embosser in the browser prompt…');
+  onStatus(say(options, 'ble_select', "Please select your Bluetooth embosser in the browser prompt…", {}));
   let device = null;
   try {
     device = await navigator.bluetooth.requestDevice({
@@ -239,12 +246,12 @@ export async function spoolViaWebBluetooth(formattedStream, options = {}) {
     });
   } catch (err) {
     if (err.name === 'NotFoundError' || (err.message && (err.message.includes('User cancelled') || err.message.includes('No device selected')))) {
-      return { success: false, method: 'cancelled', message: 'Bluetooth embosser selection was cancelled by user.' };
+      return { success: false, method: 'cancelled', message: say(options, 'ble_cancelled', "Bluetooth embosser selection was cancelled.", {}) };
     }
     throw err;
   }
 
-  onStatus(`Connecting to ${device.name || 'Bluetooth Embosser'}…`);
+  onStatus(say(options, 'connecting_device', "Connecting to {device}…", { device: device.name || 'Bluetooth' }));
   const server = await device.gatt.connect();
 
   let rxChar = null;
@@ -293,9 +300,9 @@ export async function spoolViaWebBluetooth(formattedStream, options = {}) {
           const val = new TextDecoder().decode(e.target.value);
           const telemetry = JSON.parse(val);
           if (telemetry.event === 'page_started') {
-            onStatus(`Embossing page ${telemetry.page} of ${telemetry.totalPages || '…'}…`);
+            onStatus(say(options, 'page_progress', "Embossing page {page} of {pages}…", { page: telemetry.page, pages: telemetry.totalPages || '…' }));
           } else if (telemetry.event === 'job_finished') {
-            onStatus('Embossing job finished!');
+            onStatus(say(options, 'job_finished', "Embossing job finished!", {}));
           }
         } catch (_) {}
       });
@@ -303,7 +310,7 @@ export async function spoolViaWebBluetooth(formattedStream, options = {}) {
   }
 
   const data = new TextEncoder().encode(formattedStream);
-  onStatus(`Streaming ${data.length} bytes over Bluetooth Low Energy…`);
+  onStatus(say(options, 'ble_streaming', "Streaming {bytes} bytes over Bluetooth Low Energy…", { bytes: data.length }));
 
   const chunkSize = options.bleChunkSize || 128;
   for (let offset = 0; offset < data.length; offset += chunkSize) {
@@ -313,17 +320,17 @@ export async function spoolViaWebBluetooth(formattedStream, options = {}) {
     } else {
       await rxChar.writeValue(chunk);
     }
-    onStatus(`Sent ${Math.min(offset + chunkSize, data.length)} / ${data.length} bytes (Bluetooth)…`);
+    onStatus(say(options, 'sent_ble', "Sent {sent} / {bytes} bytes (Bluetooth)…", { sent: Math.min(offset + chunkSize, data.length), bytes: data.length }));
     if (offset + chunkSize < data.length) {
       await new Promise((r) => setTimeout(r, 25));
     }
   }
 
-  onStatus('Emboss job delivered wirelessly via Bluetooth!');
+  onStatus(say(options, 'ble_done', "Emboss job delivered wirelessly via Bluetooth!", {}));
   return {
     success: true,
     method: 'web-bluetooth',
-    message: `Successfully spooled ${data.length} bytes to ${device.name || 'Bluetooth Embosser'}.`
+    message: say(options, 'ble_success', "Sent {bytes} bytes to {device}.", { bytes: data.length, device: device.name || 'Bluetooth' })
   };
 }
 
@@ -343,19 +350,19 @@ export async function spoolViaWebHid(formattedStream, options = {}) {
     { vendorId: 0x0bd7 }, // ViewPlus
   ];
 
-  onStatus('Please select your USB HID embosser in the browser prompt…');
+  onStatus(say(options, 'hid_select', "Please select your USB HID embosser in the browser prompt…", {}));
   let devices = [];
   try {
     devices = await navigator.hid.requestDevice({ filters });
   } catch (err) {
     if (err.name === 'NotFoundError' || (err.message && (err.message.includes('User cancelled') || err.message.includes('No device selected')))) {
-      return { success: false, method: 'cancelled', message: 'HID device selection was cancelled by user.' };
+      return { success: false, method: 'cancelled', message: say(options, 'hid_cancelled', "HID device selection was cancelled.", {}) };
     }
     throw err;
   }
 
   if (!devices || !devices.length) {
-    return { success: false, method: 'cancelled', message: 'No HID embosser selected.' };
+    return { success: false, method: 'cancelled', message: say(options, 'hid_none', "No HID embosser selected.", {}) };
   }
 
   const device = devices[0];
@@ -363,7 +370,7 @@ export async function spoolViaWebHid(formattedStream, options = {}) {
     await device.open();
   }
 
-  onStatus(`Connected to HID embosser: ${device.productName || 'USB HID Embosser'}…`);
+  onStatus(say(options, 'hid_connected', "Connected to HID embosser: {device}…", { device: device.productName || 'USB HID' }));
 
   const data = new TextEncoder().encode(formattedStream);
   const reportId = 0x00;
@@ -374,18 +381,18 @@ export async function spoolViaWebHid(formattedStream, options = {}) {
     const slice = data.subarray(offset, offset + reportSize);
     chunk.set(slice);
     await device.sendReport(reportId, chunk);
-    onStatus(`Sent ${Math.min(offset + reportSize, data.length)} / ${data.length} bytes (USB HID)…`);
+    onStatus(say(options, 'sent_hid', "Sent {sent} / {bytes} bytes (USB HID)…", { sent: Math.min(offset + reportSize, data.length), bytes: data.length }));
     if (offset + reportSize < data.length) {
       await new Promise((r) => setTimeout(r, 15));
     }
   }
 
   await device.close();
-  onStatus('Emboss job spooled successfully via WebHID!');
+  onStatus(say(options, 'hid_done', "Emboss job sent via WebHID!", {}));
   return {
     success: true,
     method: 'web-hid',
-    message: `Successfully spooled ${data.length} bytes via WebHID to ${device.productName || 'USB HID Embosser'}.`
+    message: say(options, 'hid_success', "Sent {bytes} bytes via WebHID to {device}.", { bytes: data.length, device: device.productName || 'USB HID' })
   };
 }
 
@@ -403,13 +410,13 @@ export async function spoolViaWebUsb(formattedStream, options = {}) {
     { vendorId: 0x2e8a },
   ];
 
-  onStatus('Please select your USB embosser in the browser prompt…');
+  onStatus(say(options, 'usb_select', "Please select your USB embosser in the browser prompt…", {}));
   let device = null;
   try {
     device = await navigator.usb.requestDevice({ filters });
   } catch (err) {
     if (err.name === 'NotFoundError' || (err.message && err.message.includes('No device selected'))) {
-      return { success: false, method: 'cancelled', message: 'Embosser selection was cancelled by user.' };
+      return { success: false, method: 'cancelled', message: say(options, 'usb_cancelled', "Embosser selection was cancelled.", {}) };
     }
     throw err;
   }
@@ -437,12 +444,12 @@ export async function spoolViaWebUsb(formattedStream, options = {}) {
   const epNum = outEndpoint.endpointNumber;
   const data = new TextEncoder().encode(formattedStream);
 
-  onStatus('Streaming data directly to USB embosser…');
+  onStatus(say(options, 'usb_streaming', "Streaming data directly to the USB embosser…", {}));
   const chunkSize = 512;
   for (let offset = 0; offset < data.length; offset += chunkSize) {
     const chunk = data.subarray(offset, offset + chunkSize);
     await device.transferOut(epNum, chunk);
-    onStatus(`Sent ${Math.min(offset + chunkSize, data.length)} / ${data.length} bytes…`);
+    onStatus(say(options, 'sent', "Sent {sent} / {bytes} bytes…", { sent: Math.min(offset + chunkSize, data.length), bytes: data.length }));
     if (offset + chunkSize < data.length) {
       await new Promise((r) => setTimeout(r, 40));
     }
@@ -450,8 +457,8 @@ export async function spoolViaWebUsb(formattedStream, options = {}) {
 
   await device.releaseInterface(ifaceNum);
   await device.close();
-  onStatus('Emboss job spooled successfully via WebUSB!');
-  return { success: true, method: 'web-usb', message: `Successfully spooled ${data.length} bytes via WebUSB.` };
+  onStatus(say(options, 'usb_done', "Emboss job sent via WebUSB!", {}));
+  return { success: true, method: 'web-usb', message: say(options, 'usb_success', "Sent {bytes} bytes via WebUSB.", { bytes: data.length }) };
 }
 
 /**
@@ -469,7 +476,7 @@ export async function spoolViaWebSerial(formattedStream, options = {}) {
     if (authorizedPorts.length === 1 && !authorizedPorts[0].readable) {
       port = authorizedPorts[0];
     } else {
-      onStatus('Please select your connected embosser in the browser prompt…');
+      onStatus(say(options, 'serial_select', "Please select your connected embosser in the browser prompt…", {}));
       port = await navigator.serial.requestPort();
     }
     try {
@@ -477,7 +484,7 @@ export async function spoolViaWebSerial(formattedStream, options = {}) {
     } catch {
       await port.open({ baudRate, dataBits: 8, stopBits: 1, parity: 'none' });
     }
-    onStatus(`Connected to embosser at ${baudRate} baud. Spooling braille job…`);
+    onStatus(say(options, 'serial_connected', "Connected to the embosser at {baud} baud. Sending the braille job…", { baud: baudRate }));
 
     const data = new TextEncoder().encode(formattedStream);
     writer = port.writable.getWriter();
@@ -486,7 +493,7 @@ export async function spoolViaWebSerial(formattedStream, options = {}) {
     for (let offset = 0; offset < data.length; offset += chunkSize) {
       const chunk = data.subarray(offset, offset + chunkSize);
       await writer.write(chunk);
-      onStatus(`Sent ${Math.min(offset + chunkSize, data.length)} / ${data.length} bytes…`);
+      onStatus(say(options, 'sent', "Sent {sent} / {bytes} bytes…", { sent: Math.min(offset + chunkSize, data.length), bytes: data.length }));
       if (offset + chunkSize < data.length) {
         await new Promise((resolve) => setTimeout(resolve, 40));
       }
@@ -494,13 +501,13 @@ export async function spoolViaWebSerial(formattedStream, options = {}) {
 
     writer.releaseLock();
     await port.close();
-    onStatus('Emboss job spooled successfully!');
-    return { success: true, method: 'web-serial', message: `Successfully spooled ${data.length} bytes to embosser.` };
+    onStatus(say(options, 'serial_done', "Emboss job sent!", {}));
+    return { success: true, method: 'web-serial', message: say(options, 'serial_success', "Sent {bytes} bytes to the embosser.", { bytes: data.length }) };
   } catch (err) {
     if (writer) { try { writer.releaseLock(); } catch (_) {} }
     if (port && port.close) { try { await port.close(); } catch (_) {} }
     if (err.name === 'NotFoundError' || (err.message && err.message.includes('No port selected'))) {
-      return { success: false, method: 'cancelled', message: 'Embosser port selection was cancelled by user.' };
+      return { success: false, method: 'cancelled', message: say(options, 'serial_cancelled', "Embosser port selection was cancelled.", {}) };
     }
     throw new Error(`Embosser hardware communication error: ${err.message}`);
   }
@@ -518,7 +525,7 @@ export async function spoolToNetworkEmbosser(brfText, options = {}) {
   const formattedStream = prepareEmbosserStream(brfText, options);
   const url = `http://${host}:${port}${path}`;
 
-  onStatus(`Connecting to network embosser at ${host}:${port}…`);
+  onStatus(say(options, 'network_connecting', "Connecting to the network embosser at {host}:{port}…", { host, port }));
 
   try {
     const res = await fetch(url, {
@@ -528,15 +535,15 @@ export async function spoolToNetworkEmbosser(brfText, options = {}) {
       mode: 'cors'
     });
     if (!res.ok) {
-      const message = `Network embosser at ${url} rejected the job (HTTP ${res.status}).`;
+      const message = say(options, 'network_rejected', "The network embosser at {url} rejected the job (HTTP {status}).", { url, status: res.status });
       onStatus(message);
       return { success: false, method: 'network-failed', status: res.status, message };
     }
-    const message = `Successfully sent ${formattedStream.length} bytes to network embosser at ${url} (HTTP ${res.status}).`;
+    const message = say(options, 'network_success', "Sent {bytes} bytes to the network embosser at {url} (HTTP {status}).", { bytes: formattedStream.length, url, status: res.status });
     onStatus(message);
     return { success: true, method: 'network-ip', status: res.status, message };
   } catch (err) {
-    const message = `Could not reach ${url}: ${err && err.message ? err.message : err}. Browsers cannot open raw TCP (port 9100) connections; the embosser must accept HTTP POST, or download the .brf and send it with your print manager.`;
+    const message = say(options, 'network_unreachable', "Could not reach {url}: {message}. Browsers cannot open raw TCP (port 9100) connections; the embosser must accept HTTP POST, or download the .brf and send it with your print manager.", { url, message: err && err.message ? err.message : String(err) });
     onStatus(message);
     return { success: false, method: 'network-failed', message };
   }
@@ -582,7 +589,7 @@ export async function spoolToEmbosser(brfText, options = {}) {
     if (res.ok) {
       const data = await res.json();
       if (data && data.success) {
-        onStatus(data.message || 'Emboss job delivered to USB printer!');
+        onStatus(data.message || say(options, 'usb_bridge_done', "Emboss job delivered to the USB printer!", {}));
         return { success: true, method: 'local-usb-bridge', message: data.message };
       }
     }

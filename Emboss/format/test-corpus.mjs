@@ -28,14 +28,26 @@ import { makeMathToBrf } from './node-maths-helper.mjs';
 // general document-to-BRF converter should ever synthesise. The sample's
 // own title (e.g. "The Three Wishes") IS modelled and IS diffed.
 //
-// Usage: node format/test-corpus.mjs [sampleNum ...]
+// HONESTY NOTE: this harness does NOT claim the corpus "passes". Today only a
+// minority of content lines match gold byte-for-byte; the per-sample comments
+// below document WHY (transcriber judgment calls, unimplemented features,
+// liblouis table behaviour) but those explanations are documentation, not
+// exemptions — every non-identical line is counted as a MISMATCH. What the
+// harness enforces is a REGRESSION GATE: format/corpus-models/baseline.json
+// records the per-sample match count last accepted, and the run exits 1 if
+// any sample drops below its baseline (or throws). Improvements are reported
+// and can be locked in with --update-baseline.
+//
+// Usage: node format/test-corpus.mjs [--update-baseline] [sampleNum ...]
 //   e.g. node format/test-corpus.mjs 1 2      (only samples 1 and 2)
-//        node format/test-corpus.mjs          (all 8)
+//        node format/test-corpus.mjs          (all 9 sample files)
+//        node format/test-corpus.mjs --update-baseline   (rewrite baseline.json)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BR = path.join(__dirname, '..');
 const projectRoot = fs.existsSync(path.join(__dirname, '../../liblouis/tables')) ? path.resolve(__dirname, '../..') : BR;
 const CORPUS = path.join(projectRoot, 'corpus', 'ukaaf');
+const BASELINE_PATH = path.join(__dirname, 'corpus-models', 'baseline.json');
 
 // ---------------------------------------------------------------------
 // Gold-file loading + boilerplate skip + page-furniture stripping
@@ -97,16 +109,17 @@ function ourContentLines(brf) {
 // Diff + report helpers
 // ---------------------------------------------------------------------
 
-// Default categorizer: flags a few mechanically-recognisable, already-
-// understood diff classes so the per-sample `categorize` override only has
-// to handle sample-specific judgment calls. Anything else is left as
-// "BUG?" for manual triage.
+// Categoriser: only MECHANICALLY recognisable diff classes get a descriptive
+// tag (so a reader can see at a glance which mismatches are the known
+// quote-sign / italics / closing-indicator classes). The tag is purely
+// informational — a tagged line is still a MISMATCH and still counts against
+// the sample. Anything not mechanically recognisable is plain "MISMATCH".
 function defaultCategorize(i, o, g) {
   // The gold's closing colons indicator line (end of whole document) — an
   // OPTIONAL indicator line per B004 Glossary ("can be... a blank line"),
   // not modelled since our doc models don't add a synthetic trailing block.
-  if (o === '<none>' && /^\s*"3{4,}\s*$/.test(g)) return 'JUDGMENT (optional closing indicator line, not modelled)';
-  return 'BUG?';
+  if (o === '<none>' && /^\s*"3{4,}\s*$/.test(g)) return 'MISMATCH (gold closing indicator line; not modelled)';
+  return 'MISMATCH';
 }
 
 function diffSample(name, ours, gold, categorize) {
@@ -120,7 +133,7 @@ function diffSample(name, ours, gold, categorize) {
     const cat = (categorize && categorize(i, o, g)) || defaultCategorize(i, o, g);
     diffs.push({ line: i + 1, ours: o, gold: g, cat });
   }
-  console.log(`\n=== ${name}: ${matches}/${n} content lines match gold ===`);
+  console.log(`\n=== ${name}: ${matches}/${n} content lines match gold (${n - matches} mismatch) ===`);
   for (const d of diffs) {
     console.log(`  [${d.cat}] line ${d.line}`);
     console.log(`    ours: ${JSON.stringify(d.ours)}`);
@@ -163,7 +176,7 @@ const SAMPLES = [
     // cascades into the greedy word-wrap, shifting a word or two across a
     // line break on the following line(s) — same root cause, not a second bug.
     categorize: (i, o, g) => {
-      const QUOTE_NOTE = 'JUDGMENT (RUEB 7.6.4 permits exchanging double/single quote assignment throughout a text; gold uses the double-quote sign for all dialogue regardless of print\'s single/double curly quotes — confirmed systematic via sample 4)';
+      const QUOTE_NOTE = 'MISMATCH (quote-sign class: RUEB 7.6.4 permits exchanging double/single quote assignment; gold uses the double-quote sign for all dialogue — see comment)';
       if (/,8|,0/.test(o) && !/,8|,0/.test(g) && (/8|0/.test(g))) return QUOTE_NOTE;
       // Line 24 (0-based 23): the extra cell used by ",0" vs "0" on the
       // previous line pushes the word "^WS" ("was") across the line break —
@@ -183,9 +196,11 @@ const SAMPLES = [
     // content diffs. Every remaining diff below is one of those three
     // known, understood judgment calls (or a knock-on line-count shift
     // caused by them) — not a new independent bug.
+    // NOTE: the explanation above is documentation, not an exemption — every
+    // differing line still counts as a MISMATCH against the baseline gate.
     categorize: (i, o, g) => {
-      if (/\.1|\.7|\.'/.test(o) || /\.1|\.7|\.'/.test(g)) return 'OUT-OF-SCOPE (italic typeform indicators not implemented; R15 says not to slavishly reproduce emphasis anyway)';
-      return 'JUDGMENT (cascades from list-indent-scheme choice [B004 §10 Ex1 vs Ex2] and/or heading indicator-line choice — content verified identical word-for-word once these are set aside)';
+      if (/\.1|\.7|\.'/.test(o) || /\.1|\.7|\.'/.test(g)) return 'MISMATCH (italic typeform class: indicators not implemented)';
+      return null; // fall through to default categorizer
     },
   },
   {
@@ -222,7 +237,7 @@ const SAMPLES = [
     //     embedded in text (with a worked example contracting "chicken" in
     //     a URL), so this looks like a liblouis-table-specific edge case
     //     for a 2-letter final segment, not a formatting-layer bug.
-    categorize: () => 'JUDGMENT/OUT-OF-SCOPE (see test-corpus.mjs comment above sample 3 — one of: headline wrap style, bold/italic typeform, missing docx subscript-run-property support, dash-spacing print-source ambiguity, phone-number numeric-space, or a liblouis Grade-2 contraction edge case — content verified char-for-char identical once these are set aside)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '4', file: 'sample4.brf', geometry: { width: 38, depth: 25 }, build: sample4,
@@ -236,7 +251,7 @@ const SAMPLES = [
     // "***" breaks use the 3-asterisks indicator line (B004 Glossary R17) —
     // this sample exposed that form was entirely unimplemented; fixed in
     // format/document.mjs's indicatorLine().
-    categorize: () => 'JUDGMENT (extra paragraph split at "Finally..." + RUEB 7.6.4 quote-sign exchange — content verified char-for-char identical once these are set aside)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '5', file: 'sample5.brf', geometry: { width: 38, depth: 25 }, build: sample5,
@@ -257,7 +272,7 @@ const SAMPLES = [
     //    vs "seals" (gold's braille) — left as printed rather than silently
     //    "corrected" in the model, since that would be putting words in
     //    the source's mouth rather than transcribing it faithfully.
-    categorize: () => 'JUDGMENT/OUT-OF-SCOPE (heading indicator-line choice, RUEB 7.6.4 quote exchange, liblouis quote/apostrophe disambiguation, phone-number numeric-space, or the print-vs-gold "seal"/"seals" wording difference — content verified char-for-char identical once these are set aside)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '6', file: 'sample6.brf', geometry: { width: 38, depth: 25 }, build: sample6,
@@ -269,7 +284,7 @@ const SAMPLES = [
     // glossary" block type in the document model — OUT-OF-SCOPE (a real,
     // valid feature gap worth adding later, not a rule violation to fix
     // now: B004 doesn't mandate one specific glossary layout).
-    categorize: () => 'OUT-OF-SCOPE (no dedicated flush-left "glossary/definition list" block type exists; content verified char-for-char identical to gold aside from indent)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '7a', file: 'sample7a-simple-maths.brf', geometry: { width: 38, depth: 27 }, build: sample7a, hasMaths: true,
@@ -281,7 +296,7 @@ const SAMPLES = [
     // pipeline runs end-to-end at the sample's own 38x27 geometry without
     // crashing (it does) and to exercise the `math` block code path via
     // the Node maths helper (format/node-maths-helper.mjs).
-    categorize: () => 'OUT-OF-SCOPE (maths module — dual-notation comparison layout not attempted; pipeline verified not to crash at this sample\'s 38x27 geometry)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '7', file: 'sample7-intermediate-maths.brf', geometry: { width: 38, depth: 25 }, build: sample7, hasMaths: true,
@@ -290,7 +305,7 @@ const SAMPLES = [
     // content -> blank gaps in pdftotext output); this model only carries
     // the surrounding narrative text plus one representative `math` block
     // to confirm the pipeline runs end-to-end without crashing.
-    categorize: () => 'OUT-OF-SCOPE (maths module — pipeline verified not to crash; full reproduction needs the source .docx for real OMML, not just the print PDF)',
+    // (no categorize override: the notes above are documentation, not an exemption — every differing line is a MISMATCH)
   },
   {
     n: '8', file: 'sample8-computer-code.brf', geometry: { width: 38, depth: 25 }, build: sample8,
@@ -303,8 +318,8 @@ const SAMPLES = [
     // discrepancy (not silently corrected in the model, same principle as
     // sample 5's "seal"/"seals").
     categorize: (i, o, g) => {
-      if (i === 0) return 'JUDGMENT (print PDF title says "Extract", gold\'s braille title says "Example" — genuine print-vs-master wording discrepancy, not corrected)';
-      return 'OUT-OF-SCOPE (computer code block layout — grade-1/uncontracted passage with its own indicators; no `code` block type implemented, by design per the task brief)';
+      if (i === 0) return 'MISMATCH (title class: print PDF says "Extract", gold braille says "Example" — print-vs-master wording discrepancy, not corrected)';
+      return null; // fall through to default categorizer (code block layout is not implemented — still a MISMATCH)
     },
   },
 ];
@@ -314,7 +329,9 @@ const SAMPLES = [
   const translate = (t) => louis.translate(t, louis.TABLES.uebG2);
   const mathToBrf = makeMathToBrf('ukaaf');
 
-  const wanted = process.argv.slice(2);
+  const argv = process.argv.slice(2);
+  const updateBaseline = argv.includes('--update-baseline');
+  const wanted = argv.filter((a) => !a.startsWith('--'));
   const results = [];
 
   for (const s of SAMPLES) {
@@ -345,8 +362,55 @@ const SAMPLES = [
     results.push({ n: s.n, ...r });
   }
 
-  console.log('\n\n========== SUMMARY ==========');
+  // ---------------------------------------------------------------------
+  // Baseline regression gate. baseline.json = { "<sample n>": { matches, total } }
+  // ---------------------------------------------------------------------
+  let baseline = null;
+  if (fs.existsSync(BASELINE_PATH)) {
+    try { baseline = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8')); } catch (e) {
+      console.log(`\nERROR: could not parse ${BASELINE_PATH}: ${e.message}`);
+    }
+  }
+
+  console.log('\n\n========== SUMMARY (per-sample match/total vs baseline) ==========');
+  let totalMatches = 0, totalLines = 0, regressions = 0, improvements = 0, threw = 0;
+  const newBaseline = baseline ? { ...baseline } : {};
   for (const r of results) {
-    console.log(`Sample ${r.n}: ${r.matches}/${r.total} content lines match${r.threw ? ' (THREW)' : ''}`);
+    totalMatches += r.matches;
+    totalLines += r.total;
+    const b = baseline && baseline[r.n];
+    let verdict;
+    if (r.threw) { verdict = 'THREW'; threw++; }
+    else if (!b) { verdict = 'no baseline'; }
+    else if (r.matches < b.matches) { verdict = `REGRESSION (baseline ${b.matches}/${b.total})`; regressions++; }
+    else if (r.matches > b.matches) { verdict = `improved (baseline ${b.matches}/${b.total})`; improvements++; }
+    else { verdict = 'at baseline'; }
+    console.log(`Sample ${r.n.padEnd(2)}: ${String(r.matches).padStart(3)}/${String(r.total).padEnd(3)} content lines match  -- ${verdict}`);
+    newBaseline[r.n] = { matches: r.matches, total: r.total };
+  }
+
+  // Report the corpus-wide figure against the FULL corpus size even when a
+  // subset was requested, so the number is never inflated by cherry-picking.
+  const fullTotal = wanted.length
+    ? Object.values(newBaseline).reduce((a, b) => a + (b.total || 0), 0)
+    : totalLines;
+  console.log(`\nUKAAF gold corpus: ${totalMatches}/${fullTotal} lines match (baseline-gated)${wanted.length ? ` [subset run: samples ${wanted.join(', ')}]` : ''}`);
+
+  if (updateBaseline) {
+    fs.writeFileSync(BASELINE_PATH, JSON.stringify(newBaseline, null, 2) + '\n');
+    console.log(`Baseline written to ${BASELINE_PATH}`);
+    process.exitCode = threw ? 1 : 0;
+    return;
+  }
+
+  if (!baseline) {
+    console.log(`FAIL: no baseline at ${BASELINE_PATH} — run with --update-baseline to create it.`);
+    process.exitCode = 1;
+  } else if (threw || regressions) {
+    console.log(`FAIL: ${regressions} sample(s) below baseline, ${threw} threw.`);
+    process.exitCode = 1;
+  } else {
+    console.log(`OK: no sample below baseline${improvements ? ` (${improvements} improved — run --update-baseline to lock in)` : ''}.`);
+    process.exitCode = 0;
   }
 })();

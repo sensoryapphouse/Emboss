@@ -11,6 +11,7 @@ if (!globalThis.XMLSerializer) globalThis.XMLSerializer = XMLSerializer;
 
 import { parseDtbook } from '../input/parse.mjs';
 import { exportToNimasXml } from '../input/nimas-export.mjs';
+import { cellPlainText } from '../format/cell-markup.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SAMPLES_DIR = path.join(HERE, 'nimas_samples');
@@ -45,6 +46,11 @@ function normalizeSegments(segments) {
         if (m) copy.latex = m[1].trim();
       }
       collapsed.push(copy);
+      continue;
+    }
+    if (s.type === 'noteref') {
+      const { idref, ...rest } = s;                 // the target id is normalised on save; the link is checked in note_references.test.mjs
+      collapsed.push({ ...rest, linked: !!idref });
       continue;
     }
 
@@ -84,7 +90,15 @@ function normalizeBlock(b) {
   if (copy.title) copy.title = copy.title.replace(/\s+/g, ' ').trim();
   if (copy.level === 0) delete copy.level; // Level 0 is default base level
   if (copy.kind === 'image') delete copy.kind; // XML round-trip standardizes prodnotes
-  
+  if (copy.type === 'pagenum') {
+    // The exporter must generate an id (DTD: #REQUIRED) and a @page type for blocks that
+    // came without them, so the re-parse is richer by design; compare the value only.
+    delete copy.id;
+    delete copy.pageType;
+    if (copy.page == null && copy.text != null) copy.page = String(copy.text);
+    if (copy.text == null && copy.page != null) copy.text = String(copy.page);
+  }
+
   if (copy.type === 'list') {
     if (copy.kind && !copy.style) copy.style = copy.kind;
     if (copy.style && !copy.kind) copy.kind = copy.style;
@@ -103,8 +117,19 @@ function normalizeBlock(b) {
       copy.blocks[0] = { ...copy.blocks[0], level: 2 };
     }
   }
+  // Note ids are link targets, not content: the save normalises them to XML NCNames
+  // ("3" -> "id_3") and supplies one when missing.
+  if (copy.type === 'footnote') delete copy.id;
+  if (copy.type === 'box' && !copy.render) {
+    // DTD: sidebar@render is #REQUIRED, so the exporter supplies "required" when the
+    // source omitted it; the re-parse is richer by design.
+    copy.render = 'required';
+  }
   if (copy.type === 'math') {
-    if (copy.mathml) copy.mathml = copy.mathml.replace(/\s*xmlns:m="[^"]*"/g, '').replace(/\s*altimg="[^"]*"/g, '').replace(/\s*alttext="[^"]*"/g, '').replace(/\s+/g, ' ').trim();
+    // The exporter writes DAISY "MathML in DTBook" form: every element m:-prefixed, the
+    // namespace bound once on <dtbook>, display="block" on displayed equations. None of
+    // that is semantic, so compare the MathML with prefixes/namespace decls removed.
+    if (copy.mathml) copy.mathml = copy.mathml.replace(/<(\/?)(?:m|mml|mathml):/g, '<$1').replace(/\s*xmlns(?::\w+)?="[^"]*"/g, '').replace(/\s*altimg="[^"]*"/g, '').replace(/\s*alttext="[^"]*"/g, '').replace(/\s*display="block"/g, '').replace(/\s+/g, ' ').trim();
     if (!copy.latex && copy.mathml) {
       const m = copy.mathml.match(/alttext="([^"]+)"/) || copy.mathml.match(/<annotation[^>]*>([^<]+)<\/annotation>/);
       if (m) copy.latex = m[1].trim();
@@ -155,11 +180,15 @@ function normalizeBlock(b) {
   if (copy.blocks) {
     copy.blocks = copy.blocks.map(normalizeBlock);
   }
+  // A cell is a string or { text, segments } (format/cell-markup.mjs).
+  const normCell = (c) => (c && typeof c === 'object'
+    ? { text: String(c.text || '').replace(/\s+/g, ' ').trim(), segments: normalizeSegments(c.segments) }
+    : String(c || '').replace(/\s+/g, ' ').trim());
   if (copy.rows) {
-    copy.rows = copy.rows.map(r => r.map(c => (c || '').replace(/\s+/g, ' ').trim()));
+    copy.rows = copy.rows.map(r => r.map(normCell));
   }
   if (copy.headers) {
-    copy.headers = copy.headers.map(h => (h || '').replace(/\s+/g, ' ').trim());
+    copy.headers = copy.headers.map(normCell);
   }
   return copy;
 }
@@ -354,7 +383,7 @@ if (largeFile) {
           if (b.text) count += b.text.trim().split(/\s+/).filter(Boolean).length;
           if (b.title) count += b.title.trim().split(/\s+/).filter(Boolean).length;
           if (b.items) for (const it of b.items) if (it.text) count += it.text.trim().split(/\s+/).filter(Boolean).length;
-          if (b.rows) for (const r of b.rows) for (const c of r) if (c) count += c.trim().split(/\s+/).filter(Boolean).length;
+          if (b.rows) for (const r of b.rows) for (const c of r) if (c) count += cellPlainText(c).trim().split(/\s+/).filter(Boolean).length;
         }
       };
       walkBlocks(ast.blocks);

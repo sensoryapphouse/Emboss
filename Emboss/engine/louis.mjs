@@ -32,6 +32,66 @@ export function version() { return M.ccall('lou_version', 'string', [], []); }
 // (one entry per input char) is passed to translate().
 export const TYPEFORM = { plain: 0, italic: 1, underline: 2, bold: 4 };
 
+// ---- Non-BMP input (audit E-4; kept identical to louis-browser.mjs) ----
+// liblouis is built with a 16-bit widechar (lou_charSize() === 2, checked in
+// init) and the marshalling below feeds UTF-16 code units one at a time. A code
+// point above U+FFFF therefore reaches the tables as two unrelated surrogate
+// units, neither of which any table defines, so liblouis emits its
+// undefined-character escape for each: 'a 𝑥 b' -> "A '\XD835''\XDC65' ;B".
+// Mathematical alphanumerics (U+1D400–U+1D7FF: 𝑥 𝐀 𝟘 …) are exactly what
+// maths-flavoured literary text contains, and NFKC folds them to the plain
+// letter/digit (𝑥 -> x). Anything with no single-character BMP fold (emoji,
+// supplementary CJK, …) becomes U+283F ⠿ (the full cell): braille-patterns.cti
+// is in every UEB table closure, so liblouis passes it through as exactly ONE
+// cell (BRF '='). U+FFFD would not do — the tables leave it undefined, so it
+// prints as the escape '\XFFFD', which is the garbage this is meant to avoid.
+//
+// NFKC is applied per non-BMP code point, NOT to the whole string: the UEB
+// tables define many BMP compatibility characters natively and braille them
+// better than their fold would (x² -> X;9#B with the superscript indicator,
+// but NFKC gives "x2"; ½ -> #A/B, but NFKC gives "1⁄2" whose U+2044 is itself
+// undefined). BMP input is passed through untouched, so every existing
+// translation stays byte-identical.
+//
+// translatePos() must return inputPos[] indexed into the CALLER's string (the
+// editor maps cells back to print characters for print<->braille sync), while
+// folding shortens the string by one unit per pair. A same-length filler was
+// tried and rejected: every zero-width character the tables know (U+2060 WORD
+// JOINER, U+FEFF) is classed as a space, so 'th𝑒'+filler brailles as ';THE'
+// where translate() gives the contraction '!', and 'a𝑥𝑦b' sprouts grade-1
+// indicators (U+200B is even `correct`ed to a real space). Instead foldNonBmp
+// also returns map[foldedIndex] = originalIndex and translatePos remaps
+// liblouis's positions through it — the braille stays identical to
+// translate()'s, as its contract promises, and typeform arrays (one entry per
+// input unit) are rebuilt alongside so emphasis stays on the right characters.
+const SURROGATE_RE = /[\uD800-\uDFFF]/;
+const NON_BMP_PLACEHOLDER = '\u283F';
+// Fold of one surrogate pair (or lone surrogate) to a single BMP code unit.
+function bmpFold(m) {
+  if (m.length !== 2) return NON_BMP_PLACEHOLDER;             // lone surrogate: malformed input
+  const f = m.normalize('NFKC');
+  return (f.length === 1 && !SURROGATE_RE.test(f)) ? f : NON_BMP_PLACEHOLDER;
+}
+// Returns { text, typeform, map }; map is null when nothing was folded (the
+// common case costs one regex test), else map[k] is the index in the original
+// string of the unit that produced folded unit k.
+function foldNonBmp(text, typeform) {
+  if (!SURROGATE_RE.test(text)) return { text, typeform, map: null };
+  let out = '';
+  const tf = typeform ? [] : null;
+  const map = [];
+  for (let i = 0; i < text.length;) {
+    const cu = text.charCodeAt(i);
+    const isSur = cu >= 0xD800 && cu <= 0xDFFF;
+    const pair = isSur && cu <= 0xDBFF && i + 1 < text.length && (text.charCodeAt(i + 1) & 0xFC00) === 0xDC00;
+    out += isSur ? bmpFold(pair ? text.slice(i, i + 2) : text[i]) : text[i];   // always exactly one unit
+    if (tf) tf.push(typeform[i] || 0);
+    map.push(i);
+    i += pair ? 2 : 1;
+  }
+  return { text: out, typeform: tf, map };
+}
+
 // Persistent reusable translation buffers in WASM memory to eliminate heap churn
 let bufInCap = 0;
 let bufInPtr = 0;
@@ -73,6 +133,7 @@ function ensureBuffers(inLen, outCap) {
 
 export function translate(text, tableList = TABLES.uebG2, typeform = null) {
   if (!M) throw new Error('call init() first');
+  ({ text, typeform } = foldNonBmp(String(text), typeform));
   const inLen = text.length;
   for (let mul = 6; ; mul *= 4) {
     const outCap = inLen * mul + 1024;
@@ -104,6 +165,9 @@ export function translate(text, tableList = TABLES.uebG2, typeform = null) {
 // Used for word/cell-level print↔braille linking in the editor.
 export function translatePos(text, tableList = TABLES.uebG2, typeform = null) {
   if (!M) throw new Error('call init() first');
+  const folded = foldNonBmp(String(text), typeform); // see the non-BMP notes above translate()
+  ({ text, typeform } = folded);
+  const posMap = folded.map;                          // folded index -> caller's index (null: nothing folded)
   const inLen = text.length;
   for (let mul = 6; ; mul *= 4) {
     const outCap = inLen * mul + 1024;
@@ -127,7 +191,8 @@ export function translatePos(text, tableList = TABLES.uebG2, typeform = null) {
     const inputPos = new Array(outLen);
     for (let j = 0; j < outLen; j++) {
       braille += String.fromCharCode(M.getValue(bufOutPtr + j * 2, 'i16') & 0xffff);
-      inputPos[j] = M.getValue(bufInPosPtr + j * 4, 'i32');
+      const p = M.getValue(bufInPosPtr + j * 4, 'i32');
+      inputPos[j] = posMap ? (posMap[p] ?? p) : p;
     }
     return { braille, inputPos };
   }

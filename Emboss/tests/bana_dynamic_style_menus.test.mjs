@@ -422,8 +422,8 @@ check('H3 cell 7 formatted', brfOut.includes('      SUBSECTION 7-7'));
 check('Stage direction cell 7 formatted', brfOut.includes('      [EXIT GHOST'));
 check('Dialogue cell 1-3 formatted', brfOut.includes('HAMLET: TO BE'));
 check('Transcriber Note has BANA TN indicators', brfOut.includes('@.<') && brfOut.includes('@.>'));
-check('Sidebar boxlines formatted', brfOut.includes('333') && brfOut.includes('777'));
-check('Spatial table contains column separator rules', brfOut.includes('---'));
+check('Sidebar boxlines formatted', brfOut.includes('7777777') && brfOut.includes('GGGGGGG'));
+check('Spatial table contains column separator rules ("333, Formats §11.4.2b)', brfOut.includes('"333'));
 check('Listed table contains heading list labels', brfOut.includes('LONDON') && brfOut.includes('POP: 9M'));
 check('TOC entry contains dot guide leaders', brfOut.includes('"'));
 
