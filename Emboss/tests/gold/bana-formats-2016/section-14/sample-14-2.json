@@ -1,0 +1,57 @@
+{
+  "id": "BANA Sample 14-2",
+  "title": "Sample 14-2: Scene Setting",
+  "pdfPages": [
+    397
+  ],
+  "textLines": [
+    11492,
+    11511
+  ],
+  "illustrates": {
+    "rule": "14.3.1",
+    "quote": "Scene settings may be described by a single word or several paragraphs, identifying the locale or period in which the action takes place. a. Titles and scene numbers are centered headings. b. Follow print for blocked or indented paragraphs. c. Follow print for use of enclosure symbols, e.g., brackets or parentheses. Do not add enclosure symbols if none are used in print. d. Omit font attributes unless needed for distinction. e. Insert a blank line to separate scene settings from dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "paragraph", "blocked": true, "text": "SCENE: The action takes place in Helmer’s residence." },
+      { "kind": "other", "text": "A print page number/running-head fragment ('#,-' in the given braille) bled into the extracted line between 'in' and \"Helmer's\" — page furniture, not scene-setting content; not modelled." },
+      { "kind": "heading", "level": 1, "text": "ACT 1" },
+      { "kind": "paragraph", "blocked": true, "text": "A comfortable room, tastefully but not expensively furnished. A door to the right in the back wall leads to the entryway; another to the left leads to Helmer’s study. ..." },
+      { "kind": "paragraph", "text": "A bell rings in the entryway; shortly after we hear the door being unlocked. ..." },
+      { "kind": "speech", "speaker": "NORA", "text": "NORA: Hide the tree well, Helene. The children mustn’t get a glimpse of it ..." }
+    ],
+    "notes": "The given braille excerpt ends NORA's own speech at '...get a glimpse of it ...' — print itself continues further ('till this evening, after it is trimmed. (To the Delivery Boy, taking out her' per one transcription run's own reading), struck through by a wavy cut-off line in the source scan, but that continuation was never transcribed into this excerpt's own braille, so it is not built here either (matching this excerpt's own, book-truncated scope, per the section-3/7/12 gold precedent's 'print.blocks records only what this excerpt's own braille actually carries' convention for a wavy/'444'-marked cut). Each '...' in `text` reproduces the given braille's own '444' omission marker exactly (confirmed by forward translation).",
+    "surroundingText": [],
+    "printFeatures": "A boxed play excerpt: a flush ('blocked') scene-setting line, a centred act heading, two more paragraphs of blocked/indented italicised stage-setting prose, and one line of dialogue, cut short by a wavy omission line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,sc5e3 ,! ac;n takes place 9        #,-",
+      ",helm]'s resid;e4",
+      "",
+      "                ,,act #a",
+      "",
+      ",a com=table room1 ta/e;lly b n",
+      "exp5sively furni%$4 ,a door to ! \"r 9 !",
+      "back wall l1ds to ! 5tryway2 ano!r to !",
+      "left l1ds to ,helm]'s /udy4 444",
+      "  ,a bell r+s 9 ! 5tryway2 %ortly af we",
+      "he> ! door 2+ unlock$4 444",
+      "",
+      ",,nora3 ,hide ! tree well1 ,hel5e4 ,! *n",
+      "  m/n't get a glimpse ( x 444"
+    ],
+    "pageBreaks": [],
+    "notes": "'SCENE:' is a flush (blocked) opening line, not a centred heading — 14.3.1a's own centred-heading treatment is reserved for an actual title/scene NUMBER ('ACT 1' here), confirmed directly since neither given braille line is centred except the 'ACT 1' one. Blank lines at lines 3/5/12 separate the scene heading, the ACT heading, and the dialogue from the stage-setting prose (14.3.1e); lines 6-9 are a blocked (flush) paragraph, lines 10-11 an ordinary indented one, matching print (14.3.1b)."
+  },
+  "uncertain": [
+    "Whether the print page-number/running-head fragment ('#,-') the given braille carries between 'in' and \"Helmer's\" is a genuine BANA page-change indicator or simply page furniture that bled into this extracted excerpt is not fully resolvable without the book's own physical braille page boundaries; treated here as unmodelled page furniture, matching the section-15 gold precedent's own identical '#,-' artifact (that README's own 'other' convention for a print page number)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte). They disagreed on structure: A used 'speech'/'cast-list'-adjacent kinds inconsistently and kept the exact print continuation past the wavy cut-off out of scope; B mis-modelled the two stage-setting paragraphs as 'stage-direction' (a between-DIALOGUE-lines construct, §14.4/14.5.3/14.6.3 — wrong here: these are SCENE-SETTING paragraphs, §14.3, which precede any dialogue at all and have their own, different rule) and reconstructed NORA's speech text past the given braille's own cut-off point (unverifiable against this excerpt's own braille). Rebuilt as ordinary 'paragraph'/'heading'/'speech' blocks per §14.3's own rule text, text truncated exactly where the given braille's own '444' marker truncates it. Forward-translated through Emboss's translator: every line's own WORDING and (where the missing page-number artifact doesn't shift a wrap boundary) MARGIN matches; three lines mismatch for reasons already covered by a documented cause — the unmodelled '#,-' artifact shifting where 'in'/\"Helmer's\" wraps (see 'other' block above), and a missing blank line before NORA's first line of dialogue, since neither `formatPara` nor the non-verse `formatPlay` path emits a blank line of its own and no BANA-14.3.1e-specific mechanism exists in document.mjs (a new, third finding this reconciliation's testing found — F-242, standards-findings.md). See differences.md."
+}

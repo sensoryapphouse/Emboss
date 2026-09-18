@@ -1,0 +1,52 @@
+{
+  "id": "BANA Example 10-22",
+  "title": "Question Mark Above Line",
+  "pdfPages": [
+    261
+  ],
+  "textLines": [
+    7628,
+    7636
+  ],
+  "illustrates": {
+    "rule": "10.6.10",
+    "quote": "Answer Cues with Question Marks. Follow print when a question mark is shown standing alone representing a write-on-line. When print uses both a question mark and a low line or dash, ignore the question mark and use the underscore or dash. Insert a transcriber’s note explaining this usage."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Print shows a question mark over an underscore. In braille, the question mark is omitted."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "What is \\_ right now?"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "A question mark is printed directly above a write-on-line underscore."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,pr9t %[s a \"q m>k ov] an",
+      "    \"uscore4 ,9 brl1 ! \"q m>k is",
+      "    omitt$4@.>",
+      ",:at is .- \"r n[8"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; the TN wording is the given braille’s own note, back-translated."
+}

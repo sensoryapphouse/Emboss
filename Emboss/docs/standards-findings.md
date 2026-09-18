@@ -1850,6 +1850,48 @@ note is generated naming that symbol.
 **Status: not fixed.** Recorded for Paul's task list (A6 already open; G8 already decided but
 not built) — no code or tests were changed producing this finding.
 
+**Status update (18 Sep 2026, item 1/A6 fixed; items 2 and 3 still open, unchanged):**
+- **Fix:** `parseSingleList`'s per-`<li>` bullet handling (`Emboss/input/parse.mjs`, the
+  `else if (detectedKind !== 'plain' && !isToc)` branch) now falls back to
+  `itemMarker = '•'` when `BULLET_PREFIX_RE` finds no literal bullet character AND the
+  list's own `type` attribute is `"ul"` — the signal chosen is the DTBook `type="ul"`
+  attribute itself (an explicitly unordered list), not any property of the item text, so a
+  `type="pl"` (plain, no enumerator) list is untouched and a list already carrying a literal
+  bullet glyph is unaffected (same `marker: '•'` as before). `formatList`/`traceBlock` already
+  rendered `marker === '•'` as `_4` (BANA 8.6.2a) before this fix — nothing there changed.
+- **Export round-trip:** `nimas-export.mjs`'s existing `keepMarkers` logic
+  (`Emboss/input/nimas-export.mjs` ~line 534, `items.every((it) => !it.marker || it.marker
+  === '•')` → `{tagOpen: '<list type="ul">', keepMarkers: false}`) already treated a plain
+  `'•'` marker as implicit and wrote no marker into the item text — this was not changed, and
+  is exactly what makes the round trip lossless: reloading a `type="ul"` list with no literal
+  bullet regenerates `marker: '•'` on every item from the signal above, without ever having
+  written a literal `•` glyph into the exported DTBook XML.
+- **Verified:** a real `<list type="ul"><li>Apple</li><li>Pear</li></list>` now parses with
+  `item.marker === '•'` on every item, formats as `_4 APPLE` / `_4 PEAR`, exports as
+  `<li>Apple</li>` (no glyph) inside `<list type="ul">`, and reloading that XML regenerates
+  the same markers. `Emboss/tests/demo_fixes.test.mjs` (`describe('F-33/A6 ...')`) covers the
+  parse, the BANA 8.6.2a-shaped output, the no-regression case for a list that DOES carry a
+  literal bullet, the `type="pl"` negative case, and the full export/reimport round trip.
+  Two pre-existing tests asserted the OLD (buggy) "no marker at all" behaviour for a plain
+  `type="ul"` sub-list and were updated citing this rule: `Emboss/tests/
+  nested_lists_roundtrip.test.mjs` ("ordered list with an unordered sub-list…", now asserts
+  `marker === '•'`, never numeric) and `Emboss/input/parse-regressions.test.mjs` (#6, the
+  NIMAS-sourced `<list type="ul">` case now expects `marker: '•'` on each item; the unrelated
+  HTML/ODT expectations in the same check are untouched since those parsers have their own,
+  separate list code).
+- **Gold:** `node Emboss/scripts/gold-run.mjs --section section-8` is unchanged before/after
+  this fix (`match: 6 mismatch: 2 not-representable: 19`, `sample-8-13/14/15` all
+  `not-representable`) — this section's own `buildModel8` (`Emboss/scripts/gold-run.mjs`)
+  builds each list item's `marker` directly from the gold JSON's own `print.blocks[].
+  items[].marker` field, bypassing `parse.mjs` entirely, so it cannot exercise this parser-
+  level fix either way; `sample-8-14`/`sample-8-15`'s own remaining `not-representable`
+  causes are exactly items 2/3 of this finding (hollow-circle/solid-square correspondence,
+  still open below), not item 1.
+- **Still open, unchanged (items 2 and 3):** per-glyph bullet-shape correspondence (hollow
+  square/circle, solid square, checkmark, triangle each with their own braille form) and the
+  Special Symbols page/transcriber's-note mechanism for a non-primary bullet — explicitly out
+  of scope for this pass; left for a future task.
+
 ---
 
 ## F-34 — No side-by-side column-list layout: a print list set in columns is always collapsed to a single column, with no page-aware refill and no column-count-change note
@@ -6171,6 +6213,49 @@ both HEAD and the working tree (pre-dates the F-106…F-113 fixes). Gold: `examp
 asterisked: the first note line begins with the reference mark followed by the text; the §16
 gold statuses for example-16-1 and sample-16-01 improve.
 
+**Status update (18 Sep 2026, fixed):** `formatFootnote` and its trace mirror (`traceBlock`'s
+`case 'footnote'`, `Emboss/format/document.mjs`) now prepend the note's own reference mark.
+- **Signal:** a new `findNoteMarks(blocks)` (`document.mjs`) walks the whole document tree once
+  (deep — a noteref nested in a list item, table cell or heading is found too) and maps each
+  referenced note `id` to the mark text of the noteref that points at it — "using the same
+  symbol the noteref used", per this file's own instruction. `buildDocPages`/`buildDocPagesAsync`
+  attach the looked-up mark onto the note's own block as `noteMark` before calling
+  `formatBlock`/`traceBlock`, the same way `noteRunStart`/`tdNote`/`lnNote` are already attached.
+  `formatFootnote` renders it via the existing `noterefBraille({text: block.noteMark}, o)` (so
+  `NOTE_SYMBOLS` and the digit/letter cases already used for the in-text mark are reused
+  unchanged) and prepends it to the OPENING paragraph only (16.5.1d's own 1-3/5-3 multi-
+  paragraph split is otherwise untouched).
+- **No double-marking:** a new `noteBodyStartsWithMark(block, mark)` skips the prepend when the
+  note's own leading text (or first segment) already starts with that mark — covering a source
+  already transcribed with the mark as literal text (e.g. `notes_rules.test.mjs`'s/
+  `note_references.test.mjs`'s own `<note><p>1 First note.</p></note>` convention, which must
+  not become `;911 FIRST NOTE`).
+- **Reproduced fixed:** the finding's own repro (`<p>Text<noteref idref="#n1">1</noteref>
+  here.</p><note id="n1"><p>Single note.</p></note>`) now renders `;91SINGLE NOTE.`, not bare
+  `SINGLE NOTE.`.
+- **Gold (`node Emboss/scripts/gold-run.mjs --section section-16`):** the missing-mark symptom
+  is gone from both proving samples — `example-16-1`'s note line is now `"9,O!LLO` (was bare
+  `,O!LLO`) and `sample-16-01`'s five notes all open with their own repeated mark(s) exactly as
+  before AND after this fix (buildModel16, another agent's model builder, already pre-baked a
+  leading `noteref` segment into each note's own `segments` as a stand-in for this fix, so
+  `sample-16-01`'s diff was unaffected either way; `noteBodyStartsWithMark` confirms no double
+  mark results now that both mechanisms coexist). Both samples remain `mismatch` in the section-
+  wide summary (still 14 mismatch / 11 not-representable / 7 no-braille, unchanged) because each
+  has its own SEPARATE, unrelated cause: `example-16-1`'s title paragraph keeps a 2-cell
+  indent the gold's isolated-illustration box formatting does not use, and gains one extra
+  `"333333` separator line (BANA 16.5.1a's run-start rule firing for an isolated single-note
+  illustration, not a real end-of-page note run); `sample-16-01` is missing its trailing print-
+  page-number field (`#,-`) and has the same extraneous separator line. Neither is part of this
+  finding's own scope (F-156 is only about the missing mark).
+- **Tests:** `Emboss/tests/demo_fixes.test.mjs` (`describe('F-156 ...')`) — the finding's own
+  repro, BANA Example 16-1 against the real liblouis translator, the numbered-mark case, the
+  multi-paragraph opening-paragraph-only case, the already-literal-mark no-double-mark
+  regression guard, and `formatBlock`/`traceBlock` parity for both the single- and multi-
+  paragraph shapes. All of `Emboss/tests/notes_rules.test.mjs` and
+  `Emboss/tests/note_references.test.mjs` (pre-existing note-formatting tests) still pass
+  unchanged. `node Emboss/scripts/run-all-tests.mjs`: no new failures (see this task's own
+  final report for the two pre-existing, unrelated section-18/21 gaps).
+
 ---
 
 # Standards findings — pronunciation (BANA §20; assessed 17 Sep 2026 by Gemini Pro, merged in-session)
@@ -8719,6 +8804,127 @@ the word "Pictures" or closes one after a run of all-picture entries.
 
 **Classification:** not done (covers BANA 10.11.1 and 10.11.3).
 
+**Status update (18 Sep 2026, §10.11.1 fixed; §10.11.3 still open, unchanged):**
+- **Fix:** `inlineSegments` (`Emboss/input/parse.mjs`) takes a new `imageAsNote` parameter;
+  when true and an `<img>`/`<image>` is found (via the existing `excludeTags`/`LI_SPLIT_TAGS`
+  branch that used to just `breakWord()` past every list-item image) with a non-empty `alt`,
+  it becomes a new `{type: 'imgnote', text: alt, src}` segment right where the image sat,
+  instead of being dropped; a decorative image with no `alt` still falls through to the old
+  `breakWord()` behaviour. The `bai-exercise` item builder (`parseSingleList`) is the only
+  caller that passes `imageAsNote: true`, so ordinary/toc/index list items are unaffected. The
+  same `<li>`'s own image-to-standalone-`graphic`-block split-out (`liTables`/`emitTables`,
+  used by every item kind so a table/image "in the item" becomes its own following block) now
+  skips an image already consumed this way, so the picture is represented exactly once, never
+  duplicated as both an inline TN and a trailing `graphic` block.
+- **Correction (18 Sep 2026, same day):** the first pass only checked `class="bai-exercise"`
+  on the `<li>` itself, matching this finding's own reproduction snippet above — but a real
+  source can equally mark the WHOLE `<list>` once (`<list class="bai-exercise" type="ol">`
+  with plain, unclassed `<li>` children) rather than repeating the class on every item. That
+  shape fell through to the ORDINARY ordered-list branch (numbered marker, `imageAsNote`
+  never passed), so the image was still silently dropped/split out on that real path even
+  though the `<li>`-class unit test was green. Fixed by also computing `listIsExercise` from
+  the `<list>` element's own `class` (`parseSingleList`, alongside the existing `isToc`/
+  `isIndex` container checks) and taking the exercise-item branch when EITHER the `<li>` or
+  its `<list>` carries `bai-exercise`. Reproduced fixed directly: `<list class="bai-exercise"
+  type="ol"><li>The <img src="b.jpg" alt="Butterfly"/> flew south for the winter.</li></list>`
+  — before, `parseDtbook` gave `{"type":"list","items":[{"text":"The  flew south for the
+  winter.","marker":"1."}],"ordered":true}` plus a separate `{"type":"graphic","src":"b.jpg",
+  "alt":"Butterfly"}` block, formatting (both modes) to `"1. THE FLEW SOUTH FOR THE WINTER."`
+  with `"@.<BUTTERFLY@.>"` on its own line afterwards; after, the item keeps a single
+  `imgnote` segment, no `graphic` block is produced, and both BANA and UKAAF format the
+  sentence as `"THE @.<BUTTERFLY@.> FLEW SOUTH FOR THE\n  WINTER."` — the note inline where
+  the picture was, exactly as BANA Example 10-31 requires. Added as its own case in
+  `Emboss/tests/demo_fixes.test.mjs` ("coordinator repro: class=\"bai-exercise\" on the
+  `<list>` itself…").
+- **Correction 2 (18 Sep 2026, same day) — two further regressions from Correction 1, both
+  reproduced and fixed:**
+  1. **Exercise items lost their printed number.** Routing a `<list class="bai-exercise"
+     type="ol">` with plain `<li>` children into the exercise-item branch (Correction 1)
+     meant they no longer passed through the ORDINARY ordered branch's marker synthesis —
+     so `{"type":"list","items":[{"text":"…","marker":"1."}],"ordered":true}` became
+     `{"kind":"exercise","ordered":true}` items with NO `marker` at all, and the formatted
+     braille lost its BANA §10.4 print numbering entirely (in both modes). Fixed by
+     synthesizing the exercise item's own marker inside the exercise branch itself
+     (`synthesizeOrderedMarker(counter, enumAttr)`, `Emboss/input/parse.mjs`, the same
+     helper and `counter`/`enumAttr` the ordinary branch already uses) whenever the list is
+     ordered (`isOl`) — but ONLY when the item's own flat text does not already carry a
+     literal marker, checked with a new `EXERCISE_MARKER_RE` (`/^\s*\(?(\d+|[a-zA-Z]
+     |[ivxlcdm]+)[\.\)]\s+/`, a version of the existing `NUMBER_PREFIX_RE` that also
+     accepts a parenthesized form — `nimas_exercise_index.test.mjs`'s own §10.4.2b 3-level
+     hierarchy test uses "1.", "a." AND "(1)" markers baked into three different items'
+     text in one document, so a synthesis check using only the plain form would have
+     double-numbered the parenthesized one; caught by re-running the full suite, not by
+     this task's own new tests, and fixed before reporting). The original bai-exercise
+     convention (a marker baked into the item's own text, e.g. "1. Which…", kept verbatim
+     with no separate `item.marker` field — `Emboss/scripts/gold-run.mjs`'s own documented
+     convention) is completely unchanged for any item that already has one.
+  2. **The `imgnote` segment did not survive the editor.** `Emboss/web/editor/editor.mjs`'s
+     Lexical node set and its two segment ⇄ node conversion points had no case for the new
+     segment type, so a document loaded into the editor and re-saved lost the TN indicators
+     around the picture description (`",! ,BUTT]FLY FLEW S\? = ! W9T]4"` instead of `",!
+     @.<BUTT]FLY@.> FLEW S\? = ! W9T]4"` — the word survived as plain inline text, but the
+     wrapping was gone). Fixed by adding a new `ImgNoteNode` (an atomic `TextNode` carrying
+     the alt text plus the source `<img>`'s `src`, purely for the round trip — mirrors
+     `NoteRefNode`, the closest existing analog: both are "the print already supplies this
+     mark/word, keep it as an atomic run" nodes, `editor.mjs` immediately above `NoteRefNode`'s
+     own definition), registered in the editor's `nodes:[…]` array, and wired into both
+     conversion directions exactly where `noteref`/`linenum` already are: `nodeToRuns`
+     (Lexical → model, the shared helper both paragraphs AND list items already call, so a
+     `bai-exercise` item's own image note is covered with no separate list-item code path)
+     gained an `$isImgNoteNode(child)` case building `{type:'imgnote', text, src?}`;
+     `fillFromBlock` (model → Lexical) gained an `else if (s.type === 'imgnote')` case
+     alongside its existing `noteref`/`linenum` cases, calling a new `$createImgNoteNode`.
+     `editor.mjs` cannot be imported under plain Node (a pre-existing constraint, see F-5),
+     so this was verified by reading the code against the `NoteRefNode`/`noteref` pattern it
+     mirrors line-for-line, not by an editor unit test, per this task's own instruction; the
+     already-verified headless `parseDtbook` → `formatDocument` path (`demo_fixes.test.mjs`)
+     was and remains correct on its own — this correction is about the SEPARATE editor
+     Lexical model only.
+  Re-verified: `node Emboss/scripts/run-all-tests.mjs` (134/134 headless, 0 failures — the
+  `nimas_exercise_index.test.mjs` regression above was caught here and fixed before this
+  report), `node scripts/run_1000_corpus_benchmark.mjs` (1150/1150), `node
+  scripts/run_800_nimas_benchmark.mjs` (800/800, 100% DTD valid). Two new cases added to
+  `Emboss/tests/demo_fixes.test.mjs`: the coordinator's exact two-item marker repro, and a
+  guard that an already-marked bai-exercise item (the original convention) is not
+  double-numbered.
+- **Rendering:** `groupSegments`/`segmentsToBraille` and their trace mirror `tcJoined`
+  (`Emboss/format/document.mjs`) gained an `imgnote` case: `TN_OPEN + o.translate(text).trim()
+  + TN_CLOSE`, with no per-character source (the description comes from the image's `alt`
+  attribute, not a position in the item's own print text) — mirroring how
+  `traceOrFormatPrintImage`'s own standalone-image description already uses `tcDeco`. No
+  "Illustration"/label word is added, matching §10.11.1's own worked example (unlike the
+  standalone-figure path's §6.2.2b label, which is a different rule).
+- **Export round-trip:** `serializeInlineSegments` (`Emboss/input/nimas-export.mjs`) re-emits
+  an `imgnote` segment as `<img src="…" alt="…"/>` (the `src` is carried through on the
+  segment purely for round-tripping; the renderer never reads it) — reloading regenerates the
+  same `imgnote` segment, not bare alt text loose in the paragraph.
+- **Verified against the rule text:** BANA Braille Formats 2016 (`references/_text/
+  braille-formats-2016.txt` lines 7853-7855, Example 10-31) — `<li class="bai-exercise">The
+  <img src="butterfly.jpg" alt="butterfly"/> flew south for the winter.</li>` now formats
+  (real liblouis UEB Grade 2) to `,! @.<BUTT]FLY@.> FLEW S\? = ! W9T]4`, matching `,!
+  @.<butt]fly@.> flew s\? = ! w9t]4` exactly but for this project's own established
+  uppercase-vs-gold-lowercase convention (see the section-16/section-11 findings' own notes on
+  this). `Emboss/tests/demo_fixes.test.mjs` (`describe("F-229 ...")`) covers the finding's own
+  reproduction (image survives, no standalone `graphic` duplicate), this exact BANA example
+  against the real translator, the export/reimport round trip, a decorative (no-`alt`) image
+  regression guard, and `formatBlock`/`traceBlock` parity for the list block.
+- **Gold:** `node Emboss/scripts/gold-run.mjs --section section-10` does NOT exercise this fix
+  and is unchanged before/after (`match: 8 mismatch: 31 not-representable: 6 no-braille: 3`) —
+  this section's own `buildModel10`/`buildBlocks10` (`Emboss/scripts/gold-run.mjs`, another
+  agent's concurrent work) represents `example-10-31`'s picture as bracketed literal print
+  text (`"The [picture of a butterfly] flew south for the winter."`, run through
+  `parseCellMarkup`) rather than a structural `<img>` element, so it never reaches
+  `parse.mjs`'s `bai-exercise`/`inlineSegments` code this fix touches at all — the actual gold
+  sample's own `not-representable` diagnosis is liblouis's plain UEB translation of the
+  literal `[`/`]` characters (`.<`/`.>`, no leading `@`) on the FULL bracket contents ("picture
+  of a butterfly"), a different, coincidental mechanism, not this finding's own `@.<`/`@.>`
+  transcriber's-note wrapper. Proven instead directly against the rule text/Example 10-31 as
+  above, using the real `<img>` construct BANA §10.11.1 and Emboss's real DTBook parser both
+  actually use.
+- **Still open, unchanged:** §10.11.3 (the cell-7-TN-wrapping "Pictures" run for a separate
+  all-picture portion of an exercise) — no gold sample exercises it and it is a distinct
+  mechanism from the embedded inline note this pass fixed; left for a future task.
+
 ---
 
 # Standards findings — Sidebars (BANA §12; gold-reconciled 17 Sep 2026, section-12)
@@ -8828,3 +9034,266 @@ evidence trail.
 **Classification:** bug / not done — the document model has no field to carry the source's own preferred note wording (LINE_NUMBER_NOTE is not parameterised at all), and `lineNumberNote`'s own output never adds the trailing blank line 15.8.1c explicitly requires (and Sample 15-3's own worked illustration of 15.4.1d shows too, though 15.4.1d's own rule text does not say so as explicitly).
 
 **Test that would prove a fix:** a document whose first line-numbered block is preceded by a source-supplied note wording renders that exact wording (not the hard-coded English sentence), followed by one blank braille line before the numbered text begins; `Emboss/tests/gold_bana_section15.test.mjs`'s `sample-15-3` and `sample-15-9` cases are the worked checks (both currently `mismatch`/`not-representable` partly on this cause).
+
+# Standards findings — spelling lists and activities, gold-run confirmation (BANA §17) (assessed 18 Sep 2026)
+
+## F-235 — No paragraph margin mechanism produces the 5-5 (cell 5 first line, cell 5 runover) indent this section's own "activity directions" instruction lines consistently need
+
+**Rules:** none named directly — a cross-cutting formatting convention this section's own worked Examples/Samples consistently show for the imperative instruction line that introduces a spelling activity (e.g. "Write these words in alphabetical order.", "Unscramble the following spelling words.", "Complete each equation to make a word list.", "Read this narrative and rewrite the underlined words..."), distinct from both BANA's ordinary indented paragraph (§1.9.3, 3-1) and its blocked paragraph (§1.9.3, 1-1).
+
+**What Emboss does:** `formatPara` (`Emboss/format/document.mjs:636-649`) computes an ordinary paragraph's own left margin from exactly two inputs — `block.blocked` (giving `first:0, runover:0`, cell 1/cell 1) and the absence of it (giving `first:2, runover:0`, cell 3/cell 1) — with `block.continuation` also collapsing to `first:0`. There is no third option, and no field anywhere in the document model that could ask for `first:4, runover:4` (cell 5/cell 5) on an ordinary `para` block; `quoteMargins` (`document.mjs:579-585`) is the only other margin source a `para` block can take, and it gives cell 3/cell 3 (BANA mode) for a `style:'quote'` paragraph, not cell 5/cell 5 either.
+
+**What the standard requires (evidence):** confirmed directly, file by file, against this reconciliation's own gold corpus (`Emboss/tests/gold/bana-formats-2016/section-17/`, `braille.lines` re-extracted independently from `references/_text/braille-formats-2016.txt`, lines 13357-14309): every one of Sample 17-2's ("Write these words in alphabetical order.", source line 13899), Sample 17-4's ("Unscramble...", line 13944), Sample 17-11's ("Write each word, adding ie or ei...", line 13899 [sic, 14105]), Sample 17-12's ("This headline and play review...", line 14127), Sample 17-13's ("Read this narrative...", line 14155), Sample 17-15's ("Complete each equation...", line 14203), Sample 17-17's ("Directions: Make new words...", line 14261), Sample 17-18's own table-header line ("If the noun ends in...", line 14291), and Example 17-11's ("Write list words by adding...", line 13765) own directions/instruction line carries a 4-cell leading indent (cell 5) on BOTH its first line and every runover line — never the 2-cell (cell 3) indent an ordinary unblocked `para` block gives by default. Running `node Emboss/scripts/gold-run.mjs --section section-17 --sample "BANA Sample 17-2"` (and the other samples named above) confirms this directly: Emboss's own output consistently indents these lines 2 cells short of the given braille.
+
+**Classification:** gap / not done — no code path anywhere in `document.mjs` can produce a cell-5/cell-5 paragraph margin; this is a genuine missing capability (a third paragraph-margin option), not a judgement call about which of the two existing options to pick.
+
+**Test that would prove a fix:** a `para` block carrying some new field (e.g. `style:'directions'` or a numeric margin override) renders at `first:4, runover:4`; `Emboss/tests/gold_bana_section17.test.mjs`'s own directions-carrying samples (17-2, 17-4, 17-11, 17-12, 17-13, 17-15, 17-17, 17-18) are the worked checks (all currently `mismatch` partly on this cause).
+
+## F-236 — `glossarySegments` silently drops a definition (or term) supplied only as `defSegments`/`termSegments` when its own plain `def`/`term` string is empty
+
+**Rules:** none named directly — a data-shape defect in the general glossary/definition-list mechanism BANA §17.6/17.7 (and §19/§21's own dl-based word lists) all share.
+
+**What Emboss does:** `glossarySegments` (`Emboss/format/document.mjs:996-1008`) reads BOTH a plain `term`/`def` string and, separately, a `termSegments`/`defSegments` array — its own header comment explicitly says "whether or not the parts carry emphasis... the parser keeps segments for every `<dt>`/`<dd>`, the editor only for formatted ones, and both must braille alike." But its own combining logic, `if (term && def) { ...return [...termSegs, sep, ...defSegs]; }`, tests the PLAIN STRING variables' truthiness only — not whether `termSegs`/`defSegs` (which DO prefer the `*Segments` arrays when present) are themselves non-empty. An item supplying `termSegments`/`term:'doctor'` alongside a `defSegments`-only definition (no plain `def` string at all, e.g. because the definition carries an italicised word-mention and was authored as segments) has a truthy `term` but a falsy (empty-string) `def`, so the `if` branch is skipped entirely; the function then falls through to its own final line, `return term ? termSegs : defSegs;`, which returns ONLY `termSegs` — the entry word is rendered, and its ENTIRE definition (segments and all) is silently dropped from the output, with no error or limitation recorded anywhere.
+
+**What the standard requires (evidence):** reproduced directly while reconciling this section's own gold corpus (Sample 17-9, "Word Usage List", BANA 17.6.1b — `Emboss/tests/gold/bana-formats-2016/section-17/sample-17-9.json`): building the item `{term:'advice, advise:', defSegments:[{type:'text',text:'Advice'},{type:'text',text:' is a noun; ',...},{type:'text',text:'advise',tf:1},{type:'text',text:' is a verb.'}]}` with no plain `def` string produced `ADVICE1 ADVISE3` and nothing else — the whole definition vanished. Supplying a plain-text `def` fallback ALONGSIDE `defSegments` (purely so the truthiness check passes; the segments are still what actually renders) made the same file format byte-for-byte correctly against the book's own given braille. BANA gives no rule that would ever want a definition silently omitted this way.
+
+**Classification:** bug / not done.
+
+**Test that would prove a fix:** a glossary item built with `termSegments`/`defSegments` only (no plain `term`/`def` string at all) still renders both the term and the definition; `Emboss/scripts/gold-run.mjs`'s own `buildBlocks17` (section-17 builder) works around this today by always supplying a plain-text fallback alongside any `*Segments` array — see the comment directly above that code.
+
+---
+
+## F-237 — No mechanism substitutes three dot 5s (and a transcriber's note) when print shows a blank space, rather than an underscore/dash, for an omitted word
+
+BANA Formats §10.6.1: "An underscore represents a low line in print that indicates omission
+of a word or a blank to be filled in. Follow print for other symbols used to show omissions
+or blanks to be filled in. **If print uses empty space to show an omission, substitute three
+dot 5s and insert a transcriber's note explaining the change from print.**"
+
+Reproduced directly while reconciling this section's own gold corpus (`Emboss/tests/gold/
+bana-formats-2016/section-10/example-10-13.json`, BANA Example 10-13's own third sentence,
+"It is _ o'clock." — print shows plain blank space between "is" and "o'clock", not an
+underscore/dash/other symbol): the given braille substitutes three dot 5s (`"""`,
+`references/_text/braille-formats-2016.txt` line 7528) with no transcriber's note nearby (the
+note itself, per the rule, would need to explain the *general* convention once, not per
+instance — this worked example shows only the substituted result). Emboss's exercise-item
+text is opaque, untyped print content (the SAME root cause F-225/F-226/F-229 already document
+for this section): nothing in `Emboss/input/parse.mjs` or `Emboss/format/document.mjs`
+detects "this word-gap in the source is empty space rather than a literal underscore/dash
+character" — there is no way for the model to distinguish the two cases at all, let alone
+substitute three dot 5s for one of them. A gold `print.blocks` item built with literal
+whitespace where print shows a blank translates via `louis.translate()` to nothing at all
+(the whitespace is simply consumed as ordinary word-spacing) rather than to three dot 5s.
+
+**Classification:** not done (missing mechanism; distinct from F-225's own write-on-line
+*omission* rule and from F-226's own TN-*synthesis* rule list, which does not include this
+one — BANA 10.5.2, 10.6.8, 10.6.10, and 10.9.2b only).
+
+**Test that would prove a fix:** a `bai-exercise` (or plain paragraph) item whose source text
+contains a run of plain whitespace standing in for an omitted word (as opposed to a literal
+underscore/dash) formats to three dot 5s (`"""` in BRF ASCII) in place of that gap.
+
+# Standards findings — alphabetic references, gold-run confirmation (BANA §21) (assessed 18 Sep 2026)
+
+## F-238 — `pageSuffix`'s "is the entry word already punctuated" check does not recognise a closing enclosure symbol (a curly quote, parenthesis), so it inserts a spurious extra comma after one
+
+**Rules:** BANA 21.4.3 (secondary effect), 21.4.4, 21.2.2 (page-reference half)
+
+*(Same class of bug as F-194 — `glossarySegments`'s own trailing-punctuation regex missing enclosure symbols — found independently here in a SIBLING code path, `pageSuffix`, not `glossarySegments` itself; cited, not repeated.)*
+
+> "The entry-word segment includes the word or phrase being defined... page numbers directly follow the index entry." (21.4.4, 21.1.1's own general index convention)
+
+**What Emboss does:** `pageSuffix` (`Emboss/format/document.mjs`, "A list item's page references…") computes `const comma = /[,:;.]$/.test(plain) ? '' : o.translate(',').trim();` — exactly like `glossarySegments`'s own regex (F-194), it recognises only a literal trailing `,`/`:`/`;`/`.` character, never a closing enclosure symbol (a curly closing quote `”`, a closing parenthesis). Probed directly (`node Emboss/scripts/gold-run.mjs --section section-21 --sample "BANA Example 21-1"`, real liblouis, BANA): the gold index item `"“Action archaeology,”"` (BANA Formats 2016 Example 21-1, `references/bana/braille-formats-2016.pdf` p.558) already carries its own comma INSIDE the closing quote, matching the print `"Action archaeology," 302` exactly — but `pageSuffix` sees the plain text's own LAST character (the closing curly quote `”`), which is not in `[,:;.]`, and inserts a SECOND, spurious comma before the page number. Expected `8,AC;N >*AEOLOGY10 #CJB`, actual `8,AC;N >*AEOLOGY101 #CJB` — an extra `1` (braille-ASCII comma) appears between the closing quote (`0`) and the page number.
+
+**What the standard requires:** no invented punctuation between an already-punctuated entry word (however it is punctuated — a trailing comma, a closing quote, a closing parenthesis) and its page reference.
+
+**Classification:** bug (same root cause and same fix as F-194, in a second, independent call site).
+
+**Test that would prove a fix:** an index item whose entry word already ends in a closing quote or parenthesis (not a bare `,`/`:`/`;`/`.`) formats with no additional comma inserted before its page reference.
+
+---
+
+## F-239 — A plain (non-glossary) list item's literal multi-space gap collapses to one space, losing §21's own "two/three blank cells" spacing rules
+
+**Rules:** BANA 21.5.1e (mixed-style entries), 21.7.2 (single-level thesaurus spacing, by the same mechanism)
+
+*(Same root cause as F-206, "a significant blank space… normalises to a single space" — found there for a play-speaker/dialogue line, `document.mjs:673`'s `t.replace(/[^\S\n]+/g, ' ')` inside `groupSegments`/`segmentsToBraille`; cited, not repeated, but reproduced here against §21's own rule text and a DIFFERENT calling block type, `formatList`'s plain `item.text`/`item.segments` path, not `formatPlay`.)*
+
+> "e. Insert two blank spaces before the start of all definitions or descriptions when the alphabetic reference has a variety of entry styles." (21.5.1e)
+> "Single-Level Thesaurus. Use 1-3 margins for all entries." (21.7.2, illustrated by Sample 21-9's own two literal blank cells between an entry word and its abbreviated part-of-speech label)
+
+**What Emboss does:** probed directly (`node Emboss/scripts/gold-run.mjs --section section-21 --sample "BANA Sample 21-9"`, real liblouis, BANA): a plain `list` item's own text, `"agree v. coincide, get along, …"`, carries two literal blank cells between the entry word and `v.` in the gold braille (`references/bana/braille-formats-2016.pdf` p.594) — expected `AGREE  ;V4 CO9CIDE1…`, actual `AGREE ;V4 CO9CIDE1…`, the double space collapsed to one. The same collapse reproduces on Example 21-19's own "Mixed Entries" worked illustration of 21.5.1e itself (`"daft"`/`"crazy, silly"`) and on Sample 21-10's own multilevel-thesaurus entries. Because a plain list item's text/segments are rendered through the same `groupSegments`/`segmentsToBraille` path F-206 already names, any deliberate multi-space gap authored directly in an item's own text is silently normalised to one space, with no per-item "preserve this gap" mechanism.
+
+**What the standard requires:** a two-blank-cell (21.5.1e) or three-blank-cell (the related 21.8.1a "counted words" convention, F-208) gap survives into the braille exactly as authored, not collapsed to Emboss's own ordinary single inter-word space.
+
+**Classification:** bug (same root cause as F-206, reproduced against a second block type and a second section's own rule text).
+
+**Test that would prove a fix:** a plain list item's own text or segments carrying two (or three) literal blank cells between two words renders with that exact gap preserved, not collapsed to one.
+
+---
+
+## F-240 — A `stage` block between two verse `play` lines breaks `poemRunBoundaries`, adding a blank line BANA §14 explicitly forbids around a between-dialogue stage direction
+
+**Rules:** BANA 14.5.3d / 14.6.3d / 14.7.2
+
+> "d. Do not insert blank lines before or after stage directions or cues printed outside or
+> between the lines of dialogue." (14.5.3d, reused verbatim by 14.6.3d for the verse case and by
+> 14.7.2 for mixed prose-and-verse)
+
+**What Emboss does:** `document.mjs`'s `poemRunBoundaries` (the mechanism F-121 already documents
+as adding a blank line before/after a POEM) treats a maximal run of consecutive `{type:'play',
+subtype:'verse'}` blocks as one poem; a `{type:'stage'}` block sitting between two such blocks is
+neither a verse block nor a recognised stanza separator (`isVerseSeparator`), so it FLUSHES the
+run — each side of the interruption becomes its own isolated single-line "poem", and gets F-121's
+own blank-line-before/blank-line-after treatment independently. Probed directly against this
+reconciliation's own gold corpus (`node Emboss/scripts/gold-run.mjs --section section-14 --sample
+"BANA Sample 14-9"`, real liblouis, BANA): King's own speech (`[Exit Horatio.]` then three lines
+of verse) gets a spurious blank line between the stage direction and the verse that follows it —
+expected (`references/bana/braille-formats-2016.pdf` p.404 / Sample 14-9) has NO blank line there
+at all. Example 14-8 (`--sample "BANA Example 14-8"`) shows the same mechanism from the other
+side: TWO stage directions between two verse lines each pick up a blank line on BOTH sides,
+turning a 4-line excerpt with no blank lines anywhere into a 6-line one. The PROSE case is
+unaffected — a non-verse `play` block never satisfies `isVerseLineBlock`, so no run/boundary logic
+ever runs on it (confirmed: Example 14-6, the prose analogue of Example 14-8, matches exactly).
+
+**What the standard requires:** no blank line anywhere around a stage direction printed between
+lines of dialogue, verse or prose alike.
+
+**Classification:** bug (a correct mechanism, F-121, applied too eagerly — it does not recognise
+a `stage` block as something that belongs INSIDE the surrounding verse run rather than ending it).
+
+**Test that would prove a fix:** a verse play with a `stage` block between two `play`/`subtype:
+'verse'` blocks (all three sharing one speech, or two different speeches) formats with NO blank
+line before or after the stage direction, matching `Emboss/tests/gold_bana_section14.test.mjs`'s
+own Sample 14-9 / Example 14-8 regression cases.
+
+---
+
+## F-241 — Emboss's `note` block always encloses its ENTIRE text in transcriber's-note indicators; there is no way to enclose only PART of a line, or to nest a second, independent transcriber's note inside another block
+
+**Rules:** BANA 14.10.2, 14.10.3f, 14.10.4a/b, 14.10.5, 14.11.1b
+
+> "Insert the word 'Cartoon,' enclosed in transcriber's notes symbols. Use 7-5 margins.
+> Continuing on the same line, insert the cartoon title and artist's name, followed by the date
+> and copyright information..." (14.10.2 — only ONE word is enclosed; the rest of the same 7-5
+> line is ordinary text)
+> "f. If necessary, a brief description of the action in the frame is enclosed in the
+> transcriber's note with the frame number. If the action relates only to a specific character,
+> insert a transcriber's note following the character's name." (14.10.5f — a SECOND, independent
+> transcriber's note, nested inside a frame's own dialogue line)
+
+**What Emboss does:** `formatTranscriberNote` (`document.mjs:819-826`) wraps `TN_OPEN + inner +
+TN_CLOSE` around the WHOLE of `tnContent(block).segs` — there is no parameter, segment flag, or
+second block type that encloses only PART of a `note` block's own text, and no way for a
+`play`/`stage`/`speech` block to carry a nested, independently-delimited transcriber's note
+inside its own single margin. Probed directly (`node Emboss/scripts/gold-run.mjs --section
+section-14 --sample "BANA Example 14-10"`, real liblouis, BANA): the single-frame-cartoon
+template's own first line (`references/bana/braille-formats-2016.pdf` p.393) encloses only the
+word "Cartoon" (`@.<,c>toon@.>`) before continuing in plain text ("title, artist's name, date and
+copyright remain") at the SAME 7-5 margin — built as a `note` block, Emboss instead encloses the
+whole thing, `@.<,C>TOON TITLE1 ... REMA9@.>`. Sample 14-5's own line 3 shows the SAME defect in
+the opposite direction: the given braille encloses only `Craig, Peter` and leaves print's own word
+"Together" OUTSIDE the enclosure (`@.<,craig1 ,pet]@.> ,tgr`); Emboss closes the enclosure only
+after both. Samples 14-11/14-12 show the NESTING variant: a frame's own dialogue line
+legitimately carries a second, independent transcriber's note describing the character's action
+(`,capta9 ,ju/ice @.</&+ at ! ice prison@.> ,*ill...`, "Captain Justice [standing at the ice
+prison] Chill out...") — with no nested-note mechanism, the closest Emboss can produce is the
+ORDINARY stage-direction-in-dialogue parenthesis enclosure (`"<`/`">`, 14.4.1c's own mechanism),
+which is visually similar but a different BRF symbol pair from the real transcriber's-note
+indicators the given braille actually uses.
+
+**What the standard requires:** a transcriber's note that encloses only part of a paragraph
+(leaving the surrounding text at the same margin, unenclosed), and — separately — a paragraph
+that itself carries one or more independently-delimited nested transcriber's notes inside its own
+running text.
+
+**Classification:** feature absent / not done (two related but distinct gaps: partial enclosure
+of one block, and nesting a second enclosure inside another).
+
+**Test that would prove a fix:** a `note` block with a `segments`-level flag marking only PART of
+its text as TN-enclosed renders with the enclosure symbols around just that part; a `play`/
+`speech` block with an embedded nested-note segment renders that segment wrapped in `@.<`/`@.>`
+without wrapping the rest of the line.
+
+---
+
+## F-242 — No blank-line mechanism connects BANA §14.3's scene-setting prose to the dialogue that follows it (14.3.1e)
+
+**Rule:** BANA 14.3.1e
+
+> "e. Insert a blank line to separate scene settings from dialogue."
+
+**What Emboss does:** neither `formatPara` (ordinary or `blocked`) nor the non-verse `formatPlay`
+path emits a blank line of its own when a scene-setting paragraph is immediately followed by the
+first line of dialogue — the two block formatters have no knowledge of each other, and
+`document.mjs`'s own general block-blank-line logic (`joinsWithoutBlank`, `buildDocPages`) only
+ever REMOVES a blank line that a formatter already added (for a heading, a poem run, a blocked
+paragraph's own leading blank per §1.9.3); it never INSERTS one a rule requires. Probed directly
+(`node Emboss/scripts/gold-run.mjs --section section-14 --sample "BANA Sample 14-2"`, real
+liblouis, BANA): Sample 14-2's own indented stage-setting paragraph ("A bell rings in the
+entryway...") is followed immediately, with no blank line, by NORA's own first line of dialogue —
+`references/bana/braille-formats-2016.pdf` p.397 clearly shows a blank line there, per 14.3.1e.
+
+**What the standard requires:** a blank line always separates the LAST scene-setting paragraph
+from the FIRST line of dialogue that follows it, regardless of either block's own margin/type.
+
+**Classification:** feature absent / not done.
+
+**Test that would prove a fix:** a scene-setting `paragraph` block immediately followed by a
+`play`/`speech` block formats with exactly one blank line between them.
+
+---
+
+## F-243 — liblouis's uebG2 table inserts a letter-sign before a bare `...?` (ellipsis directly followed by a question mark) that is itself preceded by a word-space, which the given BANA braille for the same print text does not have
+
+**Rule:** none specific — a UEB punctuation-disambiguation table behaviour, observed against BANA
+Sample 14-3's own worked braille.
+
+**What Emboss does:** probed directly (`node Emboss/scripts/gold-run.mjs --section section-14
+--sample "BANA Sample 14-3"`, real liblouis, BANA): the print text "...means ...?" (a trailing,
+space-separated ellipsis then a question mark, `references/bana/braille-formats-2016.pdf` p.398)
+forward-translates to `M1NS 444;8` — a spurious letter-sign cell (`;`) appears between the
+ellipsis (`444`) and the question mark (`8`) — where the given braille has `m1ns 4448`, no
+letter-sign at all. Gluing the ellipsis directly onto the PRECEDING word (no space) removes the
+letter-sign but also removes the given braille's own inter-word space, so no candidate print text
+reproduces the given braille exactly; the same pattern reproduces on the same sample's own final
+line (`,,john 444 ,i 4448` expected vs `,,JOHN 444 ,I 444;8` actual).
+
+**What the standard requires:** unknown without consulting a UEB punctuation-disambiguation
+reference directly — possibly a table refinement (a bare `?` immediately after a `...` run does
+not need a letter-sign the way a bare `?` after ordinary text does), possibly a legitimate
+transcriber's choice the general-purpose uebG2 table does not special-case. Left UNRESOLVED by
+this reconciliation (`tests/gold/bana-formats-2016/section-14/README.md`, `differences.md`).
+
+**Classification:** unresolved (possible liblouis table gap; not enough evidence to classify as a
+confirmed bug in Emboss's own code, since the table itself is a third-party liblouis asset).
+
+**Test that would prove a fix:** confirm against an authoritative UEB punctuation reference
+whether `...?` needs a letter-sign after a preceding word-space, then adjust the uebG2 table (or
+document that the given BANA braille itself is non-standard) accordingly.
+
+---
+
+## F-244 — liblouis's uebG2 table contracts "counsel" differently from the officially certified BANA braille for the same word
+
+**Rule:** none specific — a UEB contraction-table divergence, observed against BANA Sample 14-9's
+own worked braille (a direct Hamlet quotation, "...and so I thank you for your good counsel.").
+
+**What Emboss does:** probed directly (`node Emboss/scripts/gold-run.mjs --section section-14
+--sample "BANA Sample 14-9"`, real liblouis, BANA): `o.translate('counsel')` consistently produces
+`C\NSEL` (confirmed in isolation and in full sentence context) — the given, officially certified
+BANA braille (`references/bana/braille-formats-2016.pdf` p.404) instead has `c\ncel`. The word
+itself is not in doubt (Shakespeare's own canonical text, and both of this reconciliation's own
+independent transcription runs already agree on "counsel"); the two BRF forms decode to two
+different letter sequences after the shared `c` + `ou`-sign opening, an ordinary liblouis
+table-vs-certified-transcription mismatch for this one word, not a gold-data transcription error.
+
+**What the standard requires:** `c\ncel` for "counsel" in this context (whatever UEB rule
+produces that specific contraction choice — not yet identified).
+
+**Classification:** unresolved (possible liblouis uebG2 table gap for this specific word/context;
+not enough evidence to identify the exact contraction rule liblouis is missing).
+
+**Test that would prove a fix:** identify the UEB rule that makes "counsel" contract to `c\ncel`
+rather than liblouis's own current `c\nsel`, confirm it against a second independent occurrence of
+the word elsewhere in the BANA corpus, then adjust the uebG2 table.

@@ -1,0 +1,46 @@
+{
+  "id": "BANA Example 21-23",
+  "title": "Dictionary Entry with Left Angle Bracket",
+  "pdfPages": [
+    570
+  ],
+  "textLines": [
+    16561,
+    16569
+  ],
+  "illustrates": {
+    "rule": "21.8.2",
+    "quote": "Special Print Markers. Follow print for the placement and spacing of print markers, e.g., symbolic colon. List the symbols on the Special Symbols page or in a transcriber’s note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "bou·le·vard (bo͝ol′ə värd′) n. [Fr < MDu bolwerc, bulwark] a broad street lined with trees, etc.",
+        "features": "Bold headword with middle dots, pronunciation guide in parentheses with special characters and diacritics, italicized part of speech 'n.', etymology enclosed in brackets containing a left angle bracket and an italicized word 'bolwerc', followed by a definition. No dictionary-entry/pronunciation-key AST node exists (F-200) to hold a syllabified headword plus a bracketed, diacritic-laden pronunciation and etymology — recorded as not representable rather than forced through the flat glossary term/def shape."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A single dictionary entry starting with a bold headword, followed by a pronunciation guide, italicized part of speech, etymological information in brackets, and a definition."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "b\\lev>d b\\_4le_4v>d",
+      "  \"<bo^6ol^.b_5 v^3ard^.2\"> ;n4 .<;,fr",
+      "  @< ,m,du .1bolw]c1 bulw>k.> a broad",
+      "  /reet l9$ ) trees1 etc4"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [
+    "The pronunciation guide `bo͝ol′ə värd′` uses a tie bar or double inverted breve in print; represented here as `o` followed by combining double breve `͝` and `o` (o͝o). The diacritic on 'a' is an umlaut/diaeresis (ä), and stress marks are represented as prime symbols (′)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

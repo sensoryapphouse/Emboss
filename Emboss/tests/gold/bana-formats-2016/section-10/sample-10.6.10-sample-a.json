@@ -1,0 +1,38 @@
+{
+  "id": "BANA Sample 10.6.10-sample-a",
+  "title": "Embedded TN wording for a question mark over an underscore",
+  "pdfPages": [
+    261
+  ],
+  "textLines": [
+    7617,
+    7619
+  ],
+  "illustrates": {
+    "rule": "10.6.10",
+    "quote": "Answer Cues with Question Marks. Follow print when a question mark is shown standing alone representing a write-on-line. When print uses both a question mark and a low line or dash, ignore the question mark and use the underscore or dash. Insert a transcriber’s note explaining this usage. Sample: Print shows a question mark over an underscore. In braille, the question mark is omitted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Print shows a question mark over an underscore. In braille, the question mark is omitted."
+      }
+    ],
+    "notes": "An inline \"Sample:\" wording embedded in the rule text itself, not a full worked example.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille anywhere near this citing location — confirmed directly against source; matches both A and B."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No braille exists for this embedded wording (confirmed against source); print is the rule’s own suggested TN phrasing, unchanged from A/B. (This is the SAME wording Example 10-22 actually builds as a genuine 'note' block — that file’s braille is the real worked rendering of this sample wording.)"
+}

@@ -1,0 +1,95 @@
+{
+  "id": "BANA Sample 21-3",
+  "title": "Glossary with Diacritics",
+  "pdfPages": [
+    586
+  ],
+  "textLines": [
+    16997,
+    17028
+  ],
+  "illustrates": {
+    "rule": "21.6.2",
+    "quote": "Glossaries with Pronunciation. The basic format of a glossary is the same when it includes pronunciation. (See Formats, §20.7, Pronunciation.) When entry words are shown with syllable breaks, insert the word in contracted form with no syllable breaks at the margin. Follow this (after one blank cell) with the word showing syllable breaks and using contracted braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "ac·cord·ing (a-kôr'-ding) in agreement",
+        "features": "Glossary-with-pronunciation entry: F-200, no dictionary-entry/pronunciation-key AST node exists to hold BOTH the plain contracted headword and its own syllabified, contracted re-writing one blank cell apart."
+      },
+      {
+        "kind": "other",
+        "text": "ac·count (a-kount) explain. Can you account for the broken dishes in the sink?",
+        "features": "Same not-representable class (F-200)."
+      },
+      {
+        "kind": "other",
+        "text": "ac·tu·al·ly (ak'-chü-al-ē) 1. truly. 2. in fact. Are you actually going to read that whole book this week?",
+        "features": "Same not-representable class (F-200)."
+      },
+      {
+        "kind": "other",
+        "text": "ad·mire (ad-mīr') look up to. The little children admire their teacher.",
+        "features": "Same not-representable class (F-200)."
+      },
+      {
+        "kind": "other",
+        "text": "ad·jec·tive (a'-jik-tiv) a word that tells about a noun. There are two adjectives in that long sentence.",
+        "features": "Same not-representable class (F-200)."
+      },
+      {
+        "kind": "other",
+        "text": "ad·verb (ad'-verb) 1. a word that tells about verbs and is also used to tell about adjectives and other adverbs. 2. a word that tells where, when, how or how much. She looked closely at the sentence and quickly found two adverbs in it.",
+        "features": "Same not-representable class (F-200)."
+      },
+      {
+        "kind": "other",
+        "text": "a·gree (a-grē) 1. think the same as. I agree with your ideas on how to grow vegetables. 2. be the same as.",
+        "features": "Same not-representable class (F-200)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Glossary with syllabified words, diacritics in pronunciation guides, and numbered subentries/definitions."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "ac ;ac-cord-9g \"<_5-k^%or^.b-d+\"> 9   #f",
+      "    agree;t",
+      "a3.t ;ac-c.t \"<_5-k.t^.b\"> expla94 ,c y",
+      "    a3.t = ! brok5 di%es 9 ! s9k8",
+      "actually ;ac-tu-;al-ly",
+      "    \"<ak^.b-*^3u-_5l-@-e\">",
+      "  #a4 truly",
+      "  #b4 9 fact4 ,>e y actually go+ to r1d",
+      "    t :ole book ? week8",
+      "admire ad-mire \"<ad-m@-ir^.b\"> look up",
+      "    to4 ,! ll *n admire _! t1*]4",
+      "adjective ad-jec-tive \"<a^.b-jik-tiv\"> a",
+      "    ^w t tells ab a n\\n4 ,\"! >e two",
+      "    adjectives 9 t l;g s5t;e4",
+      "adv]b ad-v]b \"<ad^.b-v^_1erb\">",
+      "  #a4 a ^w t tells ab v]bs & is al us$",
+      "    to tell ab adjectives & o!r adv]bs4",
+      "  #b4 a ^w t tells \":1 :51 h[ or h[ m*4",
+      "    ,%e look$ closely at ! s5t;e & qkly",
+      "    f.d two adv]bs 9 x4",
+      "agree a-gree \"<_5-gr@-e^.b\">",
+      "  #a4 ?9k ! same z4 ,i agree ) yr id1s",
+      "    on h[ to gr[ vegetables4",
+      "  #b4 2 ! same z4",
+      "                ac,-agree            #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Sample 21-3: ...' title, 4 leading blank lines, and the running page header/footer ('21-30 Section 21' / 'Alphabetic References') — all removed; the 25 real content lines were already correctly extracted."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.blocks rebuilt as 'other' (not representable, F-200 — no dictionary-entry/pronunciation-key AST node exists to hold a plain contracted headword plus its own syllabified re-writing); braille.lines corrected: removed 7 bogus leading lines (title + 4 blanks + 2 running-header/footer lines)."
+}

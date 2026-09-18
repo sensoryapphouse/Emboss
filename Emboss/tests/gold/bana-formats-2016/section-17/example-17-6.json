@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 17-6",
+  "title": "Example 17-6: Omitted Letters Represented by Hyphens",
+  "pdfPages": [
+    472
+  ],
+  "textLines": [
+    13635,
+    13643
+  ],
+  "illustrates": {
+    "rule": "17.9.2b",
+    "quote": "Follow print when hyphens indicate a specific number of missing letters."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "s-------d",
+        "continuation": true
+      }
+    ],
+    "notes": "A single word, letters replaced by a run of seven hyphens between the first and last letter.",
+    "surroundingText": [
+      "(See Sample 17-11: Omitted Letters Identified in Directions on page 17-24.)"
+    ],
+    "printFeatures": "Omitted letters shown as one hyphen per missing letter."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ";s-------;d"
+    ],
+    "pageBreaks": [],
+    "notes": "Neither run's braille.lines was fully correct: A kept a spurious leading space on every line (9-space margin instead of the correct 10) AND wrongly folded the book's own '(See Sample 17-11...)' cross-reference caption (plain print commentary, not braille — it uses ordinary English capitalisation, unlike every real braille-ASCII line around it) into braille.lines; B correctly excluded the caption but is otherwise identical. Re-derived directly from source (line 13640 only, margin 10): single line ';s-------;d', matching B's content exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: corrected — single line ';s-------;d' (B's version; A had an extra leading space and wrongly appended the print-only 'See Sample 17-11' caption as if it were braille). illustrates.rule: B's '17.9.2b' kept over A's bare '17.9.2' — the example sits directly under clause b's own text (hyphens for a specific letter count)."
+}

@@ -1,0 +1,78 @@
+{
+  "id": "BANA Sample 21-10",
+  "title": "Multilevel Thesaurus",
+  "pdfPages": [
+    566
+  ],
+  "textLines": [
+    17176,
+    17192
+  ],
+  "illustrates": {
+    "rule": "21.7.3",
+    "quote": "21.7.3   Multilevel Thesaurus. Print does not always use indention to indicate subentries. In this case, the entries are often bold and subentries are another font attribute, such as italics.\na. Use a nested list format, with 1-5 margins for all main entries and 3-5 margins for all subentries.\nb. Omit font attributes for entry words at the main and subentry levels."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Thesaurus"
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A a"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "level": 1,
+            "text": "agree v. to express one's willingness or approval. *My parents agreed to get a dog for my brother and me.*"
+          },
+          {
+            "level": 2,
+            "text": "approve to say officially that something is correct or should be done. *The principal approved the plan for the field trip.*"
+          },
+          {
+            "level": 2,
+            "text": "consent to say yes. *Did Judy consent to the plan?*"
+          },
+          {
+            "level": 2,
+            "text": "antonyms: deny, refuse"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Print displays main entry and subentries flush left without indention. The main entry word 'agree' is bold, while subentries 'approve', 'consent' and 'antonyms:' appear to be italic or regular font. Example words 'agreed', 'approved', 'consent' within definitions are bold. 'A a' and 'Thesaurus' are centered headings."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                ,!saurus",
+      "",
+      "                  ,a a",
+      "agree  ;v4 to express \"o's will+;s or",
+      "    approval4 .7,my p>5ts ^1agre$ to get",
+      "    a dog = my bro!r & me4.'",
+      "  approve  to say (ficially t \"s?+ is",
+      "    correct or %d 2 d\"o4 .7,! pr9cipal",
+      "    ^1approv$ ! plan = ! field trip4.'",
+      "  3s5t  to say yes4 .7,did ,judy ^13s5t",
+      "    to ! plan8.'",
+      "  antonyms3 d5y1 refuse"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

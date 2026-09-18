@@ -1,0 +1,106 @@
+{
+  "id": "BANA Example 21-5",
+  "title": "Cross-References",
+  "pdfPages": [
+    561
+  ],
+  "textLines": [
+    16177,
+    16186
+  ],
+  "illustrates": {
+    "rule": "21.2.4",
+    "quote": "Cross-References (“See” or “See also”)\na. Follow print for placement.\nb. Retain font attributes."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "High Middle Ages,",
+            "page": "217-42"
+          },
+          {
+            "level": 2,
+            "text": "Agriculture,",
+            "page": "218-20, 229"
+          },
+          {
+            "level": 2,
+            "segments": [
+              {
+                "type": "text",
+                "text": "Russia, 254-55. "
+              },
+              {
+                "type": "text",
+                "text": "See",
+                "tf": 1
+              },
+              {
+                "type": "text",
+                "text": " "
+              },
+              {
+                "type": "text",
+                "text": "also",
+                "tf": 1
+              },
+              {
+                "type": "text",
+                "text": " Soviet Union"
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "segments": [
+              {
+                "type": "text",
+                "text": "See",
+                "tf": 1
+              },
+              {
+                "type": "text",
+                "text": " "
+              },
+              {
+                "type": "text",
+                "text": "also",
+                "tf": 1
+              },
+              {
+                "type": "text",
+                "text": " Early Middle Ages"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Italicized 'See also' phrases."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",hi< ,middle ,ages1 #bag-#db",
+      "  ,agriculture1 #bah-#bj1 #bbi",
+      "  ,russia1 #bed-#ee4 .1,see .1al ,soviet",
+      "    ,union",
+      "  .1,see .1al ,e>ly ,middle ,ages"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-5: Cross-References' title and 4 leading blank lines — removed; the 9-space left margin on the remaining 5 real lines was already stripped correctly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines. print.blocks keeps 'Russia, 254-55. See also Soviet Union' as ONE subentry item (its own single braille line in the source, not two) with 'See'/'also' individually italic, matching the braille's own two separate '.1' word-indicators before 'see' and 'al' (also) — 'Soviet Union'/'Early Middle Ages' themselves are not italicized in the given braille. The page reference is embedded directly in the item's own text (not the `page` field) since it is followed by more running text, not the end of the entry."
+}

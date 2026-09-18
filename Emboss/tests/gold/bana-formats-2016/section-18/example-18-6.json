@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 18-6",
+  "title": "Example 18-6: Text with Limited Insertions and Corrections",
+  "pdfPages": [
+    503
+  ],
+  "textLines": [
+    14547,
+    14555
+  ],
+  "illustrates": {
+    "rule": "18.6.3",
+    "quote": "When a text shows limited insertions and corrections within the flow of text:\na. Use a transcriber-defined typeform indicator to show the crossed-out word(s). (See UEB, §9.5, Transcriber-Defined Typeform Indicators.)\nb. Explain the usage in a transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "Transcriber's note: \"The symbol [transcriber-defined strike-through mark] indicates a crossed-out word.\" (back-translated, matches both runs); the sentence itself, \"Sarah *like* likes vanilla ice cream.\" with \"like\" struck through and marked by the transcriber-defined mark ^#1 — not modeled: F-188 (only one hardcoded transcriber-defined symbol exists at all, already used elsewhere for the print asterism, so a second one for strike-through cannot be minted)."
+      }
+    ],
+    "notes": "The word \"like\" has a horizontal strikethrough in print.",
+    "surroundingText": [],
+    "printFeatures": "Strikethrough on the word \"like\"."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! symbol .=^#1 9dicates a",
+      "    cross$-\\ ^w4@.>",
+      "",
+      ",s>ah ^#1l likes vanilla ice cr1m4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14552-14555, margin 9); matches both runs byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. print.blocks kept as a single 'other' (F-188) rather than attempting a plain-text sentence: unlike example-18-2’s list (where the missing mark is a simple prefix before otherwise-independent names), here the mark (^#1) is the ENTIRE point of the example (marking a specific crossed-out word inline) and the sentence without it reads as ordinary, unmarked prose that would not exercise what this example demonstrates at all."
+}

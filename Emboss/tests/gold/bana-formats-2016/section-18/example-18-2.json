@@ -1,0 +1,64 @@
+{
+  "id": "BANA Example 18-2",
+  "title": "Example 18-2: Isolated Capital Letters Are Emphasized",
+  "pdfPages": [
+    498
+  ],
+  "textLines": [
+    14355,
+    14366
+  ],
+  "illustrates": {
+    "rule": "18.2.2",
+    "quote": "When isolated letters are capitalized and emphasized (e.g., italics, bold, colored type, underlined, etc.):\na. Follow print for emphasis.\nb. Insert a transcriber’s note giving basic information about print capitalization."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Capitalize titles used before a proper name and titles used in direct address."
+      },
+      {
+        "kind": "other",
+        "text": "Transcriber's note: \"The symbol [transcriber-defined red-letter mark] represents red letters.\" — back-translation of the given braille (louis.backTranslate) confirms the note's own wording matches the rule's own quoted Sample verbatim ('The symbol .=@#2 represents red letters.'); the mark itself (@#2, a second transcriber-defined symbol) cannot be minted by Emboss at all (F-188, only one hardcoded transcriber-defined symbol exists in the whole codebase) — not modeled."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "General Robert E. Lee"
+          },
+          {
+            "text": "Chief Sitting Bull"
+          },
+          {
+            "text": "Prime Minister Tony Blair"
+          }
+        ]
+      }
+    ],
+    "notes": "The list's own three titles each need the same undoable @#2 mark placed immediately before them (F-188); built here as plain text so the wording itself can still be checked, even though the mark cannot be.",
+    "surroundingText": [],
+    "printFeatures": "Isolated capital letters (G, C, P, M) printed in red."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,capitalize titles us$ 2f a prop] \"n",
+      "    & titles us$ 9 direct address4",
+      "      @.<,! symbol .=@#2 repres5ts r$",
+      "    lrs4@.>",
+      "@#2,g5]al ,rob]t ;,e4 ,lee",
+      "@#2,*ief ,sitt+ ,bull",
+      "@#2,prime @#2,m9i/] ,tony ,blair"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14360-14366, margin 9); matches both runs byte-for-byte — no correction needed here."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs already agreed on braille.lines byte-for-byte; independent re-extraction from source confirms it exactly, so kept as-is. print.blocks rebuilt around buildModel18's own vocabulary: the intro sentence is an ordinary paragraph (representable); the TN sentence defining the @#2 symbol, and the symbol itself before each name, are F-188 (no second transcriber-defined symbol can be minted) — the note is recorded as 'other' since its wording is meaningless without the symbol it defines, while the three titles are still built as a plain list (wording testable, the missing @#2 prefix an expected, documented mismatch)."
+}

@@ -1,0 +1,70 @@
+{
+  "id": "BANA Sample 21-8",
+  "title": "Glossary with Displayed Text",
+  "pdfPages": [
+    592
+  ],
+  "textLines": [
+    17117,
+    17148
+  ],
+  "illustrates": {
+    "rule": "21.6.5g",
+    "quote": "Examples of glossary terms are treated as displayed material when they follow the definition. (See Formats, §9, Displayed Material, Attributions, and Source Information.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "Paradox\nA paradox is a statement that seems to contradict itself but is, nevertheless, true, as in the beginning of this poem:\nMuch Madness is divinest Sense\nTo a discerning Eye;\nMuch Sense the starkest Madness.\n—Emily Dickinson\nfrom “Much Madness is divinest Sense”",
+        "features": "Glossary entry word as a cell-5 heading (21.6.5c) immediately followed by a definition paragraph and then a displayed/attributed poem quotation — F-195, no glossary-item field for nested illustrative/displayed material of any kind."
+      },
+      {
+        "kind": "other",
+        "text": "Personification\nPersonification is a figure of speech in which human qualities are attributed to an object, animal, or idea. In “Incident in a Rose Garden” by Donald Justice, death is personified as someone who wears black and grins. In this line, morning is personified:\nThe grey-eyed morn smiles on the frowning night …\n—William Shakespeare, from Romeo and Juliet",
+        "features": "Same not-representable class (F-195)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Glossary layout with bold headwords followed by paragraph definitions and then offset displayed poetry. 'Romeo and Juliet' is printed in italics."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,p>adox                        a#ghh",
+      "  ,a p>adox is a /ate;t t seems to",
+      "3tradict xf b is1 n\"e!.s1 true1 z 9 !",
+      "2g9n+ ( ? poem3",
+      "",
+      "  ,m* ,mad;s is div9e/ ,s5se",
+      "  ,to a 4c]n+ ,eye2",
+      "  ,m* ,s5se ! />ke/ ,mad;s4",
+      "      ,-,emily ,dick9son",
+      "      f 8,m* ,mad;s is div9e/ ,s5se0",
+      "",
+      "    ,p]sonifica;n",
+      "  ,p]sonifica;n is a figure ( spee* 9 :",
+      "human qualities >e attribut$ to an",
+      "object1 animal1 or idea4 ,9 8,9cid5t 9 a",
+      ",rose ,g>d50 by ,donald ,ju/ice1 d1? is",
+      "p]sonifi$ z \"s\"o :o we>s black & gr9s4",
+      ",9 ? l9e1 morn+ is p]sonifi$3",
+      "",
+      "  ,! grey-ey$ morn smiles on ! fr[n+",
+      "    ni<t 444",
+      "        ,-,william ,%akespe>e1 f",
+      "        .7,romeo & ,juliet.'",
+      "",
+      "         ,p>adox,-,p]sonifica;n       #,-"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

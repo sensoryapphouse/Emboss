@@ -1,0 +1,31 @@
+{
+  "id": "BANA 18.5.2c Sample",
+  "title": "Each sentence is followed by a list of the parts of speech appearing above the print line with their corresponding words.",
+  "pdfPages": [],
+  "textLines": [
+    14468,
+    14469
+  ],
+  "illustrates": {
+    "rule": "18.5.2c",
+    "quote": "Each sentence is followed by a list of the parts of speech appearing above the print line with their corresponding words."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs already agreed byte-for-byte on this file (wording, textLines, and illustrates.rule) — confirmed directly against the source at the given textLines. Unlike the §19 gold precedent (where both runs shared a single hard-set placeholder rule id on all six embedded quotes), both runs here already correctly set illustrates.rule to this quote's own citing rule (18.5.2c), matching the source exactly; no placeholder-id bug recurs in §18."
+}

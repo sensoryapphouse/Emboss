@@ -1,0 +1,100 @@
+{
+  "id": "BANA Sample 17-7",
+  "title": "Sample 17-7: Word List with Two Different Print Symbols",
+  "pdfPages": [
+    484
+  ],
+  "textLines": [
+    14011,
+    14031
+  ],
+  "illustrates": {
+    "rule": "17.5.1",
+    "quote": "When items in a list are marked with a special shape or icon, follow print for the symbol used. If a print symbol does not have a corresponding symbol in braille, devise a symbol using a shape indicator or a transcriber-defined symbol indicator. a. Begin the symbol or icon in cell 1 followed by at least one space. d. List all symbols/icons on the Special Symbols page, or in a transcriber's note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Watch out for frequently misspelled words!",
+        "features": "prefixed by a pencil icon (devised braille symbol, F-213 — no print character to build from)"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Bonus word",
+        "features": "prefixed by a pointing-finger icon (devised braille symbol, F-213); the given braille's own embedded TN explains the finger icon means 'this is a bonus word'"
+      },
+      {
+        "kind": "box",
+        "blocks": [
+          {
+            "kind": "list",
+            "items": [
+              {
+                "text": "`choice`"
+              },
+              {
+                "text": "`noisy`"
+              },
+              {
+                "text": "`spoil`"
+              },
+              {
+                "text": "`poison`"
+              },
+              {
+                "text": "`Illinois`"
+              },
+              {
+                "text": "`amount`"
+              },
+              {
+                "text": "`our`"
+              },
+              {
+                "text": "`outside`"
+              },
+              {
+                "text": "`couch`"
+              },
+              {
+                "text": "`surround`"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Two key lines (each introduced by a devised icon — a pencil, a pointing finger — with no print character), then a boxed two-column list (print's own column layout collapsed to one column per 17.5.1c) in which two items ('Illinois', 'our', 'outside') carry the same devised icon markers inline.",
+    "surroundingText": [],
+    "printFeatures": "Two icon-prefixed key lines; a two-column boxed word list with two items individually icon-marked."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "@$pen ,wat* \\ = frequ5tly misspell$ ^ws6",
+      "@$f   ,bonus ^w @.<;f is = f+]@.>",
+      "",
+      "7777777777777777777777777777777777777777",
+      "      choice",
+      "      noisy",
+      "      spoil",
+      "      poison",
+      "@$f   ,illinois",
+      "      amount",
+      "@$pen our",
+      "@$pen outside",
+      "      couch",
+      "      surround",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: A's '17.5.1' kept over B's wrong '17.4' (a different rule, about partial-emphasis word lists, not marked/icon lists) — the source's own cross-reference at the end of clause d explicitly names 'Sample 17-7'. Modeled with the icon markers dropped (no print character exists for a genuine picture icon — recorded via `features`, not guessed as some placeholder glyph, matching F-213's own finding that an unmapped icon leaks a raw hex escape rather than any braille sign); the box's own multi-column layout is collapsed to one column, matching 17.5.1c's own requirement AND Emboss's own only-ever-one-column list behaviour (F-34, cited here as confirming, not a gap, per standards-map.md's own BANA 17.5.1c row)."
+}

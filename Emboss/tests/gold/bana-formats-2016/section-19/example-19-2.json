@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 19-2",
+  "title": "Example 19-2: Morse Code (Letters Added for Readability)",
+  "pdfPages": [
+    520
+  ],
+  "textLines": [
+    15079,
+    15084
+  ],
+  "illustrates": {
+    "rule": "19.4.1",
+    "quote": "b. Insert a blank cell between individual symbols for a word. c. Insert three blank cells between words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "M   O   R   S E       C   O   D E\n-- --- .-. ... .     -.-. --- -.. .",
+        "features": "Verified against the PDF page image (p.520): the letters M-O-R-S-E and C-O-D-E are printed above their own Morse dot/dash sequence, spaced out to align each letter over its own code; there is a wide gap between the two words. Not print text a transcriber would normally include (the title itself says \"Letters Added for Readability\") — Emboss has no column-alignment mechanism for this in any case (F-219)."
+      }
+    ],
+    "notes": "The print shows the letters of MORSE CODE spaced out with their own Morse code symbols aligned directly beneath each letter; per the example's own title, the letters are an add-on aid, not something a real transcription would carry (the braille below omits them entirely, per 19.4.1's own instruction to show only the symbols).",
+    "surroundingText": [],
+    "printFeatures": "Letter-to-symbol vertical alignment, decorative only."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "-- --- 4-4 444 4   -4-4 --- -44 4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-line 15084 (fixed 9-space Example margin stripped, U+2800→space, which is what preserves the three-cell gap between the two Morse words per 19.4.1c)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical, confirmed by independent re-extraction). Print side: the letters and their own alignment are decorative (per the example's own title) and not braille-buildable in this schema regardless (F-219/F-222); kept as a documented 'other' limitation rather than modeled, matching both runs' own intent."
+}

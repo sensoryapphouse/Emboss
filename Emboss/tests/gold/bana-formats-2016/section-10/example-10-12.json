@@ -1,0 +1,72 @@
+{
+  "id": "BANA Example 10-12",
+  "title": "Lettered List Retained",
+  "pdfPages": [
+    259
+  ],
+  "textLines": [
+    7497,
+    7507
+  ],
+  "illustrates": {
+    "rule": "10.5.2",
+    "quote": "Numbered or lettered answer lines may be retained, or transcribed as an embedded transcriber’s note. Sample: Answers a-e."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. List the Great Lakes"
+          },
+          {
+            "level": 1,
+            "text": "a."
+          },
+          {
+            "level": 1,
+            "text": "b."
+          },
+          {
+            "level": 1,
+            "text": "c."
+          },
+          {
+            "level": 1,
+            "text": "d."
+          },
+          {
+            "level": 1,
+            "text": "e."
+          }
+        ]
+      }
+    ],
+    "notes": "PDF page image (p.259) inspected directly: print reads \"1. List the Great Lakes\" with NO terminal period at all (a heading-style item), while the given braille ends \"...,lakes4\" (with a period).",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,li/ ! ,grt ,lakes4",
+      "  a4 .-",
+      "  ;b4 .-",
+      "  ;c4 .-",
+      "  ;d4 .-",
+      "  ;e4 .-"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "Print genuinely has no period after \"Lakes\" (confirmed against the PDF page image) while the given braille has one — a content-fidelity anomaly of this specific worked example (both A and B independently flagged this same ambiguity), not an Emboss defect. Built here following print exactly (no period), so this is EXPECTED to mismatch on that one character; see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print: confirmed against the PDF page image that print has no period; the five lettered choices are blank write-on-lines (\".-\", no answer text) in both print and braille — Emboss has no dot-5/write-on-line blank-fill mechanism for an exercise item, so these are built as empty text."
+}

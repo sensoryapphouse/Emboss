@@ -1,0 +1,49 @@
+{
+  "id": "BANA Example 18-12b",
+  "title": "Example 18-12b: Diagramming with Multiple Arrows",
+  "pdfPages": [
+    507
+  ],
+  "textLines": [
+    14721,
+    14731
+  ],
+  "illustrates": {
+    "rule": "18.8.3",
+    "quote": "Spatial Diagrams with Arrows and Multiple Shafts\na. Place the appropriate symbol of the arrow above the first letter of the word to which the arrow points. (See UEB, §3.2.)\nb. Use line mode to represent the arrow shaft. The line should end above the first letter of the word from which the arrow points. (See UEB, §16.2.3, Horizontal Line Mode.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "We found the diary in the middle of a box of rubbish."
+      },
+      {
+        "kind": "other",
+        "text": "A horizontal line above the sentence, from \"We\" to \"rubbish.\", with three right-pointing arrowheads on it above \"middle\", \"box\", and \"rubbish\". Not modeled: F-189."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "A horizontal line above the sentence with three right-pointing arrowheads."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      ",we",
+      "",
+      "  \"33333333333333\\o333333333\\o3333\\o",
+      "  f.d ! di>y 9 ! middle ( a box ( ru2i%4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14721-14731, margin 0). Includes BOTH the required leading (14726) and trailing (14731) full 40-blank-cell rows BANA 18.8.1 requires around every arrow/sentence pair; both are genuine content rows, not page gaps (contrast with the truly-empty lines 14722-14725)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run B's braille.lines is correct: it kept both the leading and trailing required blank lines. Run A's own braille.lines dropped both (3 lines instead of 6) — confirmed wrong by directly re-deriving the file's own textLines range from source. illustrates.rule already correct in both (18.8.3); quote unified to the rule's own text."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "BANA Sample 21-9",
+  "title": "Single-Level Thesaurus",
+  "pdfPages": [
+    594
+  ],
+  "textLines": [
+    17156,
+    17168
+  ],
+  "illustrates": {
+    "rule": "21.7.2",
+    "quote": "Single-Level Thesaurus. Use 1-3 margins for all entries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "items": [
+          {
+            "level": 1,
+            "text": "agree v. coincide, get along, side with, harmonize with, match up, concur, stand together, go along with, say yes to, conform —*Ant.* differ, disagree, debate."
+          },
+          {
+            "level": 1,
+            "text": "alarm n. anxiety, apprehension, dismay, distress, dread, strain, stress, tension —*Ant.* assurance, composure, peace, repose, security."
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bolded entry word; italicized part-of-speech label."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "agree  ;v4 co9cide1 get al;g1 side )1",
+      "  h>monize )1 mat* up1 3cur1 /& tgr1 g",
+      "  al;g )1 say yes to1 3=m ,-,ant4 di6]1",
+      "  4agree1 debate4",
+      "al>m  ;n4 anxiety1 appreh5.n1 4may1",
+      "  4tress1 dr1d1 /ra91 /ress1 t5.n",
+      "  ,-,ant4 assur.e1 composure1 p1ce1",
+      "  repose1 secur;y4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Sample 21-9: ...' title and 4 leading blank lines — removed. This sample starts mid-page at print line 10 (a genuine feature of the source, not an extraction error)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.7.2 (Single-Level Thesaurus, the actual rule this sample is cited under — A/B's own 'rule' field was null)."
+}

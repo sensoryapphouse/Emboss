@@ -1,0 +1,38 @@
+{
+  "id": "BANA Example 18-15",
+  "title": "Example 18-15: Spatial Diagram to Be Omitted (Print Only)",
+  "pdfPages": [
+    509
+  ],
+  "textLines": [
+    14776,
+    14776
+  ],
+  "illustrates": {
+    "rule": "18.9.1",
+    "quote": "Spatial sentence diagramming is difficult to represent in braille. Insert a transcriber’s note saying such diagramming has been omitted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "A spatial sentence diagram (a picture of sentence parts connected by lines) — print only, per this example’s own title; the source gives no further print description and no braille at all at this location (the required \"Sentence diagramming is omitted.\" transcriber’s note, per 18.9.1’s own Sample, is illustrated separately by this section’s own embedded sample-18-18.9.1, not repeated here)."
+      }
+    ],
+    "notes": "",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No braille exists at this location in the source (confirmed: textLines is the caption line alone, 14776, with the very next content being page furniture then §18.10's Samples list) — both runs already agreed on this (empty print.blocks/braille.lines). illustrates.rule corrected from both runs' own invented, non-existent \"18.9.2\" (there is no 18.9.2 anywhere in §18.9, which has only 18.9.1) to 18.9.1, the section's own only rule and the one this example is explicitly captioned as illustrating (\"(Print Only)\" — i.e. the case 18.9.1 says to omit)."
+}

@@ -1,0 +1,31 @@
+{
+  "id": "BANA 19.3.1d Sample",
+  "title": "A hyphen separates the numbers of each word; a space separates words.",
+  "pdfPages": [],
+  "textLines": [
+    15040,
+    15041
+  ],
+  "illustrates": {
+    "rule": "19.3.1d",
+    "quote": "A hyphen separates the numbers of each word; a space separates words."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed on the quoted wording (verbatim from the rule text) but both independently mis-set illustrates.rule to the fixed placeholder \"19.2.2\" (the Linear Key Format rule) regardless of which rule's own \"Sample:\" text this actually is — the same error in both, since both are the same model; corrected here by re-reading the source directly at the given textLines, matching this rule id (already embedded in the file's own name, following the §15 gold precedent's naming convention)."
+}

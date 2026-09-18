@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 18-13",
+  "title": "Example 18-13: Diagramming with Multiple Arrow Shafts",
+  "pdfPages": [
+    508
+  ],
+  "textLines": [
+    14738,
+    14747
+  ],
+  "illustrates": {
+    "rule": "18.8.3",
+    "quote": "Spatial Diagrams with Arrows and Multiple Shafts\na. Place the appropriate symbol of the arrow above the first letter of the word to which the arrow points. (See UEB, §3.2.)\nb. Use line mode to represent the arrow shaft. The line should end above the first letter of the word from which the arrow points. (See UEB, §16.2.3, Horizontal Line Mode.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The stadium crowd was *large* and *friendly.*"
+      },
+      {
+        "kind": "other",
+        "text": "A branching line above the sentence: a downward arrowhead points to \"crowd\", and two line-mode shafts drop from it to \"large\" and \"friendly\" (both italicized). Not modeled: F-189."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "The words 'large' and 'friendly' are italicized; an arrow diagram is drawn above the text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "          \"333333334333333334",
+      "          ;\\%      _        _",
+      ",! /adium cr[d 0 .1l>ge & .1frly4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14738-14747, margin 9). Both runs' own braille.lines omit the file's own final line (14747, a genuine trailing 40-blank-cell row, within the file's own declared textLines range and required by BANA 18.8.1) — added here as a 5th, trailing empty line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on lines 1-4 (confirmed correct by independent re-extraction) but BOTH independently dropped the file's own trailing blank line (14747, still within their own declared textLines end) — the same shared-model omission pattern flagged by this task's own brief (both are Gemini, not independent evidence): corrected here by re-deriving the full declared range from source directly, per this task's own explicit instruction not to trust run agreement alone. illustrates.rule already correct in both (18.8.3); quote unified to the rule's own text. Sentence's italics on 'large'/'friendly' confirmed by back-translation."
+}

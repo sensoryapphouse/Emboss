@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 21-7",
+  "title": "Print Guide Words on Facing Pages",
+  "pdfPages": [
+    561
+  ],
+  "textLines": [
+    16223,
+    16232
+  ],
+  "illustrates": {
+    "rule": "21.3.1d",
+    "quote": "Insert a transcriber’s note before an excerpt or facsimile to inform the reader when print shows only the first and last entry words on facing pages."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "braille | break\n88 | 89",
+        "features": "Illustration of an open book showing facing pages. Left page (88) has guide word 'braille' at the top left. Right page (89) has guide word 'break' at the top right. Pages are otherwise blank."
+      }
+    ],
+    "notes": "Print is just a conceptual illustration of two facing pages with page numbers 88 and 89 and guide words 'braille' and 'break'. 'text 444' in the braille is placeholder text representing the rest of the page contents.",
+    "surroundingText": "In the excerpt below, print guide words are centered at the beginning of each print page.",
+    "printFeatures": "Illustration of an open book showing facing pages."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                  brl                #hh",
+      "text 444",
+      "-------------------------------------#hi",
+      "                  br1k",
+      "text 444"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

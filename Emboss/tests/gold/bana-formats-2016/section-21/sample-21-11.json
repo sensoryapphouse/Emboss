@@ -1,0 +1,51 @@
+{
+  "id": "BANA Sample 21-11",
+  "title": "Dictionary with Sub- and Sub-subentries",
+  "pdfPages": [
+    596
+  ],
+  "textLines": [
+    17200,
+    17215
+  ],
+  "illustrates": {
+    "rule": "21.8.5",
+    "quote": "21.8.5 Multilevel Dictionary Entries. All of the following are treated as subentries, no matter how they appear in print:\n         a. Parts of speech: Each part of speech is treated as a\n            subentry when an entry includes more than one part-of-\n            speech label.\n         b. Each numbered or lettered definition.\n         c. Run-in derived entries, e.g., —flat-ly adv. —flat-ness n.\n         d. Synonyms or antonyms.\n         e. “See also” references when they apply to the entry and\n            all subentries.\n         f. Second-definition levels are treated as sub-subentries.\n         g. Words of foreign derivation are contracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "fum·ble /fúmbəl/ v. & n. ● v. 1 intr. (often foll. by at, with, for, after) use the hands awkwardly; grope about. 2 tr. a handle clumsily or nervously. b Football drop (the ball). ● n. an act of fumbling. —fum·bler n. fum·bling·ly adv.",
+        "features": "A single multilevel dictionary entry (parts of speech, numbered/lettered definitions, run-in derived entries as sub-/sub-subentries) — F-193/F-195, no construct exists to build this faithfully."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bullet symbols (●) before the main parts of speech. A long dash (—) before the first run-in derived entry. Centered dots (·) showing syllabification."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "fumble fum_4ble _/f^/umb_5l_/ ;v4 @& ;n4",
+      "  ;v4",
+      "    #a .19tr4 \"<(t5 foll4 by .7at1 )1 =1",
+      "        af.'\"> use ! h&s awkw>dly2 grope",
+      "        ab4",
+      "    #b .1tr4",
+      "      a h&le clumsily or n]v\\sly4",
+      "      ;b .1,football drop \"<! ball\">4",
+      "  ;n4 an act ( fumbl+4",
+      "  ,-^1fumbl] ^1fum_4bl] ;n4",
+      "        ^1fumbl+ly ^1fum_4bl+_4ly adv4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Sample 21-11: ...' title and 4 leading blank lines — removed. This sample starts mid-page at print line 5 (a genuine feature of the source, not an extraction error)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks)."
+}

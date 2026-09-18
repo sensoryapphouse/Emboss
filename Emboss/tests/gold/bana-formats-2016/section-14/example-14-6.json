@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 14-6",
+  "title": "Example 14-6: Unenclosed Stage Directions",
+  "pdfPages": [
+    390
+  ],
+  "textLines": [
+    11264,
+    11273
+  ],
+  "illustrates": {
+    "rule": "14.5.3d",
+    "quote": "Do not insert blank lines before or after stage directions or cues printed outside or between the lines of dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "JESSIE", "text": "JESSIE: It’s not a joke, Mama." },
+      { "kind": "stage-direction", "text": "Mama watches for a moment in silence." },
+      { "kind": "speech", "speaker": "MAMA", "text": "MAMA: That gun’s no good, you know. He broke it right before he died. He dropped it in the mud one day." }
+    ],
+    "notes": "A stage direction printed between two speeches, not enclosed in any punctuation; speaker names are in full capitals followed by a colon.",
+    "surroundingText": [],
+    "printFeatures": "Speaker names in full capitals followed by a colon; the stage direction between them is in italics in print (dropped per 14.5.3c since it is unenclosed and needs no distinction here)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,jessie3 ,x's n a joke1 ,mama4",
+      "      ,mama wat*es = a mo;t 9 sil;e4",
+      ",,mama3 ,t gun's no gd1 y \"k4 ,he broke",
+      "  x \"r 2f he di$4 ,he dropp$ x 9 ! mud",
+      "  \"o \"d4"
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 1 and 3-5 are dialogue at 1-3 margins (14.5.1a); line 2 is a stage direction between speeches at 7-7 margins (14.5.3a), with no blank line before or after it (14.5.3d) and no italic typeform (14.5.3c)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on print substance. pdfPages disagreed (A: 390, B: 391) — independently re-derived from the source's own page-footer positions (footer '14-6' at source line 238/text-line 11298 ends print page 14-6; this example's own textLines 11264-11273 fall entirely before that, on print page 14-6 itself) = pdf 390 (385 + (14-6)), confirming A. illustrates.quote: A quoted the actual rule 14.5.3d text; B merely repeated this example's own title (not a rule quote) — A's quote kept. Forward-translated through Emboss's translator ({type:'play'}x2 + {type:'stage'}, matching margins): EXACT MATCH (see differences.md)."
+}

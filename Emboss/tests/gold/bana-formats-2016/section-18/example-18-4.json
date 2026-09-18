@@ -1,0 +1,66 @@
+{
+  "id": "BANA Example 18-4",
+  "title": "Example 18-4: Commas Are Emphasized with Red Print",
+  "pdfPages": [
+    499
+  ],
+  "textLines": [
+    14403,
+    14415
+  ],
+  "illustrates": {
+    "rule": "18.3.3b",
+    "quote": "Ignore the emphasis when punctuation marks are emphasized in print with something other than italics, bold, underlining, or script. Insert a transcriber’s note to explain the change to print."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Use commas after words, phrases, and clauses that come at the beginning of sentences."
+      },
+      {
+        "kind": "note",
+        "text": "All commas are red."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "No, you cannot go home now."
+      },
+      {
+        "kind": "paragraph",
+        "continuation": true,
+        "text": "Following the applause, the soloist walked off the stage."
+      },
+      {
+        "kind": "paragraph",
+        "continuation": true,
+        "text": "When you are in doubt, ask for directions."
+      }
+    ],
+    "notes": "Three commas (after \"No\", \"applause\", \"doubt\") are printed in red; the given braille shows no distinguishing mark on any of them, matching \"ignore the emphasis\".",
+    "surroundingText": [],
+    "printFeatures": "Commas emphasized with red print (not italics/bold/underline/script)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,use commas af ^ws1 phrases1 & clauses",
+      "t come at ! 2g9n+ ( s5t;es4",
+      "      @.<,all commas >e r$4@.>",
+      "",
+      ",no1 y _c g home n[4",
+      ",foll[+ ! applause1 ! soloi/ walk$ (f !",
+      "  /age4",
+      ",:5 y >e 9 d\\bt1 ask = direc;ns4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14408-14415, margin 0); matches both runs byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording confirmed by back-translation. print.blocks ordered to match the given braille's own sequence (intro paragraph, THEN the transcriber's note, then the three example sentences) — an internal drafting slip here (not an A/B disagreement) had the note first. illustrates corrected to 18.3.3b’s own rule text (both runs already had the right rule id; A’s own quote was already this rule’s text, kept, B’s own duplicated the leading \"b.\" token, trimmed)."
+}

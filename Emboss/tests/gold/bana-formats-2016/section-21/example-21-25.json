@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 21-25",
+  "title": "Angle Brackets, Swung Dash",
+  "pdfPages": [
+    571
+  ],
+  "textLines": [
+    16595,
+    16602
+  ],
+  "illustrates": {
+    "rule": "21.8.2b",
+    "quote": "b. Dashes and Swung Dashes. Many dictionaries use the dash and/or the swung dash to replace or stand for the main entry word at certain points in the entries. Follow print for emphasis, number, and spacing of dashes."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "stay … 6. to keep even in a contest or rivalry <~ with the leaders>",
+        "features": "bold 'stay'. No thesaurus/dictionary construct (F-193) or devised-symbol mechanism exists for a swung dash standing in for the entry word inside angle brackets — recorded as not representable."
+      }
+    ],
+    "notes": "The swung dash has a space before and after it in print.",
+    "surroundingText": null,
+    "printFeatures": "bold 'stay'"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "/ay 444",
+      "  #f4 to keep ev5 9 a 3te/ or rivalry",
+      "    @<^2@9 ) ! l1d]s@>"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

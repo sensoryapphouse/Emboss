@@ -1,0 +1,81 @@
+{
+  "id": "BANA Example 10-26",
+  "title": "Partial Words",
+  "pdfPages": [
+    264
+  ],
+  "textLines": [
+    7686,
+    7698
+  ],
+  "illustrates": {
+    "rule": "10.6.12a",
+    "quote": "Use contractions in a word that has missing letters represented by an underscore or hyphens."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Select the correct prefix in each phrase."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "extra"
+          },
+          {
+            "text": "hemi"
+          },
+          {
+            "text": "over"
+          },
+          {
+            "text": "under"
+          }
+        ]
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1.\\_cast sky"
+          },
+          {
+            "level": 0,
+            "text": "2. southern \\_sphere"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "3. \\_\\_\\_\\_curricular sports (print shows this third item but it is struck through by a wavy torn-paper line; omitted from the given braille entirely, per B’s own summary note)"
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "Printed inside a ruled box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,select ! correct prefix 9 ea*",
+      "    phrase4",
+      "",
+      "extra hemi ov] \"u",
+      "",
+      "#a4 .-ca/ sky",
+      "#b4 s\\!rn .-sp\"h"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; item 3 (visible as \"curricular sports\" behind a torn-paper line, per gold-10-B’s own note) is not in the given braille and is recorded as 'other'."
+}

@@ -1,0 +1,107 @@
+{
+  "id": "BANA Sample 10-12",
+  "title": "Headings Added to Matching Lists",
+  "pdfPages": [
+    281
+  ],
+  "textLines": [
+    8176,
+    8199
+  ],
+  "illustrates": {
+    "rule": "10.9.2b",
+    "quote": "10.9.2 Matching Wide Columns b. Treat column headings that precede each list as cell-5 headings. When there are no print headings, insert a heading, enclosed in transcriber’s note indicators, using terms suggested in the directions."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Who did what? Before each name below, write the letter of the statement you associate with that person."
+      },
+      {
+        "kind": "note",
+        "text": "Name"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "1.",
+            "text": "Prince Henry"
+          },
+          {
+            "marker": "2.",
+            "text": "Columbus"
+          },
+          {
+            "marker": "3.",
+            "text": "Vasco de Gama"
+          },
+          {
+            "marker": "4.",
+            "text": "Bartholomew Diaz"
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Statement"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "was the first man to sail to the tip of Africa from Europe"
+          },
+          {
+            "marker": "b.",
+            "text": "was the first man to find a sea route to India"
+          },
+          {
+            "marker": "c.",
+            "text": "was an Italian who made great discoveries for Spain"
+          },
+          {
+            "marker": "d.",
+            "text": "set up a school for the study of navigation and geography"
+          }
+        ]
+      }
+    ],
+    "notes": "Print gives NO column headings at all for the two matching lists; per 10.9.2b braille synthesises \"Name\"/\"Statement\" headings (drawn from the directions’ own wording — \"write...each name below\" / \"the statement you associate\"), enclosed in transcriber’s-note indicators — the given braille’s own \"@.<,\\\"n@.>\"/\"@.<,/ate;t@.>\". Both A and B guessed \"Who\" for the first heading; back-translating the given braille’s own \"\\\"n\" with louis.backTranslate confirms it is \"name\", not \"who\" — corrected here.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,:o did :at8 ,2f ea* \"n 2l1 write !",
+      "    lr ( ! /ate;t y associate ) t p]son4",
+      "",
+      "    @.<,\"n@.>",
+      "#a4 ,pr9ce ,h5ry",
+      "#b4 ,columbus",
+      "#c4 ,vasco de ,gama",
+      "#d4 ,b>?olomew ,diaz",
+      "",
+      "    @.<,/ate;t@.>",
+      "a4 0 ! f/ man to sail to ! tip ( ,africa",
+      "  f ,europe",
+      ";b4 0 ! f/ man to f9d a sea r\\te to",
+      "  ,9dia",
+      ";c4 0 an ,italian :o made grt 4cov]ies =",
+      "  ,spa9",
+      ";d4 set up a s*ool = ! /udy ( naviga;n &",
+      "  geography"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8181-8198). Print: the synthesised first heading corrected from A/B’s shared guess \"Who\" to \"Name\" after back-translating the given braille (louis.backTranslate('\"N') = \"name\"); the file’s own bold citation title, present in A’s own print.blocks, is dropped here per this reconciliation’s convention — matching every other gold section — that a sample’s own citation title lives only in `title`/`id`, never a print.blocks heading, since the given braille has no row for it at all)."
+}

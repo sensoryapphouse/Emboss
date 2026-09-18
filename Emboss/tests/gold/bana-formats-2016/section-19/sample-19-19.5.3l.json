@@ -1,0 +1,31 @@
+{
+  "id": "BANA 19.5.3l Sample",
+  "title": "In the following crossword puzzle, each clue is followed by a transcriber-assigned column letter and row number. Numbers in parentheses at the end of each clue indicate the number of letters in the puzzle word. The clue letter/number and number of letters in the word are enclosed in transcriber’s note indicators. In the grid, a hyphen represents a square to be filled in, and a full cell represents an empty space.",
+  "pdfPages": [],
+  "textLines": [
+    15170,
+    15176
+  ],
+  "illustrates": {
+    "rule": "19.5.3l",
+    "quote": "In the following crossword puzzle, each clue is followed by a transcriber-assigned column letter and row number. Numbers in parentheses at the end of each clue indicate the number of letters in the puzzle word. The clue letter/number and number of letters in the word are enclosed in transcriber’s note indicators. In the grid, a hyphen represents a square to be filled in, and a full cell represents an empty space."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed on the quoted wording (verbatim from the rule text) but both independently mis-set illustrates.rule to the fixed placeholder \"19.2.2\" (the Linear Key Format rule) regardless of which rule's own \"Sample:\" text this actually is — the same error in both, since both are the same model; corrected here by re-reading the source directly at the given textLines, matching this rule id (already embedded in the file's own name, following the §15 gold precedent's naming convention)."
+}

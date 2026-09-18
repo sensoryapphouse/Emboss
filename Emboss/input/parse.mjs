@@ -1870,7 +1870,7 @@ export function parseDtbook(xmlStr) {
     return result;
   }
 
-  function inlineSegments(el, skipLists = false, excludeTags = null) {
+  function inlineSegments(el, skipLists = false, excludeTags = null, imageAsNote = false) {
     const hasExclude = excludeTags && typeof excludeTags.has === 'function';
     const segments = [];
     let text = '';
@@ -1915,7 +1915,29 @@ export function parseDtbook(xmlStr) {
           const tag = (child.localName || child.tagName || '').toLowerCase();
           const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
           if (tag === 'table' || tag === 'sidebar' || tag === 'brl' || (skipLists && (tag === 'list' || tag === 'ul' || tag === 'ol'))) continue;
-          if (hasExclude && excludeTags.has(tag)) { if (IMAGE_TAGS.has(tag)) breakWord(); continue; }   // "kr<img/>n" is not "krn"
+          if (hasExclude && excludeTags.has(tag)) {
+            // BANA Formats §10.11.1 ("An embedded transcriber's note (TN) with a brief
+            // description is used in material that is partially or totally pictures",
+            // Example 10-31: `,! @.<butt]fly@.> flew s\? = ! w9t]4` for print "The
+            // [picture of a] butterfly flew south for the winter."): an exercise item's
+            // own <img>/<image> becomes an embedded-TN segment right where it sat, not a
+            // silently dropped word — only when the caller opts in (imageAsNote) and the
+            // image actually has a description to show; a decorative image with no alt
+            // text is still just a word boundary, as before.
+            if (imageAsNote && (tag === 'img' || tag === 'image')) {
+              const alt = ((child.getAttribute && child.getAttribute('alt')) || '').replace(/\s+/g, ' ').trim();
+              if (alt) {
+                flush();
+                const seg = { type: 'imgnote', text: alt };
+                const src = (child.getAttribute && child.getAttribute('src')) || '';
+                if (src) seg.src = src;                        // round-trip only (A29/A26 convention); not rendered
+                segments.push(seg);
+                continue;
+              }
+            }
+            if (IMAGE_TAGS.has(tag)) breakWord();
+            continue;
+          }   // "kr<img/>n" is not "krn"
           if (PAGENUM_TAGS.has(tag)) {
             flush();
             const pn = pagenumBlock(child);
@@ -2072,6 +2094,13 @@ export function parseDtbook(xmlStr) {
       isIndex = [...(child.childNodes || [])].some((li) => li.nodeType === 1 && [...(li.childNodes || [])].some((c) => c.nodeType === 1
         && (c.localName || c.tagName || '').toLowerCase() === 'lic' && /(^|[-_\s])index([-_\s]|$)/.test(((c.getAttribute && c.getAttribute('class')) || '').toLowerCase())));
     }
+    // A DTBook source can mark exercise material with class="bai-exercise" on the whole
+    // <list> (one class, applying to every <li>) or on each <li> individually — the
+    // per-item check below already handles the latter; this handles the former so a real
+    // `<list class="bai-exercise" type="ol">` with plain, unclassed <li> children still
+    // takes the exercise-item path (BANA §10.11, F-229) instead of falling through to an
+    // ordinary numbered list that drops any inline <img>.
+    const listIsExercise = listClass.toLowerCase().includes('bai-exercise');
     let items = [];
     let counter = isOl ? (parseInt((child.getAttribute && child.getAttribute('start')) || '1', 10) || 1) : 1;   // DTBook @start
     let detectedKind = isToc ? 'toc' : (isIndex ? 'index' : (listTypeAttr.toLowerCase() === 'pl' ? 'plain' : null));
@@ -2106,6 +2135,12 @@ export function parseDtbook(xmlStr) {
     };
 
     const NUMBER_PREFIX_RE = /^\s*(\d+|[a-zA-Z]|[ivxlcdm]+)[\.\)]\s+/;
+    // A bai-exercise item's own printed marker can be plain ("1.", "a.") like
+    // NUMBER_PREFIX_RE, or parenthesized ("(1)", "(a)") — BANA §10.4.2b's own worked
+    // sub-item convention (see nimas_exercise_index.test.mjs) — so the exercise-item
+    // marker-synthesis fallback below must recognise both, or it would double-number an
+    // already-marked parenthesized sub-item.
+    const EXERCISE_MARKER_RE = /^\s*\(?(\d+|[a-zA-Z]|[ivxlcdm]+)[\.\)]\s+/;
     const BULLET_PREFIX_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7]+\s+/;
 
     for (let li = child.firstChild; li; li = li.nextSibling) {
@@ -2307,21 +2342,42 @@ export function parseDtbook(xmlStr) {
         continue;
       }
 
-      if (liClass.includes('bai-exercise')) {
+      if (liClass.includes('bai-exercise') || listIsExercise) {
         detectedKind = 'exercise';
-        const segs = segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS));
+        // imageAsNote (BANA §10.11.1/Example 10-31): an <img> inside an exercise item
+        // becomes an embedded transcriber's-note segment instead of being dropped (F-229).
+        const segs = segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS, true));
         const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_AND_TABLE_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'linenum' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'imgnote' || (s.text && s.text.includes('\n')))) item.segments = segs;
+        // BANA §10.4: an exercise item's own printed number/letter is usually baked
+        // directly into its text ("1. Which…" — kept verbatim, no separate marker field,
+        // matching the real bai-exercise convention this schema otherwise preserves
+        // unchanged) but a genuinely ordered list (type="ol") whose item text carries no
+        // such literal marker still needs its print numbering shown — synthesize one
+        // exactly like the ordinary numbered-list branch below does, so a bai-exercise
+        // list marked only at the <list> level (not per-<li>) doesn't silently lose it.
+        if (isOl) {
+          if (!EXERCISE_MARKER_RE.test(t)) item.marker = synthesizeOrderedMarker(counter, enumAttr);
+          counter++;
+        }
         items.push(item);
         lastTopItem = item;
 
-        emitTables(liTables.before);
+        // An <img> already folded into this item's own embedded TN segment (above) must
+        // not also be split out as a separate standalone graphic block — same criteria
+        // (has alt text) as the imageAsNote branch of inlineSegments used to consume it.
+        const consumedByImgNote = (el) => {
+          const et = (el.localName || el.tagName || '').toLowerCase();
+          if (et !== 'img' && et !== 'image') return false;
+          return !!(((el.getAttribute && el.getAttribute('alt')) || '').replace(/\s+/g, ' ').trim());
+        };
+        emitTables(liTables.before.filter((el) => !consumedByImgNote(el)));
         for (const cl of childLists) {
           addSubItems(parseSingleList(cl, effLevel + 1, null));
         }
-        emitTables(liTables.after);
+        emitTables(liTables.after.filter((el) => !consumedByImgNote(el)));
         for (const b of liPn.after) emitPagenum(b);
         continue;
       }
@@ -2370,6 +2426,16 @@ export function parseDtbook(xmlStr) {
           if (segs.length && segs[0].text) {
             segs[0].text = segs[0].text.replace(BULLET_PREFIX_RE, '');
           }
+        } else if (listTypeAttr.toLowerCase() === 'ul') {
+          // A6 / BANA 8.6.2 ("Retain bullets whenever they are used in lists"): a
+          // `<list type="ul">` item whose print bullet is not a literal leading
+          // character in the source text (e.g. a CSS/print bullet with no glyph
+          // captured in the markup) still needs a bullet in braille — default to the
+          // primary bullet symbol (formatList already renders '•' as '_4') rather than
+          // silently dropping it. nimas-export.mjs already treats a plain '•' marker as
+          // implicit (keepMarkers:false, `<list type="ul">` only) so this round-trips
+          // without ever writing a literal bullet glyph into the exported text.
+          itemMarker = '•';
         }
       }
 

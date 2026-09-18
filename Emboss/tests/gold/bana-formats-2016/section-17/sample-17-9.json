@@ -1,0 +1,68 @@
+{
+  "id": "BANA Sample 17-9",
+  "title": "Sample 17-9: Word Usage List",
+  "pdfPages": [
+    486
+  ],
+  "textLines": [
+    14057,
+    14071
+  ],
+  "illustrates": {
+    "rule": "17.6.1b",
+    "quote": "b. Leave one blank cell between an entry word and its definition when the entry word is followed by punctuation, or if the definition starts with an uppercase letter."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Glossary of Usage"
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "This glossary is intended to help you with some of the most commonly troublesome words and phrases."
+      },
+      {
+        "kind": "glossary",
+        "items": [
+          {
+            "term": "advice, advise:",
+            "def": "_Advice_ is a noun; _advise_ is a verb."
+          },
+          {
+            "term": "affect, effect:",
+            "def": "As verbs, to _affect_ is to influence, to _effect_ is to bring about. _Effect_ is more commonly used as a noun meaning “result.”"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 heading, a flush (1-1) intro paragraph directly beneath it (no blank line, matching §1.9.3's cell-5/7-heading exception), then two phrase-entry definitions, each entry already ending in its own punctuation (a colon) — exactly 17.6.1b's own one-blank-cell case (a colon already supplies the punctuation the clause names, so glossarySegments' single space after it is correct here).",
+    "surroundingText": [],
+    "printFeatures": "Bold+italic heading; bold entry words, italic word-mentions inside definitions."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,gloss>y ( ,usage",
+      ",? gloss>y is 9t5d$ to help y ) \"s ( !",
+      "mo/ commonly tr\\ble\"s ^ws & phrases4",
+      "",
+      "advice1 advise3 .1,advice is a n\\n2",
+      "  .1advise is a v]b4",
+      "a6ect1 e6ect3 ,z v]bs1 to .1a6ect is to",
+      "  9flu;e1 to .1e6ect is to br+ ab4",
+      "  .1,e6ect is m commonly us$ z a n\\n",
+      "  m1n+ 8result40"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: corrected from both runs' generic '17.6.1' to the more specific '17.6.1b' — unlike Sample 17-8 (phrase entries, no punctuation, two blank cells, clause c), this sample's own entry words already end in a colon (single-word terms followed by punctuation), and the given braille shows only ONE blank cell (not two) between entry and definition, exactly clause b's own case, confirmed by re-reading the given braille itself, not by either run's own (unrefined) '17.6.1'. Modeled as a 'glossary' block, expect MATCH: the entry already ends in a colon, so glossarySegments' own `/[:—-]$/` test suppresses its auto-inserted colon and leaves exactly one space — the one case this section's glossary mechanism gets right."
+}

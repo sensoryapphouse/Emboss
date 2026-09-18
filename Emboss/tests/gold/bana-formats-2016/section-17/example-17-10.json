@@ -1,0 +1,40 @@
+{
+  "id": "BANA Example 17-10",
+  "title": "Example 17-10: Inserted Letters",
+  "pdfPages": [
+    474
+  ],
+  "textLines": [
+    13743,
+    13748
+  ],
+  "illustrates": {
+    "rule": "17.12.1",
+    "quote": "Inserted Letters. Spellers often indicate replacement letters within a word to show other spellings. a. Transcribe words with inserted letters in uncontracted braille. b. Follow print for use of enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "`write writ(e)ing`"
+      }
+    ],
+    "notes": "A word and its altered spelling with an inserted letter shown in parentheses, on a single line.",
+    "surroundingText": [],
+    "printFeatures": "Plain text, no heading."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "write writ\"<e\">ing"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged. Modeled as one wholly-uncontracted paragraph (17.12.1a, 'done'); the print parentheses pass through translate() as an ordinary enclosure symbol (17.12.1b, 'done'). Expect MATCH."
+}

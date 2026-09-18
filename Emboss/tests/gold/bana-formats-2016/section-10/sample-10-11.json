@@ -1,0 +1,98 @@
+{
+  "id": "BANA Sample 10-11",
+  "title": "Wide Columns Changed to Lists",
+  "pdfPages": [
+    280
+  ],
+  "textLines": [
+    8147,
+    8169
+  ],
+  "illustrates": {
+    "rule": "10.9.2a",
+    "quote": "10.9.2 Matching Wide Columns a. If the columns are too wide to fit side by side across the width of the page, change the columns to list format with each list beginning in cell 1."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "See if you know what each word below means. Match each word in column 1 with its meaning in column 2."
+      },
+      {
+        "kind": "note",
+        "text": "1"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "1.",
+            "text": "skimmed"
+          },
+          {
+            "marker": "2.",
+            "text": "mineral"
+          },
+          {
+            "marker": "3.",
+            "text": "fuel"
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "2"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "any natural substance, such as coal, that is not a plant or animal"
+          },
+          {
+            "marker": "b.",
+            "text": "removed floating matter from the surface of liquid"
+          },
+          {
+            "marker": "c.",
+            "text": "something that produces energy"
+          }
+        ]
+      }
+    ],
+    "notes": "Print shows two wide columns headed only by the bare numbers \"1\"/\"2\" (no other column heading); per 10.9.2a-b these become two separate lists, each beginning in cell 1, with the bare number kept as their own cell-5 heading (no TN wrapping needed since print DOES give a heading, however minimal — contrast Sample 10-12’s own no-heading case).",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,see if y \"k :at ea* ^w 2l m1ns4",
+      "    ,mat* ea* ^w 9 column #a ) xs m1n+ 9",
+      "    column #b4",
+      "",
+      "    #a",
+      "#a4 skimm$",
+      "#b4 m9]al",
+      "#c4 fuel",
+      "",
+      "    #b",
+      "a4 any natural sub/.e1 s* z coal1 t is n",
+      "  a plant or animal",
+      ";b4 remov$ float+ matt] f ! surface (",
+      "  liquid",
+      ";c4 \"s?+ t produces 5]gy",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8152-8168). Print unchanged from A/B."
+}

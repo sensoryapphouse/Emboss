@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-27",
+  "title": "Compound Hyphenated Write-on-Lines",
+  "pdfPages": [
+    264
+  ],
+  "textLines": [
+    7702,
+    7707
+  ],
+  "illustrates": {
+    "rule": "10.6.12b",
+    "quote": "Follow print when the underscore is part of a compound hyphenated word."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "Driving on a \\_-\\_ highway makes me nervous."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",driv+ on a .--.- hi<way makes me n]v\\s4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

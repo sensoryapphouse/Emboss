@@ -1,0 +1,61 @@
+{
+  "id": "BANA Example 19-1",
+  "title": "Example 19-1: Number-Coded Words",
+  "pdfPages": [
+    519
+  ],
+  "textLines": [
+    15042,
+    15056
+  ],
+  "illustrates": {
+    "rule": "19.3.1d",
+    "quote": "d. Insert a transcriber’s note explaining the puzzle format. Sample: A hyphen separates the numbers of each word; a space separates words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "In this puzzle, code numbers printed under dashes represent letters. In braille, a hyphen separates the numbers of each word; a space separates words.",
+        "features": "Decoded from the given braille (back-translated) — neither transcription run captured this transcriber's note as its own print.blocks entry at all; both jumped straight to the riddle question and the number puzzle. BANA 19.3.1d requires exactly this kind of note before the puzzle."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "How can you tell which end of the worm is the head?",
+        "features": "Printed above the puzzle, in a ruled box; braille shows it flush (zero indent), so built blocked:true."
+      },
+      {
+        "kind": "other",
+        "text": "7 4 33 12 8 15   32 31\n29 20 9   10 24 17   5 42 18 22 21\n6 14 3   11 47 19 13 45 40",
+        "features": "Three lines of code numbers inside the box; each number has its own short blank line above it for writing the decoded letter. Verified against the PDF page image (p.519): the print's own row breaks are exactly as shown here — they do NOT match the braille's own line-wrap (the braille passage moves the last hyphenated group of print row 1 (\"29-20-9\") and of print row 2 (\"6-14-3\") up onto the END of the PRECEDING braille line instead, confirmed by decoding the given braille's own hyphenated number groups letter-by-letter: this is the braille reflowing a 40-cell passage, per 19.3.1c \"do not divide words between braille lines\" — not a print transcription error in either run."
+      }
+    ],
+    "notes": "The puzzle occupies a ruled box in print; the note explaining the code and the riddle question sit above it.",
+    "surroundingText": [],
+    "printFeatures": "A transcriber's-note-driven number-substitution puzzle: a question, then three rows of hyphen-grouped numbers standing for letters, each with a blank line to fill in."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,9 ? puzzle1 code numb]s pr9t$",
+      "    \"u da%es repres5t lrs4 ,9 brl1 a",
+      "    hyph5 sep>ates ! numb]s ( ea* ^w2 a",
+      "    space sep>ates ^ws4@.>",
+      "",
+      ",h[ c y tell : 5d ( ! worm is ! h1d8",
+      "",
+      "#g-#d-#cc-#ab-#h-#ae #cb-#ca #bi-#bj-#i",
+      "#aj-#bd-#ag #e-#db-#ah-#bb-#ba #f-#ad-#c",
+      "#aa-#dg-#ai-#ac-#de-#dj"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived directly from source-lines 15047-15056 (fixed 9-space Example margin stripped, U+2800→space) for this reconciliation — confirmed verbatim. Lines 1-4 (the transcriber's note) sit at a DEEPER indent (6 blank cells on the open line, 4 on the runover — i.e. braille cell 7 first line / cell 5 runover) than lines 6, 8-10 (cell 1) — kept exactly as the source shows; this is a genuine feature of this one worked example, not a stripping error (re-verified by direct byte count against the raw source file)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B already agreed, byte-identical, and this reconciliation's own independent re-extraction from source-lines 15047-15056 confirms it exactly). Print side: neither run modeled the transcriber's note that BANA 19.3.1d requires and that the given braille (lines 1-4) actually carries — recovered here by back-translating those four lines. The riddle question and the three rows of print numbers were both already correct in A and B (byte-for-byte identical); the number groupings were independently re-verified against the PDF page image (p.519) and against the given braille's own hyphenated groups, confirming the print's own row breaks are correct as originally transcribed even though they differ from the braille's own reflowed line breaks (19.3.1c)."
+}

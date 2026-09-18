@@ -1,0 +1,72 @@
+{
+  "id": "BANA Sample 17-15",
+  "title": "Sample 17-15: Word Equation Using Mathematical Symbols",
+  "pdfPages": [
+    492
+  ],
+  "textLines": [
+    14198,
+    14213
+  ],
+  "illustrates": {
+    "rule": "17.13.1",
+    "quote": "Mathematical Symbols. Spellers often use mathematical symbols to teach word formation. a. Transcribe all text in word formation “equations” in uncontracted braille. c. Use the appropriate symbols when mathematical indicators are used in discussions of word formation. List the symbols on the Special Symbols page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Word Math"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Complete each equation to make a word list."
+      },
+      {
+        "kind": "note",
+        "text": "Symbols used: + plus sign; = equals sign; – minus sign"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "`besides – sides + fore = ______`"
+          },
+          {
+            "marker": "b.",
+            "text": "`belief – ief + ong = ______`"
+          }
+        ]
+      }
+    ],
+    "notes": "A bold-italic heading, directions, a transcriber's note listing the plus/equals/minus symbols used, then a 2-item lettered list of fill-in-the-blank word equations, wholly uncontracted, with a generic blank standing in for the answer.",
+    "surroundingText": [],
+    "printFeatures": "Bold italic heading; a numbered list of word equations with an underline blank."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,^w ,ma?",
+      "    ,complete ea* equa;n to make a ^w",
+      "    li/4",
+      "      @.<,symbols us$3",
+      "",
+      ".=\"6 ,plus sign",
+      ".=\"7 ,equals sign",
+      ".=\"- ,m9us sign@.>",
+      "",
+      "#a4 besides \"- sides \"6 fore \"7 .-",
+      "#b4 belief \"- ief \"6 ong \"7 .-"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.13.1', matches the cross-reference embedded within this rule). Modeled with a standalone 'note' block (block-level TN, 'done') listing the symbols, then a wholly-uncontracted lettered list; the print/en-dash minus sign and blank-answer placeholder are the file's own expected points of divergence (minus-sign glyph choice; the generic blank-fill symbol, as in Example 17-4)."
+}

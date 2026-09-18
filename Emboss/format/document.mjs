@@ -670,6 +670,10 @@ function groupSegments(segments) {
       groups.push({ linenum: seg, len: String(seg.text ?? '').length });
       continue;
     }
+    if (seg.type === 'imgnote') {
+      groups.push({ imgnote: seg, len: String(seg.text ?? '').length });
+      continue;
+    }
     const t = String(seg.text ?? '').replace(/[^\S\n]+/g, ' ');    // collapse horizontal space runs; keep \n
     if (!t) continue;
     const last = groups[groups.length - 1];
@@ -760,6 +764,9 @@ function segmentsToBraille(segments, o, lineNumbers = false) {
   for (const g of groupSegments(segments)) {
     if (g.noteref) { braille += noterefBraille(g.noteref, o); continue; }
     if (g.linenum) { if (lineNumbers) braille += lineNumberWord(g.linenum, o); continue; }
+    // BANA 10.11.1: an image inside exercise material becomes an embedded transcriber's
+    // note (TN indicators around its description) right where the image sat.
+    if (g.imgnote) { braille += TN_OPEN + o.translate(String(g.imgnote.text ?? '')).trim() + TN_CLOSE; continue; }
     if (g.math) {
       if (!o.mathToBrf) continue;
       try { const brf = o.mathToBrf(g.math); if (brf) braille += brf; }
@@ -832,6 +839,21 @@ function formatTranscriberNote(block, o) {
 // (§16.9) and UKAAF (B004 D) keep a blank line before each note.
 const NOTE_SEPARATOR = '"333333';
 const noteLead = (block, o) => (isBanaOpts(o) && block.kind !== 'endnote' ? (block.noteRunStart ? [NOTE_SEPARATOR] : []) : ['']);
+// A source note is sometimes already transcribed with its own reference mark as the first
+// characters of its body (a real print footnote conventionally restates its number/symbol
+// there, e.g. `note_references.test.mjs`'s `<note id="n1"><p>1 First note.</p></note>`, or a
+// note built with the mark as its own leading `noteref` segment) — in either case the mark
+// must not be added again. Checks only the opening paragraph (the one §16.5.1/16.2.1's
+// restated mark belongs to).
+function noteBodyStartsWithMark(block, mark) {
+  const m = String(mark ?? '').trim();
+  if (!m) return false;
+  const first = (Array.isArray(block.blocks) && block.blocks.length) ? block.blocks[0] : block;
+  const leadText = Array.isArray(first.segments) && first.segments.length
+    ? String(first.segments[0].text ?? '')
+    : String(first.text ?? '');
+  return leadText.trimStart().startsWith(m);
+}
 // F-113 / BANA 16.5.1d: "Use 1-3 margins; for additional paragraphs in a note, use 5-3
 // margins." Each of a multi-paragraph note's blk.blocks (parse.mjs's pushNote) is rendered
 // directly at its own margin — first cell 1 (0,2) for the opening paragraph, first cell 5
@@ -841,18 +863,22 @@ const noteLead = (block, o) => (isBanaOpts(o) && block.kind !== 'endnote' ? (blo
 function formatFootnote(block, o) {
   const w = o.width || 38;
   const out = noteLead(block, o);
+  // BANA 16.5.1/16.2.1: the note body begins with the SAME reference mark used at its point
+  // of reference in the text (Example 16-1: text `,hamlet"9` / note `"9,o!llo`; numbered
+  // notes open `;9#a`) — only the opening paragraph gets it, never a continuation paragraph.
+  const markBrl = (block.noteMark && !noteBodyStartsWithMark(block, block.noteMark)) ? noterefBraille({ text: block.noteMark }, o) : '';
   if (Array.isArray(block.blocks) && block.blocks.length) {
     block.blocks.forEach((cb, i) => {
       const body = cb.segments ? segmentsToBraille(cb.segments, o) : o.translate(String(cb.text ?? ''));
       if (!body.trim()) return;
       const { first, runover } = (i > 0 && isBanaOpts(o)) ? { first: 4, runover: 2 } : { first: 0, runover: 2 };
-      out.push(...wrapCells(body, w, first, runover));
+      out.push(...wrapCells(i === 0 ? markBrl + body : body, w, first, runover));
     });
   } else if (Array.isArray(block.segments)) {
     const body = segmentsToBraille(block.segments, o);
-    out.push(...wrapCells(body, w, 0, 2));
+    out.push(...wrapCells(markBrl + body, w, 0, 2));
   } else if (block.text != null && String(block.text).trim()) {
-    out.push(...wrapCells(o.translate(String(block.text)), w, 0, 2));
+    out.push(...wrapCells(markBrl + o.translate(String(block.text)), w, 0, 2));
   }
   const lines = out.map((l) => l.replace(/\s+$/, ''));
   if (lines[0] === NOTE_SEPARATOR && lines.length > 1) Object.defineProperty(lines, 'keepGroups', { value: [[0, 1]] });
@@ -2141,7 +2167,7 @@ function tcJoined(o, parts, lineNumbers = false) {
     let c = base;
     for (const g of segs || []) {
       if (!g) continue;
-      if (g.type === 'math' || g.type === 'noteref' || g.type === 'linenum') {
+      if (g.type === 'math' || g.type === 'noteref' || g.type === 'linenum' || g.type === 'imgnote') {
         const len = g.type === 'math' ? (g.latex ? `$${g.latex}$` : '⟨equation⟩').length : String(g.text ?? '').length;
         flat.push(g);
         for (let i = 0; i < len; i++) charSrc.push(unit == null ? null : { u: unit, c: c + i });
@@ -2168,6 +2194,15 @@ function tcJoined(o, parts, lineNumbers = false) {
       const brl = noterefBraille(g.noteref, o);
       s += brl;
       for (let i = 0; i < brl.length; i++) src.push(charSrc[pos + Math.min(i, Math.max(0, g.len - 1))] ?? null);
+      pos += g.len;
+      continue;
+    }
+    if (g.imgnote) {
+      // Mirror segmentsToBraille's TN wrapping; no per-character source (synthesized
+      // from the image's own alt text, not a position in the item's print text).
+      const brl = TN_OPEN + o.translate(String(g.imgnote.text ?? '')).trim() + TN_CLOSE;
+      s += brl;
+      for (let i = 0; i < brl.length; i++) src.push(null);
       pos += g.len;
       continue;
     }
@@ -2479,19 +2514,23 @@ function traceBlock(block, o, atStart, unit = 0) {
     case 'footnote': {
       const w = o.width || 38;
       const out = noteLead(block, o).map((l) => (l ? tcDeco(l) : tcBlank));
+      // Mirror formatFootnote's markBrl: BANA 16.5.1/16.2.1, opening paragraph only.
+      const markDeco = (block.noteMark && !noteBodyStartsWithMark(block, block.noteMark)) ? tcDeco(noterefBraille({ text: block.noteMark }, o)) : null;
+      const prepend = (tr) => (markDeco ? { s: markDeco.s + tr.s, src: [...markDeco.src, ...tr.src] } : tr);
       if (block.blocks && block.blocks.length) {
         // Mirror formatFootnote: 1-3 for the opening paragraph, 5-3 (BANA) after it (F-113).
         block.blocks.forEach((cb, i) => {
-          const tr = cb.segments ? tcSegs(o, cb.segments, unit) : tcRun(o, cb.text || '', null, unit, 0);
+          let tr = cb.segments ? tcSegs(o, cb.segments, unit) : tcRun(o, cb.text || '', null, unit, 0);
           if (!tr.s) return;
+          if (i === 0) tr = prepend(tr);
           const { first, runover } = (i > 0 && isBanaOpts(o)) ? { first: 4, runover: 2 } : { first: 0, runover: 2 };
           out.push(...tcWrap(o, tr, w, first, runover));
         });
       } else if (block.segments) {
-        const seg = tcSegs(o, block.segments, unit);
+        const seg = prepend(tcSegs(o, block.segments, unit));
         out.push(...tcWrap(o, seg, w, 0, 2));
       } else if (block.text && block.text.trim()) {
-        const tr = tcRun(o, block.text, null, unit, 0);
+        const tr = prepend(tcRun(o, block.text, null, unit, 0));
         out.push(...tcWrap(o, tr, w, 0, 2));
       }
       return out.map((x) => tcRstrip(x));
@@ -3177,6 +3216,34 @@ function noteLayout(blocks, isBana) {
   return { order, runStart };
 }
 
+// BANA Formats §16.5.1 / §16.2.1: a note's body opens with the SAME reference mark used at
+// its point of reference in the text (Example 16-1: text `,hamlet"9` / note `"9,o!llo`;
+// numbered notes open `;9#a` the same way, §16.2.1). A `<note>` element's own content never
+// carries that mark literally (`pushNote`, `Emboss/input/parse.mjs`, keeps only the note's
+// print text) — it is the referencing `noteref` segment (carrying `idref` pointing at the
+// note's own `id`) that records it. `findNoteMarks` walks the whole document tree once (deep,
+// so a noteref nested in a list item, table cell or heading is found too, not only a
+// top-level paragraph) and maps each referenced note id to the mark text of the FIRST
+// noteref that points at it, in document order — mirroring how a real source can only have
+// been transcribed with one such mark per note.
+function findNoteMarks(blocks) {
+  const marks = new Map();
+  const walk = (node) => {
+    if (Array.isArray(node)) { for (const x of node) walk(x); return; }
+    if (!node || typeof node !== 'object') return;
+    if (node.type === 'noteref' && node.idref) {
+      const id = String(node.idref);
+      if (!marks.has(id)) {
+        const mark = String(node.text ?? '').trim();
+        if (mark) marks.set(id, mark);
+      }
+    }
+    for (const k in node) walk(node[k]);
+  };
+  walk(blocks);
+  return marks;
+}
+
 // A block's keep-together groups (lines.keepGroups = [[first, last], …] line indexes, set by
 // formatListed) as a per-line group number, or null.
 function keepGroupIndex(lines) {
@@ -3346,6 +3413,7 @@ function buildDocPages(doc, o) {
   o.lineNumberWidth = lineNumbers.width;                 // the text of every numbered line ends 2 cells before the widest number
   const firstAsterism = isBana ? blocks.findIndex((b) => b && (b.type === 'break' || b.type === 'indicator') && b.kind === 'asterism' && !b.text) : -1;
   const { order, runStart } = noteLayout(blocks, isBana);
+  const noteMarks = findNoteMarks(blocks);               // BANA 16.5.1/16.2.1: a note's own opening reference mark
   let content = [], contentBlock = [], contentCells = [], contentKeep = [];
   let atStart = true;
   for (const bi of order) {
@@ -3355,6 +3423,7 @@ function buildDocPages(doc, o) {
     if (bi === firstAsterism) fb = { ...fb, tdNote: true };                             // explain the symbol at first use
     if (bi === lineNumbers.first) fb = { ...fb, lnNote: true };                         // explain line numbers at first use (A30)
     if (runStart.has(bi)) fb = { ...fb, noteRunStart: true };                           // note separation line (§16.5.1a)
+    if (block.type === 'footnote' && block.id && noteMarks.has(block.id)) fb = { ...fb, noteMark: noteMarks.get(block.id) };   // §16.5.1/16.2.1: repeat the reference mark
     let lines = null, srcs = null;
     const cacheKey = o.blockCache ? getBlockSignature(fb, o, atStart) : null;
     if (cacheKey && o.blockCache.has(cacheKey)) {
@@ -3478,6 +3547,7 @@ async function buildDocPagesAsync(doc, o) {
   o.lineNumberWidth = lineNumbers.width;                 // the text of every numbered line ends 2 cells before the widest number
   const firstAsterism = isBana ? blocks.findIndex((b) => b && (b.type === 'break' || b.type === 'indicator') && b.kind === 'asterism' && !b.text) : -1;
   const { order, runStart } = noteLayout(blocks, isBana);
+  const noteMarks = findNoteMarks(blocks);               // BANA 16.5.1/16.2.1: a note's own opening reference mark
   let content = [], contentBlock = [], contentCells = [], contentKeep = [];
   let atStart = true;
   for (let oi = 0; oi < order.length; oi++) {
@@ -3494,6 +3564,7 @@ async function buildDocPagesAsync(doc, o) {
     if (bi === firstAsterism) fb = { ...fb, tdNote: true };                             // explain the symbol at first use
     if (bi === lineNumbers.first) fb = { ...fb, lnNote: true };                         // explain line numbers at first use (A30)
     if (runStart.has(bi)) fb = { ...fb, noteRunStart: true };                           // note separation line (§16.5.1a)
+    if (block.type === 'footnote' && block.id && noteMarks.has(block.id)) fb = { ...fb, noteMark: noteMarks.get(block.id) };   // §16.5.1/16.2.1: repeat the reference mark
     let lines = null, srcs = null;
     const cacheKey = o.blockCache ? getBlockSignature(fb, o, atStart) : null;
     if (cacheKey && o.blockCache.has(cacheKey)) {

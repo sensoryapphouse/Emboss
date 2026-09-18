@@ -1,0 +1,44 @@
+{
+  "id": "BANA Example 21-34",
+  "title": "Superscript Numbers Before Entry Words",
+  "pdfPages": [
+    575
+  ],
+  "textLines": [
+    16741,
+    16749
+  ],
+  "illustrates": {
+    "rule": "21.8.6c",
+    "quote": "Insert a transcriber’s note when the superscript numbers appear before the entry words in print."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "¹live /lĭv/ v. intr. To be alive; exist\n²live /līv/ adj. Having life; alive: live animals",
+        "features": "Superscript numbers before the entry word. F-199: nothing repositions a superscript number that precedes the entry word in print to follow it in braille — recorded as not representable rather than hand-moved to imitate the rule's own required OUTPUT rather than its INPUT."
+      }
+    ],
+    "notes": "Dictionary entries with superscript numbers preceding the entry word.",
+    "surroundingText": null,
+    "printFeatures": "Superscript numbers before entry words"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "live;9#a _/l@+iv_/ ;v4 9tr4 ,to 2 alive2",
+      "  exi/",
+      "live;9#b _/l@-iv_/ adj4 ,hav+ life2",
+      "  alive3 live animals"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

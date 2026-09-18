@@ -1,0 +1,92 @@
+{
+  "id": "BANA Sample 10-5",
+  "title": "Word List for Multiple Questions",
+  "pdfPages": [
+    274
+  ],
+  "textLines": [
+    8015,
+    8029
+  ],
+  "illustrates": {
+    "rule": "10.7.2c",
+    "quote": "Follow print if the word list is in columns. Do not use guide dots."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Use the words below to fill in the blanks."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "Nixon"
+          },
+          {
+            "text": "Jefferson"
+          },
+          {
+            "text": "Washington"
+          },
+          {
+            "text": "Clinton"
+          },
+          {
+            "text": "Carter"
+          },
+          {
+            "text": "Lincoln"
+          }
+        ]
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Thomas \\_"
+          },
+          {
+            "level": 0,
+            "text": "2. George \\_"
+          },
+          {
+            "level": 0,
+            "text": "3. Jimmy \\_"
+          },
+          {
+            "level": 0,
+            "text": "4. Bill \\_"
+          }
+        ]
+      }
+    ],
+    "notes": "Print lays the six-name word list out in two 3×2 columns; per 10.7.2c braille follows print’s own column shape with no guide dots (built here as a single flat list — Emboss has no side-by-side list-column layout, F-34).",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,use ! ^ws 2l to fill 9 ! blanks4",
+      "",
+      ",nixon   ,je6]son  ,wa%+ton",
+      ",cl9ton  ,c>t]     ,l9coln",
+      "",
+      "#a4 ,?omas .-",
+      "#b4 ,george .-",
+      "#c4 ,jimmy .-",
+      "#d4 ,bill .-"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8020-8028). Print unchanged from A/B."
+}

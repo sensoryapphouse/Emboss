@@ -1,0 +1,31 @@
+{
+  "id": "BANA 14.5.2b Sample",
+  "title": "Sample: Solo",
+  "pdfPages": [],
+  "textLines": [
+    11244,
+    11245
+  ],
+  "illustrates": {
+    "rule": "14.5.2b",
+    "quote": "Sample: Solo"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded unnumbered 'Sample:' block, text only (no braille rendering given in the source).",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded unnumbered 'Sample:' block, text only (no braille rendering given in the source)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed on every field byte-for-byte except which of the two identical transcriptions each labelled itself; both left illustrates.rule null. Corrected to \"14.5.2b\" (this rule's own id, matching its filename), same reasoning as sample-14-14.5.2a."
+}

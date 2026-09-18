@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 21-16",
+  "title": "Entry Word Followed by Capitalization",
+  "pdfPages": [
+    565
+  ],
+  "textLines": [
+    16378,
+    16384
+  ],
+  "illustrates": {
+    "rule": "21.5.1c",
+    "quote": "Leave one blank cell between the entry-word segment and the definition segment when the entry word is followed by punctuation, capitalization, or enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "alpha waves",
+            "def": "The relatively slow brain waves of a relaxed, awake state.",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "bold entry word"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "alpha waves ,! relatively sl[ bra9 waves",
+      "  ( a relax$1 awake /ate4"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

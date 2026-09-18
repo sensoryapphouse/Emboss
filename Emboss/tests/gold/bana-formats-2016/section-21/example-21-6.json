@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 21-6",
+  "title": "Title Page Format for Inclusive Letters of Index",
+  "pdfPages": [
+    560
+  ],
+  "textLines": [
+    16199,
+    16204
+  ],
+  "illustrates": {
+    "rule": "21.2.5",
+    "quote": "Alphabetic Reference Type and Letter Sequence on the Title Page. When an alphabetic reference (e.g., dictionary, thesaurus, etc.) occupies more than one braille volume, include the sequence of letters that identify the range of entries contained in that volume on the title page. Insert this information after the volume number. In addition: a. Include the type of alphabetic reference, e.g., “Index,” “Thesaurus,” etc. b. Use uncontracted braille for the letter sequences. c. Place the same letter sequence on the volume binding or spine in both print and braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Volume 2 Index alt-arte",
+        "blocked": true
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Plain text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",volume #b ,9dex ;alt-arte"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [
+    "`alt-arte` is deliberately left as plain text, not `` `uncontracted` `` cell-markup: probed directly (`segmentsToBraille` / `document.mjs`, real liblouis) and found that gold-run.mjs's own harness (unlike the real app, `Emboss/web/app.mjs:347`, which wires `o.translateG1` to the genuine `en-ueb-g1` grade-1 table) never sets `o.translateG1`/`o.translateUncontracted` at all — `segmentsToBraille`'s own fallback (`document.mjs` ~line 758) then translates an `uncontracted:true` run through the SAME grade-2 table as everything else, only wrapping it in the grade-1 indicator marks, so a marked-uncontracted 'alt-arte' still contracts 'ar' to '>' exactly like plain text does, plus spurious extra indicator cells. Left plain so the file demonstrates gold-run's own actual, measured behaviour rather than a markup choice that cannot change the outcome either way within this harness."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print text marked `blocked:true` (flush, cell 1) to match the given braille's own zero indent (fixed from an earlier draft, which left it at the ordinary 2-cell paragraph indent)."
+}

@@ -1,0 +1,47 @@
+{
+  "id": "BANA Sample 14-4",
+  "title": "Sample 14-4: Speaker with Multiple Paragraphs of Dialogue",
+  "pdfPages": [
+    399
+  ],
+  "textLines": [
+    11538,
+    11553
+  ],
+  "illustrates": {
+    "rule": "14.5.1e",
+    "quote": "Use 5-3 margins for additional paragraphs by the same speaker in the same dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "GALLIMARD", "text": "GALLIMARD: The limits of my cell are as such: four-and-a-half meters by five. There’s one window against the far wall; a door, very strong, to protect me from autograph hounds. I’m responsible for the tape recorder, the hot plate, and this charming coffee table." },
+      { "kind": "speech", "level": 1, "text": "When I want to eat, I’m marched off to the dining room—hot, steaming slop appears on my plate. When I want to sleep, the light bulb turns itself" }
+    ],
+    "notes": "The second paragraph is an additional paragraph by the SAME speaker (no name repeated), 14.5.1e's own subject; print indents it. This excerpt's own braille genuinely ends mid-sentence on 'itself' (the UEB shortform word 'xf', confirmed by back-translation) — not 'itself off' as one transcription run's own uncertain note guessed (that note's own parenthetical gloss '(off)' for 'xf' was simply wrong; 'xf' is UEB's own shortform for 'itself', matching both runs' actual `text` field already).",
+    "surroundingText": [],
+    "printFeatures": "GALLIMARD's name in full capitals followed by a colon; two paragraphs, the second indented (5-3 margin) as a continuation of the same speech."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,gallim>d3 ,! limits ( my cell >e z s*3",
+      "  f\\r-&-a-half met]s by five4 ,\"!'s \"o",
+      "  w9d[ ag/ ! f> wall2 a door1 v /r;g1 to",
+      "  protect me f autograph h.ds4 ,i'm",
+      "  responsible = ! tape record]1 ! hot",
+      "  plate1 & ? *>m+ c(fee table4",
+      "    ,:5 ,i want to eat1 ,i'm m>*$ (f to",
+      "  ! d9+ room,-hot1 /1m+ slop appe>s on",
+      "  my plate4 ,:5 ,i want to sleep1 ! li<t",
+      "  bulb turns xf"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for the first paragraph (14.5.1a), 5-3 for the second (14.5.1e)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on `text` itself (both already ended on 'itself', matching the given braille's own 'xf'); B's own uncertain note about 'itself'/'off' was investigated and found to be a mis-gloss of the shortform 'xf' — not a real discrepancy, so no text change was needed there. A used one block with items[]; B used speaker+items; both reduced here to buildModel14's own two-block {kind:'speech'} shape (level 0 then level 1, no speaker repeated on the continuation). illustrates.rule: both already agreed on 14.5.1e (formatting harmonised: A's '14.5.1.e' has a stray dot). Forward-translated through Emboss's translator (two {type:'play', subtype:'prose'} blocks, 1-3 then 5-3 margins): EXACT MATCH (see differences.md)."
+}

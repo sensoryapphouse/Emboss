@@ -1,0 +1,66 @@
+{
+  "id": "BANA Sample 14-1",
+  "title": "Sample 14-1: Cast of Characters",
+  "pdfPages": [
+    396
+  ],
+  "textLines": [
+    11467,
+    11485
+  ],
+  "illustrates": {
+    "rule": "14.2.1",
+    "quote": "The following format is used for the cast of characters: a. Use a cell-5 heading when a heading is included. b. Use 1-3 margins for the cast of characters, with each name followed on the same line by the character identification. c. Retain font attributes on speaker names; omit font attributes on speaker identifications. d. Follow print punctuation used to separate names from any following identifications. Note: Do not insert punctuation that does not appear in print."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "heading", "level": 2, "text": "DRAMATIS PERSONAE" },
+      {
+        "kind": "cast-list",
+        "items": [
+          { "text": "CLAUDIUS, King of Denmark" },
+          { "text": "HAMLET, son to the late King Hamlet and nephew to the present king" },
+          { "text": "POLONIUS, lord chamberlain" },
+          { "text": "HORATIO, friend to Hamlet" },
+          { "text": "LAERTES, son to Polonius" },
+          { "text": "VOLTIMAND, courtier" },
+          { "text": "CORNELIUS, 〃" },
+          { "text": "ROSENCRANTZ, 〃" },
+          { "text": "GUILDENSTERN, 〃" },
+          { "text": "OSRIC, 〃" },
+          { "text": "A GENTLEMAN" }
+        ],
+        "features": "Character names in full capitals; identifications in italics (omitted in braille per 14.2.1c). VOLTIMAND's identification 'courtier' is repeated for CORNELIUS/ROSENCRANTZ/GUILDENSTERN/OSRIC using a print ditto mark (〃) aligned in a column beneath it, rather than the word itself; A GENTLEMAN has no identification at all."
+      }
+    ],
+    "notes": "'DRAMATIS PERSONAE' is a cell-5 heading (14.2.1a). Print shows every identification in italics; 14.2.1c requires omitting font attributes on identifications (names only keep their own), so no italics are built here.",
+    "surroundingText": [],
+    "printFeatures": "Cell-5 heading over a 1-3-margin cast list; names in full caps, identifications in italics with a ditto-mark column for four repeated identifications."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,,dramatis ,,p]sonae",
+      ",,claudius1 ,k+ ( ,d5m>k",
+      ",,hamlet1 son to ! late ,k+ ,hamlet &",
+      "  nephew to ! pres5t k+",
+      ",,polonius1 \"l *amb]la9",
+      ",,horatio1 fr to ,hamlet",
+      ",,la]tes1 son to ,polonius",
+      ",,voltim&1 c\\rti]",
+      ",,cornelius1 \"1",
+      ",,ros5crantz1 \"1",
+      ",,guild5/]n1 \"1",
+      ",,osric1 \"1",
+      ",a ,,g5tleman"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1: cell-5 heading (14.2.1a). Lines 2-13: 1-3 margins for the cast of characters (14.2.1b), with Hamlet's own identification running over onto a continuation line at cell 3; the ditto mark's own braille cells ('\"1') are the UEB translation of the print ditto-mark character itself, not the word 'courtier' repeated."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte). A used a cell-5 heading level (2) and a full illustrates.rule quote; B left the heading level null and illustrates.rule null (both A's values kept, matching the source's own 14.2.1a and the actual quoted rule text). Both A and B modelled the whole cast list as ONE block with an embedded '\\n'-joined `text` string and described the ditto marks only in a prose `features` field, which buildModel14's own 'cast-list' schema cannot consume (a block, not an items[] list, and no way to reproduce a print ditto mark from a description alone). Rebuilt here as items[], one per cast member, with the four ditto identifications written as the literal print ditto-mark character (U+3003, 〃) — confirmed by testing candidate print characters through Emboss's translator until one reproduced the given braille's own '\"1' cells exactly (plain \", curly ’″\", none matched; 〃 does). Forward-translated (cell-5 heading + 11 {type:'play', subtype:'prose'} blocks, 1-3 margins): EXACT MATCH (see differences.md)."
+}

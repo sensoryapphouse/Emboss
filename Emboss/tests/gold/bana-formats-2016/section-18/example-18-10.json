@@ -1,0 +1,40 @@
+{
+  "id": "BANA Example 18-10",
+  "title": "Example 18-10: Linear Diagram with a Vertical Line",
+  "pdfPages": [
+    505
+  ],
+  "textLines": [
+    14642,
+    14647
+  ],
+  "illustrates": {
+    "rule": "18.7.2",
+    "quote": "Linear Diagrams with Print Symbols. Follow print for use of the appropriate sign and spacing to show separate parts of a sentence. List these symbols on the Special Symbols page, or in a transcriber’s note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The boy | played in the park."
+      }
+    ],
+    "notes": "The vertical line \"|\" is an ordinary UEB print symbol (dots 456, 1256) — translates correctly with zero Emboss-specific code. The required 1-3 margin (18.7.1, shared by every linear diagram) cannot be produced (F-189); an ordinary paragraph block’s own default indent is used instead — expected mismatch on indent only.",
+    "surroundingText": [],
+    "printFeatures": "Sentence containing a vertical line, enclosed in a box (the box itself: F-189, no diagram/box wrapper exists for this content)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! boy _\\ play$ 9 ! p>k4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (line 14647, margin 9); matches both runs byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. The sentence forward-translates to the given braille exactly at zero indent; built as a plain paragraph, with the required 1-3 margin recorded as the expected F-189 mismatch cause rather than guessed at with an unsupported block option."
+}

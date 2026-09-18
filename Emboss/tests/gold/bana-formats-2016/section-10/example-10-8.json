@@ -1,0 +1,66 @@
+{
+  "id": "BANA Example 10-8",
+  "title": "All Answer Choices are Vertical",
+  "pdfPages": [
+    257
+  ],
+  "textLines": [
+    7424,
+    7434
+  ],
+  "illustrates": {
+    "rule": "10.4.4",
+    "quote": "List all answer choices vertically and begin each in the same cell."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "24. What could explain a human karyotype showing 47 chromosomes?"
+          },
+          {
+            "level": 1,
+            "text": "A. monosomy"
+          },
+          {
+            "level": 1,
+            "text": "B. trisomy"
+          },
+          {
+            "level": 1,
+            "text": "C. codominance"
+          },
+          {
+            "level": 1,
+            "text": "D. dominant traits"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "Print shows the four choices in two side-by-side columns (A/B left, C/D right); braille lists them vertically per 10.4.4."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#bd4 ,:at cd expla9 a human k>yotype %[+",
+      "    #dg *romo\"ss8",
+      "  ,a4 monosomy",
+      "  ;,b4 trisomy",
+      "  ;,c4 codom9.e",
+      "  ;,d4 dom9ant traits"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

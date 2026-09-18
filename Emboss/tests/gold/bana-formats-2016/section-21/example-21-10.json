@@ -1,0 +1,41 @@
+{
+  "id": "example-21-10",
+  "title": "Shortened Guide Words",
+  "pdfPages": [
+    7
+  ],
+  "textLines": [
+    16285,
+    16290
+  ],
+  "illustrates": {
+    "rule": "21.3.2i",
+    "quote": "i. Shorten guide words when entry words are too long to fit. Do not add a period. Include enough letters from each entry word to make it intelligible."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "acetylsalicylic acid: …\n…\nacquired immune deficiency syndrome: …\n…\n…",
+        "features": "Simulated braille page showing the first and last main entries of the page, separated and followed by ellipses. Braille line numbers are shown in the left margin."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A box containing text and ellipses, with numbers 2, 22, 23, 24, 25 in the left margin representing braille line numbers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "     acetylsal,-acquir$ immune def   #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Centered guide words at the bottom of the page (line 25). The words are shortened to fit the 40-cell width, connected with a dash."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

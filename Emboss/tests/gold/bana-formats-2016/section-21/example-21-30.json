@@ -1,0 +1,56 @@
+{
+  "id": "BANA Example 21-30",
+  "title": "Subentry in Dictionary Entry",
+  "pdfPages": [
+    573
+  ],
+  "textLines": [
+    16657,
+    16677
+  ],
+  "illustrates": {
+    "rule": "21.8.3d",
+    "quote": "d. Subentry. A subentry is an entry that is subservient to the main entry. It may be a definition, another part of speech, another form of spelling, or a cross-reference."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "pre-sen-ta-tion \\pre′-zen-tā′-shən\\ n (15 c) 1 a : the act of presenting b : the act, power, or privilege esp. of a patron of applying to the bishop or ordinary for instituting someone into a benefice 2 : something presented: a : a symbol or image that represents something b : something offered or given 3 : an immediate object of perception, cognition, or memory —pre-sen-ta-tion-al",
+        "features": "Grey highlighting identifies the subentries, part of speech, and run-on entry. Multilevel dictionary entry (numbered/lettered definitions, a run-in derived entry) — F-193/F-195/F-200, no construct exists to build this faithfully."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "The main entry word, the subentry numbers '1', '2', '3', the sub-subentry letters 'a', 'b', 'a', 'b', and the run-on entry word 'pre-sen-ta-tion-al' are bold. The part of speech 'n' is italic."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "pres5ta;n pre-s5-ta-tion",
+      "      _*pre^.2-z5-t@-a^.b-%_5n_*",
+      "  ;n \"<#ae ;c\">",
+      "  #a",
+      "    a 3 ! act ( pres5t+",
+      "    ;b 3 ! act1 p[]1 or privilege esp4 (",
+      "      a patron ( apply+ to ! bi%op or",
+      "      ord9>y = 9/itut+ \"s\"o 9to a",
+      "      b5efice",
+      "  #b 3 \"s?+ pres5t$3",
+      "    a 3 a symbol or image t repres5ts",
+      "      \"s?+",
+      "    ;b 3 \"s?+ (f]$ or giv5",
+      "  #c 3 an imm object ( p]cep;n1 cogni;n1",
+      "      or memory",
+      "  ,-pres5ta;nal pre-s5-ta-tion-;al"
+    ],
+    "pageBreaks": [],
+    "notes": "Kept for reference only (this file's own print side is 'other'/not-representable, so the given braille cannot be compared against a built model) — the pronunciation \\pre'-zen-tā'-shən\\ is enclosed in italic passage indicators in braille, although it does not appear italicized in print."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

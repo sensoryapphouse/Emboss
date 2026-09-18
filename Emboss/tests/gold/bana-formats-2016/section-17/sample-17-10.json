@@ -1,0 +1,65 @@
+{
+  "id": "BANA Sample 17-10",
+  "title": "Sample 17-10: Syllabified Words in a Spelling Activity",
+  "pdfPages": [
+    487
+  ],
+  "textLines": [
+    14079,
+    14091
+  ],
+  "illustrates": {
+    "rule": "17.8.1a",
+    "quote": "a. Do not divide a syllabified word between lines unless it is too long to fit on a single line. If a word is divided between lines, it must be at a syllable break. (See Sample 17-10: Syllabified Words in a Spelling Activity on page 17-23.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Syllable Division Rules"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "Divide between 2 consonants (`rab-bit`, `mon-key`)"
+          },
+          {
+            "marker": "b.",
+            "text": "Divide between 2 words (`back-yard`, `lip-stick`)"
+          },
+          {
+            "marker": "c.",
+            "text": "Divide before and after blends (`trans-fer`, `brink-man-ship`)"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 heading, then a lettered list of three syllable-division rules, each with two hyphen-joined, wholly-uncontracted example words in parentheses.",
+    "surroundingText": [],
+    "printFeatures": "Italicised heading; a numbered/lettered rules list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,syllable ,divi.n ,rules",
+      "#a4 ,divide 2t #b 3sonants \"<rab-bit1",
+      "  mon-key\">",
+      "#b4 ,divide 2t #b ^ws \"<back-yard1",
+      "  lip-stick\">",
+      "#c4 ,divide 2f & af bl5ds \"<trans-fer1",
+      "  brink-man-ship\">",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 14091); B dropped it."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. illustrates.rule: corrected to '17.8.1a' — this exact sample is the one the source itself cross-references by name at the end of clause a ('If a word is divided between lines... (See Sample 17-10...)'); both runs' own bare '17.8.1'/'17.8.1' is less precise. Modeled as a lettered list; each example word wholly uncontracted (17.8.1). EXPECT PARTIAL: standards-map.md (BANA 17.8.1a) already confirms a space-syllabified word wraps correctly at the syllable break (wrapCells only breaks at a space), but a HYPHEN-joined syllabified word with no spaces (e.g. 'brink-man-ship') does NOT — wrapCells' hard-chunk fallback has no hyphen awareness, splitting mid-syllable instead."
+}

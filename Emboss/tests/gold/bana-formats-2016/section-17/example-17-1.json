@@ -1,0 +1,50 @@
+{
+  "id": "BANA Example 17-1",
+  "title": "Example 17-1: Vocabulary/Word List in a Foreign Language Text",
+  "pdfPages": [
+    469
+  ],
+  "textLines": [
+    13523,
+    13529
+  ],
+  "illustrates": {
+    "rule": "17.7.2b",
+    "quote": "b. In a word list with translations, insert a colon following the entry word and continue the translation on the same braille line. Do not use columnar format."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "glossary",
+        "items": [
+          {
+            "term": "el medio ambiente",
+            "def": "environment"
+          },
+          {
+            "term": "el mundo",
+            "def": "world"
+          }
+        ]
+      }
+    ],
+    "notes": "A simple bilingual (Spanish/English) vocabulary list, no heading; entry words bold in print, translations in normal type.",
+    "surroundingText": [],
+    "printFeatures": "Left-aligned two-column print list (foreign phrase, translation); collapsed to one running glossary line per 17.7.2b."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "el medio ambiente3 5viron;t",
+      "el mundo3 _w"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source. illustrates.rule: A's '17.7.2b' kept over B's bare '17.7.2' — the example is embedded in the source directly after clause b's own text (colon insertion) and before clause c's (long-phrase wrap), so b is the specific clause it illustrates. Modeled as a 'glossary' block (Emboss's `<dl>`/formatGlossary, standards-map.md BANA 17.7.2b/c 'done') — glossarySegments auto-inserts the colon+space separator, exactly reproducing the given braille."
+}

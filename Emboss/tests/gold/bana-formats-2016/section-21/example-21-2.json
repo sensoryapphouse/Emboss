@@ -1,0 +1,67 @@
+{
+  "id": "BANA Example 21-2",
+  "title": "Alphabetical Division Preceded by a Blank Line",
+  "pdfPages": [
+    558
+  ],
+  "textLines": [
+    16137,
+    16147
+  ],
+  "illustrates": {
+    "rule": "21.2.3c",
+    "quote": "Insert a blank line before, but not after, the first alphabetical division."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Words to Know: Access Guide"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Go to the page number for word definitions.",
+        "blocked": true
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A"
+      },
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "abominably,",
+            "page": "930"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "       ,^ws to ,\"k3 ,a3ess ,guide",
+      "",
+      ",g to ! page numb] = ^w def9i;ns4",
+      "",
+      "                   ,a",
+      "abom9ably1 #icj"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-2: ...' title and 4 leading blank lines as if they were braille content — removed. This block's own margin is 0 (no fixed left indent): the title line itself has no leading spaces in source, so the heading's own leading U+2800 cells are real (centred) content, not margin."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks) that were not part of the source's actual braille content."
+}

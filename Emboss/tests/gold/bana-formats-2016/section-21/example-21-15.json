@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 21-15",
+  "title": "Entry Word Followed by Punctuation",
+  "pdfPages": [
+    565
+  ],
+  "textLines": [
+    16370,
+    16376
+  ],
+  "illustrates": {
+    "rule": "21.5.1c",
+    "quote": "c. Leave one blank cell between the entry-word segment and the definition segment when the entry word is followed by punctuation, capitalization, or enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "addiction",
+            "def": "compulsive drug craving and use, despite adverse consequences",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bold entry word followed by a colon."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "addic;n3 compulsive drug crav+ & use1",
+      "  despite adv]se 3sequ;es"
+    ],
+    "pageBreaks": [],
+    "notes": "The margin is 9 spaces in the source, corresponding to cell 1 (entry start) and cell 3 (runover) when stripped. The entry word 'addic;n' is followed by the colon '3' and then one blank cell before the definition segment, illustrating rule 21.5.1c."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

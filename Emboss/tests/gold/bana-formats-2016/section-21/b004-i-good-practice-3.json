@@ -1,0 +1,36 @@
+{
+  "id": "B004 I Good practice 3",
+  "title": "● Page numbers directly follow the index entry (retaining punctuation if present).",
+  "pdfPages": [],
+  "textLines": [
+    807,
+    808
+  ],
+  "illustrates": {
+    "rule": "",
+    "quote": ""
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Page numbers directly follow the index entry (retaining punctuation if present)."
+      }
+    ],
+    "notes": "Text only sample.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille content."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print text corrected from the shared 'Answers a-e.' placeholder to the actual B004 Appendix I bullet wording (references/_text/B004.txt lines 807-808); already correct in `title`."
+}

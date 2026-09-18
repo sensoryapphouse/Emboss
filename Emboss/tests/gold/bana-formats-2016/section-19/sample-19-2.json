@@ -1,0 +1,76 @@
+{
+  "id": "BANA Sample 19-2",
+  "title": "Sample 19-2: Linear Key Format",
+  "pdfPages": [
+    528
+  ],
+  "textLines": [
+    15285,
+    15307
+  ],
+  "illustrates": {
+    "rule": "19.2.2",
+    "quote": "Linear Key Format. When letters are printed above or below the line(s) of code characters: a. To ensure the code will be read as individual letters, insert the grade 1 passage indicator... b. Use the next two consecutive braille lines (margins 1-1) for the code characters."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Assign a symbol or number for each letter of the alphabet.",
+        "features": "Given braille (lines 1-4) shows a uniform indent on every line — built blocked:true."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Share the code with anyone who will read or return a response to your written message."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Here is a secret code you can use."
+      },
+      {
+        "kind": "note",
+        "text": "The puzzle code symbols are under the letters."
+      },
+      {
+        "kind": "other",
+        "text": "a b c d e f g h i j k l m n o p q r s t u v w x y z\n2  4  6  8  1  3  5  7  9  10 /  *  &  z  _  ]  (  7  8  9  0  ...",
+        "features": "A 26-letter linear key: the alphabet on one braille line (margins 1-1, per 19.2.2b), the corresponding devised code character/number directly below each letter on the next line, per 19.2.2d. Enclosed in a ruled box and one grade-1 passage (dot locator + capitals passage indicator, source line 9: '\"\"=;;;,,,'). Emboss has no column-alignment mechanism to place a code character directly under its own letter (F-219), no dot-locator emission (F-220), and no box mechanism reused for this content."
+      }
+    ],
+    "notes": "An introductory paragraph, a short lead-in sentence, a transcriber's note explaining the format, and the letter/code linear key table itself.",
+    "surroundingText": [],
+    "printFeatures": "Paragraph, then a 26-column two-row key table pairing each alphabet letter with a devised code symbol/number."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,assign a symbol or numb] =     b#hd",
+      "    ea* lr ( ! alphabet4 ,%>e ! code )",
+      "    any\"o :o w r1d or return a response",
+      "    to yr writt5 message4",
+      "      ,\"h is a secret code y c use4",
+      "      @.<,! puzzle code symbols >e \"u !",
+      "    lrs4@.>",
+      "7777777777777777777777777777777777777777",
+      "\"\"=;;;,,,",
+      " a b c d e f g h i j k l m n o",
+      "#b #d #f #h #a #c #e #g #i 1 2 3 4 5 6",
+      "",
+      "p q r s t u v w x y z,'",
+      "7 8 9 0 / * & z _ ] (",
+      "\"\"=;'",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15285-15307. Decoded (lines 1-7): \"Assign a symbol or number for each letter of the alphabet. Share the code with anyone who will read or return a response to your written message. Here is a secret code you can use.\" and the transcriber's note \"The puzzle code symbols are under the letters.\" (matching 19.2.2f's own sample wording exactly). Line 1's trailing 'b#hd' and line 10's leading blank cell are a print-page-number cell and the key table's own capital-letter grade-1 indicator context respectively — kept as given, not decoded further (not braille-buildable in any case)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived, matches exactly). Print side reconciled from a fresh back-translation of the given braille: split into three short paragraphs (the source's own indentation change at line 5 marks a new paragraph, not a continuation) plus the transcriber's note, matching 19.2.2f's own rule-text sample verbatim."
+}

@@ -1,0 +1,65 @@
+{
+  "id": "BANA Example 17-4",
+  "title": "Example 17-4: Partial Word Blanks",
+  "pdfPages": [
+    471
+  ],
+  "textLines": [
+    13603,
+    13612
+  ],
+  "illustrates": {
+    "rule": "17.9.1",
+    "quote": "Lines Indicating Omitted Parts of Words. When text refers to spelling or word structure: a. Follow print for whatever symbol is used to represent a blank to be filled in. b. If applicable, use contractions in the portions of the word attached to the low line or other symbol."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The tunnels in Boston are very perplex_.",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "When are the _s due?",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "I in_ed the intensity.",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "Are you going to me_?",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "Don't ac_ yet.",
+        "continuation": true
+      }
+    ],
+    "notes": "Five unconnected sentences, each with a solid low-line blank standing in for the omitted word part (print shows a run of underscores; braille shows ONE dot-46,36 blank symbol per gap, not one cell per underscore — distinct from Example 17-5's per-letter asterisk convention).",
+    "surroundingText": [],
+    "printFeatures": "Five short sentences with an underscore blank; the surrounding letters keep their normal contractions (17.9.1b)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! tunnels 9 ,bo/on >e v p]plex.-4",
+      ",:5 >e ! .-s due8",
+      ",i 9.-$ ! 9t5s;y4",
+      ",>e y go+ to me.-8",
+      ",don't ac.- yet4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.9.1', matches source). Modeled as five ordinary paragraphs, each with a single literal underscore standing for the blank-fill symbol; the surrounding words keep normal contraction so 17.9.1b's requirement is exercised automatically (no special code needed). Whether a literal '_' translates through louis to the same dot-46,36 symbol the book calls '.-' is the mismatch this file actually tests — if not, that is a genuine, new gap (no existing finding names it), not a modeling error."
+}

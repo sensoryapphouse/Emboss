@@ -1,0 +1,62 @@
+{
+  "id": "BANA Example 21-8",
+  "title": "Examples of Print Guide-Word Separators",
+  "pdfPages": [
+    562
+  ],
+  "textLines": [
+    16242,
+    16253
+  ],
+  "illustrates": {
+    "rule": "21.3.1e",
+    "quote": "e. Follow print for the symbol used between two guide words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "infer-inherit",
+        "features": "Print page guide words separated by a dash."
+      },
+      {
+        "kind": "other",
+        "text": "infer•inherit",
+        "features": "Print page guide words separated by a bullet."
+      },
+      {
+        "kind": "other",
+        "text": "infer→inherit",
+        "features": "Print page guide words separated by a right-pointing arrow."
+      },
+      {
+        "kind": "other",
+        "text": "infer | inherit",
+        "features": "Print page guide words separated by a vertical line."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 56,
+    "lines": [
+      "               9f],-9h]it                           #cca",
+      "",
+      "               9f]_49h]it                           #cca",
+      "",
+      "              9f];\\o9h]it                           #cca",
+      "",
+      "               9f] _\\ 9h]it                         #cca"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run kept only the LAST of the four separator-demonstration lines (dropping the first three entirely) and mislabelled the width. All four lines (dash, underscore/bullet, semicolon-backslash-o/arrow, space-backslash-space/vertical-line braille forms), each followed by a blank line except the last, are restored; width is the true longest-line width (56), not the nominal 40."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: restored the 3 missing guide-word-separator lines the given run dropped; width set to the actual 56-cell extent."
+}

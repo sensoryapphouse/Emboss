@@ -1,0 +1,31 @@
+{
+  "id": "BANA 14.6.2b Sample",
+  "title": "Sample:",
+  "pdfPages": [],
+  "textLines": [
+    11302,
+    11304
+  ],
+  "illustrates": {
+    "rule": "14.6.2b",
+    "quote": "Sample:"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agreed on every field byte-for-byte except which of the two identical transcriptions each labelled itself; both left illustrates.rule null. Corrected to \"14.6.2b\" (this rule's own id, matching its filename), same reasoning as sample-14-14.5.2a."
+}

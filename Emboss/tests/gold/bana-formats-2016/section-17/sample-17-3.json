@@ -1,0 +1,65 @@
+{
+  "id": "BANA Sample 17-3",
+  "title": "Sample 17-3: Pronunciation Words in a List",
+  "pdfPages": [
+    480
+  ],
+  "textLines": [
+    13919,
+    13931
+  ],
+  "illustrates": {
+    "rule": "17.3.2",
+    "quote": "Uncontracted Activity Word Lists. The following words/phrases are typical terminology indicating the word list should be uncontracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "The words in the following list contain the letters ie or ei. Learn how to pronounce each word.",
+        "continuation": true
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`their`"
+          },
+          {
+            "text": "`brier`"
+          },
+          {
+            "text": "`height`"
+          },
+          {
+            "text": "`weight`"
+          }
+        ]
+      }
+    ],
+    "notes": "A genuine excerpt: the sample's own numbered braille starts above line 1 of the given range (the source's own numbering runs 10-17, i.e. this is a continuation from a preceding, unshown page). Directions ('pronounce') then a 4-word uncontracted list.",
+    "surroundingText": [],
+    "printFeatures": "Directions paragraph, flush at cell 1 (no preceding heading in this excerpt), then a single-column list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! ^ws 9 ! foll[+ li/ 3ta9 ! lrs ie or",
+      ";ei4 ,le>n h[ to pron\\nce ea* ^w4",
+      "",
+      "their",
+      "brier",
+      "height",
+      "weight",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 13931); B dropped it."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank line, source-verified) kept over B's. Rule id unchanged. Modeled as directions + a wholly-uncontracted 4-item list."
+}

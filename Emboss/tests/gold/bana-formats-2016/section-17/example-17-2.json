@@ -1,0 +1,66 @@
+{
+  "id": "BANA Example 17-2",
+  "title": "Example 17-2: Foreign Language Vocabulary List with Articles",
+  "pdfPages": [
+    470
+  ],
+  "textLines": [
+    13558,
+    13568
+  ],
+  "illustrates": {
+    "rule": "17.7.3",
+    "quote": "Use the following format when articles, reflexive pronouns, special print signs, or specially marked items are shown before foreign language words in a vocabulary list. a. Begin the longest article...in cell 1. b. Align the initial letters of the foreign language words..."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "glossary",
+        "items": [
+          {
+            "term": "la medicina",
+            "def": "medicine"
+          },
+          {
+            "term": "las pastillas, las pilodoras",
+            "def": "pills, tablets"
+          },
+          {
+            "term": "el sintoma",
+            "def": "symptom"
+          },
+          {
+            "term": "la tos",
+            "def": "cough"
+          },
+          {
+            "term": "toser",
+            "def": "to cough"
+          }
+        ]
+      }
+    ],
+    "notes": "Foreign words (with preceding Spanish articles la/las/el of varying length) in bold, translations in italic.",
+    "surroundingText": [],
+    "printFeatures": "Two print columns (foreign phrase w/ article, translation); each entry's left margin in braille is driven by the block's own LONGEST article (17.7.3a), not a fixed indent."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      " la medicina3 m$ic9e",
+      "las pastillas1 las pilodoras3 pills1",
+      "      tablets",
+      " el sintoma3 symptom",
+      " la tos3 c\\<",
+      "    toser3 to c\\<"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source exactly (including the 1-space/0-space/4-space per-entry left-margin variation driven by article length). illustrates.rule: '17.7.3' (unchanged, both agreed) — the example sits directly after clause f, before §17.8 begins. Modeled as a 'glossary' block; expect a MISMATCH on the per-entry left margin, since glossarySegments/formatGlossary give every entry the SAME fixed margin from `level` alone, never from the block's own longest-article content length (17.7.3a-f) — F-212."
+}

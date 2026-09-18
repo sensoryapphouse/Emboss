@@ -1,0 +1,80 @@
+{
+  "id": "BANA Sample 17-11",
+  "title": "Sample 17-11: Omitted Letters Identified in Directions",
+  "pdfPages": [
+    488
+  ],
+  "textLines": [
+    14099,
+    14114
+  ],
+  "illustrates": {
+    "rule": "17.9.2a",
+    "quote": "a. Follow print for symbols used to show omission. A substitution may be made if accurate representation of the print symbol in braille would hinder the reader's recognition of the concept under discussion. Explain the choice of the substituted symbol in a transcriber's note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Using Spelling Patterns"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Write each word, adding ie or ei. If you are not sure about a spelling, check the dictionary."
+      },
+      {
+        "kind": "note",
+        "text": "Print uses a square to represent the omission of letters; in braille an underscore is used for the omissions."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "w_ght"
+          },
+          {
+            "marker": "b.",
+            "text": "s_ge"
+          },
+          {
+            "marker": "c.",
+            "text": "br_f"
+          },
+          {
+            "marker": "d.",
+            "text": "v_l"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 heading, activity directions, an embedded transcriber's note explaining the print-square-to-braille-underscore substitution (17.9.2a's own 'explain the substitution' clause), then a 4-item lettered list of words with a single omitted-letter blank each.",
+    "surroundingText": [],
+    "printFeatures": "Italic heading and directions; a light shaded square marks each omission in print."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,us+ ,spell+ ,patt]ns",
+      "    ,write ea* ^w1 add+ ie or ;ei4 ,if y",
+      "    >e n sure ab a spell+1 *eck !",
+      "    dic;n>y4",
+      "      @.<,pr9t uses a squ>e to repres5t",
+      "    ! omis.n ( lrs1 9 brl an \"uscore is",
+      "    us$ = ! omis.ns4@.>",
+      "#a4 w.-ght",
+      "#b4 s.-ge",
+      "#c4 br.-f",
+      "#d4 v.-l"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (normalised 'a.'/'a' spelling; both runs agreed on content, matches source). Modeled with a standalone 'note' block for the substitution explanation (block-level TN, 'done') and a lettered list whose items each carry one literal underscore standing for the blank-fill symbol."
+}

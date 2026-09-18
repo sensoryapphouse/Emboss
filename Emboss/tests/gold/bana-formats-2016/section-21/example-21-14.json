@@ -1,0 +1,68 @@
+{
+  "id": "BANA Example 21-14",
+  "title": "Paragraphed Index Entries with Subentries",
+  "pdfPages": [
+    565
+  ],
+  "textLines": [
+    16348,
+    16358
+  ],
+  "illustrates": {
+    "rule": "21.4.2",
+    "quote": "Transcribe indexes printed in two or more columns as a list. Do not retain column headings. Insert a transcriber’s note to explain the change to print format."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "AirWays,",
+            "page": "70"
+          },
+          {
+            "level": 1,
+            "text": "Alabama,"
+          },
+          {
+            "level": 2,
+            "text": "as right-to-work law state, 201;"
+          },
+          {
+            "level": 2,
+            "text": "per capita personal income, 399;"
+          },
+          {
+            "level": 2,
+            "text": "growth of real per capita personal income, 399"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A nested index list: main entries in cell 1, subentries in cell 3, all runovers at cell 5."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",air,ways1 #gj",
+      ",alabama1",
+      "  z \"r-to-\"w law /ate1 #bja2",
+      "  p] capita p]sonal 9come1 #cii2",
+      "  gr[? ( r1l p] capita p]sonal 9come1",
+      "    #cii"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-14: ...' title and 4 leading blank lines; the source's own instruction directly above this example ('Change subentries in paragraph form to a nested list. Start main entries in cell 1. All runovers are in the same position.') is the actual rule text this example illustrates — not a bare rule id, so illustrates.rule cites 21.4.2 (indexes printed with subentries — nested-list transcription) and the quote is that instruction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print.blocks rebuilt from A/B's own paragraph-form text as the nested index list the source's own instruction describes (the paragraph form was itself a restatement of the SOURCE instruction text, not print content to transcribe); braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.4.2 (the actual governing rule; A/B's own 'rule' field just repeated the instruction sentence). The first two subentries' own page numbers are embedded directly in item text with a literal trailing semicolon (not the `page` field, which has no way to add trailing punctuation AFTER the page number it appends) — the given braille keeps the print's own semicolon-joined single run-in list, one subentry per braille line."
+}

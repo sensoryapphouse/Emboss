@@ -1,0 +1,46 @@
+{
+  "id": "BANA Example 18-7",
+  "title": "Example 18-7: Use of Freestanding Caret in an Exercise",
+  "pdfPages": [
+    504
+  ],
+  "textLines": [
+    14581,
+    14587
+  ],
+  "illustrates": {
+    "rule": "18.6.5",
+    "quote": "Carets. Use a caret symbol when a caret (^) indicates an insertion is to be made. Follow print for spacing."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Insert an adjective where you see a ^."
+      },
+      {
+        "kind": "paragraph",
+        "continuation": true,
+        "text": "1. He has ^ hair. (long, shaggy, short)"
+      }
+    ],
+    "notes": "The caret itself, the phrase \"where you see a ^.\", and \"(long, shaggy, short)\" are printed in blue — print.printFeatures records the colour; ignored, since 18.6.5c: \"Ignore colored font attributes indicating text to be inserted.\"",
+    "surroundingText": [],
+    "printFeatures": "The phrase 'where you see a ^.', the caret in the second line, and '(long, shaggy, short)' are printed in a blue font."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,9s]t an adjective \": y see a @54",
+      "#a4 ,he has @5 hair4 \"<l;g1 %a7y1 %ort\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14586-14587, margin 9); matches run A byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A’s braille.lines is correct — confirmed directly against the source (line 14586 reads '\": y see a @54' verbatim) and by forward-translating \"Insert an adjective where you see a ^.\" through Emboss’s own translator (louis.translate, uebG2), which reproduces run A’s line character-for-character. Run B’s own '\":]e y see a @54' does not occur anywhere in the source and does not forward-translate from any plausible English wording — a transcription error unique to run B (matches this task’s own advance \"Known\" note). Caret (^) is an ordinary UEB print symbol (not transcriber-defined, F-188 does not apply here) — confirmed live: translating a literal \"^\" character reproduces \"@5\" with zero Emboss-specific code, and the numbered exercise item \"1. He has ^ hair. (long, shaggy, short)\" forward-translates to the given braille’s second line exactly, parentheses included (ordinary UEB punctuation, ~F-187’s own contrast case)."
+}

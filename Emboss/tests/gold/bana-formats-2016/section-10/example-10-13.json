@@ -1,0 +1,60 @@
+{
+  "id": "BANA Example 10-13",
+  "title": "Various Symbols Used to Indicate Missing Words",
+  "pdfPages": [
+    259
+  ],
+  "textLines": [
+    7526,
+    7529
+  ],
+  "illustrates": {
+    "rule": "10.6.2",
+    "quote": "Punctuation is unspaced from the underscore or other symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "Vanilla ---- is my favorite dessert."
+          },
+          {
+            "level": 0,
+            "text": "Today is \\_."
+          },
+          {
+            "level": 0,
+            "text": "It is     o'clock."
+          },
+          {
+            "level": 0,
+            "text": "My favorite color is □."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "Four sentences illustrating different print devices for a missing word: hyphens, an underscore line, blank space, and a hollow-square symbol (U+25A1, per both A and B)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",vanilla ---- is my favorite dess]t4",
+      ",td is .-4",
+      ",x is \"\"\" o'clock4",
+      ",my favorite color is ;$#d4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B (both runs agree, including the hollow-square glyph)."
+}

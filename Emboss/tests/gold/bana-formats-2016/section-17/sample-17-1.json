@@ -1,0 +1,86 @@
+{
+  "id": "BANA Sample 17-1",
+  "title": "Sample 17-1: Spelling List",
+  "pdfPages": [
+    478
+  ],
+  "textLines": [
+    13870,
+    13886
+  ],
+  "illustrates": {
+    "rule": "17.2.2",
+    "quote": "b. List spelling words vertically using 1-3 margins. c. Contract the first writing of the spelling word or phrase. d. Repeat the words/phrases in uncontracted braille. e. Leave one blank cell between the contracted and uncontracted words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Introduction"
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Long Vowels, a, i, o"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "brain `brain`"
+          },
+          {
+            "text": "favorite"
+          },
+          {
+            "text": "stranger `stranger`"
+          },
+          {
+            "text": "sidewalk"
+          },
+          {
+            "text": "slide"
+          },
+          {
+            "text": "bowling `bowling`"
+          },
+          {
+            "text": "whole `whole`"
+          },
+          {
+            "text": "globe"
+          }
+        ]
+      }
+    ],
+    "notes": "Two centred (blue, sans-serif in print) headings, then an italic spelling word list; each word is given contracted, then (only where the contracted form actually differs from the plain spelling) uncontracted.",
+    "surroundingText": [],
+    "printFeatures": "Two centred blue headings above an italic word list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "               ,9troduc;n",
+      "          ,l;g ,v[els1 a1 i1 o",
+      "",
+      "bra9 brain",
+      "favorite",
+      "/rang] stranger",
+      "sidewalk",
+      "slide",
+      "b[l+ bowling",
+      ":ole whole",
+      "globe",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 13886, before '(Return to Text)'); B dropped that trailing blank line — a genuine, source-verifiable omission shared by neither run alone."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (with the trailing blank line the source genuinely carries, confirmed against line 13886) kept over B's (missing it). Rule id unchanged (both agreed '17.2.2', matches the source's own cross-reference at the end of clause g). Modeled as a 'list' whose items give the plain spelling once where print's own word has no distinct contraction (favorite, sidewalk, slide, globe — confirmed by the given braille itself showing only one copy) and BOTH the contracted and (backtick) uncontracted spelling where the given braille shows two (brain/stranger/bowling/whole) — 17.2.2c/d/e's own dual-writing convention, standards-map.md 'done'."
+}

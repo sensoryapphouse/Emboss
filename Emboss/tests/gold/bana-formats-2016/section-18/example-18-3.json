@@ -1,0 +1,51 @@
+{
+  "id": "BANA Example 18-3",
+  "title": "Example 18-3: Punctuation Emphasized with Bold",
+  "pdfPages": [
+    499
+  ],
+  "textLines": [
+    14385,
+    14395
+  ],
+  "illustrates": {
+    "rule": "18.3.3a",
+    "quote": "Follow print when punctuation marks are emphasized in print with italics, bold, underlining, or script."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Correct errors in punctuation in the passage below."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Today**;** I went shopping for new shoes**!** The weather has turned very cold for Easter**?** Let's go for ice cream**.** Please**.** wash your hands before making the sandwich**.**"
+      }
+    ],
+    "notes": "The semicolon, exclamation mark, question mark, and the periods after \"cream\"/\"Please\"/\"sandwich\" are printed bold — marked here with bold segment markup: forward-translating the passage with a real per-character bold typeform array around just these marks reproduces the given braille's own scattered ^22/^26/^28/^24 bold-boundary indicators almost exactly, confirming the marks genuinely need typeform boundaries even though the punctuation glyph itself does not visually change.",
+    "surroundingText": [],
+    "printFeatures": "Bold punctuation marks (semicolon, exclamation mark, question mark, three periods)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,correct ]rors 9 punctua;n 9 !",
+      "    passage 2l4",
+      ",to\"d^22 ,i w5t %opp+ = new %oes^26 ,!",
+      "w1!r has turn$ v cold = ,ea/]^28 ,let's",
+      "g = ice cr1m^24 ,pl1se^24 wa% yr h&s 2f",
+      "mak+ ! s&wi*^24"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14390-14395, margin 0); matches both runs byte-for-byte."
+  },
+  "uncertain": [
+    "Unresolved: forward-translating \"Today\" with a bold typeform boundary immediately after it (for the bold semicolon) produces the contraction \"TD\" here, where the given braille has the fuller \"TO\\\"D\" — a single-word contraction micro-detail near a typeform boundary, not a wording error; not chased further (see differences.md §4)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. Wording verified word-for-word by back-translating the given braille (louis.backTranslate): \"Today; I went shopping for new shoes! ... wash your hands before making the sandwich.\" — matching both runs’ own transcription (B’s own uncertain note flags a text-file-vs-image bold discrepancy after \"cream\" that does not affect wording). Marking each bold punctuation mark with bold segment markup and forward-translating reproduces the given braille’s own scattered bold-boundary indicators (^22/^26/^28/^24) almost exactly — the one remaining difference is a single word’s own contraction (\"TO\\\"D\" in the given braille vs. \"TD\" produced here for \"Today\"), an unresolved micro-detail of how a typeform boundary right after the very first word suppresses a whole-word contraction, not a wording error. illustrates corrected from either run’s own guess (A: caption-adjacent \"18.3.3 a\" with a stray space; B: item b’s own text) to 18.3.3a’s own rule text, matching this example’s own placement directly under that rule."
+}

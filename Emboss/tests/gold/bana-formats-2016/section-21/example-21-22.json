@@ -1,0 +1,65 @@
+{
+  "id": "BANA Example 21-22",
+  "title": "Simple English/Spanish Glossary",
+  "pdfPages": [
+    568
+  ],
+  "textLines": [
+    16478,
+    16489
+  ],
+  "illustrates": {
+    "rule": "21.6.3",
+    "quote": "English and Foreign Language Glossaries. English and foreign language entry words are frequently separated by a slash or dash, with the foreign language definition following on the same line. a. Use contracted braille for English entry words. b. Use uncontracted braille for foreign language entry words, using the appropriate accented letters and symbols for the language. (See UEB, §13, Foreign Language.) c. List foreign language symbols on the Special Symbols page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "bacteria/bacterías",
+            "def": "Pequeñísimos microorganismos unicelulares. (B59)",
+            "level": 1
+          },
+          {
+            "term": "balance/equilibrio",
+            "def": "La habilidad de no caer. (C25)",
+            "level": 1
+          },
+          {
+            "term": "benign/benigno",
+            "def": "Que no es canceroso. (D64)",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bold entry words."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "bact]ia_/bacter/as ,peque]/simos",
+      "  microorganismos unicelulares4",
+      "  \"<,b#ei\">",
+      "bal.e_/equilibrio ,la habilidad de no",
+      "  caer4 \"<,c#be\">",
+      "2nign_/benigno ,que no es canceroso4",
+      "  \"<,d#fd\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Lines 1-7 are the glossary entries formatted as 1-3 paragraphs. The entry words are not bolded in the braille. The page references are transcribed in braille brackets."
+  },
+  "uncertain": [
+    "Probed directly (`louis.translate('balance/equilibrio')`/`'benign/benigno'` in isolation, real liblouis): plain contracted translation already reproduces the given braille byte-for-byte for 2 of the 3 entries — NOT marked `uncontracted:true` (an earlier draft tried that per 21.6.3b's own wording and produced a corrupted, wrong result: liblouis's own uncontracted/grade-1 mechanism does not compose the way expected with a slash-separated compound word). The third, 'bacterías', still does not match ('BACT]^/IAS' vs the source's own 'BACTER/AS') under either plain or uncontracted translation — left unresolved; the source text file's own plain-text rendering of the accented í may itself carry a transcription artifact distinct from any Emboss behaviour."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Backtick (uncontracted) markup removed from the Spanish half of each entry word: probed directly and found ordinary contracted translation already matches 2 of the 3 given braille lines byte-for-byte, which the earlier uncontracted-marked version did not."
+}

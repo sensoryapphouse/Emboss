@@ -1,0 +1,47 @@
+{
+  "id": "BANA Example 17-7",
+  "title": "Example 17-7: Unmarked Errors to be Identified",
+  "pdfPages": [
+    472
+  ],
+  "textLines": [
+    13652,
+    13664
+  ],
+  "illustrates": {
+    "rule": "17.10.2",
+    "quote": "Unmarked Errors. When entire passages have unmarked intentional spelling errors that are to be identified and/or corrected by the reader, transcribe them in uncontracted braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "`today I wint shopping for new shoes? The weather has turned verry cold for Easter. Lets go for icecream. Please! wash your hands before make the sandwich.`",
+        "continuation": true
+      }
+    ],
+    "notes": "An entire passage with several unmarked intentional spelling errors ('wint', 'verry', 'icecream', 'equell'-style errors), no font attribute calling them out.",
+    "surroundingText": [
+      "(See Sample 17-12: Unmarked Intentional Spelling Errors on page 17-25.)"
+    ],
+    "printFeatures": "A short passage of ordinary running prose, deliberately misspelled in several places."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "today ,i wint shopping for new shoes8",
+      ",the weather has turned verry cold for",
+      ",easter4 ,lets go for icecream4 ,please6",
+      "wash your hands before make the",
+      "sandwich4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly (the trailing 'See Sample 17-12' caption is print-only commentary, correctly excluded by both runs)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.10.2', matches source). Modeled as one wholly-uncontracted paragraph (17.10.2's own whole-passage uncontracted mechanism, standards-map.md BANA 17.10.2 'done' via probe) — expect MATCH."
+}

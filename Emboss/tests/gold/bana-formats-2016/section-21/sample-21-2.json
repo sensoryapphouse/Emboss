@@ -1,0 +1,64 @@
+{
+  "id": "BANA Sample 21-2",
+  "title": "Multilevel Glossary",
+  "pdfPages": [
+    584
+  ],
+  "textLines": [
+    16980,
+    16987
+  ],
+  "illustrates": {
+    "rule": "21.6.1",
+    "quote": "Sample 21-2: Multilevel Glossary"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "Conjunction",
+            "def": "A word or phrase that connects words, phrases, or clauses.",
+            "level": 1
+          },
+          {
+            "term": "Coordinating",
+            "def": "Connects words, phrases, or clauses of equal rank: *and, but, or, and nor.*",
+            "level": 2
+          },
+          {
+            "term": "Correlative",
+            "def": "Conjunctions consisting of two elements used in pairs: *both … and, either … or.*",
+            "level": 2
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A multilevel glossary entry. The main entry word is bold and starts at the margin. Subentry words are bold and indented. Following the text of the subentry, there are examples in italics on a new line, further indented."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",3junc;n ,a ^w or phrase t 3nects    #,-",
+      "    ^ws1 phrases1 or clauses4",
+      "  ,coord9at+ ,3nects ^ws1 phrases1 or",
+      "    clauses ( equal rank3 .7&1 b1 or1.'",
+      "    & .1nor4",
+      "  ,correlative ,3junc;ns 3si/+ ( two",
+      "    ele;ts us$ 9 pairs3 .7bo? 444 &1 ei",
+      "    444 or4.'"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

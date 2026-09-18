@@ -1,0 +1,72 @@
+{
+  "id": "BANA Example 21-12",
+  "title": "Emphasized Page Numbers",
+  "pdfPages": [
+    564
+  ],
+  "textLines": [
+    16316,
+    16327
+  ],
+  "illustrates": {
+    "rule": "21.4.3",
+    "quote": "Font Attributes. Omit font attributes when a letter such as m for map, or p for photograph is emphasized as part of a page number in the index."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "Index                                    932",
+        "features": "Centered heading 'Index' with the print page number '932' right-aligned on the same braille line — no block type in this schema can combine a heading with a trailing page-number suffix on one line."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Page numbers after an m refer to a map."
+      },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A"
+      },
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "Aegean Sea,",
+            "page": "247, 248, 250, m247"
+          },
+          {
+            "level": 1,
+            "text": "Africa,",
+            "page": "368-373, 671, m608"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Centered heading with right-aligned page number; italicized letters; centered alphabetic division heading; index entries."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                 ,9dex              #icb",
+      "",
+      "  ,page numb]s af an ;m ref] to a map4",
+      "",
+      "                   ,a",
+      ",aeg1n ,sea1 #bdg1 #bdh1 #bej1 m#bdg",
+      ",africa1 #cfh-#cgc1 #fga1 m#fjh"
+    ],
+    "pageBreaks": [],
+    "notes": "Blank lines 2 and 4. Line 1 has the heading ',9dex' centered and page number '#icb' right-aligned. A 9-space left margin in the source txt was stripped."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "First line ('Index' + right-aligned '932') modeled as 'other' — not a plain heading, since Emboss's heading block has no page-number-suffix mechanism (this is a Title-Page-like construct, F-201). The italicized 'm' in the paragraph and in the page numbers is dropped per 21.4.3 itself, so the print text is left plain (no emphasis markup) rather than marked italic and then expecting it to be stripped — there is no per-list emphasis-stripping mechanism (F-196) to rely on."
+}

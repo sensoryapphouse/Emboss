@@ -1,0 +1,38 @@
+{
+  "id": "BANA 21.8.6c Sample",
+  "title": "They are inserted after the entry word in braille. .=9 is the superscript indicator.",
+  "pdfPages": [
+    596
+  ],
+  "textLines": [
+    16739,
+    16740
+  ],
+  "illustrates": {
+    "rule": "21.8.6c",
+    "quote": "Insert a transcriber’s note when the superscript numbers appear before the entry words in print."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Superscript numbers appear before the entry word in print. They are inserted after the entry word in braille. .=9 is the superscript indicator."
+      }
+    ],
+    "notes": "Text only sample.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille content."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print text corrected from the shared 'Answers a-e.' placeholder to the full embedded Sample: wording (source lines 16680-16683, both sentences — `title` had captured only the second sentence)."
+}

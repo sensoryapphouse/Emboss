@@ -1,0 +1,51 @@
+{
+  "id": "BANA Example 18-8",
+  "title": "Example 18-8: Caret for Insertion of a Phrase",
+  "pdfPages": [
+    504
+  ],
+  "textLines": [
+    14600,
+    14610
+  ],
+  "illustrates": {
+    "rule": "18.6.5a",
+    "quote": "a. When print includes inserted text preceded by a caret, the caret must be on the same line as the first word of the inserted text.\nb. Enclose the insertion in braille grouping indicators. Note: the grouping indicators will likely require grade 1 indicators preceding them.\nc. Ignore colored font attributes indicating text to be inserted.\nd. List the caret symbol and the grouping indicators on the Special Symbols page, or explain them in a transcriber’s note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "The insertion in the following sentence is preceded by a caret ^ and enclosed in braille grouping indicators."
+      },
+      {
+        "kind": "paragraph",
+        "text": "The War of the Whiskers ^between France and England raged from 1152 to 1453."
+      }
+    ],
+    "notes": "The inserted phrase \"^between France and England\" is printed in red — ignored per 18.6.5c. The braille grouping indicators (;< / ;>) that must enclose the inserted phrase cannot be produced (F-187, no such symbol exists anywhere in the codebase); built as plain inline text, so wording is still checkable even though the enclosure is not.",
+    "surroundingText": [],
+    "printFeatures": "The text '^between France and England' is printed in red."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! 9s];n 9 ! foll[+ s5t;e is",
+      "    prec$$ by a c>et .=@5 & 5clos$ 9 brl",
+      "    gr\\p+ 9dicators4@.>",
+      "",
+      "  ,! ,w> ( ! ,:isk]s @5;<betwe5 ,fr.e &",
+      ",5gl&;> rag$ f #aaeb to #adec4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14605-14610, margin 9); matches both runs byte-for-byte."
+  },
+  "uncertain": [
+    "Unresolved: the given braille's own note reads a REFERENCE form of the caret sign (\".=@5\") where forward-translating a plain mention of \"^\" in running prose produces bare \"@5\" (no \".=\" prefix) — a UEB \"symbol used as a reference, not a use\" convention with no Emboss code path to invoke; not chased further since the file's own mismatch is already fully explained by F-187 (see differences.md §4)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording of both the note and the sentence confirmed by back-translation (the note’s own \".=@5\" is the ordinary UEB caret sign, not a transcriber-defined symbol — F-188 does not apply to this note; only the \";<\"/\";>\"  braille grouping indicator pair, F-187, is unrepresentable). illustrates rule narrowed to 18.6.5a (the caret-placement clause this example’s own braille directly exercises) with a-d quoted in full since b/c/d also apply."
+}

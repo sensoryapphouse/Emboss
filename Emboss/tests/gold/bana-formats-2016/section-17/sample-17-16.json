@@ -1,0 +1,81 @@
+{
+  "id": "BANA Sample 17-16",
+  "title": "Sample 17-16: Crossed-Out Letters and Equals Sign",
+  "pdfPages": [
+    493
+  ],
+  "textLines": [
+    14221,
+    14239
+  ],
+  "illustrates": {
+    "rule": "17.13.1",
+    "quote": "Mathematical Symbols. Spellers often use mathematical symbols to teach word formation. a. Transcribe all text in word formation “equations” in uncontracted braille. b. If the result of the equation is a complete word, add the contracted form of the word at the end of the equation, enclosed in transcriber's note indicators."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "CONTRACTIONS"
+      },
+      {
+        "kind": "note",
+        "text": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter. The repeated word is enclosed within transcriber’s note indicators."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`I have` (--ve) `= I've`"
+          },
+          {
+            "text": "`is not` (n-t) `= isn't`"
+          },
+          {
+            "text": "`there is` (-s) `= there's` (\"!'s)"
+          },
+          {
+            "text": "`he will` (--ll) `= he'll`"
+          },
+          {
+            "text": "`let us` (-s) `= let's`"
+          },
+          {
+            "text": "`of the` (o- ---) `clock = o'clock`"
+          }
+        ]
+      }
+    ],
+    "notes": "A centred all-caps heading, a standalone transcriber's note (the same 17.11.1d/17.11.2c wording, reused here per 17.13.1b's own 'enclosed in transcriber's note indicators'), then six contraction equations combining the crossed-out-letter hyphen convention (§17.11) with an equals sign (17.13.1).",
+    "surroundingText": [],
+    "printFeatures": "Centred all-caps heading; crossed-out letters combined with equations."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "               ,,3trac;ns",
+      "",
+      "      @.<,^ws ) cross$-\\ lrs >e",
+      "    uncontract$1 !n rep1t$ ) a hyph5",
+      "    sub/itut$ = ea* cross$-\\ lr4 ,!",
+      "    rep1t$ ^w is 5clos$ )9 transcrib]'s",
+      "    note 9dicators4@.>",
+      "",
+      ",i have @.<--ve@.> \"7 ,i've",
+      "is not @.<n-t@.> \"7 isn't",
+      "there is @.<-s@.> \"7 there's @.<\"!'s@.>",
+      "he will @.<--ll@.> \"7 he'll",
+      "let us @.<-s@.> \"7 let's",
+      "of the @.<o- ---@.> clock \"7 o'clock"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: kept B's '17.13.1' over A's stacked '17.12.2, 17.13.1' — the source's own explicit cross-reference for THIS sample sits at the end of 17.13.1c ('...Sample 17-16: Crossed-Out Letters and Equals Sign on page 17-29'), not under §17.12; A's addition, while thematically defensible (this sample genuinely also exercises §17.11's crossed-out-letter mechanism via 17.12.2a's own cross-reference), is not what the book itself cites this sample under. Modeled with a standalone TN and a wholly-uncontracted equation list; the contracted-form result at the end of each equation is written in ordinary parentheses, not an inline TN (F-211, 17.13.1b) — expect mismatch there, matching Example 17-13/17-9's own already-noted gap."
+}

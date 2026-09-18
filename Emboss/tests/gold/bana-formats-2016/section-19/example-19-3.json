@@ -1,0 +1,44 @@
+{
+  "id": "BANA Example 19-3",
+  "title": "Example 19-3: Morse Code with Word Sounds",
+  "pdfPages": [
+    520
+  ],
+  "textLines": [
+    15093,
+    15100
+  ],
+  "illustrates": {
+    "rule": "19.4.2",
+    "quote": "Follow print when sounds such as dit, di, and dah represent the Morse code sounds. a. Use a hyphen to connect the sounds of a single letter. b. Use a space to separate the letters within words. c. Follow print for punctuation. d. Line breaks are between words. Do not divide words between braille lines."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "dah-dah dah-dah-dah di-dah-dit di-di-dit dit, dah-di-dah-dit dah-dah-dah dah-di-dit dit.",
+        "features": "Braille shows this flush (zero indent), so built blocked:true."
+      }
+    ],
+    "notes": "Plain prose paragraph (Morse sounds spelled out as words) with ordinary comma/period punctuation — 19.4.2's own point is that this needs no special handling at all, unlike 19.4.1's dot/dash symbol form.",
+    "surroundingText": [],
+    "printFeatures": "Plain text paragraph."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "dah-dah dah-dah-dah di-dah-dit di-di-dit",
+      "dit1 dah-di-dah-dit dah-dah-dah",
+      "dah-di-dit dit4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15098-15100. Forward-translating the print paragraph above through Emboss's own translator (uebG2) reproduces this braille exactly, byte-for-byte, confirming both the wording and that 19.4.2's hyphen/comma/period all need no special handling."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree; independently re-derived and forward-translation-verified). Print side: both runs agreed on the wording; adopted B's single flowing block (A's internal line break was an arbitrary transcription artifact, not something in the source — Emboss wraps the one paragraph itself)."
+}

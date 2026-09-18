@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 18-12a",
+  "title": "Example 18-12a: Diagramming with Multiple Arrows",
+  "pdfPages": [
+    507
+  ],
+  "textLines": [
+    14710,
+    14719
+  ],
+  "illustrates": {
+    "rule": "18.8.3",
+    "quote": "Spatial Diagrams with Arrows and Multiple Shafts\na. Place the appropriate symbol of the arrow above the first letter of the word to which the arrow points. (See UEB, §3.2.)\nb. Use line mode to represent the arrow shaft. The line should end above the first letter of the word from which the arrow points. (See UEB, §16.2.3, Horizontal Line Mode.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "We found the diary in the middle of a box of rubbish"
+      },
+      {
+        "kind": "other",
+        "text": "A single continuous horizontal line above the sentence, from \"found\" to \"rubbish\", with three left-pointing arrowheads on it above \"found\", \"middle\", and \"box\". Not modeled: F-189."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "A single sentence with a continuous horizontal line above it containing multiple arrowheads."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      ",we",
+      "",
+      "  ;\\[333333333333\\[333333333\\[33333",
+      "  f.d ! di>y 9 ! middle ( a box ( ru2i%"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14710-14719, margin 0). Includes the REQUIRED leading blank braille line (14715, a genuine row of 40 blank cells, not merely a page-layout gap — distinct from the truly-empty lines 14711-14714) that BANA 18.8.1 requires ('Precede and follow each arrow/sentence pair by blank lines'); \"We\" then sits alone on its own line (14716) because the arrow-shaft line below it (14718) is itself 38 cells wide and cannot share a line with any more text at 40-cell width."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run B's braille.lines is correct: it kept the leading blank line (14715) that BANA 18.8.1 requires and that genuinely appears in the source as a full 40-blank-cell row, distinct from an ordinary page gap. Run A's own braille.lines dropped this line entirely (4 lines instead of 5) — confirmed wrong by directly re-deriving the file's own textLines range from source. illustrates.rule already correct in both (18.8.3); quote unified to the rule's own text."
+}

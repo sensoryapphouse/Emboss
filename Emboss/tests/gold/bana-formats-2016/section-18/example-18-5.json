@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 18-5",
+  "title": "Example 18-5: Isolated Punctuation Is Emphasized",
+  "pdfPages": [
+    500
+  ],
+  "textLines": [
+    14424,
+    14430
+  ],
+  "illustrates": {
+    "rule": "18.3.3c",
+    "quote": "When isolated punctuation is emphasized with something other than italics, bold, underlining, or script, insert a transcriber’s note after the punctuation mark or applicable word to identify the print emphasis."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "Full sentence (back-translated from the given braille): \"I didn't think so, but that's it.\" — with an embedded transcriber’s note reading \"apostrophe is red\" inserted immediately after \"that's\" and before \"it.\" (the apostrophe in \"that's\" is printed in red). Not modeled: F-186, no mechanism exists to insert a @.<...@.> note mid-sentence, only as a standalone block."
+      }
+    ],
+    "notes": "Verified by back-translating the given braille as a whole (the two runs’ own separate guesses for the note text and sentence disagreed on where the note sits relative to \"it.\"; back-translation removes the ambiguity: the note falls between \"that's\" and \"it.\").",
+    "surroundingText": [],
+    "printFeatures": "The phrase \"but that's it.\" is italicized; the apostrophe in \"that's\" is red."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",i didn't ?9k s1 .7b t's @.<apo/rophe is",
+      "  r$@.> x4.'"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14429-14430, margin 9); matches both runs byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. print.blocks left as a single 'other' limitation (F-186, already the section’s own documented finding, its own Example 18-5 evidence) rather than an ordinary paragraph, since the note is fused into the middle of the sentence, not separable from it; building a paragraph without it would misrepresent what this example actually demonstrates."
+}

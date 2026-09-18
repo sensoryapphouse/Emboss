@@ -1,0 +1,59 @@
+{
+  "id": "BANA Sample 17-8",
+  "title": "Sample 17-8: Definition List with Two Spaces After Entry Word",
+  "pdfPages": [
+    485
+  ],
+  "textLines": [
+    14039,
+    14049
+  ],
+  "illustrates": {
+    "rule": "17.6.1c",
+    "quote": "c. Leave two blank cells between entries and definitions when the entry words are phrases instead of individual words, if they are not followed by punctuation, or if the definition begins with a lowercase letter."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Below are definitions of this lesson's words as they are used in the story about Tony.",
+        "continuation": true
+      },
+      {
+        "kind": "glossary",
+        "items": [
+          {
+            "term": "doctor",
+            "def": "a physician"
+          },
+          {
+            "term": "heart",
+            "def": "organ that pumps blood throughout the body"
+          }
+        ]
+      }
+    ],
+    "notes": "An introductory paragraph, then two definition-list entries (single-word entry, no trailing punctuation, definition starts lowercase — exactly 17.6.1c's own two-blank-cell case) with two blank cells (not a colon) between entry and definition.",
+    "surroundingText": [],
+    "printFeatures": "Bold entry words, plain definitions."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",2l >e def9i;ns ( ? lesson's ^ws z !y >e",
+      "us$ 9 ! /ory ab ,tony4",
+      "",
+      "doctor  a physician",
+      "he>t  organ t pumps blood \"?\\t ! body",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "B's version kept (has the trailing blank content line the source genuinely carries, source line 14049); A is otherwise identical but omits that trailing blank."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: B's version (trailing blank line, source-verified) kept over A's. illustrates.rule: corrected to '17.6.1c' — A's '17.6.2c' cites a rule number that does not exist in this section (17.6 has only one numbered paragraph, 17.6.1, with lettered clauses a-c, no 17.6.2 at all); B's bare '17.6.1' drops the clause letter. The source's own cross-reference for this exact sample sits at the end of clause c, and the given braille's own two-blank-cell spacing (no colon) is precisely what clause c describes. Modeled as a 'glossary' block; EXPECT MISMATCH: glossarySegments always either injects ': ' or a single blank cell (F-183), never two — Emboss has no way to produce the required two-blank-cell separator at all."
+}

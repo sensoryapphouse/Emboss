@@ -1,0 +1,134 @@
+{
+  "id": "BANA Sample 21-1",
+  "title": "Simple Glossary",
+  "pdfPages": [
+    557
+  ],
+  "textLines": [
+    16932,
+    16967
+  ],
+  "illustrates": {
+    "rule": "21.10",
+    "quote": "Sample 21-1: Simple Glossary"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Glossary of Botanical Terms"
+      },
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "Appressed",
+            "def": "Lying close and flat against, as hairs against a surface.",
+            "level": 1
+          },
+          {
+            "term": "Axil",
+            "def": "The angle formed by a leaf or branch with the stem.",
+            "level": 1
+          },
+          {
+            "term": "Axillary",
+            "def": "Situated in an axil.",
+            "level": 1
+          },
+          {
+            "term": "Bipinnately Compound",
+            "def": "Twice pinnately compound; the primary leaflets being further divided into secondary leaflets.",
+            "level": 1
+          },
+          {
+            "term": "Calyx",
+            "def": "The collective term for all the sepals of a flower.",
+            "level": 1
+          },
+          {
+            "term": "Corolla",
+            "def": "The collective term for all of the petals of a flower.",
+            "level": 1
+          },
+          {
+            "term": "Drupe",
+            "def": "A fleshy fruit, surrounding a stone that contains a single seed.",
+            "level": 1
+          },
+          {
+            "term": "Husks",
+            "def": "Tiny thin scales enclosing a grass grain, often having hairlike appendages to assist with wind and animal dispersal of the seed.",
+            "level": 1
+          },
+          {
+            "term": "Lenticels",
+            "def": "Raised pores or short lines on the stems of plants, usually corky in color.",
+            "level": 1
+          },
+          {
+            "term": "Ligule",
+            "def": "A tiny membranous projection often fringed with hairs, from the summit of the sheath of grasses, located in the *uxil*.",
+            "level": 1
+          },
+          {
+            "term": "Panicle",
+            "def": "A loose irregularly branched inflorescence (flower cluster).",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A centered heading followed by a list of simple glossary entries. The terms are bold, and the word 'uxil' is italicized."
+  },
+  "braille": {
+    "width": 41,
+    "lines": [
+      "      ,gloss>y ( ,botanical ,t]ms    #ajb",
+      "",
+      ",appress$3 ,ly+ close & flat ag/1 z",
+      "  hairs ag/ a surface4",
+      ",axil3 ,! angle =m$ by a l1f or bran* )",
+      "  ! /em4",
+      ",axill>y3 ,situat$ 9 an axil4",
+      ",bip9nately ,comp.d3 ,twice p9nately",
+      "  comp.d2 ! prim>y l1flets 2+ fur!r",
+      "  divid$ 9to second>y l1flets4",
+      ",calyx3 ,! collective t]m = all ! sepals",
+      "  ( a fl[]4",
+      ",corolla3 ,! collective t]m = all ( !",
+      "  petals ( a fl[]4",
+      ",drupe3 ,a fle%y fruit1 surr.d+ a /\"o t",
+      "  3ta9s a s+le se$4",
+      ",husks3 ,t9y ?9 scales 5clos+ a grass",
+      "  gra91 (t5 hav+ hairlike app5dages to",
+      "  assi/ ) w9d & animal 4p]sal ( ! se$4",
+      ",l5ticels3 ,rais$ pores or %ort l9es on",
+      "  ! /ems ( plants1 usually corky 9",
+      "  color4",
+      ",ligule3 ,a t9y membran\\s projec;n (t5",
+      "  fr+$ ) hairs1 f ! summit ( ! %1? (",
+      "          ,appress$,-,ligule          #,-",
+      "  grasses1 locat$ 9 ! .1uxil4      a#ajb",
+      ",panicle3 ,a loose irregul>ly bran*$",
+      "  9floresc;e \"<fl[] clu/]\">4"
+    ],
+    "pageBreaks": [
+      25
+    ],
+    "notes": "Sample spans two braille pages. The new braille page starts at line index 25. A braille-page guide word line ('Appressed-Ligule', last line of page 1) is not built (F-192, no guide-word mechanism)."
+  },
+  "uncertain": [
+    "The source braille lines ending with page numbers (lines 1, 25, 26) are exactly 41 characters wide after stripping the 5-cell line-number field, whereas other lines fit within 40 — kept verbatim, braille.width set to 41.",
+    "Print note the typo 'uxil' instead of 'axil' in the 'Ligule' entry (italicized in print, reproduced exactly in braille) is kept as-is, not corrected to the presumably-intended 'axil'."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

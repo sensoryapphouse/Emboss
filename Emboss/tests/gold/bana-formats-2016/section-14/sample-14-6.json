@@ -1,0 +1,56 @@
+{
+  "id": "BANA Sample 14-6",
+  "title": "Sample 14-6: Columned Dialogue Ignored",
+  "pdfPages": [
+    401
+  ],
+  "textLines": [
+    11579,
+    11597
+  ],
+  "illustrates": {
+    "rule": "14.5.2c",
+    "quote": "Do not attempt to duplicate print when dialogue of simultaneous speakers is printed in columns. Use the dialogue format as directed above."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "note", "text": "Higgins, Pickering together." },
+      { "kind": "speech", "speaker": "Higgins.", "text": "Higgins. You know, she has the most extraordinary quickness of ear:" },
+      { "kind": "speech", "speaker": "Pickering.", "text": "Pickering. I assure you, my dear Higgins, that the girl" },
+      { "kind": "speech", "speaker": "Higgins.", "text": "Higgins. just like a parrot. I’ve tried her with every" },
+      { "kind": "speech", "speaker": "Pickering.", "text": "Pickering. is a genius. She can play the piano quite beautifully." },
+      { "kind": "speech", "speaker": "Higgins.", "text": "Higgins. possible sort of sound that a human being can make." },
+      { "kind": "note", "text": "Solo" },
+      { "kind": "speech", "speaker": "Pickering.", "text": "Pickering. We have taken her to classical concerts and to music ..." }
+    ],
+    "notes": "Print shows the first five speeches in two columns (speaker names left, dialogue right) with a large right-pointing brace grouping all five names as simultaneous — per 14.5.2c, Emboss/the transcriber does NOT attempt to duplicate the columns, using the ordinary dialogue format instead, with a single transcriber's note (here the FULL natural-sentence wording, entirely enclosed, unlike Sample 14-5's own partial split) ahead of the group and a 'Solo' note resuming normal dialogue. Each speaker's own name is followed by a print period, not a colon.",
+    "surroundingText": [],
+    "printFeatures": "Two-column (speaker/dialogue) print layout for five simultaneous speeches, grouped by a large brace; ordinary single-column dialogue for the sixth (solo) speech."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,hi79s1 ,pick]+ tgr4@.>",
+      ",hi79s4 ,y \"k1 %e has ! mo/ extraord9>y",
+      "  qk;s ( e>3",
+      ",pick]+4 ,i assure y1 my de> ,hi79s1 t !",
+      "  girl",
+      ",hi79s4 j l a p>rot4 ,i've tri$ h] ) e",
+      ",pick]+4 is a g5ius4 ,%e c play ! piano",
+      "  q b1uti;lly4",
+      ",hi79s4 possible sort ( s.d t a human 2+",
+      "  c make4",
+      "      @.<,solo@.>",
+      ",pick]+4 ,we h tak5 h] to classical",
+      "  3c]ts & to music 444"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for every speech (14.5.1a/14.5.2c); the opening transcriber's note is fully enclosed INCLUDING the period (contrast Sample 14-5's own partial split), and, like it, has no blank line before or after (14.5.2b)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on print.blocks substance; A additionally modelled a spurious 'heading' block that just repeats this sample's own title (not itself printed content — dropped here, matching every other section's own convention that a sample's own citation title lives only in `id`/`title`, never a print.blocks heading, unless the given braille itself carries a row for it, which this one does not). illustrates.rule: A's own '14.5.2c' (the actual rule this excerpt illustrates — the print-column-ignoring behaviour) kept over B's null. Forward-translated through Emboss's translator ({type:'note'} + six {type:'play', subtype:'prose'} blocks, 1-3 margins): EXACT MATCH (see differences.md)."
+}

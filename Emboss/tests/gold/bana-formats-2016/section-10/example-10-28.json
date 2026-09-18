@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 10-28",
+  "title": "Number Above Sentence",
+  "pdfPages": [
+    265
+  ],
+  "textLines": [
+    7766,
+    7774
+  ],
+  "illustrates": {
+    "rule": "10.8.7b",
+    "quote": "10.8.7 Text with Numbers Above or Below the Sentence, Word, or Phrase a. When a number or letter is printed above or below a sentence, place it before the sentence to which it applies. b. Follow print for emphasis in the sentence(s)."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1 <u>In the drama,</u> *The Phantom Tollbooth,* <u>Milo is bored.</u> He is a restless boy who is never satisfied with what he has."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "A raised \"1\" is printed above \"In the drama,\"; \"In the drama,\" and \"Milo is bored.\" are underlined in print, \"The Phantom Tollbooth,\" is italicized — all three retained per 10.6.11c/10.8.7b (built with Emboss’s own cell-markup DSL, `_..._` underline / `*...*` bold, the nearest available emphasis to print’s own underline/italic)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a _7,9 ! drama1_' .7,! ,phantom",
+      ",tollboo?1.' _7,milo is bor$_'4 ,he is a",
+      "re/.s boy :o is n\"e satisfi$ ) :at he",
+      "has4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print reconstructed from A/B with emphasis markup added for the underlined/italicized spans the given braille itself shows (underline-word and italic-word indicators)."
+}

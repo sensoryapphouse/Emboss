@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 14-4",
+  "title": "Example 14-4: Italics Retained for Unenclosed Stage Directions",
+  "pdfPages": [
+    388
+  ],
+  "textLines": [
+    11194,
+    11201
+  ],
+  "illustrates": {
+    "rule": "14.4.1c",
+    "quote": "Ignore font attributes used for stage directions, unless needed for distinction, e.g., when stage directions after a speaker’s name are not enclosed in punctuation. If text within stage directions requires emphasis for distinction, use the typeform indicator that best represents print emphasis of surrounding text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "speech",
+        "speaker": "MAMA",
+        "text": "MAMA *hysterically:* But I can’t do anything about that!"
+      },
+      {
+        "kind": "speech",
+        "speaker": "JESSIE",
+        "text": "JESSIE *quietly:* No. You can’t."
+      }
+    ],
+    "notes": "Speaker names in full capitalization (retained per 14.1.2); the stage direction immediately after each name (‘hysterically:’, ‘quietly:’) is NOT enclosed in punctuation, so its own italic font attribute is kept for distinction per 14.4.1c, up to and including the colon that has no space before it.",
+    "surroundingText": [],
+    "printFeatures": "Full capitalization for speaker names; italics on the unenclosed stage-direction word immediately following each name; dialogue in regular type."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,mama .1hy/]ically3 ,b ,i c't d any?+",
+      "  ab t6",
+      ",,jessie .1quietly3 ,no4 ,y c't4"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for each speech (14.5.1a); the italic word indicator (.1) covers 'hysterically:'/'quietly:' up to the colon since there is no space before it; the colon itself is not a separate word."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on the substance (speaker names all-caps, stage-direction word italicized, unenclosed); both, however, described the italics only in a prose `features`/`printFeatures` string rather than marking it in `text` itself. Per this repo's own established convention (emphasis marked in place with Emboss's *italic* cell-markup), `text` was rewritten to embed *hysterically:*/*quietly:* directly, with the colon inside the italic run (forward-translation confirms the colon must stay inside the italic segment to reproduce the given braille's single '3' terminator with no separate closing mark). illustrates.rule: A already had this right ('14.4.1c'); B's own '14.5.1c' is wrong (no such rule id is quoted at source lines 128-134) and was not used. Forward-translated through Emboss's translator (two {type:'play', subtype:'prose'} blocks, 1-3 margins): EXACT MATCH (see differences.md)."
+}

@@ -1,0 +1,62 @@
+{
+  "id": "BANA Sample 21-5",
+  "title": "Side-by-Side English/Spanish Glossary",
+  "pdfPages": [
+    589
+  ],
+  "textLines": [
+    17056,
+    17066
+  ],
+  "illustrates": {
+    "rule": "21.6.3e",
+    "quote": "English and foreign language glossary words may appear as separate entries on the same page. Use 1-5 margins for the main entry words, 3-5 margins for the subentry words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "F"
+      },
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "factors",
+            "def": "(p. 10) Two or more numbers that are multiplied together to form a product.",
+            "level": 1
+          },
+          {
+            "term": "factores",
+            "def": "Dos o más números que se multiplicand entre sí para formar un producto.",
+            "level": 2
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Two columns: English entries on the left, Spanish translation on the right"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                  ;,f",
+      "factors \"<;p4 #aj\"> ,two or m numb]s t",
+      "    >e multipli$ tgr to =m a product4",
+      "  factores ,dos o m(s n)meros que se",
+      "    multiplicand entre s/ para formar un",
+      "    producto4"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

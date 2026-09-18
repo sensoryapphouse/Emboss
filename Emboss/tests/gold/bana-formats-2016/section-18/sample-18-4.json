@@ -1,0 +1,62 @@
+{
+  "id": "BANA Sample 18-4",
+  "title": "Sample 18-4: Text with Proofreading Marks",
+  "pdfPages": [
+    515
+  ],
+  "textLines": [
+    14905,
+    14927
+  ],
+  "illustrates": {
+    "rule": "18.6.2",
+    "quote": "When text shows transpositions, insertions, and/or corrections that cannot be reproduced, it is important to provide only the information that is included in the text and not give away the answers.\na. Transcribe marked words that pertain to spelling in uncontracted braille. Contract other marked words (i.e. those relating to punctuation or adding text).\nb. Use the same keying technique as that used for text with marginal labels. (See Formats, §16.11, Keying Technique for Marginal Labels.)\nc. Devise a key by assigning a number or letter(s) to each proofreader’s mark. The key should contain a dot 3 or a dot 6. Use the same terminology in the key that is found in the list of proofreader’s marks in the text, as not all books use the same terminology. Follow each key item by the marked word(s), and then the instructions on what needs to be done. Enclose the complete key in a transcriber’s note before the text.\nd. Place the keyed mark after the affected word or phrase, preceded and followed by a space. This keyed mark must appear on the same line as the marked word.\ne. Phrases should be enclosed in braille grouping indicators. Explain this usage in a transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Note: This sample uses the proofreading marks and terminology from Sample 18-3."
+      },
+      {
+        "kind": "other",
+        "text": "The full embedded transcriber’s note/key (back-translated): \"The sentence is marked with proofreading marks. Each mark is keyed. The keyed mark is inserted after each affected word. Key to marks: 1 last. Take out period; 2 pierre Make the p a capital letter; 3 agree Add d; 4 fir Check the spelling; 5 too Check the spelling; 6 lesons Check the spelling\" — one continuous TN (14913-14923) whose own internal blank line (before \"Key to marks:\") and numbered sub-list have no equivalent inside a single `note` block, which only ever wraps its content as one flat run-on paragraph (formatTranscriberNote, no internal blank-line/list support) — not modeled."
+      },
+      {
+        "kind": "paragraph",
+        "text": "At last. 1 the head chef, pierre 2 agree 3 to take Greg aside fir 4 too 5 hours every week for cooking lesons. 6"
+      }
+    ],
+    "notes": "The marked passage's own words with handwritten proofreading marks (a deletion sign over the period in 'last.', three underlines under the 'p' in 'pierre', a caret inserting 'd' after 'agree', circled 'sp' under 'fir'/'too'/'lesons') are represented in braille purely by the plain numeral key (1-6) placed after each affected word/phrase — this final passage IS fully representable as ordinary text (the numbers are plain UEB numerals, no grouping indicator or typeform needed here since the marks themselves, not phrases, are keyed).",
+    "surroundingText": [],
+    "printFeatures": "Handwritten proofreading marks in red on specific words."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,! s5t;e is m>k$ ) pro(r1d+",
+      "    m>ks4 ,ea* m>k is key$4 ,! key$ m>k",
+      "    is 9s]t$ af ea* a6ect$ ^w4",
+      "      ,key to m>ks3",
+      "",
+      "#a la/4 ,take \\ p]iod",
+      "#b pi]re ,make ! ;p a capital lr",
+      "#c agree ,add ;d",
+      "#d fir ,*eck ! spell+",
+      "#e too ,*eck ! spell+",
+      "#f lesons ,*eck ! spell+@.>",
+      "",
+      "  ,at la/4 #a ! h1d *ef1 pi]re #b",
+      "agree #c to take ,greg aside fir #d",
+      "too #e h\\rs e week = cook+ lesons4 #f"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted directly from the source's own numbered lines 5-19 (14913-14927, the numbering itself starts at 5 — lines 1-4 are the file's own UNNUMBERED intro 'Note: ...Sample 18-3.' paragraph at 14907-14908, genuine print-only text, not braille); stripping the file's own 5-character line-number field. Matches run B byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run B's braille.lines is correct: it correctly excluded the unnumbered 'Note: This sample uses...' intro (source lines 14907-14908, genuinely print-only — the braille's own numbering starts at 5, confirming lines 1-4 were never brailled at all) and started directly at the numbered content. Run A's own braille.lines wrongly spliced that print-only intro text in verbatim as if it were unnumbered braille content, with four spurious extra blank lines. illustrates.rule/quote corrected from run A's own caption-text guess to run B's own already-correct full rule text (18.6.2, stem+a-e)."
+}

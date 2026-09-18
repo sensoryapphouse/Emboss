@@ -1,0 +1,126 @@
+{
+  "BANA Example 18-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 18-10": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! BOY _\\\\ PLAY$ 9 ! P>K4\" vs actual \"  ,! BOY _\\\\ PLAY$ 9 ! P>K4\"."
+  },
+  "BANA Example 18-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \" ;\\\\[3333333333333333\" vs actual \"  ,TOM1 DID Y SUBMIT YR >TICLE8\". line count differs by -2 (expected 3, actual 1). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Two curved arrows above the sentence, both pointing left to \"Tom\": one from \"you\", a second ("
+  },
+  "BANA Example 18-12a": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",WE\" vs actual \"  ,WE F.D ! DI>Y 9 ! MIDDLE ( A BOX (\". line count differs by -2 (expected 4, actual 2). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"A single continuous horizontal line above the sentence, from \"found\" to \"rubbish\", with three left-pointi"
+  },
+  "BANA Example 18-12b": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",WE\" vs actual \"  ,WE F.D ! DI>Y 9 ! MIDDLE ( A BOX (\". line count differs by -2 (expected 4, actual 2). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"A horizontal line above the sentence, from \"We\" to \"rubbish.\", with three right-pointing arrowheads on it"
+  },
+  "BANA Example 18-13": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"          \\\"333333334333333334\" vs actual \"  ,! /ADIUM CR[D 0 .1L>GE & .1FRLY4\". line count differs by -2 (expected 3, actual 1). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"A branching line above the sentence: a downward arrowhead points to \"crowd\", and"
+  },
+  "BANA Example 18-14": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,9 ! FOLL[+ S5T;E LABEL .1=CE &\" vs actual \"  ,9 ! FOLL[+ S5T;E LABEL .1=CE &\". line count differs by -3 (expected 5, actual 2). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Diagrammed sentence (back-translated): \"The *force* of the explosions **rattl"
+  },
+  "BANA Example 18-15": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Example 18-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,CAPITALIZE TITLES US$ 2F A PROP] \\\"N\" vs actual \"  ,CAPITALIZE TITLES US$ 2F A PROP] \\\"N &\". line count differs by -1 (expected 7, actual 6). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Transcriber's note: \"The symbol [transcriber-defined red-letter"
+  },
+  "BANA Example 18-3": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"    ,CORRECT ]RORS 9 PUNCTUA;N 9 !\" vs actual \"  ,CORRECT ]RORS 9 PUNCTUA;N 9 ! PASSAGE\"."
+  },
+  "BANA Example 18-4": {
+    "status": "mismatch",
+    "note": "first differing line 7: expected \"  /AGE4\" vs actual \"/AGE4\"."
+  },
+  "BANA Example 18-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",I DIDN'T ?9K S1 .7B T'S @.<APO/ROPHE IS\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Full sentence (back-translated from the given braille): \"I didn't think so, but that's it.\" — with an e"
+  },
+  "BANA Example 18-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,! SYMBOL .=^#1 9DICATES A\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Transcriber's note: \"The symbol [transcriber-defined strike-through mark] indicates a crossed-out word.\" (ba"
+  },
+  "BANA Example 18-7": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"    ,9S]T AN ADJECTIVE \\\": Y SEE A @54\" vs actual \"  ,9S]T AN ADJECTIVE \\\": Y SEE A @54\"."
+  },
+  "BANA Example 18-8": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"    PREC$$ BY A C>ET .=@5 & 5CLOS$ 9 BRL\" vs actual \"    PREC$$ BY A C>ET @5 & 5CLOS$ 9 BRL\". line count differs by -1 (expected 6, actual 5)."
+  },
+  "BANA Example 18-9": {
+    "status": "not-representable",
+    "note": "first differing line 4: expected \"\" vs actual null. line count differs by -2 (expected 5, actual 3). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Diagrammed sentence (back-translated): \"We arrived at the hotel in the evening.\" with \"arrived\" single-underlined (the verb) and \"at the hotel\""
+  },
+  "BANA Sample 18-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,9 BRL1 EA* S5T;E IS        #,-\" vs actual \"      @.<,9 BRL1 EA* S5T;E IS FOLL[$ BY\". line count differs by -1 (expected 9, actual 8)."
+  },
+  "BANA 18.2.1 Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.2.2b Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.3.3b Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.4.1c Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.5.2c Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.5.3d Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.6.4e Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.7.3 Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.8.2e Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 18.9.1 Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 18-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",A .1COMPLEX .1S5T;E 3SI/S ( \\\"O      #,-\" vs actual \"      @.<,EA* S5T;E IS FOLL[$ BY A LI/ (\". line count differs by +1 (expected 18, actual 19)."
+  },
+  "BANA Sample 18-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777   #,-\" vs actual \"  ,,PRO(R1D+ ,,M>KS\". line count differs by -11 (expected 12, actual 1). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"A list of 7 proofreading marks, each shown as a print symbol (paragraph sign, caret,"
+  },
+  "BANA Sample 18-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,! S5T;E IS M>K$ ) PRO(R1D+\" vs actual \"  ,NOTE3 ,? SAMPLE USES ! PRO(R1D+ M>KS\". line count differs by -10 (expected 15, actual 5). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"The full embedded transcriber’s note/key (back-translated): \"The sen"
+  },
+  "BANA Sample 18-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"  ,! CIRCL$ ^W IS ! SUBJECT1 !       #,-\" vs actual \"  ,! CIRCL$ ^W IS ! SUBJECT1 ! BOX$ ^W\". line count differs by -7 (expected 9, actual 2). Input-model limitation: print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): \"Transcriber’s note (back-translated): \"Symbols used: [circled-word "
+  }
+}

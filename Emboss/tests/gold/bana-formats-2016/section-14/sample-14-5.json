@@ -1,0 +1,49 @@
+{
+  "id": "BANA Sample 14-5",
+  "title": "Sample 14-5: Simultaneous Speakers",
+  "pdfPages": [
+    400
+  ],
+  "textLines": [
+    11560,
+    11572
+  ],
+  "illustrates": {
+    "rule": "14.5.2",
+    "quote": "Simultaneous Speakers a. Ignore enclosure symbols when they are used to indicate that two or more characters are speaking at the same time with different dialogue. Precede the simultaneous speeches with a transcriber’s note. Sample: Martha and Peter together b. Indicate the resumption of normal dialogue by the following transcriber’s note. Do not insert a blank line before or after the transcriber’s note. Sample: Solo"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "Peter:", "text": "Peter: What is that?" },
+      { "kind": "speech", "speaker": "Nicky:", "text": "Nicky: The Delphis are coming." },
+      { "kind": "note", "text": "Craig, Peter Together" },
+      { "kind": "speech", "speaker": "Craig", "text": "Craig Yes, the Delphis." },
+      { "kind": "speech", "speaker": "Peter", "text": "Peter Run, Run." },
+      { "kind": "note", "text": "Solo" },
+      { "kind": "speech", "speaker": "Nicky:", "text": "Nicky: We will all be killed." }
+    ],
+    "notes": "Craig's and Peter's own speeches are grouped in print by a large right-pointing brace with the italicised word 'Together' beside it; the given braille encloses only 'Craig, Peter' in transcriber's-note indicators (the note 14.5.2a itself requires, identifying WHO is speaking simultaneously) and keeps print's own word 'Together' as ordinary, unenclosed text immediately after — not the idealised full-sentence note wording ('Martha and Peter together') rule 14.5.2a's own illustrative Sample: shows, since print already supplies a usable word here. Craig's and Peter's own speaker names carry NO colon (just a single space before the dialogue, matching their own full/lower-case print styling with no other distinguishing mark); Peter's EARLIER (non-grouped) line and both of Nicky's lines DO carry a colon.",
+    "surroundingText": [],
+    "printFeatures": "Ordinary dialogue lines interrupted by a braced pair of simultaneous speeches, marked off by two transcriber's notes (grouping-plus-'Together', then 'Solo' to resume normal dialogue)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",pet]3 ,:at is t8",
+      ",nicky3 ,! ,delphis >e com+4",
+      "      @.<,craig1 ,pet]@.> ,tgr",
+      ",craig ,yes1 ! ,delphis4",
+      ",pet] ,run1 ,run4",
+      "      @.<,solo@.>",
+      ",nicky3 ,we w all 2 kill$4"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for every speech (14.5.1a); lines 3 and 6 are transcriber's notes at 7-5 margins (14.5.2a/b), neither with a blank line before or after (14.5.2b, and matched here since Emboss's 'note' block emits none by default either)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and, in substance, on print.blocks (A's own note field already correctly identified line 3's own '<Craig, Peter>' + plain 'Together' split; B mistakenly described the given braille as adding a note 'not present in the print', when the given braille's own line 3 is exactly what both runs' own print.blocks already describe). illustrates.quote: A's own full rule text kept over B's bare title-repeat. Forward-translated through Emboss's translator ({type:'play'}/{type:'note'} blocks): every line matches exactly EXCEPT line 3, where Emboss's 'note' block (formatTranscriberNote) always encloses its ENTIRE text in transcriber's-note indicators with no way to leave part of it — print's own 'Together' — outside the enclosure (the same gap already documented for example-14-10, F-241) — EXPECTED MISMATCH on that one line, not a gold-file error (see differences.md)."
+}

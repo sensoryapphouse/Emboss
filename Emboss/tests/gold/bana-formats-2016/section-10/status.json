@@ -1,0 +1,194 @@
+{
+  "BANA Example 10-1": {
+    "status": "not-representable",
+    "note": "first differing line 3: expected \"-------------------------------------#FC\" vs actual \"\". line count differs by -1 (expected 10, actual 9). Input-model limitation: print block kind 'other' (not modeled — illegible/torn/struck-through print content, or a page device with no braille-buildable counterpart in this schema): \"—New Print Page—"
+  },
+  "BANA Example 10-10": {
+    "status": "not-representable",
+    "note": "first differing line 3: expected \"    ,FOLL[ YR T1*]'S 9/RUC;NS TO ANSW] !\" vs actual \"  ,FOLL[ YR T1*]'S 9/RUC;NS TO ANSW] !\". line count differs by +1 (expected 6, actual 7). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Example 10-11": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"#A4 ,LI/ ! 3T95TS4 @.<#G ANSW]S@.>\" vs actual \"#A4 ,LI/ ! 3T95TS4\". line count differs by +2 (expected 1, actual 3)."
+  },
+  "BANA Example 10-12": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"#A4 ,LI/ ! ,GRT ,LAKES4\" vs actual \"#A4 ,LI/ ! ,GRT ,LAKES\"."
+  },
+  "BANA Example 10-13": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \",X IS \\\"\\\"\\\" O'CLOCK4\" vs actual \",X IS O'CLOCK4\"."
+  },
+  "BANA Example 10-14": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-15": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-16": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",:AT IS \\\"<_1TO _1G\\\"> ON \\\"R N[8\" vs actual \",:AT IS \\\"<_1TO _1G_'\\\"> ON \\\"R N[8\"."
+  },
+  "BANA Example 10-17": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-18": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-19": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \",! %OP .- \\\"<SELL\\\"> B1UTI;L KITES4\" vs actual \"\". line count differs by +2 (expected 3, actual 5)."
+  },
+  "BANA Example 10-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,WRITE EA* S5T;E4\" vs actual \"  ,WRITE EA* S5T;E4\". Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Example 10-20": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-21": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-22": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \",:AT IS .- \\\"R N[8\" vs actual \"\". line count differs by +1 (expected 4, actual 5)."
+  },
+  "BANA Example 10-23": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-24": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-25": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-26": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,SELECT ! CORRECT PREFIX 9 EA*\" vs actual \"  ,SELECT ! CORRECT PREFIX 9 EA* PHRASE4\". line count differs by +2 (expected 7, actual 9). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Example 10-27": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-28": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"#A _7,9 ! DRAMA1_' .7,! ,PHANTOM\" vs actual \"#A _7,9 ! DRAMA1_' \\\"9,! ,PHANTOM\"."
+  },
+  "BANA Example 10-29": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",A4 ,USE EA* ( ! FOLL[+ ^WS 9 A COMPLETE\" vs actual \"  ,A4 ,USE EA* ( ! FOLL[+ ^WS 9 A\". line count differs by +1 (expected 6, actual 7). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Example 10-30": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-31": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! @.<BUTT]FLY@.> FLEW S\\\\? = ! W9T]4\" vs actual \",! .<PICTURE ( A BUTT]FLY.> FLEW S\\\\? = !\". line count differs by +1 (expected 1, actual 2)."
+  },
+  "BANA Example 10-32": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"  A4 @.<GIRL EAT+ C&Y@.>\" vs actual \"  A4 GIRL EAT+ C&Y\". line count differs by -1 (expected 5, actual 4)."
+  },
+  "BANA Example 10-4": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,WRITE ! V]BS 9 EA* S5T;E 2L4\" vs actual \"  ,WRITE ! V]BS 9 EA* S5T;E 2L4\". line count differs by +1 (expected 4, actual 5). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Example 10-6": {
+    "status": "not-representable",
+    "note": "first differing line 5: expected \"  ;,B4 ,! HO/ CELL \\\"UGOES CELL DIVI.N\" vs actual \"  ;,B4 ,! HO/ CELL \\\"UGOES CELL DIVI.N T\". Input-model limitation: print block kind 'other' (not modeled — illegible/torn/struck-through print content, or a page device with no braille-buildable counterpart in this schema): \"C. The virus incorporates its nucleic acid into the DNA of the host cell (print shows this choice struck through by a wavy torn-paper line; omitted from the giv\""
+  },
+  "BANA Example 10-7": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-8": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 10-9": {
+    "status": "not-representable",
+    "note": "first differing line 5: expected \"#G4 ,TURNOV] AM;G MEMB]S ( 444\" vs actual \"\". line count differs by +2 (expected 5, actual 7). Input-model limitation: print block kind 'other' (not modeled — illegible/torn/struck-through print content, or a page device with no braille-buildable counterpart in this schema): \"\\_\\_\\_\\_ (a blank write-on-line precedes question 6 in print; omitted per 10.5.1)\""
+  },
+  "BANA Sample 10-1": {
+    "status": "not-representable",
+    "note": "first differing line 2: expected \"    ,ID5TIFY : /ATE;T 9 EA* SET IS A\" vs actual \"  ,ID5TIFY :AT /ATE;T 9 EA* SET IS A\". line count differs by +1 (expected 12, actual 13). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,MAT* ! /ATE & XS CAPITAL4\" vs actual \"  ,MAT* ! /ATE & XS CAPITAL4\". Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,SEE IF Y \\\"K :AT EA* ^W 2L M1NS4\" vs actual \"  ,SEE IF Y \\\"K :AT EA* ^W 2L M1NS4 ,MAT*\". line count differs by +1 (expected 15, actual 16). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-12": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"    ,:O DID :AT8 ,2F EA* \\\"N 2L1 WRITE !\" vs actual \"  ,:O DID :AT8 ,2F EA* \\\"N 2L1 WRITE ! LR\". line count differs by +1 (expected 18, actual 19)."
+  },
+  "BANA Sample 10-13": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,F9D ! PICTURE T BE/ MAT*ES EA* FOOD\" vs actual \"  ,F9D ! PICTURE T BE/ MAT*ES EA* FOOD\". line count differs by -4 (expected 19, actual 15). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 10-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",A4 ,*OOSE ! ANSW] T %[S ! BE/ WAY TO\" vs actual \"  ,A4 ,*OOSE ! ANSW] T %[S ! BE/ WAY TO\". line count differs by -2 (expected 18, actual 16). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-4": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"      ,& \\\"! W ,I KEEP Y =\\\"E1\" vs actual \",& \\\"! W ,I KEEP Y =\\\"E1\"."
+  },
+  "BANA Sample 10-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,USE ! ^WS 2L TO FILL 9 ! BLANKS4\" vs actual \"  ,USE ! ^WS 2L TO FILL 9 ! BLANKS4\". line count differs by +4 (expected 9, actual 13). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,WRITE ! ^W T COMPLETES EA* S5T;E4\" vs actual \"  ,WRITE ! ^W T COMPLETES EA* S5T;E4\". line count differs by +2 (expected 10, actual 12). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,WRITE A PRON\\\\N T C 2 SUB/ITUT$ = !\" vs actual \"  ,WRITE A PRON\\\\N T C 2 SUB/ITUT$ = !\". line count differs by -1 (expected 11, actual 10). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,M>K ! CAPITALIZA;N ]RORS 9 ! FOLL[+\" vs actual \"  ,M>K ! CAPITALIZA;N ]RORS 9 ! FOLL[+\". Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,REWRITE ! S5T;ES1 9S]T+ COMMAS \\\":\" vs actual \"  ,REWRITE ! S5T;ES1 9S]T+ COMMAS \\\":\". line count differs by -2 (expected 13, actual 11). Input-model limitation: 'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead."
+  },
+  "BANA Sample 10.5.2-sample-a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 10.6.10-sample-a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 10.6.8-sample-a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

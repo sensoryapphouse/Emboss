@@ -1,0 +1,67 @@
+{
+  "id": "BANA Example 10-3",
+  "title": "Lettered Directions with Two Paragraphs",
+  "pdfPages": [
+    255
+  ],
+  "textLines": [
+    7330,
+    7341
+  ],
+  "illustrates": {
+    "rule": "10.3.3",
+    "quote": "Transcribe numbered or lettered directions in a nested list format. Begin additional paragraphs two cells to the right of the runover position."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "A. Use each of the following words in a complete sentence."
+      },
+      {
+        "kind": "directions",
+        "text": "Use adjectives to describe what each dwelling looks like."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. house"
+          },
+          {
+            "level": 0,
+            "text": "2. farm"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "3. ranch (print shows a wavy torn-paper line cropping this third item; omitted from the given braille entirely)"
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      ",a4 ,use ea* ( ! foll[+ ^ws 9 a complete",
+      "    s5t;e4",
+      "      ,use adjectives to describe :at",
+      "    ea* dwell+ looks l4",
+      "  #a4 h\\se",
+      "  #b4 f>m"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print reconstructed from A/B; item 3 (partially visible as \"ranch\" behind a torn-paper line in print) is not in the given braille and is recorded as 'other', matching the same torn-content convention used for Example 10-6/10-26."
+}

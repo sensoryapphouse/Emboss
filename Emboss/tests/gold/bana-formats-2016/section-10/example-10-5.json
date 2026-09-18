@@ -1,0 +1,57 @@
+{
+  "id": "BANA Example 10-5",
+  "title": "Main Entries Only",
+  "pdfPages": [
+    255
+  ],
+  "textLines": [
+    7357,
+    7366
+  ],
+  "illustrates": {
+    "rule": "10.4.1",
+    "quote": "Use 1-3 margins for an exercise set that has no subentries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Write the verbs in each sentence below."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1 He ran a very fast race, but did not do well swimming."
+          },
+          {
+            "level": 0,
+            "text": "2 Mom cooked dinner for my friends."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "    ,write ! v]bs 9 ea* s5t;e 2l4",
+      "#a ,he ran a v fa/ race1 b did n d well",
+      "  swimm+4",
+      "#b ,mom cook$ d9n] = my frs4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly (main entries use a bare \"#a\"/\"#b\" with no period). Print unchanged from A/B."
+}

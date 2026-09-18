@@ -1,0 +1,69 @@
+{
+  "id": "BANA Sample 19-6",
+  "title": "Sample 19-6: Shaped Letter Puzzles",
+  "pdfPages": [
+    536
+  ],
+  "textLines": [
+    15454,
+    15481
+  ],
+  "illustrates": {
+    "rule": "19.6.1f",
+    "quote": "f. For irregularly shaped puzzles, do not insert spaces between letters; follow print for letter placement."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "whiskers   small\news        gray\ntail       brown\nnose       cheese\nfurry      cat\ntrap",
+        "features": "A 2-column, 11-word word-bank (to be found inside the mouse-shaped grid below), in uncontracted braille (e.g. 'small' is spelled out letter-by-letter, s-m-a-l-l, rather than contracting to its usual one-cell whole-word sign) — column alignment is not reproducible (F-219)."
+      },
+      {
+        "kind": "note",
+        "text": "The puzzle is shaped like a mouse."
+      },
+      {
+        "kind": "other",
+        "text": "(an irregularly, mouse-shaped word-search grid of letters, 9 rows, following print's own letter placement with no inserted spaces per 19.6.1f)",
+        "features": "Not braille-buildable: the model has no mechanism for an irregular, print-driven letter grid whose OWN leading indentation varies row to row (F-217/219)."
+      }
+    ],
+    "notes": "A two-column word-bank list, a transcriber's note explaining the puzzle's mouse shape, and the shaped word-search grid itself.",
+    "surroundingText": [],
+    "printFeatures": "Word bank (2 columns), transcriber's note, irregularly-shaped (mouse-outline) letter grid."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "whiskers small                       #,-",
+      "ears      gray",
+      "tail      brown",
+      "nose      cheese",
+      "furry     cat",
+      "trap",
+      "",
+      "      @.<,! puzzle is %ap$ l a m\\se4@.>",
+      "",
+      "\"\"=;;;,,,",
+      " kf gh",
+      " sfhbkn",
+      " grayco   ejaxtf",
+      "ghmdoqsgycatmjcuft",
+      "hwhiskersqrqpodrrap",
+      "wbamelvefksmallreie",
+      " hhan cheesehwyhlj",
+      "       browngbfekf",
+      "          hetrap",
+      "\"\"=,';'"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15454-15481. The whole shaped grid (lines 11-19) is wrapped in one grade-1, capitalized-word passage ('\"\"=;;;,,,' / '\"\"=,\\';\\''); the word-bank list (lines 1-6) and the transcriber's note (lines 8) sit OUTSIDE that passage, before it."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived, matches exactly). Print side reconciled: the transcriber's note is back-translation-verified verbatim; the word-bank list and the shaped grid are both documented as not braille-buildable (F-217/219/222), matching both runs' own general understanding."
+}

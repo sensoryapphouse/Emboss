@@ -1,0 +1,222 @@
+{
+  "B004 I Good practice 1": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "B004 I Good practice 2": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "B004 I Good practice 3": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Example 21-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"8,AC;N >*AEOLOGY10 #CJB\" vs actual \"8,AC;N >*AEOLOGY101 #CJB\"."
+  },
+  "example-21-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"     ACETYLSAL,-ACQUIR$ IMMUNE DEF   #,-\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"acetylsalicylic acid: …"
+  },
+  "BANA Example 21-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"              KEEP \\\"<3T4\\\">                            #,-\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"2 kayak: ..."
+  },
+  "BANA Example 21-12": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                 ,9DEX              #ICB\" vs actual \"  ,PAGE NUMB]S AF AN ;M REF] TO A MAP4\". line count differs by -1 (expected 7, actual 6). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"Index                            "
+  },
+  "BANA Example 21-13": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \",AB5AKI1 CR1;N MY?S (1 #FEH-#FEI\" vs actual \"\". line count differs by +1 (expected 7, actual 8)."
+  },
+  "BANA Example 21-14": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 21-15": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 21-16": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"ALPHA WAVES ,! RELATIVELY SL[ BRA9 WAVES\" vs actual \"ALPHA WAVES3 ,! RELATIVELY SL[ BRA9\"."
+  },
+  "BANA Example 21-17": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"ANTIQUE \\\"<;N4\\\"> RELIC1 >TIFACT1\" vs actual \"ANTIQUE3 \\\"<;N4\\\"> RELIC1 >TIFACT1\"."
+  },
+  "BANA Example 21-18": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"ACRONYM  A ^W =M$ BY US+ ! 9ITIAL LRS (\" vs actual \"ACRONYM3 A ^W =M$ BY US+ ! 9ITIAL LRS (\"."
+  },
+  "BANA Example 21-19": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"DAFT  CRAZY1 SILLY\" vs actual \"DAFT3 CRAZY1 SILLY\"."
+  },
+  "BANA Example 21-2": {
+    "status": "mismatch",
+    "note": "first differing line 6: expected \"ABOM9ABLY1 #ICJ\" vs actual \"\". line count differs by +1 (expected 6, actual 7)."
+  },
+  "BANA Example 21-20": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"APPLY  ;V TO LAY OR SPR1D ON4\" vs actual \"APPLY3 ;V TO LAY OR SPR1D ON4\"."
+  },
+  "BANA Example 21-21": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"APPLY  TO LAY OR SPR1D ON4 .7,PL1SE\" vs actual \"APPLY3 TO LAY OR SPR1D ON4 .7,PL1SE\"."
+  },
+  "BANA Example 21-22": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"BACT]IA_/BACTER/AS ,PEQUE]/SIMOS\" vs actual \"BACT]IA_/BACT]^/IAS3 ,PEQUE^]N^/ISIMOS\". line count differs by -1 (expected 7, actual 6)."
+  },
+  "BANA Example 21-23": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"B\\\\LEV>D B\\\\_4LE_4V>D\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"bou·le·vard (bo͝ol′ə värd′) n. [Fr < MDu bolwerc, bulwark] a broad street lined with tre"
+  },
+  "BANA Example 21-24": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"UNCAGE 444 .1TRANSITIVE .1V]B 3 TO\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"uncage … transitive verb : to release from or as if from a cage : free from"
+  },
+  "BANA Example 21-25": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"/AY 444\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"stay … 6. to keep even in a contest or rivalry <~ with the leaders>\""
+  },
+  "example-21-26": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"/AY 444\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"stay … 3. : to remain during <~ed the whole time>\""
+  },
+  "example-21-27": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "example-21-28": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Example 21-29": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Example 21-3": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"\" vs actual \",FALCIP>UM MAL>IA1 #C1 #DD1 #EC1 #ED\". line count differs by -1 (expected 4, actual 3)."
+  },
+  "BANA Example 21-30": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"PRES5TA;N PRE-S5-TA-TION\" vs actual null. line count differs by -16 (expected 16, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"pre-sen-ta-tion \\pre′-zen-tā′-shən\\ n (15 c) 1 a : the act of presenting b : the ac"
+  },
+  "BANA Example 21-31": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Example 21-32": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"ACTIVE DUTY,-,FULL-\\\"T DUTY 9 ! ACTIVE\" vs actual \"ACTIVE DUTY3 ,- ,FULL-\\\"T DUTY 9 ! ACTIVE\"."
+  },
+  "BANA Example 21-33": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"IMPROVE IM-PROVE \\\"<IM_4PR@-<O^6O>V^.B\\\">\" vs actual null. line count differs by -8 (expected 8, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"im·prove (im·pro͞ov′) v. 1 to make or become better [Business has im"
+  },
+  "BANA Example 21-34": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"LIVE;9#A _/L@+IV_/ ;V4 9TR4 ,TO 2 ALIVE2\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"¹live /lĭv/ v. intr. To be alive; exist"
+  },
+  "BANA Example 21-35": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"LIVE;9#A _/L@+IV_/ ;V4 9TR4 ,TO 2 ALIVE2\" vs actual \"_/L@+IV_/ ;V4 9TR4 ,TO 2 ALIVE2 EXI/\". line count differs by -1 (expected 4, actual 3)."
+  },
+  "BANA Example 21-36": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"LAS BOTAS3 BOOTS1 #H\" vs actual null. line count differs by -8 (expected 8, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"las botas boots, 8"
+  },
+  "BANA Example 21-37": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"TO %[3 ENSE]AR1 #D2\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"to show enseñar, 4; to show photos enseñar fotos, 9"
+  },
+  "BANA Example 21-38": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"COUP1 ,- DE PIED\" vs actual \"C\\\\P1 ,- DE PI$\"."
+  },
+  "BANA Example 21-39": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"DESSUS1 L(--\" vs actual \"DESSUS1 L^*A-#=\"."
+  },
+  "BANA Example 21-4": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 21-5": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 21-6": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",VOLUME #B ,9DEX ;ALT-ARTE\" vs actual \",VOLUME #B ,9DEX ;ALT->TE\"."
+  },
+  "BANA Example 21-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                  BRL                #HH\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"braille | break"
+  },
+  "BANA Example 21-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"               9F],-9H]IT                           #CCA\" vs actual null. line count differs by -7 (expected 7, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"infer-inherit\""
+  },
+  "BANA Example 21-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"           ABORIG9AL,--AGOGY                           #,-\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"4 aboriginal: ..."
+  },
+  "BANA Sample 21-1": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      ,GLOSS>Y ( ,BOTANICAL ,T]MS    #AJB\" vs actual \"      ,GLOSS>Y ( ,BOTANICAL ,T]MS\". line count differs by -1 (expected 28, actual 27)."
+  },
+  "BANA Sample 21-10": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"\" vs actual \"                  ,A A\"."
+  },
+  "BANA Sample 21-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"FUMBLE FUM_4BLE _/F^/UMB_5L_/ ;V4 @& ;N4\" vs actual null. line count differs by -11 (expected 11, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"fum·ble /fúmbəl/ v. & n. ● v. 1 intr. (often foll. by at, with, for"
+  },
+  "BANA Sample 21-2": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",3JUNC;N ,A ^W OR PHRASE T 3NECTS    #,-\" vs actual \",3JUNC;N3 ,A ^W OR PHRASE T 3NECTS ^WS1\"."
+  },
+  "BANA Sample 21-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"AC ;AC-CORD-9G \\\"<_5-K^%OR^.B-D+\\\"> 9   #F\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"ac·cord·ing (a-kôr'-ding) in agreement\""
+  },
+  "BANA Sample 21-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"ANOMIE_/DESMANDADO  ;N4 CONDICI+N SOCIAL\" vs actual \"ANOMIE_/DESM&ADO3 ;N4 3DICI^/ON SOCIAL\". line count differs by -2 (expected 8, actual 6). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"...\""
+  },
+  "BANA Sample 21-5": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"FACTORS \\\"<;P4 #AJ\\\"> ,TWO OR M NUMB]S T\" vs actual \"\". line count differs by +1 (expected 6, actual 7)."
+  },
+  "BANA Sample 21-6": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"ABSORP;N ,! PROCESS BY : NUTRI5TS PASS\" vs actual \"\". line count differs by +1 (expected 6, actual 7)."
+  },
+  "BANA Sample 21-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,AU/51 ,JANE3 ,5GLI% NOVELI/     #,-\" vs actual null. line count differs by -13 (expected 13, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"Austen, Jane: English novelist"
+  },
+  "BANA Sample 21-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"    ,P>ADOX                        A#GHH\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: print block kind 'other' (not modeled — braille page guide words F-192, a simulated/mock braille-page illustration, a multilevel dictionary entry F-193/F-195, a glossary entry with pronunciation F-200, or a glossary entry's own nested illustrative material F-195): \"Paradox"
+  },
+  "BANA Sample 21-9": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"AGREE  ;V4 CO9CIDE1 GET AL;G1 SIDE )1\" vs actual \"AGREE ;V4 CO9CIDE1 GET AL;G1 SIDE )1\"."
+  },
+  "BANA 21.3.1d Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 21.8.6c Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

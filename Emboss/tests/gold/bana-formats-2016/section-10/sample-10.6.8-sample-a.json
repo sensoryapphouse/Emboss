@@ -1,0 +1,38 @@
+{
+  "id": "BANA Sample 10.6.8-sample-a",
+  "title": "Embedded TN wording for a word/phrase insertion cue",
+  "pdfPages": [
+    260
+  ],
+  "textLines": [
+    7585,
+    7587
+  ],
+  "illustrates": {
+    "rule": "10.6.8",
+    "quote": "When a word or phrase without enclosure symbols is shown above or below a printed line to indicate an insertion is to be made, use an underscore or dash followed by the word or phrase with enclosure symbols. Insert a transcriber’s note to explain this usage. Sample: The words below the sentences are placed in parentheses after the underscore."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "The words below the sentences are placed in parentheses after the underscore."
+      }
+    ],
+    "notes": "An inline \"Sample:\" wording embedded in the rule text itself, not a full worked example.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille anywhere near this citing location — confirmed directly against source; matches both A and B."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "No braille exists for this embedded wording (confirmed against source); print is the rule’s own suggested TN phrasing, unchanged from A/B. (This is the SAME wording Example 10-19 actually builds as a genuine 'note' block — that file’s braille is the real worked rendering of this sample wording.)"
+}

@@ -1,0 +1,74 @@
+{
+  "BANA Example 19-1": {
+    "status": "not-representable",
+    "note": "first differing line 7: expected \"\" vs actual null. line count differs by -4 (expected 10, actual 6). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"7 4 33 12 8 15   32 31"
+  },
+  "BANA Example 19-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"-- --- 4-4 444 4   -4-4 --- -44 4\" vs actual null. line count differs by -1 (expected 1, actual 0). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"M   O   R   S E       C   O   D E"
+  },
+  "BANA Example 19-3": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 19-4": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"#A4 ,P>5T'S FEMALE * @.<A#A \\\"<#H\\\">@.>\" vs actual \"#A4 ,P>5T'S FEMALE * A#A \\\"<#H\\\">\"."
+  },
+  "BANA Example 19-5": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\\\"\\\"=;;;\" vs actual \";;;\"."
+  },
+  "BANA Sample 19-1": {
+    "status": "not-representable",
+    "note": "expected output is enclosed in a box (top '7...'/bottom 'G...' rule lines per BANA §7/11.2.5e) but Emboss produced no box lines for this input. first differing line 1: expected \"         ,,SYMBOLICALLY ,,SP1K+       #,-\" vs actual \",SYMBOLICALLY ,SP1K+\". line count differs by -12 (expected 22, actual 10). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"A C D E F G H I L"
+  },
+  "BANA 19.2.1c Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 19.2.2f Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 19.3.1d Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 19.5.1 Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 19.5.3j Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 19.5.3l Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 19-2": {
+    "status": "not-representable",
+    "note": "expected output is enclosed in a box (top '7...'/bottom 'G...' rule lines per BANA §7/11.2.5e) but Emboss produced no box lines for this input. first differing line 1: expected \"    ,ASSIGN A SYMBOL OR NUMB] =     B#HD\" vs actual \",ASSIGN A SYMBOL OR NUMB] = EA* LR ( !\". line count differs by -7 (expected 16, actual 9). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"a b"
+  },
+  "BANA Sample 19-3": {
+    "status": "not-representable",
+    "note": "expected output is enclosed in a box (top '7...'/bottom 'G...' rule lines per BANA §7/11.2.5e) but Emboss produced no box lines for this input. first differing line 1: expected \"    ,DECODE ! ^WS F YR SPELL+ LI/     #,-\" vs actual \",DECODE ! ^WS F YR SPELL+ LI/ US+ !\". line count differs by -10 (expected 19, actual 9). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"CODE"
+  },
+  "BANA Sample 19-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"           ,,PICTURE ,,RIDDLE        #BI\" vs actual \",PICTURE ,RIDDLE\". line count differs by -20 (expected 34, actual 14). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"(9 pictures, arranged in a grid: key, cake, bag, fish, hose, nail, clown, tree, tent)\""
+  },
+  "BANA Sample 19-5": {
+    "status": "not-representable",
+    "note": "first differing line 2: expected \"    CLUE IS FOLL[$ BY A TRANSCRIB]-\" vs actual \"    CLUE IS FOLL[$ BY A\". line count differs by -15 (expected 36, actual 21). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"an 11x11 crossword grid of hyphens (fillable squares) and full cells (blocked squares), column-lettered a-k across the top and row-numbered 1-11 down the side\""
+  },
+  "BANA Sample 19-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"WHISKERS SMALL                       #,-\" vs actual \"      @.<,! PUZZLE IS %AP$ L A M\\\\SE4@.>\". line count differs by -19 (expected 20, actual 1). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"whiskers   small"
+  },
+  "BANA Sample 19-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"#A .- .- _ .- .- .- _ #H .- .-\" vs actual \"  #A .- .- .- .- .- #H .- .-\". line count differs by -2 (expected 11, actual 9). Input-model limitation: print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): \"(horizontal line-mode divider between row-bands 1 and 2, and the vertical line-mode divider between each row's own three column-bands — both use UEB Line Mode g\""
+  }
+}

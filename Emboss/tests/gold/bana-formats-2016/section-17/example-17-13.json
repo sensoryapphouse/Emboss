@@ -1,0 +1,55 @@
+{
+  "id": "BANA Example 17-13",
+  "title": "Example 17-13: Partial Emphasis Using Mathematical Symbols",
+  "pdfPages": [
+    476
+  ],
+  "textLines": [
+    13810,
+    13821
+  ],
+  "illustrates": {
+    "rule": "17.13.1",
+    "quote": "Mathematical Symbols. Spellers often use mathematical symbols to teach word formation. a. Transcribe all text in word formation “equations” in uncontracted braille. b. If the result of the equation is a complete word, add the contracted form of the word at the end of the equation, enclosed in transcriber’s note indicators. Ignore any print emphasis."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Suffixes with Consonants"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`amaze + ment = amazement` (amazement)"
+          },
+          {
+            "text": "`hope + ful = hopeful` (hopeful)"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 heading, then two word-formation equations with partial bold emphasis on the suffixes ('ment', 'ful') in both the equation and its result.",
+    "surroundingText": [],
+    "printFeatures": "Bold on the suffix portion only, in both terms of each equation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,su6ixes ) ,3sonants",
+      "amaze \"6 ^1ment \"7 amaze^1ment",
+      "  @.<amaze;t@.>",
+      "hope \"6 ^1ful \"7 hope^1ful @.<hope;l@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged. Print's own partial bold on the suffix is NOT re-encoded here: even if marked, Emboss silently drops all typeform from an uncontracted run (F-210), so a bold sub-run and a plain one produce byte-identical output — omitting the bold marking changes nothing observable. The contracted-form annotation at the end of each equation is written here in ordinary parentheses because Emboss has no inline TN segment (F-211, 17.13.1b) — the given braille wraps it in `@.<...@.>`; expect mismatch there."
+}

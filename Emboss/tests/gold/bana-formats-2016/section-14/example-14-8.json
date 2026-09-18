@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 14-8",
+  "title": "Example 14-8: Two Paragraphs of Verse Stage Directions",
+  "pdfPages": [
+    391
+  ],
+  "textLines": [
+    11320,
+    11328
+  ],
+  "illustrates": {
+    "rule": "14.6.3",
+    "quote": "Stage Directions between Lines of Verse Dialogue a. Use 7-7 margins for stage directions or cues. b. Use 9-7 margins for additional paragraphs of stage directions."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "BRUTUS", "verse": true, "text": "BRUTUS Farewell, every one." },
+      { "kind": "stage-direction", "text": "Exeunt all but BRUTUS" },
+      { "kind": "stage-direction", "level": 1, "text": "Re-enter LUCIUS, with the gown" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "Give me the gown. Where is thy instrument?" }
+    ],
+    "notes": "BRUTUS is printed as a left-flush speaker label on its own line, with the verse dialogue indented below it (the given braille merges name and first line onto one 1-cell line, no separator, per 14.1.6/14.6.1a); two consecutive italicised stage-direction paragraphs follow, unenclosed, the second an 'additional paragraph' (14.6.3b); a further verse line by BRUTUS follows as a same-speaker continuation.",
+    "surroundingText": [],
+    "printFeatures": "Left-aligned bold speaker name with indented verse dialogue beneath it; two paragraphs of italicised, unenclosed stage directions interrupt the verse."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,brutus ,f>ewell1 e \"o4",
+      "      ,exeunt all b ,,brutus",
+      "        ,re-5t] ,,lucius1 ) ! g[n",
+      "  ,give me ! g[n4 ,\": is ?y 9/ru;t8"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 1: verse dialogue at 1-5(effectively 1-cell here, a single short line) margins (14.6.1a). Line 2: stage direction at 7-7 margins (14.6.3a), NO blank line before or after (14.6.3d, reusing 14.5.3d's own wording for verse). Line 3: an additional stage-direction paragraph at 9-7 margins (14.6.3b), again no surrounding blank line. Line 4: BRUTUS's own continuation verse line at 3-5 margins (14.6.1b), again with no blank line separating it from the stage direction above."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on print substance (A's own speaker+items/text shapes were both reduced to this schema's own {kind:'speech'}/{kind:'stage-direction'} convention, matching example-14-6/14-9's own precedent). Forward-translated through Emboss's translator (alternating {type:'play',subtype:'verse'} and {type:'stage'} blocks, matching margins): the CONTENT and MARGINS of all four lines match exactly, but Emboss inserts a spurious blank line both before AND after each stage-direction block, directly contradicting 14.6.3d/14.5.3d's 'do not insert blank lines ... between the lines of dialogue' — traced to document.mjs's own `poemRunBoundaries`: a 'stage' block is neither a verse block nor a recognised stanza separator, so it breaks the surrounding verse run into two isolated single-line 'poems', each of which then gets F-121's own blank-line-before/after-a-poem treatment. This is a genuine, newly-documented Emboss gap (F-240, standards-findings.md), specific to the VERSE case (the PROSE case, example-14-6, is unaffected — a non-verse 'play' block never enters this run-boundary logic at all) — EXPECTED MISMATCH, not a gold-file error (see differences.md)."
+}

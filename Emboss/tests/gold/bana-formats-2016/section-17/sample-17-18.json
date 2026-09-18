@@ -1,0 +1,108 @@
+{
+  "id": "BANA Sample 17-18",
+  "title": "Sample 17-18: Word Formation Using Arrows",
+  "pdfPages": [
+    495
+  ],
+  "textLines": [
+    14279,
+    14302
+  ],
+  "illustrates": {
+    "rule": "17.13.2",
+    "quote": "Arrows. Use spaced arrow symbols when print arrows show progression in word formation. List all arrow symbols on the Special Symbols page, or in a transcriber's note before the text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "General Rules for Plurals"
+      },
+      {
+        "kind": "note",
+        "text": "Symbols used: → arrow; + plus sign"
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "If the noun ends in ch, s, sh, x, or z"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Then generally: add -es"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Example:"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`crutch → crutches`"
+          },
+          {
+            "text": "`wish → wishes`"
+          }
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "If the noun ends in a consonant + y"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Then generally: change y to i and add -es"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Example:"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`baby → babies`"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-7 heading, a symbols note (arrow, plus sign), then a two-part table of plural rules (transcribed as running text, not a table, per the given braille's own linearised layout) each with an arrow-formatted word-formation example.",
+    "surroundingText": [],
+    "printFeatures": "A 3-column grid table with column headers in full caps; arrows in the example column."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,g5]al ,rules = ,plurals",
+      "",
+      "      @.<,symbols us$3",
+      "",
+      ".=\\o ,\"r >r[",
+      ".=\"6 ,plus sign@.>",
+      "",
+      "    ,,,if ! n\\n 5ds in,'3 ch1 ;s1 sh1",
+      "    ;x1 or ;z",
+      ",,!n ,,g5]ally3 add -es",
+      ",,example3",
+      "  crutch ;\\o crutches",
+      "  wish ;\\o wishes",
+      "",
+      "    ,,,if ! n\\n 5ds in3,' a 3sonant \"6",
+      "    ;y",
+      ",,!n ,,g5]ally3 *ange ;y to i & add -es",
+      ",,example3",
+      "  baby ;\\o babies"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged ('17.13.2', matches the source's own cross-reference within this rule's own text). Modeled as a linear sequence of paragraphs and lists (not a table block), since the given braille shows NO table/box structure at all — matching precedent's own 'follow the given braille's structure, not the print table's', e.g. buildModel9's displayed-material convention. The all-caps 'IF...THEN GENERALLY...EXAMPLE' column headers are folded into the given braille's own running-sentence wording ('If the noun ends in...', 'Then generally...', 'Example:') rather than modeled as a table header row, since that is what the braille itself already shows the transcriber did."
+}

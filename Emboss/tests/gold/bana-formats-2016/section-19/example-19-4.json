@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 19-4",
+  "title": "Example 19-4: Embedded Transcriber’s Note",
+  "pdfPages": [
+    521
+  ],
+  "textLines": [
+    15126,
+    15131
+  ],
+  "illustrates": {
+    "rule": "19.5.2g",
+    "quote": "g. Enclose the transcriber-assigned column letters/row numbers, and the number of letters in the word, in an embedded transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "1. Parent's female child a1 (8)"
+          }
+        ],
+        "features": "Verified against the PDF page image (p.521): print shows only \"1. Parent’s female child\"; the \"(a1) (8)\" (transcriber-assigned column/row + letter count) exists only in the braille, per 19.5.2e/f/g. Decoded from the given braille: the column/row designator \"a1\" is plain text inside the embedded note, while the letter-count \"(8)\" is separately parenthesized inside that SAME note (BRF opening/closing parenthesis \"<\"/\">\", confirmed against the symbols appendix, source line 18498) — both enclosed in ONE embedded transcriber's note (@.<...@.>) immediately after the clue, on the same line. Emboss has no inline/embedded-note mechanism (F-221), so this is built as plain appended text; expect the model's own output to be missing the TN enclosure marks around \"a1 (8)\"."
+      }
+    ],
+    "notes": "A single numbered crossword clue, illustrating the embedded-transcriber's-note construct of 19.5.2e-g.",
+    "surroundingText": [],
+    "printFeatures": "Plain numbered list item; print itself carries none of the column/row/count annotation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,p>5t's female * @.<a#a \"<#h\">@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-line 15131. Decoded: '#a4' = '1.'; ',p>5t's female *' = \"Parent's female child\" ('*' = the one-cell 'ch' whole-word sign, i.e. 'child'); '@.<a#a \"<#h\">@.>' = an embedded transcriber's note reading 'a1 (8)'."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree; independently re-derived and decoded). Print side: reconciled to what the PDF page image actually shows (just the clue, no column/row/count annotation) plus a documented decode of the embedded note's own content, appended to the clue text since Emboss has no embedded-note mechanism to build it properly (F-221)."
+}

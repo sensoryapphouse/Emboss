@@ -635,6 +635,28 @@ class NoteRefNode extends TextNode {
 }
 const $createNoteRefNode = (text, idref = null, annoref = false) => new NoteRefNode(text, idref, annoref).setMode('token');
 const $isNoteRefNode = (n) => n instanceof NoteRefNode;
+// An embedded picture transcriber's note inside exercise material (BANA Formats §10.11.1,
+// F-229): an atomic run carrying the source <img>'s own alt text; braille wraps it in TN
+// indicators (@.< … @.>) right where the picture sat, and the save writes <img src="…"
+// alt="…"/> again (the src is kept only for that round trip, never shown or brailled).
+class ImgNoteNode extends TextNode {
+  static getType() { return 'emboss-imgnote'; }
+  static clone(n) { return new ImgNoteNode(n.__text, n.__src, n.__key); }
+  constructor(text = '', src = null, key) {
+    super(text, key);
+    this.__src = src || null;
+  }
+  getSrc() { return this.getLatest().__src; }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-imgnote');
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-imgnote', version: 1, src: this.__src }; }
+  static importJSON(j) { return new ImgNoteNode(j.text || '', j.src || null).updateFromJSON(j).setMode('token'); }
+}
+const $createImgNoteNode = (text, src = null) => new ImgNoteNode(text, src).setMode('token');
+const $isImgNoteNode = (n) => n instanceof ImgNoteNode;
 // A print line number in prose (A30): an atomic mark, shown small in the margin colour;
 // braille puts it at the right margin (BANA Formats §15.3) and the save writes
 // <span class="linenum"> again.
@@ -1090,7 +1112,7 @@ const $isSidebarNode = (n) => n instanceof SidebarNode;
 // ---- editor ----
 const editor = createEditor({
   namespace: 'emboss',
-  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode],
+  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, ImgNoteNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode],
   onError: (e) => { console.warn('Lexical non-fatal state warning:', e); },
   theme: { heading: { h1: 'ed-h1', h2: 'ed-h2', h3: 'ed-h3' }, list: { ul: 'ed-ul', ol: 'ed-ol' }, paragraph: 'ed-p',
     text: { bold: 'ed-b', italic: 'ed-i', underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
@@ -2411,6 +2433,16 @@ function nodeToRuns(node) {
         if (child.isAnnoref()) run.annoref = true;
         runs.push(run);
         hasEmph = true;                                  // keep segments so the reference survives
+      }
+      continue;
+    }
+    if ($isImgNoteNode(child)) {
+      const desc = child.getTextContent().trim();
+      if (desc) {
+        const run = { type: 'imgnote', text: desc };
+        if (child.getSrc()) run.src = child.getSrc();
+        runs.push(run);
+        hasEmph = true;                                  // keep segments so the embedded note survives (F-229)
       }
       continue;
     }
@@ -6570,6 +6602,7 @@ function fillFromBlock(parent, b) {
       }
       else if (s.type === 'noteref') { if (s.text) parent.append($createNoteRefNode(s.text, s.idref || null, !!s.annoref)); }
       else if (s.type === 'linenum') { if (s.text) parent.append($createLineNumberNode(s.text)); }
+      else if (s.type === 'imgnote') { if (s.text) parent.append($createImgNoteNode(s.text, s.src || null)); }
       else if (s.text) {
         // A forced line break (<br/>, '\n') stays a line break (A26); other space runs collapse.
         String(s.text).split('\n').forEach((part, k) => {

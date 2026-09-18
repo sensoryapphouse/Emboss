@@ -1,0 +1,46 @@
+{
+  "id": "BANA Example 21-37",
+  "title": "Foreign Language Glossary with Print Colon",
+  "pdfPages": [
+    578
+  ],
+  "textLines": [
+    16847,
+    16857
+  ],
+  "illustrates": {
+    "rule": "21.9.2f",
+    "quote": "f. When a print colon and a subentry word, rather than a translation, are shown following the entry word, substitute a semicolon for the colon. Place the subentry word on the following braille line at the established margin. The translation follows on the next braille line indented two cells to the right of the established margin."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "to show enseñar, 4; to show photos enseñar fotos, 9\nshy tímido(a), 2\nsick: to be estar enfermo(a), 7\nsilk la seda, 8\nsilly tonto(a), 3",
+        "features": "Entry words are aligned vertically. The English infinitive 'to' hangs in the left margin. Same not-representable margin-alignment class as Example 21-36 (F-193/F-199)."
+      }
+    ],
+    "notes": "In print, 'show', 'shy', 'sick', 'silk', and 'silly' are vertically aligned. The 'to ' before 'show' hangs to the left. The braille for the 'sick: to be' entry does not strictly follow the second sentence of the rule (it does not place 'to be' on its own following braille line).",
+    "surroundingText": null,
+    "printFeatures": "Hanging indent for English infinitive 'to'. Print colon used in the 'sick' entry."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "to %[3 ense]ar1 #d2",
+      "     to %[ photos3 ense]ar fotos1 #i",
+      "   %y3 t/mido\"<a\">1 #b",
+      "   sick2 to be3 estar enfermo\"<a\">1 #g",
+      "   silk3 la seda1 #h",
+      "   silly3 tonto\"<a\">1 #c"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines both wrongly included the 'Example 21-37: ...' title/blank lines AND failed to strip this file's own 9-space left margin from every real content line (the only file among all 39 examples where the margin strip was skipped entirely) — both corrected."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines AND stripped the 9-space left margin that the given run had left in place on every real content line (a transcription bug unique to this file)."
+}

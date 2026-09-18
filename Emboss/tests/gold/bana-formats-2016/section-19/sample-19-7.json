@@ -1,0 +1,93 @@
+{
+  "id": "BANA Sample 19-7",
+  "title": "Sample 19-7: Sudoku",
+  "pdfPages": [
+    538
+  ],
+  "textLines": [
+    15488,
+    15504
+  ],
+  "illustrates": {
+    "rule": "19.7.1",
+    "quote": "A normal 9×9 print Sudoku puzzle uses 30 cells across and 11 lines down in braille. a. Use line mode for the horizontal and vertical lines forming the puzzle... c. Separate each square by a space. d. Indicate each empty square by an underscore."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "1 _ _ _ _ _ 8 _ _",
+        "features": "Row 1 of the 9x9 Sudoku grid (real square values only — the 9 digit/blank cells, decoded from the given braille with its own vertical line-mode divider tokens removed). Print itself shows the same puzzle as ordinary printed digits in a ruled grid with a blank (no glyph) for every empty square; the braille substitutes '_' for every blank square, per 19.7.1d, which is why the print text here uses '_' too — confirmed this forward-translates to the given braille's own '.-' exactly (F-218's own positive finding, 'sudoku-row-as-para': a lone row survives `formatPara`'s `wrapCells` with its own single-space separation intact). Built as 9 separate one-line paragraph blocks, one per row (`formatParagraph` does not preserve a forced `\\n` line break WITHIN one paragraph block — confirmed empirically: joining multiple rows with `\\n` in a single block re-flows and merges them instead), each therefore carrying Emboss's own ordinary 2-cell paragraph indent (not flush, unlike the given braille) — a plain paragraph-margin mismatch on every row, on top of the missing dividers."
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ 5 _ _ 8 _ _ 9 _"
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ _ 4 _ 6 _ _ 2 5"
+      },
+      {
+        "kind": "other",
+        "text": "(horizontal line-mode divider between row-bands 1 and 2, and the vertical line-mode divider between each row's own three column-bands — both use UEB Line Mode guide-dot cells, source lines 15496/15500 and the '_' — dots 4-5-6 — token inside every data row)",
+        "features": "Not braille-buildable: Emboss has no line-mode/guide-dot mechanism to emit either divider on demand (F-222); ordinary text has no route to a devised dots-4-5-6 cell."
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ _ _ 7 _ _ 3 8 9"
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ _ 8 _ _ _ 5 _ _"
+      },
+      {
+        "kind": "paragraph",
+        "text": "3 6 1 _ _ 8 _ _ _"
+      },
+      {
+        "kind": "other",
+        "text": "(horizontal line-mode divider between row-bands 2 and 3, and each row's own vertical line-mode dividers, as above)",
+        "features": "Not braille-buildable (F-222), as above."
+      },
+      {
+        "kind": "paragraph",
+        "text": "6 9 _ _ 2 _ _ 7 _"
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ 8 _ _ 3 _ _ _ 5"
+      },
+      {
+        "kind": "paragraph",
+        "text": "_ _ 5 _ _ _ _ _ 4"
+      }
+    ],
+    "notes": "A standard 9x9 Sudoku puzzle grid; no transcriber's note or key text accompanies it in this excerpt.",
+    "surroundingText": [],
+    "printFeatures": "9x9 numeral grid with ruled 3x3 box dividers."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a .- .- _ .- .- .- _ #h .- .-",
+      ".- #e .- _ .- #h .- _ .- #i .-",
+      ".- .- #d _ .- #f .- _ .- #b #e",
+      "\"33333333w3333333333w333333333",
+      ".- .- .- _ #g .- .- _ #c #h #i",
+      ".- .- #h _ .- .- .- _ #e .- .-",
+      "#c #f #a _ .- .- #h _ .- .- .-",
+      "\"33333333w3333333333w333333333",
+      "#f #i .- _ .- #b .- _ #g .- .-",
+      ".- #h .- _ .- #c .- _ .- #e .-",
+      ".- .- #e _ .- .- .- _ .- .- #d"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-derived from source-lines 15493-15503 (numbered lines 5-15) — byte-identical to both A and B. Lines 1-4 are genuinely absent from the source's own extracted text (the puzzle's own title/heading area on this page), matching this task's own brief that Sample 19-7's lines 1-4 legitimately lack braille; numbering in the source jumps straight from the 'Sample 19-7: Sudoku' heading to line 5."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side reconciled: the 9x9 grid is rebuilt from the given braille's own digits/underscores (both runs had left this print-side largely undocumented); modeled as ordinary paragraph rows to exercise F-218's own positive finding, with the line-mode divider rows recorded separately as a limitation (F-222)."
+}

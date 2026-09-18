@@ -1,0 +1,72 @@
+{
+  "id": "BANA Example 21-13",
+  "title": "Index with Listed Subentry",
+  "pdfPages": [
+    564
+  ],
+  "textLines": [
+    16331,
+    16342
+  ],
+  "illustrates": {
+    "rule": "21.4.4",
+    "quote": "An index entry consists of the word or phrase with all its page references and subentries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A"
+      },
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "Abenaki, creation myths of,",
+            "page": "658-659"
+          },
+          {
+            "level": 1,
+            "text": "Acquired immune deficiency syndrome “(AIDS)”"
+          },
+          {
+            "level": 2,
+            "text": "culturally specific education and services for,",
+            "page": "490-491"
+          },
+          {
+            "level": 1,
+            "text": "Action anthropology,",
+            "page": "687"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "List format where subentry is indented beneath the main entry."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                   ,a",
+      ",ab5aki1 cr1;n my?s (1 #feh-#fei",
+      ",acquir$ immune defici5cy syndrome",
+      "    \"<,,aids\">",
+      "  culturally specific $uca;n & s]vices",
+      "    =1 #dij-#dia",
+      ",ac;n an?ropology1 #fhg"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

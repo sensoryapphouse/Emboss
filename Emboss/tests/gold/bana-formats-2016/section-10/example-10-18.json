@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-18",
+  "title": "Answer Cue Below Write-on-Line",
+  "pdfPages": [
+    260
+  ],
+  "textLines": [
+    7574,
+    7579
+  ],
+  "illustrates": {
+    "rule": "10.6.7",
+    "quote": "Insert the symbol for answer blanks before answer cues written above or below the write-on-line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "What is \\_ (to go) on right now?"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "The answer cue \"(to go)\" is printed below the write-on-line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",:at is .- \"<to g\"> on \"r n[8"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly (identical to Example 10-17 — see that file’s own note). Print unchanged from A/B."
+}

@@ -1,0 +1,59 @@
+{
+  "id": "BANA Sample 14-8",
+  "title": "Sample 14-8: Verse Play",
+  "pdfPages": [
+    403
+  ],
+  "textLines": [
+    11626,
+    11646
+  ],
+  "illustrates": {
+    "rule": "14.6.1",
+    "quote": "Verse plays are written in a poetic form and typically each line begins with a capital letter. a. Use 1-5 margins for the first line of dialogue. b. Use 3-5 margins for additional lines by the same speaker. c. Follow print for capitalization and emphasis. If print uses both full capitalization and emphasis to show speaker names, retain the capitalization and omit the emphasis. d. Follow print for punctuation shown after the name of each speaker. e. Insert two blank spaces between speaker names and dialogue if print shows no distinction between the names and the dialogue, e.g. emphasis on the names; punctuation between the names and related dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "First Witch.", "verse": true, "text": "First Witch. [Continuing.] Where there is no path there is no safety—" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "And the wind is beginning behind us, the treacherous wind." },
+      { "kind": "speech", "speaker": "The Winds.", "verse": true, "text": "The Winds. There is danger here in this slight stirring of a breeze." },
+      { "kind": "speech", "speaker": "First Witch.", "verse": true, "text": "First Witch. [Continuing.] Do you come from east or west?" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "Where does Kincorth lie?" },
+      { "kind": "speech", "speaker": "The Winds.", "verse": true, "text": "The Winds. It has a peaceful sound; but its significance is not peace." },
+      { "kind": "speech", "speaker": "Alison.", "verse": true, "text": "Alison. The God of my father has sent you in me need:" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "Tell me, I beseech you, whom you know at Kincorth—" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "Or is it, indeed, Kincorth Wester you seek?" }
+    ],
+    "notes": "Speaker names are printed in a small-caps font style with a trailing period; per Sample 14-7's own finding, the given braille capitalises only each NAME WORD'S first letter ('First Witch.'/'The Winds.'/'Alison.', a single comma per word), not the whole word, treating the small-caps rendering as a font style rather than semantic capitalization. A '[Continuing.]' stage direction is embedded within two of First Witch's own lines (14.4.1a: print's own brackets are kept, no font attributes to omit since none are shown). Each speaker's own single long verse LINE that runs past the braille page width simply WRAPS (cell-5 runover, no new print line); a genuinely NEW verse line by the same speaker (a real print line break) is built as its own level-1 block instead. Alison's own text reads 'in me need' (not 'in my need') — confirmed directly against the given braille's own 's5t y 9 me' (not '9 my'), matching one transcription run's own explicit verification of this apparent typo.",
+    "surroundingText": [],
+    "printFeatures": "Verse dialogue, five speeches from three speakers (First Witch speaking twice), small-caps names with a trailing period; several lines run over onto a wrapped continuation, some speeches carry a second, genuinely new verse line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",f/ ,wit*4 .<,3t9u+4.> ,\": \"! is no pa?",
+      "    \"! is no safety,-",
+      "  ,& ! w9d is 2g9n+ 2h u1 ! tr1*]\\s w9d4",
+      ",! ,w9ds4 ,\"! is dang] \"h 9 ? sli<t",
+      "    /irr+ ( a breeze4",
+      ",f/ ,wit*4 .<,3t9u+4.> ,d y come f ea/",
+      "    or we/8",
+      "  ,\": does ,k9cor? lie8",
+      ",! ,w9ds4 ,x has a p1ce;l s.d2 b xs",
+      "    signific.e is n p1ce4",
+      ",alison4 ,! ,god ( my \"f has s5t y 9 me",
+      "    ne$3",
+      "  ,tell me1 ,i 2see* y1 :om y \"k at",
+      "    ,k9cor?,-",
+      "  ,or is x1 9de$1 ,k9cor? ,we/] y seek8"
+    ],
+    "pageBreaks": [],
+    "notes": "1-5 margins for each speaker's own first verse line (14.6.1a), 3-5 for an additional line by the same speaker (14.6.1b) — the SAME nestedMargins('poetry',...) mechanism buildModel13 already reuses for §13 poems, here with the whole run's own deepest level (1) computed automatically from the five speeches together."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and, largely, on wording; B's own \\n-per-verse-line splitting matches this schema's own one-block-per-verse-line convention more directly than A's (A folded a genuine print line-wrap and a genuine new verse line together inconsistently). Both kept speaker names in ALL CAPS (print's own small-caps STYLE) rather than a single leading capital — corrected per Sample 14-7's own finding, confirmed again here by forward translation. Rebuilt as nine {kind:'speech', verse:true} blocks, one per actual verse line (a same-speaker WRAP is left inside one block's own text; a new print line becomes its own level-1 block). Forward-translated through Emboss's translator: EXACT MATCH (see differences.md)."
+}

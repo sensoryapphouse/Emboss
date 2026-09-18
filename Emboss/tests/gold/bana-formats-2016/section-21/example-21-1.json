@@ -1,0 +1,72 @@
+{
+  "id": "BANA Example 21-1",
+  "title": "Italicized Entry Word",
+  "pdfPages": [
+    558
+  ],
+  "textLines": [
+    16109,
+    16118
+  ],
+  "illustrates": {
+    "rule": "21.2.2",
+    "quote": "Font Attributes. Ignore entry word font attributes when all entry words are emphasized. Use emphasis only for entry words requiring distinction, e.g., book titles, foreign terms, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "“Action archaeology,”",
+            "page": "302"
+          },
+          {
+            "level": 1,
+            "text": "Action theory of development of states,",
+            "page": "313, 316"
+          },
+          {
+            "level": 1,
+            "segments": [
+              {
+                "type": "text",
+                "text": "Adapis,",
+                "tf": 1
+              }
+            ],
+            "page": "130"
+          },
+          {
+            "level": 1,
+            "text": "Adaptation,",
+            "page": "50, 52, 55"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "All entry words are bold. Adapis is also italicized."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "8,ac;n >*aeology10 #cjb",
+      ",ac;n !ory ( develop;t ( /ates1 #cac1",
+      "  #caf",
+      ".1,adapis1 #acj",
+      ",adapta;n1 #ej1 #eb1 #ee"
+    ],
+    "pageBreaks": [],
+    "notes": "9-space left margin stripped. Blank cells (U+2800) converted to plain spaces. The braille ignores the bolding because all entry words are bolded, but retains the italics for Adapis."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

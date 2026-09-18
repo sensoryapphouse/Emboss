@@ -1,0 +1,31 @@
+{
+  "id": "BANA 18.6.4e Sample",
+  "title": "In braille, inserted words that appear above the print line are enclosed in parentheses and placed after the corresponding material in the sentence.",
+  "pdfPages": [],
+  "textLines": [
+    14572,
+    14574
+  ],
+  "illustrates": {
+    "rule": "18.6.4e",
+    "quote": "In braille, inserted words that appear above the print line are enclosed in parentheses and placed after the corresponding material in the sentence."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs already agreed byte-for-byte on this file (wording, textLines, and illustrates.rule) — confirmed directly against the source at the given textLines. Unlike the §19 gold precedent (where both runs shared a single hard-set placeholder rule id on all six embedded quotes), both runs here already correctly set illustrates.rule to this quote's own citing rule (18.6.4e), matching the source exactly; no placeholder-id bug recurs in §18."
+}

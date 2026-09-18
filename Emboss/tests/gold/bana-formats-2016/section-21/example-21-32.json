@@ -1,0 +1,50 @@
+{
+  "id": "BANA Example 21-32",
+  "title": "Single-Level Dictionary Entries",
+  "pdfPages": [
+    574
+  ],
+  "textLines": [
+    16689,
+    16697
+  ],
+  "illustrates": {
+    "rule": "21.8.4",
+    "quote": "Single-Level Dictionary Entries"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "active duty",
+            "def": "— Full-time duty in the active military service of the United States. See also **active duty for training; inactive duty training.**",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Dictionary entry with a bold headword, an em-dash, and bold cross-references."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "active duty,-,full-\"t duty 9 ! active",
+      "  milit>y s]vice ( ! ,unit$ ,/ates4 ,see",
+      "  al ^7active duty = tra9+2 9active duty",
+      "  tra9+4^'"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "def text corrected: 'Full' needs no emphasis markup at all (its own capital F already yields the given braille's capital-letter indicator on its own); only the cross-reference TARGETS themselves ('active duty for training; inactive duty training'), not the introductory 'See also', are bold in the given braille (^7...^') — an earlier draft wrongly italicized 'Full' and bolded 'See also' too."
+}

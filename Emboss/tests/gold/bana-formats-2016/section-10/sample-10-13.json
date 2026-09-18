@@ -1,0 +1,95 @@
+{
+  "id": "BANA Sample 10-13",
+  "title": "Transcriber’s Note for Picture Descriptions",
+  "pdfPages": [
+    282
+  ],
+  "textLines": [
+    8206,
+    8230
+  ],
+  "illustrates": {
+    "rule": "10.11.3",
+    "quote": "When a separate portion of an exercise is shown as pictures, or as pictures with text, insert the transcriber’s note indicator in cell 7 before the word \"Pictures.\" Place the closing transcriber’s note indicator after the last entry. Use the appropriate format for the exercise."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Find the picture that best matches each food group."
+      },
+      {
+        "kind": "note",
+        "text": "Food Groups"
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Fat, Oils, and Sweets Group"
+          },
+          {
+            "level": 0,
+            "text": "2. Milk, Yogurt and Cheese Group"
+          },
+          {
+            "level": 0,
+            "text": "3. Vegetable Group"
+          },
+          {
+            "level": 0,
+            "text": "4. Meat, Poultry, Fish, Dry Beans, Eggs and Nuts Group"
+          },
+          {
+            "level": 0,
+            "text": "5. Fruit Group"
+          },
+          {
+            "level": 0,
+            "text": "6. Bread, Cereal, Rice, and Pasta Group"
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Pictures: a. bread b. cheese c. butter d. hot dog in bun e. apple f. carrots"
+      }
+    ],
+    "notes": "Print shows a 2×3 grid of six photographs lettered A-F with NO text captions of their own at all; per 10.11.3 braille wraps a single TN in cell 7 before \"Pictures,\" covering all six lettered descriptions, closed after the last entry.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,f9d ! picture t be/ mat*es ea* food",
+      "    gr\\p4",
+      "",
+      "      @.<,food ,gr\\ps@.>",
+      "#a4 ,fat1 ,oils1 & ,sweets ,gr\\p",
+      "#b4 ,milk1 ,yogurt & ,*eese ,gr\\p",
+      "#c4 ,vegetable ,gr\\p",
+      "#d4 ,m1t1 ,p\\ltry1 ,fi%1 ,dry ,b1ns1",
+      "  ,e7s & ,nuts ,gr\\p",
+      "#e4 ,fruit ,gr\\p",
+      "#f4 ,br1d1 ,c]1l1 ,rice1 & ,pa/a ,gr\\p",
+      "",
+      "      @.<,pictures3",
+      ",a4 br1d",
+      ";,b4 *eese",
+      ";,c4 butt]",
+      ";,d4 hot dog 9 bun",
+      ";,e4 apple",
+      ";,f4 c>rots@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8211-8229). Print unchanged from A/B; picture A is confirmed \"bread\" (not \"a loaf of meat\", per gold-10-B’s own uncertainty note) directly from the given braille’s own unambiguous \"br1d\"."
+}

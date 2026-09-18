@@ -1,0 +1,56 @@
+{
+  "id": "BANA Sample 17-13",
+  "title": "Sample 17-13: Marked Intentional Spelling Errors",
+  "pdfPages": [
+    490
+  ],
+  "textLines": [
+    14150,
+    14163
+  ],
+  "illustrates": {
+    "rule": "17.10.3",
+    "quote": "Marked Spelling Errors. When print calls attention to errors by means of a font attribute (e.g., underline, italics, color, highlighting, etc.) the designated words are uncontracted, and the remainder of the passage is contracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Read this narrative and rewrite the underlined words that have been spelled incorrectly."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Student 1: You know that new person in our `sceince` class? My `nieghbor` says he's the `hier` to a huge fortune!"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Student 2: The `hier` to a huge fortune going to public school? That's hard to `beleive`. In fact, it's pretty `inconcievable`."
+      }
+    ],
+    "notes": "Directions, then two 'Student' passages, each with several underlined misspelled words mixed into otherwise-contracted text — 17.10.3's own mixed uncontracted/contracted convention.",
+    "surroundingText": [],
+    "printFeatures": "Misspelled words underlined; the rest of each passage in ordinary print."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,r1d ? n>rative & rewrite ! \"ul9$",
+      "    ^ws t h be5 spell$ 9correctly4",
+      ",/ud5t #a3 ,y \"k t new p]son 9 \\r",
+      "  _1sceince class8 ,my _1nieghbor says",
+      "  he's ! _1hier to a huge =tune6",
+      ",/ud5t #b3 ,! _1hier to a huge =tune go+",
+      "  to public s*ool8 ,t's h>d to",
+      "  _1beleive4 ,9 fact1 x's pretty",
+      "  _1inconcievable4"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.10.3', matches source). Modeled as three paragraphs; each marked-error word individually backtick-uncontracted inside otherwise-contracted running prose — the same mixed-passage mechanism standards-map.md (BANA 17.10.3) confirms 'done' via probe."
+}

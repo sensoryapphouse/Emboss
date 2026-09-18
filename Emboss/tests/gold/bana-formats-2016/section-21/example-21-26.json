@@ -1,0 +1,43 @@
+{
+  "id": "example-21-26",
+  "title": "Symbolic Colon, Angle Brackets, Swung Dash",
+  "pdfPages": [
+    571
+  ],
+  "textLines": [
+    16606,
+    16613
+  ],
+  "illustrates": {
+    "rule": "21.8.2c",
+    "quote": "Follow print when a swung dash is followed by an unspaced letter or letters."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "stay … 3. : to remain during <~ed the whole time>",
+        "features": "Bold entry word, bold symbolic colon, angle brackets enclosing bold swung dash followed unspaced by 'ed'. Same not-representable class as Example 21-25 (F-193)."
+      }
+    ],
+    "notes": "c. Follow print when a swung dash is followed by an unspaced letter or letters.",
+    "surroundingText": null,
+    "printFeatures": "Bold main entry word; standard subentry number; bold symbolic colon; and an angle-bracketed phrase containing a bold swung dash representing the entry word, attached directly to the letters 'ed'."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "/ay 444",
+      "  #c4 ^23 to rema9 dur+ @<^2@9$ ! :ole",
+      "    \"t@>"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule normalised from '21.8.2.c' to '21.8.2c' (stray period)."
+}

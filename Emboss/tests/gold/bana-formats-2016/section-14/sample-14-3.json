@@ -1,0 +1,50 @@
+{
+  "id": "BANA Sample 14-3",
+  "title": "Sample 14-3: Dialogue",
+  "pdfPages": [
+    398
+  ],
+  "textLines": [
+    11518,
+    11531
+  ],
+  "illustrates": {
+    "rule": "14.5.1",
+    "quote": "Use 1-3 margins for each speaker’s name and accompanying dialogue. Follow print for capitalization and emphasis."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "CAROL", "text": "CAROL You don’t know what it means ...?" },
+      { "kind": "other", "text": "A print page number/running-head fragment ('#,-') bled into the extracted line, right of the ellipsis on braille line 1; page furniture, not modelled." },
+      { "kind": "speech", "speaker": "JOHN", "text": "JOHN I’m not sure that I know what it means. It’s one of those things, perhaps you’ve had them, that, you look them up, or have someone explain them to you, and you say “aha,” and, you immediately *forget* what ..." },
+      { "kind": "speech", "speaker": "CAROL", "text": "CAROL You don’t do that." },
+      { "kind": "speech", "speaker": "JOHN", "text": "JOHN ... I ...?" }
+    ],
+    "notes": "Speaker names are printed in full capitals to the LEFT of the dialogue column, with no colon or other punctuation — confirmed against the given braille, which has no comma/colon cell after 'CAROL'/'JOHN' at all, only a single space (the full-caps name is itself print's own 'distinction' from the dialogue, so 14.5.1d's two-blank-cell alternative does not apply). 'forget' is italicised in print.",
+    "surroundingText": [],
+    "printFeatures": "Speaker names in full capitals to the left of each speech; 'forget' italicised; three ellipses mark trailing-off/interrupted dialogue."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,c>ol ,y don't \"k :at x m1ns 4448   #,-",
+      ",,john ,i'm n sure t ,i \"k :at x m1ns4",
+      "  ,x's \"o ( ^? ?+s1 p]h y've _h !m1 t1 y",
+      "  look !m up1 or h \"s\"o expla9 !m to y1",
+      "  & y say 8aha10 &1 y immly .1=get :at",
+      "  444",
+      ",,c>ol ,y don't d t4",
+      ",,john 444 ,i 4448"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins throughout (14.5.1a); the italic word indicator (.1=get) covers 'forget' only."
+  },
+  "uncertain": [
+    "Line 1's own 'means ...?' and line 8's own final '...?' forward-translate with an extra letter-sign cell (';') before the final '8' that the given braille does not have (Emboss's translator inserts this whenever a space precedes a bare '...?' run; gluing '...?' directly to the preceding word removes the letter-sign but also removes the given braille's own space) — left UNRESOLVED (a punctuation-disambiguation micro-detail, not a margin/structural difference); see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on every substantive field of print.blocks (down to the italicised 'forget'); only illustrates.quote differed in style (both just repeated the sample's own title, not an actual rule quote — replaced here with 14.5.1's own actual rule text, matching every other sample's convention). Forward-translated through Emboss's translator ({type:'play', subtype:'prose'} blocks, 1-3 margins): every line matches exactly except the two noted above (see 'uncertain'), and line 1's own trailing page-number artifact (documented as an 'other' block, matching the section-15 gold precedent). See differences.md."
+}

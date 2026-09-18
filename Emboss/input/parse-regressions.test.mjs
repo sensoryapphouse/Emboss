@@ -84,8 +84,15 @@ check(5, 'named entities', by('para')[0]?.text === 'Café & crème — ok &bogus
   const od = await P.parseOdt(await zipBuf([{ name: 'content.xml', text: odtXml }]));
   globalThis.__od = od;
   const want = J([{ text: 'Alpha' }, { text: 'Beta', level: 1 }, { text: 'Gamma' }]);
+  // F-33/A6, BANA Formats 2016 §8.6.2 ("Retain bullets whenever they are used in lists"):
+  // the NIMAS <list type="ul"> source (line 63 above) carries no literal bullet character,
+  // so parse.mjs now defaults each item's marker to '•' (formatList already renders it as
+  // '_4') instead of silently dropping the bullet — the HTML/ODT parsers here go through
+  // their own, unrelated list code and are unaffected, so only the NIMAS expectation adds
+  // the marker.
+  const wantNimas = J([{ text: 'Alpha', marker: '•' }, { text: 'Beta', marker: '•', level: 1 }, { text: 'Gamma', marker: '•' }]);
   const box = by('box')[0];
-  check(6, 'nested lists not duplicated', J(h.items) === want && J(od.blocks[0].items) === want && J(by('list')[1].items) === want && J(box.blocks[1].items) === J([{ text: 'x', page: '3' }]),
+  check(6, 'nested lists not duplicated', J(h.items) === want && J(od.blocks[0].items) === want && J(by('list')[1].items) === wantNimas && J(box.blocks[1].items) === J([{ text: 'x', page: '3' }]),
     `html=${J(h.items)} odt=${J(od.blocks[0].items)} nimas=${J(by('list')[1].items)} box=${J(box.blocks[1])}`);
 }
 

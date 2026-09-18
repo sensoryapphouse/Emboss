@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-21",
+  "title": "Freestanding Question Mark",
+  "pdfPages": [
+    261
+  ],
+  "textLines": [
+    7620,
+    7626
+  ],
+  "illustrates": {
+    "rule": "10.6.10",
+    "quote": "Answer Cues with Question Marks. Follow print when a question mark is shown standing alone representing a write-on-line. When print uses both a question mark and a low line or dash, ignore the question mark and use the underscore or dash. Insert a transcriber’s note explaining this usage."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "What is ? right now?"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",:at is ;8 \"r n[8"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B (a freestanding question mark, no underscore, standing in for the write-on-line)."
+}

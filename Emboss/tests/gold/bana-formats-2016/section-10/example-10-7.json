@@ -1,0 +1,71 @@
+{
+  "id": "BANA Example 10-7",
+  "title": "Nested List Used for Exercise Set",
+  "pdfPages": [
+    256
+  ],
+  "textLines": [
+    7403,
+    7416
+  ],
+  "illustrates": {
+    "rule": "10.4.3",
+    "quote": "Each new exercise set determines the indention pattern for the associated material. Note: A review section may continue the question numbers from one exercise set to the next, throughout the entire section. In some situations the transcriber may choose to be consistent for the entire review section and format all questions/answers as a nested list if any of the questions have subentries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. How does Earth’s tilt on its axis cause seasons to change in different parts of the world?"
+          },
+          {
+            "level": 0,
+            "text": "2. During a solstice"
+          },
+          {
+            "level": 1,
+            "text": "a. one of Earth’s poles is tilted toward the Sun"
+          },
+          {
+            "level": 1,
+            "text": "b. neither pole is tilted toward the Sun"
+          },
+          {
+            "level": 1,
+            "text": "c. spring begins in the Northern Hemisphere"
+          }
+        ]
+      }
+    ],
+    "notes": "PDF page image (p.256) inspected: the given braille’s own last line ends mid-word, \"...,nor!rn ,hemisp\\\"h\" (\"...Northern Hemisph\"), clipped by the printed box’s own right border in the source book’s own braille-box graphic — confirmed directly against the page image (the word is cut at the box edge, not a text-extraction artifact of this repository’s own source dump). Print itself is fully legible (\"...spring begins in the Northern Hemisphere\", no punctuation) and is used here unchanged.",
+    "surroundingText": "",
+    "printFeatures": "Printed inside a ruled box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "#a4 ,h[ does ,e>?'s tilt on xs axis",
+      "    cause s1sons to *ange 9 di6]5t \"ps (",
+      "    ! _w8",
+      "#b4 ,dur+ a sol/ice",
+      "  a4 \"o ( ,e>?'s poles is tilt$ t[>d !",
+      "    ,sun",
+      "  ;b4 nei pole is tilt$ t[>d ! ,sun",
+      "  ;c4 spr+ 2g9s 9 ! ,nor!rn ,hemisp\"h"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "The given braille’s own last line is genuinely clipped mid-word (\"hemisph\") by the source book’s own box-graphic rendering; this line is expected to mismatch on its own last few cells for that reason, independent of anything Emboss does — see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly (including the genuine mid-word clip). Print unchanged from A/B; confirmed against the PDF page image."
+}

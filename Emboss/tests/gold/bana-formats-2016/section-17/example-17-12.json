@@ -1,0 +1,57 @@
+{
+  "id": "BANA Example 17-12",
+  "title": "Example 17-12: Crossed-Out Letters and Insertions",
+  "pdfPages": [
+    475
+  ],
+  "textLines": [
+    13776,
+    13788
+  ],
+  "illustrates": {
+    "rule": "17.12.2",
+    "quote": "Text may show crossed-out letters, words, or passages, along with substitutions in enclosure symbols. a. Follow the guidelines in Formats, §17.11 for transcribing crossed-out letters. b. Follow print for use and spacing of enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter."
+      },
+      {
+        "kind": "paragraph",
+        "text": "`The beeping was continue(ous).` (continu-(ous))",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "`I try(ied) to run a marathon.` (tr-(ied))",
+        "continuation": true
+      }
+    ],
+    "notes": "Two sentences, each with a crossed-out-letter word immediately followed by a bracketed insertion.",
+    "surroundingText": [],
+    "printFeatures": "Two unconnected sentences, not indented."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,^ws ) cross$-\\ lrs >e",
+      "    uncontract$1 !n rep1t$ ) a hyph5",
+      "    sub/itut$ = ea* cross$-\\ lr4@.>",
+      "",
+      ",! beep+ 0 continue\"<ous\">4",
+      "  @.<continu-\"<ous\">@.>",
+      ",i try\"<ied\"> @.<tr-\"<ied\">@.> to run a",
+      "  m>a?on4"
+    ],
+    "pageBreaks": [],
+    "notes": "A had the correct margin (10-space) and content; B had a spurious extra leading space (11 instead of 10) on the three TN lines only. Re-derived directly from source (margin 10 throughout): matches A exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version kept (B had a 1-cell-too-deep TN margin on its first 3 lines). illustrates.rule unchanged ('17.12.2', both agreed, matches source). Modeled the same way as Example 17-9 (standalone TN + sentences with the repeated word in ordinary parentheses) — same F-211 inline-TN gap expected."
+}

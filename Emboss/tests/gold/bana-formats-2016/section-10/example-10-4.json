@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 10-4",
+  "title": "Paragraph Instructions",
+  "pdfPages": [
+    255
+  ],
+  "textLines": [
+    7347,
+    7353
+  ],
+  "illustrates": {
+    "rule": "10.3.4",
+    "quote": "Assignments or Activities. Follow print format for instructions without specific question/answer activities. Paragraphs may be indented (3-1) or blocked (1-1)."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "On the way home, count the number of different types of trees you see."
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "Printed inside a ruled box (not modeled — no braille box lines are shown in the given output)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,on ! way home1 c.t ! numb] ( di6]5t",
+      "types ( trees y see4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

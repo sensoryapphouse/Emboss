@@ -1,0 +1,64 @@
+{
+  "id": "BANA Sample 17-14",
+  "title": "Sample 17-14: Errors to be Identified in Exercise",
+  "pdfPages": [
+    491
+  ],
+  "textLines": [
+    14171,
+    14190
+  ],
+  "illustrates": {
+    "rule": "17.10.3",
+    "quote": "Marked Spelling Errors. When print calls attention to errors by means of a font attribute (e.g., underline, italics, color, highlighting, etc.) the designated words are uncontracted, and the remainder of the passage is contracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Write the letter of the answer that correctly respells each underlined word. If the word is correct, write D."
+      },
+      {
+        "kind": "paragraph",
+        "text": "Anton (a) `believes` that (b) `coperation` is possible, and he thinks that peace is an (c) `achieveable` goal.",
+        "features": "print marks each underlined word with a small numeral (1)/(2)/(3) beneath it; the given braille instead uses its own devised inline reference marker <#a>/<#b>/<#c> at each point"
+      },
+      {
+        "kind": "other",
+        "text": "a. A beleaves  B beleives  C beleifs  D No error\nb. [only item 'a' is fully given in the source excerpt; items b/c are abridged with a '444' ellipsis]",
+        "features": "a 3-column multiple-choice grid, keyed to the reference markers above; not representable as a flat list/table without inventing structure the source itself does not give for items b/c"
+      }
+    ],
+    "notes": "Directions, a sentence with three underlined misspelled words each individually reference-marked, then a multiple-choice answer key (only the first item's own four choices are given in this excerpt; the rest is abridged by the transcriber).",
+    "surroundingText": [],
+    "printFeatures": "Underlined words with a small numeral printed beneath each."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,write ! lr ( ! answ] t correctly",
+      "    respells ea* \"ul9$ ^w4 ,if ! ^w is",
+      "    correct1 write ;,d4",
+      "  ,anton \"<#a\"> _1believes t",
+      "\"<#b\"> _1coperation is possible1 & he",
+      "?9ks t p1ce is an \"<#c\"> _1achieveable",
+      "goal4",
+      "",
+      "#a",
+      "  ,a beleaves",
+      "  ;,b beleives",
+      "  ;,c beleifs",
+      "  ;,d ,no ]ror",
+      "#b",
+      "  444"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.10.3'). The print numeral-beneath-word convention is re-expressed here as an inline '(a)'/'(b)'/'(c)' marker directly in the sentence text (Emboss has no positioned-beneath-word annotation mechanism at all, and the given braille itself uses its OWN devised bracketed marker '<#a>' rather than reproducing the print numeral literally, so there is no existing segment type this reconciliation could target for a match); the answer-key grid (only item 'a' fully given, 'b' abridged with '444') is recorded as 'other', not modeled."
+}

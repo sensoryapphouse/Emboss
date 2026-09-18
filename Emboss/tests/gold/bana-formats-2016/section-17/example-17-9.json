@@ -1,0 +1,71 @@
+{
+  "id": "BANA Example 17-9",
+  "title": "Example 17-9: Crossed-Out Letters in Sentences",
+  "pdfPages": [
+    474
+  ],
+  "textLines": [
+    13719,
+    13735
+  ],
+  "illustrates": {
+    "rule": "17.11.2",
+    "quote": "When words are shown with crossed-out letters within sentences: a. Follow points in Formats, §17.11.1 a-c. b. Enclose the repeated word in an embedded transcriber's note to distinguish it from surrounding text. c. Explain this usage in a transcriber's note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter. The repeated word is enclosed within transcriber’s note indicators."
+      },
+      {
+        "kind": "paragraph",
+        "text": "`The heater` (he-ter) `in the room did not work.`",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "`My jeans` (je-ns) `shrunk in the dryer.`",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "`Did you pack your gear` (ge-r) `for the camping trip?`",
+        "continuation": true
+      },
+      {
+        "kind": "paragraph",
+        "text": "`That is my ideal` (ide-l) `vacation!`",
+        "continuation": true
+      }
+    ],
+    "notes": "Four sentences, each with one word carrying a single crossed-out letter, the hyphen-substituted repeat embedded inline (parenthesised here) rather than as a separate list.",
+    "surroundingText": [],
+    "printFeatures": "Four unnumbered sentences."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,^ws ) cross$-\\ lrs >e",
+      "    uncontract$1 !n rep1t$ ) a hyph5",
+      "    sub/itut$ = ea* cross$-\\ lr4 ,!",
+      "    rep1t$ ^w is 5clos$ )9 transcrib]'s",
+      "    note 9dicators4@.>",
+      "",
+      ",! heater @.<he-ter@.> 9 ! room did n",
+      "  \"w4",
+      ",my jeans @.<je-ns@.> %runk 9 ! dry]4",
+      ",did y pack yr gear @.<ge-r@.> = ! camp+",
+      "  trip8",
+      ",t is my ideal @.<ide-l@.> vaca;n6"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.11.2', matches source). Modeled as a standalone TN (its own explanatory text, 17.11.2c, 'done') followed by four sentences; the repeated hyphen-substituted word is written here in ordinary parentheses (not enclosed by any inline-TN markup this flat print schema can express) because Emboss has NO inline/embedded transcriber's-note segment type (F-211) — this is the file's own expected mismatch: the given braille wraps the repeated word in `@.<...@.>` brackets inline within the sentence; Emboss can only emit that wrapper at block level."
+}

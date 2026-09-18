@@ -1,0 +1,39 @@
+{
+  "id": "BANA Example 21-31",
+  "title": "Sub-subentry in Dictionary Entry (Print Only)",
+  "pdfPages": [
+    573
+  ],
+  "textLines": [
+    16681,
+    16681
+  ],
+  "illustrates": {
+    "rule": "21.8.3e",
+    "quote": "Sub-subentry. A sub-subentry is subservient to the subentry."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "(the four lettered sub-subentries of Example 21-30's own entry, highlighted)",
+        "features": "A dictionary entry with highlighted sub-subentries; print only, no braille given for this excerpt at all (F-193/F-195)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A dictionary entry with highlighted sub-subentries."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly contained the bare 'Example 21-31: ...' title text; the source genuinely has no braille at all here (print-only excerpt, confirmed by the source's own single title line with nothing following it before the next rule) — corrected to an empty array."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected from a 1-line array (the bogus title) to the true empty array — this excerpt has no braille counterpart in the source at all."
+}

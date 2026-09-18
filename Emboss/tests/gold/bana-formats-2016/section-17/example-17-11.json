@@ -1,0 +1,58 @@
+{
+  "id": "BANA Example 17-11",
+  "title": "Example 17-11: Words Spaced from Inserted Letters",
+  "pdfPages": [
+    475
+  ],
+  "textLines": [
+    13760,
+    13769
+  ],
+  "illustrates": {
+    "rule": "17.12.1c, d, e",
+    "quote": "c. Words that are followed by a space and a word part that is to be inserted or combined should be transcribed without contractions. d. Transcribe words that are to be combined with other words or word parts in uncontracted braille. e. Follow print spacing of the text that is to be inserted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Write list words by adding the ending in parentheses to each word."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`wrap (ing)`"
+          },
+          {
+            "text": "`cute (er)`"
+          },
+          {
+            "text": "`early (est)`"
+          }
+        ]
+      }
+    ],
+    "notes": "Directions, then a 3-item list of words each followed by a bracketed ending to add.",
+    "surroundingText": [],
+    "printFeatures": "Directions paragraph followed by a numbered word list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,write li/ ^ws by add+ ! 5d+ 9",
+      "    p>5!ses to ea* ^w4",
+      "#a4 wrap \"<ing\">",
+      "#b4 cute \"<er\">",
+      "#c4 early \"<est\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly. The braille numbers the items a/b/c even though print numbers them 1/2/3 — an ordinary ordinal-marker translation quirk, not modeled specially here (the list item text carries no marker field; the marker is Emboss's own list-numbering output)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: kept B's more specific '17.12.1c, d, e' (A's bare '17.12.1' is less precise) — the example is embedded directly under clauses c-e's own text (space-separated word+insertable-part, combined without contraction, print spacing followed). Modeled as a directions paragraph (expect a margin mismatch, see the new 'activity-directions margin' finding below) plus a 3-item wholly-uncontracted list."
+}

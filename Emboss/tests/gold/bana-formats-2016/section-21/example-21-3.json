@@ -1,0 +1,60 @@
+{
+  "id": "BANA Example 21-3",
+  "title": "Blank Lines Indicating Alphabetical Divisions",
+  "pdfPages": [
+    559
+  ],
+  "textLines": [
+    16151,
+    16159
+  ],
+  "illustrates": {
+    "rule": "21.2.3g",
+    "quote": "Insert one blank line when print uses only blank lines to separate alphabetical divisions."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "External migration",
+            "page": "707"
+          },
+          {
+            "level": 1,
+            "text": "Extinction",
+            "page": "683-684"
+          },
+          {
+            "level": 1,
+            "text": "Falciparum malaria",
+            "page": "3, 44, 53, 54"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "List of dictionary-style index entries with an alphabetical division indicated solely by a blank line."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",ext]nal migra;n1 #gjg",
+      ",ext9c;n1 #fhc-#fhd",
+      "",
+      ",falcip>um mal>ia1 #c1 #dd1 #ec1 #ed"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

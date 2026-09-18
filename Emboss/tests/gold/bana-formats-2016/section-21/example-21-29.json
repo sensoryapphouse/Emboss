@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 21-29",
+  "title": "Definition Segment in Dictionary Entry (Print Only)",
+  "pdfPages": [
+    572
+  ],
+  "textLines": [
+    16643,
+    16643
+  ],
+  "illustrates": {
+    "rule": "21.8.3c",
+    "quote": "Definition Segment. The definition segment includes the part-of-speech label, definition, descriptions, examples, etc."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "n (15 c) 1 a : the act of presenting b : the act, power, or privilege esp. of a patron of applying to the bishop or ordinary for instituting someone into a benefice 2 : something presented: a : a symbol or image that represents something b : something offered or given 3 : an immediate object of perception, cognition, or memory —pre-sen-ta-tion-al",
+        "features": "The definition segment highlighted in gray; print only, no braille given — F-193/F-200 (no dictionary/multilevel-entry construct)."
+      }
+    ],
+    "notes": "The definition segment is highlighted.",
+    "surroundingText": null,
+    "printFeatures": "A dictionary entry is shown with its definition segment highlighted in gray."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [
+    "Used ´ for the stress marks in the pronunciation \\pre´-zen-tā´-shən\\. It is unclear if they are vertical tick marks or acute accents."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule normalised from '21.8.3.c' to '21.8.3c' (stray period)."
+}

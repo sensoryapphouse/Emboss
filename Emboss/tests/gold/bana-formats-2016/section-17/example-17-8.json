@@ -1,0 +1,64 @@
+{
+  "id": "BANA Example 17-8",
+  "title": "Example 17-8: Crossed-Out Letters in Word List",
+  "pdfPages": [
+    473
+  ],
+  "textLines": [
+    13689,
+    13701
+  ],
+  "illustrates": {
+    "rule": "17.11.1",
+    "quote": "When listed or displayed words relating to spelling or word structure are shown with crossed-out letters: a. Transcribe words with crossed-out letters in uncontracted braille. b. Show the word as spelled, without indicating the crossed-out letters. c. Then repeat the word, substituting a hyphen - (36) for each crossed-out letter. d. Explain the use of the hyphen in a transcriber's note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`gear` `ge-r`"
+          },
+          {
+            "text": "`heater` `he-ter`"
+          },
+          {
+            "text": "`ideal` `ide-l`"
+          },
+          {
+            "text": "`jeans` `je-ns`"
+          }
+        ]
+      }
+    ],
+    "notes": "Four words, each with one letter ('a') crossed out with a diagonal stroke in print; a standalone transcriber's note (17.11.1d) precedes the list explaining the hyphen convention.",
+    "surroundingText": [],
+    "printFeatures": "A vertical list of four words with a single crossed-out letter each."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,^ws ) cross$-\\ lrs >e",
+      "    uncontract$1 !n rep1t$ ) a hyph5",
+      "    sub/itut$ = ea* cross$-\\ lr4@.>",
+      "",
+      "gear ge-r",
+      "heater he-ter",
+      "ideal ide-l",
+      "jeans je-ns"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.11.1', matches source). Modeled as a standalone 'note' block (the TN precedes the list, so the generic block-level formatTranscriberNote applies — standards-map.md BANA 17.11.1d 'done') followed by a 'list' block, each item giving both the plain-spelled uncontracted form (17.11.1b) and the hyphen-substituted uncontracted form (17.11.1c); expect MATCH."
+}

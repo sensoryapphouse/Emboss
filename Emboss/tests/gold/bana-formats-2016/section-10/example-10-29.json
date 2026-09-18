@@ -1,0 +1,52 @@
+{
+  "id": "BANA Example 10-29",
+  "title": "True/False Abbreviations Before Sentences",
+  "pdfPages": [
+    267
+  ],
+  "textLines": [
+    7816,
+    7824
+  ],
+  "illustrates": {
+    "rule": "10.10.1",
+    "quote": "Always include print abbreviations or wording, e.g., T/F, True/False, etc. Follow print placement."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "T F 1. Thomas Jefferson was the 1st president of the United States."
+          },
+          {
+            "level": 0,
+            "text": "T F 2. Jimmy Carter only served one term as president."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ";,t ;,f #a4 ,?omas ,je6]son 0 ! #ast",
+      "  presid5t ( ! ,unit$ ,/ates4",
+      ";,t ;,f #b4 ,jimmy ,c>t] only s]v$ \"o",
+      "  t]m z presid5t4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; the ordinal \"1st\" is printed with a raised \"st\" (10.6.11c: ignore the raised position in braille)."
+}

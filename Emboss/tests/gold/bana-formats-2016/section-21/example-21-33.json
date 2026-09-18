@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 21-33",
+  "title": "Dictionary with Subentries",
+  "pdfPages": [
+    574
+  ],
+  "textLines": [
+    16709,
+    16721
+  ],
+  "illustrates": {
+    "rule": "21.8.5",
+    "quote": "Multilevel Dictionary Entries. All of the following are treated as subentries, no matter how they appear in print:\na. Parts of speech: Each part of speech is treated as a subentry when an entry includes more than one part-of-speech label.\nb. Each numbered or lettered definition.\nc. Run-in derived entries, e.g., —flat-ly adv. —flat-ness n.\nd. Synonyms or antonyms.\ne. “See also” references when they apply to the entry and all subentries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "im·prove (im·pro͞ov′) v. 1 to make or become better [Business has improved.] 2 to make good use of [She improved her spare time by reading.]—im·proved′, im·prov′ing",
+        "features": "A single continuous block with bolding in the entry word, middle dots, pronunciation guide with special characters, italicized part of speech 'v.', numbered definitions with example sentences in brackets and italics, and bold derived run-in entries separated by an em dash. Multilevel dictionary entry (numbered definitions as subentries, a run-in derived entry) — F-193/F-195, no construct exists to build the pronunciation guide or the automatic numbered-definition-as-subentry structure faithfully."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A single continuous dictionary entry with bold headwords, italics for part of speech and examples, and bracketed text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "improve im-prove \"<im_4pr@-<o^6o>v^.b\">",
+      "    ;v4",
+      "  #a to make or 2come bett] .<,busi;s",
+      "    has .1improv$4.>",
+      "  #b to make gd use ( .<,%e .1improv$ h]",
+      "    sp>e \"t by r1d+4.>",
+      "  ,-^7improv$ im_4prov$^.b1 improv+",
+      "    im_4prov^.b9g^'"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

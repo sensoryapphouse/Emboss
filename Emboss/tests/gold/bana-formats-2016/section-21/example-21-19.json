@@ -1,0 +1,53 @@
+{
+  "id": "BANA Example 21-19",
+  "title": "Mixed Entries",
+  "pdfPages": [
+    566
+  ],
+  "textLines": [
+    16415,
+    16421
+  ],
+  "illustrates": {
+    "rule": "21.5.1e",
+    "quote": "Insert two blank spaces before the start of all definitions or descriptions when the alphabetic reference has a variety of entry styles."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "daft",
+            "def": "crazy, silly",
+            "level": 1
+          },
+          {
+            "term": "daily “(dailies)”",
+            "def": "occurring every day",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bolded headwords."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "daft  crazy1 silly",
+      "daily \"<dailies\">  o3urr+ e \"d"
+    ],
+    "pageBreaks": [],
+    "notes": "A 9-space left margin in the source text was stripped. Entries start in cell 1. 2 spaces between the entry word/phrase and the definition."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

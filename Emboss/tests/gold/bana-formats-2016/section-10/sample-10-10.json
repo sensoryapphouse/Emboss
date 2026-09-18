@@ -1,0 +1,79 @@
+{
+  "id": "BANA Sample 10-10",
+  "title": "Matching Narrow Columns",
+  "pdfPages": [
+    279
+  ],
+  "textLines": [
+    8126,
+    8140
+  ],
+  "illustrates": {
+    "rule": "10.9.1",
+    "quote": "Matching Narrow Columns. Columns of matching items are not treated as displayed material."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Match the state and its capital."
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "State",
+            "Capital"
+          ]
+        ],
+        "rows": [
+          [
+            "Ohio",
+            "Des Moines"
+          ],
+          [
+            "Kentucky",
+            "Columbus"
+          ],
+          [
+            "Florida",
+            "Frankfort"
+          ],
+          [
+            "Texas",
+            "Tallahassee"
+          ],
+          [
+            "Iowa",
+            "Austin"
+          ]
+        ]
+      }
+    ],
+    "notes": "Print lays the two columns out side by side with an underlined heading row and no guide dots; per 10.9.1e this follows Formats §11’s own table-heading/separation-line guidelines — modeled as a genuine `table` block.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,mat* ! /ate & xs capital4",
+      "",
+      ",/ate     ,capital",
+      "\"3333333 \"33333333333",
+      ",ohio     ,des ,mo9es",
+      ",k5tucky ,columbus",
+      ",florida ,frank=t",
+      ",texas    ,tallahassee",
+      ",i[a      ,au/9"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8131-8139, 4-character line-number field). Print unchanged from A/B."
+}

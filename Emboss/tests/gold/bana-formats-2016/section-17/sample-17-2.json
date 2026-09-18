@@ -1,0 +1,89 @@
+{
+  "id": "BANA Sample 17-2",
+  "title": "Sample 17-2: Activity Word List for Alphabetizing",
+  "pdfPages": [
+    479
+  ],
+  "textLines": [
+    13894,
+    13911
+  ],
+  "illustrates": {
+    "rule": "17.3.2",
+    "quote": "Uncontracted Activity Word Lists. The following words/phrases are typical terminology indicating the word list should be uncontracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Short Vowels a, i, o, u"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Write these words in alphabetical order."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`past`"
+          },
+          {
+            "text": "`accident`"
+          },
+          {
+            "text": "`flood`"
+          },
+          {
+            "text": "`shuttle`"
+          },
+          {
+            "text": "`solve`"
+          },
+          {
+            "text": "`problem`"
+          },
+          {
+            "text": "`before`"
+          },
+          {
+            "text": "`lobster`"
+          },
+          {
+            "text": "`decided`"
+          }
+        ]
+      }
+    ],
+    "notes": "A centred heading, activity directions ('alphabetize' — the 17.3.2 uncontracted cue), then a 9-word uncontracted list.",
+    "surroundingText": [],
+    "printFeatures": "Centred blue heading; directions; single-column list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "        ,%ort ,v[els a1 i1 o1 ;u",
+      "",
+      "    ,write ^! ^ws 9 alphabetical ord]4",
+      "past",
+      "accident",
+      "flood",
+      "shuttle",
+      "solve",
+      "problem",
+      "before",
+      "lobster",
+      "decided",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 13911); B dropped it. Both runs otherwise agree."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank line, source-verified) kept over B's. Rule id unchanged. Modeled as heading + directions paragraph + a wholly-uncontracted list (17.3.2, 'Alphabetize' cue) — every item backtick-marked."
+}

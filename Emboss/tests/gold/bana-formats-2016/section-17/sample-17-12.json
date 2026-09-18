@@ -1,0 +1,80 @@
+{
+  "id": "BANA Sample 17-12",
+  "title": "Sample 17-12: Unmarked Intentional Spelling Errors",
+  "pdfPages": [
+    489
+  ],
+  "textLines": [
+    14122,
+    14142
+  ],
+  "illustrates": {
+    "rule": "17.10.2",
+    "quote": "Unmarked Errors. When entire passages have unmarked intentional spelling errors that are to be identified and/or corrected by the reader, transcribe them in uncontracted braille."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Proofreading"
+      },
+      {
+        "kind": "paragraph",
+        "text": "This headline and play review have six misspelled words. Circle each one. Then write each misspelled List Word correctly on the lines."
+      },
+      {
+        "kind": "box",
+        "blocks": [
+          {
+            "kind": "heading",
+            "level": 1,
+            "text": "MARIA LOPEZ STARS IN"
+          },
+          {
+            "kind": "heading",
+            "level": 1,
+            "text": "NEW MUSICOL PLAY"
+          },
+          {
+            "kind": "paragraph",
+            "text": "`The new play Pryde of the West, which openned last night at the Crown Theater, is great.` ... `This play will be a big hit, and Ms. Lopez is going to become a star without equell.`",
+            "features": "the print review's own middle sentences (Antonio/never been better/costoom/criem/beautifully) are abridged by the transcriber with a '444' ellipsis; no Emboss ellipsis mechanism exists (matching buildModel8's own established '444' precedent)"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 'Proofreading' heading, directions, then a boxed headline (two centred lines) and review paragraph, the whole box wholly uncontracted per 17.10.2's own unmarked-errors mechanism; the transcriber abridges the review's own middle sentences with '444'.",
+    "surroundingText": [],
+    "printFeatures": "Boxed headline + review, six unmarked misspellings for the reader to find."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,pro(r1d+",
+      "    ,? h1dl9e & play review h six",
+      "    misspell$ ^ws4 ,circle ea* \"o4 ,!n",
+      "    write ea* misspell$ ,li/ ,^w",
+      "    correctly on ! l9es4",
+      "7777777777777777777777777777777777777777",
+      "        ,,,maria lopez stars in",
+      "           new musicol play,'",
+      "",
+      ",the new play ,pryde of the ,west1 which",
+      "openned last night at the ,crown",
+      ",theater1 is great4 444 ,this play will",
+      "be a big hit1 and ,ms4 ,lopez is going",
+      "to become a star without equell4",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 14142); B dropped it."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. Rule id unchanged ('17.10.2', matches the source's own cross-reference). Modeled with a 'box' block containing two centred heading lines (the print title wraps across two print lines; both are level-1/centred, matching the given braille's own two independently-centred rows, not a single wrapped line) and the review paragraph, wholly uncontracted; the omitted middle sentences are recorded via `features`, not modeled, exactly like buildModel8's own '444' precedent for elided surrounding prose."
+}

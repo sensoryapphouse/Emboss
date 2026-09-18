@@ -79,7 +79,12 @@ test('ordered list with an unordered sub-list: the sub-list does not come back n
   const { doc1, xml2 } = assertListsRoundTrip(xml, 'ol-with-ul-sub');
   const items = getListBlocks(doc1)[0].items;
   assert.equal(items.filter((it) => it.level === 1).length, 3, 'three sub-items at level 1');
-  assert.ok(items.every((it) => (it.level === 1 ? !it.marker : true)), 'sub-items carry no numeric marker');
+  // F-33/A6, BANA Formats 2016 §8.6.2 ("Retain bullets whenever they are used in
+  // lists"): a plain `<list type="ul">` sub-list with no literal bullet character now
+  // gets Emboss's primary bullet marker ('•', not a numeric one) — it must still never
+  // come back NUMBERED (that would mean the outer list's numbering leaked across
+  // levels, the bug this test otherwise guards against).
+  assert.ok(items.every((it) => (it.level === 1 ? it.marker === '•' : true)), 'sub-items carry the bullet marker, never a numeric one');
   // The sub-list must be a real nested <list type="ul">, not a sibling <li class="level-1">.
   assert.match(xml2, /<list type="ol">[\s\S]*<li>Mix the ingredients\.[\s\S]*<list type="ul">[\s\S]*<\/list>[\s\S]*<\/li>[\s\S]*<\/list>/);
   assert.ok(!xml2.includes('level-1'), 'no flat class="level-1" fallback');

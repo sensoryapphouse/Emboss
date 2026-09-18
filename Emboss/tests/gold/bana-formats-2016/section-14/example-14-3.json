@@ -1,0 +1,42 @@
+{
+  "id": "BANA Example 14-3",
+  "title": "Example 14-3: Stage Directions After a Speaker’s Name",
+  "pdfPages": [
+    388
+  ],
+  "textLines": [
+    11180,
+    11186
+  ],
+  "illustrates": {
+    "rule": "14.4.1b",
+    "quote": "Follow print placement and punctuation when stage directions or cues follow the speaker’s name."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "speech",
+        "speaker": "Anne.",
+        "text": "Anne. [laughing] Isn’t that a beautiful balloon?"
+      }
+    ],
+    "notes": "The speaker's name is followed by print's own period, then a stage direction enclosed in square brackets, then the dialogue, all on the same braille line (14.1.6).",
+    "surroundingText": [],
+    "printFeatures": "Single line of dialogue with an inline, bracket-enclosed stage direction; regular typeface throughout."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",anne4 .<lau<+.> ,isn't t a b1uti;l",
+      "  balloon8"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for the speech (14.5.1a); print's own square brackets around the stage direction become UEB's own enclosure indicators."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on speaker/text substance, but split on structure: A kept speaker/text as separate fields with the name repeated as speaker only, B folded the whole line (including the name) into one text string. Per buildModel14's own design (a 'speech' block's structural driver is the fully pre-composed `text`, exactly as every other section's own builders compose text/segments before textOrSegments), B's shape (name folded into text, with print's own period kept) was kept, since 14.1.6/14.4.1b require the name, its own print punctuation, and the dialogue on one flowing line with no separator this schema would otherwise have to invent. Forward-translated through Emboss's translator ({type:'play', subtype:'prose'}, 1-3 margins): EXACT MATCH (see differences.md)."
+}

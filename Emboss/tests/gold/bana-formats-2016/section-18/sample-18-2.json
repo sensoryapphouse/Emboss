@@ -1,0 +1,111 @@
+{
+  "id": "BANA Sample 18-2",
+  "title": "Sample 18-2: Sentence Structure Labeled Above the Sentence",
+  "pdfPages": [
+    512,
+    513
+  ],
+  "textLines": [
+    14828,
+    14872
+  ],
+  "illustrates": {
+    "rule": "18.5.2, 18.5.3",
+    "quote": "18.5.2 Option 1\na. Transcribe the sentence without the text printed above or below the line.\nb. After the sentence, list the words above/below the line followed by a colon and provide the corresponding word(s) from the sentence.\nc. Insert a transcriber’s note to explain the format.\n18.5.3 Option 2\na. Place the abbreviation, word, or number in enclosure symbols not otherwise used in surrounding text (exercise set) and insert it after the affected text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "Each sentence is followed by a list of the parts of speech appearing above the sentence and its corresponding words."
+      },
+      {
+        "kind": "paragraph",
+        "text": "A *complex* *sentence* consists of one independent clause and one or more subordinate clauses."
+      },
+      {
+        "kind": "paragraph",
+        "text": "I need some new luggage that is good for air travel."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "independent clause: I need some new luggage"
+          },
+          {
+            "text": "subordinate clause: that is good for air travel."
+          }
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": "Dallas/Fort Worth International Airport got its name because it lies between the two cities."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "independent clause: Dallas/Fort Worth International Airport got its name"
+          },
+          {
+            "text": "subordinate clause: because it lies between the two cities."
+          }
+        ]
+      }
+    ],
+    "notes": "Labels and their brackets are printed in red above the two example sentences.",
+    "surroundingText": [],
+    "printFeatures": "Labels and brackets are printed in red above the sentences; the term \"complex sentence\" is italicized in the intro."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",a .1complex .1s5t;e 3si/s ( \"o      #,-",
+      "9dep5d5t clause & \"o or m subord9ate",
+      "clauses4",
+      "      @.<,ea* s5t;e is foll[$ by a li/ (",
+      "    ! \"ps ( spee* appe>+ abv ! s5t;e &",
+      "    xs correspond+ ^ws4@.>",
+      "",
+      ",i ne$ \"s new lu7age t is gd = air",
+      "    travel4",
+      "  9dep5d5t clause3 ,i ne$ \"s new lu7age",
+      "  subord9ate clause3 t is gd = air",
+      "    travel4",
+      ",dallas_/,=t ,wor? ,9t]na;nal ,airport",
+      "    got xs \"n 2c x lies 2t ! two cities4",
+      "  9dep5d5t clause3 ,dallas_/,=t ,wor?",
+      "    ,9t]na;nal ,airport got xs \"n",
+      "  subord9ate clause3 2c x lies 2t ! two",
+      "    cities4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted directly from the source's own numbered Option 1 lines 1-18 (14835-14852), stripping the file's own 5-character line-number field and converting U+2800 to space; matches both runs byte-for-byte (both already correctly excluded the 'Option 1'/'Option 2' captions). The trailing '#,-' at the end of line 1 is the book's own running braille page number (18-16), page furniture — never modeled.",
+    "variants": [
+      {
+        "label": "Option 2",
+        "lines": [
+          "444",
+          "      @.<,9 brl1 \"p-(-spee* labels abv !",
+          "    pr9t l9e >e 5clos$ 9 p>5!ses af !",
+          "    correspond+ ^ws4@.>",
+          "",
+          ",i ne$ \"s new lu7age \"<9dep5d5t clause\">",
+          "  t is gd = air travel4 \"<subord9ate",
+          "  clause\">",
+          ",dallas_/,=t ,wor? ,9t]na;nal ,airport",
+          "  got xs \"n \"<9dep5d5t clause\"> 2c x",
+          "  lies 2t ! two cities4 \"<subord9ate",
+          "  clause\">"
+        ]
+      }
+    ]
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille.lines and the Option 2 content already agreed byte-for-byte between both runs; re-extraction from source confirms both exactly. Only the braille.variants SHAPE differed (run A: a bare array of line-arrays; run B: [{description, lines}]) — normalized to this gold corpus's own established {label, lines} shape (section-13's own precedent). illustrates.rule broadened from run A's own '18.5.2, 18.5.3' (already right, kept) / run B's own bare '18.5' (too coarse) to explicit 18.5.2+18.5.3 text."
+}

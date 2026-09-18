@@ -1,0 +1,70 @@
+{
+  "id": "BANA Example 21-39",
+  "title": "Additions Represented by Print Symbols",
+  "pdfPages": [
+    579
+  ],
+  "textLines": [
+    16884,
+    16893
+  ],
+  "illustrates": {
+    "rule": "21.9.3c",
+    "quote": "Represent a dash, hyphen, or special print sign (often unspaced) used to indicate the omission of a word or word part to which an addition is to be made by the braille hyphen."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "dessus, là-∞"
+          },
+          {
+            "level": 1,
+            "text": "der Tisch, —e"
+          },
+          {
+            "level": 1,
+            "text": "der Spass, -̈e or -̈sse"
+          },
+          {
+            "level": 1,
+            "text": "exacto, -a"
+          },
+          {
+            "level": 1,
+            "text": "tu —ses, il -̂t"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A simple list of unnumbered entry items."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "dessus1 l(--",
+      "der ,tisch1 -e",
+      "der ,spass1 ^3-e or ^3-sse",
+      "exacto1 -a",
+      "tu -ses1 il^%-t"
+    ],
+    "pageBreaks": [],
+    "notes": "Left margin is 9 cells (stripped). The braille lines correspond exactly to the 5 printed items."
+  },
+  "uncertain": [
+    "The special print sign in 'là-∞' looks like an infinity symbol, though slightly clipped. Recorded as ∞.",
+    "The print symbol in 'der Spass, -̈e' is a hyphen with a diaeresis above it, transcribed as -̈ based on the braille modifier ⠸⠒ (diaeresis).",
+    "The print symbol in 'il -̂t' is a hyphen with a circumflex above it, transcribed as -̂ based on the braille modifier ⠸⠩ (circumflex)."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-31",
+  "title": "Embedded Picture TN in the Sentence",
+  "pdfPages": [
+    268
+  ],
+  "textLines": [
+    7850,
+    7855
+  ],
+  "illustrates": {
+    "rule": "10.11.1",
+    "quote": "Many texts use pictures in exercises. An embedded transcriber’s note (TN) with a brief description is used in material that is partially or totally pictures."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "The [picture of a butterfly] flew south for the winter."
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "A small inline illustration of a butterfly sits in place of the word \"butterfly\"."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",! @.<butt]fly@.> flew s\\? = ! w9t]4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; PDF page image (p.268) confirms a butterfly illustration inline, no other legible caption."
+}

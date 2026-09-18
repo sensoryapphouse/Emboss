@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 21-11",
+  "title": "Continued Guide Word",
+  "pdfPages": [
+    563
+  ],
+  "textLines": [
+    16295,
+    16300
+  ],
+  "illustrates": {
+    "rule": "21.3.2j",
+    "quote": "Use the last guide word from the previous page(s) followed by “(cont.)” when there are no new main entry words on a braille page."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "2 kayak: ...\n   ...\n23 keep: ...\n24   ...\n25              kayak—keep\n             —New Braille Page—\n1    ... (definitions for keep continue for the rest of the braille page)\n   ...\n24   ...\n25 [braille cells]",
+        "features": "Mock braille page layout showing simulated print layout corresponding to braille lines."
+      }
+    ],
+    "notes": "The print example consists of a mock braille layout showing print guide words, the transition to a new braille page, and the final line with actual braille cells representing the guide word and page number.",
+    "surroundingText": null,
+    "printFeatures": "mock braille layout, braille cells"
+  },
+  "braille": {
+    "width": 57,
+    "lines": [
+      "              keep \"<3t4\">                            #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Line 25 of the (new) braille page is exactly as in the source file, with its true 57-cell extent (28 literal spaces precede the page number in the source's own plain-text rendering)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule normalised from '21.3.2.j' to '21.3.2j' (stray period); width set to the actual 57-cell extent instead of the nominal 40."
+}

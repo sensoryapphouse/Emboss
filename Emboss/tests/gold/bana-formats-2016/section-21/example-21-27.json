@@ -1,0 +1,39 @@
+{
+  "id": "example-21-27",
+  "title": "Entry (See Example 21-30 for Braille)",
+  "pdfPages": [
+    583
+  ],
+  "textLines": [
+    16621,
+    16621
+  ],
+  "illustrates": {
+    "rule": "21.8.3a",
+    "quote": "Entry. The entry includes the word or phrase being defined. It also includes pronunciation information; derivations; parts of speech; definitions; subentries, antonyms, synonyms; sample sentences; and illustrations."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "(See Example 21-30 for the worked braille.)",
+        "features": "This item is a defined-term caption only; the source explicitly points to Example 21-30 for the actual worked braille."
+      }
+    ],
+    "notes": "No print image provided for this example because it refers to Example 21-30.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "illustrates.rule normalised from '21.8.3 a' to '21.8.3a' (stray space)."
+}

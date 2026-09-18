@@ -1,0 +1,49 @@
+{
+  "id": "BANA Example 19-5",
+  "title": "Example 19-5: Word Puzzle",
+  "pdfPages": [
+    523
+  ],
+  "textLines": [
+    15200,
+    15211
+  ],
+  "illustrates": {
+    "rule": "19.6.1",
+    "quote": "b. Insert the grade 1 passage indicator preceded by a blank line before the beginning of the puzzle... c. Insert a space between each letter... d. Do not leave blank lines between lines of the puzzle."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "code",
+        "text": "wsflowerll\nqqfnwwioyw\ntyobhaxsqk\njueeagbers\nmugppelrsa",
+        "features": "A 10-column by 5-row grid of lowercase letters with NO spaces between them in print, enclosed in a ruled box (word-search puzzle). The given braille (below) instead shows each letter separated by a space, per 19.6.1c — with irregular extra gaps in the source's own text rendering of the braille (kept verbatim, per A's own uncertainty note); modeled here as a 'code' block (the grade-1-passage-wrapped mechanism 19.6.1b actually uses) even though Emboss's own wrapCells collapses ANY multi-space run to one space regardless of block type (F-219), so an exact-spacing match is not expected."
+      }
+    ],
+    "notes": "A boxed word-search grid; print itself packs the letters with no spacing at all.",
+    "surroundingText": [],
+    "printFeatures": "10x5 letter grid in a ruled box, no inter-letter spacing."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "\"\"=;;;",
+      "w s f l      o   w   e   r   l   l",
+      "q q f n      w   w   i   o   y   w",
+      "t y o b      h   a   x   s   q   k",
+      "j u e e      a   g   b   e   r   s",
+      "m u g p      p   e   l   r   s   a",
+      "\"\"=;'"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15205-15211 (fixed 9-space Example margin stripped). The irregular multi-space gaps between some letter columns are kept exactly as the source text file shows them (per A's own note), since re-checking the raw file confirms they are genuinely present there, not an artifact of either transcription run."
+  },
+  "uncertain": [
+    "The irregular extra gaps between some letter columns in the source text's own braille rendering (e.g. between column 4 and column 5 on every grid row) do not correspond to anything visible in the print image and are not explained by any §19.6 rule; kept verbatim per the task's own instruction, not reconstructed to a single uniform space."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived, matches exactly). Print side: reconciled to the grid content both runs already agreed on (B's version, since A's redundant 'grid' array duplicated the same data with a needlessly-escaped 'text' field); modeled as a 'code' block rather than left fully unbuilt, to exercise the actual grade-1-passage mechanism 19.6.1b calls for, while documenting that exact column spacing cannot be reproduced (F-219)."
+}

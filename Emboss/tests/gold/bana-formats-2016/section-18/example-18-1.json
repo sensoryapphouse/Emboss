@@ -1,0 +1,59 @@
+{
+  "id": "BANA Example 18-1",
+  "title": "Example 18-1: All Capital Letters Emphasized",
+  "pdfPages": [
+    497
+  ],
+  "textLines": [
+    14334,
+    14344
+  ],
+  "illustrates": {
+    "rule": "18.2.1",
+    "quote": "When all capital letters are emphasized in print, ignore the emphasis and insert a transcriber’s note to explain the print."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "All capital letters in the list of names are red."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "Mark Twain"
+          },
+          {
+            "text": "Catherine the Great"
+          },
+          {
+            "text": "President Lincoln"
+          }
+        ]
+      }
+    ],
+    "notes": "Three names, printed with only their capital letters in red (M/T, C/G, P/L); the transcriber’s note wording was recovered by back-translating the given braille (louis.backTranslate), not copied from either run’s own guess.",
+    "surroundingText": [],
+    "printFeatures": "Isolated/whole-word capital letters printed in red."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,all capital lrs 9 ! li/ ( \"ns",
+      "    >e r$4@.>",
+      "",
+      ",m>k ,twa9",
+      ",ca!r9e ! ,grt",
+      ",presid5t ,l9coln"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted directly from the source (lines 14339-14344): the book's own fixed left margin here is 15 spaces (confirmed against every line in this file's own textLines range, including the run-text lines immediately above at 14330-14334, all of which share the same 15-space margin); after stripping it, line 1 keeps 6 leading blank cells (space), line 2 keeps 4, the blank line (14341, 40 blank cells) becomes empty, and the three name lines have none. This matches run A's own extraction exactly, byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run A's braille.lines is correct (verified by independently re-deriving it from the source's own margin, per this task's own instructions, rather than trusting either run). Run B's braille.lines is wrong: it added a spurious extra ~9-space indent on top of the book's real 15-space margin (12 leading spaces before the TN's own 6-blank-cell indent, and 6 before each name, where the source has 0). print.blocks was rebuilt as a note + list (buildModel18's own representable vocabulary); the note's exact wording ('...in the list of names are red.', not run A's own literal 'section below' guess nor B's 'in bold red type') was recovered by back-translating the given, already-verified braille with louis.backTranslate, not copied from either run."
+}

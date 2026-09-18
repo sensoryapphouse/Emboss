@@ -1,0 +1,63 @@
+{
+  "id": "BANA Sample 14-12",
+  "title": "Sample 14-12: Graphic Novel",
+  "pdfPages": [
+    408,
+    409
+  ],
+  "textLines": [
+    11742,
+    11766
+  ],
+  "illustrates": {
+    "rule": "14.11.1",
+    "quote": "Graphic novels use comic book style art and dialogue. They are treated as a multi-frame cartoon, with each print page beginning with Frame 1. a. Narrative boxes use 1-3 margins. b. If the narrative box appears within a frame, insert the text from the narrative into that frame. If the narrative box is outside one of the frames, treat it as a separate frame and follow the guidelines for formatting frames."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "note", "text": "Frame 1" },
+      { "kind": "speech", "text": "Kuaborsk Ice Prison 296 nautical miles from Antarctica" },
+      { "kind": "note", "text": "Frame 2" },
+      { "kind": "speech", "speaker": "Captain Justice", "text": "Captain Justice (standing at the ice prison) Chill out here for a while Chaos." },
+      { "kind": "note", "text": "Frame 3" },
+      { "kind": "speech", "speaker": "Captain Justice", "text": "Captain Justice (flying away) Have an ... ICE DAY!" },
+      { "kind": "note", "text": "Frame 4: Chaos looking out from behind the ice." },
+      { "kind": "note", "text": "Frame 5: A whirlwind pulls Chaos from the ice." },
+      { "kind": "note", "text": "Frame 6" },
+      { "kind": "speech", "text": "FWIPP! (Sound made as a grappling hook connected to a tether shoots off into space.)" }
+    ],
+    "notes": "Frames are numbered (14.11.1's own 'each print page begins with Frame 1'; back-translation confirms '#a'..'#f' are braille NUMBERS 1-6, not letters). Frame 1's own narrative caption ('Kuaborsk Ice Prison 296 nautical miles from Antarctica', 14.11.1a's own 'narrative box', 1-3 margins) has NO speaker. Frames 2, 3 and 6 each embed a SECOND, action-describing transcriber's note DIRECTLY INSIDE the dialogue/narrative line itself ('(standing at the ice prison)', '(flying away)', '(Sound made as a grappling hook...)') — confirmed by back-translation to be real transcriber's-note-indicator text (@.<...@.>), not print's own punctuation (14.10.3f's own 'insert a transcriber's note following the character's name'/'with the frame number'); Emboss has no mechanism to embed a second, independently-enclosed transcriber's note inside a `speech`/`play` block's own single margin (see resolution). Frames 4 and 5 are pure transcriber's-note visual descriptions with no dialogue. 'Chaos' (panel 2) carries NO comma before it (confirmed directly: the given braille has no comma cell there, matching B's own reading, not A's).",
+    "surroundingText": [],
+    "printFeatures": "A 6-frame graphic novel page: one narrative caption, two frames combining a visual description with dialogue, two purely-visual frames, and one frame combining a sound effect with a visual description."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,frame #a@.>",
+      ",kuaborsk ,ice ,prison #bif nautical",
+      "  miles f ,ant>ctica",
+      "      @.<,frame #b@.>",
+      ",capta9 ,ju/ice @.</&+ at ! ice",
+      "  prison@.> ,*ill \\ \"h = a :ile ,*aos4",
+      "      @.<,frame #c@.>",
+      ",capta9 ,ju/ice @.<fly+ away@.> ,h an",
+      "  444 ,,ice ,,\"d6",
+      "      @.<,frame #d3 ,*aos look+ \\ f 2h !",
+      "    ice@.>",
+      "      @.<,frame #e3 ,a :irlw9d pulls",
+      "    ,*aos f ! ice@.>",
+      "      @.<,frame #f@.>",
+      ",,fwipp6 @.<,s.d made z a grappl+ hook",
+      "  3nect$ to a te!r %oots (f 9to",
+      "  space4@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "7-5 margins for every transcriber's note (14.10.5/14.11.1); 1-3 for the narrative caption and every speech (14.11.1a); the second, embedded transcriber's note in frames 2/3/6 shares its own dialogue line's margin rather than starting a fresh 7-5 line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "pdfPages corrected from A/B's own shared [408] (the page carrying only this sample's own title, 'Sample 14-12: Graphic Novel') to [408, 409], since this excerpt's own braille content is on the FOLLOWING page (409) — independently re-derived from the source's own page-footer positions, matching the identical title/content split already found for Sample 14-11. A/B agreed on braille (byte-for-byte); A's own print.blocks (flat per-panel `text`) is closer to what this excerpt's braille actually carries than B's (B split every frame into a separate visual-only 'cartoon-panel' plus a same-panel 'speech'/'caption'/'other', which does not match the given braille's own single continuous line per frame at all, and left Frame 4/5's own visual descriptions out of `text` entirely, though the given braille clearly carries them as full transcriber's notes). Both runs, however, missed that '#a'..'#f' are NUMBERS (not letters) and that panels 2/3/6 embed a SECOND transcriber's note inside their own dialogue line — corrected here by back-translation. Forward-translated through Emboss's translator ({type:'note'} and {type:'play',subtype:'prose'} blocks, with the embedded action note approximated as ordinary round-bracket text inside the same speech, the closest mechanism Emboss has): the narrative caption (Frame 1) and the two pure-note frames (4, 5) match exactly; the three frames with an embedded SECOND transcriber's note (2, 3, 6) mismatch on the bracket characters themselves (Emboss produces UEB's own PARENTHESIS enclosure, '\"<'/'\">' — the ordinary stage-direction-in-dialogue mechanism, matching 14.4.1c — where the given braille actually has a second, independent TRANSCRIBER'S-NOTE enclosure, '@.<'/'@.>', 14.10.3f) — EXPECTED MISMATCH: Emboss has no mechanism to nest a second, independently-delimited transcriber's note inside a `speech`/`play` block's own single margin/enclosure at all, a new, related aspect of F-241 (standards-findings.md). See differences.md."
+}

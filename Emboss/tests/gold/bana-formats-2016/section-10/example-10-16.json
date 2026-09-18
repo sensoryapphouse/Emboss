@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-16",
+  "title": "Answer Cue on Write-on-Line",
+  "pdfPages": [
+    260
+  ],
+  "textLines": [
+    7558,
+    7563
+  ],
+  "illustrates": {
+    "rule": "10.6.6",
+    "quote": "Follow print for answer cues that appear on the write-on-line."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "What is (<u>to</u> <u>go</u>) on right now?"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "The words \"to go\" are printed directly on the fill-in write-on-line itself."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",:at is \"<_1to _1g\"> on \"r n[8"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

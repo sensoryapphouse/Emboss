@@ -1,0 +1,55 @@
+{
+  "id": "BANA Sample 18-3",
+  "title": "Sample 18-3: List of Boxed Proofreading Marks",
+  "pdfPages": [
+    514
+  ],
+  "textLines": [
+    14880,
+    14897
+  ],
+  "illustrates": {
+    "rule": "18.6.1",
+    "quote": "Marks used in proofreading and editing are difficult to reproduce in braille.\na. Use 1-3 margins when print proofreading marks are listed.\nb. Do not devise symbols to represent these signs. Enclose the name or a brief description of each print mark in an embedded transcriber’s note, followed by the meaning or function of the mark as stated in print.\nc. Proofreading marks and edits often are shown in a colored font attribute. Do not indicate this color.\nd. Follow print list of proofreading marks for use of capitalization and punctuation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "PROOFREADING MARKS"
+      },
+      {
+        "kind": "other",
+        "text": "A list of 7 proofreading marks, each shown as a print symbol (paragraph sign, caret, deletion sign, three stacked horizontal lines, slash, circled \"sp\", circled period) followed by its meaning (\"new paragraph\", \"add\", \"take out\", \"Make a capital letter.\", \"Make a small letter.\", \"Check the spelling.\", \"Add a period.\"). Not modeled: F-186 (each mark name is an EMBEDDED transcriber’s note fused mid-line with its own meaning text — \"@.<paragraph sign@.> new paragraph\" — and only a standalone, whole-block note exists); F-186’s own evidence already names this exact sample (BANA 18.6.1b)."
+      }
+    ],
+    "notes": "The mark itself is drawn in red on the left of each item; its meaning is in plain black text on the right. The whole list sits inside a ruled box (top/bottom rule lines of repeated \"7\"/\"g\" cells in the given braille — also not modeled, no box-rule mechanism exists for this content).",
+    "surroundingText": [],
+    "printFeatures": "Boxed list; each mark drawn in red, its meaning in black."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777   #,-",
+      "           ,,pro(r1d+ ,,m>ks",
+      "",
+      "@.<p>agraph sign@.> new p>agraph",
+      "@.<c>et@.> add",
+      "@.<dele;n sign@.> take \\",
+      "@.<?ree /ack$ horizontal l9es@.> ,make a",
+      "  capital lr4",
+      "@.<sla%@.> ,make a small lr4",
+      "@.<circl$ sp@.> ,*eck ! spell+4",
+      "@.<circl$ p]iod@.> ,add a p]iod4",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted directly from the source's own numbered lines 1-12 (14885-14896), stripping the file's own 5-character line-number field and converting U+2800 to space; matches both runs byte-for-byte. The trailing '#,-' at the end of line 1 is the book's own running braille page number (18-18), page furniture — never modeled."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. Both runs' own 'uncertain' fields already independently concluded Sample 18-3 has only ONE transcription in the source (no Option 2, unlike Samples 18-1/18-2) — confirmed here directly (the source's own '(Return to Text)' at line 14898 follows immediately after line 13, then Sample 18-4's own heading; see sample-18-1's own resolution note for this task brief's own imprecise \"Samples 18-2 and 18-3\" wording, settled from the source). illustrates corrected from run B's own caption-text guess to run A's own already-correct full rule text (18.6.1, stem+a-d, all of which this sample illustrates at once: the 1-3 margin, the embedded-note-per-mark convention, the dropped colour, and print's own capitalization/punctuation)."
+}

@@ -1,0 +1,121 @@
+{
+  "id": "BANA Sample 19-5",
+  "title": "Sample 19-5: Crossword Puzzle",
+  "pdfPages": [
+    533,
+    534
+  ],
+  "textLines": [
+    15401,
+    15447
+  ],
+  "illustrates": {
+    "rule": "19.5.3l",
+    "quote": "l. Insert a transcriber’s note before the crossword puzzle. Sample: In the following crossword puzzle, each clue is followed by a transcriber-assigned column letter and row number. Numbers in parentheses at the end of each clue indicate the number of letters in the puzzle word. The clue letter/number and number of letters in the word are enclosed in transcriber’s note indicators. In the grid, a hyphen represents a square to be filled in, and a full cell represents an empty space."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "In the following crossword puzzle, each clue is followed by a transcriber-assigned column letter and row number. Numbers in parentheses at the end of each clue indicate the number of letters in the puzzle word. The clue letter/number and number of letters in the word are enclosed in transcriber's note indicators. In the grid, a hyphen represents a square to be filled in, and a full cell represents an empty space."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Across"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "2. Not to follow the rule (b2) (5)"
+          },
+          {
+            "text": "4. To let something go (c5) (7)"
+          },
+          {
+            "text": "6. The front of a television (d7) (6)"
+          }
+        ]
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Down"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "1. To make something smaller (d1) (8)"
+          },
+          {
+            "text": "3. Symbols (b4) (7)"
+          },
+          {
+            "text": "5. Something you want to reach (b7) (4)"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "an 11x11 crossword grid of hyphens (fillable squares) and full cells (blocked squares), column-lettered a-k across the top and row-numbered 1-11 down the side",
+        "features": "The grid itself: not braille-buildable in any candidate block type (F-217/219/222)."
+      }
+    ],
+    "notes": "The whole sample spans two braille pages: the transcriber's note (page 1, its own lines 10-20) and, on page 2, the Across/Down clue lists (each with an embedded column/row + letter-count note, per 19.5.2e-g) followed by the crossword grid.",
+    "surroundingText": [],
+    "printFeatures": "Transcriber's note, Across/Down clue lists (each clue with an embedded position/length annotation), and an 11x11 lettered/numbered crossword grid."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,9 ! foll[+ cross^w puzzle1 ea*",
+      "    clue is foll[$ by a transcrib]-",
+      "    assign$ column lr & r[ numb]4",
+      "    ,numb]s 9 p>5!ses at ! 5d ( ea* clue",
+      "    9dicate ! numb] ( lrs 9 ! puzzle ^w4",
+      "    ,! clue lett]_/numb] & numb] ( lrs 9",
+      "    ! ^w >e 5clos$ 9 transcrib]'s note",
+      "    9dicators4 ,9 ! grid1 a hyph5",
+      "    repres5ts a squ>e to 2 fill$ in1 & a",
+      "    full cell repres5ts an empty",
+      "    space4@.>",
+      "    ,acr                             #,-",
+      "#b4 ,n to foll[ ! rule @.<b#b \"<#e\">@.>",
+      "#d4 ,to let \"s?+ g @.<c#e \"<#g\">@.>",
+      "#f4 ,! front ( a televi.n @.<d#g",
+      "  \"<#f\">@.> 444",
+      "",
+      "    ,d[n",
+      "#a4 ,to make \"s?+ small] @.<d#a",
+      "  \"<#h\">@.>",
+      "#c4 ,symbols @.<i#b \"<#d\">@.>",
+      "#e4 ,\"s?+ y want to r1* @.<b#g \"<#d\">@.>",
+      "444",
+      "",
+      "    abcdefghijk",
+      "#a ===-=======",
+      "#b =-----==-==",
+      "#c ===-====-==",
+      "#d ===-====-==",
+      "#e ==-------==",
+      "#f ===-=======",
+      "#g =-=------==",
+      "#h ----===-===",
+      "#i =-=====-===",
+      "#aj =----==----",
+      "#aa =======-==="
+    ],
+    "pageBreaks": [
+      11
+    ],
+    "notes": "Page 1 (source-lines 15406-15416) carries ONLY the transcriber's note, on its own numbered lines 10-20; lines 1-9 are genuinely absent from the source's own extracted text (no numbered braille line exists there at all — the source's own numbering jumps straight from the 'Sample 19-5: Crossword Puzzle' heading to line 10), matching this task's own brief that Sample 19-5's lines 1-9 legitimately lack braille. `lines` below therefore starts directly at the TN (11 lines), then a page break, then page 2 (source-lines 15422-15446, its own line numbering restarting at 1) carrying the Across/Down clue lists and the grid (25 lines)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille re-derived independently from source (source-lines 15406-15416 and 15422-15446, joined with a pageBreaks marker exactly as Sample 19-4 above); differs from both A and B, which had each force-fabricated their own line-count/pageBreaks bookkeeping for the 9 missing lines on page 1 (A: pageBreaks:[14], line count assuming a 14-line first page; B: no pageBreaks at all) without checking that those 9 lines simply have no source content, and are not, e.g., a picture placeholder with an established line count like Sample 19-7's Sudoku. Print side reconciled: the transcriber's note text matches rule 19.5.3l's own quoted 'Sample:' wording verbatim (back-translation-confirmed); the three Across and three Down clues were decoded fresh from the given braille via back-translation and the embedded-note parenthesis decode already established in Example 19-4; the crossword grid remains fully undocumented content (F-217/219/222)."
+}

@@ -1,0 +1,122 @@
+{
+  "id": "BANA Sample 17-5",
+  "title": "Sample 17-5: Activity Word List",
+  "pdfPages": [
+    482
+  ],
+  "textLines": [
+    13959,
+    13981
+  ],
+  "illustrates": {
+    "rule": "17.3.3",
+    "quote": "Contracted Activity Word Lists. Word lists with activities centered around the use of the words usually are contracted. Sample key phrases indicating the word list should be contracted include: Write a word that means the same..."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "ASSOCIATIONS"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Write the word from the box that is associated with each set of terms."
+      },
+      {
+        "kind": "box",
+        "blocks": [
+          {
+            "kind": "list",
+            "items": [
+              {
+                "text": "please"
+              },
+              {
+                "text": "pleasant"
+              },
+              {
+                "text": "cloth"
+              },
+              {
+                "text": "clothes"
+              }
+            ]
+          },
+          {
+            "kind": "other",
+            "text": "(box continues in print: sign, signature, dream, dreamt, part — abridged in the given braille by a vertical-ellipsis symbol, then the box's own last word)",
+            "features": "editorial abridgement, no Emboss ellipsis mechanism"
+          },
+          {
+            "kind": "list",
+            "items": [
+              {
+                "text": "partial"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "marker": "a.",
+            "text": "material, fabric"
+          },
+          {
+            "marker": "b.",
+            "text": "piece, section"
+          },
+          {
+            "marker": "c.",
+            "text": "fantasy, nightmare"
+          },
+          {
+            "marker": "d.",
+            "text": "you're welcome, thank you"
+          },
+          {
+            "marker": "e.",
+            "text": "enjoyable, delightful"
+          }
+        ]
+      }
+    ],
+    "notes": "An all-caps 'ASSOCIATIONS' heading, directions, a boxed word list (abridged mid-list by the transcriber with a vertical-ellipsis symbol, '444' — no full word list given in either run's own source excerpt), and a lettered activity list.",
+    "surroundingText": [],
+    "printFeatures": "Boxed word list beside directions and a lettered list (source print lays the box out beside the activity, not before it; braille linearises box-then-activity)."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,,associa;ns",
+      "    ,write ! ^w f ! box t is associat$ )",
+      "    ea* set ( t]ms4",
+      "",
+      "7777777777777777777777777777777777777777",
+      "pl1se",
+      "pl1sant",
+      "clo?",
+      "clo!s",
+      "444",
+      "\"pial",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "#a4 mat]ial1 fabric",
+      "#b4 piece1 sec;n",
+      "#c4 fantasy1 ni<tm>e",
+      "#d4 y're welcome1 ?ank y",
+      "#e4 5joyable1 deli<t;l"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged (A and B agree, matches source). Rule id unchanged ('17.3.3', matches the source's own cross-reference). Modeled with a 'box' block (matching buildModel7/8/12's own nested-box convention) containing the box's own visible words as an ordinary (contracted, per 17.3.3) list, the transcriber's own mid-box abridgement recorded as 'other' (not representable — Emboss has no ellipsis mechanism, matching buildModel8's own established '444' precedent), then a lettered activity list outside the box."
+}

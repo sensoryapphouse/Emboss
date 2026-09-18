@@ -1,0 +1,52 @@
+{
+  "id": "BANA Example 10-30",
+  "title": "True/False after Sentences",
+  "pdfPages": [
+    267
+  ],
+  "textLines": [
+    7826,
+    7834
+  ],
+  "illustrates": {
+    "rule": "10.10.1",
+    "quote": "Always include print abbreviations or wording, e.g., T/F, True/False, etc. Follow print placement."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Thomas Jefferson was the 1st president of the United States. True False"
+          },
+          {
+            "level": 0,
+            "text": "2. Jimmy Carter only served one term as president. True False"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,?omas ,je6]son 0 ! #ast presid5t (",
+      "  ! ,unit$ ,/ates4 ,true ,false",
+      "#b4 ,jimmy ,c>t] only s]v$ \"o t]m z",
+      "  presid5t4 ,true ,false"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

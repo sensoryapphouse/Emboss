@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 14-7",
+  "title": "Example 14-7: Verse Play with Extended Blank Space",
+  "pdfPages": [
+    391
+  ],
+  "textLines": [
+    11305,
+    11314
+  ],
+  "illustrates": {
+    "rule": "14.6.2a",
+    "quote": "Insert three blank cells between the speaker’s name and the beginning of the dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "ANTONIO", "verse": true, "text": "ANTONIO: I'll teach you how to flow." },
+      { "kind": "speech", "speaker": "SEBASTIAN", "verse": true, "text": "SEBASTIAN:   Do so. To ebb" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "Hereditary sloth instructs me." },
+      { "kind": "speech", "speaker": "ANTONIO", "verse": true, "text": "ANTONIO:   O," },
+      { "kind": "speech", "verse": true, "level": 1, "text": "If you but knew how you the purpose cherish" }
+    ],
+    "notes": "Confirmed directly against the page image (compare-gold-14/pages/page-391.png): print shows a wide, print-typeset gap (not literal spaces) after 'SEBASTIAN:' and after the second 'ANTONIO:', with the dialogue beginning far to the right on the same line — the given braille inserts exactly three blank cells there (14.6.2a), shown here as three literal spaces in `text` for a forward-translation test (see resolution: Emboss cannot actually reproduce this, F-206).",
+    "surroundingText": [],
+    "printFeatures": "Verse dialogue, speaker names in full caps followed by a colon; two of the four speaker turns have an extended blank space before the dialogue instead of an ordinary single space; continuation lines of the same speech are indented."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",,antonio3 ,i'll t1* y h[ to fl[4",
+      ",,seba/ian3   ,d s4 ,to ebb",
+      "  ,h]$it>y slo? 9/ructs me4",
+      ",,antonio3   ,o1",
+      "  ,if y b knew h[ y ! purpose *]i%"
+    ],
+    "pageBreaks": [],
+    "notes": "1-5 margins for a speaker's first verse line (14.6.1a), 3-5 for a continuation line by the same speaker (14.6.1b); three blank cells (not one) separate 'SEBASTIAN:'/the second 'ANTONIO:' from their own dialogue, per 14.6.2a — confirmed in the page image by the print's own wide typeset gap at exactly those two points."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on which two speaker turns carry the extended gap; A used a bare '\\n' to separate a speech's own two verse lines inside one block (losing the per-line `level` this schema needs), B used '\\n  ' (two literal spaces, an arbitrary indent amount); this reconciliation instead splits each speaker's own additional verse line into its own {kind:'speech', level:1} block, matching buildModel13/15's own established one-block-per-verse-line convention for every other poem/verse section, and lets the given braille's own 3-5 margin come from nestedMargins('poetry',...) rather than from a hard-coded string indent. Forward-translated through Emboss's translator ({type:'play', subtype:'verse'} blocks): every non-gap cell matches exactly, but the three blank cells collapse to ONE regardless of how many literal spaces `text` carries — confirmed directly (engine/louis.mjs's own translate() keeps a 3-space run intact; layout.mjs's wrapCells re-tokenises on every space and rejoins with a single one, `braille.split(' ').filter(w=>w.length>0)`, discarding the extra two unconditionally). This is a genuine, newly-documented Emboss gap (F-206, standards-findings.md) with no per-file workaround — EXPECTED MISMATCH, not a gold-file error (see differences.md)."
+}

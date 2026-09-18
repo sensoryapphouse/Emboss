@@ -1,0 +1,41 @@
+{
+  "id": "example-21-28",
+  "title": "Entry-Word Segment in Dictionary Entry (Print Only)",
+  "pdfPages": [
+    572
+  ],
+  "textLines": [
+    16635,
+    16635
+  ],
+  "illustrates": {
+    "rule": "21.8.3b",
+    "quote": "Entry-Word Segment. A main entry-word segment includes the word or phrase, the respelling, and the pronunciation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "pre-sen-ta-tion \\pre′-zen-tā′-shən\\",
+        "features": "The entry-word segment (word, respelling, pronunciation) highlighted with a gray background; print only, no braille given for this excerpt — F-200 (no dictionary-entry/pronunciation-key AST node)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Highlighted entry-word segment."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [
+    "In the respelling, it is difficult to see if the first 'e' has a macron ('prē'). It has been transcribed as 'pre'."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

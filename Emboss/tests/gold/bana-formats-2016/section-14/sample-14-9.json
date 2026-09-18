@@ -1,0 +1,61 @@
+{
+  "id": "BANA Sample 14-9",
+  "title": "Sample 14-9: Mixed Prose and Verse Stage Directions",
+  "pdfPages": [
+    404
+  ],
+  "textLines": [
+    11653,
+    11674
+  ],
+  "illustrates": {
+    "rule": "14.7",
+    "quote": "Mixed Prose and Verse Plays. Dialogue. Use the appropriate format for the type of dialogue, i.e., 1-3 margins for the prose sections and 1-5, 3-5 margins for the verse sections. Stage Directions. Use 7-7 margins for stage directions or cues. Follow print for use of enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "Ophelia:", "text": "Ophelia: I hope all will be well. We must be patient: but I cannot choose but weep, to think they should lay him i' the cold ground. My brother shall know of it: and so I thank you for your good counsel. Come, my coach! Good night, ladies; good night, sweet ladies; good night, good night." },
+      { "kind": "stage-direction", "text": "[Exit.]" },
+      { "kind": "speech", "speaker": "King:", "text": "King: Follow her close; give her good watch," },
+      { "kind": "speech", "level": 1, "text": "I pray you." },
+      { "kind": "stage-direction", "text": "[Exit Horatio.]" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "O, this is the poison of deep grief; it springs" },
+      { "kind": "speech", "verse": true, "level": 1, "text": "All from her father’s death. O Gertrude, Gertrude," },
+      { "kind": "speech", "verse": true, "level": 1, "text": "When sorrows come, they come not single spies" }
+    ],
+    "notes": "King's own speech begins in PROSE (1-3, no verse) and, after a stage direction interrupts it, continues in VERSE with no speaker name repeated — confirmed directly against the given braille's own margins: the verse portion sits at cell 3/5 (3-5, the 'additional line by the same speaker' margin, 14.6.1b) throughout, never at cell 1/5 (a fresh verse 'first line'), so it is modelled as three level-1 verse blocks continuing the same speech, not a new speech. Ophelia's own elided “i' the” keeps a plain (straight) apostrophe — confirmed by forward translation: a curly right-single-quote apostrophe there translates to a DIFFERENT symbol (a French/foreign-language single-quote indicator) that the given braille does not have.",
+    "surroundingText": [],
+    "printFeatures": "A prose speech, a bracketed stage direction, a second prose speech, a second stage direction, then three lines of verse continuing the second speaker's own turn."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",ophelia3 ,i hope all w 2 well4 ,we m/ 2",
+      "  pati5t3 b ,i _c *oose b weep1 to ?9k",
+      "  !y %d lay hm i' ! cold gr.d4 ,my bro!r",
+      "  % \"k ( x3 & s ,i ?ank y = yr gd",
+      "  c\\ncel4 ,come1 my coa*6 ,gd ni<t1",
+      "  ladies2 gd ni<t1 sweet ladies2 gd",
+      "  ni<t1 gd ni<t4",
+      "      .<,exit4.>",
+      ",k+3 ,foll[ h] close2 give h] gd wat*1",
+      "    ,i pray y4",
+      "      .<,exit ,horatio4.>",
+      "  ,o1 ? is ! poison ( deep grief2 x",
+      "    spr+s",
+      "  ,all f h] \"f's d1?4 ,o ,g]trude1",
+      "    ,g]trude1",
+      "  ,:5 sorr[s come1 !y come n s+le spies"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for both prose speeches (14.7.1); 7-7 for both stage directions (14.7.2), no blank line around either (reusing 14.5.3d's own wording); 3-5 for every verse line (14.7.1/14.6.1b) since all three continue King's own speech rather than opening a fresh one."
+  },
+  "uncertain": [
+    "The word 'counsel' (Shakespeare's own canonical text, and both transcription runs' independent reading) forward-translates through Emboss's translator to a different contraction ('C\\NSEL') than the given braille actually has ('c\\ncel') — a liblouis/uebG2 table divergence from the officially certified BANA transcription for this one word, not a gold-data error (the word itself is not in doubt); left UNRESOLVED, see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on the overall shape (prose-then-verse, no repeated speaker name); B's own pdfPages (404) is correct — confirmed by this reconciliation's own independent page derivation from the source's own footer positions (print page 14-20 = pdf 384+20 = 404), against A's incorrect 405. B's own colon-punctuated speaker names ('Ophelia:'/'King:') match the given braille's own colon cells exactly; A omitted them. illustrates.quote/rule: reset to 14.7's own actual rule text (both runs merely repeated this sample's own title). Forward-translated through Emboss's translator (two {type:'play',subtype:'prose'}, two {type:'stage'}, three {type:'play',subtype:'verse',level:1} blocks): every line matches exactly except the 'counsel' word (see 'uncertain') and one spurious blank line Emboss inserts between the second stage direction and the verse portion (the SAME already-documented F-240: a 'stage' block breaks the surrounding verse run, and F-121's blank-line-around-a-poem mechanism then adds one where 14.7.2/14.5.3d's own 'no blank line' rule says none belongs) — see differences.md."
+}

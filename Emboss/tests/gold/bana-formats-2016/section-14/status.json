@@ -1,0 +1,102 @@
+{
+  "BANA Example 14-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-10": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,C>TOON@.> TITLE1 >TI/'S \\\"N1\" vs actual \"      @.<,C>TOON TITLE1 >TI/'S \\\"N1 DATE\"."
+  },
+  "BANA Example 14-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-3": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-4": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-5": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-6": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Example 14-7": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \",,SEBA/IAN3   ,D S4 ,TO EBB\" vs actual \",,SEBA/IAN3 ,D S4 ,TO EBB\"."
+  },
+  "BANA Example 14-8": {
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"      ,EXEUNT ALL B ,,BRUTUS\" vs actual \"\". line count differs by +2 (expected 4, actual 6)."
+  },
+  "BANA Example 14-9": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-10": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-11": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"      @.<,C>TOON@.>                  #,-\" vs actual \"      @.<,C>TOON@.>\"."
+  },
+  "BANA Sample 14-12": {
+    "status": "mismatch",
+    "note": "first differing line 5: expected \",CAPTA9 ,JU/ICE @.</&+ AT ! ICE\" vs actual \",CAPTA9 ,JU/ICE \\\"</&+ AT ! ICE PRISON\\\">\". line count differs by -1 (expected 17, actual 16)."
+  },
+  "BANA 14.5.2a Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 14.5.2b Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA 14.6.2b Sample": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "BANA Sample 14-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,SC5E3 ,! AC;N TAKES PLACE 9        #,-\" vs actual \",,SC5E3 ,! AC;N TAKES PLACE 9 ,HELM]'S\". line count differs by -1 (expected 14, actual 13). Input-model limitation: print block kind 'other' (not modeled — a picture/panel-art/columned-layout with no braille-buildable counterpart in this schema): \"A print page number/running-head fragment ('#,-' in the given braille) bled into the extracted line between 'in' and \"Helmer's\" — page furniture, not scene-sett\""
+  },
+  "BANA Sample 14-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,C>OL ,Y DON'T \\\"K :AT X M1NS 4448   #,-\" vs actual \",,C>OL ,Y DON'T \\\"K :AT X M1NS 444;8\". Input-model limitation: print block kind 'other' (not modeled — a picture/panel-art/columned-layout with no braille-buildable counterpart in this schema): \"A print page number/running-head fragment ('#,-') bled into the extracted line, right of the ellipsis on braille line 1; page furniture, not modelled.\""
+  },
+  "BANA Sample 14-4": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-5": {
+    "status": "mismatch",
+    "note": "first differing line 3: expected \"      @.<,CRAIG1 ,PET]@.> ,TGR\" vs actual \"      @.<,CRAIG1 ,PET] ,TGR@.>\"."
+  },
+  "BANA Sample 14-6": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-7": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-8": {
+    "status": "match",
+    "note": "match"
+  },
+  "BANA Sample 14-9": {
+    "status": "mismatch",
+    "note": "first differing line 5: expected \"  C\\\\NCEL4 ,COME1 MY COA*6 ,GD NI<T1\" vs actual \"  C\\\\NSEL4 ,COME1 MY COA*6 ,GD NI<T1\". line count differs by +1 (expected 16, actual 17)."
+  }
+}

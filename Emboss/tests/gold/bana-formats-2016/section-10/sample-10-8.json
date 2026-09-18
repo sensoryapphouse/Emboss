@@ -1,0 +1,66 @@
+{
+  "id": "BANA Sample 10-8",
+  "title": "Numbered Sentences Begin in Same Cell",
+  "pdfPages": [
+    277
+  ],
+  "textLines": [
+    8082,
+    8094
+  ],
+  "illustrates": {
+    "rule": "10.8.5",
+    "quote": "When a label is followed by a numbered item on the same line, move the numbered item to the next line so all numbered items begin in the same cell. Keep the label in cell 1."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Mark the capitalization errors in the following sentences."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "EXAMPLE: 1. The president lives in the white house."
+          }
+        ]
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. the statue of liberty"
+          }
+        ]
+      }
+    ],
+    "notes": "PDF page image (p.277) inspected directly: print shows \"EXAMPLE: 1. The president lives in the white house.\" as ONE continuous line (the label and the numbered item on the SAME print line) — exactly the condition 10.8.5 addresses. The given braille splits them onto two separate lines (\"EXAMPLE:\" alone, then \"1. The president...\").",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,m>k ! capitaliza;n ]rors 9 ! foll[+",
+      "    s5t;es4",
+      "",
+      ",,example3",
+      "#a4 ,! presid5t lives 9 ! _2:ite _2h\\se4",
+      "",
+      "#a4 ! /atue ( lib]ty"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "Modeled as ONE exercise item carrying the print line’s own combined \"EXAMPLE: 1.\" wording, since document.mjs has no label/numbered-item same-line split mechanism at all (F-228) — EXPECTED to mismatch the given braille’s own two-line split."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8087-8093). Print: confirmed against the PDF page image that \"EXAMPLE:\" and \"1.\" genuinely share one print line; \"the statue of liberty\" is a separate, later exercise item (lowercase, the actual sentence to correct)."
+}

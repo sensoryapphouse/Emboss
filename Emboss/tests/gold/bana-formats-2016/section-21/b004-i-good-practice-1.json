@@ -1,0 +1,36 @@
+{
+  "id": "B004 I Good practice 1",
+  "title": "●   For multi-volume books repeat the summary of the print page coverage for each volume.",
+  "pdfPages": [],
+  "textLines": [
+    803,
+    804
+  ],
+  "illustrates": {
+    "rule": "",
+    "quote": ""
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "For multi-volume books repeat the summary of the print page coverage for each volume."
+      }
+    ],
+    "notes": "Text only sample.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille content."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print text corrected from the shared 'Answers a-e.' placeholder to the actual B004 Appendix I bullet wording (references/_text/B004.txt lines 803-804); already correct in `title`."
+}

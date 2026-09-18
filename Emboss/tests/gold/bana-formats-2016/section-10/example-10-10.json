@@ -1,0 +1,67 @@
+{
+  "id": "BANA Example 10-10",
+  "title": "Omit Write-on-Lines After Questions",
+  "pdfPages": [
+    258
+  ],
+  "textLines": [
+    7464,
+    7474
+  ],
+  "illustrates": {
+    "rule": "10.5.1",
+    "quote": "Omit lines, dashes, circles, boxes, or other print devices printed before or after questions, indicating where students are to answer questions."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A Song for Sailors"
+      },
+      {
+        "kind": "directions",
+        "text": "Follow your teacher’s instructions to answer the following questions about \"The Lorelei.\""
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Who were the characters?"
+          },
+          {
+            "level": 0,
+            "text": "2. What was the setting?"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "A write-on-line follows each question in print; omitted per 10.5.1."
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,a ,s;g = ,sailors",
+      "",
+      "    ,foll[ yr t1*]'s 9/ruc;ns to answ] !",
+      "    foll[+ \"qs ab 8,! ,lorelei40",
+      "#a4 ,:o 7 ! \"*s8",
+      "#b4 ,:at 0 ! sett+8"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; the poem-excerpt title is built as a genuine centred heading since the given braille centres it on its own line."
+}

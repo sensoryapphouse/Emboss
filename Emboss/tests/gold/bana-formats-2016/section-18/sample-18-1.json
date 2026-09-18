@@ -1,0 +1,76 @@
+{
+  "id": "BANA Sample 18-1",
+  "title": "Sample 18-1: Parts-of-Speech Labels Above the Sentence",
+  "pdfPages": [
+    511
+  ],
+  "textLines": [
+    14797,
+    14820
+  ],
+  "illustrates": {
+    "rule": "18.5.2, 18.5.3",
+    "quote": "18.5.2 Option 1\na. Transcribe the sentence without the text printed above or below the line.\nb. After the sentence, list the words above/below the line followed by a colon and provide the corresponding word(s) from the sentence.\nc. Insert a transcriber’s note to explain the format.\n18.5.3 Option 2\na. Place the abbreviation, word, or number in enclosure symbols not otherwise used in surrounding text (exercise set) and insert it after the affected text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "In braille, each sentence is followed by a list of the parts of speech appearing above the print line with their corresponding words."
+      },
+      {
+        "kind": "paragraph",
+        "text": "**Philanthropists** *donated* millions to charity."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "subject: Philanthropists"
+          },
+          {
+            "text": "verb: donated"
+          }
+        ]
+      }
+    ],
+    "notes": "Option 1 (18.5.2) only; Option 2 (18.5.3) is the sample's own second half, kept in braille.variants (a print-side reconstruction of it is not attempted, since its own note wording and inline-parenthesis mechanism are already exercised in full by Sample 18-2's own Option 2 below).",
+    "surroundingText": [],
+    "printFeatures": "The word \"Philanthropists\" is printed in bold; the word \"donated\" is printed in italics."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,9 brl1 ea* s5t;e is        #,-",
+      "    foll[$ by a li/ ( ! \"ps ( spee*",
+      "    appe>+ abv ! pr9t l9e ) _!",
+      "    correspond+ ^ws4@.>",
+      "",
+      "^1,philan?ropi/s .1donat$ millions to",
+      "    *>;y4",
+      "  subject3 ,philan?ropi/s",
+      "  v]b3 donat$"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted directly from the source's own numbered lines 1-9 (14804-14812), stripping the file's own 5-character line-number field (max line number 15, two digits, +3 = 5) and converting U+2800 to space; the print-only 'Option 1'/'Option 2' captions (14802/14813, not braille-ASCII, no line-number field of their own) are omitted, never treated as content. The trailing '#,-' at the end of line 1 is the book's own running braille page number (18-15), page furniture rather than sample content — never modeled.",
+    "variants": [
+      {
+        "label": "Option 2",
+        "lines": [
+          "      @.<,9 brl1 \"ps-(-spee* labels abv",
+          "    ! pr9t l9e >e 5clos$ 9 p>5!ses af !",
+          "    correspond+ ^ws4@.>",
+          "",
+          "^1,philan?ropi/s \"<subject\"> .1donat$",
+          "  \"<v]b\"> millions to *>;y4"
+        ]
+      }
+    ]
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs merged Option 1 and Option 2 into one flat braille.lines array, including the print-only 'Option 1'/'Option 2' captions as if they were braille content and with no braille.variants split at all — inconsistent with how BOTH runs treated Sample 18-2 (which DOES split Option 2 into variants, captions excluded). Re-derived from source directly: Option 1 (lines 1-9, source 14804-14812) as braille.lines, Option 2 (lines 10-15, source 14815-14820) as a single braille.variants entry, both with the 5-char line-number field stripped and the captions dropped, matching Sample 18-2's own established convention and the variants schema already used elsewhere in this gold corpus ({label, lines}, tests/gold/bana-formats-2016/section-13/sample-13-03.json). NOTE: this task's own brief says \"Samples 18-2 and 18-3 show two Options each\" — the source does not support this: Sample 18-1 and Sample 18-2 are the two-Option samples (confirmed here and by Sample 18-2 below); Sample 18-3 has only one transcription (both runs' own uncertain fields independently already reached this same conclusion, and the source's own \"(Return to Text)\" at line 14898 confirms no Option 2 follows it) — settled from the source per this task's own instruction to do so whenever a claim (here, the brief's own) conflicts with it. illustrates.rule broadened from run A's own generic 18.5.1 (merely the two-options intro) to 18.5.2+18.5.3 (Option 1's and Option 2's own defining rules, both actually illustrated here)."
+}

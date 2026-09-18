@@ -1,0 +1,63 @@
+{
+  "id": "BANA Example 10-32",
+  "title": "Embedded TNs for Answer Choices",
+  "pdfPages": [
+    268
+  ],
+  "textLines": [
+    7858,
+    7867
+  ],
+  "illustrates": {
+    "rule": "10.11.2",
+    "quote": "Picture descriptions are not limited to seven or fewer words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Which is a good habit?"
+          },
+          {
+            "level": 1,
+            "text": "a. girl eating candy"
+          },
+          {
+            "level": 1,
+            "text": "b. two boys eating ice cream from the carton"
+          },
+          {
+            "level": 1,
+            "text": "c. girl eating a carrot"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "The three answer choices are photographs (a girl eating candy; two boys eating ice cream from a carton; a girl eating a carrot) with NO print text of their own at all — confirmed directly against the PDF page image (p.268): only the bare labels \"a.\" \"b.\" \"c.\" are printed, no caption text."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,: is a gd habit8",
+      "  a4 @.<girl eat+ c&y@.>",
+      "  ;b4 @.<two boys eat+ ice cr1m f !",
+      "    c>ton@.>",
+      "  ;c4 @.<girl eat+ a c>rot@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "Choice items are built with the SAME wording as the given braille’s own transcriber’s-note descriptions, since print itself has no text of any kind for them (per 10.11.1, a TN description is the only content there is to transcribe) — Emboss has no picture-in-exercise-item TN mechanism (F-229), so this text is built as plain untagged item text and is expected to mismatch the given braille’s own TN-wrapped (\"@.<...@.>\") form."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print: both runs agree the photographs carry no print text at all; confirmed directly against the PDF page image."
+}

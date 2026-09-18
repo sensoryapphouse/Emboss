@@ -1,0 +1,58 @@
+{
+  "id": "BANA Example 21-38",
+  "title": "Repetitions Shown with Print Symbols",
+  "pdfPages": [
+    578
+  ],
+  "textLines": [
+    16867,
+    16874
+  ],
+  "illustrates": {
+    "rule": "21.9.3b",
+    "quote": "Represent a spaced dash, hyphen, or special print sign that is used to indicate the repetition of an entire word by a spaced braille dash."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "index",
+        "items": [
+          {
+            "level": 1,
+            "text": "coup, — de pied"
+          },
+          {
+            "level": 1,
+            "text": "der Laden, \""
+          },
+          {
+            "level": 1,
+            "text": "das Leben, —"
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "coup1 ,- de pied",
+      "der ,laden1 ^3,-",
+      "das ,leben1 ,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-38: ...' title and 4 leading blank lines — removed; the remaining 3 real lines already had their margin correctly stripped."
+  },
+  "uncertain": [
+    "The repetition symbol in the second print entry 'der Laden, \"' is a ditto mark or double quote; transcribed as '\"'."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks)."
+}

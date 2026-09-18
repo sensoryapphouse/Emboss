@@ -1,0 +1,84 @@
+{
+  "id": "BANA Example 10-9",
+  "title": "Omit Write-on-Lines Before Questions",
+  "pdfPages": [
+    258
+  ],
+  "textLines": [
+    7453,
+    7462
+  ],
+  "illustrates": {
+    "rule": "10.5.1",
+    "quote": "Omit lines, dashes, circles, boxes, or other print devices printed before or after questions, indicating where students are to answer questions."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "\\_\\_\\_\\_ (a blank write-on-line precedes question 6 in print; omitted per 10.5.1)"
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "6. Every congressional term is divided into"
+          },
+          {
+            "level": 1,
+            "text": "a. four sessions per year."
+          },
+          {
+            "level": 1,
+            "text": "b. twelve months."
+          },
+          {
+            "level": 1,
+            "text": "c. two one-year sessions."
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "\\_\\_\\_\\_ (a blank write-on-line precedes question 7 in print; omitted per 10.5.1)"
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "7. Turnover among members of Congress is usually"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "a. high (print continues this choice but it is cut off by a wavy torn-paper line right after \"high\"; choices b/c are not visible in print at all)"
+      }
+    ],
+    "notes": "PDF page image (p.258) inspected directly: question 7’s own text \"Turnover among members of Congress is usually\" is fully legible in print with no torn marking on it at all; only its own answer choices are torn away.",
+    "surroundingText": "",
+    "printFeatures": "Printed inside a ruled box; a write-on-line precedes each question number."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#f4 ,e 3gres.nal t]m is divid$ 9to",
+      "  a4 f\\r ses.ns p] ye>4",
+      "  ;b4 twelve mon?s4",
+      "  ;c4 two \"o-ye> ses.ns4",
+      "#g4 ,turnov] am;g memb]s ( 444"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "Question 7’s given braille stops at \"of\" with an omission indicator (\"444\"), omitting \"Congress is usually\" even though that text is fully legible in print — confirmed directly against the PDF page image (matches gold-10-B’s own reading, not gold-10-A’s claim that the braille box image itself shows more). Built with the full legible print text, so this is EXPECTED to mismatch; see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print: question 7 uses its own full, legible print wording (confirmed against the PDF page image); its own answer choices are not modeled (torn away in print, matching the given braille’s own total omission of them)."
+}

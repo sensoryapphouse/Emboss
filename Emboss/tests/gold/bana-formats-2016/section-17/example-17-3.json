@@ -1,0 +1,53 @@
+{
+  "id": "BANA Example 17-3",
+  "title": "Example 17-3: Syllabified Words in a Spelling List",
+  "pdfPages": [
+    470
+  ],
+  "textLines": [
+    13581,
+    13589
+  ],
+  "illustrates": {
+    "rule": "17.8.1b",
+    "quote": "Follow print when print uses spaces, dots, hyphens, etc. to separate syllables."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`en er gy`"
+          },
+          {
+            "text": "`mo tion`"
+          },
+          {
+            "text": "`ve loc i ty`"
+          }
+        ]
+      }
+    ],
+    "notes": "Three syllabified words, print separating syllables with spaces.",
+    "surroundingText": [],
+    "printFeatures": "No heading; a bare 1-column list of space-syllabified words, wholly uncontracted per 17.8.1."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "en er gy",
+      "mo tion",
+      "ve loc i ty"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly. The leading blank braille line has no print-side source (no heading/paragraph precedes it in the given textLines range) — not representable from print.blocks alone."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source. illustrates.rule: A's '17.8.1b' kept over B's bare '17.8.1' — the example is embedded directly under clause b's own text. Modeled as a 'list' block, every item wholly uncontracted (backtick) per 17.8.1 ('do not contract syllabified words'); expect MATCH on the three word lines themselves. The leading blank braille line (source line 13585, a genuine blank content row before 'en er gy') has no counterpart in print.blocks — recorded as not-representable."
+}

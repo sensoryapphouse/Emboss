@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 18-9",
+  "title": "Example 18-9: Diagramming with Underlining",
+  "pdfPages": [
+    505
+  ],
+  "textLines": [
+    14624,
+    14633
+  ],
+  "illustrates": {
+    "rule": "18.7.1",
+    "quote": "Linear diagramming shows sentence structure, using font attributes to distinguish between parts of speech. Use transcriber-defined typeform indicators if needed (as seen for the double underlining in the example below). Use 1-3 margins for each diagrammed sentence."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "In the following sentence the single underlined word is the verb and the double underlined words are a prepositional phrase."
+      },
+      {
+        "kind": "other",
+        "text": "Diagrammed sentence (back-translated): \"We arrived at the hotel in the evening.\" with \"arrived\" single-underlined (the verb) and \"at the hotel\" double-underlined (the prepositional phrase), at a required 1-3 margin (18.7.1). Not modeled: F-188 (Emboss’s TYPEFORM has only one underline bit, so a second, visually distinct double-underline cannot be produced) and F-189 (no 1-3 \"diagrammed sentence\" margin exists; an ordinary paragraph defaults to a different indent)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "single underline under 'arrived', double underline under 'at the hotel'"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "  ,9 ! foll[+ s5t;e ! s+le \"ul9$ ^w is !",
+      "v]b & ! d\\ble \"ul9$ ^ws >e a preposi;nal",
+      "phrase4",
+      "",
+      ",we _1>riv$ @#7at ! hotel@#' 9 ! ev5+4"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14629-14633, margin 9); matches both runs byte-for-byte."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; the diagrammed sentence and its single/double-underline distinction confirmed by back-translation. Kept the intro sentence as an ordinary, representable paragraph but the diagrammed sentence itself as 'other' (F-188 + F-189 both apply and neither is fixable by choosing different wording)."
+}

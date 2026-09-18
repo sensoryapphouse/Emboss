@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 21-24",
+  "title": "Lightface Symbolic Colon",
+  "pdfPages": [
+    570
+  ],
+  "textLines": [
+    16576,
+    16583
+  ],
+  "illustrates": {
+    "rule": "21.8.2a",
+    "quote": "Symbolic Colon. Some dictionaries use the symbolic colon (i.e., a boldface or regular colon, often printed with a space preceding and following it) to introduce a definition, or to separate two or more definitions. Follow print for placement and emphasis."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "uncage … transitive verb : to release from or as if from a cage : free from restraint",
+        "features": "Bold headword; italicized part of speech; lightface colons with spaces around them used to separate definitions. No dictionary/multilevel-entry AST node (F-193/F-200) exists to hold a devised print colon distinct from the entry-word colon glossarySegments always inserts (F-194) — recorded as not representable."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Dictionary entry with a headword, ellipsis, part of speech, and two definitions separated by symbolic colons."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "uncage 444 .1transitive .1v]b 3 to",
+      "  rel1se f or z if f a cage 3 free f",
+      "  re/ra9t"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

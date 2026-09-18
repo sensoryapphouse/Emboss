@@ -1,0 +1,77 @@
+{
+  "id": "BANA Sample 14-11",
+  "title": "Sample 14-11: Cartoon",
+  "pdfPages": [
+    406,
+    407
+  ],
+  "textLines": [
+    11704,
+    11735
+  ],
+  "illustrates": {
+    "rule": "14.10.5",
+    "quote": "Multi-Frame Cartoon. A cartoon may have a series of frames. Enclose each frame number in transcriber’s note indicators using 7-5 margins. a. Using 1-3 margins, begin dialogue with the character’s name followed by two spaces. b. Use initial capitalization when dialogue is printed in all capital letters. c. When the dialogue is continued in another frame, repeat the character’s name, followed by two spaces. d. When a character is not identified, an identifying trait is used as the character name, e.g., Boy 1, Boy 2, Man with Hat, etc. e. Give dialogue from an unknown character an identifier, such as “Narrator” or “Unseen Character.” f. If necessary, a brief description of the action in the frame is enclosed in the transcriber’s note with the frame number."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "note", "text": "Cartoon" },
+      { "kind": "paragraph", "text": "CTRL+ALT+DEL BY TIM BUCKLEY “TOO HARSH” www.cad-comic.com" },
+      { "kind": "note", "text": "Speaker names are added by the transcriber." },
+      { "kind": "blankline" },
+      { "kind": "note", "text": "Frame 1: young Woman and Ethan talking." },
+      { "kind": "speech", "speaker": "Woman", "text": "Woman  My parents get into town next week, so I need your help cleaning up around here in the next few days." },
+      { "kind": "speech", "speaker": "Ethan", "text": "Ethan  Superb." },
+      { "kind": "speech", "text": "..." },
+      { "kind": "note", "text": "Frame 2" },
+      { "kind": "speech", "speaker": "Ethan", "text": "Ethan  Slipped my mind." },
+      { "kind": "speech", "speaker": "Woman", "text": "Woman  Ethan, come on. They’re your parents." },
+      { "kind": "speech", "speaker": "Ethan", "text": "Ethan  No! They are sadistic people who took pleasure in **torturing** their child." },
+      { "kind": "note", "text": "Frame 3: Ethan is shown as a child playing a video game, while his mother is pointing a finger at him." },
+      { "kind": "speech", "speaker": "Mother", "text": "Mother  No more video games until you’re done with your homework." },
+      { "kind": "stage-direction", "text": "..." }
+    ],
+    "notes": "Neither A's nor B's own guessed wording survives forward translation unchanged: the frames are NUMBERED ('Frame 1'/'Frame 2'/'Frame 3', confirmed by back-translating '#a'/'#b'/'#c' — a braille NUMBER, not the letter 'A'/'B'/'C' both runs guessed), the woman in Frame 1's own description is called 'young Woman' (back-translation confirms the '\"y' cell is the UEB short-form 'young', dropped by both runs), the boy's mother is 'Mother' (back-translation of '\"m' — not 'Mom', both runs' own guess), the title/quote/URL run together as ONE continuous 7-5-margin unit right after the 'Cartoon' label per 14.10.2 (both runs instead put the URL at the very end of the whole sample, after all dialogue — the given braille's own lines 2-3 place it right after the title, and there is no second URL/credit line anywhere near the end of this excerpt's own braille), and the whole title+quote run is ALL CAPS including ‘TOO HARSH’ (confirmed: a caps-passage terminator ',\\'' appears in the given braille only once, right before the lower-case URL, not after the title — meaning the quoted words stay in the same caps run as the title). The braille's own omission of the panel-2 dialogue and part of panel 4's is marked by two separate '...' units, one flush (continuing the dialogue margin) and one at the transcriber's-note margin (this excerpt's very last line).",
+    "surroundingText": [],
+    "printFeatures": "A 4-panel (frames 1/2/3 transcribed; the print's own panel numbering is not preserved 1:1) webcomic; hand-lettered uppercase speech bubbles; a title banner with a quoted subtitle and a URL."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,c>toon@.>                  #,-",
+      "    ,,,ctrl\"6alt\"6del by tim buckley",
+      "    8too h>%0,' www4cad-comic4com",
+      "      @.<,sp1k] \"ns >e add$ by !",
+      "    transcrib]4@.>",
+      "",
+      "      @.<,frame #a3 \"y ,woman & ,e?an",
+      "    talk+4@.>",
+      ",woman ,my p>5ts get 9to t[n next week1",
+      "  s ,i ne$ yr help cl1n+ up >.d \"h 9 !",
+      "  next few \"ds4",
+      ",e?an ,sup]b4",
+      "444",
+      "      @.<,frame #b@.>",
+      ",e?an ,slipp$ my m9d4",
+      ",woman ,e?an1 come on4 ,!y're yr p>5ts4",
+      ",e?an ,no6 ,!y >e sadi/ic p :o took",
+      "  pl1sure 9 ^1tortur+ _! *4",
+      "      @.<,frame #c3 ,e?an is %[n z a *",
+      "    play+ a video game1 :ile 8 \"m is",
+      "    po9t+ a f+] at hm4@.>",
+      ",\"m ,no m video games until y're d\"o )",
+      "  yr home\"w4",
+      "      444"
+    ],
+    "pageBreaks": [],
+    "notes": "7-5 margins for every transcriber's note (14.10.2/14.10.5); 1-3 for every dialogue line (14.10.3b), with two spaces between a character's own name and dialogue (14.10.3c/14.10.5a); a blank line before the first frame (14.10.1, 'insert a blank line before and after a cartoon' — the cartoon's own frames start here, after the title/speaker-note header), none between frames/panels thereafter (14.10.1). Bold marks 'torturing' for emphasis within an otherwise plain speech."
+  },
+  "uncertain": [
+    "The given braille's own leftover print-page-number fragment ('#,-') on line 1, and the exact wrap point of the title/quote/URL paragraph (lines 2-3), are not reproducible by Emboss's 'note' block (which always encloses its ENTIRE text, F-241) — built here as a separate, unenclosed 'paragraph' continuing after 'Cartoon', which gets the right WORDING but not the same wrap margin as the given braille's own TN-continuation cell-5 runover; EXPECTED MISMATCH on those lines, not a gold-file error."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B disagreed substantially: A's own print.blocks already correctly kept the URL right after the title (matching this reconciliation) and used 4 panels/frames; B moved the URL to the very end and modelled 5 print panels (matching the print original's own real panel count, per B's own note, but NOT this EXCERPT's own transcribed frame count — the given braille only ever reaches 'Frame #c', three frames). Both runs guessed 'Frame A'/'B'/'C' (letters) and 'Mom' — both corrected here by back-translation (`louis.backTranslate`) to 'Frame 1'/'2'/'3' and 'Mother', then confirmed by forward-translating each candidate through Emboss's translator until every non-'other'/non-title line reproduced the given braille exactly. illustrates.rule: A's own 14.10.5 (matching this excerpt's own multi-frame subject) kept over B's null. Forward-translated ({type:'note'}/{type:'play',subtype:'prose'}/{type:'stage'}/an explicit blank-line block for 14.10.1's own required gap): every line matches exactly except the two noted in 'uncertain' (F-241, reused from example-14-10/sample-14-5) — see differences.md."
+}

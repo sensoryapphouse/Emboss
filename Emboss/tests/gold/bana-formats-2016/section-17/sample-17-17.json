@@ -1,0 +1,91 @@
+{
+  "id": "BANA Sample 17-17",
+  "title": "Sample 17-17: Word Formation Using Mathematical Symbols",
+  "pdfPages": [
+    494
+  ],
+  "textLines": [
+    14247,
+    14273
+  ],
+  "illustrates": {
+    "rule": "17.13.1",
+    "quote": "Mathematical Symbols. Spellers often use mathematical symbols to teach word formation. a. Transcribe all text in word formation “equations” in uncontracted braille. c. Use the appropriate symbols when mathematical indicators are used in discussions of word formation."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Making New Words"
+      },
+      {
+        "kind": "note",
+        "text": "Symbols used: ̄ macron above following letter; + plus sign; = equals sign; – minus sign"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Directions: Make new words from old ones by adding and subtracting short vowels (/a/, /e/, /i/, /o/, and /u/), long vowels (/ī/, /ā/, /ō/, and /ē/), and consonants. The spelling of some words will change quite a bit with the new vowel.",
+        "features": "the print's own closing '(Some of the answers are on pages 3 or 11.)' is abridged by the transcriber with a '444' ellipsis"
+      },
+      {
+        "kind": "paragraph",
+        "text": "Like this:"
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`Pete – /ē/ + /e/ = pet`"
+          },
+          {
+            "marker": "a.",
+            "text": "`boat – /b/ + /v/ = ______`"
+          },
+          {
+            "marker": "b.",
+            "text": "`kid – /i/ + /ō/ = ______`"
+          }
+        ]
+      }
+    ],
+    "notes": "A centred heading, a note listing the macron/plus/equals/minus symbols, directions (abridged at the end with '444'), 'Like this:', a worked equation, then a 2-item lettered exercise, all wholly uncontracted with vowels enclosed in slashes.",
+    "surroundingText": [],
+    "printFeatures": "Centred heading; slash-enclosed vowels, some carrying a macron."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "            ,mak+ ,new ,^ws",
+      "",
+      "      @.<,symbols us$3",
+      "",
+      ".=@- ,macron abv foll[+ lr",
+      ".=\"6 ,plus sign",
+      ".=\"7 ,equals sign",
+      ".=\"- ,m9us sign@.>",
+      "",
+      "    ,direc;ns3 ,make new ^ws f old \"os",
+      "    by add+ & subtract+ %ort v[els",
+      "    \"<_/a_/1 _/e_/1 _/i_/1 _/o_/1 &",
+      "    _/u_/\">1 l;g v[els \"<_/@-i_/1",
+      "    _/@-a_/1 _/@-o_/1 & _/@-e_/\">1 &",
+      "    3sonants4 ,! spell+ ( \"s ^ws w *ange",
+      "    q a bit ) ! new v[el4 444",
+      "",
+      ",l ?3",
+      ",pete \"- _/@-e_/ \"6 _/e_/ \"7 pet",
+      "",
+      "#a4 boat \"- _/b_/ \"6 _/v_/ \"7 .-",
+      "#b4 kid \"- _/i_/ \"6 _/@-o_/ \"7 .-"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged ('17.13.1', matches the source's own cross-reference embedded within this rule, right after Example 17-13). Modeled with a standalone TN for the symbol key, directions (abridged, matching buildModel8's own '444' precedent), a flush 'Like this:' line, and a wholly-uncontracted equation list."
+}

@@ -1,0 +1,69 @@
+{
+  "id": "BANA Sample 17-6",
+  "title": "Sample 17-6: Word List with Partial Emphasis",
+  "pdfPages": [
+    483
+  ],
+  "textLines": [
+    13989,
+    14003
+  ],
+  "illustrates": {
+    "rule": "17.4.1",
+    "quote": "Word lists may focus on certain aspects of spelling by use of partial emphasis. b. Transcribe each word contracted, uncontracted, and uncontracted with partial emphasis. d. Leave one blank cell between each spelling of single words. e. List all words and/or phrases vertically using 1-3 margins."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Words to Master"
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Make it your goal to learn to spell these fifty words this year. Use them in your writing and practice writing them until spelling them correctly comes automatically."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "accidentally `accidentally` `accidentally`"
+          },
+          {
+            "text": "advisable `advisable`"
+          },
+          {
+            "text": "arrangement `arrangement` `arrangement`"
+          }
+        ]
+      }
+    ],
+    "notes": "A cell-5 heading, a flush (1-1) introductory paragraph directly beneath it (no blank line between, per §1.9.3's own cell-5/7-heading exception), then a 3-item word list each given THREE forms per 17.4.1b: contracted, plain uncontracted, and uncontracted WITH print's own partial bold on specific letter groups (bold retained on 'advisable' only where contracted and plain-uncontracted happen to coincide, per B's own resolution note: 'advisable' appears twice, not three times, because its contracted and uncontracted forms are identical in UEB).",
+    "surroundingText": [],
+    "printFeatures": "Centred/cell-5 all-caps heading; partial (letter-group) bold emphasis in the word list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,^ws to ,ma/]",
+      ",make x yr goal to le>n to spell ^!",
+      "fifty ^ws ? ye>4 ,use !m 9 yr writ+ &",
+      "practice writ+ !m until spell+ !m",
+      "correctly comes automatically4",
+      "",
+      "a3id5tally accidentally",
+      "  a^1cc^'ident^1ally",
+      "advisable advi^1sa^'ble",
+      ">range;t arrangement a^1rr^'angement"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.4.1', matches source). Print's own partial bold on 'cc'/'ally'/'sa'/'rr' is NOT re-encoded (as with Example 17-13, F-210 drops all typeform from an uncontracted run regardless, so marking it changes nothing observable). The introductory paragraph is built 'blocked:true' since the given braille shows it flush (1-1) directly under the cell-5 heading with no blank line, matching document.mjs's own §1.9.3 cell-5/7-heading exception exactly."
+}

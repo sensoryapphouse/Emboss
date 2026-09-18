@@ -1,0 +1,49 @@
+{
+  "id": "BANA Example 10-11",
+  "title": "Embedded Transcriber’s Note with Number of Answers",
+  "pdfPages": [
+    259
+  ],
+  "textLines": [
+    7487,
+    7492
+  ],
+  "illustrates": {
+    "rule": "10.5.2",
+    "quote": "Print may use unnumbered/unlettered print lines, boxes, etc., to indicate the number of expected answers. When this number is not referenced in the text, insert the number of expected answers in an embedded transcriber’s note following the question."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. List the continents."
+          }
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "6 answers"
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "Print shows the question followed by six blank write-on lines with no numbers/letters."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,li/ ! 3t95ts4 @.<#g answ]s@.>"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly (PDF page image confirms exactly six blank lines, matching the given braille’s own \"#g answ]s\" = \"6 answers\"). Print unchanged from A/B."
+}

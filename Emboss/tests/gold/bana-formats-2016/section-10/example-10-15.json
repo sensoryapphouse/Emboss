@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 10-15",
+  "title": "Follow Print for Answer Cues in Parentheses",
+  "pdfPages": [
+    260
+  ],
+  "textLines": [
+    7544,
+    7549
+  ],
+  "illustrates": {
+    "rule": "10.6.5",
+    "quote": "Insert a space between the symbol used for answer blanks and answer numbers or cues."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "What is \\_ (to go) on right now? (going)"
+          }
+        ]
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",:at is .- \"<to g\"> on \"r n[8 \"<go+\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

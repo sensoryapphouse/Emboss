@@ -1,0 +1,49 @@
+{
+  "id": "BANA Sample 14-7",
+  "title": "Sample 14-7: Two Paragraphs of Prose Stage Directions",
+  "pdfPages": [
+    402
+  ],
+  "textLines": [
+    11604,
+    11619
+  ],
+  "illustrates": {
+    "rule": "14.5.3",
+    "quote": "Stage Directions between Lines of Prose Dialogue a. Use 7-7 margins for stage directions or cues. b. Use 9-7 margins for additional paragraphs of stage directions. c. Ignore font attributes used for stage directions. d. Do not insert blank lines before or after stage directions or cues printed outside or between the lines of dialogue."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "Twm.", "text": "Twm. Curate? At this time o' night? Any danger, I wonder? Sit down Dicky, and try to look as if it was Sunday." },
+      { "kind": "stage-direction", "text": "[They again assume the role of blameless tinkers cooking supper by the ..." },
+      { "kind": "stage-direction", "level": 1, "text": "[The Bishop of Mid-Wales comes in from the right, carrying a suit-case and trudging wearily. ..." },
+      { "kind": "speech", "speaker": "Bishop.", "text": "Bishop. What’s this? Ah yes, thank heaven— humanity at last! Good evening, friends." }
+    ],
+    "notes": "Speaker names are printed in a small-caps font style with a trailing period; the given braille capitalises only the FIRST letter of each ('Twm4'/'Bishop4', a single comma), treating the small-caps rendering as a font style rather than semantic full-word capitalization — confirmed directly (neither name has a double comma in the given braille, unlike a genuinely all-caps name elsewhere in this section, e.g. Sample 14-6's own 'HIGGINS'). Both this excerpt's own stage-direction paragraphs are truncated mid-sentence by the given braille's own '444' marker, ending exactly at 'by the ...' and 'wearily. ...' respectively — shorter than the full print paragraphs (which continue further, per both transcription runs' own longer guesses); only the truncated wording is built here, matching this excerpt's own actual transcribed scope (the section-3/7/12/14-2/14-4 gold precedent's own convention for a book-truncated excerpt). Print's opening bracket ('[') on each stage direction has no matching closing bracket anywhere in this excerpt (both runs independently confirm this print oddity; 14.4.1a/14.5.3's own 'follow print' rule means none is added).",
+    "surroundingText": [],
+    "printFeatures": "Two speeches (hanging-indent, small-caps names) framing two paragraphs of italicised, bracket-opened stage direction."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",twm4 ,curate8 ,at ? \"t o' ni<t8 ,any",
+      "  dang]1 ,i wond]8 ,sit d[n ,dicky1 &",
+      "  try to look z if x 0 ,sun\"d4",
+      "      .<,!y ag assume ! role ( blame.s",
+      "      t9k]s cook+ supp] by ! 444",
+      "        .<,! ,bi%op ( ,mid-,wales comes",
+      "      9 f ! \"r1 c>ry+ a suit-case &",
+      "      trudg+ we>ily4 444",
+      ",bi%op4 ,:at's ?8 ,ah yes1 ?ank h1v5,-",
+      "  human;y at la/6 ,gd ev5+1 frs4"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for each speech (14.5.1a); 7-7 for the first stage direction (14.5.3a), 9-7 for the second, an 'additional paragraph' (14.5.3b); no blank line anywhere (14.5.3d); italics dropped throughout (14.5.3c)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) but both guessed a FULLER print text for the two stage directions than this excerpt's own braille actually carries (both continuing well past the given '444' truncation points), and both kept the speaker names in ALL CAPS (matching print's own small-caps STYLE literally) rather than testing whether the given braille itself treats that style as semantic capitalization — forward translation shows it does not (a double comma, i.e. true full-word caps, does not reproduce 'twm4'/'bi%op4' at all). Rebuilt: names re-cased to a single leading capital, and both stage directions truncated to exactly what the given braille's own '444' markers show. Forward-translated through Emboss's translator ({type:'play', subtype:'prose'} and {type:'stage'} blocks, level 0/1): EXACT MATCH (see differences.md)."
+}

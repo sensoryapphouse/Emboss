@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 17-5",
+  "title": "Example 17-5: Omitted Letters Represented by Symbols",
+  "pdfPages": [
+    471
+  ],
+  "textLines": [
+    13621,
+    13626
+  ],
+  "illustrates": {
+    "rule": "17.9.2a",
+    "quote": "Follow print for symbols used to show omission. A substitution may be made if accurate representation of the print symbol in braille would hinder the reader's recognition of the concept under discussion. Explain the choice of the substituted symbol in a transcriber's note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "s*******d",
+        "continuation": true
+      }
+    ],
+    "notes": "A single word, letters replaced by seven asterisks between the first ('s') and last ('d') letter.",
+    "surroundingText": [],
+    "printFeatures": "Omitted letters shown as one asterisk per missing letter."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "s\"9\"9\"9\"9\"9\"9\"9d"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly. Both runs' own PDF-image-based uncertainty note (print appears to show 8 asterisks in the page image, but the source text and the given braille both consistently show 7) is resolved here in favour of the SOURCE TEXT/braille (7), since the brief instructs building from the verified source, not a re-read of the image where the extracted text and braille already agree with each other."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed on content and rule, just formatting: normalised 'a.' to 'a' style, matching the rest of this section's rule-id spelling). standards-map.md (BANA 17.9.1a) already confirms this is an EXACT match via probe."
+}

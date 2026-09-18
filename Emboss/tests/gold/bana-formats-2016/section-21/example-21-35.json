@@ -1,0 +1,57 @@
+{
+  "id": "BANA Example 21-35",
+  "title": "Superscript Numbers After Entry Words",
+  "pdfPages": [
+    575
+  ],
+  "textLines": [
+    16751,
+    16759
+  ],
+  "illustrates": {
+    "rule": "21.8.6a",
+    "quote": "Regardless of print placement, place the superscript number after the entry word in braille. Follow print for spacing."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": null,
+            "def": "/lĭv/ v. intr. To be alive; exist",
+            "level": 1
+          },
+          {
+            "term": null,
+            "def": "/līv/ adj. Having life; alive: live animals",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": "The '1' in 'live1' and '2' in 'live2' are superscripted (here already placed AFTER the entry word, matching what 21.8.6a asks braille to do — unlike Example 21-34, whose superscripts sit BEFORE the entry word in print).",
+    "surroundingText": null,
+    "printFeatures": "superscript"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "live;9#a _/l@+iv_/ ;v4 9tr4 ,to 2 alive2",
+      "  exi/",
+      "live;9#b _/l@-iv_/ adj4 ,hav+ life2",
+      "  alive3 live animals"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [
+    "The gold glossary term field cannot carry a distinct superscript-number segment (F-199/F-200); the entry word 'live' with its trailing superscript number is left out of `term`/`def` altogether here since neither field alone can reproduce 'live;9#a' (entry word + grade-1-numeral superscript marker) — recorded as not representable, matching Example 21-34."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

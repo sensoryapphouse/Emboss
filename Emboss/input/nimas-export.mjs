@@ -406,6 +406,16 @@ export function serializeInlineSegments(segments, fallbackText = '', idAlloc = n
       if (String(seg.text ?? '').trim()) out += `<span class="linenum">${escapeXml(String(seg.text).trim())}</span>`;
       continue;
     }
+    if (seg.type === 'imgnote') {
+      // BANA 10.11.1 embedded-picture TN (F-229): re-export as the <img> it came from,
+      // so reloading regenerates the same embedded note instead of leaving its
+      // description as bare running print text.
+      if (String(seg.text ?? '').trim()) {
+        const srcAttr = seg.src ? ` src="${escapeXml(seg.src)}"` : '';
+        out += `<img${srcAttr} alt="${escapeXml(String(seg.text).trim())}"/>`;
+      }
+      continue;
+    }
     if (seg.type === 'noteref') {
       // A reference to a note in this document keeps its link; one whose note is not in
       // the document (a dangling idref is not valid NIMAS) is kept as a marked span, so it

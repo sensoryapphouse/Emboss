@@ -1,0 +1,43 @@
+{
+  "id": "BANA Example 10-25",
+  "title": "Raised Identifiers in Exercise Material",
+  "pdfPages": [
+    263
+  ],
+  "textLines": [
+    7668,
+    7675
+  ],
+  "illustrates": {
+    "rule": "10.6.11c",
+    "quote": "Identifiers may appear raised from the baseline in print. Ignore this raised position in braille. Note: This does not apply to reference indicators. (See Formats, §16.2.2, Reference Marks.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "He was born in the year 1.\\_ in the state of 2.\\_. He grew up in 3.\\_. Before moving to Texas, his family 4.\\_ but 5.\\_."
+      }
+    ],
+    "notes": "",
+    "surroundingText": "",
+    "printFeatures": "The identifiers 1.-5. are printed raised (superscript) above the baseline; braille ignores the raised position per 10.6.11c."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",he 0 born 9 ! ye> #a4.- 9 ! /ate (",
+      "#b4.-4 ,he grew up 9 #c4.-4 ,2f mov+ to",
+      ",texas1 8 family #d4.- b #e4.-4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B."
+}

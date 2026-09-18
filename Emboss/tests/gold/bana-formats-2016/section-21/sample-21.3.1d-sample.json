@@ -1,0 +1,38 @@
+{
+  "id": "BANA 21.3.1d Sample",
+  "title": "In the excerpt below, print guide words are centered at the beginning of each print page.",
+  "pdfPages": [
+    560
+  ],
+  "textLines": [
+    16221,
+    16222
+  ],
+  "illustrates": {
+    "rule": "21.3.1d",
+    "quote": "Insert a transcriber’s note before an excerpt or facsimile to inform the reader when print shows only the first and last entry words on facing pages."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "note",
+        "text": "In the excerpt below, print guide words are centered at the beginning of each print page."
+      }
+    ],
+    "notes": "Text only sample.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille content (matches section-19's own precedent for an embedded, unnumbered 'Sample:' wording: this is the suggested transcriber's-note text, not a worked example)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "print text corrected from a shared placeholder ('Answers a-e.', identical across all 5 of this reconciliation's no-braille prose-only files) to the actual embedded Sample: wording (source lines 16221-16222); already correct in `title`."
+}

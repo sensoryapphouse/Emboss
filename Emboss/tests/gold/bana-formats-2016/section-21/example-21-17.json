@@ -1,0 +1,49 @@
+{
+  "id": "BANA Example 21-17",
+  "title": "Entry Word Followed by Enclosure Symbols",
+  "pdfPages": [
+    566
+  ],
+  "textLines": [
+    16391,
+    16398
+  ],
+  "illustrates": {
+    "rule": "21.5.1c",
+    "quote": "c. Leave one blank cell between the entry-word segment and the definition segment when the entry word is followed by punctuation, capitalization, or enclosure symbols."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "antique",
+            "def": "(n.) relic, artifact, heirloom, survival, rarity, monument, vestige, ruin.",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "A dictionary entry where the entry word is followed by a part-of-speech label in parentheses."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "antique \"<;n4\"> relic1 >tifact1",
+      "  heirloom1 survival1 r>;y1 monu;t1",
+      "  ve/ige1 ru94"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

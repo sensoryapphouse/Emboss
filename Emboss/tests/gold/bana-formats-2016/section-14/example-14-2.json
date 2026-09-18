@@ -1,0 +1,47 @@
+{
+  "id": "BANA Example 14-2",
+  "title": "Example 14-2: Cast of Characters with Fonts",
+  "pdfPages": [
+    386
+  ],
+  "textLines": [
+    11124,
+    11131
+  ],
+  "illustrates": {
+    "rule": "14.2.1c",
+    "quote": "Retain font attributes on speaker names; omit font attributes on speaker identifications."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "cast-list",
+        "items": [
+          { "text": "**Lucentio** Suitor of Bianca" },
+          { "text": "**Gremio** Suitor of Bianca" },
+          { "text": "**Hortensio** Suitor of Bianca" }
+        ],
+        "features": "Character names (Lucentio, Gremio, Hortensio) are in bold font, separated from their identifications by a wide, columnar space (no punctuation between name and identification). Identifications are in regular font."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "Cast list with bold character names; identifications in plain font."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "^1,luc5tio ,suitor ( ,bianca",
+      "^1,gremio ,suitor ( ,bianca",
+      "^1,hort5sio ,suitor ( ,bianca"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins for the cast of characters (14.2.1b); the bold indicator (^1) precedes each character name only (14.2.1c: retain font attributes on speaker names, omit on identifications); a single space (not the print's own wide column gap) separates name from identification, per 14.2.1d (no punctuation shown in print, so none inserted, and no extra spacing indicated either)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on the substance of print.blocks (both left the bold markup out of item.text itself, instead describing it only in a prose features string that buildModel14 cannot consume). Per this repo's own established convention (every other gold section marks emphasis in place with Emboss's **bold**/*italic* cell-markup DSL directly in a block's text, not as a side-channel description — see gold-run.mjs's own header comment), item.text was rewritten here to carry **Lucentio** etc. directly. Forward-translated through Emboss's translator (buildModel14's 'cast-list' -> {type:'play', subtype:'prose', segments} blocks, 1-3 margins, bold segment on the name only): EXACT MATCH against this braille (see differences.md)."
+}

@@ -1,0 +1,41 @@
+{
+  "id": "BANA Example 21-9",
+  "title": "Guide Words with Dash",
+  "pdfPages": [
+    562
+  ],
+  "textLines": [
+    16273,
+    16278
+  ],
+  "illustrates": {
+    "rule": "21.3.2h",
+    "quote": "h. Use a dash to connect guide words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "4 aboriginal: ...\n  ...\n24 -agogy: ...\n25",
+        "features": "Simulated braille page context showing entries on lines 4 and 24 to demonstrate the resulting guide words on line 25."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Simulated braille page layout with print numbers '4', '24' and '25' indicating line numbers."
+  },
+  "braille": {
+    "width": 58,
+    "lines": [
+      "           aborig9al,--agogy                           #,-"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included 4 leading blank lines that do not exist in the source (lines 4-24 of this simulated braille page carry no transcribed text at all — they are omitted, not blank); only the real line 25 guide-word line remains. Width is the actual 58-cell extent (27 literal spaces precede the page number in the source's own plain-text rendering)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 4 bogus leading blank lines not present in the source (this simulated page has NO transcribed content at lines 4-24, only line 25)."
+}

@@ -1,0 +1,40 @@
+{
+  "id": "BANA Example 14-9",
+  "title": "Example 14-9: Interview",
+  "pdfPages": [
+    392
+  ],
+  "textLines": [
+    11354,
+    11361
+  ],
+  "illustrates": {
+    "rule": "14.9.1",
+    "quote": "Use the prose play format (1-3 margins) for interviews. (See Formats, §14.3.)"
+  },
+  "print": {
+    "blocks": [
+      { "kind": "speech", "speaker": "Reporter", "text": "*Reporter* Mr. President, how was your vacation at Camp David?" },
+      { "kind": "speech", "speaker": "President", "text": "*President* It was fine." }
+    ],
+    "notes": "Speaker names are italicised in print, with no colon or other punctuation before the dialogue — just a single space.",
+    "surroundingText": null,
+    "printFeatures": "Prose interview format (14.9.1), speaker names in italics."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ".1,report] ,mr4 ,presid5t1 h[ 0 yr",
+      "  vaca;n at ,camp ,david8",
+      ".1,presid5t ,x 0 f9e4"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins, the prose play format (14.9.1); the italic word indicator (.1) covers each speaker's own name only."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on every substantive field (both left the italics described only in a `features` string, not marked in `text`). Per this repo's own established convention, `text` was rewritten to embed *Reporter*/*President* directly. Forward-translated through Emboss's translator ({type:'play', subtype:'prose'}, 1-3 margins, italic segment on the speaker's name only): EXACT MATCH (see differences.md)."
+}

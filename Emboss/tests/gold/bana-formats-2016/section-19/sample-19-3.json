@@ -1,0 +1,86 @@
+{
+  "id": "BANA Sample 19-3",
+  "title": "Sample 19-3: Coded Letter Puzzle",
+  "pdfPages": [
+    529
+  ],
+  "textLines": [
+    15314,
+    15338
+  ],
+  "illustrates": {
+    "rule": "19.3.1e",
+    "quote": "e. Use uncontracted braille when coded puzzles are scrambled letters. f. Grade 1 indicators may be required before single letters in the puzzle or key."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Decode the words from your spelling list using the secret code. Write your answer in the space provided.",
+        "features": "Given braille (lines 1-3) shows a uniform indent on every line — built blocked:true."
+      },
+      {
+        "kind": "other",
+        "text": "CODE     q w e r t y u i o p a s d f g h\nLETTER   a b c d e f g h i j k l m n o p\n\nCODE     j k l z x c v b n m\nLETTER   q r s t u v w x y z",
+        "features": "A QWERTY-keyboard-to-alphabet substitution key, boxed and wrapped in one continuous grade-1 passage (so no per-letter grade-1 indicators are needed inside it, unlike 19.2.2f's own per-letter case — confirmed: none of the given braille's key rows carry a ';' symbol indicator). Column alignment (letter directly under its own code letter) is not reproducible (F-219)."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "1. `stdgf`"
+          },
+          {
+            "text": "2. `kqwwoz`"
+          },
+          {
+            "text": "3. `ixfudn`"
+          },
+          {
+            "text": "4. `ygktlz`"
+          },
+          {
+            "text": "5. `usqll`"
+          }
+        ],
+        "features": "Five scrambled/coded spelling words, each in UNCONTRACTED braille per 19.3.1e (backtick-marked here so buildModel19 builds a genuine `uncontracted:true` segment, matching F-218's positive finding) — confirmed uncontracted directly from the given braille: 'usqll' keeps its double-l spelled out rather than contracting to the 'll' group sign, which grade-2 would otherwise apply."
+      }
+    ],
+    "notes": "An instruction paragraph, a QWERTY-keyboard code key (boxed), and five numbered scrambled-letter puzzle words in uncontracted braille.",
+    "surroundingText": [],
+    "printFeatures": "Paragraph, boxed key table, numbered uncontracted word list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,decode ! ^ws f yr spell+ li/     #,-",
+      "    us+ ! secret code4 ,write yr answ] 9",
+      "    ! space provid$4",
+      "",
+      "7777777777777777777777777777777777777777",
+      "\"\"=;;;",
+      ",,code    q w e r t y u i o p a s d f g h",
+      ",,letter a b c d e f g h i j k l m n o p",
+      "",
+      ",,code    j k l z x c v b n m",
+      ",,letter q r s t u v w x y z",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "#a4 stdgf",
+      "#b4 kqwwoz",
+      "#c4 ixfudn",
+      "#d4 ygktlz",
+      "#e4 usqll",
+      "\"\"=;'"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15319-15337. The whole key-and-word-list passage (lines 6-19) is ONE continuous grade-1 passage (open at line 6, close at line 19); the key table itself (lines 7-11) is additionally boxed (top rule line 5, bottom rule line 12)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived). Print side reconciled: the introductory paragraph is back-translation-verified; the key table is documented as not-buildable (F-219); the five scrambled words are modeled as an uncontracted numbered list (F-218's positive finding — the one part of this sample Emboss's generic mechanism actually gets right)."
+}

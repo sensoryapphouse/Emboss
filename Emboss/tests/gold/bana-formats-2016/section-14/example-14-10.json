@@ -1,0 +1,45 @@
+{
+  "id": "BANA Example 14-10",
+  "title": "Example 14-10: Elements of Single-Frame Cartoon",
+  "pdfPages": [
+    393
+  ],
+  "textLines": [
+    11397,
+    11402
+  ],
+  "illustrates": {
+    "rule": "14.10.4",
+    "quote": "Single-Frame Cartoon. Dialogue is frequently not included in a single-frame cartoon. Include sufficient information in a scene setting to convey the intent of the cartoon. a. Describe the scene setting in a transcriber’s note using 7-5 margins. b. Use 7-5 margins for the caption to the cartoon."
+  },
+  "print": {
+    "blocks": [
+      { "kind": "note", "text": "Cartoon title, artist's name, date and copyright remain" },
+      { "kind": "note", "text": "Scene setting describing the cartoon" },
+      { "kind": "note", "text": "Caption Caption text" }
+    ],
+    "notes": "There is genuinely NO print original for this example (confirmed directly against the page image, compare-gold-14/pages/page-393.png: the box under the 'Example 14-10' heading contains only the braille cells themselves, a generic labelled TEMPLATE illustrating 14.10.2/14.10.3a/14.10.4b's own structure, not a real cartoon) — per this task's brief, print.blocks is REBUILT here from the given braille (louis.backTranslate, cross-checked word-by-word by hand against the BRF ASCII) rather than left empty, so buildModel14 has something to forward-translate and this file still functions as a coverage/limitation probe. The given braille's own partial enclosure — only the single label word ('Cartoon' / 'Caption') is wrapped in transcriber's-note indicators, with the rest of that same 7-5 line ('title, artist's name, date and copyright remain' / 'Caption text') left OUTSIDE the enclosure at the identical margin — cannot be expressed in this schema at all (see resolution).",
+    "surroundingText": [],
+    "printFeatures": "No print image exists for this example; braille-only layout skeleton."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "      @.<,c>toon@.> title1 >ti/'s \"n1",
+      "    date & copy\"r 9=ma;n",
+      "      @.<,sc5e sett+ describ+ !",
+      "    c>toon@.>",
+      "      @.<,cap;n@.> ,cap;n text"
+    ],
+    "pageBreaks": [],
+    "notes": "7-5 margins throughout (14.10.2/14.10.4a/14.10.4b); only the bracketed label word of each of the three lines/paragraphs ('Cartoon', 'Scene setting describing the cartoon' — here the WHOLE phrase is the label, 'Caption') is wrapped in transcriber's-note indicators (@.< @.>); the rest of the first and third lines continues as ordinary text at the same 7-5 margin, outside the enclosure."
+  },
+  "uncertain": [
+    "Whether 'Scene setting describing the cartoon' is meant as a label (like 'Cartoon'/'Caption') or as the FULL worked wording of a scene-setting note is not fully resolvable from a generic template with no real cartoon behind it; the given braille encloses the entire phrase, which reads naturally either way."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A/B agreed this example has no print side at all (both left print.blocks empty and recorded the same observation in their own summary.md 'Issues noted' list) and agreed on braille (byte-for-byte). Per this task's brief ('if the book shows none, rebuild the print from the braille and say so'), print.blocks was rebuilt here from the given braille via back-translation, as three 'note' blocks approximating the source's own three 7-5-margin lines. This is a KNOWN, expected approximation, not a byte-for-byte reconstruction: Emboss's 'note' block type always wraps its ENTIRE text in transcriber's-note indicators (formatTranscriberNote, document.mjs:819-826) with no mechanism to enclose only PART of a 7-5-margin line while the rest continues as plain text at the same margin (a new, third gap this reconciliation's forward-translation testing found — F-241, standards-findings.md); forward-translating the three note blocks above over-encloses the label's own trailing plain text on lines 1 and 3 (confirmed: probe output '@.<,C>TOON TITLE1 ...DATE & COPY\"R REMA9@.>' vs the given braille's own '@.<,c>toon@.> title1 ... date & copy\"r 9=ma;n', enclosure closed after just the label). EXPECTED MISMATCH (not-representable), recorded for completeness rather than left out of the corpus (see differences.md)."
+}

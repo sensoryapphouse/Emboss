@@ -1,0 +1,75 @@
+{
+  "id": "BANA Example 10-1",
+  "title": "Blank Line After Page Change Indicator",
+  "pdfPages": [
+    253
+  ],
+  "textLines": [
+    7272,
+    7286
+  ],
+  "illustrates": {
+    "rule": "10.2.2",
+    "quote": "Insert a blank line between a page change indicator and the directions to, or the beginning of, exercise material."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "59. Where (do, does) the box of staples belong?"
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "—New Print Page—\n-63-"
+      },
+      {
+        "kind": "directions",
+        "text": "List each word used as an adjective or an adverb. Then write the word or words that it modifies. Do not include articles."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "60. Mrs. Chan just spent two interesting weeks in Kenya."
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "61. Kenya is a scenic African nation on the Equator. (omitted from the given braille, replaced by an omission indicator, \"444\")"
+      }
+    ],
+    "notes": "Print page 10-3 (PDF p.253) shows questions 59-61 and a page-change indicator; the given braille stops at 60 with an omission indicator (\"444\") instead of transcribing 61.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#ei4 ,\": \"<d1 does\"> ! box ( /aples",
+      "  2l;g8",
+      "-------------------------------------#fc",
+      "",
+      "    ,li/ ea* ^w us$ z an adjective or an",
+      "    adv]b4 ,!n write ! ^w or ^ws t x",
+      "    modifies4 ,d n 9clude >ticles4",
+      "#fj4 ,mrs4 ,*an j sp5t two 9t]e/+ weeks",
+      "  9 ,k5ya4",
+      "444"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print reconstructed from A/B (both agreed); question 61 modeled as 'other' (not built) since it is not actually present in the given braille."
+}

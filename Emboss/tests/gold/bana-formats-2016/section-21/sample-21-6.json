@@ -1,0 +1,62 @@
+{
+  "id": "BANA Sample 21-6",
+  "title": "Nested English/Spanish Glossary",
+  "pdfPages": [
+    590
+  ],
+  "textLines": [
+    17074,
+    17084
+  ],
+  "illustrates": {
+    "rule": "21.6.3e",
+    "quote": "e. English and foreign language glossary words may appear\n   as separate entries on the same page. Use 1-5 margins\n   for the main entry words, 3-5 margins for the subentry\n   words. (See Sample 21-5: Side-by-Side English/Spanish\n   Glossary on page 21-33 and Sample 21-6: Nested\n   English/Spanish Glossary on page 21-34.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "A"
+      },
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "absorption",
+            "def": "The process by which nutrients pass through the lining of the digestive system.",
+            "level": 1
+          },
+          {
+            "term": "absorción",
+            "def": "Proceso mediante el cual los nutrientes pasan a través de las paredes del sistema digestivo.",
+            "level": 2
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "bold, indentation"
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                   ,a",
+      "absorp;n ,! process by : nutri5ts pass",
+      "    \"? ! l9+ ( ! dige/ive sy/em4",
+      "  absorci+n ,proceso mediante el cual",
+      "    los nutrientes pasan a trav!s de las",
+      "    paredes del sistema digestivo4"
+    ],
+    "pageBreaks": [],
+    "notes": "Line-number field (4 cells) removed. Main entry words are in cell 1 with runovers in cell 5. Subentry words are in cell 3 with runovers in cell 5. The alphabetic division 'A' is centered (19 spaces preceding)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

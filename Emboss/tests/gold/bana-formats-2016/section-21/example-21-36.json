@@ -1,0 +1,48 @@
+{
+  "id": "BANA Example 21-36",
+  "title": "Foreign Language Glossary",
+  "pdfPages": [
+    577
+  ],
+  "textLines": [
+    16821,
+    16833
+  ],
+  "illustrates": {
+    "rule": "21.9.2e",
+    "quote": "e. Use the following format when articles, reflexive pronouns, special print signs, specially marked items, or English infinitives, are shown before entry words.\n(1) Begin the longest article, reflexive pronoun, etc. in cell 1.\n(2) Align the initial letters of the foreign language words.\n(3) The left margin is the braille cell in which the initial letter of the entry words appears.\n(4) Adjust each braille page to align the main entry words on that page.\n(5) All runovers are two cells to the right of the main entry left margin. If the main entry begins in cell 4, runovers are in cell 6; if the main entry begins in cell 5, runovers are in cell 7.\n(6) Begin subentries two cells to the right of the main entry margin and adjust the runovers accordingly. If the main entry begins in cell 5, all subentries begin in cell 7 and all runovers begin in cell 9.\n(7) When there is more than one element preceding a foreign main entry word, the established margin is still at the entry word itself."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "las botas boots, 8\nel bote boat, 9; el bote de vela sailboat, 10; pasear en bote de vela to go out in a sailboat, 10\nel brazo arm, 7\nbrillar to shine, 7\nbrindar to offer, 5",
+        "features": "Entry words aligned vertically; preceding articles ('el') hang in the left margin, aligning the entry words themselves at a shared column — F-193/F-199, no construct computes a per-page shared left margin from the longest preceding article the way 21.9.2e requires; hand-authoring fixed list levels would only coincidentally reproduce it, not demonstrate the rule."
+      }
+    ],
+    "notes": "In print, 'el bote de vela' and 'pasear en bote de vela' follow 'el bote' in the same block, separated by semicolons; their runovers are indented. In braille, they are formatted as subentries. The main entry words 'brillar' and 'brindar' lack articles, so they are aligned under 'brazo', making them appear indented in print.",
+    "surroundingText": null,
+    "printFeatures": "Hanging indent for articles. Bold foreign language terms."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "las botas3 boots1 #h",
+      " el bote3 boat1 #i2",
+      "      el bote de vela3 sailboat1 #aj2",
+      "      pasear en bote de vela3 to g \\ 9 a",
+      "        sailboat1 #aj",
+      " el brazo3 >m1 #g",
+      "    brillar3 to %9e1 #g",
+      "    brindar3 to (f]1 #e"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-36: ...' title and 4 leading blank lines — removed; the remaining 8 real lines already had their margin correctly stripped."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.9.2e (the actual multi-part rule the source quotes right before this example; A/B's own id '21.8.6e' was wrong — that is Example 21-34/35's own rule)."
+}

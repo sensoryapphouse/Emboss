@@ -1,0 +1,83 @@
+{
+  "id": "BANA Sample 19-1",
+  "title": "Sample 19-1: Symbol Code",
+  "pdfPages": [
+    526
+  ],
+  "textLines": [
+    15256,
+    15278
+  ],
+  "illustrates": {
+    "rule": "19.2.2",
+    "quote": "Linear Key Format. When letters are printed above or below the line(s) of code characters: ... h. Follow the puzzle with a blank line or a closing box line. (See Sample 19-1: Symbol Code on page 19-10 and Sample 19-2: Linear Key Format on page 19-12.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Symbolically Speaking",
+        "features": "Large bold stylized pink title graphic at the top of the puzzle page; braille shows it as a plain flush capitalized-words line, not a centred heading (verified against the given braille's own zero indent)."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "These days, weather is predicted using computers and radar, but did you know that you can predict the weather just by looking at a pine cone? To find out how, use the letters and symbols chart to decode the sentence that follows.",
+        "features": "Given braille (lines 3-8) shows a uniform indent on every line (first and runover alike) — built blocked:true to match."
+      },
+      {
+        "kind": "note",
+        "text": "Symbols are below each letter in the chart. All of the letters in the code are capitalized in print."
+      },
+      {
+        "kind": "other",
+        "text": "A C D E F G H I L\nN O P R S T U W Y\n(picture symbols, one per letter — crescent moon, star, spaceship, horseshoe magnet, etc.)",
+        "features": "A 2x9 key table: print letters in red on top, a distinct pictorial symbol (not braille-representable) below each. Verified against the PDF page image (p.526): 18 letters (A,C,D,E,F,G,H,I,L,N,O,P,R,S,T,U,W,Y) each paired with one small icon; the given braille reduces this to the bare letter sequence (BANA 19.2.1c, substituting letters for pictures) enclosed in its own ruled box (source lines 14/17, '7...7'/'g...g') inside one continuous grade-1 passage (lines 13/22, dot-locator-for-use + grade-1 passage indicator, source line 18640/10465) — none of which (box, dot locator, or passage wrapper) has a working mechanism in Emboss (F-217, F-220, F-222)."
+      },
+      {
+        "kind": "other",
+        "text": "?(%= )< )_ *[)=* <[ \\!)=1 <(% _#!+%_ [& ! ])=% #[=% #+[_% >]2 )= $\\/ ?%!<(%\\1 <(%/ []%=4",
+        "features": "The coded message itself: each print picture-symbol is replaced, per 19.2.1b, by a transcriber-devised braille ASCII punctuation character (one per key-table letter, e.g. '!'=a, '('=h, '%'=e); decoded here letter-by-letter via the key above, the message reads \"WHEN IT IS GOING TO RAIN, THE SCALES OF A PINE CONE CLOSE UP; IN DRY WEATHER, THEY OPEN.\" — confirmed independently by (1) substituting each devised symbol via the key and (2) checking every digit against the symbols appendix (source lines 18470-18476: 1=comma, 2=semicolon, 4=period). Devised symbols have no louis.mjs translation and no 'raw cell' mechanism exists in Emboss (F-222) — not buildable."
+      }
+    ],
+    "notes": "A picture/symbol-substitution cryptogram: a title graphic, an introductory paragraph, a key table pairing 18 letters with pictorial symbols, and a coded sentence built from those same symbols for the reader to decode.",
+    "surroundingText": [],
+    "printFeatures": "Title graphic, paragraph, pictorial key table (2x9), and a symbol-coded sentence."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "         ,,symbolically ,,sp1k+       #,-",
+      "",
+      "    ,^! \"ds1 w1!r is pr$ict$ us+",
+      "    comput]s & rad>1 b did y \"k t y c",
+      "    pr$ict ! w1!r j by look+ at a p9e",
+      "    c\"o8 ,to f9d \\ h[1 use ! lrs &",
+      "    symbols *>t to decode ! s5t;e t",
+      "    foll[s4",
+      "      @.<,symbols >e 2l ea* lr 9 !",
+      "    *>t4 ,all ( ! lrs 9 ! code >e",
+      "    capitaliz$ 9 pr9t4@.>",
+      "",
+      "\"\"=;;;",
+      "7777777777777777777777777777777777777777",
+      "a c d e f g h i l n o p r s t u w y",
+      "! # $ % & * ( ) + = [ ] \\ _ < > ? /",
+      "gggggggggggggggggggggggggggggggggggggggg",
+      "",
+      "?(%= )< )_ *[)=* <[ \\!)=1 <(% _#!+%_ [&",
+      "! ])=% #[=% #+[_% >]2 )= $\\/ ?%!<(%\\1",
+      "<(%/ []%=4",
+      "\"\"=;'"
+    ],
+    "pageBreaks": [],
+    "notes": "Byte-identical between run A and run B, and independently re-derived from source-lines 15256-15277 (line-number field width 5, digit + 4 spaces; U+2800→space). Decoded in full for this reconciliation: the intro paragraph and transcriber's note (lines 3-11) back-translate cleanly to ordinary English; the coded message (lines 19-21) is NOT real UEB text — back-translating it as such produces gibberish — it is a direct, one-devised-symbol-per-print-character substitution, decoded instead via the key on lines 15-16 (see print.blocks)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side substantially reconciled: A's own decoded answer to the cryptogram (\"WHEN IT IS GOING TO RAIN, SCALES OF A PINE CONE CLOSE; IN DRY WEATHER, THEY OPEN.\") was close but wrong in two places (missing \"THE\" before \"SCALES\", and \"CLOSE;\" instead of \"CLOSE UP;\") — corrected here by an independent, from-scratch key-substitution decode, cross-checked against the PDF page image (p.526) for the key table and against the source's own symbols appendix for the punctuation digits. B's own text field for the puzzle was left empty (understandable, since the coded message is not real text) but B's own key-table transcription (18 individual named icon descriptions) is far more detailed than A's bare letters; kept a condensed version of B's icon list. illustrates.rule: both runs guessed '19.2.2' (B additionally flagged this as uncertain, wondering whether it should be 19.2.1, 19.2.2, or both); this reconciliation's first pass wrongly 'corrected' it to '19.2.1' on the assumption that a symbol-substitution sample must belong to 19.2.1 rather than 19.2.2's own 'Linear Key Format' — re-reading 19.2.2's own text directly (source lines 15023-15025) shows its closing cross-reference explicitly names BOTH 'Sample 19-1: Symbol Code on page 19-10 and Sample 19-2: Linear Key Format on page 19-12', and Sample 19-1's own braille genuinely exercises 19.2.2's own linear-key mechanism (its two-line letter/symbol key at margins 1-1, one code character directly below each letter, per 19.2.2b/d) in addition to 19.2.1's substitution concept for the coded message itself. Reverted to both runs' own original '19.2.2', now confirmed correct by the rule's own explicit cross-reference rather than either run's or this reconciliation's own first-pass guess."
+}

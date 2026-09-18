@@ -1,0 +1,64 @@
+{
+  "id": "BANA Example 10-6",
+  "title": "Question and Answer Choices",
+  "pdfPages": [
+    256
+  ],
+  "textLines": [
+    7384,
+    7394
+  ],
+  "illustrates": {
+    "rule": "10.4.2",
+    "quote": "10.4.2 Exercise Questions with Answer Choices a. Treat an exercise set with subentries as a nested list. b. The main entry begins in cell 1. Each subentry level begins two cells to the right of the previous level. All runovers begin two cells to the right of the farthest indented subentry. Two levels: 1-5, 3-5"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. Which occurs during the lytic cycle of a viral infection?"
+          },
+          {
+            "level": 1,
+            "text": "A. The host cell becomes a factory that continually makes more copies of the virus."
+          },
+          {
+            "level": 1,
+            "text": "B. The host cell undergoes cell division that makes more copies of the virus."
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "C. The virus incorporates its nucleic acid into the DNA of the host cell (print shows this choice struck through by a wavy torn-paper line; omitted from the given braille entirely)"
+      }
+    ],
+    "notes": "PDF page image (p.256) inspected directly at high resolution: choice B is completely clean/legible with NO wavy line anywhere near it (\"The host cell undergoes cell division that makes more copies of the virus.\"); the wavy torn-paper strike-through starts exactly at \"C.\" and covers choice C only.",
+    "surroundingText": "",
+    "printFeatures": "Printed inside a ruled box."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,: o3urs dur+ ! lytic cycle ( a",
+      "    viral 9fec;n8",
+      "  ,a4 ,! ho/ cell 2comes a factory t",
+      "    3t9ually makes m copies ( ! virus4",
+      "  ;,b4 ,! ho/ cell \"ugoes cell divi.n",
+      "    444"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [
+    "The given braille itself truncates choice B after \"division\" with an omission indicator (\"444\"), even though print B is fully legible with no torn/struck marking at all — a content-fidelity anomaly of this specific worked example (verified against the PDF page image), not a print-legibility issue and not an Emboss defect. Built here with B's full print text (per 10.1.6a, follow print), so this line is EXPECTED to mismatch against the given (truncated) braille; see differences.md."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille matches both A and B exactly. Print: choice B corrected to its FULL text after directly inspecting the PDF page image at high resolution (README's original note/A's own note were wrong that a wavy line touches B; B run's note that B continues but was cut in braille is the one confirmed correct) — see differences.md."
+}

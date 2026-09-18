@@ -1,0 +1,31 @@
+{
+  "id": "BANA 17.11.1d Sample",
+  "title": "Sample: Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter.",
+  "pdfPages": [],
+  "textLines": [
+    13686,
+    13688
+  ],
+  "illustrates": {
+    "rule": "17.11.1d",
+    "quote": "Sample: Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Both runs agree: no braille anywhere near this citing location (braille.lines: []) — this is the suggested wording embedded inline in rule 17.11.1d's own running text (source lines 13686-13688), not a worked example with its own braille page. illustrates.rule already carries this quote's own genuine rule id in both runs ('17.11.1d'), NOT a shared placeholder — unlike the §19 gold precedent's own six embedded 'Sample:' files, this section's two embedded quotes have no placeholder-id defect to fix."
+}

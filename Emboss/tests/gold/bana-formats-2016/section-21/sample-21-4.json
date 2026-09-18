@@ -1,0 +1,70 @@
+{
+  "id": "BANA Sample 21-4",
+  "title": "Guide Words for English/Spanish Glossary",
+  "pdfPages": [
+    588
+  ],
+  "textLines": [
+    17036,
+    17048
+  ],
+  "illustrates": {
+    "rule": "21.6.3d",
+    "quote": "The language by which the glossary is organized should be used for guide words."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "anomie/desmandado",
+            "def": "n. condición social en la cual las normas son débiles, conflictivas o ausentes",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "kind": "other",
+        "text": "...",
+        "features": "The source omits entries between 'anomie' (line 6) and 'apprehension' (line 23) — a genuine gap in the given text, not a transcription drop."
+      },
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "apprehension/aprensión",
+            "def": "s. temor de lo que pueda pasar; ansiedad",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": "No printed guide words are shown in the print excerpt, but braille provides guide words based on the headwords as per rule 21.6.3d (not built here — F-192, no guide-word mechanism).",
+    "surroundingText": null,
+    "printFeatures": "Glossary format with bold headwords."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "anomie_/desmandado  ;n4 condici+n social",
+      "  en la cual las normas son d!biles1",
+      "  conflictivas o ausentes",
+      "444",
+      "",
+      "appreh5.n_/aprensi+n  ;s4 temor de lo",
+      "  que pueda pasar2 ansiedad",
+      "           anomie,-appreh5.n         #,-"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

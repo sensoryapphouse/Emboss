@@ -1,0 +1,31 @@
+{
+  "id": "BANA 18.2.1 Sample",
+  "title": "All capital letters in the section below are red.",
+  "pdfPages": [],
+  "textLines": [
+    14333,
+    14333
+  ],
+  "illustrates": {
+    "rule": "18.2.1",
+    "quote": "All capital letters in the section below are red."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Embedded note only",
+    "surroundingText": [],
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Embedded note only"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs already agreed byte-for-byte on this file (wording, textLines, and illustrates.rule) — confirmed directly against the source at the given textLines. Unlike the §19 gold precedent (where both runs shared a single hard-set placeholder rule id on all six embedded quotes), both runs here already correctly set illustrates.rule to this quote's own citing rule (18.2.1), matching the source exactly; no placeholder-id bug recurs in §18."
+}

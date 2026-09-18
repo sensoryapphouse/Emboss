@@ -1,0 +1,47 @@
+{
+  "id": "BANA Example 21-20",
+  "title": "Abbreviation with Font Attribute Omitted",
+  "pdfPages": [
+    567
+  ],
+  "textLines": [
+    16437,
+    16437
+  ],
+  "illustrates": {
+    "rule": "21.5.2a",
+    "quote": "Omit font attributes unless needed for distinction."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "list",
+        "style": "glossary",
+        "items": [
+          {
+            "term": "apply",
+            "def": "v to lay or spread on.",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Bold main entry word, italic part of speech abbreviation."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "apply  ;v to lay or spr1d on4"
+    ],
+    "pageBreaks": [],
+    "notes": "9-cell left margin stripped."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

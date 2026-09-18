@@ -1,0 +1,58 @@
+{
+  "id": "BANA Sample 21-7",
+  "title": "Glossary with Lines of Poetry",
+  "pdfPages": [
+    591
+  ],
+  "textLines": [
+    17092,
+    17109
+  ],
+  "illustrates": {
+    "rule": "21.6.5f",
+    "quote": "Do not insert a blank line between the heading and illustrative material, even though blank lines are required in specific formats, such as poetry."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "text": "Austen, Jane: English novelist\n“It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.”",
+        "features": "Glossary entry word treated as a cell-5 heading (21.6.5c) immediately followed, with no blank line, by a prose quotation treated as displayed material (21.6.5e/g/f) — F-195, a glossary item cannot hold nested illustrative material of any kind; recorded as not representable rather than forced into a flat term/def pair."
+      },
+      {
+        "kind": "other",
+        "text": "Dickinson, Emily: American poet\nThere's a certain Slant of light,\nWinter afternoons—\nThat oppresses, like the Heft\nOf Cathedral Tunes—",
+        "features": "Same not-representable class as the Austen entry (F-195) — here the nested illustrative material is a poem, which additionally has no home inside a glossary item even where Emboss's own poetry block exists for STANDALONE poems."
+      }
+    ],
+    "notes": null,
+    "surroundingText": null,
+    "printFeatures": "Glossary entries with illustrative material."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,au/51 ,jane3 ,5gli% noveli/     #,-",
+      "  8,x is a tru? univ]sally ac\"kl$g$1 t a",
+      "s+le man 9 posses.n ( a gd =tune1 m/ 2 9",
+      "want ( a wife40",
+      "",
+      "    444",
+      "",
+      "    ,dick9son1 ,emily3 ,am]ican poet",
+      ",\"!'s a c]ta9 ,slant ( li<t1",
+      ",w9t] afns,-",
+      ",t oppresses1 l ! ,heft",
+      ",( ,ca!dral ,tunes,-",
+      "            ,au/5,-,dick9son         #ae"
+    ],
+    "pageBreaks": [],
+    "notes": ""
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": null
+}

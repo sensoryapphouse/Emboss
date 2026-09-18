@@ -1,0 +1,70 @@
+{
+  "id": "BANA Sample 17-4",
+  "title": "Sample 17-4: Scrambled Words",
+  "pdfPages": [
+    481
+  ],
+  "textLines": [
+    13939,
+    13951
+  ],
+  "illustrates": {
+    "rule": "17.3.2",
+    "quote": "Uncontracted Activity Word Lists. The following words/phrases are typical terminology indicating the word list should be uncontracted."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Unscramble the following spelling words."
+      },
+      {
+        "kind": "list",
+        "items": [
+          {
+            "text": "`selerea`"
+          },
+          {
+            "text": "`cleet`"
+          },
+          {
+            "text": "`theac`"
+          },
+          {
+            "text": "`neecrs`"
+          },
+          {
+            "text": "`recdeaes`"
+          },
+          {
+            "text": "`algo`"
+          }
+        ]
+      }
+    ],
+    "notes": "Genuine excerpt (this sample's own numbering starts above line 1, per the source's line 15-22). Directions ('scrambled', the 17.3.2 cue) then a 6-word uncontracted list of scrambled spellings.",
+    "surroundingText": [],
+    "printFeatures": "Directions paragraph then a single-column list."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,unscramble ! foll[+ spell+ ^ws4",
+      "selerea",
+      "cleet",
+      "theac",
+      "neecrs",
+      "recdeaes",
+      "algo",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "A's braille.lines kept (matches source exactly, including the trailing blank content line, source line 13951); B dropped it."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. Rule id unchanged. Modeled as directions + a wholly-uncontracted list."
+}

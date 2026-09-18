@@ -1,0 +1,71 @@
+{
+  "id": "BANA Sample 10-7",
+  "title": "Exercise Example with Bold Labels",
+  "pdfPages": [
+    276
+  ],
+  "textLines": [
+    8059,
+    8075
+  ],
+  "illustrates": {
+    "rule": "10.8.4",
+    "quote": "Format exercise examples in the same manner as the following questions/answers."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "directions",
+        "text": "Write a pronoun that can be substituted for the italicized word or group of words."
+      },
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "**Example** *France* was an important center for painters"
+          },
+          {
+            "level": 0,
+            "text": "**Answer** It"
+          },
+          {
+            "level": 0,
+            "text": "1. *Women* were not accepted as artists until quite recently."
+          },
+          {
+            "level": 0,
+            "text": "2. People ignored *Mary Cassatt* for years, and her work is famous."
+          }
+        ]
+      }
+    ],
+    "notes": "Labels \"Example\"/\"Answer\" are printed bold with no following punctuation (10.8.1: retain emphasis on a label not followed by punctuation); \"France\"/\"Women\" are italicized, \"Mary Cassatt\" is printed in a different emphasis — built with Emboss’s own cell-markup DSL as the nearest available approximation.",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,write a pron\\n t c 2 sub/itut$ = !",
+      "    italiciz$ ^w or gr\\p ( ^ws4",
+      "",
+      "^1,example .1,fr.e 0 an important c5t] =",
+      "  pa9t]s",
+      "^1,answ] ,x",
+      "",
+      "#a4 .1,wom5 7 n a3ept$ z >ti/s until q",
+      "  rec5tly4",
+      "#b4 ,p ignor$ .1,m>y .1,cassatt = ye>s1",
+      "  & h] \"w is fam\\s4"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8064-8074). Print unchanged from A/B."
+}

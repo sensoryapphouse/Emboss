@@ -1,0 +1,112 @@
+{
+  "id": "BANA Sample 19-4",
+  "title": "Sample 19-4: Coded Number Riddle",
+  "pdfPages": [
+    530
+  ],
+  "textLines": [
+    15345,
+    15392
+  ],
+  "illustrates": {
+    "rule": "19.3.1g",
+    "quote": "g. Substitute an underscore for a blank space within a word."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Picture Riddle",
+        "features": "Flush title line (braille shows zero extra indent), not a centred heading."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Solve the following riddle with the help of the pictures under it.",
+        "features": "Given braille shows a uniform indent on every line — built blocked:true."
+      },
+      {
+        "kind": "other",
+        "text": "(9 pictures, arranged in a grid: key, cake, bag, fish, hose, nail, clown, tree, tent)",
+        "features": "Nine small print pictures, each with a row of blanks (one per letter of the picture's own name) below it; some blanks are numbered, tying that letter to a position in the final riddle-answer number sequence. Not braille-representable in any candidate block type (F-217/219/222)."
+      },
+      {
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "Why do golfers carry an extra pair of socks?"
+      },
+      {
+        "kind": "note",
+        "text": "Picture clues are changed to word clues. An underscore is used to indicate unnumbered blanks. The puzzle code symbols are under the letters. A hyphen separates symbols that form a word. Spaces separate each set of symbols."
+      },
+      {
+        "kind": "other",
+        "text": "key _ 23 10   cake 3 14 _ 18   bag _ 4 11   fish _ 19 5 15   hose 8 21 _ 6   nail 20 _ 1 17   clown _ _ 16 _ 2   tree 7 _ 12 9   tent 13 _ 22 _",
+        "features": "Each picture's own word, shown with a blank (underscore) or a number under each letter position — the actual print device is nine separate small pictures with blank/number lines beneath, not text; not buildable (F-217/219/222)."
+      },
+      {
+        "kind": "heading",
+        "level": 2,
+        "text": "Riddle Answer:"
+      },
+      {
+        "kind": "other",
+        "text": "1-2 3-4-5-6 7-8-9-10 11-12-13 14 15-16-17-18 19-20 21-22-23!",
+        "features": "The final decode-by-number answer sequence. Solved (word-length pattern 2,4,4,3,1,4,2,3 exactly matches): \"IN CASE THEY GET A HOLE IN ONE!\" — not itself printed anywhere; it is what the numbered picture-letter blanks spell out once solved. Not braille-buildable regardless (F-217/219/222)."
+      }
+    ],
+    "notes": "A picture-based number-substitution riddle across two braille pages: page 1 has the title, directions, riddle question, transcriber's note, and nine numbered picture-clues; page 2 has the coded shaped picture (this reconciliation treats the second page's own picture content the same way) and the final numbered riddle-answer key.",
+    "surroundingText": [],
+    "printFeatures": "Title, directions, nine numbered picture clues, and a final numbered answer-key sequence."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,,picture ,,riddle        #bi",
+      "",
+      "    ,solve ! foll[+ riddle ) ! help ( !",
+      "    pictures \"u x4 444",
+      "",
+      "    ,,,:y d golf]s c>ry an extra pair (",
+      "    socks8,'",
+      "      @.<,picture clues >e *ang$ to ^w",
+      "    clues4 ,an \"uscore is us$ to 9dicate",
+      "    unnumb]$ blanks4 ,! puzzle code",
+      "    symbols >e \"u ! lrs4 ,a hyph5",
+      "    sep>ates symbols t =m a ^w4 ,spaces",
+      "    sep>ate ea* set ( symbols4@.>",
+      "\"\"=;;;                              a#bi",
+      "k   e   y         c a k     e",
+      ".--#bc-#aj       #c-#ad-.--#ah",
+      "",
+      "b   a g          f   i   s h",
+      ".--#d-#aa        .--#ai-#e-#ae",
+      "",
+      " h o s     e      n a    i l",
+      "#h-#ba-.--#f     #bj-.--#a-#ag",
+      "",
+      "c l    o w    n   t r   e e",
+      ".--.--#af-.--#b #g-.--#ab-#i",
+      "",
+      " t e    n t",
+      "#ac-.--#bb-.-",
+      "\"\"=;'",
+      "",
+      "    ,riddle ,answ]3",
+      "#a-#b #c-#d-#e-#f #g-#h-#i-#aj",
+      "#aa-#ab-#ac #ad #ae-#af-#ag-#ah #ai-#bj",
+      "#ba-#bb-#bc6"
+    ],
+    "pageBreaks": [
+      13
+    ],
+    "notes": "Independently re-derived from source-lines 15352-15364 (page 1, lines 1-13) and 15371-15391 (page 2, lines 1-21); byte-identical to run A (run B is equivalent in content but wrongly padded four extra blank lines between the pages instead of recording a page break — rejected, since the source shows no such gap; A's own 34-line, single pageBreaks:[13] version matches gold-run.mjs's own pageBreaks-after-N-lines convention exactly)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille unchanged from A (independently re-derived and confirmed; B's 4 extra blank lines between the two pages were a fabrication not present in the source, replaced with the standard pageBreaks marker). Print side reconciled from a fresh back-translation of the whole passage; B's own guessed riddle answer (\"IN CASE THEY GET A HOLE IN ONE!\") is corroborated independently here by checking the answer's own word-length pattern (2,4,4,3,1,4,2,3) against the numbered blank-groups in the given braille, which match exactly."
+}

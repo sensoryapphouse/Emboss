@@ -1,0 +1,46 @@
+{
+  "id": "BANA Example 18-11",
+  "title": "Example 18-11: Diagramming with Two Separate Arrows",
+  "pdfPages": [
+    507
+  ],
+  "textLines": [
+    14701,
+    14708
+  ],
+  "illustrates": {
+    "rule": "18.8.3",
+    "quote": "Spatial Diagrams with Arrows and Multiple Shafts\na. Place the appropriate symbol of the arrow above the first letter of the word to which the arrow points. (See UEB, §3.2.)\nb. Use line mode to represent the arrow shaft. The line should end above the first letter of the word from which the arrow points. (See UEB, §16.2.3, Horizontal Line Mode.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "Tom, did you submit your article?"
+      },
+      {
+        "kind": "other",
+        "text": "Two curved arrows above the sentence, both pointing left to \"Tom\": one from \"you\", a second (drawn above the first) from \"your\". Not modeled: F-189 (no spatial/arrow layout support exists at all)."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "Sentence diagram with two curved arrows drawn above the text, both pointing to \"Tom\"."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      " ;\\[3333333333333333",
+      " ;\\[3333333",
+      ",tom1 did y submit yr >ticle8"
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14706-14708, margin 0, flush); matches both runs byte-for-byte. Lines 14706/14707 keep one leading blank braille cell (converted to a single space), matching a 0-cell-past-margin indent already visible in the source itself."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. illustrates.rule was already correct in both runs (18.8.3); quote corrected from run A’s own caption-text guess to the actual rule text (matching run B), which the example is directly placed under in the source (18.8.3 heading at line 14687, before Examples 18-11/18-12a/18-12b/18-13, and before 18.8.4 at line 14749). Sentence built as an ordinary paragraph (representable, forward-translates exactly); the two arrows are 'other' (F-189)."
+}

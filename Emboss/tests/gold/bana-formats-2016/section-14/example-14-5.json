@@ -1,0 +1,47 @@
+{
+  "id": "BANA Example 14-5",
+  "title": "Example 14-5: Stage Directions within Dialogue",
+  "pdfPages": [
+    388
+  ],
+  "textLines": [
+    11203,
+    11214
+  ],
+  "illustrates": {
+    "rule": "14.4.1c",
+    "quote": "Ignore font attributes used for stage directions, unless needed for distinction, e.g., when stage directions after a speaker’s name are not enclosed in punctuation. If text within stage directions requires emphasis for distinction, use the typeform indicator that best represents print emphasis of surrounding text."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "speech",
+        "speaker": "John",
+        "text": "John (into phone): I can’t talk now. (Pause) What? (Pause) Hmm. (Pause) All right, I ... I. Can’t. Talk. Now. No, no, no. I *Know* I did, but .... What? Hello. What? She *what?* She *can’t,* she said the agreement is void? ..."
+      }
+    ],
+    "notes": "The parenthetical stage directions ('(into phone):', '(Pause)') are enclosed in punctuation in print and are ignored for font purposes per 14.4.1c, so their own italics (present in print) are dropped here; three dialogue words that are NOT stage directions ('Know', the third, lower-case 'what?', and 'can't,') keep their own print italics. Re-derived word-by-word from the given braille (louis.backTranslate cross-checked against the page image) since both transcription runs independently mis-set which 'what?' (of three) is italicized and its capitalization, and used inconsistent ellipsis dot-counts (3 vs. 4 literal periods) at two different points — neither run's own guess reproduced the given braille via forward translation; this text does.",
+    "surroundingText": [],
+    "printFeatures": "A block of speech mixing enclosed, ignored-italics parenthetical stage directions with ordinary dialogue that carries its own, retained italic emphasis on three separate words."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",john \"<9to ph\"o\">3 ,i c't talk n[4",
+      "  \"<,pause\"> ,:at8 \"<,pause\"> ,hmm4",
+      "  \"<,pause\"> ,all \"r1 ,i 444 ,i4 ,c't4",
+      "  ,talk4 ,n[4 ,no1 no1 no4 ,i .1,\"k ,i",
+      "  did1 b 4444 ,:at8 ,hello4 ,:at8 ,%e",
+      "  .1:at8 ,%e .1c't1 %e sd ! agree;t is",
+      "  void8 444"
+    ],
+    "pageBreaks": [],
+    "notes": "1-3 margins (14.5.1a); print italics on the enclosed parenthetical stage directions are omitted (14.4.1c), while the three genuinely emphasised dialogue words keep the UEB italic word indicator (.1)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "A and B agreed on braille (byte-for-byte) and on the broad shape of the text, but both are the SAME model and both got the italics/punctuation details wrong in ways forward-translation catches: both capitalized all three 'What?' occurrences and italicized one of the two CAPITALIZED ones (A the 2nd, B unclear-but-matching-A's-rendering), where the given braille's own capital-sign pattern (',\"k' Know; ',:at8' What — note NO leading capital-sign comma before the italicized token in line 6, unlike the two preceding capitalized 'What?'s) shows the italicized word is the THIRD 'what?', written lower-case ('She what? She can't,' — a fragment, not a new sentence). Both runs also used a uniform ellipsis dot-count that does not survive forward translation: the given braille's three separate ellipsis points are 3/4/3 literal periods respectively (line 3 '444', line 5 '4444', line 7 '444'), not a uniform count. Re-derived by iteratively forward-translating candidate text through Emboss's translator (engine/louis.mjs, uebG2) and diffing character-for-character against this braille until an EXACT MATCH was reached (probe harness in compare-gold-14/; see differences.md for the full trial-and-error trace)."
+}

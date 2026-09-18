@@ -1,0 +1,92 @@
+{
+  "id": "BANA Sample 10-2",
+  "title": "Answer Choices without Discernible Order",
+  "pdfPages": [
+    271
+  ],
+  "textLines": [
+    7933,
+    7950
+  ],
+  "illustrates": {
+    "rule": "10.4.4b",
+    "quote": "It is necessary to make a judgment call when answer choices are unnumbered/unlettered, and there is no discernible order. Be consistent once it has been decided to list items in horizontal or vertical order."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "exercise",
+        "items": [
+          {
+            "level": 0,
+            "text": "1. What is the name of the period that followed extensive glaciation in the Precambrian?"
+          },
+          {
+            "level": 1,
+            "text": "Cambrian"
+          },
+          {
+            "level": 1,
+            "text": "Ediacaran"
+          },
+          {
+            "level": 1,
+            "text": "Precambrian"
+          },
+          {
+            "level": 1,
+            "text": "Neogene"
+          },
+          {
+            "level": 0,
+            "text": "2. Nearly all fossils occur in what kind of rocks?"
+          },
+          {
+            "level": 1,
+            "text": "batholithic"
+          },
+          {
+            "level": 1,
+            "text": "igneous"
+          },
+          {
+            "level": 1,
+            "text": "metamorphic"
+          },
+          {
+            "level": 1,
+            "text": "sedimentary"
+          }
+        ]
+      }
+    ],
+    "notes": "Print presents each question’s own choices in two side-by-side columns with no numbers/letters at all; braille lists them vertically, unmarked, per 10.4.4b. The given braille’s own line numbering starts at 4, not 1 (this excerpt begins mid-page).",
+    "surroundingText": "",
+    "printFeatures": ""
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "#a4 ,:at is ! \"n ( ! p]iod t foll[$",
+      "    ext5sive glacia;n 9 ! ,precambrian8",
+      "  ,cambrian",
+      "  ,$iac>an",
+      "  ,precambrian",
+      "  ,neog5e",
+      "#b4 ,ne>ly all fossils o3ur 9 :at k9d (",
+      "    rocks8",
+      "  ba?oli?ic",
+      "  igne\\s",
+      "  metamorphic",
+      "  s$i;t>y"
+    ],
+    "pageBreaks": [],
+    "notes": "Independently re-extracted from source (fixed left margin / line-number field stripped by counting; U+2800→space; trailing spaces removed); confirmed byte-identical to both run A and run B (gold-10-A/gold-10-B) except where differences.md records a correction."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7938-7949). Print unchanged from A/B."
+}

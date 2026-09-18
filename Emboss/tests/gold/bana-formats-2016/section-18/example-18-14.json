@@ -1,0 +1,49 @@
+{
+  "id": "BANA Example 18-14",
+  "title": "Example 18-14: Diagramming Arrow and Emphasis",
+  "pdfPages": [
+    508
+  ],
+  "textLines": [
+    14753,
+    14763
+  ],
+  "illustrates": {
+    "rule": "18.8.4",
+    "quote": "Arrows with Emphasized Words. When any of the words or phrases are connected by an arrow and are also emphasized, the arrow is placed above the sentence and points to the first letter of the emphasized word or phrase."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "text": "In the following sentence label *force* and *rattles.*"
+      },
+      {
+        "kind": "other",
+        "text": "Diagrammed sentence (back-translated): \"The *force* of the explosions **rattles** the windows.\" with \"force\" italicized and \"rattles\" bold, and a curved arrow above the sentence from \"rattles\" pointing to the first letter of \"force\". Not modeled: F-189 (the arrow itself); the trailing required blank line (14763, within this file’s own declared textLines range) is also missing from both runs’ own braille.lines, the same shared-model omission as Example 18-13."
+      }
+    ],
+    "notes": null,
+    "surroundingText": [],
+    "printFeatures": "Italics on \"force\", bold on \"rattles\", curved arrow drawn above the text pointing to \"force\"."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "    ,9 ! foll[+ s5t;e label .1=ce &",
+      "    .1rattles4",
+      "",
+      "     ;\\[33333333333333333",
+      ",! .1=ce ( ! explo.ns ^1rattles ! w9d[s4",
+      ""
+    ],
+    "pageBreaks": [],
+    "notes": "Re-extracted from source (lines 14758-14763, margin 9). Both runs' own braille.lines omit the file's own final line (14763, a genuine trailing 40-blank-cell row, required by BANA 18.8.1 and within the file's own declared textLines range) — added here as a 6th, trailing empty line."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Both runs agree on lines 1-5 (confirmed correct by independent re-extraction) but both independently dropped the trailing blank line (14763) — the same shared-model pattern as Example 18-13, corrected the same way. pdfPages [508] (both runs already corrected this from the prompt's own original page-509.png mistake, per run A's own uncertain note; confirmed against textLines). illustrates.rule/quote unified to run A's own fuller version (includes the '18.8.4 Arrows with Emphasized Words.' heading text run B's own quote had trimmed away)."
+}
