@@ -121,6 +121,46 @@ whose every cell is empty as a spacer row) is needed.
 data rows; assert the formatted output for that row is `''` (or omitted), not a row of `"`
 characters.
 
+**Status update (18 Sep 2026, fixed).** `formatColumnar`/`traceColumnar`
+(`Emboss/format/document.mjs`) now detect a data row whose every column is blank and render
+it as one genuinely empty line, no guide dots — mirrored in `renderVerticalSection`/
+`traceVerticalSection` (BANA §11.14 wide-table division, T4/F-18) for the same reason: it
+uses the identical `tableCellFill` mechanism, so the same bug existed there. `tableCellFill`
+itself is unchanged (still correct for a real blank *entry*, §11.6.4) — the new check happens
+one level up, before a blank row's cells ever reach it.
+
+The straightforward "every cell blank ⇒ blank line" rule, tried first, broke a passing gold
+sample: BANA §11.9.1 **Skeleton tables** (Sample 11-17, `tests/gold/bana-formats-2016/
+section-11/sample-11-17.json` — "only the five column headings are filled in print; all four
+rows are entirely blank, intended for the reader to fill in their own interests") are a
+table whose *every* row is blank by design, and 11.9.1.b is explicit that this case still
+gets guide dots: "Indicate empty column entries with guide dots." Re-running `gold-run.mjs
+--section section-11 --update-status` after the naive fix showed exactly this: sample-11-17's
+own line-count mismatch got *worse* (differs by -7 instead of -3 lines), because all four
+guide-dotted skeleton rows collapsed to blank lines. The final rule distinguishes the two
+cases the same way 11.5.4 and 11.9.1.b themselves do — 11.5.4's "show row groupings, or set
+off rows of totals" presumes *other* rows with real content to group/total; 11.9.1's skeleton
+format is a table with no real content anywhere. So the blank-line treatment fires only when
+`rows.some(row => row.some(cell => cell !== ''))` is true for the table as a whole (i.e. at
+least one row has real content) — a fully-blank table keeps every row guide-dotted, as
+11.9.1.b requires. This discriminator is applied identically in all four code paths.
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-2 describe block): a mixed table (real rows +
+one all-blank spacer row) renders the spacer as `''`, both with a fake and the real liblouis
+translator, cross-checked against Sample 11-06's own three-column shape; a row mixing a real
+entry with one blank cell still guide-dots the blank cell (11.6.4, unaffected); and the
+Sample-11-17 regression case (a table whose every row is blank) still guide-dots every row.
+`formatBlock`/`traceBlock` parity is asserted for every case.
+
+**Gold result:** `gold-run.mjs --section section-11 --update-status` — 2 match / 32 mismatch /
+2 no-braille, identical to the pre-fix baseline (Sample 11-06 itself stays mismatch: its own
+`braille.pageBreaks` and repeated-header-on-continuation-page convention are gaps this fix
+does not touch — Emboss does not paginate mid-table at all; see F-13). No sample's diagnosis
+text changed, confirming both that the fix introduced no regression and that no gold sample's
+own *first differing line* happens to be a blank-row line specifically (later, still-mismatch
+lines are not surfaced by the tool's own first-diff reporting) — the fix is proven by the
+unit tests above and by the Sample-11-17 regression check, not by a gold status flip.
+
 ---
 
 ## F-3 — A table's transcriber's note and its caption render in the wrong order for real (parsed) documents
@@ -151,6 +191,31 @@ side at all.
 **Test that would prove a fix:** parse a DTBook table with both `<caption>` and `<tabletn>`
 present, run the resulting blocks through `formatBlock`/`formatDocument`, and assert the
 caption's line(s) precede the transcriber's-note's line(s), which precede the table body.
+
+**Status update (18 Sep 2026, fixed).** `parseTable` (`Emboss/input/parse.mjs`) now pushes the
+`caption` block before the `tabletn` note block (previously the reverse) — a one-line
+reordering of the two `targetBlocks.push(...)` calls, with a comment quoting 11.2.5f directly
+at the point of the fix so a future edit can't silently re-invert it. `formatTable`'s own
+title-then-tabletn ordering (this finding's original, dead, alternate fix path) is unchanged
+and still never fires for a real parsed table (F-4 is the finding that tracks *that* gap
+directly; this fix does not touch it) — the ordering guarantee for a real document now comes
+entirely from the sibling-block push order in `parseTable`, matching how the parser already
+worked for every other case.
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-3 describe block) — two tests: (1) parses a
+DTBook `<table>` with both `<caption>` and `<tabletn>` and asserts `parseDtbook`'s own
+`blocks` array orders `caption` before `note` before `table`; (2) runs the same document
+through `formatDocument` in both BANA and UKAAF mode and asserts the caption's rendered line
+precedes the transcriber's-note's rendered line, which precedes the table body's own rendered
+line — proving the fix survives all the way to braille, not just the AST.
+
+**Gold evidence:** none directly — the §11 gold schema (`tests/gold/bana-formats-2016/
+section-11/README.md`) has no `tabletn` field at all (`print.notes` is transcription metadata
+only, never fed into `gold-run.mjs`'s model; grep of every section-11 gold file confirms none
+carries a table print-note alongside its caption), so no gold sample exercises this ordering.
+Proven instead by the DTBook round-trip unit test above, per this finding's own original "Test
+that would prove a fix" — consistent with this project's convention for a fix no worked
+example happens to cover (cf. F-12's overhang branches, similarly synthetic-tested).
 
 ---
 
@@ -380,6 +445,42 @@ override each other).
 (not blank padding) fill that gap, matching the mechanism already tested for text columns
 (`table_no_word_division.test.mjs`).
 
+**Status update (18 Sep 2026, fixed).** `tableCellFill`'s `numPad >= 0` branch
+(`Emboss/format/document.mjs`) now computes the leftover gap AFTER the place-value `pre`
+padding (`cw - len - pre.length`) and guide-dots it exactly like the non-numeric branch — one
+blank cell then dots to the column edge, only when the gap is ≥ 3 cells (§11.6.1f's own "leave
+one space… two or more guide dots"), never on a runover line or the table's last column
+(unchanged pre-existing conditions). The leading `pre` padding itself (the place-value
+alignment BANA 11.6.1d asks for) stays plain space, never guide-dotted — it positions digits/
+decimals/commas, it isn't "the gap to the next column" §11.6.1f describes. This composes
+correctly with F-7's own fix (a numeric column that ends up NOT place-value-aligned at all,
+because `numericAlignApplies` says so, simply has `numPad` come back `-1` and takes the plain
+text branch instead — the two fixes don't interact beyond that).
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-6 describe block) — a structural test with a
+fake translator (a short entry is bridged by guide dots when its column has a next column and
+≥3 cells of gap); a test against the *real* liblouis `en-ueb-g2` translator reproducing B004
+§12 Example 1's own No./Square/Cube table (references/_text/B004.txt), asserting guide dots
+appear on 9 of its 10 data rows (every row but "10/100/1000", where every entry already
+reaches its own column's natural width); and a no-shortfall regression case (an entry that
+already fills its column gets no dots). `formatBlock`/`traceBlock` parity is asserted
+throughout. `Emboss/tests/table_vertical_division.test.mjs`'s own pre-existing numeric-column
+fixture (`fiveColBlock`, Quiz One/Two/Three/Four scores) exercised `renderVerticalSection`'s
+identical `tableCellFill` call and was found to encode the pre-fix (space-padded) behaviour;
+its expected lines were updated to the correct guide-dotted form, citing this rule, per the
+project's own "a test's expected result must come from the standard" rule.
+
+**Gold evidence:** no BANA §11 gold sample happens to have a numeric column whose entries are
+short enough, against a header-driven column width, to leave a guide-dot-worthy gap after a
+figure (Sample 11-2's Total/Direct/Grants columns, the section's clearest numeric columns, are
+all either exactly as wide as their header or filled edge-to-edge by their own decimal-
+alignment padding — see F-7's gold evidence below); B004 §12 has no gold JSON at all (only
+BANA §11/B004 §6-9/§11/Appendix E/G/J are covered — see `standards-testing.md`'s own pilot
+scope). The fix is proven against B004's own primary source text directly instead, per this
+project's precedent for a rule with no gold JSON to hand (`standards-map.md`'s own B004 rows
+for 11.6.1f/B004 12 guide-dots/B004 E ex1-guide-dots were "proven wrong by a scratch
+experiment" the same way before this fix existed).
+
 ---
 
 ## F-7 — Any numeric column is unconditionally right/place-value aligned, even a plain left-aligned label column
@@ -423,6 +524,66 @@ while the figures column aligns by place value — needs a way to mark a column 
 "don't align" (e.g. per-column `align` hint, or simply excluding a single/first column by
 convention) that the current one-size-fits-all detection doesn't offer.
 
+**Status update (18 Sep 2026, fixed — decision below).** `numericColumnPlan` no longer runs
+unconditionally for every all-numeric column. A new gate, `numericAlignApplies(colAlign,
+rawColumnEntries)` (`Emboss/format/document.mjs`, used by both `computeTableColumns` and
+`traceTable`'s mirrored copy), decides per column:
+
+- **Default (no override):** place-value alignment applies only when at least one entry in
+  the column actually carries a decimal point or thousands comma — read directly off BANA
+  11.6.1d's own wording, "aligned by place value … to align digits, **decimals**, or
+  **commas**": punctuation to line up, not any incidental run of bare digits. A
+  punctuation-free numeric column (B004's own "No.", 1..10) defaults to left-adjusted
+  (§11.6.1c / B004 12 alignment-left's "normally aligned on the left"); a column that carries
+  real place-value punctuation (a comma or decimal point on at least one entry) defaults to
+  place-value alignment (§11.6.1d).
+- **Override:** `block.columnAlign` — an array parallel to the columns, `columnAlign[c]` one
+  of `'left'` / `'right'` — is the "way to mark a column as 'don't align'" this finding asked
+  for, in both directions: `'left'` forces left-adjustment even over a punctuated column;
+  `'right'` forces place-value alignment even over a punctuation-free one (e.g. a plain
+  sequential column the transcriber *does* want summed, B004 12 alignment-numeric's own "may").
+  This lives on the document-model table block only for now — no DTBook markup or editor UI
+  wires it yet (out of this fix's scope; a future finding, if a real document needs it).
+
+**Why the punctuation test, not a smarter heuristic:** deciding "is this column meant to be
+summed" from data shape alone is exactly the kind of guess `standards-testing.md`'s own rules
+forbid (a test's expected result comes from the standard or a worked example, never a guess).
+The punctuation test isn't a guess — it is BANA's own rule text naming its three alignment
+targets ("digits, decimals, or commas") — and it is gold-verified in **both** directions from
+two different worked examples that would otherwise conflict if alignment applied
+unconditionally to every numeric column, or to none:
+- **B004 §12 Example 1's own "No." column** (`references/_text/B004.txt`, 1..10, no comma or
+  decimal anywhere) is flush left throughout in the book's own quoted braille (`#a` … `#aj`,
+  no leading pad) — confirming the default must be OFF for punctuation-free digits.
+- **BANA Sample 11-2's own "Total" column** (`tests/gold/bana-formats-2016/section-11/
+  sample-11-02.json` — "981,712" / "1,001,676" / "1,054,503" / "1,128,432", real thousands
+  commas) IS place-value aligned in the sample's own agreed braille: the shorter 7-character
+  "981,712" (row 1) is preceded by 2 more leading cells than the 9-character "1,001,676" (row
+  2), so every row's comma/digits line up — read directly off `braille.lines` rows 12-15 —
+  confirming the default must stay ON for a punctuated column, i.e. this fix could not simply
+  turn place-value alignment off everywhere either.
+
+`traceTable`'s own numeric-plan computation (a duplicate of `computeTableColumns`'s, kept
+separate so a trace can never call into the formatter) was updated identically, gating on the
+same `numericAlignApplies` helper.
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-7 describe block) — B004 Example 1's "No."
+column stays flush left (fake translator AND the real liblouis `en-ueb-g2` translator);
+BANA Sample 11-2's "Total" column keeps its place-value alignment unchanged (real translator,
+re-deriving the expected braille tokens rather than hand-guessing liblouis' own contraction);
+and a `columnAlign` override test proving both directions (`'right'` forces alignment on a
+punctuation-free column, `'left'` keeps a punctuated one flush). `formatBlock`/`traceBlock`
+parity is asserted throughout.
+
+**Gold result:** `gold-run.mjs --section section-11 --update-status` — 2 match / 32 mismatch /
+2 no-braille, identical to the pre-fix baseline, note text unchanged for every sample. Sample
+11-2 itself stays `mismatch` both before and after this fix (its first differing line is an
+unrelated box/title-placement gap, F-4's own "before-box" vs "in-box" default — reached before
+the diff ever gets to the Total/Direct/Grants data rows), so this fix could not have flipped
+its overall status either way; it was Total's own column-by-column comparison above, checked
+directly against `sample-11-02.json`'s `braille.lines`, that proves the default was correct
+for that column, and nothing in the gold run regressed once the fix landed.
+
 ---
 
 ## F-8 — A blank column separation line is drawn under every column once *any* column has a heading
@@ -446,6 +607,40 @@ drawing dots the full width unconditionally.
 **Test that would prove a fix:** a 3-column table where only columns 1 and 3 have headings;
 assert the rendered separation line has dots under columns 1 and 3 but blanks (not dots)
 under column 2.
+
+**Status update (18 Sep 2026, fixed).** `tableSeparator` (`Emboss/format/document.mjs`) now
+takes a `hasHeader` array (one boolean per column, that column's own header text trimmed
+non-empty) and builds a plain blank segment — the column's own width, not a dot run — for any
+column whose `hasHeader` entry is false, exactly the convention `renderVerticalSection`/
+`traceVerticalSection` (BANA §11.14 wide-table division) already used for their own
+independently-built separator line (this fix reuses that same per-column boolean array, now
+shared instead of duplicated). The blank segment never narrows the gutter after it (F-10/Q-7's
+"ends in a plain space" rule — `hasHeader.map(Boolean)` doubles as `tableSeparator`'s own
+`exactFill` array, so a headed column's dot run still narrows to a 1-cell gutter same as
+before, while a headless column's blank segment keeps the full 2-cell gutter). All four call
+sites (`formatColumnar`, `formatGroupedHeaderRows`'s own sub-column-tier separator line, and
+their two `traceTable` mirrors) now pass `headers.map(h => !!h.trim())` (or the traced
+equivalent, `headerTrs.map(h => !!h.s.trim())`) instead of nothing.
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-8 describe block) — a 3-column table
+(`['Name', '', 'Score']`) asserts the separation line carries exactly 2 dot runs (one guide-
+dot character each), not 3, in both BANA and UKAAF mode; two regression cases confirm an
+every-column-headed table still gets one dot run per column, and a no-column-headed table
+still draws no separation line at all (the pre-existing whole-table gate, unchanged for that
+case). `formatBlock`/`traceBlock` parity is asserted throughout.
+
+**Gold evidence:** none directly — every section-11 gold sample whose table reaches columnar
+layout has a heading on every column it shows (including column 0, the row heading, which in
+this section's worked examples always carries its own label such as "Region/Nation" or
+"Fiscal Year" — the one shape 11.4.2c's rule text actually targets, a table with at least one
+genuinely unheaded column, does not happen to occur among this section's 36 worked examples).
+Proven by a synthetic test grounded directly in the rule text instead, per this project's
+established precedent for a real but gold-uncovered case (cf. F-12's own overhang branches).
+`gold-run.mjs --section section-11 --update-status` reports the unchanged 2 match / 32
+mismatch / 2 no-braille baseline, confirming no regression on any sample this fix touches
+(every one of them has all-headed columns, so `tableSeparator`'s new per-column branch is a
+no-op for the whole section — its old and new code paths agree exactly wherever `hasHeader` is
+all-true).
 
 ---
 
@@ -1158,6 +1353,29 @@ confidence given the content match is otherwise exact.
 **Test that would prove a fix:** re-run the B004 §12 Example 2 comparison (script kept in
 `assess-tables/`) after changing the two `wrapCells` calls' first-line indent from 2 to 3;
 assert an exact character match against the standard's quoted braille.
+
+**Status update (18 Sep 2026, fixed).** All three `wrapCells(..., w, 2, 0)` calls in
+`formatParagraphForm` (the opening TN, the paragraph-form-explanation TN, and every data row)
+now read `wrapCells(..., w, 3, 0)`, and the corresponding three calls in `traceParagraphForm`
+(`Emboss/format/document.mjs`) were updated identically for `formatBlock`/`traceBlock` parity.
+The runover margin (the second `wrapCells` argument, `0`) is unchanged — B004's own worked
+example never wraps a row onto a third line, so nothing in this section's evidence pins down
+the runover cell; the finding's own reproduction and this fix are both scoped to the
+first-line indent only, which is the one B004's braille actually shows.
+
+**Test:** `Emboss/tests/table_rules.test.mjs` (F-19 describe block) — a structural test with a
+fake translator asserts the opening TN and every row's first line begin with exactly 3 blank
+cells; a second test runs B004 §12 Example 2's own bank-statement table (`references/_text/
+B004.txt`) through the real liblouis `en-ueb-g2` translator and asserts the TN line and the
+first data row both have exactly 3 leading blank cells, matching the standard's own quoted
+braille (`   #jc_/#ji_/#ad2 ,Direct ,Debit`) — reproducing exactly the comparison this finding
+made when it first found the bug, now permanent. `formatBlock`/`traceBlock` parity is
+asserted in both tests.
+
+**Gold evidence:** none — B004 §12 has no gold JSON in `tests/gold/ukaaf-b004/` (only §6-9,
+§11, Appendix E/G/J are covered by the pilot's gold corpus; see `standards-testing.md`).
+Proven against B004's own primary source text directly, the same evidentiary standard this
+finding's own original reproduction used.
 
 ---
 

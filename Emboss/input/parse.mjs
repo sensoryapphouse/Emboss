@@ -2976,11 +2976,18 @@ export function parseDtbook(xmlStr) {
       }
     }
 
-    if (tabletnText) {
-      targetBlocks.push({ type: 'note', kind: 'tabletn', text: tabletnText });
-    }
+    // BANA 11.2.5f: "Insert print notes pertaining to a table after the table
+    // title/label, but before the body of the table and any transcriber's notes." The
+    // table's own caption/title IS the print "title/label" (§11.2.8/11.3.1); a
+    // <tabletn> is the transcriber's note the rule says comes AFTER it — so the caption
+    // block must be pushed first, then the tabletn note, then (by the caller) the table
+    // body itself (F-3; standards-findings.md). Previously pushed tabletn before
+    // caption, exactly backwards.
     if (captionText) {
       targetBlocks.push({ type: 'caption', text: captionText });
+    }
+    if (tabletnText) {
+      targetBlocks.push({ type: 'note', kind: 'tabletn', text: tabletnText });
     }
 
     // A cell keeps its emphasis and maths (A25): plain text stays a string, anything

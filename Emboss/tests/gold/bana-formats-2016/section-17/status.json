@@ -5,7 +5,7 @@
   },
   "BANA Example 17-10": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"WRITE WRIT\\\"<E\\\">ING\" vs actual \"  ;;;WRITE WRIT\\\"<E\\\">+;'\"."
+    "note": "first differing line 1: expected \"WRITE WRIT\\\"<E\\\">ING\" vs actual \"  ;;;WRITE WRIT\\\"<E\\\">ING;'\"."
   },
   "BANA Example 17-11": {
     "status": "mismatch",
@@ -13,11 +13,11 @@
   },
   "BANA Example 17-12": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"\" vs actual \";;;,! BEEP+ 0 3T9UE\\\"<\\\\S\\\">4;'\". line count differs by -1 (expected 8, actual 7)."
+    "note": "first differing line 4: expected \"\" vs actual \";;;,THE BEEPING WAS CONTINUE\\\"<OUS\\\">4;'\". line count differs by -1 (expected 8, actual 7)."
   },
   "BANA Example 17-13": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"AMAZE \\\"6 ^1MENT \\\"7 AMAZE^1MENT\" vs actual \";;;AMAZE \\\"6 M5T \\\"7 AMAZE;T;' \\\"<AMAZE;T\\\">\". line count differs by -1 (expected 4, actual 3)."
+    "note": "first differing line 2: expected \"AMAZE \\\"6 ^1MENT \\\"7 AMAZE^1MENT\" vs actual \";;;AMAZE \\\"6 MENT \\\"7 AMAZEMENT;'\"."
   },
   "BANA Example 17-2": {
     "status": "mismatch",
@@ -25,7 +25,7 @@
   },
   "BANA Example 17-3": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"EN ER GY\" vs actual \";;;EN ] GY;'\"."
+    "note": "first differing line 1: expected \"EN ER GY\" vs actual \";;;EN ER GY;'\"."
   },
   "BANA Example 17-4": {
     "status": "match",
@@ -41,19 +41,19 @@
   },
   "BANA Example 17-7": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"TODAY ,I WINT SHOPPING FOR NEW SHOES8\" vs actual \";;;TD ,I W9T %OPP+ = NEW %OES8 ,! W1!R\". line count differs by -1 (expected 5, actual 4)."
+    "note": "first differing line 1: expected \"TODAY ,I WINT SHOPPING FOR NEW SHOES8\" vs actual \";;;TODAY ,I WINT SHOPPING FOR NEW SHOES8\"."
   },
   "BANA Example 17-8": {
     "status": "mismatch",
-    "note": "first differing line 5: expected \"GEAR GE-R\" vs actual \";;GE> ;;GE-;R\"."
+    "note": "first differing line 5: expected \"GEAR GE-R\" vs actual \";;GEAR ;;GE-R\"."
   },
   "BANA Example 17-9": {
     "status": "mismatch",
-    "note": "first differing line 6: expected \"\" vs actual \";;;,! H1T];' \\\"<HE-T]\\\"> ;;;9 ! ROOM DID N\"."
+    "note": "first differing line 6: expected \"\" vs actual \";;;,THE HEATER;' \\\"<HE-T]\\\"> ;;;IN THE\". line count differs by +1 (expected 12, actual 13)."
   },
   "BANA Sample 17-1": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"BRA9 BRAIN\" vs actual \"BRA9 ;;BRA9\"."
+    "note": "first differing line 4: expected \"BRA9 BRAIN\" vs actual \"BRA9 ;;BRAIN\"."
   },
   "BANA Sample 17-10": {
     "status": "mismatch",
@@ -81,7 +81,7 @@
   },
   "BANA Sample 17-16": {
     "status": "mismatch",
-    "note": "first differing line 9: expected \",I HAVE @.<--VE@.> \\\"7 ,I'VE\" vs actual \";;;,I H;' \\\"<--VE\\\"> ;;;\\\"7 ,I'VE;'\". line count differs by +1 (expected 14, actual 15)."
+    "note": "first differing line 9: expected \",I HAVE @.<--VE@.> \\\"7 ,I'VE\" vs actual \";;;,I HAVE;' \\\"<--VE\\\"> ;;;\\\"7 ,I'VE;'\". line count differs by +2 (expected 14, actual 16)."
   },
   "BANA 17.11.1d Sample": {
     "status": "no-braille",
@@ -105,7 +105,7 @@
   },
   "BANA Sample 17-3": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"THEIR\" vs actual \";;_!\"."
+    "note": "first differing line 4: expected \"THEIR\" vs actual \";;THEIR\"."
   },
   "BANA Sample 17-4": {
     "status": "mismatch",
@@ -117,7 +117,7 @@
   },
   "BANA Sample 17-6": {
     "status": "mismatch",
-    "note": "first differing line 7: expected \"A3ID5TALLY ACCIDENTALLY\" vs actual \"A3ID5TALLY ;;A3ID5TALLY ;;A3ID5TALLY\". line count differs by -1 (expected 10, actual 9)."
+    "note": "first differing line 7: expected \"A3ID5TALLY ACCIDENTALLY\" vs actual \"A3ID5TALLY ;;ACCIDENTALLY ;;ACCIDENTALLY\". line count differs by -1 (expected 10, actual 9)."
   },
   "BANA Sample 17-7": {
     "status": "mismatch",

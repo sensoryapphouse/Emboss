@@ -134,6 +134,12 @@ test('T4: auto prefers vertical division over Listed once the squeeze fails but 
   assert.equal(tableLayout(fiveColBlock, opts(38)), 'columnar');
 });
 
+// BANA 11.6.1f: "Two or more guide dots lead the reader from one column to the next, and
+// are inserted to fill out the width of a column with shorter entries" — the gap after
+// "88"/"76" (Quiz One, header-driven width 8) and after "79"/"90" (Quiz Three, header-
+// driven width 10) is guide-dotted, exactly like the row-heading column's own gap, not
+// left as plain space (F-6; standards-findings.md — this test previously encoded the
+// pre-fix behaviour, plain space padding, for a numeric column specifically).
 test('T4: vertical division renders 2 sections with headers repeated and no data lost', () => {
   const lines = clean(formatBlock(fiveColBlock, opts(36)));
   assert.deepEqual(lines, [
@@ -143,13 +149,13 @@ test('T4: vertical division renders 2 sections with headers repeated and no data
     '',
     'STUDENT NAME QUIZ ONE QUIZ TWO',
     '"33333333333 "3333333 "3333333',
-    'ALEXANDER "" 88        92',
-    'BERNADETTE    76        81',
+    'ALEXANDER "" 88 """"" 92',
+    'BERNADETTE    76 """"" 81',
     '',
     'STUDENT NAME QUIZ THREE QUIZ FOUR',
     '"33333333333 "333333333 "33333333',
-    'ALEXANDER "" 79          95',
-    'BERNADETTE    90          85',
+    'ALEXANDER "" 79 """"""" 95',
+    'BERNADETTE    90 """"""" 85',
     '',
   ], JSON.stringify(lines));
 });

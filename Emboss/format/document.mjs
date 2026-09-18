@@ -1086,11 +1086,18 @@ const TABLE_GUIDE = '"';                                   // guide dot: dot 5
 // `overhangWidths` (BANA §11.4.3a, Change 2 — see padOverhang below): extra blank cells
 // after a specific column, when a grouped column's own separator run must line up with
 // an overhanging primary heading above it instead of the plain narrowed 1-cell gap.
-const tableSeparator = (widths, gutter, overhangWidths) => {
-  const cols = widths.map((cw) => TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1)));
-  if (!overhangWidths || !overhangWidths.some(Boolean)) return cols.join(' ');
-  const exactFill = cols.map((_, ci) => !overhangWidths[ci]);
-  return joinTableRow(padOverhang(cols, overhangWidths), exactFill, gutter);
+// `hasHeader` (BANA §11.4.2c, F-8): "Columns without a heading do not have a separation
+// line" — a per-column boolean (that column's own header text, trimmed, non-empty). A
+// column with no heading gets a plain blank segment (its own width) instead of a dot run,
+// exactly the same convention renderVerticalSection/traceVerticalSection already use for
+// their own separation line — never narrowed (F-10/Q-7's "ends in a plain space" rule: a
+// blank segment is plain fill, not content reaching the column's edge, so it keeps the
+// full 2-cell gutter around it).
+const tableSeparator = (widths, gutter, hasHeader, overhangWidths) => {
+  const cols = widths.map((cw, ci) => (hasHeader[ci] ? TABLE_GUIDE + '3'.repeat(Math.max(0, cw - 1)) : ' '.repeat(cw)));
+  const exactFill = hasHeader.map(Boolean);
+  if (!overhangWidths || !overhangWidths.some(Boolean)) return joinTableRow(cols, exactFill, gutter);
+  return joinTableRow(padOverhang(cols, overhangWidths), overhangExactFill(exactFill, overhangWidths), gutter);
 };
 // A numeric entry for place-value alignment (§11.6.1d): optional sign, digits with
 // thousands commas, optional decimal fraction. Anything else (units, %, ±, text) is a
@@ -1119,6 +1126,36 @@ function numericColumnPlan(rawEntries, brlEntries) {
   if (!any) return null;
   return { width: maxInt + maxFrac, pads: ints.map((ic) => (ic == null ? 0 : maxInt - ic)) };
 }
+// F-7 (standards-findings.md): BANA 11.6.1d aligns numerals "by place value … to align
+// digits, DECIMALS, or COMMAS" — named punctuation to line up, not any incidental run of
+// digits; B004 §12 is explicit that a column is "normally aligned on the left" and place-
+// value/right alignment is an optional, transcriber-chosen treatment "if figures are to be
+// worked on or summed". Previously numericColumnPlan/place-value alignment fired for EVERY
+// all-numeric column unconditionally — reproduced against B004 §12 Example 1's own worked
+// braille: the "No." column (1..10, a plain sequential row label, never summed, no comma or
+// decimal in any entry) stays flush left throughout in the standard's own braille, but
+// Emboss right-pads it to align with "10". Gold-verified the OTHER way too — BANA Sample
+// 11-2 (tests/gold/bana-formats-2016/section-11/sample-11-02.json)'s "Total" column ("981,712"
+// / "1,001,676" / "1,054,503" / "1,128,432") DOES carry thousands commas, and the sample's own
+// agreed braille right-aligns it exactly as numericColumnPlan already computes (the shorter
+// 7-character "981,712" entry gets 2 extra leading cells so every row's comma/digits line up
+// with the 9-character entries below — confirmed character-for-character against
+// braille.lines rows 12-15). So the rule text's own distinguishing signal — whether the
+// column's print entries actually carry a decimal point or thousands comma worth aligning —
+// already separates both gold-verified cases correctly, with no heuristic guess needed: a
+// punctuation-free numeric column (B004's "No.") defaults to left (§11.6.1c); a
+// punctuation-bearing one (BANA's "Total") defaults to place-value alignment (§11.6.1d).
+// `columnAlign[c]` is the transcriber's own explicit override the finding asked for ("a way
+// to mark a column as 'don't align'") — 'left' forces left-adjustment even over a punctuated
+// column, 'right' forces place-value alignment even over a punctuation-free one (e.g. a
+// plain-integer column the transcriber does want summed); anything else (undefined/'auto')
+// defers to the punctuation default above.
+const hasPlaceValuePunctuation = (raw) => /[.,]/.test(String(raw ?? ''));
+function numericAlignApplies(colAlign, rawColumnEntries) {
+  if (colAlign === 'left') return false;
+  if (colAlign === 'right') return true;
+  return rawColumnEntries.some(hasPlaceValuePunctuation);
+}
 // Fill one column entry line out to its column width: { pre, post } such that
 // pre + text + post is exactly cw cells.
 //  §11.6.1f: "Two or more guide dots lead the reader from one column to the next, and are
@@ -1129,15 +1166,25 @@ function numericColumnPlan(rawEntries, brlEntries) {
 //    are used to bridge the gap between columns, leaving a space at each end. Two cells is
 //    the minimum length"). §11.6.1g: no guide dots after a column runover line.
 //  §11.6.4: a blank entry is filled with "guide dots across the width of a column".
-//  Numbers (§11.6.1c/d; B004 "guide dots … are left short of the aligned column of
-//    figures") are place-value padded on the left and never trailed by guide dots.
+//  Numbers (§11.6.1d) are place-value padded on the LEFT (`pre`, plain space — never
+//    guide-dotted, since that padding positions digits/decimals/commas, not a gap to the
+//    next column); the LEADING padding is invisible to the reader either way, but the
+//    TRAILING gap left after a place-value-aligned entry (when the column is wider than its
+//    widest aligned entry, e.g. a header wider than any figure) is exactly the same
+//    "shorter entry in the column" case §11.6.1f/B004 12 guide-dots describe, and is guide-
+//    dotted the same way (F-6; standards-findings.md — previously any numeric column always
+//    returned plain space padding here and never reached the guide-dot branch at all;
+//    reproduced against B004 §12 Example 1's Square/Cube columns, guide-dotted in the
+//    standard's own braille, space-padded in Emboss's old output).
 function tableCellFill(text, cw, { firstLine, lastCol, numPad }) {
   const len = text.length;
   if (len >= cw) return { pre: '', post: '' };
   if (!len) return { pre: '', post: firstLine ? TABLE_GUIDE.repeat(cw) : ' '.repeat(cw) };
   if (numPad >= 0) {
     const pre = ' '.repeat(Math.min(numPad, cw - len));
-    return { pre, post: ' '.repeat(cw - len - pre.length) };
+    const gap = cw - len - pre.length;
+    if (firstLine && !lastCol && gap >= 3) return { pre, post: ' ' + TABLE_GUIDE.repeat(gap - 1) };
+    return { pre, post: ' '.repeat(gap) };
   }
   const gap = cw - len;
   if (firstLine && !lastCol && gap >= 3) return { pre: '', post: ' ' + TABLE_GUIDE.repeat(gap - 1) };
@@ -1310,7 +1357,16 @@ function renderVerticalSection(headers, rows, widths, numPlans, gutter, w) {
   }
   const plans = numPlans.map((p, c) => (p && widths[c] >= p.width ? p : null));
   const rowWrappedData = rows.map((row) => row.map((cell, ci) => wrapCells(cell, widths[ci], 0, 2)));
+  // BANA §11.5.4 vs §11.9.1.b (F-2): a blank row reads as a deliberate spacer/grouping
+  // line ONLY when the table also has rows WITH real content around it — that is what
+  // "show row groupings" / "set off rows of totals" means (Sample 11-6). When EVERY row
+  // is blank (a skeleton table, §11.9.1: "Indicate empty column entries with guide dots"
+  // — the whole point of the format), each row stays guide-dotted like any other blank
+  // entry; gold-verified against Sample 11-17 (Skeleton Table), whose four rows are all
+  // blank on purpose and must keep their guide dots, not collapse to blank lines.
+  const anyRowHasContent = rows.some((row) => row.some((cell) => cell !== ''));
   rowWrappedData.forEach((cellWrapped, ri) => {
+    if (anyRowHasContent && rows[ri].every((cell) => cell === '')) { out.push(''); return; }
     const maxLines = Math.max(1, ...cellWrapped.map((l) => l.length));
     for (let li = 0; li < maxLines; li++) {
       const exactFill = [];
@@ -1406,8 +1462,13 @@ function computeTableColumns(block, o) {
   });
 
   // Natural column widths. A numeric column (§11.6.1d) is at least as wide as its
-  // place-value-aligned entries (widest integer part + longest fraction).
-  const numPlans = Array.from({ length: colCount }, (_, c) => numericColumnPlan(rawRows.map((r) => cellPlainText(r[c])), rows.map((r) => r[c])));
+  // place-value-aligned entries (widest integer part + longest fraction) — only when
+  // place-value alignment actually applies to that column (F-7: numericAlignApplies).
+  const colAlign = Array.isArray(block.columnAlign) ? block.columnAlign : [];
+  const numPlans = Array.from({ length: colCount }, (_, c) => {
+    const rawCol = rawRows.map((r) => cellPlainText(r[c]));
+    return numericAlignApplies(colAlign[c], rawCol) ? numericColumnPlan(rawCol, rows.map((r) => r[c])) : null;
+  });
   const colWidths = Array(colCount).fill(1);
   for (let c = 0; c < colCount; c++) {
     if (headers[c]) colWidths[c] = Math.max(colWidths[c], headers[c].length);
@@ -1719,7 +1780,7 @@ function formatGroupedHeaderRows(headers, headerGroups, actualWidths, gutter, w,
     const exactFill = overhangExactFill(raw.map((t, ci) => t.length >= actualWidths[ci]), overhang);
     out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
   }
-  out.push(tableSeparator(actualWidths, gutter, overhang).slice(0, w));
+  out.push(tableSeparator(actualWidths, gutter, headers.map((h) => !!(h && h.trim())), overhang).slice(0, w));
 
   return out;
 }
@@ -1742,19 +1803,21 @@ function formatTable(block, o) {
   const formatTitle = () => tableTitleLines(title, o, w);
 
   // UKAAF paragraph form (B004 §12b and Example 2): a transcriber's note naming the
-  // column order, then each row as one 3-1 paragraph — its entries "separated by
-  // punctuation rather than being aligned" (semicolons, closed by a full stop), a blank
-  // entry shown as a dash as in the example. "Particularly useful for wide tables (since
-  // there is no limit to row length)", so it is the UKAAF fallback for an over-wide table.
+  // column order, then each row as one 4-1 paragraph (F-19; standards-findings.md — B004's
+  // own worked Example 2 indents the TN and every row's first line 3 cells, not 2: a "4-1"
+  // margin, not "3-1") — its entries "separated by punctuation rather than being aligned"
+  // (semicolons, closed by a full stop), a blank entry shown as a dash as in the example.
+  // "Particularly useful for wide tables (since there is no limit to row length)", so it is
+  // the UKAAF fallback for an over-wide table.
   const formatParagraphForm = () => {
     const out = [''];
     const titleLines = formatTitle();
     if (titleLines.length) out.push(...titleLines, '');
     if (block.tabletn || block.note) {
-      out.push(...wrapCells(TN_OPEN + o.translate(block.tabletn || block.note).trim() + TN_CLOSE, w, 2, 0));
+      out.push(...wrapCells(TN_OPEN + o.translate(block.tabletn || block.note).trim() + TN_CLOSE, w, 3, 0));
     }
     const names = Array.from({ length: colCount }, (_, ci) => (has(rawHeaders[ci]) ? cellPlainText(rawHeaders[ci]).trim() : `Column ${ci + 1}`));
-    out.push(...wrapCells(TN_OPEN + o.translate(paragraphFormTn(names)).trim() + TN_CLOSE, w, 2, 0));
+    out.push(...wrapCells(TN_OPEN + o.translate(paragraphFormTn(names)).trim() + TN_CLOSE, w, 3, 0));
     // Each row is one print string translated as a whole (a ";" translated on its own
     // would pick up a grade-1 indicator); inline cell markup keeps its typeform segments,
     // adjacent plain runs are merged so a plain row is a single translate call.
@@ -1774,7 +1837,7 @@ function formatTable(block, o) {
         }
       }
       pushPlain(segs, '.');
-      out.push(...wrapCells(segmentsToBraille(segs, o), w, 2, 0));
+      out.push(...wrapCells(segmentsToBraille(segs, o), w, 3, 0));
     }
     out.push('');
     return out;
@@ -1847,7 +1910,10 @@ function formatTable(block, o) {
         const exactFill = raw.map((t, ci) => t.length >= actualWidths[ci]);   // F-10/Q-7
         out.push(joinTableRow(lineCols, exactFill, gutter).slice(0, w));
       }
-      out.push(tableSeparator(actualWidths, gutter).slice(0, w));
+      // BANA §11.4.2c (F-8): "Columns without a heading do not have a separation line" —
+      // per column, not all-or-nothing (previously gated on `headers.some(...)` for the
+      // WHOLE table, so once any column had a heading, every column got a dot run).
+      out.push(tableSeparator(actualWidths, gutter, headers.map((h) => !!h.trim())).slice(0, w));
     }
 
     // Column entries: runovers indented 2 cells inside the column (§11.6.1a).
@@ -1855,7 +1921,18 @@ function formatTable(block, o) {
 
     // Render Data Rows: each entry line filled to its column with guide dots / place-value
     // padding (tableCellFill: §11.6.1f/g, §11.6.4, §11.6.1d).
+    // BANA §11.5.4 vs §11.9.1.b (F-2): a blank row is a deliberate spacer/grouping line
+    // ("Follow print when blank lines are used to show row groupings, or to set off rows
+    // of column totals") only when the table ALSO has rows with real content — that is
+    // what "groupings"/"totals" means, and is Sample 11-6's own shape. A table whose
+    // EVERY row is blank is instead a skeleton table (§11.9.1.b: "Indicate empty column
+    // entries with guide dots" — the format's whole point, gold-verified against Sample
+    // 11-17), so it keeps guide dots on every row rather than collapsing to blank lines.
+    // A row that mixes real entries with one blank cell always keeps guide-dotting that
+    // cell regardless (§11.6.4, unaffected either way).
+    const anyRowHasContent = rows.some((row) => row.some((cell) => cell !== ''));
     rowWrappedData.forEach((cellWrapped, ri) => {
+      if (anyRowHasContent && rows[ri].every((cell) => cell === '')) { out.push(''); return; }
       const maxLines = Math.max(1, ...cellWrapped.map((l) => l.length));
       for (let li = 0; li < maxLines; li++) {
         const exactFill = [];
@@ -2379,7 +2456,7 @@ function traceGroupedHeaderRows(headerTrs, headerGroups, actualWidths, gutter, w
     });
     out.push(joinSlotLine(parts));
   }
-  out.push(tcDeco(tableSeparator(actualWidths, gutter, overhang).slice(0, w)));
+  out.push(tcDeco(tableSeparator(actualWidths, gutter, headerTrs.map((h) => !!(h.s && h.s.trim())), overhang).slice(0, w)));
 
   return out;
 }
@@ -2713,8 +2790,13 @@ function traceTable(block, o) {
   const headers = headerTrs.map((h) => h.s);
   const rows = rowTrs.map((r) => r.map((c) => c.s));
 
-  // mirror formatTable: numeric plans widen a column to its place-value-aligned width
-  const numPlans = Array.from({ length: colCount }, (_, c) => numericColumnPlan(rawRows.map((r) => cellPlainText(r[c])), rows.map((r) => r[c])));
+  // mirror formatTable: numeric plans widen a column to its place-value-aligned width,
+  // only where place-value alignment applies at all (F-7: numericAlignApplies).
+  const colAlign = Array.isArray(block.columnAlign) ? block.columnAlign : [];
+  const numPlans = Array.from({ length: colCount }, (_, c) => {
+    const rawCol = rawRows.map((r) => cellPlainText(r[c]));
+    return numericAlignApplies(colAlign[c], rawCol) ? numericColumnPlan(rawCol, rows.map((r) => r[c])) : null;
+  });
   const colWidths = Array(colCount).fill(1);
   for (let c = 0; c < colCount; c++) {
     if (headers[c]) colWidths[c] = Math.max(colWidths[c], headers[c].length);
@@ -2761,14 +2843,14 @@ function traceTable(block, o) {
     return { s: openDeco.s + run.s + closeDeco.s, src: [...openDeco.src, ...run.src, ...closeDeco.src] };
   };
 
-  // mirror formatParagraphForm (B004 §12 paragraph form)
+  // mirror formatParagraphForm (B004 §12 paragraph form; F-19's 4-1 margin)
   const traceParagraphForm = () => {
     const out = [tcBlank];
     const titleLines = traceTitle();
     if (titleLines.length) out.push(...titleLines, tcBlank);
-    if (block.tabletn || block.note) out.push(...tcWrap(o, traceTn(block.tabletn || block.note, 0), w, 2, 0));
+    if (block.tabletn || block.note) out.push(...tcWrap(o, traceTn(block.tabletn || block.note, 0), w, 3, 0));
     const names = Array.from({ length: colCount }, (_, ci) => (has(rawHeaders[ci]) ? cellPlainText(rawHeaders[ci]).trim() : `Column ${ci + 1}`));
-    out.push(...tcWrap(o, traceTn(paragraphFormTn(names), null), w, 2, 0));
+    out.push(...tcWrap(o, traceTn(paragraphFormTn(names), null), w, 3, 0));
     // The row is translated as one print string (as formatParagraphForm does for a plain
     // row); each cell's character range maps to its unit, the separators to null.
     const deco = (text) => ({ segs: [{ type: 'text', text }], unit: null });
@@ -2780,7 +2862,7 @@ function traceTable(block, o) {
         else parts.push(deco('–'));
       }
       parts.push(deco('.'));
-      out.push(...tcWrap(o, tcJoined(o, parts), w, 2, 0));
+      out.push(...tcWrap(o, tcJoined(o, parts), w, 3, 0));
     });
     out.push(tcBlank);
     return out;
@@ -2831,8 +2913,12 @@ function traceTable(block, o) {
     const colCountSub = widths.length;
     const headerStrs = headerTrsSub.map((h) => h.s);
     const out = [];
+    // F-2/BANA §11.5.4 vs §11.9.1.b — mirror renderVerticalSection: blank-row-as-blank-
+    // line only applies when some OTHER row has real content (else it's a skeleton table).
+    const anyRowHasContent = rowTrsSub.some((row) => row.some((cTr) => cTr.s !== ''));
     const traceRow = (cellTrList, ri) => {
       const isData = ri != null;
+      if (isData && anyRowHasContent && cellTrList.every((cTr) => cTr.s === '')) return [tcBlank];
       const wrappedCells = cellTrList.map((cTr, ci) => wrapCellsSrc(cTr.s, cTr.src, widths[ci], 0, isData ? 2 : 0));
       const maxLines = Math.max(1, ...wrappedCells.map((wc) => wc.lines.length));
       const rowOut = [];
@@ -2925,10 +3011,15 @@ function traceTable(block, o) {
       out.push(...tcWrap(o, tnFull, w, 6, 4), tcBlank);
     }
 
+    // F-2/BANA §11.5.4 vs §11.9.1.b — mirror formatColumnar: blank-row-as-blank-line only
+    // applies when some OTHER row has real content (else it's a skeleton table, §11.9.1.b,
+    // which keeps guide dots on every row — gold-verified against Sample 11-17).
+    const anyRowHasContent = rowTrs.some((row) => row.some((cTr) => cTr.s !== ''));
     // ri == null: a heading row (runover 0, space-padded); else a data row (runover 2,
     // guide dots / place-value padding via tableCellFill) — mirror formatColumnar.
     const formatTracedRow = (cellTrList, ri = null) => {
       const isData = ri != null;
+      if (isData && anyRowHasContent && cellTrList.every((cTr) => cTr.s === '')) return { lines: [tcBlank], maxLines: 1 };
       const wrappedCells = cellTrList.map((cTr, ci) => wrapCellsSrc(cTr.s, cTr.src, actualWidths[ci], 0, isData ? 2 : 0));
       const maxLines = Math.max(1, ...wrappedCells.map((wc) => wc.lines.length));
       const rowOut = [];
@@ -2987,7 +3078,8 @@ function traceTable(block, o) {
       const hdrFormatted = formatTracedRow(headerTrs);
       out.push(...hdrFormatted.lines);
 
-      out.push(tcDeco(tableSeparator(actualWidths, gutter).slice(0, w)));   // §11.4.2b "3333
+      // F-8/BANA §11.4.2c: per-column, mirroring formatColumnar.
+      out.push(tcDeco(tableSeparator(actualWidths, gutter, headers.map((h) => !!h.trim())).slice(0, w)));   // §11.4.2b "3333
     }
 
     const rowFormatted = rowTrs.map((r, ri) => formatTracedRow(r, ri));

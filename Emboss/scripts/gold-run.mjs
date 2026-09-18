@@ -101,6 +101,11 @@ const louis = await import(path.join(EMBOSS, 'engine', 'louis.mjs'));
 await louis.init(path.join(EMBOSS, 'liblouis', 'tables'));
 const TABLES = louis.TABLES.uebG2;
 const translate = (t, tf) => louis.translate(t, TABLES, tf || null);
+// Grade 1, for segments the model marks `uncontracted` (spelling lists §17, foreign words
+// §21.9, uncontracted passages §5). The real app wires this too (Emboss/web/app.mjs);
+// without it a gold comparison silently judged uncontracted content against grade-2 output.
+const G1_TABLES = louis.TABLES.uebG1;
+const translateG1 = (t, tf) => louis.translate(t, G1_TABLES, tf || null);
 
 // ---------------------------------------------------------------------------
 // CLI
@@ -2630,6 +2635,7 @@ const OPTS = {
   width: IS_UKAAF_SECTION ? UKAAF_WIDTH : 40,
   depth: 25,
   translate,
+  translateG1,
   suppressHeader: true,
 };
 
