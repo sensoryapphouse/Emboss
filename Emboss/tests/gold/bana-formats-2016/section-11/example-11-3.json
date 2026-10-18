@@ -67,15 +67,15 @@
     "lines": [
       "",
       "7777777777777777777777777777777777777777",
-      ",9f9itive ,pa/     ,pa/ ,\"piciple",
-      "\"33333333 \"33333 \"3333333333333",
-      "awake \"\"\" awoke    awok5",
-      "2 \"\"\"\"\"\"\" was1 7 be5",
-      "be> \"\"\"\"\" bore     born",
-      "b1t \"\"\"\"\" b1t \"\" b1t",
-      "2come \"\"\" 2came    2come",
-      "2g9 \"\"\"\"\" 2gan     2gun",
-      "b5d \"\"\"\"\" b5t \"\" b5t",
+      ",9f9itive  ,pa/    ,pa/ ,\"piciple",
+      "\"33333333  \"33333  \"3333333333333",
+      "awake \"\"\"  awoke   awok5",
+      "2 \"\"\"\"\"\"\"  was1 7  be5",
+      "be> \"\"\"\"\"  bore    born",
+      "b1t \"\"\"\"\"  b1t \"\"  b1t",
+      "2come \"\"\"  2came   2come",
+      "2g9 \"\"\"\"\"  2gan    2gun",
+      "b5d \"\"\"\"\"  b5t \"\"  b5t",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -89,5 +89,35 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines: run B added one extra guide-dot quote character on 5 lines (physical lines 8347-8349, 8351-8352); run A matches the source .txt exactly and is used."
+  "resolution": "braille.lines: run B added one extra guide-dot quote character on 5 lines (physical lines 8347-8349, 8351-8352); run A matches the source .txt exactly and is used.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",9f9itive ,pa/     ,pa/ ,\"piciple",
+        "\"33333333 \"33333 \"3333333333333",
+        "awake \"\"\" awoke    awok5",
+        "2 \"\"\"\"\"\"\" was1 7 be5",
+        "be> \"\"\"\"\" bore     born",
+        "b1t \"\"\"\"\" b1t \"\" b1t",
+        "2come \"\"\" 2came    2come",
+        "2g9 \"\"\"\"\" 2gan     2gun",
+        "b5d \"\"\"\"\" b5t \"\" b5t"
+      ],
+      "after": [
+        ",9f9itive  ,pa/    ,pa/ ,\"piciple",
+        "\"33333333  \"33333  \"3333333333333",
+        "awake \"\"\"  awoke   awok5",
+        "2 \"\"\"\"\"\"\"  was1 7  be5",
+        "be> \"\"\"\"\"  bore    born",
+        "b1t \"\"\"\"\"  b1t \"\"  b1t",
+        "2come \"\"\"  2came   2come",
+        "2g9 \"\"\"\"\"  2gan    2gun",
+        "b5d \"\"\"\"\"  b5t \"\"  b5t"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 2, 3, 4, 5, 6, 7, 8, 9, 10 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 286 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (5); two blank cells collapsed to one (4). Where: column gap after guide dots (7); column gap (table / related columns / columned list) (6); table separation line (1)."
+    }
+  ]
 }

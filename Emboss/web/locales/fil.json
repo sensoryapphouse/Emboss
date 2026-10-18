@@ -60,10 +60,13 @@
     "toc": "Talaan ng Nilalaman",
     "print": "Tanawin sa Pag-print (LHS)",
     "braille": "Braille",
+    "export": "I-export",
+    "export_title": "I-export ang braille (BRF, eBraille) o ipadala sa embosser",
+    "emboss_menu": "Ipadala sa embosser",
     "braille_view": "Tanawin ng Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "I-emboss",
     "emboss_tooltip": "Ipadala ang dokumento sa embosser o printer",
     "clear_doc": "I-clear ang Dokumento",
@@ -133,8 +136,6 @@
     "poem_desc": "Linya ng saknong ng tula (1-3)",
     "exercise_title": "Tanong sa Pagsasanay",
     "exercise_desc": "Numbered na tanong sa pagsasanay (1-5 / 3-5)",
-    "caption_title": "Caption / Pagkilala",
-    "caption_desc": "Caption o pagkilala sa larawan (7-5)",
     "footnote_title": "Talababa",
     "footnote_desc": "Teksto ng footnote (1-3)",
     "note_title": "Tala ng Tagasalin",
@@ -163,8 +164,6 @@
     "page_desc": "Magpasok ng indicator ng print page break mula sa pinagmulan",
     "printpage_title": "Numero ng Print Page",
     "printpage_desc": "Magpasok ng indicator ng print page break mula sa pinagmulan",
-    "code_title": "Code ng Computer",
-    "code_desc": "Magpasok ng Code block na may UEB indicator",
     "indent_title": "I-indent / I-nest ang Sub-item",
     "indent_desc": "I-nest nang mas malalim ang list item o exercise (Tab)",
     "outdent_title": "I-outdent / I-promote ang Item",
@@ -185,8 +184,8 @@
     "language_label": "Wika ng Interface",
     "language_help": "Piliin ang wikang gagamitin para sa mga button, menu, dialog, at anunsyo ng screen reader.",
     "standard_label": "Pamantayan ng Braille",
-    "standard_bana": "BANA (USA at Canada — 40×25 cell)",
-    "standard_ukaaf": "UKAAF (United Kingdom at Internasyonal — 38×25 cell)",
+    "standard_bana": "BANA (USA at Canada — 38×25 cell)",
+    "standard_ukaaf": "UKAAF (United Kingdom at Internasyonal — 38×27 cell)",
     "grade_label": "Antas ng Contraction",
     "grade_1": "Grade 1 (Walang contraction / Titik-kada-titik)",
     "grade_2": "Grade 2 (May contraction)",
@@ -261,7 +260,7 @@
     "size_full": "Buong Sheet (Hindi Naka-slice sa Line 1)",
     "lead_lines": "Mga Tactile Lead Line",
     "braille_labels": "Mga Braille Label",
-    "footer_tip": "💡 Ang itim na outline ay nagiging solidong tactile border; awtomatikong nagma-map ang mga kulay sa magkakaibang tactile texture.",
+    "footer_tip": "Ang itim na outline ay nagiging solidong tactile border; awtomatikong nagma-map ang mga kulay sa magkakaibang tactile texture.",
     "open_repositories": "Mga Bukas na Tactile Repository:",
     "no_diagrams": "Walang nahanap na tumutugmang diagram."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Status ng Lossless Round-Trip",
     "precedence_status": "Status ng Braille Precedence Rule",
     "perfect_match": "100% Round-Trip Match (0 discrepancy)",
-    "badge_warn": "⚠ {count} na dapat suriin",
+    "badge_warn": "{count} na dapat suriin",
     "badge_title": "{count} discrepancy ng salita ang nahanap sa round-trip back-translation. I-click para pumunta sa una.",
     "badge_clean": "Round-trip check: walang nahanap na discrepancy ng salita."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "May mga hindi na-save na pagbabago ka. Sigurado ka bang lalabas nang hindi nag-save?",
     "unsaved_load": "May mga hindi na-save na pagbabago ka. Papalitan ng pag-load ng bagong file ang kasalukuyan mong dokumento. Magpatuloy?",
     "unsaved_clear": "May mga hindi na-save na pagbabago ka. Sigurado ka bang gusto mong i-clear ang dokumento?",
-    "drop_hint": "⬇ Maghulog ng dokumento para i-import ito sa editor",
+    "drop_hint": "Maghulog ng dokumento para i-import ito sa editor",
     "notice": "Paalala",
     "close_notice": "Isara ang Paalala"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Teksto ng dokumento",
+      "math_keyboard_toggle": "Keyboard ng matematika",
       "label": "Teksto",
       "toolbar_aria": "Pag-format",
       "style_label": "Istilo ng talata",
@@ -443,8 +443,8 @@
       "graphic_cats": "Mga Kategorya ng Graphic",
       "graphic_list": "Mga tactile graphic diagram",
       "formula_search_label": "Maghanap ng formula",
-      "btactile_link": "BTactile (Libre) ↗",
-      "tgil_link": "APH TGIL (1,800+ Template) ↗"
+      "btactile_link": "BTactile (Libre)",
+      "tgil_link": "APH TGIL (1,800+ Template)"
     },
     "settings": {
       "list_spaced": "Listahang may blangkong linya (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Direktang kumonekta sa custom na microcontroller embosser (ESP32-S3, RP2040/RP2350, STM32, Arduino) na lumalampas sa OS printer-driver lockout.",
       "graphics_hint": "Kapag hindi naka-check, ini-export ang mga diagram bilang accessible na paglalarawan ng Tala ng Tagasalin para sa text-only na embosser at braille display.",
       "tactile_heading": "Live Stream ng Tactile Display (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Kumonekta sa Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Kumonekta sa USB / HID (Monarch)",
+      "tactile_connect_ble": "Kumonekta sa Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Kumonekta sa USB / HID (Monarch)",
       "tactile_disconnect": "Idiskonekta ang Display",
       "tactile_sim_monarch": "Subukan ang Simulated Monarch (32×10)",
       "tactile_sim_dotpad": "Subukan ang Simulated DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Nagse-stream ng live na braille viewport at tactile graphics nang direkta sa pamamagitan ng WebBluetooth (DotPad BLE UART) o WebHID (Monarch/USB) nang walang external na driver.",
       "perkins_hint": "— mag-type ng braille gamit ang SDF at JKL key",
       "ascii_hint": "— ipakita ang raw na ASCII braille character",
+      "show_explanation_bar": "Ipakita ang bar ng paliwanag",
+      "show_explanation_bar_hint": "— ang strip sa ilalim ng teksto at braille na nagpapaliwanag ng braille para sa salitang kinalalagyan mo",
+      "simple_mode_hint": "— buksan ang Emboss sa simpleng converter. Hindi ito binabago ng paglipat sa pagitan ng Mabilisang Mode at ng editor.",
       "covers_hint": "— embossed na cover ng pamagat kapag hinahati ang mga aklat"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Ulunan {n}",
       "cell_aria_named": "{header}, row {row}",
       "cell_aria": "Column {col}, row {row}",
-      "too_wide_listed": "⚠ Masyadong malapad para sa mga column — ibi-braille bilang listed na talahanayan",
+      "too_wide_listed": "Masyadong malapad para sa mga column — ibi-braille bilang listed na talahanayan",
       "too_wide_listed_title": "Hindi kasya sa mga column ang talahanayang ito sa kasalukuyang bilang ng cell kada linya at braille mode, kaya ibi-braille ito bilang listed na talahanayan (BANA Formats §11.9) sa halip na magkatabing column.",
-      "too_wide_paragraph": "⚠ Masyadong malapad para sa mga column — ibi-braille sa anyong talata",
+      "too_wide_paragraph": "Masyadong malapad para sa mga column — ibi-braille sa anyong talata",
       "too_wide_paragraph_title": "Hindi kasya sa mga column ang talahanayang ito sa kasalukuyang bilang ng cell kada linya at braille mode, kaya ibi-braille ito sa anyong talata (UKAAF B004 §12) sa halip na magkatabing column."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Hindi na-load ang mga talahanayan para sa \"{code}\" — ginagamit pa rin ang naunang braille code.",
-      "failed": "⚠ Hindi magawa ang braille.",
+      "failed": "Hindi magawa ang braille.",
       "failed_hint": "(Kung sinasabi nitong hindi pa naisimulan ang engine, hindi na-load ang braille engine — mag-hard-refresh gamit ang Cmd/Ctrl+Shift+R.)",
       "error_status": "Error sa pag-render: {message}"
     },
     "engine": {
       "loading": "Nilo-load ang braille engine…",
-      "failed": "⚠ Hindi na-load ang braille engine.",
+      "failed": "Hindi na-load ang braille engine.",
       "failed_hint": "Mag-hard-refresh gamit ang Cmd/Ctrl+Shift+R. Kung magpapatuloy, buksan ang browser console (View ▸ Developer) at ipadala ang mga error.",
       "failed_status": "Hindi na-load ang engine: {message}",
       "ready": "Handa na — mag-type o mag-format sa kaliwa; nag-a-update nang live ang braille."
@@ -715,7 +718,7 @@
       "network_unreachable": "Hindi maabot ang {url}: {message}. Hindi makapagbukas ang mga browser ng raw na TCP (port 9100) na koneksyon; dapat tumanggap ng HTTP POST ang embosser, o i-download ang .brf at ipadala gamit ang iyong print manager.",
       "usb_bridge_done": "Naihatid ang emboss job sa USB printer!",
       "needs_webserial": "Kailangan ng direktang serial na pag-emboss ng browser na may WebSerial (Chrome, Edge, Opera). Maaari mong i-download ang .brf file para i-emboss gamit ang iyong print manager, o gamitin ang Network (Port 9100) mode sa Settings.",
-      "detected": "🔌 Natukoy ang {name} — naitakda sa {cells}×{lines} sa {baud} baud."
+      "detected": "Natukoy ang {name} — naitakda sa {cells}×{lines} sa {baud} baud."
     },
     "symbols": {
       "title": "Library ng Tactile Symbol",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamic na Matrix",
       "badge_text_only": "Tekstong Lamang",
       "badge_index": "Matrix ng Tuldok"
+    },
+    "offline": {
+      "ready": "Handa na ang Emboss na gumana offline.",
+      "ready_short": "Handa nang gumana offline",
+      "not_yet": "Naghahanda pa para gumana offline…"
     }
   }
 }

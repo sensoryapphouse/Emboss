@@ -96,8 +96,11 @@ const check = (name, cond, detail = '') => {
     
     const bBrl = formatBlock(hBold, formatOptsBana).join(' ');
     const uBrl = formatBlock(hBold, formatOptsUkaaf).join(' ');
-    // Formats §4.3.7 / B004 §5: font attributes are ignored in centred, cell-5 and cell-7 headings.
-    check(`Heading Level ${level} Bold [BANA]: bold indicator dropped (§4.3.7)`, !/\^1/.test(bBrl), bBrl);
+    // K1 (25 Sep): BANA 5.3.1 "When these items are partially emphasized, however, font attributes must be retained"
+    // (Example 4-7) — a partly bold heading keeps its bold; a wholly bold one drops it (§4.3.7). B004 §5: UKAAF drops all.
+    const bAll = formatBlock({ type: 'heading', level, segments: [{ type: 'text', text: 'All of it emphasised.', tf: 4 }] }, formatOptsBana).join(' ');
+    check(`Heading Level ${level} partly Bold [BANA]: bold indicator kept (§5.3.1)`, /\^1/.test(bBrl), bBrl);
+    check(`Heading Level ${level} wholly Bold [BANA]: bold indicator dropped (§4.3.7)`, !/\^/.test(bAll), bAll);
     check(`Heading Level ${level} Bold [UKAAF]: bold indicator dropped (B004 §5)`, !/\^1/.test(uBrl), uBrl);
     verifyTraceInvariant(hBold, formatOptsBana, `Heading L${level} Bold`);
     verifyTraceInvariant(hItal, formatOptsUkaaf, `Heading L${level} Italic`);
@@ -180,7 +183,7 @@ const check = (name, cond, detail = '') => {
     type: 'box',
     title: 'Sidebar Notice',
     blocks: [
-      { type: 'heading', level: 2, segments: makeSegments(4) },
+      { type: 'heading', level: 2, segments: [{ type: 'text', text: 'Wholly bold heading', tf: 4 }] },   // K1: a partly bold heading would keep its bold (5.3.1)
       { type: 'para', segments: makeSegments(1) },
       { type: 'list', kind: 'bullet', items: [{ segments: makeSegments(2) }] },
     ],

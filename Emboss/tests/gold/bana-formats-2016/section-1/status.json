@@ -5,7 +5,7 @@
   },
   "example-1-10": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"------------------------------------#CFJ\" vs actual \"\". line count differs by +3 (expected 10, actual 13)."
+    "note": "first differing line 10: expected \"  ;B4 444\" vs actual \"  ;B4 PIGEON\". line count differs by +2 (expected 10, actual 12)."
   },
   "example-1-11": {
     "status": "no-braille",
@@ -37,11 +37,11 @@
   },
   "example-1-18": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \",! ^W = SL$ IS .1TR9EO4\" vs actual \",! ^W SL$ IS SPELL$ TR9EO4\"."
+    "note": "first differing line 1: expected \",! ^W = SL$ IS .1TR9EO4\" vs actual \",! ^W = SL$ IS .1TR9EO.'4\"."
   },
   "example-1-19": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \",! ^W = WOOD%$ 9 ,SPANI% IS LE^]N]A4\" vs actual \",! ^W WOOD$ 9 ,SPANI% IS LE^]N]A4\"."
+    "status": "match",
+    "note": "match"
   },
   "example-1-2": {
     "status": "no-braille",
@@ -80,8 +80,8 @@
     "note": "match"
   },
   "sample-1-01": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"#A ,OLD] ADULTS 9CR1S+LY USE ^WS T 3VEY\" vs actual \"#A ,OLD] ADULTS 9CR1S+LY USE ^WS TO 3VEY\"."
+    "status": "match",
+    "note": "match"
   },
   "sample-1-02": {
     "status": "match",
@@ -89,7 +89,7 @@
   },
   "sample-1-03": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"               ,UNIT ,\\\"O           #D-#E\" vs actual \"               ,UNIT ,TWO\". line count differs by -2 (expected 7, actual 5). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
+    "note": "first differing line 1: expected \"               ,UNIT ,\\\"O           #D-#E\" vs actual \"               ,UNIT ,\\\"O\". line count differs by -2 (expected 7, actual 5). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\""
   },
   "sample-1-04": {
     "status": "not-representable",

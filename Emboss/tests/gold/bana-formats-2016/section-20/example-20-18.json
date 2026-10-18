@@ -1,0 +1,44 @@
+{
+  "id": "example-20-18",
+  "title": "Example 20-18: Two Diacritic Marks above Letter",
+  "pdfPages": [
+    6
+  ],
+  "textLines": [
+    15758,
+    15763
+  ],
+  "illustrates": {
+    "rule": "20.4.6b",
+    "quote": "b. The mark nearest the letter is transcribed first when two or more diacritic marks appear above a letter."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "fē̂ar",
+        "features": "Two marks above e: macron nearest the letter, circumflex above it"
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-544.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "f@-^%e>"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Print diacritics are combined-Unicode approximations read from a small page image; the braille modifiers, not the glyphs, are the authority."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (cited rule is the one the example follows). print: B left blocks empty; A's blocks checked against the page image; corrected: A put a circumflex on both e and a ('fêar'); the image shows both marks on the e only.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

@@ -27,7 +27,7 @@
   "braille": {
     "width": 57,
     "lines": [
-      "              keep \"<3t4\">                            #,-"
+      "              keep \"<3t4\">           #,-"
     ],
     "pageBreaks": [],
     "notes": "Line 25 of the (new) braille page is exactly as in the source file, with its true 57-cell extent (28 literal spaces precede the page number in the source's own plain-text rendering)."
@@ -37,5 +37,19 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule normalised from '21.3.2.j' to '21.3.2j' (stray period); width set to the actual 57-cell extent instead of the nominal 40."
+  "resolution": "illustrates.rule normalised from '21.3.2.j' to '21.3.2j' (stray period); width set to the actual 57-cell extent instead of the nominal 40.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "              keep \"<3t4\">                            #,-"
+      ],
+      "after": [
+        "              keep \"<3t4\">           #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 563 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

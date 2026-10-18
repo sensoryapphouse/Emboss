@@ -20,12 +20,12 @@
         "blocks": [
           { "kind": "paragraph", "text": "Search" },
           { "kind": "note", "text": "Toolbar" },
-          { "kind": "paragraph", "text": "back forward home reload stop print" },
+          { "kind": "paragraph", "text": "Back Forward Home Reload Stop Print" },
           { "kind": "paragraph", "text": "Address http://search.com/search?p=%22life+on+mars%22", "features": "The %22 (URL-encoded quote) pair around 'life on mars' is rendered in the agreed braille as a devised symbol pair ('#bb...#bb'), not literal punctuation — not built (no print-side words to build it from; a devised-symbol gap, F-222)." },
           { "kind": "note", "text": "Hyperlinks" },
           { "kind": "paragraph", "text": "Science: Astronomy: Solar System: Planets: Mars: **Life on Mars?**", "features": "'Life on Mars?' is bold (a hyperlink)." },
           { "kind": "paragraph", "text": "Science Magazine: **Life on Mars** Special", "features": "'Life on Mars' is bold (a hyperlink)." },
-          { "kind": "paragraph", "text": "Is there **Life on Mars?** an interview with top scientists", "features": "'Life on Mars?' is bold (a hyperlink)." }
+          { "kind": "paragraph", "text": "Is there **life on Mars?** an interview with top scientists", "features": "'Life on Mars?' is bold (a hyperlink)." }
         ]
       },
       {
@@ -35,13 +35,13 @@
           { "kind": "note", "text": "Top: Title" },
           { "kind": "paragraph", "text": "Search" },
           { "kind": "note", "text": "Left margin: Toolbar" },
-          { "kind": "paragraph", "text": "back forward home reload stop print" },
+          { "kind": "paragraph", "text": "Back Forward Home Reload Stop Print" },
           { "kind": "note", "text": "Left margin: URL field" },
           { "kind": "paragraph", "text": "Address http://search.com/search?p=%22life+on+mars%22", "features": "Devised-symbol quote pair, not built (see box 1)." },
           { "kind": "note", "text": "Left margin" },
           { "kind": "paragraph", "text": "Science: Astronomy: Solar System: Planets: Mars: **Life on Mars?**", "features": "'Life on Mars?' is bold; the whole hyperlinked phrase is additionally wrapped in a separate hyperlink-boundary indicator pair ('@#7'/'@#'') in the agreed braille — Emboss has no such construct (not italic/bold/underline/code); not built, and the resulting mismatch on this indicator is expected." },
           { "kind": "paragraph", "text": "Science Magazine: **Life on Mars** Special", "features": "Same hyperlink-boundary indicator, not built." },
-          { "kind": "paragraph", "text": "Is there **Life on Mars?** an interview with top scientists", "features": "Same hyperlink-boundary indicator, not built." }
+          { "kind": "paragraph", "text": "Is there **life on Mars?** an interview with top scientists", "features": "Same hyperlink-boundary indicator, not built." }
         ]
       }
     ],
@@ -57,7 +57,7 @@
       "                 ,se>*",
       "",
       "      @.<,toolb>@.>",
-      "back =w>d home reload /op pr9t",
+      "back  =w>d  home  reload  /op  pr9t",
       "",
       ",address http3_/_/se>*4com_/se>*8p\"7.0\"",
       "  #bblife\"6on\"6mars.0#bb",
@@ -77,7 +77,7 @@
       "                 ,se>*",
       "",
       "      @.<,left m>g93 ,toolb>@.>",
-      "back =w>d home reload /op pr9t",
+      "back  =w>d  home  reload  /op  pr9t",
       "",
       "      @.<,left m>g93 ,,url field@.>",
       ",address http3_/_/se>*4com_/se>*8p\"7.0\"",
@@ -101,5 +101,35 @@
     "A",
     "B"
   ],
-  "resolution": "CORRECTION (session-wide): both box top-rule lines were victims of the all-digit-line blanking bug (see differences.md) and are restored directly from source-6.txt (lines 5251, 5275), matched exactly against the surviving bottom-rule lines both runs already had. The toolbar button row ('Back Forward Home Reload Stop Print') was capitalized in both runs; forward-translating that capitalized form does not reproduce the agreed braille (which has no capital-word signs at all on that line) while the plain lowercase form does — corrected. The 'Life on Mars(?)' hyperlink phrases were plain in both runs; forward-translating them with TF_BOLD (not italic, tested and ruled out the same way as example-6-3/sample-6-1) reproduces the agreed braille's '^7...^'' passage markers exactly — corrected to **bold** markup, with a features note recording each as a hyperlink. print.blocks were restructured into two explicit {kind:'box'} containers (matching the section-7/section-8 gold precedent's own box modelling) with the section-label transcriber's notes (Toolbar/Hyperlinks/Top: Title/etc.) built as standalone {kind:'note'} blocks, since neither run's flat figure.labels array carried any of this structure."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocks[2].text and print.blocks[1].blocks[3].text",
+      "was": "back forward home reload stop print",
+      "now": "Back Forward Home Reload Stop Print",
+      "evidence": "page image references/_gemini/_done/gold-6-A/page-180.png (PDF p180, Sample 6-15), zoomed at 250 dpi: the toolbar button captions read Back, Forward, Home, Reload, Stop, Print, each with a capital. The earlier lowercase form was chosen to make forward translation match the book's lowercase braille, which is not print evidence."
+    },
+    {
+      "field": "print.blocks[0].blocks[7].text and print.blocks[1].blocks[9].text",
+      "was": "Is there **Life on Mars?** an interview with top scientists",
+      "now": "Is there **life on Mars?** an interview with top scientists",
+      "evidence": "Same page image, zoomed: the third hyperlink line reads \"Is there life on Mars?  an interview with top scientists\" with a lowercase l in \"life\"; only the first two lines have capital \"Life on Mars\"."
+    }
+  ],
+  "resolution": "CORRECTION (session-wide): both box top-rule lines were victims of the all-digit-line blanking bug (see differences.md) and are restored directly from source-6.txt (lines 5251, 5275), matched exactly against the surviving bottom-rule lines both runs already had. The toolbar button row ('Back Forward Home Reload Stop Print') was capitalized in both runs; forward-translating that capitalized form does not reproduce the agreed braille (which has no capital-word signs at all on that line) while the plain lowercase form does — corrected. The 'Life on Mars(?)' hyperlink phrases were plain in both runs; forward-translating them with TF_BOLD (not italic, tested and ruled out the same way as example-6-3/sample-6-1) reproduces the agreed braille's '^7...^'' passage markers exactly — corrected to **bold** markup, with a features note recording each as a hyperlink. print.blocks were restructured into two explicit {kind:'box'} containers (matching the section-7/section-8 gold precedent's own box modelling) with the section-label transcriber's notes (Toolbar/Hyperlinks/Top: Title/etc.) built as standalone {kind:'note'} blocks, since neither run's flat figure.labels array carried any of this structure. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "back =w>d home reload /op pr9t",
+        "back =w>d home reload /op pr9t"
+      ],
+      "after": [
+        "back  =w>d  home  reload  /op  pr9t",
+        "back  =w>d  home  reload  /op  pr9t"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 5, 25 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 180, 181 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2). Where: column gap (table / related columns / columned list) (2)."
+    }
+  ]
 }

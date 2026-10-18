@@ -141,26 +141,29 @@ test('E-3: real content is not mistaken for empty', () => {
   assert.equal(maths.mathmlToBrf('<math><msup><mi>x</mi><mn>2</mn></msup></math>', 'ueb'), unicodeBrailleToBrf('⠭⠰⠔⠼⠃'));
 });
 
-test('E-3: MathCAT error → empty string plus console.warn, never an injected ⠌⠼ marker', () => {
+// S2b item 11 (ChatGPT audit 15 Oct 2026, Emboss/docs/chatgpt-audit-15oct.md #11) CHANGES this test's old expectation: a MathCAT error used
+// to come back as '' and the formatter dropped the equation without a word. A rejected NON-EMPTY equation is now a thrown failure
+// (mathRejected); the formatter shows the "Equation could not be read" note and raises a warning (tests/s2b_rejected_maths.test.mjs).
+test('E-3 / S2b #11: MathCAT error → a thrown mathRejected failure plus console.warn, never an injected ⠌⠼ marker and never a silent empty string', () => {
   for (const mml of [
     '<math><mfrac><mn>1</mn></mfrac></math>',    // mfrac needs two children
     '<math><mi>x</math>',                        // not well-formed XML
   ]) {
     for (const mode of ['bana', 'ueb']) {
-      const { result, warns } = withWarns(() => maths.mathmlToBrf(mml, mode));
-      assert.equal(result, '', `${mode}: ${mml}`);
-      assert.ok(!result.includes(ERROR_MARKER));
+      const { warns } = withWarns(() => { try { maths.mathmlToBrf(mml, mode); assert.fail('it should have thrown: ' + mml); } catch (e) { assert.equal(e.mathRejected, true, `${mode}: ${mml}: ${e.message}`); } });
       assert.equal(warns.length, 1, `${mode}: one warning surfaced for ${mml}: ${warns.join(' | ')}`);
       assert.ok(/MathCAT/.test(warns[0]), warns[0]);
     }
   }
-  // Callers skip an empty result: a broken equation drops out of the page cleanly.
+  // The formatter keeps the text round the equation and marks its place (the rest is in tests/s2b_rejected_maths.test.mjs).
   const opts = { mode: 'ukaaf', width: 38, depth: 25, translate: (t) => louis.translate(t, T), mathToBrf: (seg) => maths.mathToBrf(seg, 'ueb') };
   const { result: out } = withWarns(() => formatDocument({ blocks: [
     { type: 'para', segments: [{ type: 'text', text: 'Before' }, { type: 'math', mathml: '<math><mfrac><mn>1</mn></mfrac></math>' }, { type: 'text', text: 'after.' }] },
   ] }, opts));
   assert.ok(!out.includes(ERROR_MARKER), out);
   assert.ok(!out.includes('\\'), out);
+  assert.ok(/@\.</.test(out.replace(/[\r\n\f]/g, '')), 'the transcriber\'s note stands where the equation was: ' + out);
+  assert.equal((opts.warnings || []).filter((w) => w.kind === 'math-unreadable').length, 1);
 });
 
 // ---------------------------------------------------------------- E-4 ----
@@ -177,18 +180,34 @@ test('E-4: translate("a 𝑥 b") folds the mathematical italic x to a plain lett
   assert.equal(louis.translate('x² ½', T), 'X;9#B #A/B');
 });
 
-test('E-4: emoji and other unfoldable non-BMP input yield a single placeholder cell, not \\X garbage', () => {
+// A78 (Paul's decision, 28 Sep 2026, docs/decisions.md ICON-1): this test used to pin
+// foldNonBmp pre-substituting a single full-cell placeholder for any unfoldable non-BMP
+// character, so a bare louis.translate() call never saw liblouis's own undefined-character
+// escape for one. That silently hid the character from format/document.mjs's scrub layer too
+// (scanUndefinedEscapes/assignIconSymbol), so it could never become a BANA transcriber-defined
+// icon symbol and UKAAF never raised its lou-undefined-char warning for it — audit item A78
+// closes that gap (see engine/louis.mjs's own "Non-BMP input" comment and
+// tests/emoji_icons.test.mjs for the document-level BANA/UKAAF coverage this enables).
+// foldNonBmp now keeps an unfoldable code point's two surrogate units intact instead, so a bare
+// translate()/translatePos() call gets the raw '\Xhhhh' escape per unit — exactly what it
+// already returns for an ordinary undefined BMP character (e.g. ⚠) — and it is the CALLER's job
+// to scrub that, same as for any other undefined character; document.mjs's installScrub already
+// does this for every real document.
+test('E-4: emoji and other unfoldable non-BMP input reach translate() as liblouis\'s own undefined-char escape, one per surrogate half (A78)', () => {
   const got = louis.translate('a 😀 b', T);
-  assert.ok(!got.includes('\\X'), JSON.stringify(got));
-  assert.ok(!got.includes('\\'), JSON.stringify(got));
-  assert.equal(got, louis.translate('a ⠿ b', T), 'one full-cell placeholder where the emoji was');
-  assert.equal(got, 'A = ;B');
-  // Unicode-braille display table: the placeholder is the full cell itself.
-  assert.equal(louis.translate('a 😀 b', louis.TABLES.uebG2_unicode), '⠁⠀⠿⠀⠰⠃');
-  // Supplementary CJK, a lone (malformed) surrogate, and an emoji sequence.
-  assert.ok(!louis.translate('𠀋', T).includes('\\'));
-  assert.ok(!louis.translate('a\uD835 b', T).includes('\\'));
-  assert.ok(!louis.translate('Hi 👋🏽!', T).includes('\\'));
+  // 😀 U+1F600 = high surrogate D83D, low surrogate DE00.
+  assert.equal(got, "A '\\XD83D''\\XDE00' ;B", JSON.stringify(got));
+  assert.ok(!got.includes('='), 'no pre-substituted full-cell placeholder — A78 moved that decision to the caller (document.mjs: BANA icon symbol, UKAAF full cell + warning)');
+  // Unicode-braille display table: liblouis's undefined-char escape is still raised (its own
+  // ASCII text then goes through the Unicode display table like any other output, so the exact
+  // cells differ from the .dis table above — only the "no silent full-cell placeholder" claim
+  // is checked here).
+  assert.notEqual(louis.translate('a 😀 b', louis.TABLES.uebG2_unicode), '⠁⠀⠿⠀⠰⠃', 'must not be the old silent full-cell placeholder');
+  // Supplementary CJK, a lone (malformed) surrogate, and an emoji sequence: each now surfaces
+  // liblouis's own escape too, rather than being silently swallowed.
+  assert.ok(louis.translate('𠀋', T).includes('\\X'), louis.translate('𠀋', T));
+  assert.ok(louis.translate('a\uD835 b', T).includes('\\X'), louis.translate('a\uD835 b', T));
+  assert.ok(louis.translate('Hi 👋🏽!', T).includes('\\X'), louis.translate('Hi 👋🏽!', T));
 });
 
 test('E-4: translatePos keeps braille identical to translate() and indexes into the caller\'s string', () => {
@@ -228,5 +247,19 @@ test('E-4: louis.mjs and louis-browser.mjs carry the same non-BMP handling', () 
     const s = fs.readFileSync(path.join(EMB, 'engine', f), 'utf8');
     assert.equal((s.match(/foldNonBmp\(String\(text\), typeform\)/g) || []).length, 2, f + ': both translate() and translatePos() fold');
     assert.ok(s.includes('posMap ? (posMap[p] ?? p) : p'), f + ': translatePos remaps inputPos');
+  }
+});
+
+// A89 (random-action testing, seed 1982326777, Chrome): an equation typed in the editor is held as a bare fragment (no <math>
+// root), and an empty slot left a "?" as loose text inside an <mfrac>. MathCAT rejected it, so the equation was missing from the
+// braille — until a save, which wraps the fragment and puts loose text in <mtext> (nimas-export.mjs normalizeMathMl), made it
+// appear after reopening. The maths engine now does the same before MathCAT sees it.
+test('an editor fragment with loose text brailles, as the saved and reopened equation does', () => {
+  const fragment = '<mfrac><mrow><mn>10</mn><mo>&lt;</mo><mn>12</mn></mrow><mrow><msup><mo>sin</mo><mn>8</mn></msup><mo>∑</mo><mfrac><mrow><mi>b</mi><mo>&#8290;</mo><mi>r</mi></mrow>?</mfrac><mi>n</mi></mrow></mfrac>';
+  const tidy = '<math><mfrac><mrow><mn>10</mn><mo>&lt;</mo><mn>12</mn></mrow><mrow><msup><mo>sin</mo><mn>8</mn></msup><mo>∑</mo><mfrac><mrow><mi>b</mi><mo>&#8290;</mo><mi>r</mi></mrow><mtext>?</mtext></mfrac><mi>n</mi></mrow></mfrac></math>';
+  for (const mode of ['ueb', 'nemeth']) {
+    const want = withWarns(() => maths.mathmlToBrf(tidy, mode)).result;
+    assert.ok(want, `sanity (${mode}): the tidy equation brailles`);
+    assert.equal(withWarns(() => maths.mathmlToBrf(fragment, mode)).result, want, mode);
   }
 });

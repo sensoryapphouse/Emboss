@@ -113,7 +113,7 @@ test('Serializes Poetry Verse and Stanzas', () => {
 });
 
 test('Serializes Notes, Footnotes, Captions, and Attributions', () => {
-  assert.equal(serializeBlock({ type: 'note', text: 'Transcriber note text' }, 0), '<prodnote render="optional">Transcriber note text</prodnote>');
+  assert.equal(serializeBlock({ type: 'note', text: 'Transcriber note text' }, 0), '<prodnote render="required">Transcriber note text</prodnote>');   // D6/A43: a note Emboss created is required; an imported one keeps its own value
   assert.equal(serializeBlock({ type: 'para', style: 'note', text: 'Prod note 2' }, 0), '<prodnote render="optional">Prod note 2</prodnote>');
   assert.equal(serializeBlock({ type: 'footnote', text: 'Footnote content' }, 0), '<note id="note-1" class="footnote"><p>Footnote content</p></note>');
   assert.equal(serializeBlock({ type: 'para', style: 'footnote', text: 'Footnote content 2' }, 0), '<note id="note-1" class="footnote"><p>Footnote content 2</p></note>');
@@ -141,8 +141,10 @@ test('Serializes Table of Contents (TOC) Plain Lists with Page Numbers', () => {
 });
 
 test('Serializes Bulleted, Numbered, Plain, and Exercise Lists', () => {
-  const ulBlock = { type: 'list', items: [{ text: 'Apple' }, { text: 'Banana' }] };
+  // A bullet list carries a bullet marker; items with none are a plain list and save as type="pl" (a markerless "ul" gained bullets on re-open).
+  const ulBlock = { type: 'list', items: [{ text: 'Apple', marker: '•' }, { text: 'Banana', marker: '•' }] };
   assert.ok(serializeBlock(ulBlock, 0).includes('<list type="ul">'));
+  assert.ok(serializeBlock({ type: 'list', items: [{ text: 'Apple' }, { text: 'Banana' }] }, 0).includes('<list type="pl">'));
 
   const olBlock = { type: 'list', items: [{ text: 'First', marker: '1.' }, { text: 'Second', marker: '2.' }] };
   assert.ok(serializeBlock(olBlock, 0).includes('<list type="ol">'));
@@ -195,7 +197,7 @@ test('Serializes Sidebars / Boxes with nested blocks', () => {
     blocks: [
       { type: 'heading', level: 2, text: 'KEY VOCABULARY' },
       { type: 'para', text: 'Photosynthesis: the process by which green plants make food.' },
-      { type: 'list', items: [{ text: 'Chlorophyll' }, { text: 'Light energy' }] }
+      { type: 'list', items: [{ text: 'Chlorophyll', marker: '•' }, { text: 'Light energy', marker: '•' }] }
     ]
   };
   const xml = serializeBlock(boxBlock, 0);

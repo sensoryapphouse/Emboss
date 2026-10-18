@@ -60,10 +60,13 @@
     "toc": "Spis treści",
     "print": "Widok wydruku (lewa strona)",
     "braille": "Pismo Braille'a",
+    "export": "Eksportuj",
+    "export_title": "Eksportuj brajl (BRF, eBraille) lub wyślij do drukarki brajlu",
+    "emboss_menu": "Wyślij do drukarki brajlu",
     "braille_view": "Widok pisma Braille'a",
     "download_brf": "Pismo Braille'a (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Drukuj brajl",
     "emboss_tooltip": "Wyślij dokument do drukarki brajlu lub drukarki",
     "clear_doc": "Wyczyść dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Linia wersetu strofy poetyckiej (1-3)",
     "exercise_title": "Pytanie ćwiczenia",
     "exercise_desc": "Numerowane pytanie ćwiczenia (1-5 / 3-5)",
-    "caption_title": "Podpis / przypisanie",
-    "caption_desc": "Podpis figury lub przypisanie (7-5)",
     "footnote_title": "Przypis",
     "footnote_desc": "Tekst przypisu (1-3)",
     "note_title": "Notatka transkrybtora",
@@ -163,8 +164,6 @@
     "page_desc": "Wstaw wskaźnik podziału strony źródłowej",
     "printpage_title": "Numer strony wydruku",
     "printpage_desc": "Wstaw wskaźnik podziału strony źródłowej",
-    "code_title": "Kod komputerowy",
-    "code_desc": "Wstaw blok kodu ze wskaźnikami UEB",
     "indent_title": "Indent / Nest Sub-item",
     "indent_desc": "Nest list item or exercise deeper (Tab)",
     "outdent_title": "Outdent / Promote Item",
@@ -185,8 +184,8 @@
     "language_label": "Język interfejsu",
     "language_help": "Wybierz język używany dla przycisków, menu, okienek dialogowych i ogłoszeń czytnika ekranu.",
     "standard_label": "Standard pisma Braille'a",
-    "standard_bana": "BANA (USA i Kanada — 40×25 komórek)",
-    "standard_ukaaf": "UKAAF (Wielka Brytania i międzynarodowy — 38×25 komórek)",
+    "standard_bana": "BANA (USA i Kanada — 38×25 komórek)",
+    "standard_ukaaf": "UKAAF (Wielka Brytania i międzynarodowy — 38×27 komórek)",
     "grade_label": "Poziom skrócenia",
     "grade_1": "Stopień 1 (nieskrócony / litera za literą)",
     "grade_2": "Stopień 2 (skrócony)",
@@ -261,7 +260,7 @@
     "size_full": "Cały arkusz (linia 1 bez pocięcia)",
     "lead_lines": "Linie przewodnie dotykowe",
     "braille_labels": "Etykiety brajlu",
-    "footer_tip": "💡 Czarne kontury stają się stałymi granicami dotykowymi; kolory automatycznie mapują się na odrębne tekstury dotykowe.",
+    "footer_tip": "Czarne kontury stają się stałymi granicami dotykowymi; kolory automatycznie mapują się na odrębne tekstury dotykowe.",
     "open_repositories": "Otwarte repozytoria dotykowe:",
     "no_diagrams": "Nie znaleziono pasujących diagramów."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Status przejazdu w obie strony bez strat",
     "precedence_status": "Status reguł pierwszeństwa brajlu",
     "perfect_match": "100% dopasowanie przejazdu w obie strony (0 rozbieżności)",
-    "badge_warn": "⚠ {count} do przejrzenia",
+    "badge_warn": "{count} do przejrzenia",
     "badge_title": "{count} rozbieżności wyrazu(ów) znalezionej(ego) podczas przejazdu w obie strony. Kliknij, aby przeskoczyć na pierwszy.",
     "badge_clean": "Sprawdzenie przejazdu w obie strony: nie znaleziono rozbieżności wyrazu."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Masz niezapisane zmiany. Czy na pewno chcesz wyjść bez zapisania?",
     "unsaved_load": "Masz niezapisane zmiany. Załadowanie nowego pliku zastąpi Twój bieżący dokument. Kontynuować?",
     "unsaved_clear": "Masz niezapisane zmiany. Czy na pewno chcesz wyczyścić dokument?",
-    "drop_hint": "⬇ Upuść dokument, aby zaimportować go do edytora",
+    "drop_hint": "Upuść dokument, aby zaimportować go do edytora",
     "notice": "Uwaga",
     "close_notice": "Zamknij uwagę"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Tekst dokumentu",
+      "math_keyboard_toggle": "Klawiatura matematyczna",
       "label": "Tekst",
       "toolbar_aria": "Formatowanie",
       "style_label": "Styl akapitu",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategorie grafiki",
       "graphic_list": "Diagramy grafiki dotykowej",
       "formula_search_label": "Szukaj formuł",
-      "btactile_link": "BTactile (Darmowy) ↗",
-      "tgil_link": "APH TGIL (1 800+ szablonów) ↗"
+      "btactile_link": "BTactile (Darmowy)",
+      "tgil_link": "APH TGIL (1 800+ szablonów)"
     },
     "settings": {
       "list_spaced": "Lista z pustą linią (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Połącz bezpośrednio z niestandardowymi drukarkami mikrokontrolerów (ESP32-S3, RP2040/RP2350, STM32, Arduino), omijając blokady sterowników drukarek systemu operacyjnego.",
       "graphics_hint": "Jeśli nie jest zaznaczone, diagramy są eksportowane jako opisy notatek transkryptora dostępne dla drukarek tylko tekstowych i wyświetlaczy braille'a.",
       "tactile_heading": "Transmisja na żywo wyświetlacza dotykowego (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Połącz Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Połącz USB / HID (Monarch)",
+      "tactile_connect_ble": "Połącz Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Połącz USB / HID (Monarch)",
       "tactile_disconnect": "Rozłącz wyświetlacz",
       "tactile_sim_monarch": "Testuj symulowany Monarch (32×10)",
       "tactile_sim_dotpad": "Testuj symulowany DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Przesyła żywy widok braille'a i grafikę dotykową bezpośrednio przez WebBluetooth (DotPad BLE UART) lub WebHID (Monarch/USB) bez sterowników zewnętrznych.",
       "perkins_hint": "— wpisuj braille'a klawiszami SDF i JKL",
       "ascii_hint": "— pokaż surowe znaki braille'a ASCII",
+      "show_explanation_bar": "Pokaż pasek objaśnień",
+      "show_explanation_bar_hint": "— pasek pod tekstem i brajlem, który objaśnia brajl dla słowa, na którym jesteś",
+      "simple_mode_hint": "— otwieraj Emboss w prostym konwerterze. Przełączanie między Trybem szybkim a edytorem tego nie zmienia.",
       "covers_hint": "— okładki wydrukowane brajlem przy dzieleniu książek"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Nagłówek {n}",
       "cell_aria_named": "{header}, wiersz {row}",
       "cell_aria": "Kolumna {col}, wiersz {row}",
-      "too_wide_listed": "⚠ Zbyt szeroka na kolumny — zostanie zapisana brajlem jako tabela wymieniająca",
+      "too_wide_listed": "Zbyt szeroka na kolumny — zostanie zapisana brajlem jako tabela wymieniająca",
       "too_wide_listed_title": "Ta tabela nie mieści się w kolumnach przy bieżącej liczbie komórek na linię i trybie brajla, więc zostanie zapisana brajlem jako tabela wymieniająca (BANA Formats §11.9) zamiast kolumn obok siebie.",
-      "too_wide_paragraph": "⚠ Zbyt szeroka na kolumny — zostanie zapisana brajlem w formie akapitu",
+      "too_wide_paragraph": "Zbyt szeroka na kolumny — zostanie zapisana brajlem w formie akapitu",
       "too_wide_paragraph_title": "Ta tabela nie mieści się w kolumnach przy bieżącej liczbie komórek na linię i trybie brajla, więc zostanie zapisana brajlem w formie akapitu (UKAAF B004 §12) zamiast kolumn obok siebie."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nie można załadować tabel dla \"{code}\" — wciąż używany jest poprzedni kod braille'a.",
-      "failed": "⚠ Braille nie mógł być wygenerowany.",
+      "failed": "Braille nie mógł być wygenerowany.",
       "failed_hint": "(Jeśli mówi, że silnik nie jest zainicjalizowany, silnik braille'a nie załadował — twarde odświeżanie za pomocą Cmd/Ctrl+Shift+R.)",
       "error_status": "Błąd renderowania: {message}"
     },
     "engine": {
       "loading": "Ładowanie silnika braille'a…",
-      "failed": "⚠ Silnik braille'a nie załadował się.",
+      "failed": "Silnik braille'a nie załadował się.",
       "failed_hint": "Twarde odświeżanie za pomocą Cmd/Ctrl+Shift+R. Jeśli się powtarza, otwórz konsolę przeglądarki (Widok ▸ Narzędzia programisty) i wyślij błędy.",
       "failed_status": "Silnik nie załadował się: {message}",
       "ready": "Gotowy — pisz lub formatuj po lewej; braille aktualizuje się na żywo."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nie można uzyskać dostępu do {url}: {message}. Przeglądarki nie mogą otwierać surowych połączeń TCP (port 9100); drukarka musi akceptować HTTP POST lub pobrać plik .brf i wysłać go za pomocą menedżera drukowania.",
       "usb_bridge_done": "Zadanie drukowania dostarczone do drukarki USB!",
       "needs_webserial": "Bezpośrednie drukowanie seryjne wymaga przeglądarki z WebSerial (Chrome, Edge, Opera). Możesz pobrać plik .brf, aby drukować za pomocą menedżera drukowania, lub użyć trybu sieci (port 9100) w ustawieniach.",
-      "detected": "🔌 Wykryto {name} — ustawić na {cells}×{lines} na {baud} baud."
+      "detected": "Wykryto {name} — ustawić na {cells}×{lines} na {baud} baud."
     },
     "symbols": {
       "title": "Biblioteka symboli dotykowych",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Macierz dynamiczna",
       "badge_text_only": "Tylko tekst",
       "badge_index": "Macierz kropek"
+    },
+    "offline": {
+      "ready": "Emboss jest gotowy do pracy offline.",
+      "ready_short": "Gotowe do pracy offline",
+      "not_yet": "Trwa przygotowywanie do pracy offline…"
     }
   }
 }

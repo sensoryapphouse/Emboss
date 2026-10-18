@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 15 Line Numbered Text"/><meta name="dc:Identifier" content="stage4-15"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 15 Line Numbered Text</doctitle></frontmatter><bodymatter><level1>
+<h1>Line-Numbered Verse</h1>
+<poem><title>Autumn</title>
+<linegroup><line>Leaves fall gently to the ground</line><line>Without a whisper, without a sound,</line><line>The wind is cold, the sky is grey,</line><line>And summer slowly slips away.</line><line><linenum>5</linenum>Then frost arrives on window panes</line></linegroup></poem>
+<p>A prose passage with a reference number<span class="linenum">5</span> in the margin follows here.</p>
+</level1></bodymatter></book></dtbook>

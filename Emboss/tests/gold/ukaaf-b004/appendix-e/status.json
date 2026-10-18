@@ -1,0 +1,10 @@
+{
+  "example-1": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"       ,H\\\\SEHOLD ,EXP5DITURE\" vs actual \"        ,H\\\\SEHOLD ,EXP5DITURE\". line count differs by +14 (expected 15, actual 29). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered/ruled box (visible cell borders in the PDF, page 17); column headers 'Life Insurance', 'Buildings and Contents Insurance' and 'Gas and Electricity' wrap onto 2-3 print l"
+  },
+  "example-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                                   #EB\" vs actual \" ,TABLE #C3 ,W1!R ,=ECA/ = ,\\\"S\\\": ,C;Y\". line count differs by +8 (expected 38, actual 46). Input-model limitation: print.printFeatures describes visual/structural features with no model equivalent (bold, shading, rules, diagonal lines, charts, etc.): \"Bordered/ruled box (PDF page 19); header row and the day-name column are bold on a grey-shaded background (visible in the PDF; lost in the plain .txt extraction,"
+  }
+}

@@ -15,11 +15,19 @@
   "print": {
     "blocks": [
       {
+        "kind": "paragraph",
+        "text": "I didn’t think so, *but that’s it.*",
+        "blocked": true,
+        "continuation": true,
+        "features": "Print (page-500.png): 'I didn’t think so, but that’s it.' with 'but that’s it.' in italics and the apostrophe of 'that’s' printed in red. The print shows no note."
+      },
+      {
         "kind": "other",
-        "text": "Full sentence (back-translated from the given braille): \"I didn't think so, but that's it.\" — with an embedded transcriber’s note reading \"apostrophe is red\" inserted immediately after \"that's\" and before \"it.\" (the apostrophe in \"that's\" is printed in red). Not modeled: F-186, no mechanism exists to insert a @.<...@.> note mid-sentence, only as a standalone block."
+        "text": "transcriber-written note wording and position",
+        "features": "not-representable: rule 18.3.3c has the transcriber insert a note after the red apostrophe; its wording and position are the transcriber's, not in the print."
       }
     ],
-    "notes": "Verified by back-translating the given braille as a whole (the two runs’ own separate guesses for the note text and sentence disagreed on where the note sits relative to \"it.\"; back-translation removes the ambiguity: the note falls between \"that's\" and \"it.\").",
+    "notes": "The print page (page-500.png) shows the sentence only; the transcriber's note is braille content and is not built.",
     "surroundingText": [],
     "printFeatures": "The phrase \"but that's it.\" is italicized; the apostrophe in \"that's\" is red."
   },
@@ -37,5 +45,25 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly. print.blocks left as a single 'other' limitation (F-186, already the section’s own documented finding, its own Example 18-5 evidence) rather than an ordinary paragraph, since the note is fused into the middle of the sentence, not separable from it; building a paragraph without it would misrepresent what this example actually demonstrates."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. The embedded note is transcriber-written (wording and position) and is recorded as a limitation, not built. Print description corrected 23 Sep 2026 (see printCorrections). Corrected again 23 Sep 2026 (round 3): note removed from the print text.",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Full sentence (back-translated from the given braille): \"I didn't think so, but that's it.\" — with an embedded transcriber’s note reading \"apostrophe is red\" inserted immediately after \"that's\" and before \"it.\" (the apostrophe in \"that's\" is printed in red). Not modeled: F-186, no mechanism exists to insert a @.<...@.> note mid-sentence, only as a standalone block.",
+      "now": "Full sentence (back-translated from the given braille): \"I didn\\u2019t think so, *but that\\u2019s it.*\" — with an embedded transcriber’s note reading \"apostrophe is red\" inserted immediately after \"that's\" and before \"it.\" (the apostrophe in \"that's\" is printed in red). Not modeled: F-186, no mechanism exists to insert a @.<...@.> note mid-sentence, only as a standalone block.",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-500.png (Example 18-5): 'but that's it.' is italic in print (the apostrophe of 'that's' red); gold description had the sentence plain."
+    },
+    {
+      "field": "print.blocks.0",
+      "was": "kind 'other' with text containing the literal escape sequences \\u2019 (backslash-u, a bad edit earlier today) and the embedded note described in prose",
+      "now": "kind 'paragraph', text: I didn’t think so, *but that’s {{tn:apostrophe is red}} it.*, blocked, continuation",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-500.png (Example 18-5): sentence printed with curly apostrophes, 'but that’s it.' italic, apostrophe of that’s red; rule 18.3.3c printed above the example says to insert a transcriber's note after the punctuation to identify the emphasis. The note wording 'apostrophe is red' is the transcriber's description of the red apostrophe visible in print (judgement: the wording itself is not printed). Flags blocked/continuation: the sentence sits flush in the box."
+    },
+    {
+      "field": "print.blocks.0.text / print.blocks.1",
+      "was": "text carried {{tn:apostrophe is red}} placed by back-translating the given braille",
+      "now": "plain italic sentence plus an other block (limitation): transcriber-written note wording and position",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-500.png shows no note in print (independence rule)."
+    }
+  ]
 }

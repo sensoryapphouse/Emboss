@@ -1,0 +1,46 @@
+{
+  "id": "example-20-14",
+  "title": "Example 20-14: Diacritic Marking of Two Letters",
+  "pdfPages": [
+    5
+  ],
+  "textLines": [
+    15712,
+    15718
+  ],
+  "illustrates": {
+    "rule": "20.4.4",
+    "quote": "Diacritic Marking of Two Letters. Enclose the modified letters in braille grouping indicators if a single modifier applies to more than one letter. Note: Grade 1 indicators are not required for the grouping indicators because a modifier cannot be followed by a contraction. (See UEB, §4.2.5, Modifiers.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "fo͞ol\nthere",
+        "features": "Line 1: a single macron over both o's. Line 2: 'th' with a diagonal stroke through it (ligatured)",
+        "lineBreaks": true
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-543.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "f@-<oo>l",
+      "@*<th>]e"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Print diacritics are combined-Unicode approximations read from a small page image; the braille modifiers, not the glyphs, are the authority."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (cited rule is the one the example follows). print: B left blocks empty; A's blocks checked against the page image; corrected: A used a tie under 'th' in 'there'; the image shows a diagonal stroke.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

@@ -1,15 +1,15 @@
 {
   "example-3-1": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,! SYMBOL .=\\\"8 REPRES5TS\" vs actual \"      @.<,! SYMBOL \\\"8 REPRES5TS\"."
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,! SYMBOL .=\\\"8 REPRES5TS\" vs actual \"  ,I H TR\\\\BLE ) MULTIPLICA;N TABLES1\". line count differs by -2 (expected 4, actual 2). Input-model limitation: the expected braille includes a transcriber's note (\"The symbol × represents multiplication.\") that the print original does not show (transcriber-written, BANA 3.2); building it would read the note back from the braille — not representable from the print alone."
   },
   "example-3-2": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \",ELECTRICAL 5]GY ;\\\\O @.<\\\"R >R[@.> LI<T &\" vs actual \"  ,ELECTRICAL 5]GY ;\\\\O\". line count differs by +1 (expected 2, actual 3)."
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",ELECTRICAL 5]GY ;\\\\O @.<\\\"R >R[@.> LI<T &\" vs actual \"  ,ELECTRICAL 5]GY ;\\\\O LI<T & H1T\". line count differs by -1 (expected 2, actual 1). Input-model limitation: the expected braille includes a transcriber's note (\"right arrow\") that the print original does not show (transcriber-written, BANA 3.2); building it would read the note back from the braille — not representable from the print alone."
   },
   "example-3-3": {
-    "status": "mismatch",
-    "note": "first differing line 3: expected \"\" vs actual \"    3 IS TO\". line count differs by -1 (expected 9, actual 8)."
+    "status": "not-representable",
+    "note": "first differing line 2: expected \"      @.<,ANALOGY SYMBOLS US$3\" vs actual \"\". line count differs by -4 (expected 9, actual 5). Input-model limitation: the expected braille includes a transcriber's note (\"Analogy symbols used: : is to; :: as\") that the print original does not show (transcriber-written, BANA 3.2); building it would read the note back from the braille — not representable from the print alone."
   },
   "example-3-4": {
     "status": "mismatch",

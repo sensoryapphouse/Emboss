@@ -20,15 +20,15 @@ test('Spooler Protocol: Enabling Technologies Romeo & Juliet Escape Sequences', 
   const brf = ' ,TESTING ROMEO SPOOLER.\x0c';
   const stream = prepareEmbosserStream(brf, { embosser: 'romeo', width: 40, depth: 25, duplex: 'double' });
   
-  assert.ok(stream.startsWith('\x1b\x00\x1b\x0c25\x1b\x0e40\x1b\x122'));
-  assert.ok(stream.endsWith('\x1a'), 'Romeo stream must terminate with 0x1A (EOF)');
+  assert.ok(stream.startsWith('\x1bA@@\x1bK@\x1bW@'));
+  assert.ok(!stream.endsWith('\x1a'), 'no trailing EOF byte for these models (A12, 23 Sep)');
 });
 
 test('Spooler Protocol: ViewPlus Tiger & PixBlaster Text Protocol', () => {
   const brf = ' ,VIEWPLUS TIGER TEST.\x0c';
   const stream = prepareEmbosserStream(brf, { embosser: 'viewplus' });
   
-  assert.ok(stream.startsWith('\x1b*t'));
+  assert.ok(!stream.startsWith('\x1b'));
   assert.ok(stream.endsWith('\x0c'));
 });
 
@@ -36,7 +36,7 @@ test('Spooler Protocol: Braillo 300/600 Escape Sequences', () => {
   const brf = ' ,BRAILLO TEST.\x0c';
   const stream = prepareEmbosserStream(brf, { embosser: 'braillo', depth: 27 });
   
-  assert.ok(stream.startsWith('\x1bM0\x1bL27'));
+  assert.ok(stream.startsWith('\x1bS1\x1bJ0\x1bN0\x1bR0\x1bA27'));
   assert.ok(stream.endsWith('\x0c'));
 });
 

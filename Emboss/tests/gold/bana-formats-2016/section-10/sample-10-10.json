@@ -60,10 +60,10 @@
       "    ,mat* ! /ate & xs capital4",
       "",
       ",/ate     ,capital",
-      "\"3333333 \"33333333333",
+      "\"3333333  \"33333333333",
       ",ohio     ,des ,mo9es",
-      ",k5tucky ,columbus",
-      ",florida ,frank=t",
+      ",k5tucky  ,columbus",
+      ",florida  ,frank=t",
       ",texas    ,tallahassee",
       ",i[a      ,au/9"
     ],
@@ -75,5 +75,23 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8131-8139, 4-character line-number field). Print unchanged from A/B."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8131-8139, 4-character line-number field). Print unchanged from A/B.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"3333333 \"33333333333",
+        ",k5tucky ,columbus",
+        ",florida ,frank=t"
+      ],
+      "after": [
+        "\"3333333  \"33333333333",
+        ",k5tucky  ,columbus",
+        ",florida  ,frank=t"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 5, 6 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 279 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (3). Where: column gap (table / related columns / columned list) (2); table separation line (1)."
+    }
+  ]
 }

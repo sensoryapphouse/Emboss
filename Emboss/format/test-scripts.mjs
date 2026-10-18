@@ -1,4 +1,4 @@
-import path from 'path'; import fs from 'fs'; import { fileURLToPath } from 'url';
+import path from 'path'; import fs from 'fs'; import zlib from 'zlib'; import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Validate docx subscript/superscript (w:vertAlign) support end-to-end:
 //   parseDocx reads run vertical alignment and brackets the run with script
@@ -17,21 +17,22 @@ const { parseDocx } = await import('../input/parse.mjs');
 const BR = path.join(__dirname, '..');
 const projectRoot = fs.existsSync(path.join(__dirname, '../../liblouis/tables')) ? path.resolve(__dirname, '../..') : BR;
 
-// --- minimal ZIP writer: one STORED (method 0) entry; unzipEntry ignores CRC ---
+// --- minimal ZIP writer: one STORED (method 0) entry; unzipEntry checks the CRC (audit 15 Oct 2026, S2b #21) ---
 function storedZip(name, content) {
   const enc = new TextEncoder();
   const nameB = enc.encode(name), data = enc.encode(content);
   const nlen = nameB.length, dlen = data.length;
+    const crc = zlib.crc32(data);   // S2b item 21 (audit 15 Oct 2026): the reader now checks the zip's CRC-32, so the test zip carries the true one (it wrote 0)
   const b = [];
   const u16 = (v) => b.push(v & 0xff, (v >> 8) & 0xff);
   const u32 = (v) => b.push(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >>> 24) & 0xff);
   // local file header + name + data
-  u32(0x04034b50); u16(20); u16(0); u16(0); u16(0); u16(0); u32(0); u32(dlen); u32(dlen); u16(nlen); u16(0);
+  u32(0x04034b50); u16(20); u16(0); u16(0); u16(0); u16(0); u32(crc); u32(dlen); u32(dlen); u16(nlen); u16(0);
   for (const x of nameB) b.push(x);
   for (const x of data) b.push(x);
   const cdOffset = b.length;
   // central directory header + name
-  u32(0x02014b50); u16(20); u16(20); u16(0); u16(0); u16(0); u16(0); u32(0); u32(dlen); u32(dlen);
+  u32(0x02014b50); u16(20); u16(20); u16(0); u16(0); u16(0); u16(0); u32(crc); u32(dlen); u32(dlen);
   u16(nlen); u16(0); u16(0); u16(0); u16(0); u32(0); u32(0);
   for (const x of nameB) b.push(x);
   const cdSize = b.length - cdOffset;

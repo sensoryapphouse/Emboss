@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+  <metadata>
+    <dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <dc:Title>Multi-file Fixture Book</dc:Title>
+      <dc:Creator role="author">Fixture Author</dc:Creator>
+      <dc:Publisher>Fixture Press</dc:Publisher>
+      <dc:Date>2026-09-30</dc:Date>
+      <dc:Identifier id="uid">9780000000001</dc:Identifier>
+      <dc:Language>en-GB</dc:Language>
+      <dc:Format>NIMAS 1.1</dc:Format>
+    </dc-metadata>
+    <x-metadata>
+      <meta name="nimas-SourceEdition" content="First"/>
+    </x-metadata>
+  </metadata>
+  <manifest>
+    <item id="part3" href="part3.xml" media-type="application/x-dtbook+xml"/>
+    <item id="part1" href="part1.xml" media-type="application/x-dtbook+xml"/>
+    <item id="part2" href="text/part2.xml" media-type="application/x-dtbook+xml"/>
+    <item id="fig1" href="images/fig1.png" media-type="image/png"/>
+    <item id="fig2" href="text/art/fig2.png" media-type="image/png"/>
+    <item id="fig3" href="images/fig3.png" media-type="image/png"/>
+  </manifest>
+  <spine>
+    <itemref idref="part1"/>
+    <itemref idref="part2"/>
+    <itemref idref="part3"/>
+  </spine>
+</package>

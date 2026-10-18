@@ -267,12 +267,22 @@ describe('F-6 — guide dots appear between numeric columns, exactly as for text
 //    and the sample's own agreed braille right/place-value-aligns it (the 7-character
 //    "981,712" gets 2 extra leading cells to line up with the 9-character entries below,
 //    braille.lines rows 12-15) — Emboss must keep aligning THAT column.
-// Decision (this fix): numericColumnPlan applies automatically only when at least one entry
-// in the column actually carries a decimal point or thousands comma (BANA 11.6.1d's own
+// Decision (this fix): numericColumnPlan applied automatically only when at least one entry
+// in the column actually carried a decimal point or thousands comma (BANA 11.6.1d's own
 // wording: alignment is "to align digits, decimals, OR COMMAS" — punctuation to line up, not
 // bare digits). `block.columnAlign[c]` ('left' | 'right') is the transcriber's explicit
 // override in either direction, satisfying this finding's own "needs a way to mark a column
 // as 'don't align'".
+//
+// SUPERSEDED by K3 (EMBOSS-TASKS.md section K; transcriber KD, BANA): the punctuation guess
+// above was itself only a proxy for §11.6.1d's actual instruction — "aligned by place value
+// in print AS SHOWN" / §11.6.1c "even though print shows column entries centered or right-
+// adjusted" — i.e. follow what PRINT did with the column, not what the numbers look like.
+// The default now reads `block.printAlign[c]` ('right' | 'decimal'), which each reader sets
+// from the source markup's own alignment (DOCX w:jc/decimal tab, HTML/DTBook align/style/
+// char, ODT fo:text-align, RTF \qr/\tqdec, .doc sprmPJc) — never from punctuation. These two
+// tests keep their original B004/BANA evidence but now set printAlign explicitly, standing
+// in for "this is what the source file's own markup recorded".
 // ===========================================================================================
 describe('F-7 — numeric column alignment defaults to left; place-value alignment needs a reason (or an override)', () => {
   test('B004 §12 Example 1\'s own "No." column (no comma/decimal) stays flush left, no right-padding', () => {
@@ -294,10 +304,12 @@ describe('F-7 — numeric column alignment defaults to left; place-value alignme
     }
   });
 
-  test('BANA Sample 11-2\'s "Total" column (thousands commas) DOES place-value align, unchanged', () => {
+  test('BANA Sample 11-2\'s "Total" column (thousands commas, print right-aligns it) DOES place-value align', () => {
     // tests/gold/bana-formats-2016/section-11/sample-11-02.json's own print.rows, Total column.
+    // K3: the punctuation is no longer what triggers alignment — printAlign stands in for the
+    // source file's own column alignment markup (e.g. DOCX w:jc="right"/a decimal tab stop).
     const block = {
-      type: 'table', format: 'columnar',
+      type: 'table', format: 'columnar', printAlign: [undefined, 'right'],
       headers: ['Fiscal Year', 'Total'],
       rows: [
         ['1998', '981,712'],
@@ -357,23 +369,41 @@ describe('F-8 — a column with no heading gets no separation line, even when ot
     rows: [['Ann', 'x', '10'], ['Bob', 'y', '20']],
   };
 
-  test('the separation line has a dot run only under the columns that have a heading (structural)', () => {
-    for (const mode of ['bana', 'ukaaf']) {
-      const o = fakeOpts(mode, 40);
-      const lines = clean(formatBlock(block, o));
-      // The separation line is the one line consisting only of guide-dot / blank cells,
-      // right after the header row and before the first data row.
-      const headerIdx = lines.findIndex((l) => l.includes('NAME') && l.includes('SCORE'));
-      assert.ok(headerIdx >= 0, JSON.stringify(lines));
-      const sep = lines[headerIdx + 1];
-      assert.ok(sep, JSON.stringify(lines));
-      // TABLE_GUIDE ('"') starts exactly one dot run per HEADED column — two here (Name,
-      // Score), never three (previously: any heading anywhere drew a dot run under every
-      // column, including the blank-headed middle one).
-      const dotRuns = (sep.match(/"/g) || []).length;
-      assert.equal(dotRuns, 2, `${mode}: expected exactly 2 dot runs (Name, Score), not one under the unheaded middle column too: ${JSON.stringify(sep)}`);
-      parity(block, o);
-    }
+  test('the separation line has a dot run only under the columns that have a heading (structural, BANA — §11.4.2b/c)', () => {
+    // BANA-only: B004 (UKAAF) has no header-separation-line rule at all — see the
+    // 'UKAAF has no header separation line at all' test below (Task 2, 26 Sep 2026).
+    const o = fakeOpts('bana', 40);
+    const lines = clean(formatBlock(block, o));
+    // The separation line is the one line consisting only of guide-dot / blank cells,
+    // right after the header row and before the first data row.
+    const headerIdx = lines.findIndex((l) => l.includes('NAME') && l.includes('SCORE'));
+    assert.ok(headerIdx >= 0, JSON.stringify(lines));
+    const sep = lines[headerIdx + 1];
+    assert.ok(sep, JSON.stringify(lines));
+    // TABLE_GUIDE ('"') starts exactly one dot run per HEADED column — two here (Name,
+    // Score), never three (previously: any heading anywhere drew a dot run under every
+    // column, including the blank-headed middle one).
+    const dotRuns = (sep.match(/"/g) || []).length;
+    assert.equal(dotRuns, 2, `expected exactly 2 dot runs (Name, Score), not one under the unheaded middle column too: ${JSON.stringify(sep)}`);
+    parity(block, o);
+  });
+
+  // Task 2, 26 Sep 2026: B004 §12 / Appendix E's own worked table examples never show a
+  // dot-run line between the header row and the first data row (B004's own separator rule,
+  // §12, is guide DOTS bridging a gap WITHIN a row, between columns — nothing to do with a
+  // full header-separation line). Emboss used to emit the BANA-only §11.4.2b/c line in UKAAF
+  // mode too; written to fail against the pre-Task-2 formatter (verified by hand against the
+  // saved pre-change copy in this task's scratch directory).
+  test('UKAAF has no header separation line at all, unlike BANA (B004 §12 / Appendix E)', () => {
+    const o = fakeOpts('ukaaf', 40);
+    const lines = clean(formatBlock(block, o));
+    const headerIdx = lines.findIndex((l) => l.includes('NAME') && l.includes('SCORE'));
+    assert.ok(headerIdx >= 0, JSON.stringify(lines));
+    // The line right after the header is the first DATA row, not a dot-run separator.
+    const afterHeader = lines[headerIdx + 1];
+    assert.ok(afterHeader && afterHeader.includes('ANN'), `UKAAF: no separator line between the header and the first data row: ${JSON.stringify(lines)}`);
+    assert.ok(!lines.some((l) => /^[\s"]+$/.test(l) && l.includes('"')), `UKAAF: no line anywhere should be pure guide-dot/blank cells: ${JSON.stringify(lines)}`);
+    parity(block, o);
   });
 
   test('a table with every column headed keeps one dot run per column (regression)', () => {

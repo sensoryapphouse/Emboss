@@ -18,7 +18,7 @@
         "kind": "list",
         "items": [
           {
-            "text": "1. Parent's female child a1 (8)"
+            "text": "1. Parent’s female child"
           }
         ],
         "features": "Verified against the PDF page image (p.521): print shows only \"1. Parent’s female child\"; the \"(a1) (8)\" (transcriber-assigned column/row + letter count) exists only in the braille, per 19.5.2e/f/g. Decoded from the given braille: the column/row designator \"a1\" is plain text inside the embedded note, while the letter-count \"(8)\" is separately parenthesized inside that SAME note (BRF opening/closing parenthesis \"<\"/\">\", confirmed against the symbols appendix, source line 18498) — both enclosed in ONE embedded transcriber's note (@.<...@.>) immediately after the clue, on the same line. Emboss has no inline/embedded-note mechanism (F-221), so this is built as plain appended text; expect the model's own output to be missing the TN enclosure marks around \"a1 (8)\"."
@@ -41,5 +41,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree; independently re-derived and decoded). Print side: reconciled to what the PDF page image actually shows (just the clue, no column/row/count annotation) plus a documented decode of the embedded note's own content, appended to the clue text since Emboss has no embedded-note mechanism to build it properly (F-221)."
+  "resolution": "Braille unchanged (A and B agree; independently re-derived and decoded). Print side: reconciled to what the PDF page image actually shows (just the clue, no column/row/count annotation) plus a documented decode of the embedded note's own content, appended to the clue text since Emboss has no embedded-note mechanism to build it properly (F-221). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.items.0.text",
+      "was": "1. Parent's female child a1 (8)",
+      "now": "1. Parent’s female child",
+      "evidence": "Page image references/_gemini/_done/gold-19-A/page-521.png (Example 19-4): print shows only '1. Parent’s female child'; 'a1 (8)' is the braille-only embedded note (19.5.2e-g), not print. Gold item text had it appended."
+    }
+  ]
 }

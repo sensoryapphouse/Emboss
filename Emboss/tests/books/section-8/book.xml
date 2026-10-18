@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-8"/>
+<meta name="dc:Title" content="Lists"/>
+<meta name="dc:Identifier" content="test-section-8"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Lists</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>Lists</h1>
+<p>As the groups prepared, their thoughts included (a) would they travel well, (b) would it be dangerous, and (c) would they see home again.</p>
+<list type="pl"><li>cat</li><li>dog</li><li>mouse</li><li>cow</li><li>horse</li></list>
+<list type="ol" enum="1"><li>First step in the recipe.</li><li>Second step, which is long enough that it needs to wrap onto a runover line.</li><li>Third step.</li></list>
+<list type="ul"><li>Bullet one</li><li>Bullet two
+<list type="ul"><li>Nested bullet</li><li>Another nested bullet</li></list></li></list>
+<list type="ol" enum="a"><li>alpha item</li><li>beta item</li></list>
+<dl><dt>Noun</dt><dd>A word that names a person, place or thing.</dd><dt>Verb</dt><dd>A word for an action.</dd></dl>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

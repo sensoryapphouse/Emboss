@@ -24,7 +24,7 @@
           },
           {
             "level": 1,
-            "text": "der Laden, \""
+            "text": "der Laden, ¨—"
           },
           {
             "level": 1,
@@ -48,11 +48,19 @@
     "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-38: ...' title and 4 leading blank lines — removed; the remaining 3 real lines already had their margin correctly stripped."
   },
   "uncertain": [
-    "The repetition symbol in the second print entry 'der Laden, \"' is a ditto mark or double quote; transcribed as '\"'."
+    "The glyph on line 2 ('der Laden, ¨—') is read as a dash with a diaeresis above it (¨—), per the review's round-2 question 3, not yet confirmed against the source image with certainty."
   ],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks)."
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks). braille.lines left unchanged by the 2026-09-25 print-description correction (below); only the print reading of line 2's repetition symbol was wrong.",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[1].text",
+      "was": "der Laden, \"",
+      "now": "der Laden, ¨—",
+      "evidence": "PDF page 578: the repetition symbol is a dash with a diaeresis above it (¨—), not a plain double-quote/ditto mark as originally transcribed. See Emboss/docs/bana-2024-changes-review.md round-2 question 3: the exact glyph (dash vs. hyphen) is not fully certain, kept in `uncertain`."
+    }
+  ]
 }

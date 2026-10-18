@@ -16,7 +16,8 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "Insert an adjective where you see a ^."
+        "text": "Insert an adjective where you see a ^.",
+        "directions": true
       },
       {
         "kind": "paragraph",
@@ -42,5 +43,13 @@
     "A",
     "B"
   ],
-  "resolution": "Run A’s braille.lines is correct — confirmed directly against the source (line 14586 reads '\": y see a @54' verbatim) and by forward-translating \"Insert an adjective where you see a ^.\" through Emboss’s own translator (louis.translate, uebG2), which reproduces run A’s line character-for-character. Run B’s own '\":]e y see a @54' does not occur anywhere in the source and does not forward-translate from any plausible English wording — a transcription error unique to run B (matches this task’s own advance \"Known\" note). Caret (^) is an ordinary UEB print symbol (not transcriber-defined, F-188 does not apply here) — confirmed live: translating a literal \"^\" character reproduces \"@5\" with zero Emboss-specific code, and the numbered exercise item \"1. He has ^ hair. (long, shaggy, short)\" forward-translates to the given braille’s second line exactly, parentheses included (ordinary UEB punctuation, ~F-187’s own contrast case)."
+  "resolution": "Run A’s braille.lines is correct — confirmed directly against the source (line 14586 reads '\": y see a @54' verbatim) and by forward-translating \"Insert an adjective where you see a ^.\" through Emboss’s own translator (louis.translate, uebG2), which reproduces run A’s line character-for-character. Run B’s own '\":]e y see a @54' does not occur anywhere in the source and does not forward-translate from any plausible English wording — a transcription error unique to run B (matches this task’s own advance \"Known\" note). Caret (^) is an ordinary UEB print symbol (not transcriber-defined, F-188 does not apply here) — confirmed live: translating a literal \"^\" character reproduces \"@5\" with zero Emboss-specific code, and the numbered exercise item \"1. He has ^ hair. (long, shaggy, short)\" forward-translates to the given braille’s second line exactly, parentheses included (ordinary UEB punctuation, ~F-187’s own contrast case). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-504.png: the opening sentence is an instruction to the student (imperative exercise directions) set as an indented first paragraph; the gold braille sets it 5-5."
+    }
+  ]
 }

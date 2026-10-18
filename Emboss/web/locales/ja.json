@@ -60,10 +60,13 @@
     "toc": "目次",
     "print": "印刷表示 (LHS)",
     "braille": "点字",
+    "export": "エクスポート",
+    "export_title": "点字 (BRF、eBraille) をエクスポートするか、エンボッサーに送信",
+    "emboss_menu": "エンボッサーに送信",
     "braille_view": "点字ビュー",
     "download_brf": "点字 (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "エンボス",
     "emboss_tooltip": "ドキュメントをエンボッサーまたはプリンターに送信",
     "clear_doc": "ドキュメントをクリア",
@@ -133,8 +136,6 @@
     "poem_desc": "詩的詩句韻文ライン (1-3)",
     "exercise_title": "演習問題",
     "exercise_desc": "番号付き演習問題 (1-5 / 3-5)",
-    "caption_title": "キャプション/著作権",
-    "caption_desc": "図のキャプションまたは著作権表示 (7-5)",
     "footnote_title": "脚注",
     "footnote_desc": "脚注テキスト (1-3)",
     "note_title": "翻訳者の注釈",
@@ -163,8 +164,6 @@
     "page_desc": "ソース印刷ページ区切りインジケーターを挿入",
     "printpage_title": "印刷ページ番号",
     "printpage_desc": "ソース印刷ページ区切りインジケーターを挿入",
-    "code_title": "コンピューターコード",
-    "code_desc": "UEBインジケーター付きのコードブロックを挿入",
     "indent_title": "インデント / ネストされた副項目",
     "indent_desc": "リストアイテムまたは演習をより深くネスト (Tab)",
     "outdent_title": "アウトデント / 項目を昇格",
@@ -185,8 +184,8 @@
     "language_label": "インターフェース言語",
     "language_help": "ボタン、メニュー、ダイアログ、スクリーンリーダーアナウンスに使用される言語を選択してください。",
     "standard_label": "点字標準",
-    "standard_bana": "BANA (アメリカ・カナダ — 40×25セル)",
-    "standard_ukaaf": "UKAAF (イギリス・国際 — 38×25セル)",
+    "standard_bana": "BANA (アメリカ・カナダ — 38×25セル)",
+    "standard_ukaaf": "UKAAF (イギリス・国際 — 38×27セル)",
     "grade_label": "収縮レベル",
     "grade_1": "グレード1 (無収縮/文字ごと)",
     "grade_2": "グレード2 (収縮)",
@@ -261,7 +260,7 @@
     "size_full": "全ページ (1行目アンチスライス)",
     "lead_lines": "触覚リードライン",
     "braille_labels": "点字ラベル",
-    "footer_tip": "💡 黒いアウトラインは固い触覚境界になります。色は自動的に異なる触覚テクスチャーにマップされます。",
+    "footer_tip": "黒いアウトラインは固い触覚境界になります。色は自動的に異なる触覚テクスチャーにマップされます。",
     "open_repositories": "触覚リポジトリを開く:",
     "no_diagrams": "一致する図が見つかりません。"
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "ロスレスラウンドトリップステータス",
     "precedence_status": "点字優先順位ルールステータス",
     "perfect_match": "100% ラウンドトリップ一致 (不一致0件)",
-    "badge_warn": "⚠ {count} を確認",
+    "badge_warn": "{count} を確認",
     "badge_title": "ラウンドトリップ逆翻訳中に {count} 単語の不一致が見つかりました。クリックして最初のものにジャンプします。",
     "badge_clean": "ラウンドトリップチェック: 単語の不一致がありません。"
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "保存していない変更があります。保存せずに終了してもよろしいですか?",
     "unsaved_load": "保存していない変更があります。新しいファイルを読み込むと、現在のドキュメントが置き換わります。続行しますか?",
     "unsaved_clear": "保存していない変更があります。ドキュメントをクリアしてもよろしいですか?",
-    "drop_hint": "⬇ ドキュメントをドロップしてエディターにインポート",
+    "drop_hint": "ドキュメントをドロップしてエディターにインポート",
     "notice": "通知",
     "close_notice": "通知を閉じる"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "ドキュメント テキスト",
+      "math_keyboard_toggle": "数式キーボード",
       "label": "テキスト",
       "toolbar_aria": "フォーマット",
       "style_label": "段落スタイル",
@@ -443,8 +443,8 @@
       "graphic_cats": "グラフィックカテゴリ",
       "graphic_list": "触覚グラフィック図表",
       "formula_search_label": "数式を検索",
-      "btactile_link": "BTactile (無料) ↗",
-      "tgil_link": "APH TGIL (1,800+ テンプレート) ↗"
+      "btactile_link": "BTactile (無料)",
+      "tgil_link": "APH TGIL (1,800+ テンプレート)"
     },
     "settings": {
       "list_spaced": "空行リスト (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "OS プリンタドライバロックアウトをバイパスして、カスタムマイクロコントローラーエンボッサー (ESP32-S3、RP2040/RP2350、STM32、Arduino) に直接接続。",
       "graphics_hint": "チェック解除すると、ダイアグラムはテキストのみのエンボッサーとブライユディスプレイ用のアクセス可能な転写者注の説明としてエクスポート。",
       "tactile_heading": "触覚ディスプレイライブストリーム (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Bluetooth を接続 (DotPad BLE)",
-      "tactile_connect_hid": "🔌 USB / HID を接続 (Monarch)",
+      "tactile_connect_ble": "Bluetooth を接続 (DotPad BLE)",
+      "tactile_connect_hid": "USB / HID を接続 (Monarch)",
       "tactile_disconnect": "ディスプレイの接続を切断",
       "tactile_sim_monarch": "シミュレートされた Monarch をテスト (32×10)",
       "tactile_sim_dotpad": "シミュレートされた DotPad をテスト (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "WebBluetooth (DotPad BLE UART) または WebHID (Monarch/USB) 経由で、外部ドライバーなしでライブ点字ビューポートと触覚グラフィックスをストリーミング。",
       "perkins_hint": "— SDF と JKL キーで点字を入力",
       "ascii_hint": "— 生の ASCII 点字文字を表示",
+      "show_explanation_bar": "解説バーを表示",
+      "show_explanation_bar_hint": "— テキストと点字の下にある、現在の単語の点字を説明する帯",
+      "simple_mode_hint": "— Emboss をシンプルコンバーターで開きます。クイックモードとエディターの切り替えでは変更されません。",
       "covers_hint": "— 本を分割するときにタイトルカバーをエンボス"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "ヘッダー {n}",
       "cell_aria_named": "{header}、{row} 行目",
       "cell_aria": "{col} 列目、{row} 行目",
-      "too_wide_listed": "⚠ 列に対して幅が広すぎるため、リスト表として点字化されます",
+      "too_wide_listed": "列に対して幅が広すぎるため、リスト表として点字化されます",
       "too_wide_listed_title": "この表は現在の1行あたりのセル数と点字モードでは列に収まらないため、左右に並んだ列の代わりにリスト表 (BANA Formats §11.9) として点字化されます。",
-      "too_wide_paragraph": "⚠ 列に対して幅が広すぎるため、段落形式で点字化されます",
+      "too_wide_paragraph": "列に対して幅が広すぎるため、段落形式で点字化されます",
       "too_wide_paragraph_title": "この表は現在の1行あたりのセル数と点字モードでは列に収まらないため、左右に並んだ列の代わりに段落形式 (UKAAF B004 §12) で点字化されます。"
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "\"{code}\" のテーブルを読み込めませんでした — 前の点字コードを使用しています。",
-      "failed": "⚠ 点字を生成できませんでした。",
+      "failed": "点字を生成できませんでした。",
       "failed_hint": "(エンジンが初期化されていないと表示されている場合は、点字エンジンが読み込まれていません — Cmd/Ctrl+Shift+R でハード更新してください。)",
       "error_status": "レンダリングエラー: {message}"
     },
     "engine": {
       "loading": "点字エンジンを読み込み中…",
-      "failed": "⚠ 点字エンジンが読み込めませんでした。",
+      "failed": "点字エンジンが読み込めませんでした。",
       "failed_hint": "Cmd/Ctrl+Shift+R でハード更新してください。問題が続く場合は、ブラウザーコンソール (表示 ▸ 開発者) を開いてエラーを送信してください。",
       "failed_status": "エンジンが読み込めませんでした: {message}",
       "ready": "準備完了 — 左側でテキストを入力またはフォーマット; 点字がライブ更新されます。"
@@ -715,7 +718,7 @@
       "network_unreachable": "{url} に到達できません: {message}。ブラウザーは未加工の TCP (ポート 9100) 接続を開くことはできません; エンボッサーは HTTP POST を受け入れるか、.brf をダウンロードしてプリントマネージャーで送信する必要があります。",
       "usb_bridge_done": "エンボス作業は USB プリンターに配信されました!",
       "needs_webserial": "直接シリアルエンボスには WebSerial 付きブラウザー (Chrome、Edge、Opera) が必要です。.brf ファイルをダウンロードしてプリントマネージャーでエンボスするか、設定でネットワーク (ポート 9100) モードを使用できます。",
-      "detected": "🔌 検出 {name} — {cells}×{lines} に設定 ({baud} ボー)。"
+      "detected": "検出 {name} — {cells}×{lines} に設定 ({baud} ボー)。"
     },
     "symbols": {
       "title": "触覚シンボルライブラリ",
@@ -752,6 +755,11 @@
       "badge_dotpad": "ダイナミックマトリックス",
       "badge_text_only": "テキストのみ",
       "badge_index": "ドットマトリックス"
+    },
+    "offline": {
+      "ready": "Emboss をオフラインで使う準備ができました。",
+      "ready_short": "オフラインで使えます",
+      "not_yet": "オフラインで使う準備をしています…"
     }
   }
 }

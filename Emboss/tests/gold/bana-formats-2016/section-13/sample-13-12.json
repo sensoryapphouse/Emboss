@@ -87,20 +87,20 @@
       ",on a cl\\d ,i saw a *1",
       "  ,& he lau<+ sd to me3",
       "",
-      "   ^/ @+     ^/   @+      ^/ @+",
+      "   ^/ @+     ^/   @+     ^/ @+",
       "  ,piping _\\ down the _\\ valleys _\\",
       "",
       "      wild1",
       "",
-      "     ^/ @+     ^/     @+    ^/  @+",
+      "     ^/ @+     ^/    @+    ^/   @+",
       "    ,piping _\\ songs of _\\ pleasant _\\",
       "",
       "      glee1",
       "",
-      "   ^/ @+   ^/     @+    ^/ @+",
+      "   ^/ @+   ^/     @+   ^/  @+",
       "  ,on a _\\ cloud ,i _\\ saw a _\\ child1",
       "",
-      "     ^/ @+     ^/    @+     ^/  @+",
+      "     ^/  @+    ^/   @+     ^/   @+",
       "    ,and he _\\ laughing _\\ said to _\\",
       "",
       "      me3"
@@ -122,5 +122,25 @@
     "A",
     "B"
   ],
-  "resolution": "Every leading-space count independently re-derived character-by-character against the source (.txt lines 10968-10987 page 1, 10994-11010 page 2; both pages' reference-number field is 5 characters -- 2-digit max (17/19) + 3). Two lines needed a NEW value neither run had (index 0, 'William Blake' byline: 12 leading blank cells, centring a 16-character line in 40 cells -- both runs had 11; index 1, 'The Piper' title: 14 leading blank cells, centring a 12-character line in 40 cells -- run A had 10, run B had 13) and two more needed a value NEITHER run had (index 25: 5, both runs undercounted -- run A 3, run B 4; index 26: 4, run A 2, run B 3). Index 2 (caption line) matches run A's count (5); indices 33/34 match run B's counts (5/4, run A overcounted at 6/2). The page break was represented as a literal form-feed character prefixed to run B's resuming line (index 20) -- removed here since no gold file anywhere in this repository embeds a form-feed inside braille.lines; the established convention (section-9/11/16 precedent) is a separate braille.pageBreaks entry instead, added above. All other lines (29 of 37) were already identical between the two runs and independently confirmed correct against the source."
+  "resolution": "Every leading-space count independently re-derived character-by-character against the source (.txt lines 10968-10987 page 1, 10994-11010 page 2; both pages' reference-number field is 5 characters -- 2-digit max (17/19) + 3). Two lines needed a NEW value neither run had (index 0, 'William Blake' byline: 12 leading blank cells, centring a 16-character line in 40 cells -- both runs had 11; index 1, 'The Piper' title: 14 leading blank cells, centring a 12-character line in 40 cells -- run A had 10, run B had 13) and two more needed a value NEITHER run had (index 25: 5, both runs undercounted -- run A 3, run B 4; index 26: 4, run A 2, run B 3). Index 2 (caption line) matches run A's count (5); indices 33/34 match run B's counts (5/4, run A overcounted at 6/2). The page break was represented as a literal form-feed character prefixed to run B's resuming line (index 20) -- removed here since no gold file anywhere in this repository embeds a form-feed inside braille.lines; the established convention (section-9/11/16 precedent) is a separate braille.pageBreaks entry instead, added above. All other lines (29 of 37) were already identical between the two runs and independently confirmed correct against the source.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "   ^/ @+     ^/   @+      ^/ @+",
+        "     ^/ @+     ^/     @+    ^/  @+",
+        "   ^/ @+   ^/     @+    ^/ @+",
+        "     ^/ @+     ^/    @+     ^/  @+"
+      ],
+      "after": [
+        "   ^/ @+     ^/   @+     ^/ @+",
+        "     ^/ @+     ^/    @+    ^/   @+",
+        "   ^/ @+   ^/     @+   ^/  @+",
+        "     ^/  @+    ^/   @+     ^/   @+"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 20, 25, 30, 33 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 381 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: run misplaced (2); two blank cells collapsed to one, with a later gap widened by one (2). Where: poetry stress/scansion mark positions (4)."
+    }
+  ]
 }

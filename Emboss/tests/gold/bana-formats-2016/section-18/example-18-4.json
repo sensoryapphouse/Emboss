@@ -23,19 +23,15 @@
         "text": "All commas are red."
       },
       {
-        "kind": "paragraph",
-        "blocked": true,
-        "text": "No, you cannot go home now."
-      },
-      {
-        "kind": "paragraph",
-        "continuation": true,
-        "text": "Following the applause, the soloist walked off the stage."
-      },
-      {
-        "kind": "paragraph",
-        "continuation": true,
-        "text": "When you are in doubt, ask for directions."
+        "kind": "list",
+        "level": null,
+        "text": null,
+        "features": "Three short example sentences, one per line, flush left, no markers; each has a red comma.",
+        "items": [
+          "No, you cannot go home now.",
+          "Following the applause, the soloist walked off the stage.",
+          "When you are in doubt, ask for directions."
+        ]
       }
     ],
     "notes": "Three commas (after \"No\", \"applause\", \"doubt\") are printed in red; the given braille shows no distinguishing mark on any of them, matching \"ignore the emphasis\".",
@@ -62,5 +58,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording confirmed by back-translation. print.blocks ordered to match the given braille's own sequence (intro paragraph, THEN the transcriber's note, then the three example sentences) — an internal drafting slip here (not an A/B disagreement) had the note first. illustrates corrected to 18.3.3b’s own rule text (both runs already had the right rule id; A’s own quote was already this rule’s text, kept, B’s own duplicated the leading \"b.\" token, trimmed)."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording confirmed by back-translation. print.blocks ordered to match the given braille's own sequence (intro paragraph, THEN the transcriber's note, then the three example sentences) — an internal drafting slip here (not an A/B disagreement) had the note first. illustrates corrected to 18.3.3b’s own rule text (both runs already had the right rule id; A’s own quote was already this rule’s text, kept, B’s own duplicated the leading \"b.\" token, trimmed). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "three paragraph blocks (blocked / continuation) for the example sentences",
+      "now": "one list block with the three sentences as unmarked items",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-499.png (Example 18-4): under the indented instruction sentence the three example sentences are stacked one per line, flush left, unnumbered -- a list of lines, not running paragraphs."
+    }
+  ]
 }

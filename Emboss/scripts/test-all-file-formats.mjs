@@ -76,6 +76,22 @@ async function runTests() {
     record('maths.docx', 'DOCX', 0, 0, 0, e.message);
   }
 
+  // Word 97–2003 binary .doc (input/doc.mjs): the reader's fixtures, through parseFile.
+  const docDir = path.join(__dirname, '../tests/fixtures/doc');
+  const docFiles = fs.existsSync(docDir) ? fs.readdirSync(docDir).filter((f) => f.endsWith('.doc') && !/^(word6|encrypted)\.doc$/.test(f)) : [];
+  for (const df of docFiles) {
+    try {
+      const buf = fs.readFileSync(path.join(docDir, df));
+      const model = await parseFile(df, buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+      const brf = formatDocument(model, { mode: 'bana', width: 40, depth: 25, translate: t => t });
+      const pages = brf ? brf.split('\f').length : 0;
+      const lines = brf ? brf.split(/\r?\n/).filter(l => l.trim().length > 0).length : 0;
+      record(df, 'DOC', model.blocks.length, pages, lines);
+    } catch (e) {
+      record(df, 'DOC', 0, 0, 0, e.message);
+    }
+  }
+
   // ----------------------------------------------------
   // 2. HTML / XHTML Test Suite
   // ----------------------------------------------------

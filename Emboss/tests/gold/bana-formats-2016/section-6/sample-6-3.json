@@ -14,7 +14,7 @@
   },
   "print": {
     "blocks": [
-      { "kind": "heading", "level": 1, "text": "Five Wishes Wallet Card" },
+      { "kind": "heading", "level": 3, "text": "Five Wishes Wallet Card" },
       { "kind": "paragraph", "text": "Important Notice to Medical Personnel:" },
       { "kind": "paragraph", "text": "I have a Five Wishes Advance Directive." },
       { "kind": "paragraph", "text": "Signature _" },
@@ -37,7 +37,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "      ,five ,wi%es ,wallet ,c>d",
+      "       ,five ,wi%es ,wallet ,c>d",
       "",
       ",important ,notice to ,m$ical ,p]sonnel3",
       ",i h a ,five ,wi%es ,adv.e ,directive4",
@@ -69,5 +69,27 @@
     "A",
     "B"
   ],
-  "resolution": "A and B agreed byte-for-byte, but both share two errors (again the 'agreement is no evidence' case): (1) 'IMPORTANT NOTICE TO MEDICAL PERSONNEL:' transcribed as all-caps print text, when forward-translating the TITLE-CASE form 'Important Notice to Medical Personnel:' is what reproduces the agreed braille exactly (',IMPORTANT ,NOTICE TO ,M$ICAL ,P]SONNEL3' — note lowercase 'to', impossible from genuine all-caps print, which capitalizes every word); the all-caps guess would instead produce a triple-caps passage indicator, which does not match. (2) Every blank-writing field was given as a run of 11 underscores ('___________'), which forward-translates to the underscore-fill symbol repeated 11 times ('.-.-.-.-.-.-.-.-.-.-.-'); the agreed braille shows the symbol exactly ONCE per field ('.-'), confirmed by forward-translating a single underscore — matching BANA 6.7.3e's own wording ('use AN underscore', singular, to represent a blank, not one underscore per print character). Both corrections verified by exact forward-translation of every field. The combined multi-line paragraph blocks used by A/B were also split into one paragraph per printed field/line, matching the blank-line-separated shape of the agreed braille as closely as this schema allows (see print.notes re F-169)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].level",
+      "was": "1",
+      "now": "3",
+      "evidence": "Print level of a lone heading is not visible in the image (page-160.png shows the card title as small left-aligned text). Level taken from the book's braille layout: source text line 4835 starts the braille at cell 7 (6 blank cells before \",five ,wi%es\"), which is level 3 in the builder's mapping (level 3 = cell 7). Braille-derived, flagged."
+    }
+  ],
+  "resolution": "A and B agreed byte-for-byte, but both share two errors (again the 'agreement is no evidence' case): (1) 'IMPORTANT NOTICE TO MEDICAL PERSONNEL:' transcribed as all-caps print text, when forward-translating the TITLE-CASE form 'Important Notice to Medical Personnel:' is what reproduces the agreed braille exactly (',IMPORTANT ,NOTICE TO ,M$ICAL ,P]SONNEL3' — note lowercase 'to', impossible from genuine all-caps print, which capitalizes every word); the all-caps guess would instead produce a triple-caps passage indicator, which does not match. (2) Every blank-writing field was given as a run of 11 underscores ('___________'), which forward-translates to the underscore-fill symbol repeated 11 times ('.-.-.-.-.-.-.-.-.-.-.-'); the agreed braille shows the symbol exactly ONCE per field ('.-'), confirmed by forward-translating a single underscore — matching BANA 6.7.3e's own wording ('use AN underscore', singular, to represent a blank, not one underscore per print character). Both corrections verified by exact forward-translation of every field. The combined multi-line paragraph blocks used by A/B were also split into one paragraph per printed field/line, matching the blank-line-separated shape of the agreed braille as closely as this schema allows (see print.notes re F-169). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      ,five ,wi%es ,wallet ,c>d"
+      ],
+      "after": [
+        "       ,five ,wi%es ,wallet ,c>d"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 161 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: run misplaced (1). Where: leading indentation / centring (1)."
+    }
+  ]
 }

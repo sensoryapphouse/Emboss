@@ -32,13 +32,15 @@
                 "text": "And there will I keep you forever,"
               },
               {
-                "text": "Yes, forever and a day,"
+                "text": "Yes, forever and a day,",
+                "indent": 1
               },
               {
                 "text": "Till the walls shall crumble to ruin,"
               },
               {
-                "text": "And moulder in dust away!"
+                "text": "And moulder in dust away!",
+                "indent": 1
               }
             ]
           }
@@ -101,5 +103,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7993-8007). Print unchanged from A/B; the poem is built via the same {type:'play',subtype:'verse'} mechanism buildModel13 already uses for §13 poems, since document.mjs has no exercise-specific poem handling."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7993-8007). Print unchanged from A/B; the poem is built via the same {type:'play',subtype:'verse'} mechanism buildModel13 already uses for §13 poems, since document.mjs has no exercise-specific poem handling. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].stanzas[0].lines[1] and [3] (indent)",
+      "was": "no indent on any of the four lines",
+      "now": "indent 1 on lines 2 (\"Yes, forever and a day,\") and 4 (\"And moulder in dust away!\")",
+      "evidence": "references/_gemini/_done/gold-10-A/page-273.png, Sample 10-4 print: the poem is set with lines 2 and 4 indented under lines 1 and 3; the gold braille also steps lines 2 and 4 in (cells 7/9 pattern)."
+    }
+  ]
 }

@@ -6,8 +6,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser, ENGINE_LABEL } from './lib/launch-browser.mjs';
 import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, registerLocale } from '../web/i18n.mjs';
+const PORT = Number(process.argv.slice(2).find((a) => /^\d+$/.test(a)) || process.env.PORT || 8137);   // A63: a port argument, for agents on their own dev server
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = path.join(__dirname, '../web/locales');
@@ -137,11 +138,7 @@ ok('common.save is "Save"', t('common.save') === 'Save');
 // =========================================================================
 console.log('\nPart 2: Headless Chrome Direct Braille Editor Integration');
 
-const browser = await chromium.launch({
-  channel: 'chrome',
-  headless: !process.argv.includes('--show'),
-  args: ['--no-sandbox']
-});
+const browser = await launchBrowser({ args: ['--no-sandbox'] });
 const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
 
 await context.addInitScript(() => {
@@ -164,7 +161,7 @@ const waitFor = async (fn, what, ms = 12000) => {
 page.on('pageerror', (err) => console.error('  ✖ Page error:', err.message));
 
 try {
-  await page.goto('http://localhost:8137/editor/index.html', { waitUntil: 'load' });
+  await page.goto(`http://localhost:${PORT}/editor/index.html`, { waitUntil: 'load' });
   await waitFor(() => typeof window.t === 'function' && typeof window.setLocale === 'function', 'i18n engine on window');
   await new Promise((r) => setTimeout(r, 300));
 
@@ -303,7 +300,7 @@ try {
 // =========================================================================
 // Summary
 // =========================================================================
-console.log(`\n=== Emboss Global Localization Test Results: ${pass} passed, ${failures.length} failed ===`);
+console.log(`\n=== Emboss Global Localization Test Results [${ENGINE_LABEL}]: ${pass} passed, ${failures.length} failed ===`);
 if (failures.length > 0) {
   console.error('Failures:', failures);
   process.exit(1);

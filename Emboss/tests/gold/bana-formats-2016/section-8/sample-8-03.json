@@ -45,9 +45,9 @@
       },
       {
         "kind": "heading",
-        "level": null,
+        "level": 2,
         "text": "Internet-Based Health Care",
-        "features": "Bold centered heading, immediately after the page turn."
+        "features": "Bold heading, left-aligned and indented (not centred), immediately after the page turn."
       },
       {
         "kind": "paragraph",
@@ -58,7 +58,7 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "Same three questions as Sample 8-2, but the new print page opens with a bold centered heading rather than a plain paragraph."
+    "printFeatures": "Same three questions as Sample 8-2, but the new print page opens with a bold indented heading rather than a plain paragraph."
   },
   "braille": {
     "width": 40,
@@ -77,9 +77,23 @@
     "notes": "Lines 1-5 as in Sample 8-2; line 6 is the page-change dash rule ('#fe' = 65); line 7 is a single blank line — per 8.3.2.d this is the only blank line retained where format would otherwise call for one both before and after the page-change indicator; line 8 is the heading ',9t]net-,bas$ ,h1l? ,c>e' (Internet-Based Health Care), begun 4 cells in, with no blank line between it and the page-change indicator above or the paragraph text below; line 9 begins the paragraph ('A patient communicates...'), ending '444'."
   },
   "uncertain": [],
-  "resolution": "braille.lines byte-identical between A and B; the \"(Return to Text)\" navigation line is correctly excluded from `lines` by both (per the section-11 precedent and this task’s standing decision). Only prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s kept as the base, with B’s explicit note on the \"(Return to Text)\" exclusion folded in.",
+  "resolution": "braille.lines byte-identical between A and B; the \"(Return to Text)\" navigation line is correctly excluded from `lines` by both (per the section-11 precedent and this task’s standing decision). Only prose fields (features/surroundingText/printFeatures/notes) differed in wording — A’s kept as the base, with B’s explicit note on the \"(Return to Text)\" exclusion folded in. Print description corrected 23 Sep 2026 (see printCorrections).",
   "sources": [
     "A",
     "B"
+  ],
+  "printCorrections": [
+    {
+      "field": "print.blocks[2].level",
+      "was": "null",
+      "now": "2",
+      "evidence": "Page image p.211: \"Internet-Based Health Care\" is bold, left-aligned with an indent, sitting between the page number and the paragraph; a cell-5 style heading, so level 2 (runner builds a heading only when level is set)."
+    },
+    {
+      "field": "print.blocks[2].features / print.printFeatures",
+      "was": "Bold centered heading / bold centered heading",
+      "now": "Bold heading, left-aligned and indented (not centred) / bold indented heading",
+      "evidence": "Page image p.211: the heading starts left of the paragraph indent and is not centred on the line."
+    }
   ]
 }

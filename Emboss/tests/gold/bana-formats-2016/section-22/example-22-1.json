@@ -1,0 +1,72 @@
+{
+  "id": "example-22-1",
+  "title": "Example 22-1: Bibliography",
+  "pdfPages": [
+    1
+  ],
+  "textLines": [
+    17237,
+    17254
+  ],
+  "illustrates": {
+    "rule": "22.2.1",
+    "quote": "List each bibliography entry using 1-3 margins. See Formats, §22.3 to learn how to format annotated bibliographies."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "Leiber, M. J., and Jamieson, K. M. 1995. Race and Decision making within juvenile justice: The importance of context. Journal of Quantitative Criminology 11(4)363-388.",
+        "features": "Hanging indent (first line at margin, runovers indented). 'Journal of Quantitative Criminology' in italics.",
+        "emphasis": [
+          [
+            "Journal of Quantitative Criminology",
+            "i"
+          ]
+        ]
+      },
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "Poupart, L. 1995. The overrepresentation of minority youths in the California juvenile justice administration: Racial disparities in an urban juvenile court. In Minorities in Juvenile Justice edited by K. K. Leonard, C. E. Pope, and W. Feyerherm. Thousand Oaks, CA: Sage Publications.",
+        "features": "Hanging indent. 'Minorities in Juvenile Justice' in italics.",
+        "emphasis": [
+          [
+            "Minorities in Juvenile Justice",
+            "i"
+          ]
+        ]
+      }
+    ],
+    "notes": "Print original is the picture in the example box (gold-22-A/page-597.png).",
+    "surroundingText": null,
+    "printFeatures": "Bibliography entries with hanging indents."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",leib]1 ;,m4 ;,j41 & ,jamieson1 ;,k4",
+      "  ;,m4 #aiie4 ,race & ,deci.n mak+ )9",
+      "  juv5ile ju/ice3 ,! import.e ( 3text4",
+      "  .7,j\\rnal ( ,quantitative",
+      "  ,crim9ology.' #aa\"<#d\">#cfc-#chh4",
+      ",p\\\"p1 ;,l4 #aiie4 ,! ov]repres5ta;n (",
+      "  m9or;y y\\?s 9 ! ,cali=nia juv5ile",
+      "  ju/ice adm9i/ra;n3 ,racial 4p>ities 9",
+      "  an urban juv5ile c\\rt4 ,9 .7,m9orities",
+      "  9 ,juv5ile ,ju/ice.' $it$ by ;,k4 ;,k4",
+      "  ,leon>d1 ;,c4 ;,e4 ,pope1 & ;,w4",
+      "  ,fey]h]m4 ,?\\s& ,oaks1 ,,ca3 ,sage",
+      "  ,publica;ns4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 14. Runover indent kept as spaces (U+2800 cells converted). 4 blank picture-area source lines after the caption are excluded."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree with the source and with each other. A dropped a backslash on line 6 (',p\"p1' for ',p\\\"p1', the 'ou' contraction in 'Poupart'); B and the source have it, so the source line is kept. Neither run listed the print-picture blank lines here, so no gap handling was needed in the runs; the 4 blank source lines after the caption are print-original area and are excluded, as in section 20. illustrates: A and B rule text agrees with the source (verified). print: A and B agree in text; italic extents checked against the braille passage indicators and the page image (the italic run includes the full stop where the braille terminator follows the period). pdfPages: A gave the PNG number ([597]), B the section page; B's is used."
+}

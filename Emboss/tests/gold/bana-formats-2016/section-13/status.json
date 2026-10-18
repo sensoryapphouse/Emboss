@@ -1,7 +1,7 @@
 {
   "example-13-1": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"444 SU7E/+ T 8! TRU/ ,O!LLO PUTS HM 9 _/\" vs actual \"  444 SU7E/+ T 8! TRU/ ,O!LLO PUTS HM 9\"."
+    "status": "match",
+    "note": "match"
   },
   "example-13-2": {
     "status": "match",
@@ -24,12 +24,12 @@
     "note": "first differing line 1: expected \",ALL ! NI<T SLEEP CAME N ^U MY EYELIDS\" vs actual \",ALL ! _\\\\ NI<T SLEEP _\\\\ CAME N U_\\\\PON MY\". line count differs by -2 (expected 4, actual 2)."
   },
   "example-13-7": {
-    "status": "not-representable",
-    "note": "first differing line 1: expected \"@+^/ _\\\\ @+@+^/ _\\\\ @+@+^/\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): \"\""
+    "status": "match",
+    "note": "match"
   },
   "sample-13-01": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \",PRES5T$ \\\"H IS A FAMILI> EXAMPLE F \\\"O (\" vs actual \"  ,PRES5T$ \\\"H IS A FAMILI> EXAMPLE F \\\"O\"."
+    "status": "match",
+    "note": "match"
   },
   "sample-13-02": {
     "status": "mismatch",
@@ -40,8 +40,8 @@
     "note": "first differing line 3: expected \"           ,PATRICK ,W9/ANLEY\" vs actual \"  ,PATRICK ,W9/ANLEY\". line count differs by -6 (expected 9, actual 3). Input-model limitation: print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): \"AMPERSAND IS MUCH MORE GRAND ... AN 'AND', BUT AN 'AND' IS SIMPLY AN AMPERSAND (exact wording and reading order uncertain -- see "
   },
   "sample-13-04": {
-    "status": "mismatch",
-    "note": "first differing line 16: expected \"    E4E4 CUMM+S\" vs actual \"\". line count differs by +1 (expected 16, actual 17)."
+    "status": "match",
+    "note": "match"
   },
   "sample-13-05": {
     "status": "mismatch",
@@ -49,15 +49,15 @@
   },
   "sample-13-06": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,? POEM HAS UNUSUAL LR &    #.-\" vs actual \"BR\\\"\\\\ ALL(H] TREM,B\". line count differs by -5 (expected 12, actual 7)."
+    "note": "first differing line 1: expected \"      @.<,? POEM HAS UNUSUAL LR &    #.-\" vs actual \";;;BROUGHT ALLOFHER TREM,B\". line count differs by -5 (expected 12, actual 7)."
   },
   "sample-13-07": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"    .1,T5D] .1,BUTTONS .<,A ,*AIR.>\" vs actual \"      ,T5D] ,BUTTONS .<,A ,*AIR.>\"."
+    "note": "first differing line 1: expected \"    .1,T5D] .1,BUTTONS .<,A ,*AIR.>\" vs actual \"      ,T5D] ,BUTTONS .<,A ,*AIR.>\". line count differs by +3 (expected 13, actual 16)."
   },
   "sample-13-08": {
-    "status": "not-representable",
-    "note": "first differing line 3: expected \",F ! NOISE ( ! :EEL & ! CL>ION;9#A HORN\" vs actual \",F ! NOISE ( ! :EEL & ! CL>ION'\\\\X00B9'\". line count differs by -4 (expected 10, actual 6). Input-model limitation: print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): \"¹clarion (klar’-ē-ən): loud and clear.\""
+    "status": "mismatch",
+    "note": "first differing line 6: expected \"\\\"333333\" vs actual \"\". line count differs by -1 (expected 10, actual 9)."
   },
   "sample-13-09": {
     "status": "mismatch",
@@ -69,7 +69,7 @@
   },
   "sample-13-11": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \",AH1 4T9CTLY ,I REMEMB] X 0 9 !       #,-\" vs actual \",AH1 4T9CTLY ,I REMEMB] X 0 9 ! BL1K\". line count differs by -7 (expected 11, actual 4)."
+    "note": "first differing line 1: expected \",AH1 4T9CTLY ,I REMEMB] X 0 9 !       #,-\" vs actual \",AH1 DIS _\\\\ -T9CT-LY _\\\\ ,I RE _\\\\ -MEM-B]\". line count differs by -5 (expected 11, actual 6)."
   },
   "sample-13-12": {
     "status": "mismatch",
@@ -81,7 +81,7 @@
   },
   "sample-13-14": {
     "status": "not-representable",
-    "note": "first differing line 6: expected \",BY C\\\\RT9' TOO SL[4\" vs actual \",BY C\\\\RT9,0 TOO SL[4\". line count differs by +4 (expected 14, actual 18). Input-model limitation: print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): \"\""
+    "note": "first differing line 10: expected \"444\" vs actual \",& \\\"P+ IS GRIEF2\". line count differs by +4 (expected 14, actual 18). Input-model limitation: print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): \"\""
   },
   "sample-note-13-6-2": {
     "status": "no-braille",

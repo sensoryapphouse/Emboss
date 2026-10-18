@@ -1,0 +1,88 @@
+{
+  "id": "sample-2-19",
+  "title": "Sample 2-19: Transposed Notes",
+  "pdfPages": [
+    46,
+    47
+  ],
+  "textLines": [
+    2731,
+    2764
+  ],
+  "illustrates": {
+    "rule": "2.10.12c",
+    "quote": "c. The text itself is not repeated in its original print location. Insert a transcriber’s note, on the original print page, indicating where the material can be found. (See Sample 2-19: Transposed Notes on page 2-46.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-090.png, page-091.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "            ,detail$ ,3t5ts          xiv",
+      "",
+      "                 ,\"p #e",
+      "        ,/ate & ,local ,gov]n;t",
+      "#ba ,! ,new ,face ( ,/ate & ,local",
+      "      ,gov]n;t \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #fef",
+      "  ,/ate ,3/itu;ns \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #fei",
+      "    ,am5d+ ,/ate ,3/itu;ns \"\"\"\"\"\"\"\" #ffj",
+      "  ,/ate ,elec;ns \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #ffa",
+      "    ,gub]natorial ,elec;ns \"\"\"\"\"\"\"\" #ffa",
+      "    ,/ate ,legislative ,elec;ns \"\"\" #ffb",
+      "    ,! ,*ang+ ,face ( ,/ate",
+      "      ,elect$ ,(ficials \"\"\"\"\"\"\"\"\"\"\" #fff",
+      "  ,mak+ a ,di6];e3 ,*>l5e ,m>%all   #ffh",
+      "444",
+      "  ,\"u/&+ ,/ate & ,local ,gov]n;ts   #fia",
+      "    ,democracy at ! ,subna;nal",
+      "      ,level \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #fia",
+      "  _4 ,y ,>e ! ,policymak]3 ,%d ,yr",
+      "      ,/ate ,take a ,*.e on",
+      "      ,gambl+8 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #fib",
+      "",
+      ",notes \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #gch",
+      ",key ,t]ms 9 ,spani% \"\"\"\"\"\"\"\"\"\"\"\"\"\" #ged",
+      "                                     p#b"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "             ,detail$ ,3t5ts          xiv"
+      ],
+      "after": [
+        "            ,detail$ ,3t5ts          xiv"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 4 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 91 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: leading indentation / centring (1)."
+    },
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.91: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 4"
+    }
+  ]
+}

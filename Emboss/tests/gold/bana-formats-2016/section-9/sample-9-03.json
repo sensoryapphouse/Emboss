@@ -12,6 +12,7 @@
       {
         "kind": "paragraph",
         "level": null,
+        "directions": true,
         "text": "Write a word that means the same as the underlined word in the sentence.",
         "features": null
       },
@@ -19,7 +20,7 @@
         "kind": "list",
         "level": null,
         "text": null,
-        "features": "Six words displayed in print as two rows of three; too long to fit one braille line, so arranged in columns left to right per 9.2.5a, with two blank cells between columns per 9.2.5b and no guide dots between the unrelated columns per 9.2.5c.",
+        "features": "Six words displayed in print in one row; too long to fit one braille line, so arranged in columns left to right per 9.2.5a, with two blank cells between columns per 9.2.5b and no guide dots between the unrelated columns per 9.2.5c.",
         "items": ["mailbox", "nearby", "into", "sometimes", "sunrise", "anything"]
       },
       {
@@ -28,15 +29,15 @@
         "text": null,
         "features": "Three numbered sentences, each with one target word underlined in print; item runovers indented 2 cells beyond the item's own start.",
         "items": [
-          "Carmen and I will wake up to go fishing before dawn.",
-          "The bus driver asked, “Is there a gas station around?”",
-          "The campers went inside the tent."
+          { "marker": "1.", "level": 1, "text": "Carmen and I will wake up to go fishing before <u>dawn</u>." },
+          { "marker": "2.", "level": 1, "text": "The bus driver asked, “Is there a gas station <u>around</u>?”" },
+          { "marker": "3.", "level": 1, "text": "The campers went <u>inside</u> the tent." }
         ]
       }
     ],
     "notes": "Direct worked example of 9.2.5a-c: the six-word list is too long for one braille line and is set in two columns.",
     "surroundingText": null,
-    "printFeatures": "Plain (unboxed) worksheet text; the six list words are printed in two rows of three; one word is underlined in each of the three numbered sentences."
+    "printFeatures": "Plain (unboxed) worksheet text; the six list words are printed in one row; one word is underlined in each of the three numbered sentences."
   },
   "braille": {
     "width": 40,
@@ -44,8 +45,8 @@
       "    ,write a ^w t m1ns ! same z ! \"ul9$",
       "    ^w 9 ! s5t;e4",
       "",
-      "mailbox ne>by     9to",
-      "\"s\"ts     sunrise any?+",
+      "mailbox  ne>by    9to",
+      "\"s\"ts    sunrise  any?+",
       "",
       "#a4 ,c>m5 & ,i w wake up to g fi%+ 2f",
       "  _1dawn4",
@@ -61,5 +62,41 @@
     "The exact column alignment of the multi-space gaps in the word-list lines is preserved verbatim from the source, but the precise number of blank cells intended between each column pair was not independently re-derived from a print column ruler."
   ],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6942-6952 after stripping the 5-character line-number field (the '(Return to Text)' line 6953 excluded). `illustrates.rule` narrowed to 9.2.5.a specifically (B quoted the whole of 9.2.5, a-d) since this sample's column layout is specifically clause a's own case. Second list's items: A included the underlined target word inline in parentheses (e.g. '(dawn underlined)'); B gave the plain sentence only. Resolved to B's plain text (matching what the braille itself actually contains -- an underline-word indicator on the target word, not a parenthetical annotation) with the underlining fact moved to `features` instead of into `text`."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p240 (Sample 9-3): the first line is the exercise instruction \"Write a word that means the same as the underlined word in the sentence.\" (BANA 10.3.2 directions; builder reads b.directions on a paragraph)."
+    },
+    {
+      "field": "print.blocks[1].features and printFeatures",
+      "was": "two rows of three",
+      "now": "one row",
+      "evidence": "Same page image: the six words \"mailbox nearby into sometimes sunrise anything\" are printed on ONE line. Only the description changed; items unchanged."
+    },
+    {
+      "field": "print.blocks[2].items",
+      "was": "three plain strings, no markers, no underline",
+      "now": "{marker \"1.\"/\"2.\"/\"3.\", level 1, text with <u>dawn</u> / <u>around</u> / <u>inside</u>}",
+      "evidence": "Same page image: the sentences are numbered \"1.\" \"2.\" \"3.\" and the words dawn, around and inside are underlined (the punctuation after them is not)."
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6942-6952 after stripping the 5-character line-number field (the '(Return to Text)' line 6953 excluded). `illustrates.rule` narrowed to 9.2.5.a specifically (B quoted the whole of 9.2.5, a-d) since this sample's column layout is specifically clause a's own case. Second list's items: A included the underlined target word inline in parentheses (e.g. '(dawn underlined)'); B gave the plain sentence only. Resolved to B's plain text (matching what the braille itself actually contains -- an underline-word indicator on the target word, not a parenthetical annotation) with the underlining fact moved to `features` instead of into `text`. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "mailbox ne>by     9to",
+        "\"s\"ts     sunrise any?+"
+      ],
+      "after": [
+        "mailbox  ne>by    9to",
+        "\"s\"ts    sunrise  any?+"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 240 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (2). Where: column gap (table / related columns / columned list) (2)."
+    }
+  ]
 }

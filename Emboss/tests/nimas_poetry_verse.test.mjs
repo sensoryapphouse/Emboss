@@ -211,9 +211,13 @@ test('Poetry with Inline Formatting & Math: <em>, <strong>, <u>, and <math> insi
   assert.ok(mathSeg, 'Math segment should exist');
   assert.ok(mathSeg.mathml.includes('<mi>m</mi>') || mathSeg.mathml.includes('mc'), 'Math segment should retain MathML');
 
-  // Verify roundtrip serialization to NIMAS DTBook XML
+  // Verify roundtrip serialization to NIMAS DTBook XML.
+  // A19/A21 (D5): this poem was read from a real <poem>/<linegroup>/<line> source, so it is
+  // tagged fromPoem and must save back the same way, not flattened to <p class="bai-verse">
+  // (that shape is now reserved for BrailleBlaster's bai-verse, verse *drama*, per D5).
   const exportedXml = exportToNimas(doc);
-  assert.ok(exportedXml.includes('<p class="bai-verse">'), 'Exported XML should contain verse paragraphs');
+  assert.ok(exportedXml.includes('<poem>') && exportedXml.includes('<linegroup>'), 'Exported XML should contain <poem>/<linegroup>');
+  assert.equal(exportedXml.includes('<p class="bai-verse">'), false, 'A genuine poem should no longer flatten to <p class="bai-verse"> paragraphs');
   assert.ok(exportedXml.includes('<em>you shall hear</em>'), 'Exported XML should preserve em tags');
   assert.ok(exportedXml.includes('<strong>midnight ride</strong>'), 'Exported XML should preserve strong tags');
   assert.ok(exportedXml.includes('class="underline">eighteenth of April</span>') || exportedXml.includes('<u>eighteenth of April</u>'), 'Exported XML should preserve underline tags');

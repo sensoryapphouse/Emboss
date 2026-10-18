@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 10 Exercise Material"/><meta name="dc:Identifier" content="stage4-10"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 10 Exercise Material</doctitle></frontmatter><bodymatter><level1>
+<h1>Chapter 3 Exercises</h1>
+<p>Directions: Read each question and write your answer in the space provided.</p>
+<list type="ol">
+<li>Name the three primary colours.</li>
+<li>Which planet is closest to the sun?
+<list type="ol" enum="a"><li>Venus</li><li>Mercury</li><li>Mars</li></list></li>
+<li>Complete the sentence: The cat sat on the ______.</li>
+</list>
+<h2>True or False</h2>
+<p>Write T or F beside each statement.</p>
+<list type="pl"><li>Water boils at 100 degrees Celsius.</li><li>The moon is a star.</li></list>
+<p>Matching: draw a line from each word to its <em>opposite</em>.</p>
+<table><thead><tr><th>Word</th><th>Opposite</th></tr></thead><tbody><tr><td>hot</td><td>cold</td></tr><tr><td>up</td><td>down</td></tr></tbody></table>
+</level1></bodymatter></book></dtbook>

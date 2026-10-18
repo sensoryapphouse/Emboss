@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-GB">
+<head>
+<meta name="dc:Title" content="Audit DTBook alphadctitle"/>
+<meta name="dc:Creator" content="Audit Author"/>
+<meta name="dc:Language" content="en-GB"/>
+<meta name="dc:Identifier" content="audit-d01"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Audit DTBook alphadoctitle</doctitle>
+<docauthor>Audit Author alphadocauthor</docauthor>
+<level1 class="dedication"><h1>Dedication alphadedication</h1><p>For the auditors alphadedtext.</p></level1>
+</frontmatter>
+<bodymatter>
+<level1 id="l1">
+<h1>Chapter one alphach1</h1>
+<pagenum id="pg1" page="normal">1</pagenum>
+<p>Plain paragraph with <em>alphaem</em> <strong>alphastrong</strong> <sub>2</sub> <sup>2</sup> <code>alphacode</code> <kbd>alphakbd</kbd> <samp>alphasamp</samp> <q>alphaq</q> <cite>alphacite</cite> <abbr title="Abbreviation">alphaabbr</abbr> <acronym title="Acronym">alphaacr</acronym> <dfn>alphadfn</dfn> <span class="alphaspan">alphaspan</span> <span xml:lang="fr">Bonjour alphafrench</span> <a href="https://example.org/alpha">alphalink</a>.</p>
+<p>A note reference<noteref idref="#n1" id="nr1">1</noteref> and a pagenum <pagenum id="pg2" page="normal">2</pagenum>inline and a line<br/>break alphabr.</p>
+<note id="n1"><p>Note body alphanotebody.</p></note>
+<sidebar render="required"><hd>Sidebar title alphasidebarhd</hd><p>Sidebar text alphasidebar.</p></sidebar>
+<sidebar render="optional"><p>Optional sidebar alphaoptsidebar.</p></sidebar>
+<prodnote render="required">Required production note alphaprodreq</prodnote>
+<prodnote render="optional">Optional production note alphaprodopt</prodnote>
+<blockquote><p>Block quote alphablockquote</p><cite>Quote source alphaquotecite</cite></blockquote>
+<epigraph><p>Epigraph text alphaepigraph</p></epigraph>
+<poem><title>Poem title alphapoemtitle</title><author>Poet alphapoet</author><linegroup><line>Poem line one alphaline1</line><line>Poem line two alphaline2</line></linegroup><linegroup><line>Second stanza alphaline3</line></linegroup></poem>
+<linegroup><line>Bare linegroup a alphabarelg</line><line>Bare linegroup b</line></linegroup>
+<imggroup id="ig1"><img src="img1.png" alt="alphaimgalt a red square" id="img1"/><caption>Image caption alphaimgcaption</caption><prodnote render="required">Image prodnote alphaimgprod</prodnote></imggroup>
+<img src="img2.png" alt="" id="img2"/>
+<list type="ul"><li>alphaB1<list type="ul"><li>alphaB2<list type="ul"><li>alphaB3</li></list></li></list></li><li>alphaB4</li></list>
+<list type="ol" start="3" enum="a"><li>alphaN3</li><li>alphaN4</li></list>
+<list type="pl"><li>alphaplain1</li><li>alphaplain2</li></list>
+<list type="ol"><hd>List heading alphalisthd</hd><li><lic>Left alphalic</lic><lic>Right</lic></li></list>
+<dl><dt>alphaterm</dt><dd>alphadef</dd></dl>
+<table id="t1"><caption>Table caption alphatcaption</caption><thead><tr><th colspan="2">alphaSpanHead</th><th>H3</th></tr></thead><tbody><tr><td rowspan="2">alphaRowspan</td><td>d2</td><td>d3</td></tr><tr><td>e2</td><td>e3</td></tr></tbody><tfoot><tr><td>alphatfoot</td><td>x</td><td>y</td></tr></tfoot></table>
+<p>Maths: <math xmlns="http://www.w3.org/1998/Math/MathML" altimg="m.png" alttext="alphamathalt"><mfrac><mi>a</mi><mi>b</mi></mfrac></math> inline.</p>
+<level2><h2>Section alphasec</h2><p>Section body alphasecbody.</p>
+<level3><h3>Subsection alphasub</h3><p>Sub body.</p><level4><h4>Level four alphal4</h4><p>L4 body.</p><level5><h5>Level five alphal5</h5><p>L5 body.</p><level6><h6>Level six alphal6</h6><p>L6 body.</p></level6></level5></level4></level3></level2>
+<p><bridgehead>Bridgehead alphabridge</bridgehead></p>
+<div class="alphadiv"><p>Div content alphadiv.</p></div>
+</level1>
+<level1><h1>Chapter two alphach2</h1><p>Second chapter alphasecondch.</p></level1>
+</bodymatter>
+<rearmatter>
+<level1 class="glossary"><h1>Glossary alphaglossary</h1><dl><dt>alphagterm</dt><dd>alphagdef</dd></dl></level1>
+</rearmatter>
+</book>
+</dtbook>

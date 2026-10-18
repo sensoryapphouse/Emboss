@@ -1,0 +1,42 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 4,
+ "engine": "webkit",
+ "kind": "quick",
+ "doc": "tests/fixtures/libreoffice/lo-math-inline.doc",
+ "docSource": "libreoffice",
+ "docFeatures": null,
+ "docs": {
+  "tests/fixtures/libreoffice/lo-math-inline.doc": "docs/00-lo-math-inline.doc",
+  "gen:1763563818-s4-l6": "docs/01-gen-1763563818-s4-l6.md"
+ },
+ "settings": {
+  "simpleMode": true,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1000,
+  "height": 700
+ },
+ "invariant": "roundtrip-differs",
+ "key": "roundtrip-differs",
+ "message": "the braille preview after Advanced editor and back is not the one before (1737 / 1647 characters); first differences: part 6: before \"ROWNOW5WOULDOWATIONOUGHDOT.NEMETHCHFOXOCEANALTHOUGH8SEEPAGEE\" / after \"ROWNOW5WOULDOWATIONOUGHDOT.NEMETHCH#A────────pagebreak──────\" | part 7: before \"NCETHE,*<0OVERATION\\\"33333333333333333333333333333\\\"3333333333\" / after \"──PAGEREADSNUMBERREADSERE4G4OUNDFOXOCEANALTHOUGH8SEEPAGEENCE\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 20,
+ "originalActions": 51,
+ "actions": [
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s4-l6"
+  },
+  {
+   "t": "roundTrip"
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 18 Grammar"/><meta name="dc:Identifier" content="stage4-18"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 18 Grammar</doctitle></frontmatter><bodymatter><level1>
+<h1>Grammar</h1>
+<p>A noun names a person, place or thing. In the sentence <em>The dog barked</em>, the word <em>dog</em> is a noun.</p>
+<list type="ol" enum="a"><li>Subject: <em>The dog</em></li><li>Predicate: <em>barked loudly</em></li></list>
+<p><sent>The <w>quick</w> fox jumps.</sent></p>
+<p>Parts of speech include <strong>nouns</strong>, <strong>verbs</strong> and <strong>adjectives</strong>.</p>
+<table><thead><tr><th>Word</th><th>Part of speech</th></tr></thead><tbody><tr><td>run</td><td>verb</td></tr><tr><td>green</td><td>adjective</td></tr></tbody></table>
+</level1></bodymatter></book></dtbook>

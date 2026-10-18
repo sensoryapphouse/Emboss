@@ -106,7 +106,7 @@
     ],
     "notes": "Two blank print rows separate the eight English-region rows from the four home-nation rows, and again separate the home-nation rows from the final 'UK' total row — exactly what the braille preserves as blank lines per rule 11.5.4.",
     "surroundingText": null,
-    "printFeatures": "Bordered box, ruled line under every row; header row bold two-line wrap (\"Yes—Has Accessed / Funding\", \"No—Has Not / Accessed Funding\")."
+    "printFeatures": "Title \"Percentage of Practitioners Accessing Funding by Region and Nation, 2006\" (two centred lines, plain type) is ABOVE the box, outside it. Bordered box, ruled line under every row; header row bold two-line wrap (\"Yes—Has Accessed / Funding\", \"No—Has Not / Accessed Funding\"); two empty ruled rows (after West Midlands and after Wales) set off the groups."
   },
   "braille": {
     "width": 40,
@@ -120,23 +120,23 @@
       ",yes ,yes,-,has ,a3ess$ ,fund+",
       ",no ,no,-,has ,n ,a3ess$ ,fund+@.>",
       ",region_/,na;n       ,yes   ,no     a#hj",
-      "\"333333333333333333 \"3333 \"3333",
-      ",nor? ,ea/ \"\"\"\"\"\"\"\" #e.0    #ie.0",
-      ",nor? ,we/ \"\"\"\"\"\"\"\" #h.0    #ib.0",
-      ",ea/ ( ,5gl& \"\"\"\"\"\" #ad.0 #hf.0",
-      ",york%ire @& ,humb] #bc.0 #gg.0",
-      ",s\\? ,ea/ \"\"\"\"\"\"\"\"\" #bh.0 #gb.0",
-      ",s\\? ,we/ \"\"\"\"\"\"\"\"\" #cb.0 #fh.0",
-      ",ea/ ,midl&s \"\"\"\"\"\" #db.0 #eh.0",
-      ",london \"\"\"\"\"\"\"\"\"\"\" #de.0 #ee.0",
-      ",we/ ,midl&s \"\"\"\"\"\" #ej.0 #ej.0",
+      "\"333333333333333333  \"3333  \"3333",
+      ",nor? ,ea/ \"\"\"\"\"\"\"\"  #e.0   #ie.0",
+      ",nor? ,we/ \"\"\"\"\"\"\"\"  #h.0   #ib.0",
+      ",ea/ ( ,5gl& \"\"\"\"\"\"  #ad.0  #hf.0",
+      ",york%ire @& ,humb]  #bc.0  #gg.0",
+      ",s\\? ,ea/ \"\"\"\"\"\"\"\"\"  #bh.0  #gb.0",
+      ",s\\? ,we/ \"\"\"\"\"\"\"\"\"  #cb.0  #fh.0",
+      ",ea/ ,midl&s \"\"\"\"\"\"  #db.0  #eh.0",
+      ",london \"\"\"\"\"\"\"\"\"\"\"  #de.0  #ee.0",
+      ",we/ ,midl&s \"\"\"\"\"\"  #ej.0  #ej.0",
       "",
-      ",5gl& \"\"\"\"\"\"\"\"\"\"\"\"\" #cj.0 #gj.0",
-      ",nor!rn ,irel& \"\"\"\" #d.0    #if.0",
-      ",scotl& \"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0",
-      ",wales \"\"\"\"\"\"\"\"\"\"\"\" #df.0 #ed.0",
+      ",5gl& \"\"\"\"\"\"\"\"\"\"\"\"\"  #cj.0  #gj.0",
+      ",nor!rn ,irel& \"\"\"\"  #d.0   #if.0",
+      ",scotl& \"\"\"\"\"\"\"\"\"\"\"  #ca.0  #fi.0",
+      ",wales \"\"\"\"\"\"\"\"\"\"\"\"  #df.0  #ed.0",
       "",
-      ",,uk \"\"\"\"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0",
+      ",,uk \"\"\"\"\"\"\"\"\"\"\"\"\"\"  #ca.0  #fi.0",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -154,5 +154,55 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines/rows/pageBreaks content already agreed between the two runs and match the source exactly, including the explicit '—New Braille Page—' marker after line 8; pageBreaks schema normalized to run B's richer {afterLineIndex, type, note} object form."
+  "resolution": "braille.lines/rows/pageBreaks content already agreed between the two runs and match the source exactly, including the explicit '—New Braille Page—' marker after line 8; pageBreaks schema normalized to run B's richer {afterLineIndex, type, note} object form. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box, ruled line under every row; header row bold two-line wrap (\"Yes—Has Accessed / Funding\", \"No—Has Not / Accessed Funding\").",
+      "now": "Title \"Percentage of Practitioners Accessing Funding by Region and Nation, 2006\" (two centred lines, plain type) is ABOVE the box, outside it. Bordered box, ruled line under every row; header row bold two-line wrap (\"Yes—Has Accessed / Funding\", \"No—Has Not / Accessed Funding\"); two empty ruled rows (after West Midlands and after Wales) set off the groups.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.312 (90 dpi): the title is above the ruled table; the table has no title row inside it. Two blank ruled rows are visible, one after West Midlands and one after Wales."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"333333333333333333 \"3333 \"3333",
+        ",nor? ,ea/ \"\"\"\"\"\"\"\" #e.0    #ie.0",
+        ",nor? ,we/ \"\"\"\"\"\"\"\" #h.0    #ib.0",
+        ",ea/ ( ,5gl& \"\"\"\"\"\" #ad.0 #hf.0",
+        ",york%ire @& ,humb] #bc.0 #gg.0",
+        ",s\\? ,ea/ \"\"\"\"\"\"\"\"\" #bh.0 #gb.0",
+        ",s\\? ,we/ \"\"\"\"\"\"\"\"\" #cb.0 #fh.0",
+        ",ea/ ,midl&s \"\"\"\"\"\" #db.0 #eh.0",
+        ",london \"\"\"\"\"\"\"\"\"\"\" #de.0 #ee.0",
+        ",we/ ,midl&s \"\"\"\"\"\" #ej.0 #ej.0",
+        ",5gl& \"\"\"\"\"\"\"\"\"\"\"\"\" #cj.0 #gj.0",
+        ",nor!rn ,irel& \"\"\"\" #d.0    #if.0",
+        ",scotl& \"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0",
+        ",wales \"\"\"\"\"\"\"\"\"\"\"\" #df.0 #ed.0",
+        ",,uk \"\"\"\"\"\"\"\"\"\"\"\"\"\" #ca.0 #fi.0"
+      ],
+      "after": [
+        "\"333333333333333333  \"3333  \"3333",
+        ",nor? ,ea/ \"\"\"\"\"\"\"\"  #e.0   #ie.0",
+        ",nor? ,we/ \"\"\"\"\"\"\"\"  #h.0   #ib.0",
+        ",ea/ ( ,5gl& \"\"\"\"\"\"  #ad.0  #hf.0",
+        ",york%ire @& ,humb]  #bc.0  #gg.0",
+        ",s\\? ,ea/ \"\"\"\"\"\"\"\"\"  #bh.0  #gb.0",
+        ",s\\? ,we/ \"\"\"\"\"\"\"\"\"  #cb.0  #fh.0",
+        ",ea/ ,midl&s \"\"\"\"\"\"  #db.0  #eh.0",
+        ",london \"\"\"\"\"\"\"\"\"\"\"  #de.0  #ee.0",
+        ",we/ ,midl&s \"\"\"\"\"\"  #ej.0  #ej.0",
+        ",5gl& \"\"\"\"\"\"\"\"\"\"\"\"\"  #cj.0  #gj.0",
+        ",nor!rn ,irel& \"\"\"\"  #d.0   #if.0",
+        ",scotl& \"\"\"\"\"\"\"\"\"\"\"  #ca.0  #fi.0",
+        ",wales \"\"\"\"\"\"\"\"\"\"\"\"  #df.0  #ed.0",
+        ",,uk \"\"\"\"\"\"\"\"\"\"\"\"\"\"  #ca.0  #fi.0"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 25 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 313 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (12); two blank cells collapsed to one, with a later gap widened by one (3). Where: column gap (table / related columns / columned list) (14); column gap after guide dots (13); table separation line (1)."
+    }
+  ]
 }

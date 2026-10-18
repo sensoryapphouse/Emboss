@@ -1,0 +1,40 @@
+{
+  "id": "example-2-4",
+  "title": "Example 2-4: Copyright Year",
+  "pdfPages": [
+    6
+  ],
+  "textLines": [
+    1599,
+    1605
+  ],
+  "illustrates": {
+    "rule": "2.3.6d(2)",
+    "quote": "d. Copyright Notices (1) Use the copyright symbol when it appears in print. Follow print for spacing. (2) Only the most recent copyright date and copyright holder are placed on the title page of each volume. All other dates are ignored."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-050.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",copy\"r ^c #bjje by",
+      "  ,macmillan_/,mc,graw-,hill"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 0"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used)."
+}

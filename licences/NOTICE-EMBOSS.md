@@ -71,14 +71,17 @@ the modified version. To make that possible:
 * **Licence:** **MIT** (© 2020 Ron Kok) — full text in `Temml-MIT.txt`.
 * **Upstream:** https://github.com/ronkok/Temml
 
-## MathLive 0.101.2 — maths input field
+## MathLive 0.111.1 — maths input field
 
 * **Shipped as:** `vendor/mathlive.min.js` (from `web/vendor/mathlive.min.js`),
   plus the assets the MathLive package distributes with it: `vendor/sounds/`
   (keypress and plonk `.wav`) and `vendor/fonts/` (the `KaTeX_*.woff2` maths
   faces MathLive renders with).
-* **Version:** 0.101.2 — the bundle header reads `/** MathLive 0.101.2 */`;
-  `package.json` names `mathlive ^0.101.2`.
+* **Version:** 0.111.1 — the bundle header reads `/** MathLive 0.111.1 */`
+  (replaced 15 Oct 2026, S1 security audit item 24: 0.101.2 let imported maths run
+  script, GHSA-qwj6-q94f-8425 and GHSA-fm7p-gw32-828p; the fonts and sounds are
+  byte-identical to 0.101.2's). `package.json` still names `mathlive ^0.101.2`
+  until the main session bumps it.
 * **Licence:** **MIT** (© 2017–present Arno Gourdol) — full text in
   `MathLive-MIT.txt`, which is the licence file the MathLive npm package ships
   for everything in it, fonts and sounds included. The `KaTeX_*` fonts
@@ -105,6 +108,19 @@ the modified version. To make that possible:
   `Inter-OFL-1.1.txt` (also beside the fonts as `fonts/Inter-OFL.txt`).
 * **Upstream:** https://rsms.me/inter/
 
+## Iconoir — the interface icons
+
+* **Shipped as:** the line drawings inside `web/icons.mjs` (settings, close,
+  arrows, play/stop, printer, warning and the slash-menu icons), added to each
+  page as an SVG sprite — no separate icon files. Quick Mode also writes the
+  five its own markup uses (settings, close, play, download, the dropdown
+  arrow) inline, as an SVG `<symbol>` sprite at the top of `web/index.html`,
+  as Translate does, so they are drawn at first paint.
+* **Licence:** **MIT** (© 2021 Luca Burgio) — full text in `Iconoir-MIT.txt`
+  (also in `web/icons/iconoir-LICENSE.txt`, with a list of the icons used in
+  `web/icons/README.md`, as in Translate).
+* **Upstream:** https://iconoir.com
+
 ## APH Braille Shadows — the braille typeface
 
 * **Shipped as:** `fonts/APH_Braille_Shadows.{woff2,woff,ttf}`.
@@ -121,6 +137,10 @@ the modified version. To make that possible:
   Emboss runtime file imports it, so it is not part of a shipped Emboss build.
   It is listed here only so that the `Emboss/web/vendor/` directory is fully
   accounted for.
+
+* `tests/vendor/axe-core/` — axe-core 4.13.0 (MPL-2.0; its `LICENSE` is in
+  that directory), the accessibility checker `tests/test-brand-style.mjs` runs
+  in the browser. A test tool only: never copied into a build.
 
 Everything else in `dist/` — the pages, the layout engine under `format/`,
 `input/`, the `Translate/*.mjs` modules shared with Translate, and the tiny

@@ -9,7 +9,7 @@
   },
   "print": {
     "blocks": [
-      { "kind": "numbered", "text": "It rained all afternoon in a single tone. In the uniform and peaceful", "number": "1", "printVisible": true, "newPara": true, "features": "Prose." },
+      { "kind": "numbered", "text": "It rained all afternoon in a single tone. In the uniform and peaceful", "number": "1", "printVisible": true, "newPara": true, "blocked": true, "features": "Prose. First line starts flush at the left margin (blocked paragraph, no indent)." },
       { "kind": "numbered", "text": "intensity you could hear the water fall, the way it is when you travel all", "number": "2", "printVisible": false },
       { "kind": "numbered", "text": "afternoon on a train. But without our noticing it, the rain was pene-", "number": "3", "printVisible": false },
       { "kind": "numbered", "text": "trating too deeply into our senses. Early Monday morning, when we", "number": "4", "printVisible": false },
@@ -23,8 +23,6 @@
   "braille": {
     "width": 40,
     "lines": [
-      "",
-      "",
       "      @.<,?ree blank cells o3urr+    #,-",
       "    )9 a brl l9e 9dicate ! 2g9n+ ( a new",
       "    pr9t l9e4@.>",
@@ -35,7 +33,7 @@
       "all   afn on a tra94 ,b )\\t \\r        #c",
       "notic+ x1 ! ra9 0 p5e-   trat+ too    #d",
       "deeply 9to \\r s5ses4 ,e>ly ,mon\"d",
-      "morn+1 :5 we   clos$ ! door to avoid #e",
+      "morn+1 :5 we   clos$ ! door to avoid  #e",
       "! cutt+1 icy draft t blew 9 f !",
       "c\\rty>d1 \\r s5ses _h be5 fill$ )      #f",
       "ra94 ,& on ,mon\"d"
@@ -45,5 +43,39 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the two print-visible anchors (1, 5); this reconciliation adds the four intervening sequential numbers. The transcriber's note text itself is NOT modeled as a print.blocks entry (see 'notes' above) so that Emboss's own automatic §15.4.1d note (LINE_NUMBER_NOTE, document.mjs:737) is what gets compared against this rule's own worked example of the correct wording — expect a wording mismatch (Emboss's fixed text differs word-for-word from the book's own suggested text, though both convey the same three-blank-cell convention); if not already covered by an existing finding this reconciliation records it as a new one (see differences.md)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocked / features",
+      "was": "newPara true, no blocked flag (formatter indents 2)",
+      "now": "newPara true, blocked true",
+      "evidence": "references/_gemini/_done/gold-15-A/page-420.png, Sample 15-3 print: \"It rained all afternoon...\" starts at the left margin of the text block with no first-line indent (the \"1\" hangs to its left); the gold braille row also starts at cell 1."
+    }
+  ],
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the two print-visible anchors (1, 5); this reconciliation adds the four intervening sequential numbers. The transcriber's note text itself is NOT modeled as a print.blocks entry (see 'notes' above) so that Emboss's own automatic §15.4.1d note (LINE_NUMBER_NOTE, document.mjs:737) is what gets compared against this rule's own worked example of the correct wording — expect a wording mismatch (Emboss's fixed text differs word-for-word from the book's own suggested text, though both convey the same three-blank-cell convention); if not already covered by an existing finding this reconciliation records it as a new one (see differences.md). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "morn+1 :5 we   clos$ ! door to avoid #e"
+      ],
+      "after": [
+        "morn+1 :5 we   clos$ ! door to avoid  #e"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 12 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 420 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (1). Where: before line number (15.3.1c: at least two blank cells) (1)."
+    },
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.420: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 2"
+    }
+  ]
 }

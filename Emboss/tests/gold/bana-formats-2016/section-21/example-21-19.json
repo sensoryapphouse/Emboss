@@ -24,7 +24,7 @@
             "level": 1
           },
           {
-            "term": "daily “(dailies)”",
+            "term": "daily (dailies)",
             "def": "occurring every day",
             "level": 1
           }
@@ -49,5 +49,13 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[1].term",
+      "was": "daily “(dailies)”",
+      "now": "daily (dailies)",
+      "evidence": "references/_gemini/_done/gold-21-A/page-566.png (Example 21-19): the print reads \"daily (dailies) occurring every day\" with plain parentheses; no quotation marks. Braille: daily \"<dailies\">."
+    }
+  ]
 }

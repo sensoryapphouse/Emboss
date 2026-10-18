@@ -313,6 +313,19 @@ export const STYLE_DEFINITIONS = {
     blankAfter: true,
     description: 'Displayed / quoted material: BANA blocked 3-3 at the adjusted margin with a blank line before and after (Formats §9.2.2); UKAAF 7-5 with no blank lines (B004 App. B / App. G).',
   },
+  // Import fix list #40 (1 Oct 2026): the editor's "Computer Code" style; mirrors formatCodeBlock (format/document.mjs): each line
+  // from cell 1, runovers in cell 3, the grade-1 passage indicator and terminator on their own lines with a blank line around them.
+  code: {
+    id: 'code',
+    name: 'Computer Code',
+    category: 'text',
+    xmlTag: 'p',
+    firstCell: 1,
+    runoverCell: 3,
+    blankBefore: true,
+    blankAfter: true,
+    description: 'Displayed computer code: a grade 1 passage (UEB Technical §17, BANA §19), each line from cell 1 with runovers in cell 3, spaces and lines kept.',
+  },
   // F-94 — BANA Formats §9.3.1: "Do not treat epigraphs as displayed material" (9.3.1c) —
   // an epigraph keeps its OWN print format instead of Blockquote's adjusted/blocked margin,
   // e.g. the ordinary "3-1 margins for indented paragraphs" (9.3.1b's own example; a poem

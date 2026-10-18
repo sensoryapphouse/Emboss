@@ -18,7 +18,8 @@
         "kind": "paragraph",
         "level": null,
         "text": "Write the principal parts for each verb. Use your dictionary if needed.",
-        "features": "Two-line direction/instruction text directly above the list, no blank line beneath it in print."
+        "features": "Two-line direction/instruction text directly above the list, no blank line beneath it in print.",
+        "directions": true
       },
       {
         "kind": "list",
@@ -69,9 +70,17 @@
     "notes": "Blank line precedes the direction text (line 1) per ordinary paragraph spacing; the two-line direction (indented 4 blank cells, i.e. cell-5 style) is immediately followed by the list with no blank line between, per 8.3.3.c; 'be' is transcribed as the one-cell whole-word contraction '2' (dots 2,3) and 'go' as the one-cell whole-word contraction 'g', per standard braille contractions, not letter-for-letter spelling; a blank line follows the list."
   },
   "uncertain": [],
-  "resolution": "braille.lines byte-identical between A and B; only prose fields differed — A’s kept. Directions paragraph modeled as an ordinary paragraph block (Emboss has no \"directions\" concept — F-37); illustrates.quote kept as A’s (stem + clause c, matching the source’s own multi-clause layout).",
+  "resolution": "braille.lines byte-identical between A and B; only prose fields differed — A’s kept. Directions paragraph modeled as an ordinary paragraph block (Emboss has no \"directions\" concept — F-37); illustrates.quote kept as A’s (stem + clause c, matching the source’s own multi-clause layout). Print description corrected 23 Sep 2026 (see printCorrections).",
   "sources": [
     "A",
     "B"
+  ],
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image p.200 (PDF page 200): the two-line sentence \"Write the principal parts for each verb. Use your dictionary if needed.\" is directions immediately above the list (BANA 8.3.3.c, 10.3.2 directions margins); the gold print block had no directions flag, which the runner reads."
+    }
   ]
 }

@@ -18,27 +18,44 @@
         "kind": "paragraph",
         "level": null,
         "text": "gained, and write them out for publication. And he added:",
-        "features": "End of running line-numbered prose, print line 80 (right-margin line-number column; facsimile image of a line-numbered manuscript page)."
+        "features": "Running line-numbered prose: print line 80 (line number 80 in the right-margin gutter), a single print line that begins mid-sentence (lower-case \"gained\", flush at the left margin, i.e. the carried-over end of a paragraph).",
+        "continuation": true,
+        "lines": [
+          {
+            "number": "80",
+            "text": "gained, and write them out for publication. And he added:"
+          }
+        ]
       },
       {
         "kind": "box",
         "level": null,
         "text": null,
         "title": null,
-        "features": "An indented quotation box drawn around print lines 81-82, opened with a top box line only; the box's own bottom edge is drawn as a jagged, torn-paper line beneath line 82 (confirmed against the PDF page image, p.187, footer 7-3), with line 83's row in the line-number gutter left blank (no text visible there). Read as the source figure being a deliberately cropped/partial illustration, consistent with the braille's own '444' continuation marker in place of a bottom box line. Matches 7.3.3.b: the braille top box line stops short (35 of 40 cells) to leave the required two blank cells before the line-number field.",
+        "features": "An indented quotation box drawn around print lines 81-82 (line numbers 81 and 82 in the right-margin gutter), with a top box line; the bottom edge is drawn as a jagged torn-paper line, and the gutter shows the number 83 beside a blurred, illegible strip of text inside the torn edge (page image p.187, footer 7-3). Print lines 81 and 82 are two separate print lines. The braille's top box line stops at 35 of 40 cells to leave the two blank cells before the line-number field (7.3.3.b).",
         "blocks": [
           {
             "kind": "paragraph",
             "level": null,
             "text": "\"Never say ‘We learn’ so-and-so, or ‘It is reported,’ or ‘It is rumored,’ or ‘We understand’ so-and-so, but go to",
-            "features": "Print lines 81-82 of the line-numbered quotation (line 81 wraps across two print lines in the source image; line 82 ends the excerpt, cut off by the box's own torn bottom edge after 'but go to'). The braille excerpt itself ends this same quotation with a '444' continuation marker rather than a bottom box line -- the quotation is evidently longer than what either the print image or the braille excerpt reproduces."
+            "features": "Print lines 81 and 82 of the line-numbered quotation: line 81 ends \"or 'It is\" and line 82 begins \"rumored,'\" and ends \"but go to\"; a further (blurred, illegible) line 83 lies under the torn edge. The braille excerpt ends the quotation with a 444 marker after \"We understand\".",
+            "lines": [
+              {
+                "number": "81",
+                "text": "\"Never say 'We learn' so-and-so, or 'It is reported,' or 'It is"
+              },
+              {
+                "number": "82",
+                "text": "rumored,' or 'We understand' so-and-so, but go to"
+              }
+            ]
           }
         ]
       }
     ],
     "notes": "Two-part print image: (1) a facsimile of ordinary line-numbered prose (line 80, unboxed) ending 'And he added:'; (2) immediately below/right, an indented box containing the start of a quotation (lines 81-82), whose print border is drawn torn off (no bottom line, no line-83 text) -- the source figure is itself a deliberately partial excerpt, not a complete page.",
     "surroundingText": null,
-    "printFeatures": "Photographic facsimile of a line-numbered manuscript page; the quotation box is a plain-ruled rectangle (top line only) inset within the shared right-margin line-number gutter used by both the running text and the box."
+    "printFeatures": "Facsimile of a line-numbered page: line numbers 80, 81, 82, 83 in a right-margin gutter shared by the running text and the box; the quotation box is a plain-ruled rectangle with a torn-paper bottom edge."
   },
   "braille": {
     "width": 40,
@@ -58,9 +75,29 @@
     "Print line 83's row in the line-number gutter is visible but blank in the source page image -- the print box's own bottom border is drawn as a jagged, torn-paper line after line 82 rather than a normal ruled bottom edge. Read as the source figure being a deliberately partial/cropped illustration (consistent with the braille excerpt also truncating the same quotation with a '444' marker rather than a bottom box line), not as evidence that line 83 contained further boxed text that was simply omitted from transcription.",
     "The BANA line-number encoding was decoded by the standard a=1..j=0 letter-for-digit convention (#hj=80, #ha=81, #hb=82); not cross-checked against a separate Special Symbols page in this reference copy."
   ],
-  "resolution": "braille.lines byte-identical between A and B. Print content and structure agree; wording differs only in how the box's own torn bottom edge is described (A: 'wavy/cut-off line'; B: 'hand-torn/frayed edge') -- both describe the same jagged torn-paper-style line, confirmed directly against the PDF page image (p.187, footer 7-3). Title uses the bare descriptive form ('Box within Line-Numbered Prose'), matching the section-4/8 gold precedent's own convention -- B's title field wrongly carried a literal 'Example 7-1:' prefix, not used. This box carries no title of its own (contrast Example 7-2's 'Forms of be'). BOTH runs transcribed the quotation's nested quotation marks as straight ASCII apostrophes ('We learn'); corrected to proper Unicode single quotation marks (‘We learn’) matching the print image's own typographic quotes -- confirmed by direct translate() experiment that only the curly form reproduces the expected braille's own nested-quote indicator (',8,we le>n,0'); the straight-apostrophe form translates as a plain apostrophe-word instead, which does not match. (This sample still mismatches Emboss's own output for unrelated reasons -- see standards-findings.md F-70/F-76.)",
+  "resolution": "braille.lines byte-identical between A and B. Print content and structure agree; wording differs only in how the box's own torn bottom edge is described (A: 'wavy/cut-off line'; B: 'hand-torn/frayed edge') -- both describe the same jagged torn-paper-style line, confirmed directly against the PDF page image (p.187, footer 7-3). Title uses the bare descriptive form ('Box within Line-Numbered Prose'), matching the section-4/8 gold precedent's own convention -- B's title field wrongly carried a literal 'Example 7-1:' prefix, not used. This box carries no title of its own (contrast Example 7-2's 'Forms of be'). BOTH runs transcribed the quotation's nested quotation marks as straight ASCII apostrophes ('We learn'); corrected to proper Unicode single quotation marks (‘We learn’) matching the print image's own typographic quotes -- confirmed by direct translate() experiment that only the curly form reproduces the expected braille's own nested-quote indicator (',8,we le>n,0'); the straight-apostrophe form translates as a plain apostrophe-word instead, which does not match. (This sample still mismatches Emboss's own output for unrelated reasons -- see standards-findings.md F-70/F-76.) Print description corrected 23 Sep 2026 (see printCorrections).",
   "sources": [
     "A",
     "B"
+  ],
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].lines / print.blocks[1].blocks[0].lines",
+      "was": "no per-line line numbers or print line breaks",
+      "now": "lines arrays: 80 \"gained, and write them out for publication. And he added:\"; 81 \"\"Never say 'We learn' so-and-so, or 'It is reported,' or 'It is\"; 82 \"rumored,' or 'We understand' so-and-so, but go to\"",
+      "evidence": "Page image p.187 (PDF page 187): the gutter at the right of the facsimile is numbered 80, 81, 82, 83 and each of those is its own print line."
+    },
+    {
+      "field": "print.blocks[1].features (line 81 wraps)",
+      "was": "line 81 wraps across two print lines",
+      "now": "81 and 82 are two separate print lines; a blurred line 83 is under the torn edge",
+      "evidence": "Page image p.187: the quotation occupies two ruled lines numbered 81 and 82; \"83\" appears in the gutter beside a smeared strip of text at the torn edge."
+    },
+    {
+      "field": "print.blocks[0].continuation",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image p.187: the first line starts with lower-case \"gained,\" flush at the left margin, so it is the carried-over end of a paragraph, not a new indented paragraph."
+    }
   ]
 }

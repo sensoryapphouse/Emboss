@@ -31,7 +31,7 @@
       {
         "ref": "**",
         "placement": "footnote",
-        "text": "EDS. NOTE—Raj: sovereignty."
+        "text": "EDS. NOTE—*Raj:* sovereignty."
       },
       {
         "ref": "***",
@@ -72,5 +72,13 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: braille-formats-2016.txt line 12896, stripped of its 4-character line-number field (digits(8)+3=4), is exactly 40 characters, ending in a page-change token '#,-'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: braille-formats-2016.txt line 12896, stripped of its 4-character line-number field (digits(8)+3=4), is exactly 40 characters, ending in a page-change token '#,-'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.notes.1.text",
+      "was": "EDS. NOTE—Raj: sovereignty.",
+      "now": "EDS. NOTE—*Raj:* sovereignty.",
+      "evidence": "Page image PDF p.445 (Sample 16-1), 300 dpi crop: in the second note 'Raj:' is italic, colon included. Gold text carried no markup."
+    }
+  ]
 }

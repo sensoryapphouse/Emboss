@@ -1,0 +1,32 @@
+{
+ "id": "08-hostile:nest-5000-html-table",
+ "budget": {
+  "timeSec": 30,
+  "heapMB": 1024,
+  "rssMB": 800
+ },
+ "status": "FAIL",
+ "timeSec": 30.092,
+ "peakMB": 0,
+ "failures": [
+  {
+   "item": "nest-5000-html-table",
+   "reason": "timeout: the whole unit passed its 30 s budget during \"parse\" (item running: nest-5000-html-table)\n(NOTE: depth 5000 is beyond what a browser builds (its HTML parser stops at about 512 levels, its XML parser at about 2,000); only the Node DOM makes a tree this deep, so this is not a failure a transcriber can meet today)",
+   "file": "/scratch/ex-known/inputs/08-hostile_nest-5000-html-table/001-nest-5000-html-table.html"
+  }
+ ],
+ "warns": [],
+ "notes": [],
+ "items": [
+  {
+   "id": "nest-5000-html-table",
+   "file": "/scratch/ex-known/inputs/08-hostile_nest-5000-html-table/001-nest-5000-html-table.html",
+   "status": "FAIL",
+   "reasons": [
+    "timeout: the whole unit passed its 30 s budget during \"parse\" (item running: nest-5000-html-table)\n(NOTE: depth 5000 is beyond what a browser builds (its HTML parser stops at about 512 levels, its XML parser at about 2,000); only the Node DOM makes a tree this deep, so this is not a failure a transcriber can meet today)"
+   ],
+   "warns": [],
+   "notes": []
+  }
+ ]
+}

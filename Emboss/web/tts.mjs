@@ -206,12 +206,39 @@ export function buildSpokenItems(model, mathSpeech) {
       return;
     }
     if (b.type === 'list') {
-      (b.items || []).forEach((it, li) => {
+      // An item's further content (item.blocks — a further paragraph, or a table the item
+      // holds; see document.mjs formatItemBlocks / editor.mjs mergeListItemBlocks) is read right
+      // after the item's own line, in order: each further paragraph is its own spoken unit (the
+      // k-th list LINE is unit k — the same numbering traceItemBlocks uses, and the same one
+      // caretPos() gets by counting the editor's non-empty list lines in DOM order), and a
+      // table's cells are read headers-then-rows, left to right, each its own unit too.
+      let line = 0;
+      (b.items || []).forEach((it) => {
+        const itemUnit = line++;
         if (it && it.segments && it.segments.length) {
-          processSegments(it.segments, idx, li);
+          processSegments(it.segments, idx, itemUnit);
         } else {
           const t = collapse(typeof it === 'string' ? it : (it?.text || ''));
-          if (t.trim()) items.push(ident(idx, t, li));
+          if (t.trim()) items.push(ident(idx, t, itemUnit));
+        }
+        for (const cb of (it && Array.isArray(it.blocks) ? it.blocks : [])) {
+          if (!cb || typeof cb !== 'object') continue;
+          if (cb.type === 'table') {
+            const rawHeaders = Array.isArray(cb.headers) ? cb.headers : [];
+            const rawRows = (Array.isArray(cb.rows) ? cb.rows : []).map((r) => (Array.isArray(r) ? r : (r == null ? [] : [r])));
+            for (let ci = 0; ci < rawHeaders.length; ci++) processSegments(cellSegments(rawHeaders[ci]), idx, line++);
+            rawRows.forEach((r) => {
+              const colCount = Math.max(rawHeaders.length, r.length);
+              for (let ci = 0; ci < colCount; ci++) processSegments(cellSegments(r[ci]), idx, line++);
+            });
+            continue;
+          }
+          const contUnit = line++;
+          if (cb.segments && cb.segments.length) processSegments(cb.segments, idx, contUnit);
+          else {
+            const t = collapse(cb.text || '');
+            if (t.trim()) items.push(ident(idx, t, contUnit));
+          }
         }
       });
       return;

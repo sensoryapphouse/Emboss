@@ -17,23 +17,23 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "[ref:1]Predacious, fierce, secretive, majestic, and even wise are adjectives that describe the owl.",
+        "text": "{{td1: Predacious}}, fierce, secretive, majestic, and even wise are adjectives that describe the owl.",
         "features": "The word \"Predacious\" is highlighted (yellow background) rather than marked with a symbol; this highlighting is the reference mark per rule 16.3a.",
         "items": null
       },
       {
         "kind": "note",
         "level": null,
-        "text": "predacious: characteristic of a predator",
+        "text": "**predacious**: characteristic of a predator",
         "features": "Set off below a horizontal rule at the foot of the passage; \"predacious\" itself is bold.",
         "items": null
       }
     ],
     "notes": [
       {
-        "ref": "1",
+        "ref": "",
         "placement": "footnote",
-        "text": "predacious: characteristic of a predator"
+        "text": "**predacious**: characteristic of a predator"
       }
     ],
     "surroundingText": "Illustration directly below rule 16.7.3 (immediately following 16.6's gloss-note material), showing highlighting used as the print reference mark.",
@@ -60,5 +60,31 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.5.1.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12567 (the page-change dashed rule ending '#abc'), stripped of its 7-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.5.1.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12567 (the page-change dashed rule ending '#abc'), stripped of its 7-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "[ref:1]Predacious, fierce, secretive, majestic, and even wise are adjectives that describe the owl.",
+      "now": "{{td1: Predacious}}, fierce, secretive, majestic, and even wise are adjectives that describe the owl.",
+      "evidence": "Page image PDF p.435 (Example 16-9), zoomed: 'Predacious' has a yellow highlight; there is NO superscript or other reference mark in print (rule 16.3a: the emphasis is the reference). Gold had encoded the highlight as a [ref:1] mark. {{td1: }} is the corpus placeholder for a transcriber-defined typeform (as in section 5). Builder must learn: section 16 does not strip {{tdN:}} and cannot attach a note to an emphasised word without a mark."
+    },
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "predacious: characteristic of a predator",
+      "now": "**predacious**: characteristic of a predator",
+      "evidence": "Same zoom: 'predacious' is bold; the colon and the definition are plain."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "predacious: characteristic of a predator",
+      "now": "**predacious**: characteristic of a predator",
+      "evidence": "Same as above (bold headword)."
+    },
+    {
+      "field": "print.print.notes.0.ref",
+      "was": "1",
+      "now": "(empty: no printed mark)",
+      "evidence": "Print shows no reference mark before the note (only the highlight in the text); 16.5.1d says do not add a mark print does not use. Builder must learn: a note with an empty ref keyed to a highlighted word."
+    }
+  ]
 }

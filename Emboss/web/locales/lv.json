@@ -60,10 +60,13 @@
     "toc": "Satura rādītājs",
     "print": "Drukāšanas skats (kreisais)",
     "braille": "Braila",
+    "export": "Eksportēt",
+    "export_title": "Eksportēt brailu (BRF, eBraille) vai nosūtīt braila spiedienam",
+    "emboss_menu": "Nosūtīt braila spiedienam",
     "braille_view": "Braila skats",
     "download_brf": "Braila (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Braila spiediens",
     "emboss_tooltip": "Sūtīt dokumentu braila spiedienā vai printerī",
     "clear_doc": "Notīrīt dokumentu",
@@ -133,8 +136,6 @@
     "poem_desc": "Poētiskā strofa dzejoļu līnija (1-3)",
     "exercise_title": "Vingrinājuma jautājums",
     "exercise_desc": "Numurēts vingrinājuma jautājums (1-5 / 3-5)",
-    "caption_title": "Paraksts / Atribūts",
-    "caption_desc": "Attēla paraksts vai atribūts (7-5)",
     "footnote_title": "Piezīme",
     "footnote_desc": "Piezīmes teksts (1-3)",
     "note_title": "Tulkotāja piezīme",
@@ -163,8 +164,6 @@
     "page_desc": "Ievietot avota drukāšanas lapas pārtraukuma indikators",
     "printpage_title": "Drukāšanas lapas numurs",
     "printpage_desc": "Ievietot avota drukāšanas lapas pārtraukuma indikators",
-    "code_title": "Dators kods",
-    "code_desc": "Ievietot koda bloku ar UEB indikatoriem",
     "indent_title": "Atkāpe / Ligzdot apakšelementu",
     "indent_desc": "Ievietot saraksta elementu vai vingrinājumu dziļāk (Tab)",
     "outdent_title": "Atcelt atkāpi / Paaugstināt elementu",
@@ -185,8 +184,8 @@
     "language_label": "Interfeisa valoda",
     "language_help": "Atlasiet valodu, ko izmantot pogām, izvēlnēm, dialoga logiem un ekrāna lasītāja paziņojumiem.",
     "standard_label": "Braila standarts",
-    "standard_bana": "BANA (ASV un Kanāda — 40×25 šūnas)",
-    "standard_ukaaf": "UKAAF (Apvienotā Karaliste un starptautisks — 38×25 šūnas)",
+    "standard_bana": "BANA (ASV un Kanāda — 38×25 šūnas)",
+    "standard_ukaaf": "UKAAF (Apvienotā Karaliste un starptautisks — 38×27 šūnas)",
     "grade_label": "Saīsinājuma līmenis",
     "grade_1": "Pakāpe 1 (Nesaīsināts / Burtu uz burtu)",
     "grade_2": "Pakāpe 2 (Saīsināts)",
@@ -261,7 +260,7 @@
     "size_full": "Pilna lapa (1. rinda Anti-griežot)",
     "lead_lines": "Taktīlās vadotājas līnijas",
     "braille_labels": "Braila etiķetes",
-    "footer_tip": "💡 Melnas kontūras kļūst par cietu taktīlu robežu; krāsas automātiski tiek kartētas uz atšķirīgām taktīlām tekstūrām.",
+    "footer_tip": "Melnas kontūras kļūst par cietu taktīlu robežu; krāsas automātiski tiek kartētas uz atšķirīgām taktīlām tekstūrām.",
     "open_repositories": "Atveriet taktīlus repozitorijus:",
     "no_diagrams": "Nav atbilstošas diagrammas."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Bezjaudas tur-atpakaļ statuss",
     "precedence_status": "Braila prioritāšu noteikumu statuss",
     "perfect_match": "100% tur-atpakaļ sakritības (0 neatbilstības)",
-    "badge_warn": "⚠ {count} pārskatīt",
+    "badge_warn": "{count} pārskatīt",
     "badge_title": "{count} vārdu neatbilstības atrasta tur-atpakaļ otrreizējā tulkošanā. Noklikšķiniet uz pirmo.",
     "badge_clean": "Tur-atpakaļ pārbaude: vārdu neatbilstības nav atrastas."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Jums ir nesaglabātas izmaiņas. Vai esat pārliecināts, ka vēlaties iziet bez saglabāšanas?",
     "unsaved_load": "Jums ir nesaglabātas izmaiņas. Jauna faila ielāde aizstāvēs jūsu pašreizējo dokumentu. Turpināt?",
     "unsaved_clear": "Jums ir nesaglabātas izmaiņas. Vai esat pārliecināts, ka vēlaties notīrīt dokumentu?",
-    "drop_hint": "⬇ Velciet dokumentu redaktorā, lai importētu",
+    "drop_hint": "Velciet dokumentu redaktorā, lai importētu",
     "notice": "Paziņojums",
     "close_notice": "Aizvērt paziņojumu"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumenta teksts",
+      "math_keyboard_toggle": "Matemātikas tastatūra",
       "label": "Teksts",
       "toolbar_aria": "Formatēšana",
       "style_label": "Rindkopas stils",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafiku kategorijas",
       "graphic_list": "Taktīlās grafikas diagrammas",
       "formula_search_label": "Meklēt formulas",
-      "btactile_link": "BTactile (bezmaksas) ↗",
-      "tgil_link": "APH TGIL (1800+ veidnes) ↗"
+      "btactile_link": "BTactile (bezmaksas)",
+      "tgil_link": "APH TGIL (1800+ veidnes)"
     },
     "settings": {
       "list_spaced": "Saraksts ar tukšām rindām (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Pieslēdzieties tieši pielāgotiem mikrokontrolieru braila spiedieniem (ESP32-S3, RP2040/RP2350, STM32, Arduino), apejot OS printera draiveru ierobežojumus.",
       "graphics_hint": "Ja nav atzīmēts, diagrammas tiek eksportētas kā pieejami tulkotāja piezīmju apraksti tikai teksta braila spiedieniem un braila displejiem.",
       "tactile_heading": "Taktīlā displeja tiešraides straumēšana (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Pievienot Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Pievienot USB / HID (Monarch)",
+      "tactile_connect_ble": "Pievienot Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Pievienot USB / HID (Monarch)",
       "tactile_disconnect": "Atvienot displeju",
       "tactile_sim_monarch": "Testēt simulētu Monarch (32×10)",
       "tactile_sim_dotpad": "Testēt simulētu DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Straumē tiešraides braila skatu un taktīlo grafiku tieši caur WebBluetooth (DotPad BLE UART) vai WebHID (Monarch/USB) bez ārējiem draiveriem.",
       "perkins_hint": "— rakstiet brailu ar SDF un JKL taustiņiem",
       "ascii_hint": "— rādīt neapstrādātas ASCII braila rakstzīmes",
+      "show_explanation_bar": "Rādīt paskaidrojumu joslu",
+      "show_explanation_bar_hint": "— josla zem teksta un braila, kas paskaidro brailu vārdam, pie kura atrodaties",
+      "simple_mode_hint": "— atvērt Emboss vienkāršajā pārveidotājā. Pārslēgšanās starp Ātro režīmu un redaktoru to nemaina.",
       "covers_hint": "— braila titullapas vāki, sadalot grāmatas sējumos"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Virsraksts {n}",
       "cell_aria_named": "{header}, rinda {row}",
       "cell_aria": "Kolonna {col}, rinda {row}",
-      "too_wide_listed": "⚠ Pārāk plata kolonnām — tiks pārrakstīta Brailā kā uzskaitīta tabula",
+      "too_wide_listed": "Pārāk plata kolonnām — tiks pārrakstīta Brailā kā uzskaitīta tabula",
       "too_wide_listed_title": "Šī tabula neietilpst kolonnās pie pašreizējā šūnu skaita uz līnijas un Braila režīma, tāpēc tā tiks pārrakstīta Brailā kā uzskaitīta tabula (BANA Formats §11.9) blakus esošu kolonnu vietā.",
-      "too_wide_paragraph": "⚠ Pārāk plata kolonnām — tiks pārrakstīta Brailā rindkopas formā",
+      "too_wide_paragraph": "Pārāk plata kolonnām — tiks pārrakstīta Brailā rindkopas formā",
       "too_wide_paragraph_title": "Šī tabula neietilpst kolonnās pie pašreizējā šūnu skaita uz līnijas un Braila režīma, tāpēc tā tiks pārrakstīta Brailā rindkopas formā (UKAAF B004 §12) blakus esošu kolonnu vietā."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Neizdevās ielādēt tabulas priekš \"{code}\" — joprojām tiek izmantots iepriekšējais braila kods.",
-      "failed": "⚠ Neizdevās ģenerēt brailu.",
+      "failed": "Neizdevās ģenerēt brailu.",
       "failed_hint": "(Ja teikts, ka dzinējs nav inicializēts, braila dzinējs neielādējās — pilnībā atsvaidziniet ar Cmd/Ctrl+Shift+R.)",
       "error_status": "Atveidošanas kļūda: {message}"
     },
     "engine": {
       "loading": "Notiek braila dzinēja ielāde…",
-      "failed": "⚠ Neizdevās ielādēt braila dzinēju.",
+      "failed": "Neizdevās ielādēt braila dzinēju.",
       "failed_hint": "Pilnībā atsvaidziniet ar Cmd/Ctrl+Shift+R. Ja tas atkārtojas, atveriet pārlūkprogrammas konsoli (View ▸ Developer) un nosūtiet kļūdas.",
       "failed_status": "Neizdevās ielādēt dzinēju: {message}",
       "ready": "Gatavs — rakstiet vai formatējiet kreisajā pusē; brailis tiek atjaunināts tiešraidē."
@@ -715,7 +718,7 @@
       "network_unreachable": "Neizdevās sasniegt {url}: {message}. Pārlūkprogrammas nevar atvērt tiešus TCP (porta 9100) savienojumus; braila spiedienam jāpieņem HTTP POST, vai lejupielādējiet .brf failu un nosūtiet to ar savu drukas pārvaldnieku.",
       "usb_bridge_done": "Spiešanas darbs piegādāts USB printerim!",
       "needs_webserial": "Tiešai seriālai spiešanai nepieciešama pārlūkprogramma ar WebSerial (Chrome, Edge, Opera). Varat lejupielādēt .brf failu, lai drukātu ar savu drukas pārvaldnieku, vai izmantot tīkla (porta 9100) režīmu iestatījumos.",
-      "detected": "🔌 Konstatēts {name} — iestatīts uz {cells}×{lines} ar {baud} baud."
+      "detected": "Konstatēts {name} — iestatīts uz {cells}×{lines} ar {baud} baud."
     },
     "symbols": {
       "title": "Taktīlo simbolu bibliotēka",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamiska matrica",
       "badge_text_only": "Tikai teksts",
       "badge_index": "Punktu matrica"
+    },
+    "offline": {
+      "ready": "Emboss ir gatavs darbam bez interneta.",
+      "ready_short": "Gatavs darbam bez interneta",
+      "not_yet": "Joprojām notiek sagatavošana darbam bez interneta…"
     }
   }
 }

@@ -23,13 +23,13 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Nora *(pause)* Does anything strike you as we sit here?",
-        "features": "Plain body text; stage direction '(pause)' is italicised in print."
+        "text": "Nora (pause): Does anything strike you as we sit here?",
+        "features": "Play dialogue line: speaker name, parenthetical stage direction '(pause)' in roman (not italic), then a colon and the speech."
       }
     ],
     "notes": "Illustrates that print italics within a heading (here, only the play title, not the author name) are ignored in braille except where needed for distinction -- the whole heading is rendered without added typeform emphasis except on the title, per the exception in rule 4.3.7.",
     "surroundingText": null,
-    "printFeatures": "Centered bold blue heading combining an unitalicised author name and an italicised work title; body paragraph below with an italicised parenthetical stage direction."
+    "printFeatures": "Centred bold blue heading combining an unitalicised author name and an italicised work title; body line below reading as play dialogue (speaker, parenthetical direction, colon)."
   },
   "braille": {
     "width": 40,
@@ -51,5 +51,19 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree; wording merged. Heading centered (level 1), confirmed by the centering-formula check (indent 3 matches (40-34)/2). print.blocks text corrected during model-building verification: the heading needs *italic* markup on \"A Doll's House\" (the one retained font attribute per rule 4.3.7's exception) to produce the expected typeform brackets, and the paragraph's stage direction needs *(pause)* markup, not the literal BRF ASCII quotation glyphs that had been pasted into the print text by mistake."
+  "resolution": "braille.lines agree; wording merged. Heading centered (level 1), confirmed by the centering-formula check (indent 3 matches (40-34)/2). print.blocks text corrected during model-building verification: the heading needs *italic* markup on \"A Doll's House\" (the one retained font attribute per rule 4.3.7's exception) to produce the expected typeform brackets, and the paragraph's stage direction needs *(pause)* markup, not the literal BRF ASCII quotation glyphs that had been pasted into the print text by mistake. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].text",
+      "was": "Nora *(pause)* Does anything strike you as we sit here?",
+      "now": "Nora (pause): Does anything strike you as we sit here?",
+      "evidence": "Page image p.110 (PDF page 110): the line reads \"Nora (pause): Does anything strike you as we sit here?\" with a colon after the parenthesis and no italics on \"(pause)\"."
+    },
+    {
+      "field": "print.blocks[1].features / print.printFeatures",
+      "was": "stage direction '(pause)' is italicised in print",
+      "now": "'(pause)' is roman; line is play dialogue",
+      "evidence": "Page image p.110: \"(pause)\" is in the same roman type as \"Nora\" and the speech."
+    }
+  ]
 }

@@ -60,10 +60,13 @@
     "toc": "Clár Ábhair",
     "print": "Amharc Priontála (LHS)",
     "braille": "Braille",
+    "export": "Easpórtáil",
+    "export_title": "Easpórtáil an Braille (BRF, eBraille) nó seol chuig an bpriontálaí Braille é",
+    "emboss_menu": "Seol chuig an bpriontálaí Braille",
     "braille_view": "Amharc Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Priontáil Braille",
     "emboss_tooltip": "Seol an doiciméad chuig an bpriontálaí Braille nó chuig gnáthphriontálaí",
     "clear_doc": "Glan an Doiciméad",
@@ -133,8 +136,6 @@
     "poem_desc": "Líne véarsa filíochta (1-3)",
     "exercise_title": "Ceist Chleachtaidh",
     "exercise_desc": "Ceist chleachtaidh uimhrithe (1-5 / 3-5)",
-    "caption_title": "Fotheideal / Sanas",
-    "caption_desc": "Fotheideal nó sanas fíoráin (7-5)",
     "footnote_title": "Fonóta",
     "footnote_desc": "Téacs fonóta (1-3)",
     "note_title": "Nóta an Aistritheora",
@@ -163,8 +164,6 @@
     "page_desc": "Ionsáigh táscaire briste leathanaigh an bhunfhoinse phriontáilte",
     "printpage_title": "Uimhir an Leathanaigh Phriontáilte",
     "printpage_desc": "Ionsáigh táscaire briste leathanaigh an bhunfhoinse phriontáilte",
-    "code_title": "Cód Ríomhaire",
-    "code_desc": "Ionsáigh bloc cóid le táscairí UEB",
     "indent_title": "Eangaigh / Neadaigh Fo-mhír",
     "indent_desc": "Neadaigh mír liosta nó cleachtadh níos doimhne (Tab)",
     "outdent_title": "Aistarraing / Ardaigh Mír",
@@ -185,8 +184,8 @@
     "language_label": "Teanga an Chomhéadain",
     "language_help": "Roghnaigh an teanga a úsáidtear do chnaipí, roghchláir, dialóga agus fógraí an léitheora scáileáin.",
     "standard_label": "Caighdeán Braille",
-    "standard_bana": "BANA (SAM agus Ceanada — 40×25 cill)",
-    "standard_ukaaf": "UKAAF (an Ríocht Aontaithe agus idirnáisiúnta — 38×25 cill)",
+    "standard_bana": "BANA (SAM agus Ceanada — 38×25 cill)",
+    "standard_ukaaf": "UKAAF (an Ríocht Aontaithe agus idirnáisiúnta — 38×27 cill)",
     "grade_label": "Leibhéal Giorrúcháin",
     "grade_1": "Grád 1 (Neamhghiorraithe / litir ar litir)",
     "grade_2": "Grád 2 (Giorraithe)",
@@ -261,7 +260,7 @@
     "size_full": "Bileog Iomlán (Líne 1 Fáiscthe)",
     "lead_lines": "Línte Treorach Tadhaill",
     "braille_labels": "Lipéid Braille",
-    "footer_tip": "💡 Iompaíonn imlínte dubha ina n-imill tadhaill sholadacha; déantar dathanna a mhapáil go huathoibríoch chuig uigeachtaí tadhaill ar leith.",
+    "footer_tip": "Iompaíonn imlínte dubha ina n-imill tadhaill sholadacha; déantar dathanna a mhapáil go huathoibríoch chuig uigeachtaí tadhaill ar leith.",
     "open_repositories": "Stórlanna Oscailte Tadhaill:",
     "no_diagrams": "Níor aimsíodh léaráidí a oireann."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Stádas an Fhillchomhshó gan Chaillteanas",
     "precedence_status": "Stádas Rialacha Tosaíochta Braille",
     "perfect_match": "100% Comhoiriúnú Fillchomhshó (0 neamhréiteach)",
-    "badge_warn": "⚠ {count} le hathbhreithniú",
+    "badge_warn": "{count} le hathbhreithniú",
     "badge_title": "{count} neamhréiteach focal aimsithe le linn an fhillchomhshó. Cliceáil chun dul chuig an gcéad cheann.",
     "badge_clean": "Seiceáil fillchomhshó: níor aimsíodh aon neamhréiteach focal."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Tá athruithe neamhshábháilte agat. An bhfuil tú cinnte gur mian leat scoir gan sábháil?",
     "unsaved_load": "Tá athruithe neamhshábháilte agat. Cuirfidh lódáil comhad nua ionad do dhoiciméid reatha. Ar mhaith leat leanúint ar aghaidh?",
     "unsaved_clear": "Tá athruithe neamhshábháilte agat. An bhfuil tú cinnte gur mian leat an doiciméad a ghlanadh?",
-    "drop_hint": "⬇ Scaoil doiciméad chun é a iompórtáil isteach san eagarthóir",
+    "drop_hint": "Scaoil doiciméad chun é a iompórtáil isteach san eagarthóir",
     "notice": "Fógra",
     "close_notice": "Dún an Fógra"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Téacs an doiciméid",
+      "math_keyboard_toggle": "Méarchlár matamaitice",
       "label": "Téacs",
       "toolbar_aria": "Formáidiú",
       "style_label": "Stíl an ailt",
@@ -443,8 +443,8 @@
       "graphic_cats": "Catagóirí Grafaice",
       "graphic_list": "Léaráidí grafaice tadhaill",
       "formula_search_label": "Cuardaigh foirmlí",
-      "btactile_link": "BTactile (Saor in Aisce) ↗",
-      "tgil_link": "APH TGIL (1,800+ Teimpléad) ↗"
+      "btactile_link": "BTactile (Saor in Aisce)",
+      "tgil_link": "APH TGIL (1,800+ Teimpléad)"
     },
     "settings": {
       "list_spaced": "Liosta le línte bána (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Ceangail go díreach le printéirí Braille micririaltóra saincheaptha (ESP32-S3, RP2040/RP2350, STM32, Arduino), gan bacadh le glasálacha tiománaí printéara an chórais oibriúcháin.",
       "graphics_hint": "Nuair nach bhfuil sé ticeáilte, easpórtáiltear léaráidí mar chuntais Nóta an Aistritheora inrochtana do phrintéirí Braille téacs-amháin agus taispeántais Braille.",
       "tactile_heading": "Sruthú Beo Taispeántais Tadhaill (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Ceangail Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Ceangail USB / HID (Monarch)",
+      "tactile_connect_ble": "Ceangail Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Ceangail USB / HID (Monarch)",
       "tactile_disconnect": "Dícheangail an Taispeántas",
       "tactile_sim_monarch": "Tástáil Monarch Ionsamhlaithe (32×10)",
       "tactile_sim_dotpad": "Tástáil DotPad Ionsamhlaithe (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Sruthaíonn sé an t-amharcadán Braille beo agus grafaicí tadhaill go díreach thar WebBluetooth (DotPad BLE UART) nó WebHID (Monarch/USB) gan tiománaithe seachtracha.",
       "perkins_hint": "— clóscríobh Braille leis na heochracha SDF agus JKL",
       "ascii_hint": "— taispeáin carachtair amh Braille ASCII",
+      "show_explanation_bar": "Taispeáin an barra míniúcháin",
+      "show_explanation_bar_hint": "— an stiall faoin téacs agus faoin mBraille a mhíníonn an Braille don fhocal ina bhfuil tú",
+      "simple_mode_hint": "— oscail Emboss sa chiontaire simplí. Ní athraíonn aistriú idir Mód Gasta agus an t-eagarthóir seo.",
       "covers_hint": "— clúdaigh teidil phriontáilte agus leabhair á roinnt ina n-imleabhair"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Ceanntásc {n}",
       "cell_aria_named": "{header}, ró {row}",
       "cell_aria": "Colún {col}, ró {row}",
-      "too_wide_listed": "⚠ Róleathan do cholúin — brailleofar mar thábla liostaithe é",
+      "too_wide_listed": "Róleathan do cholúin — brailleofar mar thábla liostaithe é",
       "too_wide_listed_title": "Ní oireann an tábla seo do cholúin ag líon reatha na gceall in aghaidh na líne agus an mhód braille, mar sin brailleofar mar thábla liostaithe é (BANA Formats §11.9) in ionad colúin taobh le taobh.",
-      "too_wide_paragraph": "⚠ Róleathan do cholúin — brailleofar i bhfoirm ailt é",
+      "too_wide_paragraph": "Róleathan do cholúin — brailleofar i bhfoirm ailt é",
       "too_wide_paragraph_title": "Ní oireann an tábla seo do cholúin ag líon reatha na gceall in aghaidh na líne agus an mhód braille, mar sin brailleofar i bhfoirm ailt é (UKAAF B004 §12) in ionad colúin taobh le taobh."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Níorbh fhéidir na táblaí do \"{code}\" a lódáil — an cód Braille roimhe seo á úsáid fós.",
-      "failed": "⚠ Níorbh fhéidir Braille a ghiniúint.",
+      "failed": "Níorbh fhéidir Braille a ghiniúint.",
       "failed_hint": "(Má deir sé seo nach bhfuil an t-inneall túsaithe, níor lódáil an t-inneall Braille — déan athlódáil chrua le Cmd/Ctrl+Shift+R.)",
       "error_status": "Earráid rindreála: {message}"
     },
     "engine": {
       "loading": "Inneall Braille á lódáil…",
-      "failed": "⚠ Theip ar an inneall Braille lódáil.",
+      "failed": "Theip ar an inneall Braille lódáil.",
       "failed_hint": "Déan athlódáil chrua le Cmd/Ctrl+Shift+R. Má leanann sé ar aghaidh, oscail consól an bhrabhsálaí (Amharc ▸ Forbróir) agus seol na hearráidí.",
       "failed_status": "Theip ar an inneall lódáil: {message}",
       "ready": "Réidh — clóscríobh nó formáidigh ar chlé; nuashonraítear an Braille go beo."
@@ -715,7 +718,7 @@
       "network_unreachable": "Níorbh fhéidir teacht ar {url}: {message}. Ní féidir le brabhsálaithe ceangail amh-TCP (calafort 9100) a oscailt; caithfidh an printéir Braille glacadh le HTTP POST, nó íoslódáil an comhad .brf agus é a sheoladh le do bhainisteoir priontála.",
       "usb_bridge_done": "Seachadadh an jab priontála chuig an bpriontálaí USB!",
       "needs_webserial": "Teastaíonn brabhsálaí le WebSerial (Chrome, Edge, Opera) le haghaidh priontála sraithe dírí. Is féidir leat an comhad .brf a íoslódáil agus é a phriontáil le do bhainisteoir priontála, nó mód Líonra (Calafort 9100) a úsáid sna Socruithe.",
-      "detected": "🔌 Braitheadh {name} — socraithe go {cells}×{lines} ag {baud} baud."
+      "detected": "Braitheadh {name} — socraithe go {cells}×{lines} ag {baud} baud."
     },
     "symbols": {
       "title": "Leabharlann Siombailí Tadhaill",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Maitrís Dhinimiciúil",
       "badge_text_only": "Téacs Amháin",
       "badge_index": "Maitrís Ponc"
+    },
+    "offline": {
+      "ready": "Tá Emboss réidh le hoibriú as líne.",
+      "ready_short": "Réidh le hoibriú as líne",
+      "not_yet": "Á ullmhú fós chun oibriú as líne…"
     }
   }
 }

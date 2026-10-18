@@ -145,10 +145,12 @@ for (const cls of REQUIRED_BANA_CSS_CLASSES) {
 }
 
 // Check BANA Sidebar Boxline visual representation (border-top & border-bottom boxlines)
-check('style.css represents BANA Top Boxline (border-top on sidebar)', styleCss.includes('border-top: 2.5px solid') && styleCss.includes('.emboss-sidebar-card'));
-check('style.css represents BANA Bottom Boxline (border-bottom on sidebar)', styleCss.includes('border-bottom: 2.5px solid') && styleCss.includes('.emboss-sidebar-card'));
-check('index.html represents BANA Top Boxline (border-top on sidebar)', indexHtml.includes('border-top: 2.5px solid') && indexHtml.includes('.emboss-sidebar-card'));
-check('index.html represents BANA Bottom Boxline (border-bottom on sidebar)', indexHtml.includes('border-bottom: 2.5px solid') && indexHtml.includes('.emboss-sidebar-card'));
+// CHANGED 17 Oct 2026 (Paul's decision, feedback item 4): a box has the SAME blue line on all four sides (the right edge was the pale --line and seemed to
+// vanish, especially in nested boxes), so the top and bottom boxlines are the top and bottom of one 2.5px border all round, not border-top / border-bottom of their own.
+check('style.css represents BANA Top Boxline (the top of the sidebar\'s border, the accent blue)', styleCss.includes('border: 2.5px solid var(--accent)') && styleCss.includes('.emboss-sidebar-card'));
+check('style.css represents BANA Bottom Boxline (the bottom of the same border, all four sides alike)', styleCss.includes('border: 2.5px solid var(--accent)') && !/\.emboss-sidebar-card,[^{]*\{[^}]*border-(?:left|top|bottom):/.test(styleCss));
+check('index.html represents BANA Top Boxline (the top of the sidebar\'s border, the accent blue)', indexHtml.includes('border: 2.5px solid var(--accent)') && indexHtml.includes('.emboss-sidebar-card'));
+check('index.html represents BANA Bottom Boxline (the bottom of the same border, all four sides alike)', indexHtml.includes('border: 2.5px solid var(--accent)') && indexHtml.includes('.emboss-sidebar-card'));
 
 // Check Dark Mode & High Contrast coverage
 check('style.css has dark mode for .bana-style-note', styleCss.includes(':root.dark') && styleCss.includes('bana-style-note'));

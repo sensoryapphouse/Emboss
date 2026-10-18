@@ -18,18 +18,19 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Respectively means “separately” or “individually”; respectfully means “full of respect”",
+        "text": "*Respectively* means “separately” or “individually”; *respectfully* means “full of respect”",
         "features": "'Respectively' and 'respectfully' italicized (defined terms)."
       },
       {
         "kind": "list",
         "level": null,
         "text": null,
-        "features": "The two displayed sentences, each formatted as a list item at the adjusted left margin, with 'respectively'/'respectfully' italicized within them.",
+        "features": "The two displayed sentences: each set off from the running text on its own print line, indented, the second line of the first one hanging; 'respectively'/'respectfully' italicized within them.",
         "items": [
-          "The participants in the debate were St. Lawrence High School and Delphi High School, respectively.",
-          "The students respectfully stated their arguments."
-        ]
+          "The participants in the debate were St. Lawrence High School and Delphi High School, *respectively*.",
+          "The students *respectfully* stated their arguments."
+        ],
+        "displayed": true
       }
     ],
     "notes": "Illustrates 9.2.2e directly: two displayed sentences are formatted as a list beginning at the adjusted left margin (cell 3), with wrapped runover lines at cell 5 -- the list-item-plus-runover pattern the rule describes.",
@@ -55,5 +56,19 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "A and B agreed on every `braille.lines` byte except one: A included a leading blank line (this block's own line 6627 in the source, a genuine 40-blank-cell braille line, not a truly-empty .txt filler line) that B omitted. Settled from the primary source directly (awk-extracted, byte-counted): line 6627 carries the block's own 8-space left-margin padding plus 40 literal U+2800 characters -- a real blank braille line distinct from the truly-empty .txt lines 6623-6626 immediately before it -- so A's leading blank is correct and is kept; B's array (missing it) is not used. `illustrates.rule` dotted per this project's convention (9.2.2.e, not A's undotted '9.2.2e'). Heading level: A measured a fixed 4-cell indent (cell 5, not matching the centering formula) and recorded level 2; B recorded null. Resolved to level 2 on A's direct measurement against the agreed braille."
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].text and print.blocks[2].items (italics)",
+      "was": "Respectively / respectfully / respectively / respectfully unmarked",
+      "now": "each of the four words wrapped in *...*",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p230 (Example 9-4): \"Respectively\" and \"respectfully\" in the definition line, \"respectively\" in the first displayed sentence and \"respectfully\" in the second are italic. Whether the full stop after \"respectively\" is italic is not settled at this resolution, so it is left outside the markup."
+    },
+    {
+      "field": "print.blocks[2].features / .displayed",
+      "was": "\"...each formatted as a list item at the adjusted left margin...\" (a braille formatting description)",
+      "now": "print wording only (displayed sentences, indented, own lines); print flag displayed:true added",
+      "evidence": "references/bana/braille-formats-2016.pdf p.230 (Example 9-4), rendered at 90 dpi: the two sentences are indented in the print box, each on its own line, with the runover of the first one hanging. \"Adjusted left margin\" is braille vocabulary; the runner now reads the print flag displayed:true instead of matching that wording."
+    }
+  ],
+  "resolution": "A and B agreed on every `braille.lines` byte except one: A included a leading blank line (this block's own line 6627 in the source, a genuine 40-blank-cell braille line, not a truly-empty .txt filler line) that B omitted. Settled from the primary source directly (awk-extracted, byte-counted): line 6627 carries the block's own 8-space left-margin padding plus 40 literal U+2800 characters -- a real blank braille line distinct from the truly-empty .txt lines 6623-6626 immediately before it -- so A's leading blank is correct and is kept; B's array (missing it) is not used. `illustrates.rule` dotted per this project's convention (9.2.2.e, not A's undotted '9.2.2e'). Heading level: A measured a fixed 4-cell indent (cell 5, not matching the centering formula) and recorded level 2; B recorded null. Resolved to level 2 on A's direct measurement against the agreed braille. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

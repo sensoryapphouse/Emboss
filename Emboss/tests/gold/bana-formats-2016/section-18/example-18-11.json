@@ -30,17 +30,33 @@
   "braille": {
     "width": 40,
     "lines": [
-      " ;\\[3333333333333333",
-      " ;\\[3333333",
+      " ;\\[\"333333333333333",
+      " ;\\[\"333333",
       ",tom1 did y submit yr >ticle8"
     ],
     "pageBreaks": [],
-    "notes": "Re-extracted from source (lines 14706-14708, margin 0, flush); matches both runs byte-for-byte. Lines 14706/14707 keep one leading blank braille cell (converted to a single space), matching a 0-cell-past-margin indent already visible in the source itself."
+    "notes": "Re-extracted from source (lines 14706-14708, margin 0, flush); matches both runs byte-for-byte. Lines 14706/14707 keep one leading blank braille cell (converted to a single space), matching a 0-cell-past-margin indent already visible in the source itself. BANA Errata March 2024 (C11) adds dot 5 (\") of the horizontal line mode indicator immediately after the arrow symbol on lines 1-2, replacing one trailing '3' cell so line length is unchanged."
   },
   "uncertain": [],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly. illustrates.rule was already correct in both runs (18.8.3); quote corrected from run A’s own caption-text guess to the actual rule text (matching run B), which the example is directly placed under in the source (18.8.3 heading at line 14687, before Examples 18-11/18-12a/18-12b/18-13, and before 18.8.4 at line 14749). Sentence built as an ordinary paragraph (representable, forward-translates exactly); the two arrows are 'other' (F-189)."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. illustrates.rule was already correct in both runs (18.8.3); quote corrected from run A’s own caption-text guess to the actual rule text (matching run B), which the example is directly placed under in the source (18.8.3 heading at line 14687, before Examples 18-11/18-12a/18-12b/18-13, and before 18.8.4 at line 14749). Sentence built as an ordinary paragraph (representable, forward-translates exactly); the two arrows are 'other' (F-189).",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA Errata March 2024",
+      "field": "braille.lines",
+      "before": [
+        " ;\\[3333333333333333",
+        " ;\\[3333333"
+      ],
+      "after": [
+        " ;\\[\"333333333333333",
+        " ;\\[\"333333"
+      ],
+      "note": "Errata (C11): dot 5 of the horizontal line mode indicator is missing after the arrow on lines 1-2. The leading space stays as in the gold; each line keeps its original length. (The BRF correction prints \";$[\" on line 2; the PDF and the book print \";\\\\[\", so the arrow symbol itself is unchanged — only the added dot-5 indicator follows the erratum.)"
+    }
+  ]
 }

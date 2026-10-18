@@ -143,7 +143,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "    ,critical ,?9k+                  b#ig",
+      "    ,critical ,?9k+                 b#ig",
       ",! ,3/itu;n e/abli%$ a detail$ plan 444",
       ".7,:at p[]s >e %>$ by ! na;nal & /ate",
       "gov]n;ts8.'",
@@ -167,8 +167,8 @@
       ",,na;nal & ,,/ate ,,gov]n;ts",
       "  _4 ,levy taxes",
       "  _4 ,borr[ m\"oy",
-      "  444                                 #,-",
-      "    @.<,sec;n #c@.>                        c#ig",
+      "  444                                #,-",
+      "    @.<,sec;n #c@.>                 c#ig",
       ",,/ate ,,gov]n;ts",
       "  _4 ,regulate 9tra/ate comm]ce",
       "  _4 ,e/abli% local gov]n;t sy/ems",
@@ -184,5 +184,23 @@
     "A",
     "B"
   ],
-  "resolution": "CORRECTION (session-wide): the gold-6-A/gold-6-B braille arrays were produced by a script that wrongly blanked every all-digit braille line (it treated a line of only '4's or '7's as empty) — this cost both runs their '444' excerpt-ellipsis markers throughout this file (five of them: after 'Coin money', after the federal-courts item, after 'Borrow money', and after the two final items) and is the majority of this file's own reconciliation work; every one was restored by decoding source-6.txt directly (lines 5210-5240), not by trusting either run's blanked array. Beyond that restoration: both runs mis-transcribe the numbered section labels as lettered (Section A/B/C instead of 1/2/3, confirmed by forward translation) and reverse the Critical-Thinking-box/main-heading order relative to the agreed braille. print.blocks (the note/paragraph/list structure for each of the three sections) was built from scratch, since neither run supplied one, only a flat, unordered figure.labels array with no section grouping at all."
+  "resolution": "CORRECTION (session-wide): the gold-6-A/gold-6-B braille arrays were produced by a script that wrongly blanked every all-digit braille line (it treated a line of only '4's or '7's as empty) — this cost both runs their '444' excerpt-ellipsis markers throughout this file (five of them: after 'Coin money', after the federal-courts item, after 'Borrow money', and after the two final items) and is the majority of this file's own reconciliation work; every one was restored by decoding source-6.txt directly (lines 5210-5240), not by trusting either run's blanked array. Beyond that restoration: both runs mis-transcribe the numbered section labels as lettered (Section A/B/C instead of 1/2/3, confirmed by forward translation) and reverse the Critical-Thinking-box/main-heading order relative to the agreed braille. print.blocks (the note/paragraph/list structure for each of the three sections) was built from scratch, since neither run supplied one, only a flat, unordered figure.labels array with no section grouping at all.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "    ,critical ,?9k+                  b#ig",
+        "  444                                 #,-",
+        "    @.<,sec;n #c@.>                        c#ig"
+      ],
+      "after": [
+        "    ,critical ,?9k+                 b#ig",
+        "  444                                #,-",
+        "    @.<,sec;n #c@.>                 c#ig"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 24, 25 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 179 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (3). Where: before right-margin page number (3)."
+    }
+  ]
 }

@@ -49,7 +49,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "text 5ds4                                             #f",
+      "text 5ds4                             #f",
       "                                     #de",
       "     #a4 ,,,! life & \"ts ( %]lock",
       "       holmes,'",
@@ -73,5 +73,19 @@
   "sources": [
     "A",
     "B"
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "text 5ds4                                             #f"
+      ],
+      "after": [
+        "text 5ds4                             #f"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 204 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
   ]
 }

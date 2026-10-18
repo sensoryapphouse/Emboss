@@ -79,7 +79,7 @@
     ],
     "notes": "The row-heading column ('Gender', 'Ethnicity', 'Age') is printed only once per group; the blank cells below each in print are the implied/understood row headings covered by rule 11.5.3.",
     "surroundingText": null,
-    "printFeatures": "Bordered box, no header row shown (first column values act as the effective headers); ruled lines separate each group ('Gender' rows from 'Ethnicity' rows from 'Age' rows) but not between rows within a group."
+    "printFeatures": "Title \"Health Sector Workforce Characteristics, 2004\" (bold) is ABOVE the box, outside it. Bordered box, no header row shown (first column values act as the effective headers); the first (row-heading) column has ruled lines only between the groups (Gender / Ethnicity / Age), the other two columns are ruled between every row."
   },
   "braille": {
     "width": 40,
@@ -87,18 +87,18 @@
       "          ,h1l? ,sector ,\"w=ce       #de",
       "            ,\"*i/ics1 #bjjd",
       "7777777777777777777777777777777777777777",
-      ",g5d] \"\" ,male \"\"\"\" #bb.0",
-      "          ,female \"\" #gh.0",
-      ",e?nic;y ,:ite \"\"\"\" #hi.0",
-      "          ,asian \"\"\" #e.0",
-      "          ,black \"\"\" #c.0",
-      "          ,mix$_/o!r #c.0",
-      ",age \"\"\" #af-#bd \"\" #g.0",
-      "          #be-#cd \"\" #bc.0",
-      "          #ce-#dd \"\" #bi.0",
-      "          #de-#ed \"\" #be.0",
-      "          #ee-#fd \"\" #ad.0",
-      "          #fe\"6 \"\"\"\" #a.0",
+      ",g5d] \"\"  ,male \"\"\"\"  #bb.0",
+      "          ,female \"\"  #gh.0",
+      ",e?nic;y  ,:ite \"\"\"\"  #hi.0",
+      "          ,asian \"\"\"  #e.0",
+      "          ,black \"\"\"  #c.0",
+      "          ,mix$_/o!r  #c.0",
+      ",age \"\"\"  #af-#bd \"\"  #g.0",
+      "          #be-#cd \"\"  #bc.0",
+      "          #ce-#dd \"\"  #bi.0",
+      "          #de-#ed \"\"  #be.0",
+      "          #ee-#fd \"\"  #ad.0",
+      "          #fe\"6 \"\"\"\"  #a.0",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -110,5 +110,49 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers set to null: the print table (confirmed against the PDF image, p. 311) has no header row at all -- 'Gender / Male / 22%' is the table's first DATA row, not a heading. Run A had mistakenly duplicated that first data row into headers (while also, correctly, keeping it in rows); run B's headers were an invented placeholder. Both runs' rows lists (12 rows) were already correct and agree."
+  "resolution": "print.headers set to null: the print table (confirmed against the PDF image, p. 311) has no header row at all -- 'Gender / Male / 22%' is the table's first DATA row, not a heading. Run A had mistakenly duplicated that first data row into headers (while also, correctly, keeping it in rows); run B's headers were an invented placeholder. Both runs' rows lists (12 rows) were already correct and agree. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box, no header row shown (first column values act as the effective headers); ruled lines separate each group ('Gender' rows from 'Ethnicity' rows from 'Age' rows) but not between rows within a group.",
+      "now": "Title \"Health Sector Workforce Characteristics, 2004\" (bold) is ABOVE the box, outside it. Bordered box, no header row shown (first column values act as the effective headers); the first (row-heading) column has ruled lines only between the groups (Gender / Ethnicity / Age), the other two columns are ruled between every row.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.311 (90 dpi): the bold title sits above and outside the ruled table; the box has no title row. The row-heading cells Gender/Ethnicity/Age are ruled only where a group starts; the Male/Female/... and percentage columns have a rule under every row. The old text said nothing about the title position and said rules did not separate rows within a group."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",g5d] \"\" ,male \"\"\"\" #bb.0",
+        "          ,female \"\" #gh.0",
+        ",e?nic;y ,:ite \"\"\"\" #hi.0",
+        "          ,asian \"\"\" #e.0",
+        "          ,black \"\"\" #c.0",
+        "          ,mix$_/o!r #c.0",
+        ",age \"\"\" #af-#bd \"\" #g.0",
+        "          #be-#cd \"\" #bc.0",
+        "          #ce-#dd \"\" #bi.0",
+        "          #de-#ed \"\" #be.0",
+        "          #ee-#fd \"\" #ad.0",
+        "          #fe\"6 \"\"\"\" #a.0"
+      ],
+      "after": [
+        ",g5d] \"\"  ,male \"\"\"\"  #bb.0",
+        "          ,female \"\"  #gh.0",
+        ",e?nic;y  ,:ite \"\"\"\"  #hi.0",
+        "          ,asian \"\"\"  #e.0",
+        "          ,black \"\"\"  #c.0",
+        "          ,mix$_/o!r  #c.0",
+        ",age \"\"\"  #af-#bd \"\"  #g.0",
+        "          #be-#cd \"\"  #bc.0",
+        "          #ce-#dd \"\"  #bi.0",
+        "          #de-#ed \"\"  #be.0",
+        "          #ee-#fd \"\"  #ad.0",
+        "          #fe\"6 \"\"\"\"  #a.0"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 311 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (12). Where: column gap after guide dots (11); column gap (table / related columns / columned list) (2)."
+    }
+  ]
 }

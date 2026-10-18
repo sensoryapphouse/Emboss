@@ -19,11 +19,11 @@
         "items": [
           {
             "level": 1,
-            "text": "agree v. coincide, get along, side with, harmonize with, match up, concur, stand together, go along with, say yes to, conform —*Ant.* differ, disagree, debate."
+            "text": "agree *v.* coincide, get along, side with, harmonize with, match up, concur, stand together, go along with, say yes to, conform —Ant. differ, disagree, debate."
           },
           {
             "level": 1,
-            "text": "alarm n. anxiety, apprehension, dismay, distress, dread, strain, stress, tension —*Ant.* assurance, composure, peace, repose, security."
+            "text": "alarm *n.* anxiety, apprehension, dismay, distress, dread, strain, stress, tension —Ant. assurance, composure, peace, repose, security."
           }
         ]
       }
@@ -52,5 +52,13 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.7.2 (Single-Level Thesaurus, the actual rule this sample is cited under — A/B's own 'rule' field was null)."
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.7.2 (Single-Level Thesaurus, the actual rule this sample is cited under — A/B's own 'rule' field was null). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[*].text",
+      "was": "agree v. ... —*Ant.* differ ; alarm n. ... —*Ant.* assurance",
+      "now": "agree *v.* ... —Ant. differ ; alarm *n.* ... —Ant. assurance",
+      "evidence": "references/bana/braille-formats-2016.pdf p.594, rendered at 300 dpi and cropped: the part-of-speech labels \"v.\" and \"n.\" are italic; \"Ant.\" after the em dash is roman (upright), not italic. The gold text had it the other way round (Ant. italic, v./n. plain) although its printFeatures already said \"italicized part-of-speech label\". The entries are still one plain list item each (entry word and definition are not split); the runner has no way to take the bold entry word from this shape - builder must learn to read a thesaurus entry as entry word + label + definition."
+    }
+  ]
 }

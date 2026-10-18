@@ -1,0 +1,54 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 3,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "gen:1982326777-s3",
+ "docSource": "generated",
+ "docFeatures": [
+  "break",
+  "display-math",
+  "h1",
+  "h2",
+  "h3",
+  "pagenum",
+  "picture-alt",
+  "poem",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1982326777-s3": "docs/00-gen-1982326777-s3.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1000,
+  "height": 700
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: table",
+ "message": "the saved file reopens to different braille [first differing block: table] (block #39 not counting empty ones, table / table): first tab has 176 lines, reopened tab has 176; first differences: line 152: first tab \"CONTROL CHARS    ;8 #B      ,HEADER\\r\" / reopened tab \"CONTROL CHARS   ;8 #B      ,HEADER\\r\" | line 153: first tab \",HEADER #A                  #C\\r\" / reopened tab \",HEADER #A                 #C\\r\" | line 154: first tab \"\\\"33333333333333  \\\"33333333  \\\"33333333\\r\" / reopened tab \"\\\"3333333333333  \\\"33333333  \\\"33333333\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 15,
+ "originalActions": 17,
+ "actions": [
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "paste",
+   "how": "insertText",
+   "text": "\u0000\u0007 control chars \u001b"
+  }
+ ]
+}

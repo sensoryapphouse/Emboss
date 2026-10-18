@@ -1,0 +1,508 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 0,
+ "engine": "firefox",
+ "kind": "editor",
+ "doc": "gen:1982326777-s0",
+ "docSource": "generated",
+ "docFeatures": [
+  "display-math",
+  "h3",
+  "h4",
+  "h6",
+  "inline-math",
+  "link",
+  "note",
+  "pagenum",
+  "picture-noalt",
+  "script:arabic",
+  "script:cjk",
+  "script:combining",
+  "script:emoji",
+  "script:greek",
+  "script:hebrew",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1982326777-s0": "docs/00-gen-1982326777-s0.html"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: note",
+ "message": "the saved file reopens to different braille [first differing block: note] (block #6 not counting empty ones, note / box): first tab has 465 lines, reopened tab has 465; first differences: line 22: first tab \"    #A4\\r\" / reopened tab \"                 \\\"3#A\\r\" | line 23: first tab \"                 \\\"3#A\\r\" / reopened tab \"  _/\\r\" | line 24: first tab \"  _/\\r\" / reopened tab \"               \\\"9 \\\"9 \\\"9\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 9,
+ "originalActions": 81,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.9594,
+   "i": 9,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7127,
+   "i": 10,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4231,
+   "i": 11,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9612,
+   "i": 12,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6966,
+   "i": 13,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0875,
+   "i": 14,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7967,
+   "i": 15,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4537,
+   "i": 16,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8706,
+   "i": 17,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7717,
+   "i": 18,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1151,
+   "i": 19,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 15
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0407,
+   "i": 20,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6681,
+   "i": 21,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9939,
+   "i": 22,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 16
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.13,
+   "i": 23,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 17
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8514,
+   "i": 24,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 18
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0559,
+   "i": 25,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 19
+  },
+  {
+   "t": "insertAll",
+   "i": 20
+  },
+  {
+   "t": "insertAll",
+   "i": 21
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5867,
+   "i": 26,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8051,
+   "i": 27,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0296,
+   "i": 28,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "insertAll",
+   "i": 22
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7371,
+   "i": 29,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 23
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9,
+   "i": 30,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 24
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9774,
+   "i": 31,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 25
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7744,
+   "i": 32,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 26
+  },
+  {
+   "t": "insertAll",
+   "i": 27
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5751,
+   "i": 33,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9001,
+   "i": 34,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 28
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6301,
+   "i": 35,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2644,
+   "i": 36,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 29
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2991,
+   "i": 37,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2398,
+   "i": 38,
+   "q": "p",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1932,
+   "i": 39,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8446,
+   "i": 40,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 30
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.03,
+   "i": 41,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 31
+  },
+  {
+   "t": "insertAll",
+   "i": 32
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.099,
+   "i": 42,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 33
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5598,
+   "i": 43,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8035,
+   "i": 44,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2358,
+   "i": 45,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2958,
+   "i": 46,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2597,
+   "i": 47,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 34
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9656,
+   "i": 48,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8252,
+   "i": 49,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 35
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.647,
+   "i": 50,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1152,
+   "i": 51,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 36
+  },
+  {
+   "t": "insertAll",
+   "i": 37
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3125,
+   "i": 52,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "all"
+  }
+ ]
+}

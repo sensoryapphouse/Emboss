@@ -1,0 +1,61 @@
+{
+  "id": "sample-2-11",
+  "title": "Sample 2-11: Layout of Table of Contents",
+  "pdfPages": [
+    34
+  ],
+  "textLines": [
+    2508,
+    2524
+  ],
+  "illustrates": {
+    "rule": "2.10 cross-reference",
+    "quote": "(See Sample 2-11: Layout of Table of Contents on page 2-34.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-078.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "                ,,3t5ts               vi",
+      "",
+      "            @.<,volume #a@.>",
+      ",*apt]",
+      "",
+      "              ,unit ,h1d+",
+      "               ,\"p ,h1d+ \"\"\"\"\"\"\"\"\"\"\"\" #a",
+      "#a ,*apt] ,h1d+ \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #b",
+      "  ,sub5try \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #e",
+      "  ,sub5try \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #aj",
+      "    ,sub-sub5try \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" #ab"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.78: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 4"
+    }
+  ]
+}

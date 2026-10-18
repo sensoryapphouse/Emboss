@@ -1,0 +1,40 @@
+{
+  "id": "sample-20-7-3c",
+  "title": "20.7.3c: Title page: Print pages 395, 45-a86",
+  "pdfPages": [
+    9
+  ],
+  "textLines": [
+    15879,
+    15879
+  ],
+  "illustrates": {
+    "rule": "20.7.3c",
+    "quote": "c. Include the print page number of the transposed page that contains the repeated pronunciation key on the title page. For example:"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "other",
+        "level": null,
+        "text": "Title page: Print pages 395, 45-a86",
+        "features": "Single line of print-style reference text set under rule 20.7.3c (an illustration of the wording, not braille)"
+      }
+    ],
+    "notes": "Unnumbered inline example ('For example:'); shown in the page image gold-20-A/page-547.png as one indented line of serif text.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille in the source for this example."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree ([]). illustrates: A recorded rule '20.x' and the line itself as the quote; B recorded '20.7.3c' with the same line as the quote; rule id agreed, quote replaced by the rule's own wording (lines 15876-15878). print: A's block text lacked the words 'Title page:'; corrected to the full source line, which also matches the page image. B empty. Title: A's and B's titles were the line itself / 'BANA 20.7.3c'; replaced by a rule-labelled title. pdfPages: A empty, B [9], agrees with footers."
+}

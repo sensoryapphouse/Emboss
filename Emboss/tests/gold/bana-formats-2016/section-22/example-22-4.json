@@ -1,0 +1,73 @@
+{
+  "id": "example-22-4",
+  "title": "Example 22-4: Annotated Bibliography",
+  "pdfPages": [
+    3
+  ],
+  "textLines": [
+    17304,
+    17316
+  ],
+  "illustrates": {
+    "rule": "22.3.2",
+    "quote": "Use margins of 1-5, 3-5 for mixed bibliographies that include both annotated and unannotated entries."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "L’Engle, Madeleine (1973). A Wrinkle in Time. New York: Bantam Doubleday Dell Books for Young Readers.",
+        "features": "Hanging indent. 'A Wrinkle in Time.' in italics, including the full stop.",
+        "emphasis": [
+          [
+            "A Wrinkle in Time.",
+            "i"
+          ]
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "This Newbery Medal winner is a mixture of science fiction and mysticism. Two children and a friend must rescue their father from the fifth dimension.",
+        "features": "Annotation, indented further than the entry's runover lines (3-5 margins)."
+      },
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "——. The Small Rain (1945). New York: Farrar Straus Giroux.",
+        "features": "Hanging indent. Begins with a long print dash in place of the author's name. 'The Small Rain' in italics; '(1945).' in roman.",
+        "emphasis": [
+          [
+            "The Small Rain",
+            "i"
+          ]
+        ]
+      }
+    ],
+    "notes": "Print original is the picture in the example box (gold-22-A/page-599.png).",
+    "surroundingText": null,
+    "printFeatures": "Bibliography entries with hanging indents and long print dashes."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",l',5gle1 ,madele9e \"<#aigc\">4 .7,a",
+      "    ,wr9kle 9 ,\"t4.' ,new ,york3 ,bantam",
+      "    ,d\\ble\"d ,dell ,books = ,\"y ,r1d]s4",
+      "  ,? ,newb]y ,m$al w9n] is a mixture (",
+      "    sci;e fic;n & my/icism4 ,two *n & a",
+      "    fr m/ rescue _! \"f f ! fif? dim5.n4",
+      "\",-4 .7,! ,small ,ra9.' \"<#aide\">4 ,new",
+      "    ,york3 ,f>r> ,/raus ,gir\\x4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. Runover indent kept as spaces (U+2800 cells converted). 4 blank picture-area source lines after the caption are excluded."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree with the source and with each other. B cited 22.3.1 and 22.3.2 with both rule texts; the example follows 22.3.2 directly, so only that rule is cited (as in A). Neither run listed the print-picture blank lines here, so no gap handling was needed in the runs; the 4 blank source lines after the caption are print-original area and are excluded, as in section 20. illustrates: A and B rule text agrees with the source (verified). print: A and B agree in text; italic extents checked against the braille passage indicators and the page image (the italic run includes the full stop where the braille terminator follows the period). pdfPages: A gave the PNG number ([599]), B the section page; B's is used."
+}

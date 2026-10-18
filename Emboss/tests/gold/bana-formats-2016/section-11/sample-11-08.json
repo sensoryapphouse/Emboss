@@ -53,12 +53,12 @@
       "",
       "     ,,,example base price me?od,'",
       "",
-      ",pr(it \"\"\"\"\"\"\"\"\"\"\"\" @s# c4ej    #aj.0",
+      ",pr(it \"\"\"\"\"\"\"\"\"\"\"\"  @s# c4ej   #aj.0",
       ",ov]h1d \"\"\"\"\"\"\"\"\"\"\"    # i4de   #bg.0",
       ",labor \"\"\"\"\"\"\"\"\"\"\"\"    # i4aj   #bf.0",
       ",raw ,food ,co/s \"\"    #ab4ie   #cg.0",
-      "                     \"3333333 \"33333",
-      ",cu/om]'s ,m1l ,co/ @s#ce4jj #ajj.0",
+      "                     \"3333333  \"33333",
+      ",cu/om]'s ,m1l ,co/  @s#ce4jj  #ajj.0",
       ""
     ],
     "pageBreaks": [],
@@ -71,5 +71,23 @@
     "A",
     "B"
   ],
-  "resolution": "pdfPages already agreed. print.headers confirmed null (no header row; confirmed against the PDF image, p. 315)."
+  "resolution": "pdfPages already agreed. print.headers confirmed null (no header row; confirmed against the PDF image, p. 315).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",pr(it \"\"\"\"\"\"\"\"\"\"\"\" @s# c4ej    #aj.0",
+        "                     \"3333333 \"33333",
+        ",cu/om]'s ,m1l ,co/ @s#ce4jj #ajj.0"
+      ],
+      "after": [
+        ",pr(it \"\"\"\"\"\"\"\"\"\"\"\"  @s# c4ej   #aj.0",
+        "                     \"3333333  \"33333",
+        ",cu/om]'s ,m1l ,co/  @s#ce4jj  #ajj.0"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 4, 8, 9 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 315 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap (table / related columns / columned list) (2); column gap after guide dots (1); table separation line (1)."
+    }
+  ]
 }

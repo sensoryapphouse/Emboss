@@ -16,11 +16,13 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "Correct errors in punctuation in the passage below."
+        "text": "Correct errors in punctuation in the passage below.",
+        "directions": true
       },
       {
         "kind": "paragraph",
-        "text": "Today**;** I went shopping for new shoes**!** The weather has turned very cold for Easter**?** Let's go for ice cream**.** Please**.** wash your hands before making the sandwich**.**"
+        "text": "Today**;** I went shopping for new shoes**!** The weather has turned very cold for Easter**?** Let's go for ice cream**.** Please**.** wash your hands before making the sandwich**.**",
+        "blocked": true
       }
     ],
     "notes": "The semicolon, exclamation mark, question mark, and the periods after \"cream\"/\"Please\"/\"sandwich\" are printed bold — marked here with bold segment markup: forward-translating the passage with a real per-character bold typeform array around just these marks reproduces the given braille's own scattered ^22/^26/^28/^24 bold-boundary indicators almost exactly, confirming the marks genuinely need typeform boundaries even though the punctuation glyph itself does not visually change.",
@@ -47,5 +49,19 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly. Wording verified word-for-word by back-translating the given braille (louis.backTranslate): \"Today; I went shopping for new shoes! ... wash your hands before making the sandwich.\" — matching both runs’ own transcription (B’s own uncertain note flags a text-file-vs-image bold discrepancy after \"cream\" that does not affect wording). Marking each bold punctuation mark with bold segment markup and forward-translating reproduces the given braille’s own scattered bold-boundary indicators (^22/^26/^28/^24) almost exactly — the one remaining difference is a single word’s own contraction (\"TO\\\"D\" in the given braille vs. \"TD\" produced here for \"Today\"), an unresolved micro-detail of how a typeform boundary right after the very first word suppresses a whole-word contraction, not a wording error. illustrates corrected from either run’s own guess (A: caption-adjacent \"18.3.3 a\" with a stray space; B: item b’s own text) to 18.3.3a’s own rule text, matching this example’s own placement directly under that rule."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. Wording verified word-for-word by back-translating the given braille (louis.backTranslate): \"Today; I went shopping for new shoes! ... wash your hands before making the sandwich.\" — matching both runs’ own transcription (B’s own uncertain note flags a text-file-vs-image bold discrepancy after \"cream\" that does not affect wording). Marking each bold punctuation mark with bold segment markup and forward-translating reproduces the given braille’s own scattered bold-boundary indicators (^22/^26/^28/^24) almost exactly — the one remaining difference is a single word’s own contraction (\"TO\\\"D\" in the given braille vs. \"TD\" produced here for \"Today\"), an unresolved micro-detail of how a typeform boundary right after the very first word suppresses a whole-word contraction, not a wording error. illustrates corrected from either run’s own guess (A: caption-adjacent \"18.3.3 a\" with a stray space; B: item b’s own text) to 18.3.3a’s own rule text, matching this example’s own placement directly under that rule. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-499.png: the opening sentence is an instruction to the student (imperative exercise directions) set as an indented first paragraph; the gold braille sets it 5-5."
+    },
+    {
+      "field": "print.print.blocks.1.blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-499.png (Example 18-3): the passage 'Today; I went shopping ...' starts flush at the box's left margin (same x as the directions line), no first-line indent."
+    }
+  ]
 }

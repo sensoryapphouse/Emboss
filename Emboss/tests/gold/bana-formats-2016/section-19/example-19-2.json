@@ -15,9 +15,12 @@
   "print": {
     "blocks": [
       {
-        "kind": "other",
-        "text": "M   O   R   S E       C   O   D E\n-- --- .-. ... .     -.-. --- -.. .",
-        "features": "Verified against the PDF page image (p.520): the letters M-O-R-S-E and C-O-D-E are printed above their own Morse dot/dash sequence, spaced out to align each letter over its own code; there is a wide gap between the two words. Not print text a transcriber would normally include (the title itself says \"Letters Added for Readability\") — Emboss has no column-alignment mechanism for this in any case (F-219)."
+        "kind": "paragraph",
+        "text": "-- --- .-. ... .   -.-. --- -.. .",
+        "blocked": true,
+        "continuation": true,
+        "wordGaps": true,
+        "features": "Print (page-520.png): a line of Morse code in two words with a wide gap between the words; the letters M O R S E C O D E printed above are the standard's own aid ('Letters Added for Readability' in the example title), not part of the code line."
       }
     ],
     "notes": "The print shows the letters of MORSE CODE spaced out with their own Morse code symbols aligned directly beneath each letter; per the example's own title, the letters are an add-on aid, not something a real transcription would carry (the braille below omits them entirely, per 19.4.1's own instruction to show only the symbols).",
@@ -37,5 +40,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree, byte-identical, confirmed by independent re-extraction). Print side: the letters and their own alignment are decorative (per the example's own title) and not braille-buildable in this schema regardless (F-219/F-222); kept as a documented 'other' limitation rather than modeled, matching both runs' own intent."
+  "resolution": "Braille unchanged (A and B agree, byte-identical, confirmed by independent re-extraction). Print side: the letters and their own alignment are decorative (per the example's own title) and not braille-buildable in this schema regardless (F-219/F-222); kept as a documented 'other' limitation rather than modeled, matching both runs' own intent. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks.0",
+      "was": "kind 'other': letters row 'M   O   R   S E       C   O   D E' plus Morse row",
+      "now": "kind 'paragraph': the Morse row only, '-- --- .-. ... .   -.-. --- -.. .' (three spaces between words), blocked, continuation, wordGaps:true",
+      "evidence": "Page image references/_gemini/_done/gold-19-A/page-520.png (Example 19-2): the boxed print shows the Morse dot/dash row with a clearly wider gap between the two words, with the letter row above it; the example title says the letters were added for readability, so the code line is the print content to transcribe. wordGaps is the field for 19.4.1c three-cell gaps. Judgement: treating the letter row as the standard's aid rather than print."
+    }
+  ]
 }

@@ -54,13 +54,25 @@ test('BANA §8.5.1b / §10.4.1: one level is 1-3, two levels 1-5, 3-5 — for li
   }
 });
 
-test('UKAAF B004 App C Ex1: nested list 1/5, 3/7, 5/9; §10 Ex1: a flat list stays 1-3', () => {
-  const lines = bodyLines(formatDocument({ blocks: [threeLevelList()] }, opts('ukaaf')));
+// UK-5 (28 Sep, James / decisions.md "UKAAF"): the 'compact' house style is now the UKAAF DEFAULT
+// (superseding the "spaced unless told otherwise" default this test used to rely on by calling
+// opts('ukaaf') with no listStyle) — App C Ex1 / §10 Ex1's margins below are still exactly right,
+// just now reached only with an explicit `listStyle: 'spaced'`. See the 'compact is now the default'
+// test further down for the new default itself.
+test('UKAAF B004 App C Ex1: nested list 1/5, 3/7, 5/9; §10 Ex1: a flat list stays 1-3 (listStyle: spaced)', () => {
+  const lines = bodyLines(formatDocument({ blocks: [threeLevelList()] }, opts('ukaaf', { listStyle: 'spaced' })));
   const entries = ['MAIN ENTRY', 'SUB ENTRY', 'SUBSUB ENTRY'].map((t) => lines.findIndex((l) => l.trimStart().startsWith(t)));
   assert.deepEqual(entries.map((i) => leading(lines[i])), [0, 2, 4], `entries in cells 1, 3, 5: ${JSON.stringify(lines)}`);
   assert.deepEqual(entries.map((i) => leading(lines[i + 1])), [4, 6, 8], `runovers in cells 5, 7, 9: ${JSON.stringify(lines)}`);
-  const flat = bodyLines(formatDocument({ blocks: [{ type: 'list', items: [{ text: longText('Only') }] }] }, opts('ukaaf')));
+  const flat = bodyLines(formatDocument({ blocks: [{ type: 'list', items: [{ text: longText('Only') }] }] }, opts('ukaaf', { listStyle: 'spaced' })));
   assert.deepEqual([leading(flat[0]), leading(flat[1])], [0, 2], `flat list 1-3: ${JSON.stringify(flat)}`);
+});
+
+test('UK-5: UKAAF list margins default to compact (5/1, 7/1, 9/1) when listStyle is not set at all', () => {
+  const lines = bodyLines(formatDocument({ blocks: [threeLevelList()] }, opts('ukaaf')));
+  const entries = ['MAIN ENTRY', 'SUB ENTRY', 'SUBSUB ENTRY'].map((t) => lines.findIndex((l) => l.trimStart().startsWith(t)));
+  assert.deepEqual(entries.map((i) => leading(lines[i])), [4, 6, 8], `entries in cells 5, 7, 9 (compact default): ${JSON.stringify(lines)}`);
+  assert.deepEqual(entries.map((i) => leading(lines[i + 1])), [0, 0, 0], `runovers in cell 1 (compact default): ${JSON.stringify(lines)}`);
 });
 
 test('UKAAF B004 App I: index entries share one runover start two cells right of the deepest entry', () => {
@@ -73,8 +85,10 @@ test('UKAAF B004 App I: index entries share one runover start two cells right of
 test('UKAAF B004 §10 Ex2 compact (5-1, 7-1) applies only in UKAAF mode; BANA ignores listStyle=compact', () => {
   const doc = { blocks: [{ type: 'list', items: [{ marker: '1.', text: longText('Main'), level: 0 }, { marker: 'a.', text: longText('Sub'), level: 1 }] }] };
   const uk = bodyLines(formatDocument(doc, opts('ukaaf', { listStyle: 'compact' })));
-  assert.deepEqual(pairs(uk, ['MAIN', 'SUB']), [[4, 0], [6, 0]], `compact 5/1, 7/1: ${JSON.stringify(uk)}`);
-  assert.equal(uk[0].includes('1.'), false, 'compact ignores print markers');
+  assert.deepEqual(pairs(uk, ['1. MAIN', 'A. SUB']), [[4, 0], [6, 0]], `compact 5/1, 7/1: ${JSON.stringify(uk)}`);
+  // 28 Sep: compact now KEEPS print markers (numbers are content; bullets follow Show bullets, UK-10). It used to
+  // drop them, which took the numbers off every numbered list once compact became the UKAAF default (UK-5).
+  assert.equal(uk.some((l) => l.trimStart().startsWith('1. MAIN')), true, `compact keeps print markers: ${JSON.stringify(uk)}`);
   const us = bodyLines(formatDocument(doc, opts('bana', { listStyle: 'compact' })));
   assert.deepEqual(pairs(us, ['1. MAIN', 'A. SUB']), [[0, 4], [2, 4]], `BANA keeps §8.5.1b 1-5, 3-5: ${JSON.stringify(us)}`);
   assert.equal(us[0].startsWith('1.'), true, 'BANA keeps the print marker');
@@ -161,22 +175,30 @@ test('BANA §4.5.3 / §8.3.3a / §13.3.1a: no blank line between a cell-5 or cel
   assert.equal(lines[at('VOCABULARY') + 1], '', 'a centred heading is still followed by a blank line before a list (§4.4.1)');
 });
 
-test('UKAAF mode keeps the B004 list spacing (blank line before a list after a heading)', () => {
+// UK-5 (28 Sep, James / decisions.md "UKAAF"): supersedes this test's old name/expectation — UKAAF
+// now carries NO blank line here (or anywhere else except before a sub-heading itself); was "keeps
+// the B004 list spacing (blank line before a list after a heading)" under UK-1's narrower rules.
+test('UK-5: UKAAF — no blank line between a heading and the list that follows it', () => {
   const lines = formatDocument({ blocks: [
     { type: 'para', text: 'Intro.' },
     { type: 'heading', level: 2, text: 'Materials' },
     { type: 'list', items: [{ text: 'notebook' }] },
-  ] }, opts('ukaaf', { suppressHeader: true })).split('\f')[0].split(/\r?\n/);
+  ] }, opts('ukaaf', { suppressHeader: true, docEndMarker: false })).split('\f')[0].split(/\r?\n/);
   const at = (t) => lines.findIndex((l) => l.trim() === t);
-  assert.equal(lines[at('MATERIALS') + 1], '', JSON.stringify(lines));
+  assert.equal(lines[at('MATERIALS') + 1].trim(), 'NOTEBOOK', JSON.stringify(lines));
 });
 
 test('BANA §4.3.7 / §14.4.1c: font attributes are dropped from headings and stage directions but kept in paragraphs', () => {
   const segs = [{ type: 'text', text: 'Plain and ' }, { type: 'text', text: 'bold', tf: 4 }];
   const o = opts('bana', { translate: tfTranslate, translatePos: tfTranslatePos });
+  // K1 (25 Sep): a heading drops a font attribute that covers all of it (§4.3.7) and keeps one that covers only part
+  // of it (BANA 5.3.1: "When these items are partially emphasized, however, font attributes must be retained").
+  const whole = [{ type: 'text', text: 'Plain and bold', tf: 4 }];
   for (const level of [1, 2, 3]) {
-    const h = formatBlock({ type: 'heading', level, segments: segs }, o, false).filter(Boolean);
+    const h = formatBlock({ type: 'heading', level, segments: whole }, o, false).filter(Boolean);
     assert.equal(h.some((l) => l.includes('^')), false, `heading level ${level} drops tf: ${JSON.stringify(h)}`);
+    const hp = formatBlock({ type: 'heading', level, segments: segs }, o, false).filter(Boolean);
+    assert.equal(hp.some((l) => l.includes('^')), true, `partly bold heading level ${level} keeps tf: ${JSON.stringify(hp)}`);
     const tr = traceBlock({ type: 'heading', level, segments: segs }, o, false);
     assert.deepEqual(tr.map((t) => t.s), formatBlock({ type: 'heading', level, segments: segs }, o, false), 'trace mirrors the formatter');
   }

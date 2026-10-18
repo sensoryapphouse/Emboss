@@ -38,10 +38,10 @@
       "",
       "\"\"=;;; [Dot locator for “use” precedes grade 1 passage indicator standing alone. UEB, §3.14]",
       "",
-      "   x        _/                x                _/             x",
+      "   x     _/     x      _/    x",
       "  ,but ,,soft6 ,what ,,light through",
       "",
-      "      _/         x               _/          x              _/",
+      "      _/   x     _/   x     _/",
       "    ,,yon,'der ,,win,'dow ,,breaks8;'",
       ""
     ],
@@ -57,5 +57,21 @@
     "A",
     "B"
   ],
-  "resolution": "Same all-blank-row correction as example-13-4 (indices 0,2,4,7,10; .txt lines 10462/10464/10466/10469/10472, each 40 literal U+2800 characters, confirmed genuine diagrammed-scansion spacer rows, not page filler) -- run A's ASCII-space padding replaced with \"\", matching the run-B/repo-wide convention. Index 5 (.txt line 10467, the ictus/x mark row '⠀⠀⠀x        _/...') is kept as run A gave it (3 leading blank cells): counted directly against the source (three literal U+2800 characters precede the first 'x'), confirming run A and correcting run B's 2-space count (an undercount by one). Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. CORRECTION during buildModel13 integration: the first block (run A's own 'poem' kind, 2 stanzas-lines) is changed to 'other' here, matching run B's own judgement for this same content: this is a stress/ictus diagram with a mark row placed ABOVE a text row (F-P7 -- 'a diacritic placed above a specific letter cannot be represented at all'), not a real 2-level verse poem; modelling it as 'poem' would build fictitious verse-block content Emboss's own poem margins have no real bearing on. The file's overall 'not-representable' status is unaffected (the second writing was already an unbuildable 'other' block)."
+  "resolution": "Same all-blank-row correction as example-13-4 (indices 0,2,4,7,10; .txt lines 10462/10464/10466/10469/10472, each 40 literal U+2800 characters, confirmed genuine diagrammed-scansion spacer rows, not page filler) -- run A's ASCII-space padding replaced with \"\", matching the run-B/repo-wide convention. Index 5 (.txt line 10467, the ictus/x mark row '⠀⠀⠀x        _/...') is kept as run A gave it (3 leading blank cells): counted directly against the source (three literal U+2800 characters precede the first 'x'), confirming run A and correcting run B's 2-space count (an undercount by one). Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. CORRECTION during buildModel13 integration: the first block (run A's own 'poem' kind, 2 stanzas-lines) is changed to 'other' here, matching run B's own judgement for this same content: this is a stress/ictus diagram with a mark row placed ABOVE a text row (F-P7 -- 'a diacritic placed above a specific letter cannot be represented at all'), not a real 2-level verse poem; modelling it as 'poem' would build fictitious verse-block content Emboss's own poem margins have no real bearing on. The file's overall 'not-representable' status is unaffected (the second writing was already an unbuildable 'other' block).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "   x        _/                x                _/             x",
+        "      _/         x               _/          x              _/"
+      ],
+      "after": [
+        "   x     _/     x      _/    x",
+        "      _/   x     _/   x     _/"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 5, 8 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 361 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (2). Where: poetry stress/scansion mark positions (2)."
+    }
+  ]
 }

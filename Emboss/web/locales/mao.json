@@ -60,10 +60,13 @@
     "toc": "Ihirangi",
     "print": "Tirohanga Tā (Taha Mauī)",
     "braille": "Braille",
+    "export": "Kawe atu",
+    "export_title": "Kawe atu te Braille (BRF, eBraille), tukuna rānei ki te pūrere tā Braille",
+    "emboss_menu": "Tukuna ki te pūrere tā Braille",
     "braille_view": "Tirohanga Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Tā Braille",
     "emboss_tooltip": "Tukuna te tuhinga ki te pūrere tā Braille, ki te pūrere tā rānei",
     "clear_doc": "Whakawātea i te Tuhinga",
@@ -133,8 +136,6 @@
     "poem_desc": "Rārangi whiti rotarota (1-3)",
     "exercise_title": "Pātai Mahi",
     "exercise_desc": "Pātai mahi kua taua (1-5 / 3-5)",
-    "caption_title": "Kupu Whakamārama / Puna",
-    "caption_desc": "Kupu whakamārama whakaahua, puna rānei (7-5)",
     "footnote_title": "Kōrero Raro Whārangi",
     "footnote_desc": "Kuputuhi kōrero raro whārangi (1-3)",
     "note_title": "Kōrero a te Kaiwhakapāra",
@@ -163,8 +164,6 @@
     "page_desc": "Whakauru tohu wāhinga whārangi o te pukapuka tā taketake",
     "printpage_title": "Tau Whārangi Tā",
     "printpage_desc": "Whakauru tohu wāhinga whārangi o te pukapuka tā taketake",
-    "code_title": "Waehere Rorohiko",
-    "code_desc": "Whakauru poraka waehere me ngā tohu UEB",
     "indent_title": "Tāpiri Kokonga / Kōhuki i te Urunga Iti",
     "indent_desc": "Kōhukihia te urunga rārangi, te pātai mahi rānei kia hōhonu ake (Tab)",
     "outdent_title": "Tango Kokonga / Whakanui i te Urunga",
@@ -185,8 +184,8 @@
     "language_label": "Te Reo o te Atanga",
     "language_help": "Kōwhiria te reo mō ngā pātene, ngā tahua, ngā kōrerorero, me ngā pānui a te kaipānui mata.",
     "standard_label": "Paerewa Braille",
-    "standard_bana": "BANA (Amerika me Kanata — 40×25 pūkoro)",
-    "standard_ukaaf": "UKAAF (United Kingdom me te Ao Whānui — 38×25 pūkoro)",
+    "standard_bana": "BANA (Amerika me Kanata — 38×25 pūkoro)",
+    "standard_ukaaf": "UKAAF (United Kingdom me te Ao Whānui — 38×27 pūkoro)",
     "grade_label": "Taumata Whakapotoranga",
     "grade_1": "Taumata 1 (Kāore i whakapotoa / reta mō te reta)",
     "grade_2": "Taumata 2 (Kua whakapotoa)",
@@ -261,7 +260,7 @@
     "size_full": "Whārangi Katoa (Rārangi 1 Kua Kotia)",
     "lead_lines": "Rārangi Ārahi Pā-ringa",
     "braille_labels": "Tapanga Braille",
-    "footer_tip": "💡 Ka huri ngā rangi mangumangu hei rohe pā-ringa mārō; ka aunoa te huri o ngā tae hei ā-anga pā-ringa motuhake.",
+    "footer_tip": "Ka huri ngā rangi mangumangu hei rohe pā-ringa mārō; ka aunoa te huri o ngā tae hei ā-anga pā-ringa motuhake.",
     "open_repositories": "Ngā Pātaka Pā-ringa Tuwhera:",
     "no_diagrams": "Kāore i kitea he hoahoa e rite ana."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Te Tūnga o te Whakamāoritanga Huri-hoki",
     "precedence_status": "Te Tūnga o ngā Ture Mana Nui Braille",
     "perfect_match": "100% Te Ōrite o te Huri-hoki (0 rerekētanga)",
-    "badge_warn": "⚠ {count} hei arotake",
+    "badge_warn": "{count} hei arotake",
     "badge_title": "{count} ngā rerekētanga kupu i kitea i te wā o te whakamāoritanga huri-hoki. Pāwhiria hei peke ki te tuatahi.",
     "badge_clean": "Arotake huri-hoki: kāore he rerekētanga kupu i kitea."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "He rerekētanga tō koe kāore anō kia tiakina. Kei te tino hiahia koe ki te puta i waho i te tiaki?",
     "unsaved_load": "He rerekētanga tō koe kāore anō kia tiakina. Ki te utaina e koe tētahi kōnae hou, ka whakakapi i tō tuhinga o nāianei. Me haere tonu?",
     "unsaved_clear": "He rerekētanga tō koe kāore anō kia tiakina. Kei te tino hiahia koe ki te whakawātea i te tuhinga?",
-    "drop_hint": "⬇ Tukuna he tuhinga hei kawe mai ki te ētita",
+    "drop_hint": "Tukuna he tuhinga hei kawe mai ki te ētita",
     "notice": "Pānui",
     "close_notice": "Katia te Pānui"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Kuputuhi o te tuhinga",
+      "math_keyboard_toggle": "Papapātuhi pāngarau",
       "label": "Kuputuhi",
       "toolbar_aria": "Whakahōputu",
       "style_label": "Momo whatinga",
@@ -443,8 +443,8 @@
       "graphic_cats": "Ngā Wāhanga Whakaahua",
       "graphic_list": "Ngā hoahoa whakaahua pā-ringa",
       "formula_search_label": "Rapua ngā whārite",
-      "btactile_link": "BTactile (Kore Utu) ↗",
-      "tgil_link": "APH TGIL (neke atu i te 1,800 Tauira) ↗"
+      "btactile_link": "BTactile (Kore Utu)",
+      "tgil_link": "APH TGIL (neke atu i te 1,800 Tauira)"
     },
     "settings": {
       "list_spaced": "Rārangi wātea (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Tūhonohono tika ki ngā pūrere tā microcontroller ritenga (ESP32-S3, RP2040/RP2350, STM32, Arduino) e karo ana i ngā ārai kaiārahi pūrere tā a te OS.",
       "graphics_hint": "Ki te kore e tohua, ka kaweake ngā hoahoa hei whakāhuatanga Kōrero a te Kaiwhakapāra e taea ana te uru mō ngā pūrere tā kuputuhi-anake me ngā whakaaturanga Braille.",
       "tactile_heading": "Rerenga Ora Whakaaturanga Pā-ringa (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Tūhono Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Tūhono USB / HID (Monarch)",
+      "tactile_connect_ble": "Tūhono Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Tūhono USB / HID (Monarch)",
       "tactile_disconnect": "Motuhia te Whakaaturanga",
       "tactile_sim_monarch": "Whakamātauria te Monarch Whakatairite (32×10)",
       "tactile_sim_dotpad": "Whakamātauria te DotPad Whakatairite (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Ka tuku i te tirohanga ora Braille me ngā whakaahua pā-ringa tika mā WebBluetooth (DotPad BLE UART), WebHID (Monarch/USB) rānei, kāore he kaiārahi pūmanawa o waho.",
       "perkins_hint": "— tuhia te Braille mā ngā kī SDF me JKL",
       "ascii_hint": "— whakaatu i ngā piopio Braille ASCII mata",
+      "show_explanation_bar": "Whakaatu i te pae whakamārama",
+      "show_explanation_bar_hint": "— te kōpae i raro i te kuputuhi me te Braille e whakamārama ana i te Braille mō te kupu kei a koe",
+      "simple_mode_hint": "— whakatuwhera i a Emboss i te kaitahuri māmā. Kāore te whakawhiti i waenga i te Aratau Tere me te ētita e whakarerekē i tēnei.",
       "covers_hint": "— ngā uhi taitara kua tāngia i te wā e wāwāhi ana i ngā pukapuka"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Pane {n}",
       "cell_aria_named": "{header}, rārangi {row}",
       "cell_aria": "Pou {col}, rārangi {row}",
-      "too_wide_listed": "⚠ He whānui rawa mō ngā pou — ka whakamāoritia hei ripanga rārangi i te Braille",
+      "too_wide_listed": "He whānui rawa mō ngā pou — ka whakamāoritia hei ripanga rārangi i te Braille",
       "too_wide_listed_title": "Kāore tēnei ripanga e uru ki ngā pou i te maha o ngā pūkoro ā-rārangi me te aratau Braille o nāianei, nō reira ka hangaia hei ripanga rārangi (BANA Formats §11.9) i te Braille, kaua ko ngā pou e tū tahi ana.",
-      "too_wide_paragraph": "⚠ He whānui rawa mō ngā pou — ka hangaia hei whatinga i te Braille",
+      "too_wide_paragraph": "He whānui rawa mō ngā pou — ka hangaia hei whatinga i te Braille",
       "too_wide_paragraph_title": "Kāore tēnei ripanga e uru ki ngā pou i te maha o ngā pūkoro ā-rārangi me te aratau Braille o nāianei, nō reira ka hangaia hei whatinga (UKAAF B004 §12) i te Braille, kaua ko ngā pou e tū tahi ana."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Kāore i taea te uta i ngā ripanga mō “{code}” — kei te whakamahi tonu i te waehere Braille o mua.",
-      "failed": "⚠ Kāore i taea te hanga Braille.",
+      "failed": "Kāore i taea te hanga Braille.",
       "failed_hint": "(Mehemea e kī ana kāore anō te pūkaha kia tīmata, kāore te pūkaha Braille i uta — whakahoutia mārō mā Cmd/Ctrl+Shift+R.)",
       "error_status": "Hapa hanga: {message}"
     },
     "engine": {
       "loading": "E uta ana i te pūkaha Braille…",
-      "failed": "⚠ I rahua te uta o te pūkaha Braille.",
+      "failed": "I rahua te uta o te pūkaha Braille.",
       "failed_hint": "Whakahoutia mārō mā Cmd/Ctrl+Shift+R. Ki te tū tonu, huakina te ariā pūtirotiro (Tiro ▸ Kaiwhakawhanake) ka tuku mai i ngā hapa.",
       "failed_status": "I rahua te uta o te pūkaha: {message}",
       "ready": "Kua rite — tuhi, whakahōputu rānei ki te taha mauī; ka whakahou ora te Braille."
@@ -715,7 +718,7 @@
       "network_unreachable": "Kāore i taea te tae atu ki {url}: {message}. Kāore e taea e ngā pūtirotiro te huaki i ngā hononga TCP mata (tomokanga 9100); me whakaae te pūrere tā ki te HTTP POST, tikiake rānei i te kōnae .brf ka tuku mā tō kaiwhakahaere tā.",
       "usb_bridge_done": "Kua tae te mahi Emboss ki te pūrere tā USB!",
       "needs_webserial": "Me whai te tā rārangi tika i tētahi pūtirotiro me WebSerial (Chrome, Edge, Opera). Ka taea e koe te tikiake i te kōnae .brf hei tā mā tō kaiwhakahaere tā, te whakamahi rānei i te aratau Whatunga (Tomokanga 9100) i ngā Tautuhinga.",
-      "detected": "🔌 Kua kitea a {name} — kua tautuhia ki {cells}×{lines} i te {baud} baud."
+      "detected": "Kua kitea a {name} — kua tautuhia ki {cells}×{lines} i te {baud} baud."
     },
     "symbols": {
       "title": "Pātaka Tohu Pā-ringa",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Ahurangi Hurihuri",
       "badge_text_only": "Kuputuhi Anake",
       "badge_index": "Ahurangi Piopio"
+    },
+    "offline": {
+      "ready": "Kua rite a Emboss hei mahi me te kore ipurangi.",
+      "ready_short": "Kua rite hei mahi me te kore ipurangi",
+      "not_yet": "Kei te whakareri tonu hei mahi me te kore ipurangi…"
     }
   }
 }

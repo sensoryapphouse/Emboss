@@ -18,7 +18,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Publish in a print medium. Submit your narrative to a school newspaper or national magazine that publishes student writing. Consult your teacher or librarisn for suggestions.",
+        "text": "*Publish in a print medium.* Submit your narrative to a school newspaper or national magazine that publishes student writing. Consult your teacher or librarisn for suggestions.",
         "features": "'Publish in a print medium.' italicized as a run-in lead-in; sic: print reads 'librarisn' (apparent typo for 'librarian', re-verified at 8x zoom directly against the PDF image -- reproduced verbatim, as printed)."
       },
       {
@@ -65,5 +65,13 @@
     "Whether the main-article heading 'Publishing and Presenting' and its paragraph are meant to be read as part of 'Example 9-7' or merely as page context the cross-reference note sits within is not stated explicitly by the rule text."
   ],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines` except A included a leading blank line (source .txt line 6800, a genuine 40-blank-cell braille line) that B omitted. Settled the same way as Example 9-4: byte-counted directly from the source, line 6800 carries the 8-space margin plus 40 literal U+2800 cells, distinct from the truly-empty .txt lines 6796-6799 before it -- A's leading blank is correct and kept. Print-content disagreement: A folded the icon and the note's own heading into one 'other' block's text; B kept the icon as its own 'other' block and gave 'Speaking Connection' its own 'heading' block (level null). Resolved to B's finer split (icon as 'other', note heading as its own 'heading' block, level 3/cell-7 measured directly from the agreed braille's own indent) since it separates print's own distinct visual elements rather than merging unrelated content into one block's text, matching this section's general convention (cf. example-9-8). Both runs agreed on the 'librarisn' typo, kept verbatim per the task's 'as printed' instruction."
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].text (italics)",
+      "was": "Publish in a print medium. Submit ...",
+      "now": "*Publish in a print medium.* Submit ...",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110 dpi, PDF p234 (Example 9-7): the run-in lead-in \"Publish in a print medium.\" is italic, the rest of the paragraph upright. (The italics on \"Listening and Speaking Workshop\" in the marginal note are not settled at this resolution and are left as they were.)"
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines` except A included a leading blank line (source .txt line 6800, a genuine 40-blank-cell braille line) that B omitted. Settled the same way as Example 9-4: byte-counted directly from the source, line 6800 carries the 8-space margin plus 40 literal U+2800 cells, distinct from the truly-empty .txt lines 6796-6799 before it -- A's leading blank is correct and kept. Print-content disagreement: A folded the icon and the note's own heading into one 'other' block's text; B kept the icon as its own 'other' block and gave 'Speaking Connection' its own 'heading' block (level null). Resolved to B's finer split (icon as 'other', note heading as its own 'heading' block, level 3/cell-7 measured directly from the agreed braille's own indent) since it separates print's own distinct visual elements rather than merging unrelated content into one block's text, matching this section's general convention (cf. example-9-8). Both runs agreed on the 'librarisn' typo, kept verbatim per the task's 'as printed' instruction. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

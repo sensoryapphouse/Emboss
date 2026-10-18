@@ -18,7 +18,7 @@
         "kind": "other",
         "level": null,
         "text": "Note(s) in the table below.",
-        "features": "Set in italics, indented as a sample of suggested wording for the transcriber's note inserted before a table with notes, per rule 16.8.1b.",
+        "features": "Set in plain roman type, indented as a sample of suggested wording for the transcriber's note inserted before a table with notes, per rule 16.8.1b.",
         "items": null
       }
     ],
@@ -39,5 +39,13 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.8.1.b per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.8.1.b per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: print-only per standards-map.md; both runs agree. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.features",
+      "was": "Set in italics, indented as a sample of suggested wording for the transcriber's note inserted before a table with notes, per rule 16.8.1b.",
+      "now": "Set in plain roman type, indented as a sample of suggested wording for the transcriber's note inserted before a table with notes, per rule 16.8.1b.",
+      "evidence": "Page image PDF p.439: the sample wording is set in upright (roman) serif type, not italic."
+    }
+  ]
 }

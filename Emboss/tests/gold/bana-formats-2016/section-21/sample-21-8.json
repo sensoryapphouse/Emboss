@@ -56,7 +56,7 @@
       "        ,-,william ,%akespe>e1 f",
       "        .7,romeo & ,juliet.'",
       "",
-      "         ,p>adox,-,p]sonifica;n       #,-"
+      "         ,p>adox,-,p]sonifica;n      #,-"
     ],
     "pageBreaks": [],
     "notes": ""
@@ -66,5 +66,19 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": null,
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "         ,p>adox,-,p]sonifica;n       #,-"
+      ],
+      "after": [
+        "         ,p>adox,-,p]sonifica;n      #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 24 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 593 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

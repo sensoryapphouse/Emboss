@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 11 Tables"/><meta name="dc:Identifier" content="stage4-11"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 11 Tables</doctitle></frontmatter><bodymatter><level1>
+<h1>Tables and Related Columns</h1>
+<p>The table below lists three rivers.</p>
+<table><caption>Longest rivers</caption>
+<thead><tr><th>River</th><th>Length (km)</th><th>Continent</th></tr></thead>
+<tbody><tr><td>Nile</td><td>6650</td><td>Africa</td></tr>
+<tr><td>Amazon</td><td>6400</td><td>South America</td></tr>
+<tr><td>Yangtze</td><td>6300</td><td>Asia</td></tr></tbody></table>
+<table><tbody><tr><td>Monday</td><td>Maths</td></tr><tr><td>Tuesday</td><td>Art</td></tr></tbody></table>
+<table><thead><tr><th colspan="2">Fruit prices</th></tr></thead><tbody><tr><td>Apple</td><td>0.50</td></tr><tr><td>Pear</td><td>0.60</td></tr></tbody></table>
+<p>After the tables, an ordinary paragraph follows.</p>
+</level1></bodymatter></book></dtbook>

@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="/web/logo.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/web/logo-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/web/logo-16.png" />
-  <link rel="apple-touch-icon" sizes="512x512" href="/web/logo-512.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/web/apple-touch-icon.png" />
   <meta name="theme-color" content="#1f2a44" />
   <link rel="stylesheet" href="/web/style.css" />
   <!-- liblouis WASM glue: exposes globalThis.createLiblouis -->
@@ -20,6 +20,10 @@
        /web/sw.js; the dist build rewrites /web/ -> / and has sw.js at the root). A new
        version is NOT activated behind the user's back: sw.js waits until this page posts
        SKIP_WAITING from the "new version available" toast, then reloads on controllerchange. -->
+  <script>
+    // A phone (the screen's shorter side under 500 points, as settings.mjs isPhoneScreen; Paul, 18 Oct 2026): Emboss is Quick Mode only there.
+    try { if (Math.min(screen.width, screen.height) < 500) document.documentElement.classList.add('is-phone'); } catch (e) { /* */ }
+  </script>
   <script>
     (function () {
       if (!('serviceWorker' in navigator)) return;
@@ -64,22 +68,52 @@
           toast.appendChild(later);
         });
       }
+      // Whether a service worker controlled this page when it LOADED (A89): only then is a newly installed one an update. On a
+      // first visit Emboss's own worker takes control as soon as it installs (clients.claim()), and in WebKit that could come
+      // before the check below, so a first install showed "A new version of Emboss is available".
+      var controlledAtLoad = !!navigator.serviceWorker.controller;
+      window.__embossControlledAtLoad = controlledAtLoad;   // offline-ready.mjs (S4-Q2): a first visit is one no worker controlled
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('/web/sw.js', { scope: '/' }).then(function (reg) {
-          if (reg.waiting && navigator.serviceWorker.controller) showUpdateToast(reg.waiting);
+          if (reg.waiting && controlledAtLoad) showUpdateToast(reg.waiting);
+          // Ask for a new version whenever the page comes back into view, and hourly while it stays open, not only
+          // on load: a tab or Safari "Add to Dock" app left open otherwise kept running an old build (30 Sep).
+          function checkForUpdate() { reg.update().catch(function () {}); }
+          document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') checkForUpdate(); });
+          setInterval(checkForUpdate, 60 * 60 * 1000);
           reg.addEventListener('updatefound', function () {
             var nw = reg.installing;
             if (!nw) return;
             nw.addEventListener('statechange', function () {
-              if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateToast(nw);
+              if (nw.state === 'installed' && controlledAtLoad) showUpdateToast(nw);
             });
           });
         }).catch(function (err) { console.warn('[sw] registration failed:', err); });
       });
     })();
   </script>
+  <style>
+    /* Feedback 30 Sep item 15: a beta build hides the Transcriber tools switch and the help lines about it and the hardware toggle. */
+    body.beta-locked .beta-hide, body.beta-locked .help-tt-off.help-note { display:none !important; }
+    /* Paragraph style and quotation marks are transcriber settings (Paul, 7 Oct 2026): shown only with Transcriber tools on (the editor's switch, shared settings) */
+    body:not(.transcriber-tools) .fmt-transcriber { display:none !important; }
+    .beta-only { display:none; }
+    body.beta-locked .beta-only { display:inline; }
+  </style>
 </head>
 <body>
+  <!-- ICON SPRITE, AS TRANSLATE'S (feedback 10 Oct, item 6). Iconoir (MIT, regular, 24x24, stroke-based; licence in licences/Iconoir-MIT.txt, credited in
+       NOTICE-EMBOSS.md), stroke="currentColor", so each icon takes the colour of the button or text round it. These are the symbols this page's
+       own markup refers to, written here so they are drawn at first paint instead of when the script has loaded; web/icons.mjs holds the whole
+       set (the editor and the code that builds buttons use it), adds the rest to this same <svg> and never adds one twice, and
+       tests/brand_style.test.mjs holds these to its path data, so they cannot drift. -->
+  <svg id="emboss-icon-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"/><path d="M19.6224 10.3954L18.5247 7.7448L20 6L18 4L16.2647 5.48295L13.5578 4.36974L12.9353 2H10.981L10.3491 4.40113L7.70441 5.51596L6 4L4 6L5.45337 7.78885L4.3725 10.4463L2 11V13L4.40111 13.6555L5.51575 16.2997L4 18L6 20L7.79116 18.5403L10.397 19.6123L11 22H13L13.6045 19.6132L16.2551 18.5155C16.6969 18.8313 18 20 18 20L20 18L18.5159 16.2494L19.6139 13.598L21.9999 12.9772L22 11L19.6224 10.3954Z"/></symbol>
+    <symbol id="icon-xmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20L18 20"/><path d="M12 4V16M12 16L15.5 12.5M12 16L8.5 12.5"/></symbol>
+    <symbol id="icon-nav-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9L12 15L18 9"/></symbol>
+    
+  </svg>
   <header>
     <div class="header-row">
       <a class="app-logo-link" href="https://paigebraille.com"
@@ -88,15 +122,27 @@
         <img class="app-logo" src="/web/logo.svg" alt="" />
       </a>
       <h1>Emboss</h1>
-      <div class="toolbar" style="margin-left:auto;display:flex;align-items:center;gap:8px">
-        <button id="advancedBtn" class="adv-btn" type="button" data-i18n="toolbar.advanced_editor" data-i18n-title="toolbar.advanced_editor" title="Open the Advanced editor — type &amp; format with live braille">Advanced&nbsp;editor →</button>
-        <button id="settingsBtn" class="icon-btn icon-btn-lg" type="button" data-i18n-title="common.settings" data-i18n-aria="common.settings" title="Settings" aria-label="Settings">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06-.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-        </button>
-        <button id="helpBtn" class="icon-btn icon-btn-lg" type="button" data-i18n-title="common.help" data-i18n-aria="common.help" title="Help &amp; credits" aria-label="Help and credits">?</button>
+      <!-- THE HEADER (Paul, 17 Oct 2026, feedback item 9b): logo and name, then Advanced Editor (the switch to the editor), Load, Export ▾, Help and the gear.
+           It follows Translate's order and look (tester feedback 10 Oct, item 6): pills for the actions, the gear last. Load is the drop zone's "Choose file"; Export
+           ▾ holds what the Read / Emboss / Download row above the braille used to do (the braille file, eBraille, send to the embosser; Read is gone from Quick
+           Mode). It is a toolbar, ARIA-wise: Left, Right, Home and End move between the buttons as an extra way round (app.mjs, "toolbar arrow keys"), and Tab
+           still reaches each one. -->
+      <div class="head-right" id="headRight" role="toolbar" aria-label="Emboss controls" data-i18n-aria="app.header.toolbar_aria">
+        <button id="advancedBtn" class="pill-btn" type="button" data-i18n="toolbar.advanced_editor" data-i18n-title="toolbar.advanced_editor" title="Open the Advanced editor — type &amp; format with live braille">Advanced Editor</button>
+        <div class="menu-wrap" id="downloadMenuWrap">
+          <button id="downloadBtn" type="button" class="pill-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="downloadMenu" disabled data-i18n-title="toolbar.export_title" title="Export the braille (BRF, eBraille) or send it to an embosser">
+            <svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-download"/></svg>
+            <span data-i18n="toolbar.export">Export</span> <svg class="icon icon-caret dropdown-caret" aria-hidden="true" focusable="false"><use href="#icon-nav-arrow-down"/></svg>
+          </button>
+          <div class="menu-dropdown align-right" id="downloadMenu" role="menu" aria-labelledby="downloadBtn" hidden>
+            <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon" aria-hidden="true">⠿</span> <span class="menu-item-lbl" data-i18n="toolbar.download_brf">Braille (BRF)</span></button>
+            <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem" hidden><span class="menu-item-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-0.125em"><path d="M4 21.4V2.6C4 2.26863 4.26863 2 4.6 2H16.2515C16.4106 2 16.5632 2.06321 16.6757 2.17574L19.8243 5.32426C19.9368 5.43679 20 5.5894 20 5.74853V21.4C20 21.7314 19.7314 22 19.4 22H4.6C4.26863 22 4 21.7314 4 21.4Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10L16 10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 18L16 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14L12 14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2V5.4C16 5.73137 16.2686 6 16.6 6H20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span> <span class="menu-item-lbl" data-i18n="toolbar.download_pef">Embosser (PEF)</span></button>
+            <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-0.125em"><path d="M12 16.01L12.01 15.9989" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 19.4V4.6C7 4.26863 7.26863 4 7.6 4H16.4C16.7314 4 17 4.26863 17 4.6V19.4C17 19.7314 16.7314 20 16.4 20H7.6C7.26863 20 7 19.7314 7 19.4Z" stroke="currentColor" stroke-width="1.5"/></svg></span> <span class="menu-item-lbl" data-i18n="toolbar.download_ebrl">eBraille 1.0 (.ebrl)</span></button>
+            <button type="button" role="menuitem" class="menu-dropdown-item hardware-expert-only" id="downloadEmbossItem"><span class="menu-item-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-0.125em"><path d="M17 13.01L17.01 12.9989" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 17H17M6 10V3.6C6 3.26863 6.26863 3 6.6 3H17.4C17.7314 3 18 3.26863 18 3.6V10M21 20.4V14C21 11.7909 19.2091 10 17 10H7C4.79086 10 3 11.7909 3 14V20.4C3 20.7314 3.26863 21 3.6 21H20.4C20.7314 21 21 20.7314 21 20.4Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span> <span class="menu-item-lbl" data-i18n="toolbar.emboss_menu">Send to embosser</span></button>
+          </div>
+        </div>
+        <button id="helpBtn" class="pill-btn" type="button" data-i18n="common.help" data-i18n-title="common.help" title="Help &amp; credits">Help</button>
+        <button id="settingsBtn" class="icon-btn" type="button" data-i18n-title="common.settings" data-i18n-aria="common.settings" title="Settings" aria-label="Settings"><svg class="icon icon-settings" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></button>
       </div>
     </div>
     <p class="sub">document → <strong>BRF</strong> braille · UEB (<span id="settingsSummary">…</span>)</p>
@@ -113,249 +159,91 @@
         </div>
         <h2 class="dz-title" data-i18n="dropzone.title">Drop a document here</h2>
         <p class="dz-or" data-i18n="dropzone.or">or</p>
-        <button id="chooseBtn" type="button" data-i18n="dropzone.choose">Choose file</button>
+        <button id="chooseBtn" type="button" class="pill-btn" data-i18n="dropzone.choose">Choose file</button>
         <div class="dz-formats" data-i18n-aria="dropzone.formats" aria-label="Supported file formats">
-          <span class="chip">DOCX</span><span class="chip">ODT</span><span class="chip">EPUB</span>
+          <span class="chip">DOCX</span><span class="chip">DOC</span><span class="chip">ODT</span><span class="chip">EPUB</span>
           <span class="chip">HTML</span><span class="chip">NIMAS XML</span><span class="chip">DAISY</span><span class="chip">MD</span><span class="chip">RTF</span><span class="chip">TXT</span>
         </div>
         <input id="fileInput" type="file"
-               accept=".docx,.odt,.epub,.html,.htm,.md,.markdown,.rtf,.txt,.xml,.nimas,.dtbook,.zip,text/plain,text/html,text/xml,application/xml" hidden />
+               accept=".docx,.docm,.dotx,.dotm,.doc,.dot,.odt,.ott,.fodt,.epub,.html,.htm,.md,.markdown,.rtf,.txt,.xml,.nimas,.dtbook,.zip,text/plain,text/html,text/xml,application/xml" hidden />
         <p id="fileName" class="dz-file"></p>
-        <div id="fileActions" style="display:none;margin-top:12px;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
-          <button id="dzReadBtn" type="button" style="height:40px;padding:0 16px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600;border-radius:6px">▶ <span data-i18n="toolbar.read_aloud">Read Aloud</span></button>
-          <button id="dzEmbossBtn" type="button" style="height:40px;padding:0 18px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;border-radius:6px;font-size:1rem">🖨 <span data-i18n="toolbar.emboss">Emboss</span></button>
-        </div>
       </div>
     </section>
 
     <p id="status" class="status" role="status"></p>
+    <!-- S3c (S2B-Q1): what the import itself had to leave out (missing EPUB chapters, damaged parts), as the editor's notice shows it. -->
+    <div id="importNotice" class="status warn import-notice" role="status" aria-live="polite" hidden>
+      <span id="importNoticeText"></span>
+      <button type="button" id="importNoticeDismiss" class="import-notice-dismiss" data-i18n="app.warnings.export_notice_dismiss">Dismiss</button>
+    </div>
 
     <section id="result" class="result" hidden>
       <div class="result-bar">
         <span id="resultMeta"></span>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <button id="readBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:#137a3b;color:#fff;border-color:#137a3b;font-weight:600">▶ <span data-i18n="toolbar.read_aloud">Read Aloud</span></button>
-          <button id="embossBtn" type="button" class="tb-btn hardware-expert-only" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;display:none;">🖨 <span data-i18n="toolbar.emboss">Emboss</span></button>
-          <div class="menu-wrap" id="downloadMenuWrap">
-            <button id="downloadBtn" type="button" class="tb-btn" style="height:38px;padding:0 14px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600" aria-haspopup="menu" aria-expanded="false" data-i18n-title="common.download" title="Download formatted braille document (.brf, .pef, .ebrl)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span data-i18n="common.download">Download</span> <span class="dropdown-caret" style="font-size:.65rem;margin-left:2px;opacity:.8;">▼</span>
-            </button>
-            <div class="menu-dropdown align-right" id="downloadMenu" role="menu" hidden>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadBrfItem"><span class="menu-item-icon">⠿</span> <span class="menu-item-lbl" data-i18n="toolbar.download_brf">Braille (BRF)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadPefItem"><span class="menu-item-icon">📑</span> <span class="menu-item-lbl" data-i18n="toolbar.download_pef">Embosser (PEF)</span></button>
-              <button type="button" role="menuitem" class="menu-dropdown-item" id="downloadEbrlItem"><span class="menu-item-icon">📱</span> <span class="menu-item-lbl" data-i18n="toolbar.download_ebrl">eBraille 1.0 (.ebrl)</span></button>
-            </div>
-          </div>
-        </div>
+        <button type="button" id="quickWarnBadge" class="warn-badge" hidden data-i18n-title="app.warnings.badge_title" title="Emboss had to skip or change some things while brailling this document."></button>
       </div>
-      <pre id="preview" class="preview" aria-label="BRF preview"></pre>
+      <!-- The braille as the editor's braille pane draws it (web/braille-render.mjs renderBraille): dot cells, "page N" markers, the same size and spacing, and
+           only the lines in view are in the page (feedback 17 Oct 2026, item 8). It used to be one <pre> of Unicode braille with "page break" lines. -->
+      <div id="preview" class="braille preview" aria-label="Braille preview" tabindex="0"></div>
     </section>
   </main>
+  <div id="exportWarnNotice" class="export-warn-notice" role="alert" hidden>
+    <span id="exportWarnNoticeText"></span>
+    <button type="button" id="exportWarnNoticeDismiss" data-i18n="app.warnings.export_notice_dismiss">Dismiss</button>
+  </div>
 
-  <!-- Settings dialog -->
-  <dialog id="settingsDialog" class="dialog">
-    <form method="dialog" class="dialog-body">
-      <div class="dialog-head"><h2 data-i18n="settings.title">Settings</h2><button class="icon-btn" value="close" aria-label="Close">✕</button></div>
-      <div class="settings-layout">
-        <nav class="settings-nav" role="tablist" aria-label="Settings Categories">
-          <button type="button" class="tab-btn active" data-tab="tab-rules" role="tab" aria-selected="true">📘 <span data-i18n="settings.tab_rules">Rules &amp; Standards</span></button>
-          <button type="button" class="tab-btn hardware-expert-only" data-tab="tab-hardware" role="tab" aria-selected="false" style="display:none;">🖨 <span data-i18n="settings.tab_embosser">Embosser &amp; Hardware</span></button>
-          <button type="button" class="tab-btn" data-tab="tab-display" role="tab" aria-selected="false">💻 <span data-i18n="settings.tab_interface">User Interface</span></button>
-          <button type="button" class="tab-btn" data-tab="tab-document" role="tab" aria-selected="false">⚙️ <span data-i18n="settings.tab_production">Advanced Production</span></button>
-        </nav>
-        <div class="settings-panels">
-          <div id="tab-rules" class="settings-panel active" role="tabpanel">
-            <h3 data-i18n="settings.tab_rules">Rules &amp; Translation Standards</h3>
-            <div class="field">
-              <label for="language" data-i18n="settings.braille_code_label">Language &amp; Contraction Grade</label>
-              <select id="language">
-                <option value="ueb_g2" selected>English UEB (Grade 2 - Contracted)</option>
-                <option value="ueb_g1">English UEB (Grade 1 - Uncontracted)</option>
-                <option value="welsh_g2">Welsh (Grade 2 - Contracted)</option>
-                <option value="welsh_g1">Welsh (Grade 1 - Uncontracted)</option>
-                <option value="spanish_g1">Spanish (Grade 1)</option>
-                <option value="spanish_g2">Spanish (Grade 2)</option>
-                <option value="french_g1">French (Grade 1)</option>
-                <option value="french_g2">French (Grade 2)</option>
-                <option value="german_g1">German (Grade 1)</option>
-                <option value="german_g2">German (Grade 2)</option>
-                <option value="italian_g1">Italian (Grade 1)</option>
-                <option value="italian_g2">Italian (Grade 2)</option>
-                <option value="gaelic_g1">Gaelic (Grade 1)</option>
-                <option value="gaelic_g2">Gaelic (Grade 2)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="mode" data-i18n="settings.standard_label">Layout Standard</label>
-              <select id="mode">
-                <option value="ukaaf" selected>UKAAF (UK Standard, 38×25)</option>
-                <option value="bana">BANA (US Standard, 40×25)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="paragraphStyle" data-i18n="settings.paragraph_style_label">Paragraph Style</label>
-              <select id="paragraphStyle">
-                <option value="indented" selected>Indented (3-1, standard)</option>
-                <option value="block">Block (1-1, blank lines)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="quoteStyle" data-i18n="settings.quote_style_label">Quotation Marks</label>
-              <select id="quoteStyle">
-                <option value="faithful" selected>Faithful to print</option>
-                <option value="exchange">Exchange single → double (UK house style)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="listStyle" data-i18n="settings.list_style_label">List Format</label>
-              <select id="listStyle">
-                <option value="spaced" selected>Blank-line list (B004 Ex1, 1-3)</option>
-                <option value="compact">Compact list (B004 Ex2, 5-1)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="tableFormat" data-i18n="settings.table_format_label">Table Layout</label>
-              <select id="tableFormat">
-                <option value="auto" selected>Auto (Listed if wide, Columnar if small)</option>
-                <option value="listed">Listed Table Format (UKAAF §8 / BANA §11)</option>
-                <option value="columnar">Columnar Table Format</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="tab-hardware" class="settings-panel" role="tabpanel">
-            <h3 data-i18n="settings.tab_embosser">Embosser Hardware &amp; Serial Spooling</h3>
-            <div class="field">
-              <label for="embosser" data-i18n="settings.embosser_preset_label">Embosser Preset</label>
-              <select id="embosser">
-                <option value="generic" selected>Generic BRF / Standard Embosser (38×25)</option>
-                <option value="monarch">APH Monarch Dynamic Display (32×10)</option>
-                <option value="dotpad">DotPad Dynamic Display (30×10 + 20 Braille)</option>
-                <option value="custom">Simple One-Page Braille Printer (30×20)</option>
-                <option value="aph">APH PageBlaster / PixBlaster (34×25)</option>
-                <option value="viewplus">ViewPlus Columbia / Premier (40×25)</option>
-                <option value="braillo">Braillo 300 / 600 (42×25)</option>
-                <option value="index">Index Basic-D / Everest-D V5 (42×25)</option>
-                <option value="romeo">Romeo 60 / Enabling Juliet 120 (40×25)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="embosserDuplex" data-i18n="settings.duplex_label">Duplex Mode</label>
-              <select id="embosserDuplex">
-                <option value="double" selected data-i18n="settings.duplex_double">Interpoint (Double-Sided)</option>
-                <option value="single" data-i18n="settings.duplex_single">Single-Sided (Simplex)</option>
-              </select>
-            </div>
-            <div class="field" style="display:none;">
-              <label for="baudRate" data-i18n="settings.baud_rate_label">Serial Baud Rate (WebSerial Spooling)</label>
-              <select id="baudRate">
-                <option value="9600" selected>9600 bps (Standard Embosser default)</option>
-                <option value="19200">19200 bps</option>
-                <option value="38400">38400 bps</option>
-                <option value="115200">115200 bps (High Speed USB/Serial)</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="tab-display" class="settings-panel" role="tabpanel">
-            <h3 data-i18n="settings.tab_interface">User Interface</h3>
-            <div class="field" style="margin-bottom:14px;">
-              <label for="set-uiLanguage" data-i18n="settings.language_label">Interface Language</label>
-              <select id="set-uiLanguage"></select>
-              <small data-i18n="settings.language_help" style="color:var(--muted); font-size:.78rem; display:block; margin-top:4px;">Select the language used for buttons, menus, dialogs, and screen reader announcements.</small>
-            </div>
-            <div class="field field-check">
-              <label class="check-label" for="interline">
-                <input type="checkbox" id="interline" />
-                <span><strong data-i18n="settings.interline_label">Interline Print View</strong> — show print text directly above braille lines</span>
-              </label>
-            </div>
-            <div class="field field-check">
-              <label class="check-label" for="asciiBraille">
-                <input type="checkbox" id="asciiBraille" />
-                <span><strong data-i18n="settings.ascii_braille_label">Display as ASCII Braille</strong> — show raw ASCII braille characters</span>
-              </label>
-            </div>
-            <div class="field field-check">
-              <label class="check-label" for="simpleMode">
-                <input type="checkbox" id="simpleMode" checked />
-                <span><strong data-i18n="settings.simple_mode_label">Simple mode</strong> — drag-and-drop converter mode</span>
-              </label>
-            </div>
-          </div>
-
-          <div id="tab-document" class="settings-panel" role="tabpanel">
-            <h3 data-i18n="settings.tab_production">Page Geometry &amp; Volume Splitting</h3>
-            <div class="field-row" style="margin-bottom:12px;">
-              <div class="field"><label for="cells" data-i18n="settings.geometry_cells">Cells / line</label><input id="cells" type="number" min="10" max="60" value="38" /></div>
-              <div class="field"><label for="lines" data-i18n="settings.geometry_lines">Lines / page</label><input id="lines" type="number" min="10" max="45" value="25" /></div>
-            </div>
-            <div class="field">
-              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-                <input type="checkbox" id="includeCovers" style="width:16px;height:16px" />
-                <span><strong data-i18n="settings.include_covers">Tactile Volume Cover Pages</strong> <span style="color:var(--muted);font-weight:400">— embossed title covers when splitting books</span></span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="dialog-foot"><button value="close" class="primary" data-i18n="common.done">Done</button></div>
-    </form>
-  </dialog>
+  <!-- Settings dialog: built by web/settings-panes.mjs, the one source the editor's Settings uses too (feedback 17 Oct 2026, item 9a) -->
+  <dialog id="settingsDialog" class="dialog"></dialog>
 
   <!-- Help & credits dialog -->
   <dialog id="helpDialog" class="dialog">
     <div class="dialog-body">
-      <div class="dialog-head"><h2 data-i18n="common.help">Help &amp; Documentation</h2><button id="helpClose" class="icon-btn" data-i18n-aria="common.close" aria-label="Close">✕</button></div>
+      <div class="dialog-head"><h2 data-i18n="common.help">Help &amp; Documentation</h2><button id="helpClose" class="icon-btn" data-i18n-aria="common.close" aria-label="Close"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-xmark"/></svg></button></div>
+      <p class="report-problem-row"><span data-i18n="app.report.help_row">Something not working?</span> <button type="button" id="reportProblemBtn" class="pill-btn" data-i18n="app.report.button">Report a problem…</button></p>
       <div class="help-content">
         <h3>What Emboss Does</h3>
-        <p>Emboss converts modern documents into properly formatted braille files (<strong>BRF</strong>, <strong>eBraille</strong>, and <strong>PEF</strong>), ready for physical embossing or digital refreshable braille displays. It interprets document structure — headings, paragraphs, lists, tables, mathematics, poetry, drama, footnotes, and tactile graphics — and lays them out according to official international braille standards.</p>
+        <p>Emboss converts modern documents into properly formatted braille files (<strong>BRF</strong> and <strong>eBraille</strong>), ready for physical embossing or digital refreshable braille displays. It interprets document structure — headings, paragraphs, lists, tables, mathematics, poetry, drama and footnotes — and lays them out according to official international braille standards.</p>
 
         <h3>Two Ways to Work</h3>
-        <p>Emboss has two integrated modes sharing your settings and translation configurations:</p>
+        <p>Emboss has two modes that share the same settings:</p>
         <ul>
-          <li><strong>Quick Mode (This Screen)</strong> — The fast route for documents you already have: drag and drop a file and get an embosser-ready BRF straight away.</li>
-          <li><strong>Advanced Direct Braille Editor</strong> — A live dual-pane editor where you write and format with braille building live beside you, including MathLive equations, 346 formula templates, spatial tables, tactile graphics RIP, Perkins 6-key chording, read-aloud speech, and self-checking proofreader. Open it with <strong>Advanced&nbsp;editor&nbsp;→</strong> at the top of the screen.</li>
+          <li><strong>Quick Mode (this screen)</strong>: drop in a document you already have and download the braille.</li>
+          <li><strong>The editor</strong>: write and format your own document, with the braille shown beside it as you type. It has maths, tables, read-aloud and a check of the braille. Open it with <strong>Advanced Editor</strong> at the top of the screen; your document goes with it, and its own Help explains it. Emboss opens at Quick Mode unless you turn off <strong>Settings&nbsp;› User Interface › Start in Quick Mode</strong>; switching between the two does not change that setting. The editor is made for a computer or tablet: on a phone, Emboss works in Quick Mode only.</li>
         </ul>
 
         <h3>How to Use Quick Mode</h3>
         <ol>
-          <li>Drag a document onto the drop area, or click <em>Choose file</em> (<code>.docx · .md · .xml · .nimas · .dtbook · .epub · .html · .odt · .rtf · .txt</code>). It is <strong>transcribed immediately</strong> and shown as a live braille preview.</li>
-          <li>Open <strong>Settings&nbsp;⚙</strong> to pick your translation standard, language &amp; contraction grade, embosser hardware preset, and page geometry.</li>
-          <li>Click <strong>Download .brf</strong> (or choose eBraille / PEF in the editor) to save your deliverable.</li>
+          <li>Drag a document onto the drop area, or click <em>Choose file</em> (<code>.docx · .doc · .odt · .epub · .html · .md · .rtf · .txt · .xml · .nimas · .dtbook</code>, or a NIMAS package <code>.zip</code>). It is brailled straight away and shown as a braille preview. Emboss cannot read PDFs, pictures, spreadsheets or slides: such a file is refused with a message that lists the formats it can read (for a PDF, save it as a Word document first).</li>
+          <li>Open <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong> to choose the braille code and grade, the braille standard, and the page size: pick a <strong>Page size preset</strong> (US braille paper 11 × 11½ in, UK 12-inch paper or A4) or type the cells and lines. The size in use is shown at the top of the screen.</li>
+          <li>Click <strong>Export</strong> and choose <strong>Braille (BRF)</strong> or <strong>eBraille</strong>.</li>
         </ol>
 
-        <h3>🌐 Localisation &amp; Braille Languages</h3>
-        <p>The Emboss user interface is translated into <strong>7 languages</strong> — German, Spanish, French, Italian, Portuguese, Arabic and Hebrew (the last two with right-to-left layout). The language picker lists all <strong>112 languages</strong> that have braille translation tables; choosing one that is not yet translated keeps the interface in English (and keeps the page language as English so screen readers use the right voice). The interface language does not change the braille code — choose that separately in the braille settings. Over <strong>142 braille translation tables</strong> are available. Customize your preferred UI language and document translation tables in <strong>Settings&nbsp;⚙</strong>.</p>
+        <h3>Interface Language</h3>
+        <p>Choose the language of the buttons and menus in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg> › User Interface</strong>. This does not change the braille: choose the braille code separately, in the braille settings.</p>
 
         <h3>Working with Document Structure</h3>
-        <p>Emboss reads document <em>structure</em> rather than visual styling. In Word, apply <strong>Title</strong> and <strong>Heading&nbsp;1–3</strong> styles for headings, and standard bulleted/numbered lists for lists. In Markdown or HTML, use semantic heading and list tags. House-style choices (indented 3-1 vs block paragraphs, quotation mark exchange, and list formats) can be customized in <strong>Settings&nbsp;⚙</strong>.</p>
+        <p>Emboss reads document <em>structure</em> rather than visual styling. In Word, apply <strong>Title</strong> and <strong>Heading&nbsp;1–3</strong> styles for headings, and standard bulleted/numbered lists for lists. In Markdown or HTML, use semantic heading and list tags. House-style choices (indented 3-1 vs block paragraphs, quotation mark exchange, and list formats) can be customized in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>.</p>
 
         <h3>Maths &amp; Equations (MathCAT)</h3>
         <p>Emboss transcribes mathematics using <a href="https://daisy.github.io/MathCAT/" target="_blank" rel="noopener">MathCAT</a> into <strong>UEB&nbsp;maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA). Word equations (<kbd>Alt + =</kbd>), LaTeX math (<code>$...$</code> or <code>$$...$$</code>), and MathML (<code>&lt;math&gt;...&lt;/math&gt;</code>) are transcribed with full code-switch indicators.</p>
 
-        <h3>📊 Spatial Tables &amp; Advanced Formatting (BANA &amp; UKAAF)</h3>
-        <p>Emboss automatically transcribes tabular data into standard <strong>Spatial Columnar Tables</strong> with aligned columns and 2-cell gutters, falling back to <strong>Listed Table</strong> format when tables exceed page width. It also supports formal Transcriber's Notes (<code>TN_OPEN</code>/<code>TN_CLOSE</code>), BANA §12 Footnotes (1-3 margin), Boxlines (<code>333 / 777</code>), Play dialogues, and Verse stanzas.</p>
+        <h3>Tables</h3>
+        <p>Tables are brailled in columns when they fit the braille page. A table too wide for columns is brailled as a listed table (BANA) or in paragraph form (UKAAF). <span class="beta-hide">The table layout can be changed in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>.</span></p>
 
-        <h3>🖼 Tactile Graphics &amp; Anti-Slicing (Experimental)</h3>
-        <p>Emboss includes an experimental <strong>page-boundary anti-slicing</strong> engine that ensures tactile diagrams never get cut across page breaks, and rasterizes vector SVGs directly into <strong>ViewPlus Tiger 8-height 3D relief</strong> and <strong>Index Braille floating-dot streams</strong>. <em>(Note: Tactile graphics rasterization is an experimental feature currently in active development.)</em></p>
+        <h3>Embossing</h3>
+        <p>Export the BRF file and send it to your embosser with the embosser's own software.<span class="beta-hide"> To send braille straight to an embosser from Emboss, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> on a Mac) to add <strong>Send to embosser</strong> to the <strong>Export</strong> menu and show the embosser settings. Tactile graphics are not yet sent to embossers.</span></p>
 
-        <h3>🖨 Modern Driverless Embosser Spooling</h3>
-        <p>Emboss allows you to punch pages directly to braille embossers from Chrome, Edge, and Opera without installing proprietary drivers:</p>
-        <ul>
-          <li><strong>Wireless Bluetooth Low Energy (Web Bluetooth):</strong> Direct pairing with ESP32-S3, RP2350, nRF52, and Nordic UART bridges via Custom GATT Profile (<code>0xFEB0</code>) with adaptive MTU chunking and live telemetry.</li>
-          <li><strong>Universal Driverless USB (WebHID):</strong> Direct user-space output report streaming that bypasses Windows <code>usbprint.sys</code> and macOS CUPS kernel driver locks.</li>
-          <li><strong>Network REST / IP:</strong> Direct local IP spooling via HTTP POST (<code>/api/print</code>) or network socket bridges.</li>
-          <li><strong>USB Serial (WebSerial):</strong> Virtual COM port communication with automatic hardware profile identification.</li>
-        </ul>
+        <h3>Working Offline</h3>
+        <p>Emboss works without the internet once it has been opened with a connection. On that first visit it quietly downloads everything it needs (the braille tables, the maths engine and the fonts), and the status line says <strong>Emboss is ready to work offline</strong> once. Help shows whether it is ready, next to the version. A new version arrives the next time Emboss is opened online.</p>
 
         <h3>Standards</h3>
-        <p><strong>UKAAF</strong> follows the UK layout guidance (38×25 default); <strong>BANA</strong> follows the US guidance (40×25 default), including the braille page number on the last line rather than the first.</p>
+        <p><strong>UKAAF</strong> follows the UK layout guidance (38×27 default); <strong>BANA</strong> follows the US guidance (38×25 default), including the braille page number on the last line rather than the first. The first time Emboss runs it picks the standard that matches your browser's country (BANA in the United States and Canada, UKAAF elsewhere); you can change it in Settings, and changing it sets that standard's usual page size.</p>
 
         <h3>Credits &amp; Licensing</h3>
         <ul class="credits">
           <li><strong>Emboss</strong> © 2026 <strong>Sensory App House&nbsp;Ltd</strong>. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">CC&nbsp;BY-NC-SA&nbsp;4.0</a>.</li>
+          <li><strong>Version:</strong> <span id="buildInfo">development</span></li>
+          <li><strong>Offline:</strong> <span id="offlineState">Still getting ready to work offline…</span></li>
           <li><strong>Translation Engine:</strong> <a href="https://liblouis.io" target="_blank" rel="noopener">liblouis</a> <span id="engineVer">…</span> (LGPL), compiled to WebAssembly. © liblouis contributors.</li>
           <li><strong>Maths &amp; Speech:</strong> <a href="https://daisy.github.io/MathCAT/" target="_blank" rel="noopener">MathCAT</a> (MIT, © Neil Soiffer / DAISY); LaTeX via <a href="https://temml.org" target="_blank" rel="noopener">Temml</a> (MIT).</li>
           <li><strong>Braille Codes:</strong> Unified English Braille — ICEB, <em>The Rules of UEB</em>.</li>

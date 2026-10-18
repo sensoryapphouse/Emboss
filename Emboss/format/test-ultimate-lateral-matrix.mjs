@@ -118,17 +118,17 @@ function check(name, cond, detail = '') {
 
   // 2.2 Enabling Technologies Romeo / Juliet
   const romeoStream = prepareEmbosserStream(testBrf, { embosser: 'romeo', rows: 25, cols: 40, duplex: 'double' });
-  check('2.2.1 Romeo stream has ESC \\x00 init header', romeoStream.startsWith('\x1b\x00\x1b\x0c25\x1b\x0e40\x1b\x122'));
-  check('2.2.2 Romeo stream ends with EOF \\x1a', romeoStream.endsWith('\x1a'));
+  check('2.2.1 Romeo stream has the Enabling Technologies reset header', romeoStream.startsWith('\x1bA@@\x1bK@\x1bW@'));
+  check('2.2.2 Romeo stream ends with a page break, no trailing EOF byte', romeoStream.endsWith('\r\n\f') && !romeoStream.endsWith('\x1a'));   // A12, 23 Sep
 
   // 2.3 ViewPlus Tiger / PixBlaster
   const tigerStream = prepareEmbosserStream(testBrf, { embosser: 'viewplus' });
-  check('2.3.1 ViewPlus stream begins with ESC *t header', tigerStream.startsWith('\x1b*t'));
+  check('2.3.1 ViewPlus stream is plain BRF, no header', !tigerStream.startsWith('\x1b'));
   check('2.3.2 ViewPlus stream ends with Form Feed \\x0c', tigerStream.endsWith('\x0c'));
 
   // 2.4 Braillo 300/450/600
   const brailloStream = prepareEmbosserStream(testBrf, { embosser: 'braillo', rows: 25 });
-  check('2.4.1 Braillo stream begins with ESC M0 ESC L25 header', brailloStream.startsWith('\x1bM0\x1bL25'));
+  check('2.4.1 Braillo stream begins ESC S1 ESC J0 ESC N0 ESC R0 ESC A25', brailloStream.startsWith('\x1bS1\x1bJ0\x1bN0\x1bR0\x1bA25'));
   check('2.4.2 Braillo stream ends with Form Feed \\x0c', brailloStream.endsWith('\x0c'));
 
   // 2.5 BLE GATT Profile Constants
@@ -169,7 +169,8 @@ function check(name, cond, detail = '') {
     // Verify presence of mimetype and ebraille structure in byte stream
     const rawString = new TextDecoder('latin1').decode(ebrlBytes);
     check('3.3 eBraille contains application/epub+zip mimetype', rawString.includes('application/epub+zip'));
-    check('3.4 eBraille contains volume-1.html content document', rawString.includes('volume-1.html'));
+    // Paul, 1 Oct 2026: the export is structured content documents split at the headings, not volume-N.html pages of lines.
+    check('3.4 eBraille contains a content document', rawString.includes('content/section-01.html'));
     check('3.5 eBraille includes embedded SVG tactile graphic resource', rawString.includes('graphics/graphic-1.svg'));
   } catch (e) {
     check('3.1 eBraille export crash', false, e.message);

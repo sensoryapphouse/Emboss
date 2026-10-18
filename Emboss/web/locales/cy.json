@@ -60,10 +60,13 @@
     "toc": "TABL CYNNWYS",
     "print": "Golwg argraffu (LHS)",
     "braille": "Braille",
+    "export": "Allforio",
+    "export_title": "Allforio'r braille (BRF, eBraille) neu ei anfon i'r peiriant braille",
+    "emboss_menu": "Anfon i'r peiriant braille",
     "braille_view": "Golwg Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Mowldio",
     "emboss_tooltip": "Anfon dogfen i'r peiriant braille neu argraffu",
     "clear_doc": "Clirio dogfen",
@@ -133,8 +136,6 @@
     "poem_desc": "Llinell vers stanza poetig (1-3)",
     "exercise_title": "Cwestiwn ymarfer",
     "exercise_desc": "Cwestiwn ymarfer rhifwyd (1-5 / 3-5)",
-    "caption_title": "Capsiwn/priodoliad",
-    "caption_desc": "Capsiwn ffigwr neu briodoliad (7-5)",
     "footnote_title": "Troednodyn",
     "footnote_desc": "Testun troednodyn (1-3)",
     "note_title": "Nodyn y cyfiethydd",
@@ -163,8 +164,6 @@
     "page_desc": "Mewnosod dangosydd toriad tudalen argraffu",
     "printpage_title": "Rhif tudalen argraffu",
     "printpage_desc": "Mewnosod dangosydd toriad tudalen argraffu",
-    "code_title": "Cod cyfrifiadur",
-    "code_desc": "Mewnosod bloc cod gyda dangosyddion UEB",
     "indent_title": "Darannu / Nythu Is-eitem",
     "indent_desc": "Nythu eitem rhestr neu ymarfer yn ddyfnach (Tab)",
     "outdent_title": "Lleihau'r Dent / Dyrchafu Eitem",
@@ -185,8 +184,8 @@
     "language_label": "Iaith rhyngwyneb",
     "language_help": "Dewiswch yr iaith a ddefnyddir ar gyfer botymau, dewislenni, deialogau a hysbysiadau'r darllenydd sgrin.",
     "standard_label": "Safon Braille",
-    "standard_bana": "BANA (USA a Chanada — 40×25 cell)",
-    "standard_ukaaf": "UKAAF (Y Deyrnas Unedig ac Rhyngwladol — 38×25 cell)",
+    "standard_bana": "BANA (USA a Chanada — 38×25 cell)",
+    "standard_ukaaf": "UKAAF (Y Deyrnas Unedig ac Rhyngwladol — 38×27 cell)",
     "grade_label": "Lefel cryno",
     "grade_1": "Gradd 1 (Heb gryno / Llythyren am lythyren)",
     "grade_2": "Gradd 2 (Crynedig)",
@@ -261,7 +260,7 @@
     "size_full": "Taflen lawn (llinell 1 heb doriad)",
     "lead_lines": "Llinellau arwain tactaidd",
     "braille_labels": "Labeli braille",
-    "footer_tip": "💡 Mae contorau du yn dod yn ffin tactaidd solet; mae lliwiau'n mapio'n awtomatig i ddefnyddiau tactaidd gwahanol.",
+    "footer_tip": "Mae contorau du yn dod yn ffin tactaidd solet; mae lliwiau'n mapio'n awtomatig i ddefnyddiau tactaidd gwahanol.",
     "open_repositories": "Agor storfeydd tactaidd:",
     "no_diagrams": "Ni chafwyd diagramau sy'n cyfateb."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Statws taith rownd heb golled",
     "precedence_status": "Statws rheolau blaenoriaeth braille",
     "perfect_match": "Cydweddu taith rownd 100% (0 anghytundeb)",
-    "badge_warn": "⚠ {count} i adolygu",
+    "badge_warn": "{count} i adolygu",
     "badge_title": "{count} anghytundeb geiriau wedi'u canfod yn ystod cyfieithu taith rownd yn ôl. Cliciwch i neidio i'r cyntaf.",
     "badge_clean": "Gwiriad taith rownd: dim anghytundeb geiriau wedi'u canfod."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Mae gennych newidiadau heb eu cadw. Ydych chi'n siŵr eich bod eisiau gadael heb gadw?",
     "unsaved_load": "Mae gennych newidiadau heb eu cadw. Bydd llwytho ffeil newydd yn disodli'r dogfen gyfredol. Parhau?",
     "unsaved_clear": "Mae gennych newidiadau heb eu cadw. Ydych chi'n siŵr eich bod eisiau clirio'r dogfen?",
-    "drop_hint": "⬇ Taflwch ddogfen i'w mewnforio i'r golygydd",
+    "drop_hint": "Taflwch ddogfen i'w mewnforio i'r golygydd",
     "notice": "Hysbysiad",
     "close_notice": "Cau hysbysiad"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Testun y ddogfen",
+      "math_keyboard_toggle": "Bysellfwrdd mathemateg",
       "label": "Testun",
       "toolbar_aria": "Fformatio",
       "style_label": "Steil paragraff",
@@ -443,8 +443,8 @@
       "graphic_cats": "Categorïau Graffegau",
       "graphic_list": "Diagramau graffegau tactaidd",
       "formula_search_label": "Chwilio fformwlâu",
-      "btactile_link": "BTactile (Am Ddim) ↗",
-      "tgil_link": "APH TGIL (1,800+ o Dempledi) ↗"
+      "btactile_link": "BTactile (Am Ddim)",
+      "tgil_link": "APH TGIL (1,800+ o Dempledi)"
     },
     "settings": {
       "list_spaced": "Rhestr llinell wag (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Cysylltu'n uniongyrchol â pheiriannau braille microreolydd cyfaddas (ESP32-S3, RP2040/RP2350, STM32, Arduino) gan osgoi cyfyngiadau gyrrwr argraffydd y system weithredu.",
       "graphics_hint": "Pan nad yw wedi'i dicio, allforir diagramau fel disgrifiadau Nodyn y Cyfieithydd hygyrch ar gyfer peiriannau braille testun-yn-unig a dangosyddion braille.",
       "tactile_heading": "Ffrwd Fyw Dangosydd Tactaidd (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Cysylltu Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Cysylltu USB / HID (Monarch)",
+      "tactile_connect_ble": "Cysylltu Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Cysylltu USB / HID (Monarch)",
       "tactile_disconnect": "Datgysylltu'r Dangosydd",
       "tactile_sim_monarch": "Profi Monarch Efelychiedig (32×10)",
       "tactile_sim_dotpad": "Profi DotPad Efelychiedig (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Yn ffrydio golwg braille byw a graffegau tactaidd yn uniongyrchol dros WebBluetooth (DotPad BLE UART) neu WebHID (Monarch/USB) heb yrwyr allanol.",
       "perkins_hint": "— teipiwch braille gyda bysellau SDF a JKL",
       "ascii_hint": "— dangos nodau braille ASCII crai",
+      "show_explanation_bar": "Dangos y bar esbonio",
+      "show_explanation_bar_hint": "— y stribed o dan y testun a'r braille sy'n egluro'r braille ar gyfer y gair rydych arno",
+      "simple_mode_hint": "— agor Emboss yn y trawsnewidydd syml. Nid yw newid rhwng Modd cyflym a'r golygydd yn newid hyn.",
       "covers_hint": "— cloriau teitl wedi'u mowldio wrth hollti llyfrau"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Pennawd {n}",
       "cell_aria_named": "{header}, rhes {row}",
       "cell_aria": "Colofn {col}, rhes {row}",
-      "too_wide_listed": "⚠ Rhy lydan ar gyfer colofnau — wedi'i freillio fel tabl rhestr",
+      "too_wide_listed": "Rhy lydan ar gyfer colofnau — wedi'i freillio fel tabl rhestr",
       "too_wide_listed_title": "Nid yw'r tabl hwn yn ffitio mewn colofnau gyda'r nifer presennol o gelloedd fesul llinell a'r modd Braille, felly caiff ei freillio fel tabl rhestr (BANA Formats §11.9) yn lle colofnau ochr yn ochr.",
-      "too_wide_paragraph": "⚠ Rhy lydan ar gyfer colofnau — wedi'i freillio ar ffurf paragraff",
+      "too_wide_paragraph": "Rhy lydan ar gyfer colofnau — wedi'i freillio ar ffurf paragraff",
       "too_wide_paragraph_title": "Nid yw'r tabl hwn yn ffitio mewn colofnau gyda'r nifer presennol o gelloedd fesul llinell a'r modd Braille, felly caiff ei freillio ar ffurf paragraff (UKAAF B004 §12) yn lle colofnau ochr yn ochr."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Ni ellid llwytho'r tablau ar gyfer \"{code}\" — yn dal i ddefnyddio'r cod braille blaenorol.",
-      "failed": "⚠ Ni ellid cynhyrchu'r braille.",
+      "failed": "Ni ellid cynhyrchu'r braille.",
       "failed_hint": "(Os yw hyn yn dweud nad yw'r peiriant wedi'i gychwyn, ni lwythodd y peiriant braille — ail-lwythwch yn galed gyda Cmd/Ctrl+Shift+R.)",
       "error_status": "Gwall rendro: {message}"
     },
     "engine": {
       "loading": "Yn llwytho'r peiriant braille…",
-      "failed": "⚠ Methodd y peiriant braille lwytho.",
+      "failed": "Methodd y peiriant braille lwytho.",
       "failed_hint": "Ail-lwythwch yn galed gyda Cmd/Ctrl+Shift+R. Os yw'n parhau, agorwch gonsol y porwr (View ▸ Developer) ac anfonwch y gwallau.",
       "failed_status": "Methodd y peiriant lwytho: {message}",
       "ready": "Yn barod — teipiwch neu fformatiwch ar y chwith; mae'r braille yn diweddaru'n fyw."
@@ -715,7 +718,7 @@
       "network_unreachable": "Ni ellid cyrraedd {url}: {message}. Ni all porwyr agor cysylltiadau TCP crai (porth 9100); rhaid i'r peiriant braille dderbyn HTTP POST, neu llwythwch i lawr y ffeil .brf a'i hanfon gyda'ch rheolwr argraffu.",
       "usb_bridge_done": "Gwaith mowldio wedi'i ddanfon i'r argraffydd USB!",
       "needs_webserial": "Mae angen porwr gyda WebSerial (Chrome, Edge, Opera) ar gyfer mowldio seriaidd uniongyrchol. Gallwch lwytho i lawr y ffeil .brf i fowldio gyda'ch rheolwr argraffu, neu ddefnyddio modd Rhwydwaith (Porth 9100) yn y Gosodiadau.",
-      "detected": "🔌 Wedi canfod {name} — wedi'i osod i {cells}×{lines} ar {baud} bod."
+      "detected": "Wedi canfod {name} — wedi'i osod i {cells}×{lines} ar {baud} bod."
     },
     "symbols": {
       "title": "Llyfrgell Symbolau Tactaidd",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrics Dynamig",
       "badge_text_only": "Testun yn Unig",
       "badge_index": "Matrics Dotiau"
+    },
+    "offline": {
+      "ready": "Mae Emboss yn barod i weithio all-lein.",
+      "ready_short": "Yn barod i weithio all-lein",
+      "not_yet": "Yn dal i baratoi i weithio all-lein…"
     }
   }
 }

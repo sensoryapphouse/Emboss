@@ -49,8 +49,17 @@ export function makePefIdentifier() {
  */
 export function exportToPef(doc, opts = {}) {
   requireTranslate(opts, 'exportToPef');
-  const width = Math.max(10, Number(opts.width) || 38);
-  const depth = Math.max(10, Number(opts.depth) || 25);
+  // S5d (audit 15 Oct 2026, "PEF boundary"): the cells per line and lines per page are written into the file as they are, so a value
+  // that is not a finite whole number would make a PEF the embosser cannot read. The interface only offers whole numbers; a caller
+  // that gives anything else is told, not silently rounded. Absent (undefined / null / '') means the default.
+  const wholeCount = (v, name, dflt) => {
+    if (v === undefined || v === null || v === '') return dflt;
+    const n = typeof v === 'number' ? v : (typeof v === 'string' && /^\s*\d+\s*$/.test(v) ? Number(v) : NaN);
+    if (!Number.isFinite(n) || !Number.isInteger(n) || n < 1) throw new Error(`exportToPef: ${name} must be a whole number of ${name === 'width' ? 'cells' : 'lines'} greater than zero (got ${String(v)}).`);
+    return n;
+  };
+  const width = Math.max(10, wholeCount(opts.width, 'width', 38));
+  const depth = Math.max(10, wholeCount(opts.depth, 'depth', 25));
   const title = doc?.title || 'Untitled Document';
   const mode = (opts.mode || 'ukaaf').toUpperCase();
   const duplexOpt = opts.duplex ?? opts.embosserDuplex;

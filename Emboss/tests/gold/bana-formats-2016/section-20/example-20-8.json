@@ -1,0 +1,52 @@
+{
+  "id": "example-20-8",
+  "title": "Example 20-8: Primary and Secondary Stress",
+  "pdfPages": [
+    4
+  ],
+  "textLines": [
+    15649,
+    15654
+  ],
+  "illustrates": {
+    "rule": "20.4.1",
+    "quote": "Syllable Stress Using Print Symbols. Different print signs may be used either before or after syllables to indicate stress. (See UEB, §15.2, Stress, for braille stress symbols.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "(ar′ə mat′ ik)",
+        "features": "Prime marks after 'ar' (heavier, primary stress) and after 'mat' (lighter, secondary stress), the second followed by a space before 'ik'; schwa; parentheses"
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-542.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "\"<>^.b _5 mat^.2 ik\">"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Cited rule: follows the a-d list of 20.4.1; lead sentence cited because no single item is named."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (follows the a-d list of 20.4.1; lead sentence cited because no single item is named). print: B left blocks empty; A's blocks checked against the page image; corrected: A had a space before 'ik' and normal apostrophes; the image shows no space and prime marks.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "(ar′ə mat′ik)",
+      "now": "(ar′ə mat′ ik)",
+      "evidence": "references/bana/braille-formats-2016.pdf p.542 (PDF page 542), rendered at 300 dpi and cropped to the Example 20-8 box: the print reads \"(ar′ə mat′ ik)\" - a clear word space follows the second prime, before \"ik\". The braille has a space at the same place (mat^.2 ik). The two primes differ in weight in print (first heavier, second lighter); the text keeps one U+2032 for both because the prime cannot say which is which - builder must learn that primary/secondary stress needs distinct characters (the runner still emits 7 for a prime). The space between the first prime and the schwa is not clear in the image, so it was left as it was."
+    }
+  ]
+}

@@ -171,11 +171,14 @@ test('UKAAF: level 4 uses level 2\'s margins (cell 1 / runover 5) but forces bol
   assert.ok(l4.some((l) => l.includes('^')), `L4 carries a bold marker: ${JSON.stringify(l4)}`);
 });
 
+// UK-5 (28 Sep, James / decisions.md "UKAAF"): levels 3 and 6 (cell-3/runover-5) are NOT
+// "sub-headings" (that exception is cell-1/runover-5 only — levels 2, 4, 5), so both now come
+// with no leading blank line at all, at index [0] rather than [1] as before.
 test('UKAAF: level 6 uses level 3\'s margins (cell 3 / runover 5) but forces bold', () => {
   const text = 'A Heading';
   const l3 = formatBlock({ type: 'heading', level: 3, text }, opts('ukaaf'), false);
   const l6 = formatBlock({ type: 'heading', level: 6, text }, opts('ukaaf'), false);
-  assert.equal(leading(l6[1]), leading(l3[1]), `L6 entry indent matches L3's cell 3: ${JSON.stringify(l6)} vs ${JSON.stringify(l3)}`);
+  assert.equal(leading(l6[0]), leading(l3[0]), `L6 entry indent matches L3's cell 3: ${JSON.stringify(l6)} vs ${JSON.stringify(l3)}`);
   assert.ok(l6.some((l) => l.includes('^')), `L6 carries a bold marker: ${JSON.stringify(l6)}`);
   assert.ok(!l3.some((l) => l.includes('^')), `L3 (unchanged) carries no bold marker: ${JSON.stringify(l3)}`);
 });
@@ -191,7 +194,12 @@ test('UKAAF: a bold override replaces any print emphasis already on the heading 
   assert.ok(/\^PLAIN THEN ITALIC\^/.test(joined), `originally-plain segment is now bold: ${joined}`);
   const seen = [];
   const rec = (str, tf) => { seen.push(tf); return tfTranslate(str, tf); };
-  formatBlock({ type: 'heading', level: 4, segments: seg, text: 'plain then italic' }, opts('ukaaf', { translate: rec }), false);
+  // "One layout path" stage 2: formatBlock's 'heading' case now prefers o.translatePos over
+  // o.translate whenever the caller supplies one (previously formatHeading never looked at
+  // translatePos at all). To spy on what formatBlock passes to o.translate, drop translatePos
+  // here too -- exactly what every real formatBlock caller (formatDocument, gold, headless
+  // tests) already does; only the editor's traceBlock ever supplies translatePos.
+  formatBlock({ type: 'heading', level: 4, segments: seg, text: 'plain then italic' }, opts('ukaaf', { translate: rec, translatePos: undefined }), false);
   const tfs = seen.filter(Array.isArray).flat();
   assert.ok(tfs.length && tfs.every((b) => b === 4), `every character is bold and none italic: ${JSON.stringify(seen)}`);
   assert.equal((joined.match(/\^/g) || []).length, 2, `one bold run (two ^ markers) for the whole heading: ${joined}`);
@@ -235,8 +243,19 @@ test('formatDocument: level 1-3 headings are byte-identical to the pre-change sn
   // Captured via `git show HEAD:Emboss/format/document.mjs` (the commit this test
   // was added against) run through the same blocks/options, before formatHeading /
   // traceBlock / joinsWithoutBlank were touched for levels 4-6.
+  //
+  // UK-1 (docs/decisions.md "UKAAF", 26 Sep 2026): the UKAAF snapshot below has been updated to drop the
+  // `"31111111111` end-marker line before "First Level Heading". That heading is the document's only
+  // level-1 heading (there's no earlier L1 heading whose section it could be closing) — B004 Glossary's own
+  // "can be placed after a section is complete" made the marker optional, and it is now off by default
+  // (a document option / a per-heading field turn it back on; see tests/ukaaf_uk1_uk3_uk4.test.mjs). The
+  // BANA snapshot is untouched.
   const SNAPSHOT_BANA = '  INTRO PARAGRAPH BEFORE\r\nHEADINGS.\r\n\r\n     FIRST LEVEL HEADING\r\n\r\n  BODY UNDER ONE.\r\n\r\n    SECOND LEVEL HEADING\r\n  BODY UNDER TWO.\r\n\r\n      THIRD LEVEL HEADING\r\n  BODY UNDER THREE.\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n                            #A\r\n';
-  const SNAPSHOT_UKAAF = '                            #A\r\n  INTRO PARAGRAPH BEFORE\r\nHEADINGS.\r\n\r\n         "31111111111\r\n     FIRST LEVEL HEADING\r\n  BODY UNDER ONE.\r\n\r\nSECOND LEVEL HEADING\r\n  BODY UNDER TWO.\r\n\r\n  THIRD LEVEL HEADING\r\n  BODY UNDER THREE.\r\n';
+  // UK-5 (28 Sep, James / decisions.md "UKAAF"): UKAAF now carries no blank line before the L3
+  // heading (only a cell-1/runover-5 "sub-heading" — L2/4/5 — keeps one), and no blank line
+  // between L1 and the "Body under one" paragraph either (UK-5's blanket "no blank lines"
+  // default). UK-6: a colons end-of-document marker is now the true last line by default.
+  const SNAPSHOT_UKAAF = '                            #A\r\n  INTRO PARAGRAPH BEFORE\r\nHEADINGS.\r\n     FIRST LEVEL HEADING\r\n  BODY UNDER ONE.\r\n\r\nSECOND LEVEL HEADING\r\n  BODY UNDER TWO.\r\n  THIRD LEVEL HEADING\r\n  BODY UNDER THREE.\r\n         "33333333333\r\n';
 
   assert.equal(formatDocument({ blocks }, snapshotOpts('bana')), SNAPSHOT_BANA, 'BANA h1-h3 output unchanged');
   assert.equal(formatDocument({ blocks }, snapshotOpts('ukaaf')), SNAPSHOT_UKAAF, 'UKAAF h1-h3 output unchanged');

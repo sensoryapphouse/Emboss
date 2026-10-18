@@ -1,0 +1,265 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 6,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "empty",
+ "docSource": "empty",
+ "docFeatures": null,
+ "docs": {},
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "stuck",
+ "key": "stuck",
+ "message": "ArrowUp did not move the caret 3 times in a row (caret c:4.0.0:1)",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 14,
+ "originalActions": 44,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.2979,
+   "i": 8,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "undoRun",
+   "n": 18,
+   "redo": 6
+  },
+  {
+   "t": "resize",
+   "w": 1300,
+   "h": 500
+  },
+  {
+   "t": "clickText",
+   "fx": 0.7115,
+   "fy": 0.9041,
+   "n": 2
+  },
+  {
+   "t": "insertAll",
+   "i": 2
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7194,
+   "i": 9,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "readAloud",
+   "n": 2
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowLeft",
+   "n": 7,
+   "word": false
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5775,
+   "i": 10,
+   "q": "h",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 3
+  },
+  {
+   "t": "insertAll",
+   "i": 4
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2628,
+   "i": 11,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "clickBraille",
+   "fx": 0.6886,
+   "fy": 0.8541,
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "type",
+   "text": "á?"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.702,
+   "i": 12,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0543,
+   "i": 13,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.632,
+   "i": 14,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5425,
+   "i": 15,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "clickText",
+   "fx": 0.9951,
+   "fy": 0.4496,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.265,
+   "i": 16,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1873,
+   "i": 17,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "clickText",
+   "fx": 0.1862,
+   "fy": 0.7445,
+   "n": 1
+  },
+  {
+   "t": "clickCard",
+   "f": 0.8224,
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8825,
+   "i": 18,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "readAloud",
+   "n": 2
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3068,
+   "i": 19,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "all"
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "clickText",
+   "fx": 0.9722,
+   "fy": 0.9935,
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4492,
+   "i": 20,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "key",
+   "key": "Alt+ArrowRight",
+   "n": 3
+  },
+  {
+   "t": "scroll",
+   "where": "editor",
+   "dy": 3000
+  },
+  {
+   "t": "type",
+   "text": "&amp;"
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 4
+  }
+ ]
+}

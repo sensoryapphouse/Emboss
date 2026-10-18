@@ -60,10 +60,13 @@
     "toc": "Innehållsförteckning",
     "print": "Utskriftsöversikt (vänster)",
     "braille": "Punktskrift",
+    "export": "Exportera",
+    "export_title": "Exportera punktskriften (BRF, eBraille) eller skicka den till präglare",
+    "emboss_menu": "Skicka till präglare",
     "braille_view": "Punktskriftsöversikt",
     "download_brf": "Punktskrift (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Prägling",
     "emboss_tooltip": "Skicka dokument till präglare eller skrivare",
     "clear_doc": "Rensa dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Versrad i poetisk vers (1-3)",
     "exercise_title": "Övningsfråga",
     "exercise_desc": "Numrerad övningsfråga (1-5 / 3-5)",
-    "caption_title": "Bildtext / tillskrivning",
-    "caption_desc": "Figurbildtext eller tillskrivning (7-5)",
     "footnote_title": "Fotnot",
     "footnote_desc": "Fotnottext (1-3)",
     "note_title": "Transkribents anteckning",
@@ -163,8 +164,6 @@
     "page_desc": "Infoga källsidsombrytningsindikatör",
     "printpage_title": "Utskriftssidnummer",
     "printpage_desc": "Infoga källsidsombrytningsindikatör",
-    "code_title": "Datorkod",
-    "code_desc": "Infoga kodblock med UEB-indikatorer",
     "indent_title": "Indent / Nest Sub-item",
     "indent_desc": "Nest list item or exercise deeper (Tab)",
     "outdent_title": "Outdent / Promote Item",
@@ -185,8 +184,8 @@
     "language_label": "Gränssnittsspråk",
     "language_help": "Välj det språk som används för knappar, menyer, dialogrutor och skärmläsaraviseringar.",
     "standard_label": "Punktskriftstandard",
-    "standard_bana": "BANA (USA och Kanada — 40×25 celler)",
-    "standard_ukaaf": "UKAAF (Storbritannien och Internationell — 38×25 celler)",
+    "standard_bana": "BANA (USA och Kanada — 38×25 celler)",
+    "standard_ukaaf": "UKAAF (Storbritannien och Internationell — 38×27 celler)",
     "grade_label": "Kontraktionsnivå",
     "grade_1": "Nivå 1 (okontraherad / bokstav-för-bokstav)",
     "grade_2": "Nivå 2 (kontraherad)",
@@ -261,7 +260,7 @@
     "size_full": "Helark (rad 1 anti-slitad)",
     "lead_lines": "Känsliga ledlinjer",
     "braille_labels": "Punktskriftetiketter",
-    "footer_tip": "💡 Svarta konturer blir solida känsliga gränser; färger mappar automatiskt till distinkta känsliga texturer.",
+    "footer_tip": "Svarta konturer blir solida känsliga gränser; färger mappar automatiskt till distinkta känsliga texturer.",
     "open_repositories": "Öppna känsliga arkiv:",
     "no_diagrams": "Inga matchande diagram hittade."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Förlustfritt roundtrip-status",
     "precedence_status": "Prioritetsstatus för punktskriftsregler",
     "perfect_match": "100% roundtrip-matchning (0 avvikelser)",
-    "badge_warn": "⚠ {count} att granska",
+    "badge_warn": "{count} att granska",
     "badge_title": "{count} ordavvikelse(r) hittades under roundtrip-återöversättning. Klicka för att hoppa till den första.",
     "badge_clean": "Roundtrip-kontroll: inga ordavvikelser hittades."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Du har osparade ändringar. Är du säker på att du vill avsluta utan att spara?",
     "unsaved_load": "Du har osparade ändringar. Om du laddar en ny fil ersätts ditt aktuella dokument. Fortsätt?",
     "unsaved_clear": "Du har osparade ändringar. Är du säker på att du vill rensa dokumentet?",
-    "drop_hint": "⬇ Släpp ett dokument för att importera det till redigeraren",
+    "drop_hint": "Släpp ett dokument för att importera det till redigeraren",
     "notice": "Meddelande",
     "close_notice": "Stäng meddelande"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumenttext",
+      "math_keyboard_toggle": "Mattetangentbord",
       "label": "Text",
       "toolbar_aria": "Formatering",
       "style_label": "Styckeformat",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafikkategorier",
       "graphic_list": "Känsliga grafik-diagram",
       "formula_search_label": "Sök formler",
-      "btactile_link": "BTactile (Gratis) ↗",
-      "tgil_link": "APH TGIL (1 800+ mallar) ↗"
+      "btactile_link": "BTactile (Gratis)",
+      "tgil_link": "APH TGIL (1 800+ mallar)"
     },
     "settings": {
       "list_spaced": "Blankradlista (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Anslut direkt till anpassade mikrokontroller-präglare (ESP32-S3, RP2040/RP2350, STM32, Arduino) som kringgår OS-skrivarlåsningar.",
       "graphics_hint": "Om den är avmarkerad exporteras diagram som tillgängliga transkribentanteckningsbeskrivningar för textbaserade präglare och punktskriftsdisplayer.",
       "tactile_heading": "Känslig display Live Stream (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Anslut Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Anslut USB / HID (Monarch)",
+      "tactile_connect_ble": "Anslut Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Anslut USB / HID (Monarch)",
       "tactile_disconnect": "Koppla från display",
       "tactile_sim_monarch": "Testa simulerad Monarch (32×10)",
       "tactile_sim_dotpad": "Testa simulerad DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Strömmar live punktskriftsbild och känsliga grafik direkt över WebBluetooth (DotPad BLE UART) eller WebHID (Monarch/USB) utan externa drivrutiner.",
       "perkins_hint": "— skriv punktskrift med SDF och JKL tangenter",
       "ascii_hint": "— visa raw ASCII-punktskrifttecken",
+      "show_explanation_bar": "Visa förklaringsfältet",
+      "show_explanation_bar_hint": "— remsan under texten och punktskriften som förklarar punktskriften för ordet du står på",
+      "simple_mode_hint": "— öppna Emboss i den enkla konverteraren. Att växla mellan Snabbläge och redigeraren ändrar inte detta.",
       "covers_hint": "— präglade titelsidor vid uppdelning av böcker"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Rubrik {n}",
       "cell_aria_named": "{header}, rad {row}",
       "cell_aria": "Kolumn {col}, rad {row}",
-      "too_wide_listed": "⚠ För bred för kolumner — skrivs som listad tabell i punktskrift",
+      "too_wide_listed": "För bred för kolumner — skrivs som listad tabell i punktskrift",
       "too_wide_listed_title": "Den här tabellen får inte plats i kolumner med aktuellt antal celler per rad och punktskriftsläge, så den skrivs som listad tabell (BANA Formats §11.9) i punktskrift i stället för kolumner sida vid sida.",
-      "too_wide_paragraph": "⚠ För bred för kolumner — skrivs i styckeform i punktskrift",
+      "too_wide_paragraph": "För bred för kolumner — skrivs i styckeform i punktskrift",
       "too_wide_paragraph_title": "Den här tabellen får inte plats i kolumner med aktuellt antal celler per rad och punktskriftsläge, så den skrivs i styckeform (UKAAF B004 §12) i punktskrift i stället för kolumner sida vid sida."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Kunde inte ladda tabellerna för \"{code}\" — använder fortfarande föregående punktskriftskod.",
-      "failed": "⚠ Punktskrift kunde inte genereras.",
+      "failed": "Punktskrift kunde inte genereras.",
       "failed_hint": "(Om detta säger att motorn inte är initierad, laddades inte punktskriftsmotorn — hårduppdatera med Cmd/Ctrl+Shift+R.)",
       "error_status": "Renderingsfel: {message}"
     },
     "engine": {
       "loading": "Läser in punktskriftmotor…",
-      "failed": "⚠ Punktskriftsmotorn misslyckades att ladda.",
+      "failed": "Punktskriftsmotorn misslyckades att ladda.",
       "failed_hint": "Hårduppdatera med Cmd/Ctrl+Shift+R. Om det fortsätter, öppna webbläsarkonsolen (Visa ▸ Utvecklare) och skicka felen.",
       "failed_status": "Motor misslyckades att ladda: {message}",
       "ready": "Redo — skriv eller formatera på vänster; punktskrift uppdateras live."
@@ -715,7 +718,7 @@
       "network_unreachable": "Kunde inte nå {url}: {message}. Webbläsare kan inte öppna raw TCP (port 9100) anslutningar; präglaren måste acceptera HTTP POST, eller ladda ner .brf-filen och skicka den med skrivarhantaren.",
       "usb_bridge_done": "Präglingsjobb levererat till USB-skrivaren!",
       "needs_webserial": "Direkt seriell prägling behöver en webbläsare med WebSerial (Chrome, Edge, Opera). Du kan ladda ner .brf-filen för att präga med skrivarhantaren, eller använda Nätverk (Port 9100) läge i Inställningar.",
-      "detected": "🔌 Upptäckt {name} — ställd in på {cells}×{lines} på {baud} baud."
+      "detected": "Upptäckt {name} — ställd in på {cells}×{lines} på {baud} baud."
     },
     "symbols": {
       "title": "Känsligt symbollibibliotek",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamisk matris",
       "badge_text_only": "Endast text",
       "badge_index": "Punktmatris"
+    },
+    "offline": {
+      "ready": "Emboss är redo att användas offline.",
+      "ready_short": "Redo att användas offline",
+      "not_yet": "Gör sig fortfarande redo att användas offline…"
     }
   }
 }

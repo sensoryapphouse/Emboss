@@ -1,0 +1,306 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 5,
+ "engine": "chrome",
+ "kind": "quick",
+ "doc": "web/test_samples/9780076996285NIMAS.xml",
+ "docSource": "test-samples",
+ "docFeatures": null,
+ "docs": {
+  "web/test_samples/9780076996285NIMAS.xml": "docs/00-9780076996285NIMAS.xml",
+  "gen:1763563818-s5-l6": "docs/01-gen-1763563818-s5-l6.html",
+  "tests/nimas_samples/bb_pagenum_input.xml": "docs/02-bb_pagenum_input.xml",
+  "gen:1763563818-s5-l2": "docs/03-gen-1763563818-s5-l2.html",
+  "tests/real_samples/md/ch10-01-syntax.md": "docs/04-ch10-01-syntax.md",
+  "tests/nimas_samples/NIMAS_valid_baseline.xml": "docs/05-NIMAS_valid_baseline.xml"
+ },
+ "settings": {
+  "simpleMode": true,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "console-error",
+ "key": "console-error: Cannot resolve table 'en-chardefs.cti' [http://localhost:#/web/problem-report.mjs:#]",
+ "message": "Cannot resolve table 'en-chardefs.cti'  [http://localhost:8297/web/problem-report.mjs:45]",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 19,
+ "originalActions": 51,
+ "actions": [
+  {
+   "t": "settings",
+   "tab": 0.6005,
+   "f": 0.4203,
+   "v": 0.163,
+   "close": "escape"
+  },
+  {
+   "t": "colorScheme",
+   "v": "dark"
+  },
+  {
+   "t": "colorScheme",
+   "v": "light"
+  },
+  {
+   "t": "roundTrip"
+  },
+  {
+   "t": "colorScheme",
+   "v": "dark"
+  },
+  {
+   "t": "key",
+   "key": "ArrowUp",
+   "n": 1
+  },
+  {
+   "t": "help",
+   "close": "escape"
+  },
+  {
+   "t": "colorScheme",
+   "v": "light"
+  },
+  {
+   "t": "menu",
+   "which": "download",
+   "f": 0.487,
+   "close": "escape"
+  },
+  {
+   "t": "setting",
+   "what": "standard",
+   "close": "escape",
+   "val": "bana"
+  },
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s5-l6"
+  },
+  {
+   "t": "setting",
+   "what": "pageSize",
+   "close": "escape",
+   "v": 0.0347
+  },
+  {
+   "t": "settings",
+   "tab": 0.0294,
+   "f": 0.3438,
+   "v": 0.5425,
+   "close": "escape"
+  },
+  {
+   "t": "settings",
+   "tab": 0.9877,
+   "f": 0.0433,
+   "v": 0.0887,
+   "close": "escape"
+  },
+  {
+   "t": "load",
+   "doc": "tests/nimas_samples/bb_pagenum_input.xml"
+  },
+  {
+   "t": "menu",
+   "which": "download",
+   "f": 0.0032,
+   "close": "escape"
+  },
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s5-l6"
+  },
+  {
+   "t": "clickPreview",
+   "fx": 0.1651,
+   "fy": 0.4725,
+   "n": 1
+  },
+  {
+   "t": "help",
+   "close": "button"
+  },
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s5-l2"
+  },
+  {
+   "t": "help",
+   "close": "escape"
+  },
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s5-l2"
+  },
+  {
+   "t": "menu",
+   "which": "download",
+   "f": 0.7416,
+   "close": "escape"
+  },
+  {
+   "t": "clickPreview",
+   "fx": 0.3746,
+   "fy": 0.7434,
+   "n": 1
+  },
+  {
+   "t": "load",
+   "doc": "tests/nimas_samples/bb_pagenum_input.xml"
+  },
+  {
+   "t": "resize",
+   "w": 1000,
+   "h": 700
+  },
+  {
+   "t": "settings",
+   "tab": 0.7903,
+   "f": 0.7627,
+   "v": 0.177,
+   "close": "escape"
+  },
+  {
+   "t": "clickPreview",
+   "fx": 0.2021,
+   "fy": 0.4409,
+   "n": 1
+  },
+  {
+   "t": "setting",
+   "what": "ui",
+   "close": "button",
+   "lang": "pl"
+  },
+  {
+   "t": "settings",
+   "tab": 0.1111,
+   "f": 0.0501,
+   "v": 0.3619,
+   "close": "escape"
+  },
+  {
+   "t": "settings",
+   "tab": 0.0547,
+   "f": 0.2164,
+   "v": 0.4939,
+   "close": "escape"
+  },
+  {
+   "t": "scroll",
+   "where": "preview",
+   "dy": -300
+  },
+  {
+   "t": "colorScheme",
+   "v": "light"
+  },
+  {
+   "t": "menu",
+   "which": "download",
+   "f": 0.7268,
+   "close": "escape"
+  },
+  {
+   "t": "colorScheme",
+   "v": "light"
+  },
+  {
+   "t": "settings",
+   "tab": 0.0378,
+   "f": 0.6192,
+   "v": 0.7185,
+   "close": "button"
+  },
+  {
+   "t": "settings",
+   "tab": 0.04,
+   "f": 0.5325,
+   "v": 0.9414,
+   "close": "escape"
+  },
+  {
+   "t": "type",
+   "text": "$x^2$"
+  },
+  {
+   "t": "load",
+   "doc": "tests/real_samples/md/ch10-01-syntax.md"
+  },
+  {
+   "t": "key",
+   "key": "Home",
+   "n": 10
+  },
+  {
+   "t": "setting",
+   "what": "ui",
+   "lang": "en",
+   "close": "escape"
+  },
+  {
+   "t": "readAloud",
+   "n": 2
+  },
+  {
+   "t": "settings",
+   "tab": 0.1403,
+   "f": 0.6938,
+   "v": 0.8248,
+   "close": "escape"
+  },
+  {
+   "t": "load",
+   "doc": "gen:1763563818-s5-l2"
+  },
+  {
+   "t": "settings",
+   "tab": 0.3079,
+   "f": 0.3173,
+   "v": 0.4982,
+   "close": "escape"
+  },
+  {
+   "t": "menu",
+   "which": "download",
+   "f": 0.4787,
+   "close": "escape"
+  },
+  {
+   "t": "key",
+   "key": "Shift+Tab",
+   "n": 1
+  },
+  {
+   "t": "load",
+   "doc": "tests/nimas_samples/NIMAS_valid_baseline.xml"
+  },
+  {
+   "t": "settings",
+   "tab": 0.8352,
+   "f": 0.1752,
+   "v": 0.0084,
+   "close": "escape"
+  },
+  {
+   "t": "settings",
+   "tab": 0.4688,
+   "f": 0.6744,
+   "v": 0.4137,
+   "close": "button"
+  },
+  {
+   "t": "roundTrip"
+  }
+ ]
+}

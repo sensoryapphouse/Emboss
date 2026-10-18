@@ -40,29 +40,33 @@ test('Hardware Protocols: Enabling Technologies Romeo & Juliet Protocol Setup', 
   
   // Romeo Single-Sided
   const streamRomeo = prepareEmbosserStream(brf, { embosser: 'romeo', width: 40, depth: 25, duplex: 'single' });
-  assert.ok(streamRomeo.startsWith('\x1b\x00\x1b\x0c25\x1b\x0e40\x1b\x121'), 'Romeo setup string must configure depth, width, and single-sided mode');
-  assert.ok(streamRomeo.endsWith('\x1a'), 'Romeo must end with EOF 0x1A');
+  assert.ok(streamRomeo.startsWith('\x1bA@@\x1bK@\x1bW@'), 'Romeo header opens with the driver\'s reset commands (A12, 23 Sep: bytes taken from APH libembosser)');
+  assert.ok(streamRomeo.includes('\x1bR' + String.fromCharCode(40 + 64)), 'Romeo carries its cells-per-line as ESC R <cols+64>');
+  assert.ok(streamRomeo.includes('\x1bQ' + String.fromCharCode(25 + 64)), 'Romeo carries its lines-per-page as ESC Q <rows+64>');
+  assert.ok(!streamRomeo.endsWith('\x1a'), 'these models take no trailing EOF byte (A12, 23 Sep: APH libembosser)');
 
   // Juliet Double-Sided (Interpoint)
   const streamJuliet = prepareEmbosserStream(brf, { embosser: 'juliet', width: 38, depth: 27, duplex: 'double' });
-  assert.ok(streamJuliet.startsWith('\x1b\x00\x1b\x0c27\x1b\x0e38\x1b\x122'), 'Juliet must configure 27 depth, 38 width, and double-sided mode (0x122)');
-  assert.ok(streamJuliet.endsWith('\x1a'));
+  assert.ok(streamJuliet.startsWith('\x1bA@@\x1bK@\x1bW@'), 'Juliet shares the Enabling Technologies header');
+  assert.ok(streamJuliet.includes('\x1bR' + String.fromCharCode(38 + 64)), 'Juliet carries 38 cells per line');
+  assert.ok(streamJuliet.includes('\x1bQ' + String.fromCharCode(27 + 64)), 'Juliet carries 27 lines per page');
+  assert.ok(!streamJuliet.endsWith('\x1a'), 'no trailing EOF byte for these models (A12, 23 Sep)');
 });
 
 test('Hardware Protocols: ViewPlus Tiger & PixBlaster Graphics Stream', () => {
   const brf = ' ,VIEWPLUS TIGER TEST.\x0c';
   const streamVP = prepareEmbosserStream(brf, { embosser: 'viewplus' });
-  assert.ok(streamVP.startsWith('\x1b*t'), 'ViewPlus stream must begin with Tiger prefix \\x1b*t');
+  assert.ok(!streamVP.startsWith('\x1b'), 'ViewPlus gets plain BRF: its own driver writes no header (A12, 23 Sep)');
   assert.ok(streamVP.endsWith('\x0c'), 'ViewPlus stream must terminate with form feed');
 
   const streamPix = prepareEmbosserStream(brf, { embosser: 'pixblaster' });
-  assert.ok(streamPix.startsWith('\x1b*t'), 'PixBlaster shares ViewPlus Tiger driver format');
+  assert.ok(!streamPix.startsWith('\x1b'), 'PixBlaster shares the ViewPlus path, so also plain BRF');
 });
 
 test('Hardware Protocols: Braillo 200/400/600 Heavy Industrial Protocol', () => {
   const brf = ' ,BRAILLO HEAVY PRODUCTION.\x0c';
   const streamBraillo = prepareEmbosserStream(brf, { embosser: 'braillo', depth: 27 });
-  assert.ok(streamBraillo.startsWith('\x1bM0\x1bL27'), 'Braillo must initialize with margin 0 and page length 27');
+  assert.ok(streamBraillo.startsWith('\x1bS1\x1bJ0\x1bN0\x1bR0\x1bA27'), 'Braillo header carries its 27 lines per page (A12, 23 Sep)');
   assert.ok(streamBraillo.endsWith('\x0c'), 'Braillo must conclude with Form Feed');
 });
 

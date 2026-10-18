@@ -60,10 +60,13 @@
     "toc": "תוכן עניינים",
     "print": "תצוגת הדפסה (צד שמאל)",
     "braille": "ברייל",
+    "export": "ייצוא",
+    "export_title": "ייצוא הברייל (BRF, eBraille) או שליחה למדפסת ברייל",
+    "emboss_menu": "שלח למדפסת ברייל",
     "braille_view": "תצוגת ברייל",
     "download_brf": "ברייל (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "הדפסת ברייל",
     "emboss_tooltip": "שלח מסמך למדפסת ברייל או מדפסת",
     "clear_doc": "נקה מסמך",
@@ -133,8 +136,6 @@
     "poem_desc": "שורת חרוזים בסטנזה (1-3)",
     "exercise_title": "שאלת תרגיל",
     "exercise_desc": "שאלת תרגול ממוספרת (1-5 / 3-5)",
-    "caption_title": "כיתוב / ייחוס",
-    "caption_desc": "כיתוב דמות או ייחוס (7-5)",
     "footnote_title": "הערת שוליים",
     "footnote_desc": "טקסט הערת שוליים (1-3)",
     "note_title": "הערת מעתיק",
@@ -163,8 +164,6 @@
     "page_desc": "הכנס מחוון מעבר עמוד מקור בדפוס",
     "printpage_title": "מספר עמוד בדפוס",
     "printpage_desc": "הכנס מחוון מעבר עמוד מקור בדפוס",
-    "code_title": "קוד מחשב",
-    "code_desc": "הכנס בלוק קוד עם אינדיקטורים של UEB",
     "indent_title": "הזחה / קינון תת-פריט",
     "indent_desc": "קינון פריט רשימה או תרגיל עמוק יותר (Tab)",
     "outdent_title": "הקטנת הזחה / קידום פריט",
@@ -185,8 +184,8 @@
     "language_label": "שפת ממשק",
     "language_help": "בחר את השפה המשמשת לכפתורים, תפריטים, תיבות דיאלוג והודעות קורא מסך.",
     "standard_label": "תקן ברייל",
-    "standard_bana": "BANA (ארה\"ב וקנדה — 40×25 תאים)",
-    "standard_ukaaf": "UKAAF (בריטניה ובינלאומי — 38×25 תאים)",
+    "standard_bana": "BANA (ארה\"ב וקנדה — 38×25 תאים)",
+    "standard_ukaaf": "UKAAF (בריטניה ובינלאומי — 38×27 תאים)",
     "grade_label": "רמת קיצורים",
     "grade_1": "רמה 1 (ברייל מלא / אות אחר אות)",
     "grade_2": "רמה 2 (ברייל מקוצר)",
@@ -261,7 +260,7 @@
     "size_full": "עמוד מלא (שורה 1 מוגנת)",
     "lead_lines": "קווי הנחיה מישושיים",
     "braille_labels": "תוויות ברייל",
-    "footer_tip": "💡 קווי מתאר שחורים הופכים לגבולות מישושיים מוצקים; צבעים ממופים באופן אוטומטי לטקסטורות מישושיות ייחודיות.",
+    "footer_tip": "קווי מתאר שחורים הופכים לגבולות מישושיים מוצקים; צבעים ממופים באופן אוטומטי לטקסטורות מישושיות ייחודיות.",
     "open_repositories": "פתח מאגרי גרפיקה מישושית:",
     "no_diagrams": "לא נמצאו דיאגרמות תואמות."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "סטטוס המרה דו-כיוונית ללא אובדן",
     "precedence_status": "סטטוס כללי עדיפות ברייל",
     "perfect_match": "התאמה מדויקת 100% (0 אי-התאמות)",
-    "badge_warn": "⚠ {count} לבדיקה",
+    "badge_warn": "{count} לבדיקה",
     "badge_title": "{count} אי-התאמה(ות) במילה שנמצאו בהמרה חזרה. לחץ כדי לדלג לראשונה.",
     "badge_clean": "בדיקת קרוב-וחזור: לא נמצאו אי-התאמות במילים."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "יש לך שינויים שלא נשמרו. האם אתה בטוח שברצונך לצאת בלי לשמור?",
     "unsaved_load": "יש לך שינויים שלא נשמרו. טעינת קובץ חדש תחליף את המסמך הנוכחי. להמשיך?",
     "unsaved_clear": "יש לך שינויים שלא נשמרו. האם אתה בטוח שברצונך לנקות את המסמך?",
-    "drop_hint": "⬇ שחרר מסמך כדי לייבא אותו לעורך",
+    "drop_hint": "שחרר מסמך כדי לייבא אותו לעורך",
     "notice": "הודעה",
     "close_notice": "סגור הודעה"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "טקסט המסמך",
+      "math_keyboard_toggle": "מקלדת מתמטיקה",
       "label": "טקסט",
       "toolbar_aria": "עיצוב",
       "style_label": "סגנון פסקה",
@@ -443,8 +443,8 @@
       "graphic_cats": "קטגוריות גרפיקה",
       "graphic_list": "דיאגרמות גרפיקה משושית",
       "formula_search_label": "חפש נוסחאות",
-      "btactile_link": "BTactile (חינם) ↗",
-      "tgil_link": "APH TGIL (1,800+ תבניות) ↗"
+      "btactile_link": "BTactile (חינם)",
+      "tgil_link": "APH TGIL (1,800+ תבניות)"
     },
     "settings": {
       "list_spaced": "רשימה עם שורה ריקה (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "התחבר ישירות למדפסות embossing של יחידת בקרה מותאמת אישית (ESP32-S3, RP2040/RP2350, STM32, Arduino) עוקפים נעילות מנהלי התקנים של מדפסת OS.",
       "graphics_hint": "כאשר בחרת, דיאגרמות מייצאות כתיאורים נגישים של הערות מעתיק לטקסט בלבד מדפסות וצפויות ברייל.",
       "tactile_heading": "ספק תצוגה משושית בזמן אמת (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 התחבר ל-Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 התחבר ל-USB / HID (Monarch)",
+      "tactile_connect_ble": "התחבר ל-Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "התחבר ל-USB / HID (Monarch)",
       "tactile_disconnect": "נתק תצוגה",
       "tactile_sim_monarch": "בדוק Monarch מדומה (32×10)",
       "tactile_sim_dotpad": "בדוק DotPad מדומה (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "סטרימים של ברייל חי וגרפיקה משושית ישירות על WebBluetooth (DotPad BLE UART) או WebHID (Monarch/USB) ללא דרייברים חיצוניים.",
       "perkins_hint": "— הקלד ברייל עם מקשי SDF ו-JKL",
       "ascii_hint": "— הצג תווי ברייל ASCII גולמיים",
+      "show_explanation_bar": "הצג את סרגל ההסבר",
+      "show_explanation_bar_hint": "— הרצועה מתחת לטקסט ולברייל שמסבירה את הברייל של המילה שבה אתה נמצא",
+      "simple_mode_hint": "— פתח את Emboss בממיר הפשוט. מעבר בין מצב מהיר לעורך אינו משנה זאת.",
       "covers_hint": "— כריכות כותרת כרוכות בעת חלוקת ספרים"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "כותרת {n}",
       "cell_aria_named": "{header}, שורה {row}",
       "cell_aria": "עמודה {col}, שורה {row}",
-      "too_wide_listed": "⚠ רחב מדי לעמודות — יודפס בברייל כטבלה רשימתית",
+      "too_wide_listed": "רחב מדי לעמודות — יודפס בברייל כטבלה רשימתית",
       "too_wide_listed_title": "טבלה זו אינה משתלבת בעמודות במספר התאים הנוכחי בשורה ובמצב הברייל, ולכן היא תודפס בברייל כטבלה רשימתית (BANA Formats §11.9) במקום עמודות זו לצד זו.",
-      "too_wide_paragraph": "⚠ רחב מדי לעמודות — יודפס בברייל בטופס פסקה",
+      "too_wide_paragraph": "רחב מדי לעמודות — יודפס בברייל בטופס פסקה",
       "too_wide_paragraph_title": "טבלה זו אינה משתלבת בעמודות במספר התאים הנוכחי בשורה ובמצב הברייל, ולכן היא תודפס בברייל בטופס פסקה (UKAAF B004 §12) במקום עמודות זו לצד זו."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "לא יכול לטעון טבלאות עבור \"{code}\" — עדיין משתמש בקוד ברייל הקודם.",
-      "failed": "⚠ לא היה ניתן לייצור ברייל.",
+      "failed": "לא היה ניתן לייצור ברייל.",
       "failed_hint": "(אם זה אומר שהמנוע לא נאתחל, מנוע ברייל לא טען — רענון כפוי עם Cmd/Ctrl+Shift+R.)",
       "error_status": "שגיאת רינדור: {message}"
     },
     "engine": {
       "loading": "טוען מנוע ברייל…",
-      "failed": "⚠ מנוע ברייל נכשל בטעינה.",
+      "failed": "מנוע ברייל נכשל בטעינה.",
       "failed_hint": "רענון כפוי עם Cmd/Ctrl+Shift+R. אם זה נמשך, פתח קונסול דפדפן (View ▸ Developer) וגרור השגיאות.",
       "failed_status": "מנוע נכשל בטעינה: {message}",
       "ready": "מוכן — הקלד או בצע עיצוב משמאל; ברייל עדכונים בזמן אמת."
@@ -715,7 +718,7 @@
       "network_unreachable": "לא יכול להגיע {url}: {message}. דפדפנים לא יכולים לפתוח חיבורי TCP גולמיים (יציאה 9100); המדפסת חייבת לקבל HTTP POST או להוריד את .brf ולשלוח אותה עם מנהל ההדפסה שלך.",
       "usb_bridge_done": "עבודת הדפסה הועברה למדפסת USB!",
       "needs_webserial": "הדפסה סדרתית ישירה צריכה דפדפן עם WebSerial (Chrome, Edge, Opera). אתה יכול להוריד את קובץ .brf כדי להדפיס עם מנהל ההדפסה שלך או להשתמש במצב רשת (יציאה 9100) בהגדרות.",
-      "detected": "🔌 זוהה {name} — הוגדר ל-{cells}×{lines} בבקרה {baud}."
+      "detected": "זוהה {name} — הוגדר ל-{cells}×{lines} בבקרה {baud}."
     },
     "symbols": {
       "title": "ספריית סמלים משושיים",
@@ -752,6 +755,11 @@
       "badge_dotpad": "מטריצה דינמית",
       "badge_text_only": "טקסט בלבד",
       "badge_index": "מטריצת נקודות"
+    },
+    "offline": {
+      "ready": "Emboss מוכן לעבודה ללא אינטרנט.",
+      "ready_short": "מוכן לעבודה ללא אינטרנט",
+      "not_yet": "עדיין מתכונן לעבודה ללא אינטרנט…"
     }
   }
 }

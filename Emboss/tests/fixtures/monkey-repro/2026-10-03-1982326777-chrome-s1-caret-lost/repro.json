@@ -1,0 +1,47 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 1,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "web/test_corpus_1000/file_1171_Volume_1171_Large_Academic_Textbook.xml",
+ "docSource": "corpus",
+ "docFeatures": null,
+ "docs": {
+  "web/test_corpus_1000/file_1171_Volume_1171_Large_Academic_Textbook.xml": "docs/00-file_1171_Volume_1171_Large_Academic_Textbook.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 390,
+  "height": 844
+ },
+ "invariant": "caret-lost",
+ "key": "caret-lost",
+ "message": "after a click into the text the focus is on BODY and the selection is in #text, not in the editor",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 18,
+ "originalActions": 16,
+ "actions": [
+  {
+   "t": "type",
+   "text": "שלום"
+  },
+  {
+   "t": "save"
+  },
+  {
+   "t": "clickText",
+   "fx": 0.9691,
+   "fy": 0.9267,
+   "n": 1
+  }
+ ]
+}

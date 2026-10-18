@@ -60,10 +60,13 @@
     "toc": "Ibirimo",
     "print": "Icapiro (Ibumoso)",
     "braille": "Braille",
+    "export": "Kohereza hanze",
+    "export_title": "Kohereza hanze Braille (BRF, eBraille) cyangwa uyohereze ku mashini ya Braille",
+    "emboss_menu": "Ohereza ku mashini ya Braille",
     "braille_view": "Kureba muri Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Kohereza mu Icapiro",
     "emboss_tooltip": "Ohereza inyandiko ku mashini ya Braille cyangwa ku icapiro",
     "clear_doc": "Siba Inyandiko",
@@ -133,8 +136,6 @@
     "poem_desc": "Umurongo w'igisigo (1-3)",
     "exercise_title": "Ikibazo cy'Umwitozo",
     "exercise_desc": "Ikibazo cy'umwitozo gifite umubare (1-5 / 3-5)",
-    "caption_title": "Ibisobanuro / Uwavuze",
-    "caption_desc": "Ibisobanuro by'ishusho cyangwa uwavuze (7-5)",
     "footnote_title": "Icyinjijwe hepfo",
     "footnote_desc": "Inyandiko y'icyinjijwe hepfo (1-3)",
     "note_title": "Icyinjijwe cy'Uhindura",
@@ -163,8 +164,6 @@
     "page_desc": "Shyiramo ikimenyetso cy'aharangira urupapuro rw'igitabo",
     "printpage_title": "Umubare w'Urupapuro rw'Igitabo",
     "printpage_desc": "Shyiramo ikimenyetso cy'aharangira urupapuro rw'igitabo",
-    "code_title": "Kode ya Mudasobwa",
-    "code_desc": "Shyiramo igice cya kode gifite ibimenyetso bya UEB",
     "indent_title": "Ongera Intera / Shyira Ikintu Gito Imbere",
     "indent_desc": "Shyira ikintu cy'urutonde cyangwa umwitozo imbere cyane (Tab)",
     "outdent_title": "Gabanya Intera / Zamura Ikintu",
@@ -185,8 +184,8 @@
     "language_label": "Ururimi rw'Imiterere y'Ikoreshwa",
     "language_help": "Hitamo ururimi ruzakoreshwa ku buto, amamenyu, ibiganiro, n'amatangazo ya porogaramu isoma ku mugaragaro.",
     "standard_label": "Uburyo bwa Braille",
-    "standard_bana": "BANA (Leta Zunze Ubumwe za Amerika na Kanada — utudirishya 40×25)",
-    "standard_ukaaf": "UKAAF (Ubwongereza n'Amahanga — utudirishya 38×25)",
+    "standard_bana": "BANA (Leta Zunze Ubumwe za Amerika na Kanada — utudirishya 38×25)",
+    "standard_ukaaf": "UKAAF (Ubwongereza n'Amahanga — utudirishya 38×27)",
     "grade_label": "Urwego rwo Kugabanya",
     "grade_1": "Urwego rwa 1 (Ntibigabanyijwe / Inyuguti kuri buri nyuguti)",
     "grade_2": "Urwego rwa 2 (Bigabanyijwe)",
@@ -261,7 +260,7 @@
     "size_full": "Urupapuro Rwose (Umurongo wa 1 Utabujije)",
     "lead_lines": "Imirongo Iyobora mu Ntoki",
     "braille_labels": "Amazina ya Braille",
-    "footer_tip": "💡 Imirongo y'ikizigira ihinduka imbibi zikomeye zikorwa mu ntoki; amabara ahinduka byikora ubwoko butandukanye bw'ubunini bukorwa mu ntoki.",
+    "footer_tip": "Imirongo y'ikizigira ihinduka imbibi zikomeye zikorwa mu ntoki; amabara ahinduka byikora ubwoko butandukanye bw'ubunini bukorwa mu ntoki.",
     "open_repositories": "Ububiko Bufunguye bw'Ibikorwa mu Ntoki:",
     "no_diagrams": "Nta bishushanyo bihuye byabonetse."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Imiterere y'Ihinduza Ritagira Igihombo",
     "precedence_status": "Imiterere y'Amategeko y'Ubutware bwa Braille",
     "perfect_match": "Guhuza kwa 100% (Nta Tandukaniro)",
-    "badge_warn": "⚠ {count} bikeneye gusuzumwa",
+    "badge_warn": "{count} bikeneye gusuzumwa",
     "badge_title": "Amagambo {count} atandukanye yabonetse mu gihe cyo kugereranya inyuma. Kanda kugira ngo ujye ku ya mbere.",
     "badge_clean": "Isuzuma ry'ihinduza: nta tandukaniro ry'amagambo ryabonetse."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Ufite impinduka zitabitswe. Uremeza ko ushaka gusohoka utazibitse?",
     "unsaved_load": "Ufite impinduka zitabitswe. Gutangiza dosiye nshya bizasimbura inyandiko ufite ubu. Wemeza gukomeza?",
     "unsaved_clear": "Ufite impinduka zitabitswe. Uremeza ko ushaka gusiba inyandiko?",
-    "drop_hint": "⬇ Shyira inyandiko hano kugira ngo uyitangize mu ihinduza",
+    "drop_hint": "Shyira inyandiko hano kugira ngo uyitangize mu ihinduza",
     "notice": "Itangazo",
     "close_notice": "Funga Itangazo"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Umwandiko w'Inyandiko",
+      "math_keyboard_toggle": "Mwandikisho y'imibare",
       "label": "Umwandiko",
       "toolbar_aria": "Gutunganya",
       "style_label": "Imisusire y'Igika",
@@ -443,8 +443,8 @@
       "graphic_cats": "Ibyiciro by'Ibishushanyo",
       "graphic_list": "Ibishushanyo bikorwa mu ntoki",
       "formula_search_label": "Shakisha ingero z'imibare",
-      "btactile_link": "BTactile (Kubuntu) ↗",
-      "tgil_link": "APH TGIL (Ingero zirenga 1.800) ↗"
+      "btactile_link": "BTactile (Kubuntu)",
+      "tgil_link": "APH TGIL (Ingero zirenga 1.800)"
     },
     "settings": {
       "list_spaced": "Urutonde rufite umurongo utagira ikintu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Huza ako kanya n'imashini za Braille za mikorokontroroli (ESP32-S3, RP2040/RP2350, STM32, Arduino) utarenganya poroguramu za sisitemu.",
       "graphics_hint": "Iyo bitahiswemo, ibishushanyo bisohoka nk'ibisobanuro by'Icyinjijwe cy'Uhindura bigezwaho, ku mashini za Braille zandika umwandiko gusa n'ibibuga bya Braille.",
       "tactile_heading": "Kohereza Ako Kanya ku Kibuga Gikorwa mu Ntoki (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Huza Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Huza USB / HID (Monarch)",
+      "tactile_connect_ble": "Huza Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Huza USB / HID (Monarch)",
       "tactile_disconnect": "Kuraho Ikibuga",
       "tactile_sim_monarch": "Gerageza Monarch Wigana (32×10)",
       "tactile_sim_dotpad": "Gerageza DotPad Wigana (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Yohereza ako kanya ikibuga cya Braille n'ibishushanyo bikorwa mu ntoki binyuze muri WebBluetooth (DotPad BLE UART) cyangwa WebHID (Monarch/USB) nta poroguramu z'inyongera zisabwa.",
       "perkins_hint": "— andika Braille ukoresheje ibuto SDF na JKL",
       "ascii_hint": "— erekana inyuguti za ASCII Braille zitunganyijwe",
+      "show_explanation_bar": "Erekana umurongo w'ibisobanuro",
+      "show_explanation_bar_hint": "— umurongo uri munsi y'umwandiko na Braille usobanura Braille y'ijambo urimo",
+      "simple_mode_hint": "— fungura Emboss ku mpindura yoroshye. Guhindura hagati y'Uburyo Bwihuse n'ihinduza ntibihindura ibi.",
       "covers_hint": "— ipfundikizo z'izina zicapwe iyo igitabo kigabanyijwe"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Umutwe {n}",
       "cell_aria_named": "{header}, umurongo {row}",
       "cell_aria": "Inkingi {col}, umurongo {row}",
-      "too_wide_listed": "⚠ Igari cyane ku nkingi — izanditswe muri Braille nk'imbonerahamwe iratondwa",
+      "too_wide_listed": "Igari cyane ku nkingi — izanditswe muri Braille nk'imbonerahamwe iratondwa",
       "too_wide_listed_title": "Iyi mbonerahamwe ntibashobora kuba mu nkingi ku utudirishya kuri buri murongo n'uburyo bwa Braille bikoreshwa ubu, ku bw'ibyo izanditswe muri Braille nk'imbonerahamwe iratondwa (BANA Formats §11.9) aho kuba inkingi ziri iruhande rw'izindi.",
-      "too_wide_paragraph": "⚠ Igari cyane ku nkingi — izanditswe muri Braille mu miterere y'ibika",
+      "too_wide_paragraph": "Igari cyane ku nkingi — izanditswe muri Braille mu miterere y'ibika",
       "too_wide_paragraph_title": "Iyi mbonerahamwe ntibashobora kuba mu nkingi ku utudirishya kuri buri murongo n'uburyo bwa Braille bikoreshwa ubu, ku bw'ibyo izanditswe muri Braille mu miterere y'ibika (UKAAF B004 §12) aho kuba inkingi ziri iruhande rw'izindi."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Ntibyashobotse gutangiza imbonerahamwe za \"{code}\" — hakoreshwa uburyo bwa Braille bwabanjirije.",
-      "failed": "⚠ Braille ntiyashoboye gukorwa.",
+      "failed": "Braille ntiyashoboye gukorwa.",
       "failed_hint": "(Niba havuzwe ko moteri itaratangira, moteri ya Braille ntiyatangijwe — vugurura ukoresheje Cmd/Ctrl+Shift+R.)",
       "error_status": "Ikosa ryo gukora: {message}"
     },
     "engine": {
       "loading": "Gutangiza moteri ya Braille…",
-      "failed": "⚠ Moteri ya Braille ntiyashoboye gutangira.",
+      "failed": "Moteri ya Braille ntiyashoboye gutangira.",
       "failed_hint": "Vugurura ukoresheje Cmd/Ctrl+Shift+R. Niba bikomeje, fungura console ya porogaramu ireba interineti (View ▸ Developer) hanyuma wohereze amakosa.",
       "failed_status": "Moteri ntiyashoboye gutangira: {message}",
       "ready": "Biteguye — andika cyangwa utunganye ibumoso; Braille ivugururwa ako kanya."
@@ -715,7 +718,7 @@
       "network_unreachable": "Ntibyashobotse kugera kuri {url}: {message}. Porogaramu zireba interineti ntizishobora gufungura umuyoboro wa TCP (9100) butaziguye; imashini ya Braille igomba kwemera HTTP POST, cyangwa ukure dosiye ya .brf uyohereze ukoresheje porogaramu yawe y'igicapo.",
       "usb_bridge_done": "Akazi ko gucapa kagejejwe ku icapiro rya USB!",
       "needs_webserial": "Gucapa butaziguye binyuze muri Serial bisaba porogaramu ireba interineti ifite WebSerial (Chrome, Edge, Opera). Urashobora gukura dosiye ya .brf ukayicapisha ukoresheje porogaramu yawe y'igicapo, cyangwa ukoreshe uburyo bw'Urusobe (Umuyoboro 9100) mu Igenamiterere.",
-      "detected": "🔌 {name} yabonetse — yagenwe kuri {cells}×{lines} kuri {baud} baud."
+      "detected": "{name} yabonetse — yagenwe kuri {cells}×{lines} kuri {baud} baud."
     },
     "symbols": {
       "title": "Ububiko bw'Ibimenyetso Bikorwa mu Ntoki",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrisi Ihinduka",
       "badge_text_only": "Umwandiko Gusa",
       "badge_index": "Matrisi y'Utudomo"
+    },
+    "offline": {
+      "ready": "Emboss yiteguye gukora nta interineti.",
+      "ready_short": "Yiteguye gukora nta interineti",
+      "not_yet": "Iracyiyitegura gukora nta interineti…"
     }
   }
 }

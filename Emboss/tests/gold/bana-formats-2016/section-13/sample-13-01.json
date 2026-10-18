@@ -18,7 +18,8 @@
         "kind": "paragraph",
         "level": null,
         "text": "Presented here is a familiar example from one of Donne’s songs:",
-        "features": "Introductory lead-in sentence, ordinary paragraph, before the centered poem."
+        "features": "Introductory lead-in sentence, flush-left (blocked, no first-line indent) paragraph, before the centered poem.",
+        "blocked": true
       },
       {
         "kind": "poem",
@@ -109,5 +110,13 @@
     "A",
     "B"
   ],
-  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocked / features",
+      "was": "ordinary paragraph (no flag)",
+      "now": "blocked:true; flush-left lead-in",
+      "evidence": "PDF p.367 (references/bana/braille-formats-2016.pdf, rendered 110 dpi), Sample 13-1: \"Presented here is a familiar example ...\" starts at the left margin with no indent; the braille (line 10) also starts at cell 1."
+    }
+  ]
 }

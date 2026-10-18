@@ -21,7 +21,7 @@
           "type": "diagram",
           "description": "A timeline from 1050 to 1650 with events at various points; two events share the date 1438.",
           "labels": [
-            "c. 1100 Incas settle in Cuzco.", "1050", "1200", "1438 Pachacuti becomes ruler.",
+            "c.1100 Incas settle in Cuzco.", "1050", "1200", "1438 Pachacuti becomes ruler.",
             "1350", "1438 Incan Empire begins.", "1500", "1572 Incan Empire falls.",
             "1532 Spanish invade Incan Empire.", "1650"
           ]
@@ -31,7 +31,7 @@
         "kind": "list",
         "items": [
           { "text": "1050" },
-          { "text": "c. 1100 Incas settle in Cuzco." },
+          { "text": "c.1100 Incas settle in Cuzco." },
           { "text": "1438", "level": 1 },
           { "text": "Pachacuti becomes ruler.", "level": 2 },
           { "text": "Incan Empire begins.", "level": 2 },
@@ -69,5 +69,19 @@
     "A",
     "B"
   ],
-  "resolution": "B's braille margins (2-space runover for the two nested 1438 events, 12-space heading indent) match the raw source exactly (source-6.txt lines 5060-5069, decoded directly); A's runover is 1 space short and its heading indent 1 short. All dates/text confirmed by exact forward-translation except the 'c.' abbreviation noted above. print.blocks[2] (the actual buildable list, with the 1438/nested-events structure) was built here since neither run supplied one, only a flat, unordered figure.labels array."
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].figure.labels[0]",
+      "was": "c. 1100 Incas settle in Cuzco.",
+      "now": "c.1100 Incas settle in Cuzco.",
+      "evidence": "page image references/_gemini/_done/gold-6-A/page-172.png (PDF p172, Sample 6-10): the first callout box on the timeline reads \"c.1100 / Incas settle / in Cuzco.\" with no space after the period."
+    },
+    {
+      "field": "print.blocks[2].items[1].text",
+      "was": "c. 1100 Incas settle in Cuzco.",
+      "now": "c.1100 Incas settle in Cuzco.",
+      "evidence": "Same page image; same callout text, no space between \"c.\" and 1100."
+    }
+  ],
+  "resolution": "B's braille margins (2-space runover for the two nested 1438 events, 12-space heading indent) match the raw source exactly (source-6.txt lines 5060-5069, decoded directly); A's runover is 1 space short and its heading indent 1 short. All dates/text confirmed by exact forward-translation except the 'c.' abbreviation noted above. print.blocks[2] (the actual buildable list, with the 1438/nested-events structure) was built here since neither run supplied one, only a flat, unordered figure.labels array. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

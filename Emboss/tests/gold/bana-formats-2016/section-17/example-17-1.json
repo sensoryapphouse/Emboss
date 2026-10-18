@@ -35,16 +35,32 @@
   "braille": {
     "width": 40,
     "lines": [
-      "el medio ambiente3 5viron;t",
-      "el mundo3 _w"
+      "el medio ambiente  5viron;t",
+      "el mundo  _w"
     ],
     "pageBreaks": [],
-    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly, except where corrections (below) apply."
   },
   "uncertain": [],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source. illustrates.rule: A's '17.7.2b' kept over B's bare '17.7.2' — the example is embedded in the source directly after clause b's own text (colon insertion) and before clause c's (long-phrase wrap), so b is the specific clause it illustrates. Modeled as a 'glossary' block (Emboss's `<dl>`/formatGlossary, standards-map.md BANA 17.7.2b/c 'done') — glossarySegments auto-inserts the colon+space separator, exactly reproducing the given braille."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source. illustrates.rule: A's '17.7.2b' kept over B's bare '17.7.2' — the example is embedded in the source directly after clause b's own text (colon insertion) and before clause c's (long-phrase wrap), so b is the specific clause it illustrates. Modeled as a 'glossary' block (Emboss's `<dl>`/formatGlossary, standards-map.md BANA 17.7.2b/c 'done') — glossarySegments auto-inserts the colon+space separator, exactly reproducing the given braille.",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA foreign-language changes June 2024",
+      "field": "braille.lines",
+      "before": [
+        "el medio ambiente3 5viron;t",
+        "el mundo3 _w"
+      ],
+      "after": [
+        "el medio ambiente  5viron;t",
+        "el mundo  _w"
+      ],
+      "note": "New rule 17.7.1c (was 17.7.2b): follow print for punctuation after an entry word; if there is no punctuation, leave two blank cells instead of inserting a braille colon. This entry has no print punctuation, so the inserted colon (3) becomes two spaces."
+    }
+  ]
 }

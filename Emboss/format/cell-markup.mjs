@@ -12,12 +12,16 @@
 
 // Exported so other modules that build or read segment `tf` bitmasks (e.g. the editor's
 // contenteditable table cells, format/cell-dom.mjs) share one definition (G15).
-export const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4;
+// TF_SCRIPT (K5, UEB §9) matches engine/louis.mjs's TYPEFORM.script = 8 exactly — the next
+// bit after TF_BOLD, combinable with the other three the same way liblouis combines them.
+export const TF_ITALIC = 1, TF_UNDERLINE = 2, TF_BOLD = 4, TF_SCRIPT = 8;
 const ESCAPABLE = '*_`$<\\';
-// Escaped characters are parked in the Private Use Area while the markup is parsed.
-const PUA = 0xE000;
+// Escaped characters are parked in the Private Use Area while the markup is parsed — at U+E020 up, clear of the
+// sub/superscript markers U+E000–U+E002 (format/text-style.mjs SCRIPT_MARKS): parked at U+E000 as they were, a
+// superscript in a table cell came back as a literal "_" and "`" (import audit, 30 Sep).
+const PUA = 0xE020;
 const park = (s) => s.replace(/\\([*_`$<\\])/g, (_, ch) => String.fromCharCode(PUA + ESCAPABLE.indexOf(ch)));
-const unpark = (s) => s.replace(/[\uE000-\uE005]/g, (c) => ESCAPABLE[c.charCodeAt(0) - PUA]);
+const unpark = (s) => s.replace(/[\uE020-\uE025]/g, (c) => ESCAPABLE[c.charCodeAt(0) - PUA]);
 const MARKUP_CHARS = /[*_`$<\\]/;
 
 const isObjectCell = (cell) => cell != null && typeof cell === 'object' && !Array.isArray(cell);
@@ -31,7 +35,9 @@ export function parseCellMarkup(str) {
 
   if (/<[a-z][\s\S]*>/i.test(s)) {
     const segments = [];
-    const regex = /<(\/)?(strong|b|em|i|u|code|span|dfn)(?:\s+[^>]*)?>|([^<]+)/gi;
+    // K5: `<script>…</script>` is this dialect's own pseudo-tag for the script typeform (real
+    // HTML has no inline tag for it, same reasoning as `<u>` for underline above) -> TF_SCRIPT.
+    const regex = /<(\/)?(strong|b|em|i|u|code|span|dfn|script)(?:\s+[^>]*)?>|([^<]+)/gi;
     let m, tf = 0, unc = false;
     while ((m = regex.exec(s)) !== null) {
       if (m[3]) {
@@ -42,7 +48,7 @@ export function parseCellMarkup(str) {
       } else if (m[2]) {
         const isClose = !!m[1];
         const tag = m[2].toLowerCase();
-        const bit = (tag === 'b' || tag === 'strong') ? TF_BOLD : ((tag === 'i' || tag === 'em' || tag === 'dfn') ? TF_ITALIC : (tag === 'u' ? TF_UNDERLINE : 0));
+        const bit = (tag === 'b' || tag === 'strong') ? TF_BOLD : ((tag === 'i' || tag === 'em' || tag === 'dfn') ? TF_ITALIC : (tag === 'u' ? TF_UNDERLINE : (tag === 'script' ? TF_SCRIPT : 0)));
         if (isClose) {
           if (bit) tf &= ~bit;
           if (tag === 'code') unc = false;
@@ -89,7 +95,7 @@ export function cellSegments(cell) {
 /** True when the cell needs segment translation (emphasis, uncontracted text or maths). */
 export function cellIsRich(cell) {
   const segs = cellSegments(cell);
-  return segs.length > 1 || !!(segs[0] && (segs[0].tf || segs[0].uncontracted || segs[0].type === 'math' || segs[0].type === 'noteref'));
+  return segs.length > 1 || !!(segs[0] && (segs[0].tf || segs[0].uncontracted || segs[0].type === 'math' || segs[0].type === 'noteref' || segs[0].type === 'imgnote' || segs[0].type === 'brl' || segs[0].href || segs[0].cite));
 }
 
 /** Plain print text of a cell (maths as its LaTeX), for widths, numbers, speech and search. */
@@ -99,7 +105,13 @@ export function cellPlainText(cell) {
   return cellSegments(cell).map((g) => (g.type === 'math' ? (g.latex || '') : (g.text || ''))).join('');
 }
 
-export const cellIsBlank = (cell) => cellPlainText(cell).trim() === '';
+// A {type:'brl'} segment's `text` (the print it stands for) is deliberately '' for a cell
+// that is ONLY literal braille with no print equivalent of its own (a BrailleBlaster
+// <brl>-only table cell) — cellPlainText correctly reports no PRINT text for it, but the
+// cell itself is not blank: it has real braille to emboss (`.brl`). Every other rich
+// segment type (math's latex, imgnote's alt text) already surfaces through cellPlainText,
+// so brl is the one case that needs checking separately here.
+export const cellIsBlank = (cell) => cellPlainText(cell).trim() === '' && !cellSegments(cell).some((g) => g.type === 'brl' && g.brl);
 
 const escapeText = (t) => String(t).replace(/[*_`$<\\]/g, (c) => '\\' + c);
 
@@ -113,10 +125,11 @@ export function cellToMarkup(cell) {
     if (!t) return '';
     if (g.uncontracted) t = '`' + t + '`';
     const tf = g.tf || 0;
-    // The markup does not nest; bold wins over italic, italic over underline.
+    // The markup does not nest; bold wins over italic, italic over underline over script (K5).
     if (tf & TF_BOLD) t = `**${t}**`;
     else if (tf & TF_ITALIC) t = `*${t}*`;
     else if (tf & TF_UNDERLINE) t = `<u>${t}</u>`;
+    else if (tf & TF_SCRIPT) t = `<script>${t}</script>`;
     return t;
   }).join('');
 }
@@ -136,7 +149,18 @@ export function cellFromEdit(markup, previous) {
  */
 export function cellFromSegments(text, segments) {
   const plain = String(text ?? '');
-  const rich = Array.isArray(segments) && segments.some((g) => g.tf || g.uncontracted || g.type === 'math' || g.type === 'noteref');
+  // A19/A21 Stage 3/4: a cell whose only "rich" content is a <a href>/<cite> segment (no
+  // tf/uncontracted/math/noteref) must still keep its segments, or the href/cite marking
+  // (parse.mjs's walkInline) is dropped the moment the cell collapses to a plain string.
+  // A picture kept in a table cell (parse.mjs, DOCX data tables) is an `imgnote` segment
+  // (an embedded transcriber's note with its description, BANA §10.11.1): kept the same way.
+  // BrailleBlaster-style table test fixtures (TablesTestXml.xml) hold a cell's LITERAL
+  // braille as a {type:'brl'} segment (document.mjs's F-187/F-188/F-222 model) — that must
+  // count as "rich" too, or a cell whose only content is one brl segment (no tf/href/etc.,
+  // print `text` empty) collapses back to the empty plain string here and the segment
+  // (the cell's only actual content) is silently thrown away.
+  // A foreign-language run (`lang`, input/lang.mjs) is kept the same way (it does not change the braille).
+  const rich = Array.isArray(segments) && segments.some((g) => g.tf || g.uncontracted || g.type === 'math' || g.type === 'noteref' || g.type === 'imgnote' || g.type === 'brl' || g.href || g.cite || g.lang);
   if (!rich && !MARKUP_CHARS.test(plain)) return plain;
   return { text: plain, segments: rich ? segments : [{ type: 'text', text: plain }] };
 }

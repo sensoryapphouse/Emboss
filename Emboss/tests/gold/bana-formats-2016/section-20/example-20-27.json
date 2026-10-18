@@ -1,0 +1,49 @@
+{
+  "id": "example-20-27",
+  "title": "Example 20-27: Pronunciation Key in Columns with Headings",
+  "pdfPages": [
+    10
+  ],
+  "textLines": [
+    15899,
+    15909
+  ],
+  "illustrates": {
+    "rule": "20.7.4c",
+    "quote": "c. When pronunciation keys are shown in columns, list the entries using 1-3 margins, or 1-5, 3-5 for a nested list. Omit print column headings. Explain the change to print in a transcriber’s note."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "table",
+        "level": null,
+        "text": "Symbol\tExample Words\na\tat, bad\ne\teven\nng\tlong, pink\noi\toil, toy\nu\tup, mud\nzh\tvision, seizure",
+        "features": "Two columns with underlined headings 'Symbol' and 'Example Words'; bold letters mark the sounds in the example words (at, the a of bad, ng of long, n of pink, oil, up, u of mud, i of vision, z of seizure, as far as the image resolves)"
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-548.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "a ^2at1 b^2ad",
+      ";e ^2ev5",
+      "ng lo^1ng1 pi^2nk",
+      "oi ^1oi^'l1 t^1oy",
+      ";u ^2up1 m^2ud",
+      "zh vi^1si^'on1 sei^2zure"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 10. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Which letters are bold in the example words was read from a low-resolution image; the braille emphasis marks (^2..1, ^1..1 etc.) were not used to decide."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (cited rule is the one the example follows). print: B left blocks empty; A's blocks checked against the page image; corrected: A did not record the underlined headings or the bold letters.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

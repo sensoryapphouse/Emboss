@@ -58,13 +58,13 @@
       "      @.<,columns & r[s >e 9t]*ang$4@.>",
       "",
       "      ,sunrise     ,sunset",
-      "      \"3333333333 \"3333333333",
-      ",jan #g3#bc ,,am #e3#ec ,,pm",
-      ",feb #g3#jb ,,am #f3#ai ,,pm",
-      ",m>   #f3#ca ,,am #f3#ch ,,pm",
-      ",apr #f3#aj ,,am #g3#eg ,,pm",
-      ",may #e3#ej ,,am #h3#ag ,,pm",
-      ",jun #e3#cj ,,am #h3#ca ,,pm",
+      "      \"3333333333  \"3333333333",
+      ",jan  #g3#bc ,,am  #e3#ec ,,pm",
+      ",feb  #g3#jb ,,am  #f3#ai ,,pm",
+      ",m>   #f3#ca ,,am  #f3#ch ,,pm",
+      ",apr  #f3#aj ,,am  #g3#eg ,,pm",
+      ",may  #e3#ej ,,am  #h3#ag ,,pm",
+      ",jun  #e3#cj ,,am  #h3#ca ,,pm",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -76,5 +76,31 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers' first cell resolved to '' (blank above the Sunrise/Sunset row headings in print), not a fabricated '(row)' placeholder; confirmed against the PDF image (p. 331)."
+  "resolution": "print.headers' first cell resolved to '' (blank above the Sunrise/Sunset row headings in print), not a fabricated '(row)' placeholder; confirmed against the PDF image (p. 331).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      \"3333333333 \"3333333333",
+        ",jan #g3#bc ,,am #e3#ec ,,pm",
+        ",feb #g3#jb ,,am #f3#ai ,,pm",
+        ",m>   #f3#ca ,,am #f3#ch ,,pm",
+        ",apr #f3#aj ,,am #g3#eg ,,pm",
+        ",may #e3#ej ,,am #h3#ag ,,pm",
+        ",jun #e3#cj ,,am #h3#ca ,,pm"
+      ],
+      "after": [
+        "      \"3333333333  \"3333333333",
+        ",jan  #g3#bc ,,am  #e3#ec ,,pm",
+        ",feb  #g3#jb ,,am  #f3#ai ,,pm",
+        ",m>   #f3#ca ,,am  #f3#ch ,,pm",
+        ",apr  #f3#aj ,,am  #g3#eg ,,pm",
+        ",may  #e3#ej ,,am  #h3#ag ,,pm",
+        ",jun  #e3#cj ,,am  #h3#ca ,,pm"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 6, 7, 8, 9, 10, 11, 12 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 331 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (7). Where: column gap (table / related columns / columned list) (6); table separation line (1)."
+    }
+  ]
 }

@@ -1,0 +1,49 @@
+{
+ "version": 2,
+ "runSeed": "1081764635",
+ "session": 6,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "gen:1081764635-s6",
+ "docSource": "generated",
+ "docFeatures": [
+  "break",
+  "display-math",
+  "h4",
+  "h5",
+  "h6",
+  "inline-math",
+  "link",
+  "picture-noalt",
+  "script:arabic",
+  "script:cyrillic",
+  "script:emoji",
+  "script:hebrew",
+  "sidebar",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1081764635-s6": "docs/00-gen-1081764635-s6.md"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: math",
+ "message": "the saved file reopens to different braille [first differing block: math] (block #10 not counting empty ones, math / math): first tab has 163 lines, reopened tab has 163; first differences: line 26: first tab \"#AJB9#I \\\"7@: #CH\\r\" / reopened tab \"#AJB9#I@&NE2#CH\\r\" | line 99: first tab \"#AJB9#I \\\"7@: #CH\\r\" / reopened tab \"#AJB9#I@&NE2#CH\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 2,
+ "originalActions": 17,
+ "actions": []
+}

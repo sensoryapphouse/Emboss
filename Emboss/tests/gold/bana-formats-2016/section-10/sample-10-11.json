@@ -19,7 +19,8 @@
         "text": "See if you know what each word below means. Match each word in column 1 with its meaning in column 2."
       },
       {
-        "kind": "note",
+        "kind": "heading",
+        "level": 2,
         "text": "1"
       },
       {
@@ -40,7 +41,8 @@
         ]
       },
       {
-        "kind": "note",
+        "kind": "heading",
+        "level": 2,
         "text": "2"
       },
       {
@@ -94,5 +96,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8152-8168). Print unchanged from A/B."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8152-8168). Print unchanged from A/B. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1] and [3]",
+      "was": "kind note \"1\" and kind note \"2\"",
+      "now": "kind heading level 2 \"1\" and \"2\"",
+      "evidence": "references/_gemini/_done/gold-10-A/page-280.png, Sample 10-11: print shows the bare column numbers 1 and 2 as column headings above the two columns; the braille (lines 6 and 11) shows them as plain cell-5 headings with no transcriber's-note indicators."
+    }
+  ]
 }

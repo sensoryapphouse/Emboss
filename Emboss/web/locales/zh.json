@@ -60,10 +60,13 @@
     "toc": "目錄",
     "print": "列印檢視 (LHS)",
     "braille": "點字",
+    "export": "匯出",
+    "export_title": "匯出點字 (BRF、eBraille) 或傳送到壓印機",
+    "emboss_menu": "傳送到壓印機",
     "braille_view": "點字檢視",
     "download_brf": "點字 (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "壓印",
     "emboss_tooltip": "將文件傳送到壓印機或印表機",
     "clear_doc": "清除文件",
@@ -133,8 +136,6 @@
     "poem_desc": "詩歌詩節韻文行 (1-3)",
     "exercise_title": "練習題",
     "exercise_desc": "編號練習題 (1-5 / 3-5)",
-    "caption_title": "圖說/著作權",
-    "caption_desc": "圖形圖說或著作權表示 (7-5)",
     "footnote_title": "腳註",
     "footnote_desc": "腳註文字 (1-3)",
     "note_title": "譯者的註釋",
@@ -163,8 +164,6 @@
     "page_desc": "插入原始列印頁面分隔符指示符",
     "printpage_title": "列印頁碼",
     "printpage_desc": "插入原始列印頁面分隔符指示符",
-    "code_title": "電腦代碼",
-    "code_desc": "插入帶 UEB 指示符的代碼塊",
     "indent_title": "縮排 / 巢狀子項目",
     "indent_desc": "將清單項目或練習深度巢狀化 (Tab)",
     "outdent_title": "減少縮排 / 升級項目",
@@ -185,8 +184,8 @@
     "language_label": "介面語言",
     "language_help": "選擇用於按鈕、選單、對話框和螢幕閱讀器通知的語言。",
     "standard_label": "點字標準",
-    "standard_bana": "BANA (美國和加拿大 — 40×25 點)",
-    "standard_ukaaf": "UKAAF (英國和國際 — 38×25 點)",
+    "standard_bana": "BANA (美國和加拿大 — 38×25 點)",
+    "standard_ukaaf": "UKAAF (英國和國際 — 38×27 點)",
     "grade_label": "縮寫級別",
     "grade_1": "第 1 級 (無縮寫/逐字)",
     "grade_2": "第 2 級 (縮寫)",
@@ -261,7 +260,7 @@
     "size_full": "整張 (第 1 行反切片)",
     "lead_lines": "觸覺前導線",
     "braille_labels": "點字標籤",
-    "footer_tip": "💡 黑色邊框變成堅實的觸覺邊界；顏色自動對映到不同的觸覺紋理。",
+    "footer_tip": "黑色邊框變成堅實的觸覺邊界；顏色自動對映到不同的觸覺紋理。",
     "open_repositories": "開啟觸覺儲存庫：",
     "no_diagrams": "找不到符合的圖表。"
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "無損來回狀態",
     "precedence_status": "點字優先順序規則狀態",
     "perfect_match": "100% 來回符合 (0 個不符)",
-    "badge_warn": "⚠ {count} 個待檢視",
+    "badge_warn": "{count} 個待檢視",
     "badge_title": "在往返反向翻譯中發現 {count} 個單詞不符。按一下以跳至第一個。",
     "badge_clean": "往返檢查：未發現單詞不符。"
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "您有未儲存的變更。確定要在未儲存的情況下結束?",
     "unsaved_load": "您有未儲存的變更。載入新檔案將取代您目前的文件。是否繼續?",
     "unsaved_clear": "您有未儲存的變更。確定要清除文件?",
-    "drop_hint": "⬇ 拖放文件以將其匯入編輯器",
+    "drop_hint": "拖放文件以將其匯入編輯器",
     "notice": "通知",
     "close_notice": "關閉通知"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "文件文字",
+      "math_keyboard_toggle": "數學鍵盤",
       "label": "文字",
       "toolbar_aria": "格式設定",
       "style_label": "段落樣式",
@@ -443,8 +443,8 @@
       "graphic_cats": "圖形類別",
       "graphic_list": "觸覺圖形圖表",
       "formula_search_label": "搜尋公式",
-      "btactile_link": "BTactile (免費) ↗",
-      "tgil_link": "APH TGIL (1,800+ 範本) ↗"
+      "btactile_link": "BTactile (免費)",
+      "tgil_link": "APH TGIL (1,800+ 範本)"
     },
     "settings": {
       "list_spaced": "空白行清單 (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "直接連線到自訂微控制器點字機 (ESP32-S3、RP2040/RP2350、STM32、Arduino)，繞過作業系統印表機驅動程式鎖定。",
       "graphics_hint": "取消選取時，圖表會匯出為無文字點字機和點字顯示器之無障礙設計譯者說明。",
       "tactile_heading": "觸覺顯示器實時串流 (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 連線藍牙 (DotPad BLE)",
-      "tactile_connect_hid": "🔌 連線 USB / HID (Monarch)",
+      "tactile_connect_ble": "連線藍牙 (DotPad BLE)",
+      "tactile_connect_hid": "連線 USB / HID (Monarch)",
       "tactile_disconnect": "中斷顯示器連線",
       "tactile_sim_monarch": "測試模擬 Monarch (32×10)",
       "tactile_sim_dotpad": "測試模擬 DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "無需外部驅動程式，透過 WebBluetooth (DotPad BLE UART) 或 WebHID (Monarch/USB) 串流實時點字檢視區和觸覺圖形。",
       "perkins_hint": "— 使用 SDF 和 JKL 鍵輸入點字",
       "ascii_hint": "— 顯示原始 ASCII 點字字元",
+      "show_explanation_bar": "顯示說明列",
+      "show_explanation_bar_hint": "— 文字與點字下方、說明您所在字詞點字的列",
+      "simple_mode_hint": "— 以簡易轉換器開啟 Emboss。在快速模式與編輯器之間切換不會改變此設定。",
       "covers_hint": "— 分割書籍時壓印標題封面"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "標頭 {n}",
       "cell_aria_named": "{header}，第 {row} 列",
       "cell_aria": "第 {col} 欄，第 {row} 列",
-      "too_wide_listed": "⚠ 對欄而言太寬 — 將以點字轉為清單表",
+      "too_wide_listed": "對欄而言太寬 — 將以點字轉為清單表",
       "too_wide_listed_title": "此表格在目前每行的點數與點字模式下無法容納於欄中，因此將以點字轉為清單表 (BANA Formats §11.9)，而非並排的欄。",
-      "too_wide_paragraph": "⚠ 對欄而言太寬 — 將以點字轉為段落格式",
+      "too_wide_paragraph": "對欄而言太寬 — 將以點字轉為段落格式",
       "too_wide_paragraph_title": "此表格在目前每行的點數與點字模式下無法容納於欄中，因此將以點字轉為段落格式 (UKAAF B004 §12)，而非並排的欄。"
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "無法載入「{code}」的表格 — 仍使用先前的點字代碼。",
-      "failed": "⚠ 無法產生點字。",
+      "failed": "無法產生點字。",
       "failed_hint": "(若顯示引擎未初始化，表示點字引擎未載入 — 以 Cmd/Ctrl+Shift+R 進行硬重新整理。)",
       "error_status": "轉譯錯誤: {message}"
     },
     "engine": {
       "loading": "正在載入點字引擎…",
-      "failed": "⚠ 點字引擎載入失敗。",
+      "failed": "點字引擎載入失敗。",
       "failed_hint": "以 Cmd/Ctrl+Shift+R 進行硬重新整理。如果持續發生，請開啟瀏覽器主控台 (檢視 ▸ 開發者) 並傳送錯誤。",
       "failed_status": "引擎載入失敗: {message}",
       "ready": "準備完成 — 在左側輸入或格式化; 點字會即時更新。"
@@ -715,7 +718,7 @@
       "network_unreachable": "無法到達 {url}: {message}。瀏覽器無法開啟原始 TCP (連接埠 9100) 連線; 點字機必須接受 HTTP POST，或下載 .brf 並使用列印管理員傳送。",
       "usb_bridge_done": "壓印工作已傳遞至 USB 印表機!",
       "needs_webserial": "直接序列壓印需要具有 WebSerial 的瀏覽器 (Chrome、Edge、Opera)。您可以下載 .brf 檔案使用列印管理員進行壓印，或在設定中使用網路 (連接埠 9100) 模式。",
-      "detected": "🔌 偵測到 {name} — 設定為 {cells}×{lines}，{baud} 波特。"
+      "detected": "偵測到 {name} — 設定為 {cells}×{lines}，{baud} 波特。"
     },
     "symbols": {
       "title": "觸覺符號庫",
@@ -752,6 +755,11 @@
       "badge_dotpad": "動態陣列",
       "badge_text_only": "純文字",
       "badge_index": "點陣列"
+    },
+    "offline": {
+      "ready": "Emboss 已準備好離線工作。",
+      "ready_short": "已準備好離線工作",
+      "not_yet": "仍在準備離線工作…"
     }
   }
 }

@@ -168,6 +168,11 @@ test('F-12 format: BANA Sample 11-2 (Complex Table) header block matches the gol
     type: 'table',
     headers: ['Fiscal Year', 'Total', 'Direct', 'Grants'],
     headerGroups: [{ text: 'In Millions of Dollars', from: 1, to: 3 }],
+    // K3 (BANA 11.6.1d, transcriber KD): print right-aligns all three money columns (sample-
+    // 11-02.json's own gold braille, confirmed below) — stands in for what a real reader
+    // would read from the source file's own column-alignment markup (superseded punctuation
+    // guess, F-7/table_rules.test.mjs).
+    printAlign: [undefined, 'right', 'right', 'right'],
     rows: [
       ['1998', '981,712', '817,770', '163,942'],
       ['1999', '1,001,676', '825,833', '175,843'],
@@ -184,18 +189,19 @@ test('F-12 format: BANA Sample 11-2 (Complex Table) header block matches the gol
   // test's plain (untitled) block does not render), upper-cased to match this project's
   // BRF ASCII convention (gold-run.mjs's own documented case-normalisation — see its
   // "gold §11 letter-case convention" comment; the standard's own dot pattern is
-  // unaffected by letter case either way).
+  // unaffected by letter case either way). K33 (26 Sep 2026): the gold's column gaps are now the book's two blank
+  // cells (11.2.5b); this copy used to carry the one-cell gaps of the gold's earlier text-dump transcription.
   const expected = [
     '7777777777777777777777777777777777777777',
     '         ,9 ,millions ( ,doll>s',
     '         "33333333333333333333333333333',
     ',fiscal',
     ',ye>     ,total      ,direct   ,grants',
-    '"333333 "333333333 "3333333 "3333333',
-    '#aiih      #iha1gab #hag1ggj #afc1idb',
-    '#aiii    #a1jja1fgf #hbe1hcc #age1hdc',
-    '#bjjj    #a1jed1ejc #hfg1gac #ahf1gij',
-    '#bjja    #a1abh1dcb #ibj1cid #bjh1jch',
+    '"333333  "333333333  "3333333  "3333333',
+    '#aiih      #iha1gab  #hag1ggj  #afc1idb',
+    '#aiii    #a1jja1fgf  #hbe1hcc  #age1hdc',
+    '#bjjj    #a1jed1ejc  #hfg1gac  #ahf1gij',
+    '#bjja    #a1abh1dcb  #ibj1cid  #bjh1jch',
   ].map((l) => l.toUpperCase());
 
   const topIdx = lines.findIndex((l) => /^7+$/.test(l));

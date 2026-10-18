@@ -21,9 +21,9 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "The word sled is spelled trineo.",
+        "text": "The word for sled is *trineo*.",
         "continuation": true,
-        "features": "Single sentence; the foreign (Spanish) word 'trineo' is italicised in the print original; no accented letters."
+        "features": "Single sentence; the foreign (Spanish) word 'trineo' is italicised in the print original (word for sled, no 'spelled'); no accented letters."
       }
     ]
   },
@@ -40,5 +40,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on wording; the italics/font handling ('.1' passage indicator) is text feeding straight into liblouis's own UEB translation, not an Emboss format-layer decision -- built as a single para block, letting liblouis's real translation decide contraction use (F-68)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "The word sled is spelled trineo.",
+      "now": "The word for sled is *trineo*.",
+      "evidence": "PDF p35 (printed 1-19) page image rendered from references/bana/braille-formats-2016.pdf: the Example 1-18 box reads \"The word for sled is trineo.\" with trineo in italics; there is no word \"spelled\" and \"for\" is present. Source text line 1213 braille \",! ^w = sl$ is .1tr9eo4\" is consistent (= is the word \"for\"). Italics marked with the *...* markup the builder's parseCellMarkup reads."
+    }
+  ],
+  "resolution": "Both runs agree on wording; the italics/font handling ('.1' passage indicator) is text feeding straight into liblouis's own UEB translation, not an Emboss format-layer decision -- built as a single para block, letting liblouis's real translation decide contraction use (F-68). Print description corrected 23 Sep 2026 (see printCorrections)."
 }

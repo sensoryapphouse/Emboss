@@ -56,7 +56,11 @@ test('BANA: superscript marks, separation line, notes at the end of the print pa
   assert.ok(sep < pageTwo, 'the page-1 notes come before print page 2');
   assert.ok(out[sep + 1].startsWith('#A FIRST NOTE') || out[sep + 1].startsWith('1 FIRST NOTE'), out[sep + 1]);
   assert.equal(out.filter((l) => l === '"333333').length, 1, 'one separation line for the run of two notes');
-  assert.ok(out.findIndex((l) => l.includes('AN ENDNOTE')) > pageTwo, 'the endnote keeps its place');
+  // IMP-W3 (Paul, 30 Sep 2026; BANA Formats 16.9.2-16.9.3): an endnote no longer "keeps its place" in the text: it is collected into
+  // an endnote section at the end of the document (tests/endnote_section.test.mjs), on a new page under NOTES.
+  const en = out.findIndex((l) => l.includes('AN ENDNOTE'));
+  assert.ok(en > pageTwo, 'the endnote comes after the text');
+  assert.ok(out.slice(0, en).some((l) => l.includes('@.<NOTES@.>')), 'under the heading NOTES');
 });
 
 test('UKAAF: notes stay in place, no separation line; marks superscripted', () => {

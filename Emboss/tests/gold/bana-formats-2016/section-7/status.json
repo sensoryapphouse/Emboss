@@ -4,8 +4,8 @@
     "note": "first differing line 1: expected \"GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,&   #HJ\" vs actual \"  GA9$1 & WRITE !M \\\\ = PUBLICA;N4 ,& HE\". line count differs by +1 (expected 7, actual 8)."
   },
   "example-7-2": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"               ,=MS ( .12\" vs actual \"    ,=MS ( 2\"."
+    "status": "match",
+    "note": "match"
   },
   "example-7-3": {
     "status": "no-braille",

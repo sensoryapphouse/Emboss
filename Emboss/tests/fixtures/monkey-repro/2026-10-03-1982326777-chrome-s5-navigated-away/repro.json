@@ -1,0 +1,70 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 5,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "web/test_corpus_1000/file_0373_Volume_373_Diverse_Corpus.xml",
+ "docSource": "corpus",
+ "docFeatures": null,
+ "docs": {
+  "web/test_corpus_1000/file_0373_Volume_373_Diverse_Corpus.xml": "docs/00-file_0373_Volume_373_Diverse_Corpus.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "navigated-away",
+ "key": "navigated-away",
+ "message": "the page navigated away to http://localhost:8140/web/index.html",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 23,
+ "originalActions": 27,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.4483,
+   "i": 20,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowUp",
+   "n": 5,
+   "word": false
+  },
+  {
+   "t": "type",
+   "text": ">"
+  },
+  {
+   "t": "phone",
+   "w": 360,
+   "h": 740
+  },
+  {
+   "t": "check",
+   "which": "all"
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 6
+  },
+  {
+   "t": "key",
+   "key": "Enter",
+   "n": 1
+  }
+ ]
+}

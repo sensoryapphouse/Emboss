@@ -65,28 +65,50 @@
 }
 
 :root {
+  /* The Paige palette (feedback 30 Sep, item 18: the same as Translate after Paramveer's brand pass, PaigeBraille/translate#10).
+     White grounds; body text the brand's darkest grey, never black; --accent (Paige blue, 4.1:1 on white) only for lines, rings and
+     the caret; --accent-text for blue text that is read. There is no --accent-fill any more: Translate has no button
+     filled with colour, so neither has Emboss (Paul, 17 Oct 2026). */
   --line: #eaebec;
-  --bg: #f3f4fc;
-  --bg-grad: linear-gradient(135deg, #ffffff 0%, #f3f4fc 100%);
-  --pane-bg: rgba(255, 255, 255, 0.75);
-  --panel: rgba(255, 255, 255, 0.85);
-  --panel-head: rgba(255, 255, 255, 0.95);
-  --ink: #171d1c;
+  --bg: #ffffff;
+  --bg-grad: #ffffff;
+  --pane-bg: #ffffff;
+  --panel: #ffffff;
+  --panel-head: #ffffff;
+  --ink: #444444;
   --muted: #5c6462;
   --accent: #2a7de1;
-  --accent-text: #0e2f7f;
+  --accent-text: #0d2e80;
   --accent-ink: #ffffff;
-  --link: #fdf1cc;
-  --linkb: #f5b700;
-  --ok: #1a7f4b;
-  --err: #c0392b;
-  --radius: 14px;
+  --link: #fcedbf;
+  --linkb: #f5b800;
+  --hover-wash: #e9f2fc;
+  --warn-bg: #fcedbf;
+  --warn-ink: #444444;
+  --sel: color-mix(in srgb, var(--accent) 25%, transparent);
+  --ok: var(--muted);
+  --err: var(--danger);
+  --radius: 16px;
   --pill-bg: #ffffff;
   --head-bg: #ffffff;
   --btn-bg: #ffffff;
-  --code-bg: #f0f2f8;
+  --code-bg: #fafbfc;
   --select-bg: #ffffff;
   --sb-bg: #ffffff;
+  /* Translate's other colours, named (Paul, 17 Oct 2026: "make the colour scheme of Emboss exactly the same as that of Translate").
+     Each is a value Translate's own stylesheet uses: --chip-bg its <kbd> fill; --tint its word-hover and maths tint; --danger,
+     --danger-line, --danger-wash its Clear button; --warn-text and --warn-line its amber "repair" lead and rule; --c0 to --c6 its
+     explanation-bar chips. --on-mark is the text on a light mark (highlight, warning box, chip): Translate keeps those light in
+     dark mode too, with near-black text. Translate has no green and no button filled with colour, so neither has Emboss now. */
+  --chip-bg: #fafbfc;
+  --tint: #e9f2fc;
+  --danger: #aa1111;
+  --danger-line: #e6bcbc;
+  --danger-wash: #fdf0f0;
+  --on-mark: #444444;
+  --warn-text: #8a5b00;
+  --warn-line: #e0cf9a;
+  --c0: #fcedbf; --c1: #cadef7; --c2: #e3f0de; --c3: #ffdad2; --c4: #e8dbff; --c5: #bfe9e6; --c6: #f7d9ee;
   color-scheme: light;
   font-family: "Inter", "APHfont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -95,46 +117,64 @@
   :root:not(.light) {
     --line: #30363d;
     --bg: #0d1117;
-    --bg-grad: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-    --pane-bg: rgba(22, 27, 34, 0.75);
-    --panel: rgba(22, 27, 34, 0.85);
-    --panel-head: rgba(33, 38, 45, 0.95);
+    --bg-grad: #0d1117;
+    --pane-bg: #161b22;
+    --panel: #161b22;
+    --panel-head: #21262d;
     --ink: #e6edf3;
     --muted: #8b949e;
-    --accent: #387df5;
-    --accent-text: #d4e5f9;
-    --accent-ink: #ffffff;
-    --link: #302209;
-    --linkb: #c99a2e;
+    --accent: #e9f2fc;
+    --accent-text: #e9f2fc;
+      --accent-ink: #ffffff;
+    --warn-ink: #0d1117;
+    --hover-wash: rgba(129, 140, 248, 0.20);
+    --link: #fcedbf;
+    --linkb: #f5b800;
     --pill-bg: #21262d;
     --head-bg: #161b22;
     --btn-bg: #21262d;
     --code-bg: #21262d;
     --select-bg: #161b22;
     --sb-bg: #161b22;
+    --chip-bg: #21262d;
+    --tint: rgba(129, 140, 248, 0.20);
+    --danger: #ffb0a2;
+    --danger-wash: #21262d;
+    --on-mark: #0d1117;
+    --warn-text: #f2c94c;
+    --warn-line: #5c4415;
     color-scheme: dark;
   }
 }
 :root.dark {
   --line: #30363d;
   --bg: #0d1117;
-  --bg-grad: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-  --pane-bg: rgba(22, 27, 34, 0.75);
-  --panel: rgba(22, 27, 34, 0.85);
-  --panel-head: rgba(33, 38, 45, 0.95);
+  --bg-grad: #0d1117;
+  --pane-bg: #161b22;
+  --panel: #161b22;
+  --panel-head: #21262d;
   --ink: #e6edf3;
   --muted: #8b949e;
-  --accent: #387df5;
-  --accent-text: #d4e5f9;
+  --accent: #e9f2fc;
+  --accent-text: #e9f2fc;
   --accent-ink: #ffffff;
-  --link: #302209;
-  --linkb: #c99a2e;
+  --warn-ink: #0d1117;
+  --hover-wash: rgba(129, 140, 248, 0.20);
+  --link: #fcedbf;
+  --linkb: #f5b800;
   --pill-bg: #21262d;
   --head-bg: #161b22;
   --btn-bg: #21262d;
   --code-bg: #21262d;
   --select-bg: #161b22;
   --sb-bg: #161b22;
+  --chip-bg: #21262d;
+  --tint: rgba(129, 140, 248, 0.20);
+  --danger: #ffb0a2;
+  --danger-wash: #21262d;
+  --on-mark: #0d1117;
+  --warn-text: #f2c94c;
+  --warn-line: #5c4415;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -146,7 +186,7 @@ header { padding: 10px 18px; background: var(--head-bg); border-bottom: 1px soli
 .app-logo-link { display: inline-flex; flex-shrink: 0; border-radius: 11px; line-height: 0; }
 .app-logo-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .app-logo-link:hover .app-logo { opacity: .85; }
-header h1 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--accent); font-weight: 700; }
+header h1 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--ink); font-weight: 700; }
 .brl-title { font-weight: 400; letter-spacing: 0.06em; }
 .sub { margin: 2px 0 0; color: var(--muted); font-size: 0.82rem; }
 .toolbar { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -156,89 +196,107 @@ header h1 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; color: var(-
   display: inline-flex; align-items: center; justify-content: center; line-height: 1;
   transition: all 0.2s ease;
 }
-.icon-btn-lg { width: 34px; height: 34px; }
 .icon-btn:hover, .icon-btn:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .icon-btn svg { display: block; }
-.adv-btn {
-  height: 38px; padding: 0 16px; border-radius: 8px; font: inherit; font-weight: 600; font-size: .92rem;
-  background: var(--accent); color: #fff; border: 1px solid var(--accent); cursor: pointer; white-space: nowrap;
-  transition: all 0.2s ease;
-}
-.adv-btn:hover, .adv-btn:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(42,125,225,.3);
-  filter: brightness(1.05);
-}
+/* Iconoir line icons (web/icons.mjs): em-sized, so an icon follows the text it sits in; stroke is currentColor. */
+.icon { width: 1.2em; height: 1.2em; flex: 0 0 auto; }
+.icon-inline { width: 1em; height: 1em; vertical-align: -0.15em; display: inline-block; }
+.icon-caret { width: 0.95em; height: 0.95em; margin-left: 2px; vertical-align: -0.15em; }
 
 body:not(.editor-page) main, .converter-main { max-width: min(96vw, 1440px); margin: 0 auto; padding: 10px 20px 40px; }
 
 .dropzone {
-  position: relative; border: 2px dashed #c4cddf; border-radius: 16px;
+  position: relative; border: 1px solid var(--line); border-radius: 16px;
   background: var(--pane-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 52px 24px 44px; text-align: center; cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.03);
   transition: all 0.2s ease;
 }
-.dropzone:hover {
-  border-color: var(--accent);
-  box-shadow: 0 12px 36px rgba(42,125,225,0.08);
-  transform: translateY(-2px);
-}
-.dropzone.drag { border-color: var(--accent); background: #eaf1fe; box-shadow: 0 0 0 4px rgba(47,111,237,.14); }
+.dropzone:hover { border-color: var(--accent); }
+.dropzone.drag { border-color: var(--accent); background: var(--sel); }
 .dropzone:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .dz-inner { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .dz-icon {
   width: 96px; height: 96px; display: grid; place-items: center; margin-bottom: 10px;
-  border-radius: 50%; background: #eaf1fe; color: var(--accent); transition: transform .15s, background .15s;
+  border-radius: 50%; background: var(--hover-wash); color: var(--accent); transition: transform .15s, background .15s;
 }
-.dropzone:hover .dz-icon { transform: translateY(-2px); }
-.dropzone.drag .dz-icon { background: var(--accent); color: #fff; transform: scale(1.05); }
+.dropzone.drag .dz-icon { background: var(--sel); color: var(--accent-text); transform: scale(1.05); }
 .dz-title { font-size: 1.3rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
 .dz-or { color: var(--muted); margin: 8px 0; font-size: 0.9rem; }
-.dz-inner #chooseBtn { padding: 12px 30px; font-size: 1.02rem; border-radius: 10px; box-shadow: 0 6px 16px rgba(47,111,237,.28); }
+.dz-inner #chooseBtn { min-height: 44px; padding: 0 28px; font-size: 1rem; }
 .dz-formats { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 22px; }
 .chip {
   font-size: 0.72rem; font-weight: 700; letter-spacing: .04em; color: var(--muted);
-  background: #eef1f7; border: 1px solid #e0e5ef; border-radius: 999px; padding: 4px 11px;
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 4px 11px;
 }
-.dz-file { margin: 16px 0 0; font-weight: 600; color: var(--accent); min-height: 1.2em; }
+.dz-file { margin: 16px 0 0; font-weight: 600; color: var(--accent-text); min-height: 1.2em; }
 
 button {
-  font: inherit; font-weight: 600; color: var(--accent-ink); background: var(--accent);
-  border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer;
+  font: inherit; font-weight: 600; color: var(--ink); background: var(--pill-bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 10px 18px; cursor: pointer;
 }
-button:hover { filter: brightness(1.05); }
-button:disabled { background: #aeb6c7; cursor: not-allowed; }
-#chooseBtn { background: var(--ink); }
+button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-text); }
+/* A phone: Quick Mode only (Paul, 18 Oct 2026) - no way to the editor, and no "Start in Quick Mode" choice (html.is-phone, set before paint) */
+html.is-phone #advancedBtn, html.is-phone .phone-hide { display: none !important; }
+
+button:disabled { background: var(--pane-bg); color: var(--muted); cursor: not-allowed; }
 .icon-btn:disabled { background: var(--panel); }
 
 .status { min-height: 1.3em; margin: 8px 2px; font-size: 1.05rem; color: var(--muted); text-align: center; }
 .status.err { color: var(--err); font-weight: 600; }
 .status.ok { color: var(--ok); }
+/* One look for a warning (as Translate's yellow boxes): the pale yellow fill, no border, ink text, 6px corners; the same in dark, where only
+   the ink changes (--warn-ink). It was amber text on the page. */
+.status.warn { display: block; width: fit-content; max-width: 100%; margin: 8px auto; padding: 6px 12px; border-radius: 6px; background: var(--warn-bg); color: var(--warn-ink); font-weight: 600; }
+.import-notice[hidden] { display: none; }
+.import-notice { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; text-align: left; font-size: .95rem; }
+.import-notice-dismiss { font: 600 .8rem/1 inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--warn-ink) 40%, transparent); background: transparent; color: inherit; cursor: pointer; }
+.import-notice-dismiss:hover, .import-notice-dismiss:focus-visible { background: color-mix(in srgb, var(--warn-ink) 12%, transparent); }
+
+/* The "Loading the braille engine…" state (F9 item I, Paul 9 Oct 2026): a small spinner and words in the page's own font and colours,
+   in the editor's braille pane and Quick Mode's status line. Still when the reader prefers reduced motion. */
+.engine-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px 8px; color: var(--muted);
+  font: 500 .95rem/1.4 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; letter-spacing: normal; white-space: normal; word-break: normal; }
+.status .engine-loading { display: inline-flex; padding: 0; font: inherit; }
+.engine-spinner { width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; box-sizing: border-box;
+  border: 2.5px solid color-mix(in srgb, var(--accent) 22%, transparent); border-top-color: var(--accent); animation: engine-spin .9s linear infinite; }
+@keyframes engine-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .engine-spinner { animation: none; border-right-color: var(--accent); } }
 
 .result { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.result-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.result-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
 #resultMeta { color: var(--muted); font-size: 0.9rem; }
-.preview {
-  margin: 0; padding: 16px; overflow-x: hidden; overflow-y: auto; background: var(--panel);
-  font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", "SF Mono", "Menlo", "Consolas", monospace;
-  font-size: clamp(12px, 1.6vw, 18px); line-height: 1.4; letter-spacing: 0.04em;
-  white-space: pre; color: var(--ink); max-height: 60vh;
+/* The warning triangle on a badge (Iconoir warning-triangle, web/icons.mjs) — drawn here, in the text's colour, rather than the ⚠
+   character the strings used to start with, which some phones draw as a coloured emoji (feedback 30 Sep, item 18). */
+.warn-badge::before, .proof-badge.warn::before, .table-warn-badge::before {
+  content: ''; display: inline-block; width: 1.15em; height: 1.15em; margin-right: 5px; vertical-align: -0.25em; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.0429 21H3.95705C2.41902 21 1.45658 19.3364 2.22324 18.0031L10.2662 4.01533C11.0352 2.67792 12.9648 2.67791 13.7338 4.01532L21.7768 18.0031C22.5434 19.3364 21.581 21 20.0429 21Z'/%3E%3Cpath d='M12 9V13'/%3E%3Cpath d='M12 17.01L12.01 16.9989'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.0429 21H3.95705C2.41902 21 1.45658 19.3364 2.22324 18.0031L10.2662 4.01533C11.0352 2.67792 12.9648 2.67791 13.7338 4.01532L21.7768 18.0031C22.5434 19.3364 21.581 21 20.0429 21Z'/%3E%3Cpath d='M12 9V13'/%3E%3Cpath d='M12 17.01L12.01 16.9989'/%3E%3C/svg%3E") center / contain no-repeat;
 }
+.warn-badge { font: 600 .72rem/1 -apple-system,system-ui,sans-serif; padding: 4px 9px; border-radius: 4px; white-space: nowrap; letter-spacing: .01em; background: var(--warn-bg); color: var(--warn-ink); border: 0; margin-left: 8px; }
+.export-warn-notice { position: fixed; z-index: 70; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--warn-bg); color: var(--warn-ink); border-radius: 6px; font: 600 .82rem/1.4 -apple-system,system-ui,sans-serif; max-width: 92vw; }
+.export-warn-notice[hidden] { display: none; }
+.export-warn-notice button { font: 600 .8rem/1 inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--warn-ink) 40%, transparent); background: transparent; color: inherit; cursor: pointer; }
+.export-warn-notice button:hover, .export-warn-notice button:focus-visible { background: color-mix(in srgb, var(--warn-ink) 12%, transparent); }
+/* Quick Mode only: the editor has its own .warn-badge and notice (and its own focus style on the badge), which this must not reach. */
+body:not(.editor-page) .export-warn-notice button:focus-visible,
+body:not(.editor-page) .warn-badge:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* dialogs */
-.dialog { border: 1px solid var(--line); border-radius: 14px; padding: 0; max-width: 680px; width: calc(100% - 32px); max-height: 85vh; margin: auto; box-shadow: 0 24px 60px rgba(0,0,0,.50); color: var(--ink); background: var(--head-bg, #ffffff); opacity: 1 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-.dialog::backdrop { background: rgba(0,0,0,.60); }
+/* EVERY <dialog> (brand pass, as Translate's #10): no browser border or black text, 16px corners like the panes, no drop shadow. */
+dialog { border: none; border-radius: 16px; color: var(--ink); background: var(--head-bg, #ffffff); }
+dialog::backdrop { background: rgba(0,0,0,.35); backdrop-filter: blur(4px); }
+.dialog { border: none; border-radius: 16px; padding: 0; max-width: 680px; width: calc(100% - 32px); max-height: 85vh; margin: auto; color: var(--ink); background: var(--head-bg, #ffffff); opacity: 1 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.dialog::backdrop { background: rgba(0,0,0,.35); backdrop-filter: blur(4px); }
 .dialog-body { padding: 18px 20px 20px; background: inherit; }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.dialog-head h2 { margin: 0; font-size: 1.25rem; color: var(--accent); font-weight: 700; letter-spacing: -0.02em; }
+.dialog-head h2 { margin: 0; font-size: 1.25rem; color: var(--accent-text); font-weight: 700; letter-spacing: -0.02em; }
+/* The dialogs' close button, the editor's look, on both pages (the Settings dialog is one shared markup, web/settings-panes.mjs). */
+.dialog-head button { border: 0; background: none; font-size: 1.2rem; cursor: pointer; color: var(--muted); padding: 4px 8px; border-radius: 6px; }
+.dialog-head button:hover { background: var(--btn-bg); color: var(--ink); }
 
 /* Tabbed Settings Dialog (Left Column Navigation) */
 .settings-layout { display: flex; gap: 16px; min-height: 200px; max-height: 65vh; margin-top: 8px; }
@@ -249,14 +307,14 @@ button:disabled { background: #aeb6c7; cursor: not-allowed; }
   background: transparent; color: var(--ink); opacity: 0.78; font: inherit; font-size: 0.86rem; font-weight: 600; text-align: left; cursor: pointer; transition: background .15s, color .15s, opacity .15s;
 }
 .tab-btn:hover { background: var(--btn-bg); opacity: 1; color: var(--ink); }
-.tab-btn.active { background: var(--btn-bg); color: var(--accent); opacity: 1; font-weight: 700; }
+.tab-btn.active { background: var(--hover-wash); color: var(--accent-text); opacity: 1; font-weight: 700; }
 .hardware-expert-only { display: none !important; }
 body.expert-hardware .hardware-expert-only { display: inline-flex !important; }
 body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
 .settings-panels { flex: 1; min-width: 0; overflow-y: auto; padding-right: 4px; }
 .settings-panel { display: none; }
 .settings-panel.active { display: block; }
-.settings-panel h3 { margin: 0 0 10px; font-size: 0.98rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.settings-panel h3 { margin: 0 0 10px; font-size: 0.98rem; font-weight: 700; color: var(--accent-text); border-bottom: 1px solid var(--line); padding-bottom: 6px; }
 
 .dialog .field { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
 .dialog .field.field-check,
@@ -291,7 +349,6 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   -webkit-backdrop-filter: none !important;
   border: 1px solid var(--line);
   border-radius: 8px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.18);
   padding: 5px;
   min-width: 190px;
   z-index: 1000;
@@ -304,6 +361,7 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   right: 0;
 }
 .menu-dropdown[hidden] { display: none !important; }
+.menu-dropdown-item[hidden] { display: none; }   /* PEF download hidden (Paul, 25 Sep) */
 .menu-dropdown-item {
   display: flex;
   align-items: center;
@@ -322,11 +380,12 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   white-space: nowrap;
   transition: background 0.15s, color 0.15s;
 }
+/* Lit by the mouse or by the keyboard (:focus-visible), never just because opening the menu focused its first item (as #10). */
 .menu-dropdown-item:hover, .menu-dropdown-item:focus-visible {
-  background: var(--btn-bg);
-  color: var(--accent);
-  outline: none;
+  background: var(--hover-wash);
+  color: var(--accent-text);
 }
+.menu-dropdown-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .menu-item-icon {
   display: inline-flex;
   align-items: center;
@@ -345,7 +404,7 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
 
 /* Unified Download Pill Button */
 .download-group {
-  display: inline-flex; align-items: center; height: 46px; border-radius: 999px;
+  display: inline-flex; align-items: center; height: 46px; border-radius: 8px;
   border: 1.5px solid var(--line); background: var(--pill-bg, #fff); color: var(--ink);
   font: inherit; font-size: 0.92rem; font-weight: 600; overflow: hidden;
   transition: border-color .15s, box-shadow .15s;
@@ -353,19 +412,19 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
 .download-group:hover, .download-group:focus-within { border-color: var(--accent); }
 .download-group button {
   height: 100%; border: 0; background: transparent; color: inherit; font: inherit;
-  font-weight: 600; padding: 0 10px 0 16px; border-radius: 999px 0 0 999px; cursor: pointer;
+  font-weight: 600; padding: 0 10px 0 16px; border-radius: 0; cursor: pointer;
   display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; transition: background .15s, color .15s;
 }
-.download-group button:hover, .download-group button:focus-visible { background: var(--accent); color: #fff; }
+.download-group button:hover, .download-group button:focus-visible { border-color: var(--accent); color: var(--accent-text); }
 .download-group select {
   height: 100%; border: 0; border-left: 1.5px solid var(--line); background: transparent;
-  color: inherit; font: inherit; font-weight: 600; padding: 0 28px 0 10px; border-radius: 0 999px 999px 0;
+  color: inherit; font: inherit; font-weight: 600; padding: 0 28px 0 10px; border-radius: 0;
   cursor: pointer; appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position: calc(100% - 14px) 20px, calc(100% - 9px) 20px;
   background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
 }
-.download-group select:hover { background-color: rgba(47, 111, 237, 0.08); }
+.download-group select:hover { background-color: var(--sel); }
 .download-group select:focus { outline: none; }
 
 .help-content { color: var(--ink); line-height: 1.6; }
@@ -385,8 +444,7 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   padding: 2px 6px; border-radius: 5px; font-size: 0.88em;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 }
-.help-content kbd { border-bottom-width: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
-.help-content a { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.help-content a { color: var(--accent-text); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .help-content a:hover { filter: brightness(1.2); }
 .credits { list-style: none; padding-left: 0; margin: 8px 0; }
 .credits li { margin-bottom: 7px; padding-left: 14px; position: relative; color: var(--ink); }
@@ -406,38 +464,37 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
 
 /* 3D Physical Emboss Relief Simulator Shading */
 .brl-emboss-relief {
-  background: #f1ebd9 !important;
-  background-image: radial-gradient(#e4dcbe 15%, transparent 16%), radial-gradient(#e4dcbe 15%, transparent 16%) !important;
+  background: var(--chip-bg) !important;
+  background-image: radial-gradient(var(--chip-bg) 15%, transparent 16%), radial-gradient(var(--chip-bg) 15%, transparent 16%) !important;
   background-size: 16px 16px !important;
   background-position: 0 0, 8px 8px !important;
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08) !important;
   padding: 12px !important;
   border-radius: 8px !important;
 }
 .brl-emboss-relief .don {
-  fill: #8b6e4e !important;
-  filter: drop-shadow(-1px -1px 1px #ffffff) drop-shadow(1.5px 1.5px 1.5px rgba(0,0,0,0.45)) !important;
+  fill: var(--ink) !important;
+  filter: none !important;
 }
 .brl-emboss-relief .doff {
-  fill: #ded7bd !important;
+  fill: var(--line) !important;
   opacity: 0.5 !important;
 }
 /* Volume Split Divider Styling */
 .brl-volumebreak {
   margin: 16px 0 10px;
   padding: 8px 14px;
-  background: var(--btn-bg, #f1f5f9);
-  border: 1.5px solid var(--accent, #0284c7);
+  background: var(--btn-bg, var(--chip-bg));
+  border: 1.5px solid var(--accent, var(--accent));
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--ink, #0f172a);
+  color: var(--ink, var(--ink));
   font: 700 0.8rem/1.4 system-ui, -apple-system, sans-serif;
 }
 .brl-vol-tag {
-  background: var(--accent, #0284c7);
-  color: #fff;
+  background: var(--tint);
+  color: var(--accent-text);
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.72rem;
@@ -446,7 +503,7 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   font-weight: 700;
 }
 .brl-vol-page {
-  color: var(--muted, #64748b);
+  color: var(--muted, var(--muted));
   font-size: 0.76rem;
   font-weight: 500;
 }
@@ -457,8 +514,8 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #1e293b;
-  background: #eef2fa;
+  color: var(--ink);
+  background: var(--chip-bg);
   border-left: 3px solid var(--accent);
   padding: 3px 8px;
   margin: 6px 0 4px 0;
@@ -482,7 +539,7 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
   box-sizing: border-box;
 }
 .bcell:hover {
-  background: rgba(47, 111, 237, 0.12);
+  background: var(--sel);
   border-radius: 2px;
 }
 
@@ -493,44 +550,46 @@ math-field {
   --math-mode-color: var(--ink);
   --text-color: var(--ink);
   --caret-color: var(--accent);
-  --selection-background-color: rgba(56, 125, 245, 0.35);
+  --selection-background-color: var(--sel);
   --selection-color: var(--ink);
   border-radius: 6px;
   font-size: 1.05em;
   vertical-align: middle;
   display: inline-flex;
 }
-/* MathLive menu hidden (print styling only); the virtual-keyboard toggle stays visible (G11). */
-math-field::part(menu-toggle) {
+/* MathLive menu hidden (print styling only) (G11). Its virtual-keyboard toggle is hidden too: it draws its own keyboard glyph, which is not an Iconoir icon
+   (Paul, 17 Oct 2026, feedback item 3b). The editor adds its own button in its place (.math-kb-btn, editor.mjs), which opens and closes the same keyboard. */
+math-field::part(menu-toggle),
+math-field::part(virtual-keyboard-toggle) {
   display: none !important;
 }
 math-field:focus, math-field:focus-within, math-field[focused] {
   outline: 2px solid var(--accent) !important;
   outline-offset: 1px !important;
-  background: rgba(42, 125, 225, 0.12) !important;
+  background: var(--sel) !important;
 }
 @media (prefers-color-scheme: dark) {
   :root:not(.light) math-field {
     color: #e6edf3;
     --math-mode-color: #e6edf3;
     --text-color: #e6edf3;
-    --caret-color: #387df5;
+    --caret-color: #e9f2fc;
   }
   :root:not(.light) math-field:focus,
   :root:not(.light) math-field:focus-within,
   :root:not(.light) math-field[focused] {
-    outline: 2px solid #387df5 !important;
-    background: rgba(56, 125, 245, 0.22) !important;
-    color: #f0f6fc !important;
-    --math-mode-color: #f0f6fc !important;
-    --text-color: #f0f6fc !important;
+    outline: 2px solid var(--accent) !important;
+    background: var(--sel) !important;
+    color: var(--ink) !important;
+    --math-mode-color: #e6edf3 !important;
+    --text-color: #e6edf3 !important;
   }
   :root:not(.light) math-virtual-keyboard,
   :root:not(.light) .ML__keyboard,
   :root:not(.light) .MLK__backdrop {
     --keyboard-background: #161b22;
     --keyboard-toolbar-text: #e6edf3;
-    --keyboard-toolbar-text-active: #387df5;
+    --keyboard-toolbar-text-active: #e9f2fc;
     --keyboard-toolbar-background: #0d1117;
     --keycap-background: #21262d;
     --keycap-background-active: #30363d;
@@ -548,23 +607,23 @@ math-field:focus, math-field:focus-within, math-field[focused] {
   color: #e6edf3;
   --math-mode-color: #e6edf3;
   --text-color: #e6edf3;
-  --caret-color: #387df5;
+  --caret-color: #e9f2fc;
 }
 :root.dark math-field:focus,
 :root.dark math-field:focus-within,
 :root.dark math-field[focused] {
-  outline: 2px solid #387df5 !important;
-  background: rgba(56, 125, 245, 0.22) !important;
-  color: #f0f6fc !important;
-  --math-mode-color: #f0f6fc !important;
-  --text-color: #f0f6fc !important;
+  outline: 2px solid var(--accent) !important;
+  background: var(--sel) !important;
+  color: var(--ink) !important;
+  --math-mode-color: #e6edf3 !important;
+  --text-color: #e6edf3 !important;
 }
 :root.dark math-virtual-keyboard,
 :root.dark .ML__keyboard,
 :root.dark .MLK__backdrop {
   --keyboard-background: #161b22;
   --keyboard-toolbar-text: #e6edf3;
-  --keyboard-toolbar-text-active: #387df5;
+  --keyboard-toolbar-text-active: #e9f2fc;
   --keyboard-toolbar-background: #0d1117;
   --keycap-background: #21262d;
   --keycap-background-active: #30363d;
@@ -582,7 +641,7 @@ math-field:focus, math-field:focus-within, math-field[focused] {
 .ed-p.bana-continuation,
 p.bana-continuation {
   text-indent: 0;
-  border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  border-top: 1px solid var(--line);
   padding-top: 2px;
 }
 
@@ -590,8 +649,8 @@ p.bana-continuation {
 .ed-p.bana-style-note,
 p.bana-style-note,
 [data-bana-style="note"] {
-  border-left: 3.5px solid #6366f1;
-  background: rgba(99, 102, 241, 0.08);
+  border-left: 3.5px solid var(--accent);
+  background: var(--tint);
   padding: 6px 12px;
   border-radius: 6px;
   margin: 8px 0;
@@ -600,9 +659,9 @@ p.bana-style-note,
 :root.dark .ed-p.bana-style-note,
 :root.dark p.bana-style-note,
 :root.dark [data-bana-style="note"] {
-  border-left: 3.5px solid #818cf8;
-  background: rgba(99, 102, 241, 0.18);
-  color: #e0e7ff;
+  border-left: 3.5px solid var(--accent);
+  background: var(--tint);
+  color: var(--ink);
 }
 
 .ed-p.bana-style-stage,
@@ -610,12 +669,12 @@ p.bana-style-stage,
 [data-bana-style="stage"] {
   margin-left: 2.5rem;
   font-style: italic;
-  color: var(--muted, #475569);
+  color: var(--muted, var(--muted));
 }
 :root.dark .ed-p.bana-style-stage,
 :root.dark p.bana-style-stage,
 :root.dark [data-bana-style="stage"] {
-  color: #e2e8f0;
+  color: var(--ink);
 }
 
 .ed-p.bana-style-dialogue,
@@ -632,14 +691,14 @@ caption,
 [data-bana-style="caption"] {
   font-size: 0.92em;
   font-style: italic;
-  color: var(--muted, #475569);
+  color: var(--muted, var(--muted));
   margin: 6px 0 10px 0;
 }
 :root.dark .ed-p.bana-style-caption,
 :root.dark p.bana-style-caption,
 :root.dark caption,
 :root.dark [data-bana-style="caption"] {
-  color: #e2e8f0;
+  color: var(--ink);
 }
 
 .ed-p.bana-style-footnote,
@@ -647,17 +706,17 @@ p.bana-style-footnote,
 note.footnote,
 [data-bana-style="footnote"] {
   font-size: 0.88em;
-  border-top: 1px dashed #cbd5e1;
+  border-top: 1px solid var(--line);
   padding-top: 6px;
   margin-top: 10px;
-  color: var(--muted, #475569);
+  color: var(--muted, var(--muted));
 }
 :root.dark .ed-p.bana-style-footnote,
 :root.dark p.bana-style-footnote,
 :root.dark note.footnote,
 :root.dark [data-bana-style="footnote"] {
-  border-top-color: #384151;
-  color: #e2e8f0;
+  border-top-color: var(--line);
+  color: var(--ink);
 }
 
 .ed-p.bana-style-poem,
@@ -675,11 +734,11 @@ poem,
 p.bana-style-quote,
 blockquote.bana-style-quote,
 [data-bana-style="quote"] {
-  border-left: 3.5px solid var(--accent, #2563eb);
+  border-left: 3.5px solid var(--accent, var(--accent));
   padding: 8px 14px;
   margin: 10px 0;
   font-style: italic;
-  background: rgba(42, 125, 225, 0.05);
+  background: var(--tint);
   border-radius: 0 6px 6px 0;
   color: var(--ink);
 }
@@ -687,9 +746,9 @@ blockquote.bana-style-quote,
 :root.dark p.bana-style-quote,
 :root.dark blockquote.bana-style-quote,
 :root.dark [data-bana-style="quote"] {
-  background: rgba(56, 125, 245, 0.16);
-  border-left-color: #60a5fa;
-  color: #f1f5f9;
+  background: var(--tint);
+  border-left-color: var(--accent);
+  color: var(--ink);
 }
 
 .ed-p.bana-style-attribution,
@@ -699,7 +758,7 @@ byline,
   margin-left: 3rem;
   font-size: 0.95em;
   font-style: italic;
-  color: var(--muted, #475569);
+  color: var(--muted, var(--muted));
   margin-top: 4px;
   margin-bottom: 8px;
 }
@@ -707,7 +766,7 @@ byline,
 :root.dark p.bana-style-attribution,
 :root.dark byline,
 :root.dark [data-bana-style="attribution"] {
-  color: #e2e8f0;
+  color: var(--ink);
 }
 
 .bana-style-glossary,
@@ -718,7 +777,9 @@ byline,
 }
 .bana-style-glossary > li,
 [data-bana-style="glossary"] > li {
-  margin-left: 1.5rem;
+  /* Hanging indent via padding, not margin: `.editor .emboss-plain-list > li` resets the
+     margin to 0, which left the -1.5rem first line poking out of the pane (G10). */
+  padding-left: 1.5rem;
   text-indent: -1.5rem;
   margin-bottom: 6px;
 }
@@ -727,41 +788,41 @@ byline,
   :root:not(.light) .ed-p.bana-style-note,
   :root:not(.light) p.bana-style-note,
   :root:not(.light) [data-bana-style="note"] {
-    border-left: 3.5px solid #818cf8;
-    background: rgba(99, 102, 241, 0.18);
-    color: #e0e7ff;
+    border-left: 3.5px solid var(--accent);
+    background: var(--tint);
+    color: var(--ink);
   }
   :root:not(.light) .ed-p.bana-style-stage,
   :root:not(.light) p.bana-style-stage,
   :root:not(.light) [data-bana-style="stage"] {
-    color: #e2e8f0;
+    color: var(--ink);
   }
   :root:not(.light) .ed-p.bana-style-caption,
   :root:not(.light) p.bana-style-caption,
   :root:not(.light) caption,
   :root:not(.light) [data-bana-style="caption"] {
-    color: #e2e8f0;
+    color: var(--ink);
   }
   :root:not(.light) .ed-p.bana-style-footnote,
   :root:not(.light) p.bana-style-footnote,
   :root:not(.light) note.footnote,
   :root:not(.light) [data-bana-style="footnote"] {
-    border-top-color: #384151;
-    color: #e2e8f0;
+    border-top-color: var(--line);
+    color: var(--ink);
   }
   :root:not(.light) .ed-p.bana-style-attribution,
   :root:not(.light) p.bana-style-attribution,
   :root:not(.light) byline,
   :root:not(.light) [data-bana-style="attribution"] {
-    color: #e2e8f0;
+    color: var(--ink);
   }
   :root:not(.light) .ed-p.bana-style-quote,
   :root:not(.light) p.bana-style-quote,
   :root:not(.light) blockquote.bana-style-quote,
   :root:not(.light) [data-bana-style="quote"] {
-    background: rgba(56, 125, 245, 0.16);
-    border-left-color: #60a5fa;
-    color: #f1f5f9;
+    background: var(--tint);
+    border-left-color: var(--accent);
+    color: var(--ink);
   }
 }
 
@@ -827,38 +888,43 @@ li.bana-style-toc-entry[data-level="3"] {
   margin-left: 4.5rem !important;
 }
 
-/* TOC entry layout with tabular page numbering */
+/* TOC entry layout with tabular page numbering. Not flex: in a flex row every text run
+   (bold "POEM", the plain title, a line break) became its own column, so a long entry
+   broke into ragged columns (G9). The entry flows as ordinary text with a hanging indent,
+   room is kept on the right, and the page number sits at the right of its last line. */
 .bana-style-toc > li[data-page],
 li.bana-style-toc-entry[data-page] {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  display: block;
+  padding-right: 4.5rem;
+  padding-left: 1.5rem !important;   /* the li can carry the list's own class, whose padding-left: 0 !important would win */
+  text-indent: -1.5rem;
 }
 
 .bana-style-toc > li[data-page]::after,
 li.bana-style-toc-entry[data-page]::after {
   content: attr(data-page);
-  margin-left: auto;
-  padding-left: 1.5rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-indent: 0;
   font-variant-numeric: tabular-nums;
   font-weight: 500;
-  color: #64748b;
+  color: var(--muted);
   white-space: nowrap;
-  max-width: 40%;
+  max-width: 4.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: right;
-  flex-shrink: 0;
 }
 
 :root.dark .bana-style-toc > li[data-page]::after,
 :root.dark li.bana-style-toc-entry[data-page]::after {
-  color: #cbd5e1;
+  color: var(--muted);
 }
 @media (prefers-color-scheme: dark) {
   :root:not(.light) .bana-style-toc > li[data-page]::after,
   :root:not(.light) li.bana-style-toc-entry[data-page]::after {
-    color: #cbd5e1;
+    color: var(--muted);
   }
 }
 
@@ -866,15 +932,12 @@ li.bana-style-toc-entry[data-page]::after {
 .emboss-sidebar-card,
 aside.bana-style-sidebar,
 [data-bana-style="sidebar"] {
-  border: 1.5px solid var(--line, #cbd5e1);
-  border-left: 4px solid var(--accent, #3b82f6);
-  border-top: 2.5px solid var(--accent, #3b82f6);
-  border-bottom: 2.5px solid var(--accent, #3b82f6);
+  /* Paul, 17 Oct 2026: the SAME blue line on all four sides (the right edge was the pale --line, so it seemed to vanish, especially in nested boxes). */
+  border: 2.5px solid var(--accent);
   border-radius: 8px;
   padding: 1rem 1.25rem;
   margin: 1.25rem 0;
-  background: rgba(59, 130, 246, 0.04);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  background: var(--tint);
   position: relative;
   box-sizing: border-box;
 }
@@ -886,10 +949,10 @@ aside.bana-style-sidebar > h1:first-child,
 aside.bana-style-sidebar > h2:first-child,
 aside.bana-style-sidebar > h3:first-child {
   margin-top: 0;
-  color: var(--accent-dark, #1d4ed8);
+  color: var(--accent-dark, var(--accent-text));
   font-size: 1.1rem;
   font-weight: 700;
-  border-bottom: 1px dashed var(--line, #cbd5e1);
+  border-bottom: 1px solid var(--line);
   padding-bottom: 0.5rem;
   margin-bottom: 0.75rem;
 }
@@ -902,11 +965,8 @@ aside.bana-style-sidebar > :last-child {
 :root.dark .emboss-sidebar-card,
 :root.dark aside.bana-style-sidebar,
 :root.dark [data-bana-style="sidebar"] {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: #334155;
-  border-left-color: #60a5fa;
-  border-top-color: #60a5fa;
-  border-bottom-color: #60a5fa;
+  background: var(--tint);
+  border-color: var(--accent);
 }
 :root.dark .emboss-sidebar-card > h1:first-child,
 :root.dark .emboss-sidebar-card > h2:first-child,
@@ -914,19 +974,16 @@ aside.bana-style-sidebar > :last-child {
 :root.dark aside.bana-style-sidebar > h1:first-child,
 :root.dark aside.bana-style-sidebar > h2:first-child,
 :root.dark aside.bana-style-sidebar > h3:first-child {
-  color: #93c5fd;
-  border-bottom-color: #334155;
+  color: var(--accent-text);
+  border-bottom-color: var(--line);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) .emboss-sidebar-card,
   :root:not(.light) aside.bana-style-sidebar,
   :root:not(.light) [data-bana-style="sidebar"] {
-    background: rgba(59, 130, 246, 0.08);
-    border-color: #334155;
-    border-left-color: #60a5fa;
-    border-top-color: #60a5fa;
-    border-bottom-color: #60a5fa;
+    background: var(--tint);
+    border-color: var(--accent);
   }
   :root:not(.light) .emboss-sidebar-card > h1:first-child,
   :root:not(.light) .emboss-sidebar-card > h2:first-child,
@@ -934,8 +991,8 @@ aside.bana-style-sidebar > :last-child {
   :root:not(.light) aside.bana-style-sidebar > h1:first-child,
   :root:not(.light) aside.bana-style-sidebar > h2:first-child,
   :root:not(.light) aside.bana-style-sidebar > h3:first-child {
-    color: #93c5fd;
-    border-bottom-color: #334155;
+    color: var(--accent-text);
+    border-bottom-color: var(--line);
   }
 }
 
@@ -944,9 +1001,9 @@ aside.bana-style-sidebar > :last-child {
   font-size: 0.92em;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--btn-bg, #f1f5f9);
-  border: 1px solid var(--line, #cbd5e1);
+  border-radius: 4px;
+  background: var(--btn-bg, var(--chip-bg));
+  border: 1px solid var(--line, var(--line));
   color: var(--ink);
   display: inline-flex;
   align-items: center;
@@ -959,8 +1016,7 @@ aside.bana-style-sidebar > :last-child {
 }
 .style-inspector-badge:hover {
   border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: var(--accent-text);
 }
 .style-inspector-badge:focus-visible {
   outline: 2px solid var(--accent);
@@ -972,8 +1028,8 @@ aside.bana-style-sidebar > :last-child {
   color: #e6edf3;
 }
 :root.dark .style-inspector-badge:hover {
-  border-color: #387df5;
-  color: #58a6ff;
+  border-color: var(--accent);
+  color: var(--accent-text);
 }
 @media (prefers-color-scheme: dark) {
   :root:not(.light) .style-inspector-badge {
@@ -982,8 +1038,8 @@ aside.bana-style-sidebar > :last-child {
     color: #e6edf3;
   }
   :root:not(.light) .style-inspector-badge:hover {
-    border-color: #387df5;
-    color: #58a6ff;
+    border-color: var(--accent);
+    color: var(--accent-text);
   }
 }
 
@@ -991,7 +1047,7 @@ aside.bana-style-sidebar > :last-child {
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(0,0,0,.35);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: flex;
@@ -1005,11 +1061,10 @@ aside.bana-style-sidebar > :last-child {
 }
 .loading-card {
   background: var(--panel-bg, #ffffff);
-  color: var(--ink, #1e293b);
-  border: 1px solid var(--line, #e2e8f0);
+  color: var(--ink, var(--ink));
+  border: 1px solid var(--line, var(--line));
   border-radius: 14px;
   padding: 28px 36px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1021,8 +1076,8 @@ aside.bana-style-sidebar > :last-child {
 .loading-spinner {
   width: 38px;
   height: 38px;
-  border: 3.5px solid rgba(148, 163, 184, 0.25);
-  border-top-color: var(--accent, #2563eb);
+  border: 3.5px solid var(--line);
+  border-top-color: var(--accent, var(--accent));
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -1032,38 +1087,74 @@ aside.bana-style-sidebar > :last-child {
 .loading-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--ink, #0f172a);
+  color: var(--ink, var(--ink));
 }
 .loading-msg {
   font-size: 0.85rem;
-  color: var(--muted, #64748b);
+  color: var(--muted, var(--muted));
   min-height: 1.2rem;
 }
 .loading-percent {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--accent, #2563eb);
+  color: var(--accent, var(--accent-text));
   min-height: 1.5rem;
   letter-spacing: 0.5px;
 }
 :root.dark .loading-card,
 @media (prefers-color-scheme: dark) {
   :root:not(.light) .loading-card {
-    background: #1e293b;
-    border-color: #334155;
-    color: #f8fafc;
+    background: var(--pane-bg);
+    border-color: var(--line);
+    color: var(--ink);
   }
   :root:not(.light) .loading-title {
-    color: #f8fafc;
+    color: var(--ink);
   }
   :root:not(.light) .loading-msg {
-    color: #94a3b8;
+    color: var(--muted);
   }
   :root:not(.light) .loading-percent {
-    color: #60a5fa;
+    color: var(--accent-text);
   }
 }
 
+
+/* =====================================================================================================================
+   QUICK MODE'S BUTTONS, MENU BAR AND MENU: Translate's vocabulary (tester feedback 10 Oct, item 6; Paul: "I am happy with Translate's").
+   What is ported is the look, not the identity: the logo and the name are Emboss's own and are not touched here.
+     .pill-btn   an action: white, a hairline border, 8px corners, regular weight; the border turns Paige blue on hover. The TEXT turns
+                 --accent-text, not Translate's --accent: that blue is 4.1:1 on white and these labels are read text (it needs 4.5:1);
+                 --accent-text is 12:1, and in dark it is the near-white. (An icon-only button's drawing may take --accent: it only needs 3:1.)
+     .icon-btn   a square, icon-only action (the gear, the dialogs' close buttons): the same border and corners
+     the focus ring is a 2px blue line two pixels out, on both, as the other focused controls here have; the transition names its
+     properties instead of "all", so the ring is there at once and does not grow from nothing over a fifth of a second
+     .menu-dropdown   the Download menu, in the metrics of Translate's Export menu: 10px corners, 4px padding, a blue wash on the item
+   Every rule is scoped to body:not(.editor-page): the editor has its own header and its own copy of these classes in its page, and is
+   not changed by this.
+   ===================================================================================================================== */
+body:not(.editor-page) .head-right { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; position: relative; }
+/* min-height, not Translate's fixed height: the problem report's own buttons (padding 10px 18px, below) are taller and must stay so. */
+body:not(.editor-page) .pill-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 34px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--pill-bg); color: var(--ink); filter: none;
+  font: inherit; font-size: .88rem; font-weight: 400; white-space: nowrap; cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+body:not(.editor-page) .icon-btn { transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease; }
+body:not(.editor-page) .pill-btn:hover { border-color: var(--accent); color: var(--accent-text); filter: none; }
+body:not(.editor-page) .pill-btn:focus-visible,
+body:not(.editor-page) .icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+body:not(.editor-page) .pill-btn:disabled { opacity: .55; cursor: not-allowed; }
+body:not(.editor-page) .pill-btn:disabled:hover { border-color: var(--line); color: var(--ink); }
+/* The gear, scaled as Translate's is: 34px square, the drawing at 0.9em of a 1.3rem button. */
+body:not(.editor-page) #settingsBtn { font-size: calc(1.45rem * 34 / 38); }
+body:not(.editor-page) #settingsBtn .icon { width: 0.9em; height: 0.9em; }
+body:not(.editor-page) .menu-dropdown { top: calc(100% + 4px); min-width: 220px; border-radius: 10px; padding: 4px; gap: 0; }
+body:not(.editor-page) .menu-dropdown-item { padding: 8px 10px; border-radius: 7px; font-size: .94rem; font-weight: 400; }
+body:not(.editor-page) .menu-dropdown-item:hover,
+body:not(.editor-page) .menu-dropdown-item:focus-visible { background: var(--sel); color: var(--ink); }
 
 /* Service-worker "new version available" toast (created by the inline registration
    script in index.html and editor/index.html; role=status so it is announced). */
@@ -1071,14 +1162,99 @@ aside.bana-style-sidebar > :last-child {
   position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 10000;
   display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
   max-width: calc(100vw - 32px); padding: 10px 14px;
-  background: var(--panel-head, #fff); color: var(--ink, #171d1c);
+  background: var(--panel-head, #fff); color: var(--ink, #444444);
   border: 1px solid var(--line, #eaebec); border-radius: 10px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18); font-size: 0.95rem;
+  font-size: 0.95rem;
 }
 .sw-update-toast:empty { display: none; }
 .sw-update-toast button {
   font: inherit; padding: 6px 12px; border-radius: 8px; cursor: pointer;
-  border: 1px solid var(--accent, #2a7de1); background: var(--accent, #2a7de1); color: var(--accent-ink, #fff);
+  border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink);
 }
-.sw-update-toast button.sw-update-later { background: transparent; color: var(--ink, #171d1c); border-color: var(--line, #eaebec); }
-.sw-update-toast button:focus-visible { outline: 3px solid var(--linkb, #f5b700); outline-offset: 2px; }
+.sw-update-toast button.sw-update-later { background: transparent; color: var(--ink, #444444); border-color: var(--line, #eaebec); }
+.sw-update-toast button:focus-visible { outline: 3px solid var(--linkb, #f5b800); outline-offset: 2px; }
+
+/* "Report a problem" (A89 step 2): the row at the top of Help, and its dialog (web/problem-report.mjs). */
+.report-problem-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 12px; padding: 8px 12px; border-radius: 6px; background: var(--hover-wash); color: var(--ink); font-size: .92rem; }
+.report-problem-row .pill-btn { height: 32px; padding: 0 12px; border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink); border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
+.report-problem-row .pill-btn:hover, .report-problem-row .pill-btn:focus-visible { border-color: var(--accent); color: var(--accent-text); }
+.problem-dialog { max-width: 560px; }
+.problem-dialog .problem-intro { margin: 4px 0 12px; line-height: 1.5; }
+.problem-dialog .problem-label { display: block; font-weight: 600; margin-bottom: 4px; }
+.problem-dialog textarea { width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--select-bg); color: var(--ink); resize: vertical; }
+.problem-dialog .problem-include { margin-top: 12px !important; }
+.problem-dialog .problem-foot { gap: 8px; }
+.problem-dialog .problem-foot .pill-btn { padding: 10px 18px; border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink); border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
+
+
+/* =====================================================================================================================
+   THE BRAILLE AS DRAWN BY web/braille-render.mjs (renderBraille): the editor's braille pane and, since 17 Oct 2026 (feedback item 8), Quick Mode's
+   preview. These rules used to live in the editor's page; they are here so both pages draw the same cells, page markers and spacing.
+   ===================================================================================================================== */
+.braille {
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace;
+  line-height: 1.4;
+  letter-spacing: normal;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.braille:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.braille .brl-row {
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: visible;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: normal;
+}
+.braille .brl-text-wrap {
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: normal;
+  white-space: pre;
+  box-sizing: border-box;
+}
+.braille .bcell {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+}
+.braille .brl-row.brl-linked { background:var(--link); color:var(--on-mark); }
+.braille .brl-row.brl-reading { background:var(--c2); color:var(--on-mark); }
+/* The word linked between print and braille looks the same in both panes (Paul, 7 Oct 2026), in a strong yellow that stands out
+   (the pale --link was too faint): #ffd23f with the text in its own colour (6.7:1); in dark mode a bright gold with dark text (9.7:1). */
+/* The word clicked stands out from its line (18 Oct 2026: with both in Translate's pale --link the word could not be seen): the line keeps
+   --link, the word's own cells take Paige yellow (--linkb, Translate's own colour), with near-black dots; the unraised dots pale. */
+.braille .bcell.cell-hl { background:var(--linkb); color:var(--on-mark); }
+.braille rect.cell-box { fill:var(--linkb); }
+:root.dark .braille .bcell.cell-hl { background:var(--linkb); color:#0d1117; }
+@media (prefers-color-scheme: dark) { :root:not(.light) .braille .bcell.cell-hl { background:var(--linkb); color:#0d1117; } }
+.braille .bcell.cell-hl circle.doff { fill:var(--link); }
+.braille .bcell.cell-speaking circle.don { fill:var(--accent-text); }
+.braille .brl-sr-hint { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
+.braille .brl-svg { display:block; width:100%; max-width:100%; height:auto; }
+.braille .brl-svg .don { fill:var(--ink); }
+.braille .brl-svg .doff { fill:var(--line); }
+.braille .brl-pagebreak { color:var(--muted); font:600 .7rem/2 -apple-system,system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; text-align:center; border-top:1px solid var(--line); margin:6px 0; }
+.braille .brl-volumebreak { margin:14px 0 8px; padding:6px 12px; background:var(--btn-bg, var(--chip-bg)); border:1.5px solid var(--accent, var(--accent)); border-radius:6px; display:flex; align-items:center; justify-content:space-between; color:var(--ink); font:700 .78rem/1.4 system-ui,-apple-system,sans-serif; }
+.braille .brl-vol-tag { background:var(--tint); color:var(--accent-text); padding:2px 7px; border-radius:4px; font-size:.7rem; letter-spacing:.04em; text-transform:uppercase; font-weight:700; }
+.braille .brl-vol-page { color:var(--muted); font-size:.74rem; font-weight:500; }
+
+/* Quick Mode's preview: the same drawing in a box of its own (the editor's pane is a flex item with its own padding and background) */
+.result .braille.preview { padding: 14px; background: var(--panel); max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; box-sizing: border-box; border-radius: 0 0 14px 14px; }
+.result .braille.preview:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }

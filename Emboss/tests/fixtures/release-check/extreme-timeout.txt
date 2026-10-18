@@ -1,0 +1,20 @@
+Extreme-document test set: 1 unit(s), seed 20261002, 1 job(s), time scale 0.02
+node v26.5.1, 10 cpus, load 93.7 48.4 64.2, 32 GB RAM
+working folder: /scratch/ex-slow
+[1/1] 05-headings:5000-txt                                 FAIL               0.0 s      - MB
+
+UNIT (case:format)    RESULT                  TIME s  PEAK MB    INPUT   BUDGET s/MB  WHY (first failure)
+------------------------------------------------------------------------------------------------------------
+05-headings:5000-txt  FAIL                       0.0        -    80 KB         1/800  not run: the unit's time budget of 1 s was used up by the items before it
+
+FAILURES (1 in 1 unit(s))
+
+* 05-headings:5000-txt
+    not run: the unit's time budget of 1 s was used up by the items before it
+        input: /scratch/ex-slow/inputs/05-headings_5000-txt/001-5000-txt.txt
+    repeat: node Emboss/scripts/check-extreme-documents.mjs --filter "05-headings:5000-txt" --out <dir>
+    one input alone: node Emboss/scripts/check-extreme-documents.mjs --file "/scratch/ex-slow/inputs/05-headings_5000-txt/001-5000-txt.txt"
+
+0/1 units passed, 1 failed; 0 min 0 s
+inputs and logs kept in /scratch/ex-slow
+exit 1

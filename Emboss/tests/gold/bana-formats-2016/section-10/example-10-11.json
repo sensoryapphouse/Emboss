@@ -25,12 +25,12 @@
       },
       {
         "kind": "note",
-        "text": "6 answers"
+        "text": "7 answers"
       }
     ],
     "notes": "",
     "surroundingText": "",
-    "printFeatures": "Print shows the question followed by six blank write-on lines with no numbers/letters."
+    "printFeatures": "Print shows the question followed by seven blank write-on lines with no numbers/letters."
   },
   "braille": {
     "width": 40,
@@ -45,5 +45,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly (PDF page image confirms exactly six blank lines, matching the given braille’s own \"#g answ]s\" = \"6 answers\"). Print unchanged from A/B."
+  "resolution": "Braille matches both A and B exactly (PDF page image confirms exactly six blank lines, matching the given braille’s own \"#g answ]s\" = \"6 answers\"). Print unchanged from A/B. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].text and print.printFeatures",
+      "was": "6 answers / six blank write-on lines",
+      "now": "7 answers / seven blank write-on lines",
+      "evidence": "references/_gemini/_done/gold-10-A/page-259.png, Example 10-11 print box: counted seven short underlined lines under \"1. List the continents.\"; gold braille \"#g answ]s\" also reads 7."
+    }
+  ]
 }

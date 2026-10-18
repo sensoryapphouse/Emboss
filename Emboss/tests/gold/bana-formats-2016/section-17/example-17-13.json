@@ -23,17 +23,20 @@
         "kind": "list",
         "items": [
           {
-            "text": "`amaze + ment = amazement` (amazement)"
+            "text": "`amaze +` **ment** `=` `amaze`**ment**"
           },
           {
-            "text": "`hope + ful = hopeful` (hopeful)"
+            "text": "`hope +` **ful** `=` `hope`**ful**"
           }
         ]
       }
     ],
     "notes": "A cell-5 heading, then two word-formation equations with partial bold emphasis on the suffixes ('ment', 'ful') in both the equation and its result.",
     "surroundingText": [],
-    "printFeatures": "Bold on the suffix portion only, in both terms of each equation."
+    "printFeatures": "Bold on the suffix portion only, in both terms of each equation.",
+    "transcriberSupplied": [
+      "the contracted repeat of each result word in transcriber's note indicators (17.13.1b): @.<amaze;t@.> and @.<hope;l@.> (\"amazement\", \"hopeful\")"
+    ]
   },
   "braille": {
     "width": 40,
@@ -51,5 +54,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged. Print's own partial bold on the suffix is NOT re-encoded here: even if marked, Emboss silently drops all typeform from an uncontracted run (F-210), so a bold sub-run and a plain one produce byte-identical output — omitting the bold marking changes nothing observable. The contracted-form annotation at the end of each equation is written here in ordinary parentheses because Emboss has no inline TN segment (F-211, 17.13.1b) — the given braille wraps it in `@.<...@.>`; expect mismatch there."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged. Print's own partial bold on the suffix is NOT re-encoded here: even if marked, Emboss silently drops all typeform from an uncontracted run (F-210), so a bold sub-run and a plain one produce byte-identical output — omitting the bold marking changes nothing observable. The contracted-form annotation at the end of each equation is written here in ordinary parentheses because Emboss has no inline TN segment (F-211, 17.13.1b) — the given braille wraps it in `@.<...@.>`; expect mismatch there. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[*].text",
+      "was": "`amaze + ment = amazement` (amazement) (no bold)",
+      "now": "`amaze +` **ment** `=` `amaze`**ment** (amazement)  (bold on the suffixes)",
+      "evidence": "references/_gemini/_done/gold-17-A/page-476.png (Example 17-13): print shows \"amaze + **ment** = amaze**ment**\" and \"hope + **ful** = hope**ful**\" - bold on the suffix in both places; the gold text had lost the bold although its own notes/printFeatures say \"bold on the suffix\". The trailing \"(amazement)\" is the transcriber-supplied contracted repeat in note indicators (17.13.1b), not in the print image; left as it was."
+    },
+    {
+      "field": "print.blocks[1].items[*].text",
+      "was": "items ended with the contracted repeat \"(amazement)\" and \"(hopeful)\"",
+      "now": "items end at the printed result word; the repeats are in print.transcriberSupplied",
+      "evidence": "references/bana/braille-formats-2016.pdf p.476, rendered at 110 dpi: the print original shows only \"amaze + ment = amazement\" and \"hope + ful = hopeful\" (bold on the suffixes). The repeats in transcriber's note indicators are braille-side (17.13.1b)."
+    }
+  ]
 }

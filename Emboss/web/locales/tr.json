@@ -60,10 +60,13 @@
     "toc": "İçindekiler",
     "print": "Baskı Görünümü (Sol)",
     "braille": "Braille",
+    "export": "Dışa aktar",
+    "export_title": "Braille'i (BRF, eBraille) dışa aktar veya kabartma yazıcıya gönder",
+    "emboss_menu": "Kabartma yazıcıya gönder",
     "braille_view": "Braille Görünümü",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Kabart",
     "emboss_tooltip": "Belgeyi kabartma yazıcısına veya yazıcıya gönder",
     "clear_doc": "Belgeyi Temizle",
@@ -133,8 +136,6 @@
     "poem_desc": "Şiirsel dörtlük dizesi (1-3)",
     "exercise_title": "Alıştırma Sorusu",
     "exercise_desc": "Numaralı alıştırma sorusu (1-5 / 3-5)",
-    "caption_title": "Açıklama / Kaynak",
-    "caption_desc": "Şekil açıklaması veya kaynağı (7-5)",
     "footnote_title": "Dipnot",
     "footnote_desc": "Dipnot metni (1-3)",
     "note_title": "Çevirmenin Notu",
@@ -163,8 +164,6 @@
     "page_desc": "Kaynak basılı sayfa sonu göstergesi ekle",
     "printpage_title": "Basılı Sayfa Numarası",
     "printpage_desc": "Kaynak basılı sayfa sonu göstergesi ekle",
-    "code_title": "Bilgisayar Kodu",
-    "code_desc": "UEB göstergeleriyle Kod bloğu ekle",
     "indent_title": "Girintile / Alt Öğe Ekle",
     "indent_desc": "Liste öğesini veya alıştırmayı daha derine yerleştir (Tab)",
     "outdent_title": "Girintiyi Azalt / Öğeyi Yükselt",
@@ -185,8 +184,8 @@
     "language_label": "Arayüz Dili",
     "language_help": "Düğmeler, menüler, iletişim kutuları ve ekran okuyucu duyuruları için kullanılan dili seçin.",
     "standard_label": "Braille Standardı",
-    "standard_bana": "BANA (ABD ve Kanada — 40×25 hücre)",
-    "standard_ukaaf": "UKAAF (Birleşik Krallık ve Uluslararası — 38×25 hücre)",
+    "standard_bana": "BANA (ABD ve Kanada — 38×25 hücre)",
+    "standard_ukaaf": "UKAAF (Birleşik Krallık ve Uluslararası — 38×27 hücre)",
     "grade_label": "Kısaltma Düzeyi",
     "grade_1": "1. Derece (Kısaltmasız / Harf harf)",
     "grade_2": "2. Derece (Kısaltmalı)",
@@ -261,7 +260,7 @@
     "size_full": "Tam Sayfa (1. Satırda Kesilmeden)",
     "lead_lines": "Dokunsal Kılavuz Çizgiler",
     "braille_labels": "Braille Etiketleri",
-    "footer_tip": "💡 Siyah dış hatlar katı dokunsal kenarlıklara dönüşür; renkler otomatik olarak farklı dokunsal dokulara eşlenir.",
+    "footer_tip": "Siyah dış hatlar katı dokunsal kenarlıklara dönüşür; renkler otomatik olarak farklı dokunsal dokulara eşlenir.",
     "open_repositories": "Açık Dokunsal Depolar:",
     "no_diagrams": "Eşleşen diyagram bulunamadı."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Kayıpsız Geri Çeviri Durumu",
     "precedence_status": "Braille Öncelik Kuralları Durumu",
     "perfect_match": "%100 Geri Çeviri Eşleşmesi (0 tutarsızlık)",
-    "badge_warn": "⚠ {count} incelenecek",
+    "badge_warn": "{count} incelenecek",
     "badge_title": "Geri çeviri sırasında {count} kelime tutarsızlığı bulundu. İlkine atlamak için tıklayın.",
     "badge_clean": "Geri çeviri kontrolü: kelime tutarsızlığı bulunamadı."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Kaydedilmemiş değişiklikleriniz var. Kaydetmeden çıkmak istediğinizden emin misiniz?",
     "unsaved_load": "Kaydedilmemiş değişiklikleriniz var. Yeni bir dosya yüklemek geçerli belgenizin yerini alacak. Devam edilsin mi?",
     "unsaved_clear": "Kaydedilmemiş değişiklikleriniz var. Belgeyi temizlemek istediğinizden emin misiniz?",
-    "drop_hint": "⬇ İçe aktarmak için bir belgeyi düzenleyiciye bırakın",
+    "drop_hint": "İçe aktarmak için bir belgeyi düzenleyiciye bırakın",
     "notice": "Bildirim",
     "close_notice": "Bildirimi Kapat"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Belge metni",
+      "math_keyboard_toggle": "Matematik klavyesi",
       "label": "Metin",
       "toolbar_aria": "Biçimlendirme",
       "style_label": "Paragraf stili",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafik Kategorileri",
       "graphic_list": "Dokunsal grafik diyagramları",
       "formula_search_label": "Formülleri ara",
-      "btactile_link": "BTactile (Ücretsiz) ↗",
-      "tgil_link": "APH TGIL (1.800+ Şablon) ↗"
+      "btactile_link": "BTactile (Ücretsiz)",
+      "tgil_link": "APH TGIL (1.800+ Şablon)"
     },
     "settings": {
       "list_spaced": "Boş satırlı liste (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "İşletim sistemi yazıcı sürücüsü kilitlerini atlayarak özel mikrodenetleyici kabartma yazıcılarına (ESP32-S3, RP2040/RP2350, STM32, Arduino) doğrudan bağlanın.",
       "graphics_hint": "İşaretlenmediğinde, diyagramlar metin tabanlı kabartma yazıcılar ve braille ekranlar için erişilebilir Çevirmen Notu açıklamaları olarak dışa aktarılır.",
       "tactile_heading": "Dokunsal Ekran Canlı Akışı (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Bluetooth Bağla (DotPad BLE)",
-      "tactile_connect_hid": "🔌 USB / HID Bağla (Monarch)",
+      "tactile_connect_ble": "Bluetooth Bağla (DotPad BLE)",
+      "tactile_connect_hid": "USB / HID Bağla (Monarch)",
       "tactile_disconnect": "Ekran Bağlantısını Kes",
       "tactile_sim_monarch": "Simüle Edilmiş Monarch'ı Test Et (32×10)",
       "tactile_sim_dotpad": "Simüle Edilmiş DotPad'i Test Et (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Canlı braille görünümünü ve dokunsal grafikleri harici sürücü olmadan doğrudan WebBluetooth (DotPad BLE UART) veya WebHID (Monarch/USB) üzerinden akış olarak gönderir.",
       "perkins_hint": "— SDF ve JKL tuşlarıyla braille yaz",
       "ascii_hint": "— ham ASCII braille karakterlerini göster",
+      "show_explanation_bar": "Açıklama çubuğunu göster",
+      "show_explanation_bar_hint": "— metnin ve braille'in altında, üzerinde olduğun sözcüğün braille karşılığını açıklayan şerit",
+      "simple_mode_hint": "— Emboss'u basit dönüştürücüde aç. Hızlı Mod ile düzenleyici arasında geçiş bunu değiştirmez.",
       "covers_hint": "— kitaplar ciltlere bölünürken kabartılmış başlık kapakları"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Başlık {n}",
       "cell_aria_named": "{header}, satır {row}",
       "cell_aria": "Sütun {col}, satır {row}",
-      "too_wide_listed": "⚠ Sütunlar için çok geniş — listelenmiş tablo olarak Braille'e dönüştürülecek",
+      "too_wide_listed": "Sütunlar için çok geniş — listelenmiş tablo olarak Braille'e dönüştürülecek",
       "too_wide_listed_title": "Bu tablo, mevcut satır başına hücre sayısı ve Braille moduyla sütunlara sığmıyor, bu nedenle yan yana sütunlar yerine listelenmiş tablo (BANA Formats §11.9) olarak Braille'e dönüştürülecek.",
-      "too_wide_paragraph": "⚠ Sütunlar için çok geniş — paragraf biçiminde Braille'e dönüştürülecek",
+      "too_wide_paragraph": "Sütunlar için çok geniş — paragraf biçiminde Braille'e dönüştürülecek",
       "too_wide_paragraph_title": "Bu tablo, mevcut satır başına hücre sayısı ve Braille moduyla sütunlara sığmıyor, bu nedenle yan yana sütunlar yerine paragraf biçiminde (UKAAF B004 §12) Braille'e dönüştürülecek."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "\"{code}\" için tablolar yüklenemedi — önceki braille kodu kullanılmaya devam ediliyor.",
-      "failed": "⚠ Braille oluşturulamadı.",
+      "failed": "Braille oluşturulamadı.",
       "failed_hint": "(Bu, motorun başlatılmadığını söylüyorsa, braille motoru yüklenmemiştir — Cmd/Ctrl+Shift+R ile tam yenileme yapın.)",
       "error_status": "Oluşturma hatası: {message}"
     },
     "engine": {
       "loading": "Braille motoru yükleniyor…",
-      "failed": "⚠ Braille motoru yüklenemedi.",
+      "failed": "Braille motoru yüklenemedi.",
       "failed_hint": "Cmd/Ctrl+Shift+R ile tam yenileme yapın. Sorun devam ederse tarayıcı konsolunu açın (Görünüm ▸ Geliştirici) ve hataları gönderin.",
       "failed_status": "Motor yüklenemedi: {message}",
       "ready": "Hazır — solda yazın veya biçimlendirin; braille canlı olarak güncellenir."
@@ -715,7 +718,7 @@
       "network_unreachable": "{url} adresine ulaşılamadı: {message}. Tarayıcılar ham TCP (port 9100) bağlantısı açamaz; kabartma yazıcının HTTP POST kabul etmesi gerekir, ya da .brf dosyasını indirip yazdırma yöneticinizle gönderin.",
       "usb_bridge_done": "Kabartma işi USB yazıcıya teslim edildi!",
       "needs_webserial": "Doğrudan seri kabartma, WebSerial destekli bir tarayıcı gerektirir (Chrome, Edge, Opera). .brf dosyasını indirip yazdırma yöneticinizle kabartabilir veya Ayarlar'da Ağ (Port 9100) modunu kullanabilirsiniz.",
-      "detected": "🔌 {name} algılandı — {cells}×{lines}, {baud} baud olarak ayarlandı."
+      "detected": "{name} algılandı — {cells}×{lines}, {baud} baud olarak ayarlandı."
     },
     "symbols": {
       "title": "Dokunsal Sembol Kitaplığı",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamik Matris",
       "badge_text_only": "Yalnızca Metin",
       "badge_index": "Nokta Matrisi"
+    },
+    "offline": {
+      "ready": "Emboss çevrimdışı çalışmaya hazır.",
+      "ready_short": "Çevrimdışı çalışmaya hazır",
+      "not_yet": "Çevrimdışı çalışmaya hâlâ hazırlanıyor…"
     }
   }
 }

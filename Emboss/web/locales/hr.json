@@ -60,10 +60,13 @@
     "toc": "Sadržaj",
     "print": "Prikaz ispisa (LHS)",
     "braille": "Brajica",
+    "export": "Izvezi",
+    "export_title": "Izvezi brajicu (BRF, eBraille) ili je pošalji na brajičarski tiskalnik",
+    "emboss_menu": "Pošalji na brajičarski tiskalnik",
     "braille_view": "Prikaz Brajice",
     "download_brf": "Brajica (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBrajica (.ebraille)",
+    "download_ebrl": "eBrajica (.ebrl)",
     "emboss": "Embosser",
     "emboss_tooltip": "Pošalji dokument na brajičarski tiskalnik",
     "clear_doc": "Očisti dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Pjesnički strof stih linija (1-3)",
     "exercise_title": "Vježba pitanje",
     "exercise_desc": "Numerirana vježba pitanje (1-5 / 3-5)",
-    "caption_title": "Naslov / Atribucija",
-    "caption_desc": "Naslov slike ili atribucija (7-5)",
     "footnote_title": "Fusnota",
     "footnote_desc": "Tekst fusnote (1-3)",
     "note_title": "Bilješka prepisivača",
@@ -163,8 +164,6 @@
     "page_desc": "Umetni indikator prijeloma stranice izvornog ispisa",
     "printpage_title": "Broj stranice ispisa",
     "printpage_desc": "Umetni indikator prijeloma stranice izvornog ispisa",
-    "code_title": "Računalni kod",
-    "code_desc": "Umetni blok koda s UEB indikatorima",
     "indent_title": "Povećaj uvlaku / Ugniježdi stavku",
     "indent_desc": "Ugniježdi stavku popisa ili vježbu dublje (Tab)",
     "outdent_title": "Smanjite uvlaku / Promakni stavku",
@@ -185,8 +184,8 @@
     "language_label": "Jezik sučelja",
     "language_help": "Odaberi jezik korišten za gumbe, izbornike, dijaloge i objave za čitače zaslona.",
     "standard_label": "Brajični standard",
-    "standard_bana": "BANA (SAD i Kanada — 40×25 ćelija)",
-    "standard_ukaaf": "UKAAF (Ujedinjeno kraljevstvo i međunarodno — 38×25 ćelija)",
+    "standard_bana": "BANA (SAD i Kanada — 38×25 ćelija)",
+    "standard_ukaaf": "UKAAF (Ujedinjeno kraljevstvo i međunarodno — 38×27 ćelija)",
     "grade_label": "Razina kontrakcije",
     "grade_1": "Razina 1 (Nekontrairana / Slovo po slovo)",
     "grade_2": "Razina 2 (Kontrahirana)",
@@ -261,7 +260,7 @@
     "size_full": "Puna stranica (Linija 1 Protusječ)",
     "lead_lines": "Taktilne vodeće linije",
     "braille_labels": "Oznake brajice",
-    "footer_tip": "💡 Crne konture postaju čvrste taktilne granice; boje se automatski mapiraju na različite taktilne teksture.",
+    "footer_tip": "Crne konture postaju čvrste taktilne granice; boje se automatski mapiraju na različite taktilne teksture.",
     "open_repositories": "Otvori taktilne spremnike:",
     "no_diagrams": "Nije pronađena podudarna dijagrama."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Stanje bezgubitnog povratnog putovanja",
     "precedence_status": "Stanje brajičnih pravila preimućstva",
     "perfect_match": "100% podudaranje povratnog putovanja (0 razlika)",
-    "badge_warn": "⚠ {count} za pregledavanje",
+    "badge_warn": "{count} za pregledavanje",
     "badge_title": "{count} razlika u riječima pronađena tijekom povratnog prijevoda. Kliknite za skok na prvi.",
     "badge_clean": "Provjera povratnog putovanja: nema razlika u riječima pronađeno."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Imate nespremljene izmjene. Jeste li sigurni da želite izaći bez spremanja?",
     "unsaved_load": "Imate nespremljene izmjene. Učitavanje nove datoteke će zamijeniti trenutni dokument. Nastaviti?",
     "unsaved_clear": "Imate nespremljene izmjene. Jeste li sigurni da želite obrisati dokument?",
-    "drop_hint": "⬇ Ispusti dokument za unos u uređivač",
+    "drop_hint": "Ispusti dokument za unos u uređivač",
     "notice": "Obavijest",
     "close_notice": "Zatvori obavijest"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Tekst dokumenta",
+      "math_keyboard_toggle": "Matematička tipkovnica",
       "label": "Tekst",
       "toolbar_aria": "Oblikovanje",
       "style_label": "Stil odlomka",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategorije grafike",
       "graphic_list": "Taktilne grafičke dijagrame",
       "formula_search_label": "Pretraži formule",
-      "btactile_link": "BTactile (Besplatno) ↗",
-      "tgil_link": "APH TGIL (1,800+ predložaka) ↗"
+      "btactile_link": "BTactile (Besplatno)",
+      "tgil_link": "APH TGIL (1,800+ predložaka)"
     },
     "settings": {
       "list_spaced": "Lista s praznom linijom (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Izravno se spojite na prilagođene mikrokontroler tiskalnike (ESP32-S3, RP2040/RP2350, STM32, Arduino) zaobidući zaključavanja upravljačkog programa OS printera.",
       "graphics_hint": "Kada je isključeno, dijagrame se izvozavaju kao pristupačne opise bilješki prepisivača za tiskalnike samo-teksta i brajične prikaze.",
       "tactile_heading": "Taktilni prikaz živog strujanja (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Povezivanje Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Povezivanje USB / HID (Monarch)",
+      "tactile_connect_ble": "Povezivanje Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Povezivanje USB / HID (Monarch)",
       "tactile_disconnect": "Otključi prikaz",
       "tactile_sim_monarch": "Testiraj simulirani Monarch (32×10)",
       "tactile_sim_dotpad": "Testiraj simulirani DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Struji živu brajičnu vezu i taktilne grafike izravno preko WebBluetooth-a (DotPad BLE UART) ili WebHID-a (Monarch/USB) bez vanjskih upravljačkih programa.",
       "perkins_hint": "— upišite brajicu s tipkama SDF i JKL",
       "ascii_hint": "— prikaži sirove ASCII brajične znakove",
+      "show_explanation_bar": "Prikaži traku s objašnjenjem",
+      "show_explanation_bar_hint": "— traka ispod teksta i brajice koja objašnjava brajicu za riječ na kojoj se nalazite",
+      "simple_mode_hint": "— otvori Emboss u jednostavnom pretvaraču. Prebacivanje između Brzog režima i uređivača to ne mijenja.",
       "covers_hint": "— embossirane naslove na naslovnicama pri dijeljenju knjiga"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Naslov {n}",
       "cell_aria_named": "{header}, redak {row}",
       "cell_aria": "Stupac {col}, redak {row}",
-      "too_wide_listed": "⚠ Preširoko za stupce — ispisat će se brajicom kao navedena tablica",
+      "too_wide_listed": "Preširoko za stupce — ispisat će se brajicom kao navedena tablica",
       "too_wide_listed_title": "Ova tablica ne stane u stupce uz trenutni broj ćelija po liniji i način brajice, stoga će se ispisati brajicom kao navedena tablica (BANA Formats §11.9) umjesto stupaca jedan uz drugi.",
-      "too_wide_paragraph": "⚠ Preširoko za stupce — ispisat će se brajicom u obliku odlomka",
+      "too_wide_paragraph": "Preširoko za stupce — ispisat će se brajicom u obliku odlomka",
       "too_wide_paragraph_title": "Ova tablica ne stane u stupce uz trenutni broj ćelija po liniji i način brajice, stoga će se ispisati brajicom u obliku odlomka (UKAAF B004 §12) umjesto stupaca jedan uz drugi."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nije moguće učitati tablice za \"{code}\" — i dalje koristim prethodni brajični kod.",
-      "failed": "⚠ Brajica se ne može generirati.",
+      "failed": "Brajica se ne može generirati.",
       "failed_hint": "(Ako u ovom se kaže da motor nije inicijaliziran, motor brajice nije učitan — tvrd osvježaj s Cmd/Ctrl+Shift+R.)",
       "error_status": "Greška pri renderiranju: {message}"
     },
     "engine": {
       "loading": "Učitavanje brajičnog motora…",
-      "failed": "⚠ Brajični motor se nije mogao učitati.",
+      "failed": "Brajični motor se nije mogao učitati.",
       "failed_hint": "Tvrd osvježaj s Cmd/Ctrl+Shift+R. Ako se nastavi, otvorite konzolu pretraživača (Prikaz ▸ Razvoj) i pošaljite greške.",
       "failed_status": "Motor se nije mogao učitati: {message}",
       "ready": "Gotovo — upišite ili oblikujte s lijeve strane; brajica se ažurira uživo."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nije moguće dosegnuti {url}: {message}. Pretraživači ne mogu otvoriti sirove TCP veze (port 9100); tiskalnik mora prihvatiti HTTP POST ili preuzmite .brf i pošaljite ga s upraviteljem ispisa.",
       "usb_bridge_done": "Posao embossinga isporučen USB tiskalnku!",
       "needs_webserial": "Izravni serijski embossing trebao bi pretraživač s WebSerialnom podrškom (Chrome, Edge, Opera). Možete preuzeti datoteku .brf za embossing s upraviteljem ispisa ili koristiti mrežni (port 9100) način u Postavkama.",
-      "detected": "🔌 Detektiran {name} — postavljen na {cells}×{lines} na {baud} baud."
+      "detected": "Detektiran {name} — postavljen na {cells}×{lines} na {baud} baud."
     },
     "symbols": {
       "title": "Biblioteka taktilnih simbola",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamička matrica",
       "badge_text_only": "Samo tekst",
       "badge_index": "Točkasta matrica"
+    },
+    "offline": {
+      "ready": "Emboss je spreman za rad bez interneta.",
+      "ready_short": "Spremno za rad bez interneta",
+      "not_yet": "Još se priprema za rad bez interneta…"
     }
   }
 }

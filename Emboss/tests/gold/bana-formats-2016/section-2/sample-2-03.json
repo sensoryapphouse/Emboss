@@ -1,0 +1,52 @@
+{
+  "id": "sample-2-03",
+  "title": "Sample 2-3: Grade Level on Back Cover",
+  "pdfPages": [
+    26
+  ],
+  "textLines": [
+    2351,
+    2358
+  ],
+  "illustrates": {
+    "rule": "2.3.4g",
+    "quote": "g. Grade/Level. A grade level shown in words or numerals is transcribed as printed and placed on the line with or following the book title. If there is room, the grade level goes on the same line as the title, separated by a semicolon. Sometimes this information is found only on the book spine or back cover. Do not include the grade level if it is not clearly apparent. A graphic design of lines, dots, etc., determined to be the grade level is transcribed as an arabic number. (See Sample 2-3: Grade Level on Back Cover on page 2-26 and Sample 2-4: Grade Level Indicated by Dots on Spine on page 2-27.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-070.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",mc,d\\gal ,littell ,,,! language (,'",
+      "  ,lit]ature2 #aj"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 4"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.70: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 4"
+    }
+  ]
+}

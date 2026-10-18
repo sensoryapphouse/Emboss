@@ -8,40 +8,40 @@
     "note": "Standard gives no braille for this sample (print-only worked example)."
   },
   "example-9-3": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \",9 ! ?IRD P]SON1 ! CORRECT =M IS\" vs actual \"  ,9 ! ?IRD P]SON1 ! CORRECT =M IS\"."
+    "status": "match",
+    "note": "match"
   },
   "example-9-4": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \".1,RESPECTIVELY M1NS 8SEP>ATELY0 OR 444\" vs actual \"  ,RESPECTIVELY M1NS 8SEP>ATELY0 OR\". line count differs by +1 (expected 8, actual 9)."
+    "note": "first differing line 2: expected \".1,RESPECTIVELY M1NS 8SEP>ATELY0 OR 444\" vs actual \".1,RESPECTIVELY M1NS 8SEP>ATELY0 OR\". line count differs by +2 (expected 8, actual 10)."
   },
   "example-9-5": {
-    "status": "mismatch",
-    "note": "first differing line 4: expected \"  SANK SUBM>9E ,TUES\\\"D\" vs actual \"SANK\". line count differs by +2 (expected 7, actual 9)."
+    "status": "match",
+    "note": "match"
   },
   "example-9-6": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"             ,TRANSCRIPT (\" vs actual \"       ,TRANSCRIPT ( ,GETTYSBURG\". line count differs by +11 (expected 6, actual 17)."
+    "note": "first differing line 1: expected \"             ,TRANSCRIPT (\" vs actual \"       ,TRANSCRIPT ( ,GETTYSBURG\". line count differs by +16 (expected 6, actual 22)."
   },
   "example-9-7": {
     "status": "not-representable",
-    "note": "first differing line 2: expected \".7,PUBLI% 9 A PR9T M$IUM4.' ,SUBMIT YR\" vs actual \"  ,PUBLI% 9 A PR9T M$IUM4 ,SUBMIT YR\". line count differs by +1 (expected 8, actual 9). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"[small pencil/quill icon beside the marginal cross-reference box]\""
+    "note": "first differing line 3: expected \"N>RATIVE TO A S*OOL NEWSPAP] OR 444\" vs actual \"N>RATIVE TO A S*OOL NEWSPAP] OR NA;NAL\". line count differs by +1 (expected 8, actual 9). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"[small pencil/quill icon beside the marginal cross-reference box]\""
   },
   "example-9-8": {
-    "status": "not-representable",
-    "note": "first differing line 2: expected \",:Y D Y ?9K ,P]ICLES ?\\\"\\\\ X 0 S IMPORTANT\" vs actual \"  ,:Y D Y ?9K ,P]ICLES ?\\\"\\\\ X 0 S\". line count differs by -3 (expected 7, actual 4). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"For more information, go online to Meet the People at www.sfsocialstudies.com.\""
+    "status": "mismatch",
+    "note": "first differing line 6: expected \"      ,= M 9=MA;N1 G ONL9E TO .7,MEET !\" vs actual \"      ,= M 9=MA;N1 G ONL9E TO ,MEET ! ,P\"."
   },
   "sample-9-01": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \",SOVIET PREMI] ,JOSEPH ,/AL9 0 M ( A\" vs actual \"  ,SOVIET PREMI] ,JOSEPH ,/AL9 0 M ( A\". line count differs by +5 (expected 15, actual 20)."
+    "note": "first differing line 3: expected \"DEF1T+ ,HITL] %D 2 ! F/ MILIT>Y PRIOR;Y1\" vs actual \"\". line count differs by +6 (expected 15, actual 21)."
   },
   "sample-9-02": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \",_M UPP]-CLASS P F ,JUDAH 7 S5T TO\" vs actual \"  ,_M UPP]-CLASS P F ,JUDAH 7 S5T TO\"."
+    "status": "match",
+    "note": "match"
   },
   "sample-9-03": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,WRITE A ^W T M1NS ! SAME Z ! \\\"UL9$\" vs actual \"  ,WRITE A ^W T M1NS ! SAME Z ! \\\"UL9$ ^W\". line count differs by +3 (expected 11, actual 14)."
+    "note": "first differing line 3: expected \"\" vs actual \"MAILBOX\". line count differs by +3 (expected 11, actual 14)."
   },
   "sample-9-04": {
     "status": "not-representable",
@@ -52,12 +52,12 @@
     "note": "first differing line 1: expected \"     ,EI<T ,BRIEF ,TALES ( ,LOV]S   #AEG\" vs actual \"         ,,,ALPHEUS & >E?USA,'\". line count differs by -2 (expected 13, actual 11). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Eight Brief Tales of Lovers                    157\""
   },
   "sample-9-06": {
-    "status": "mismatch",
-    "note": "first differing line 11: expected \"      ,-,JU/ICE ,LEWIS ;,F4 ,P[ELL1\" vs actual \"    ,-,JU/ICE ,LEWIS ;,F4 ,P[ELL1 ,JR41\"."
+    "status": "match",
+    "note": "match"
   },
   "sample-9-07": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"      @.<,PICTURE@.> ,O!R ,S\\\\RCES ( ,P[]\" vs actual \"    ,LOCOMOTIVES \\\"<SEE ! ,NORRIS ABV\\\">\". line count differs by +7 (expected 10, actual 17). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"[Picture] Other Sources of Power\""
+    "note": "first differing line 1: expected \"      @.<,PICTURE@.> ,O!R ,S\\\\RCES ( ,P[]\" vs actual \"    ,LOCOMOTIVES \\\"<SEE ! ,NORRIS ABV\\\">\". line count differs by +5 (expected 10, actual 15). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"[Picture] Other Sources of Power\""
   },
   "sample-9-08": {
     "status": "not-representable",
@@ -69,7 +69,7 @@
   },
   "sample-9-10": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,EMP]OR ,WILLIAM ,,II TO       A#GEA\" vs actual \"    ,EMP]OR ,WILLIAM ,,II TO ,TS>\". line count differs by +27 (expected 15, actual 42)."
+    "note": "first differing line 1: expected \"    ,EMP]OR ,WILLIAM ,,II TO       A#GEA\" vs actual \"    ,EMP]OR ,WILLIAM ,,II TO ,TS>\". line count differs by +21 (expected 15, actual 36)."
   },
   "sample-9-11": {
     "status": "not-representable",

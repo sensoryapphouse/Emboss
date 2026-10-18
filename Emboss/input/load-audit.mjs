@@ -21,7 +21,9 @@ export const wordList = (s) => String(s || '').match(/[\p{L}\p{N}]+/gu) || [];
 /** Source words the model does not have (as a multiset). */
 export function missingWords(srcText, modelText) {
   const have = new Map();
-  for (const w of wordList(modelText)) have.set(w, (have.get(w) || 0) + 1);
+  // The sub/superscript markers (format/text-style.mjs SCRIPT_MARKS) sit inside a word ("H2O" with its subscript), as
+  // <sub>/<sup> do in the source, where they are inline — so they must not split the model's word either (30 Sep).
+  for (const w of wordList(String(modelText || '').replace(/[\ue000-\ue002]/g, ''))) have.set(w, (have.get(w) || 0) + 1);
   const lost = [];
   for (const w of wordList(srcText)) { const n = have.get(w) || 0; if (n > 0) have.set(w, n - 1); else lost.push(w); }
   return lost;
@@ -79,12 +81,21 @@ export function modelStats(doc) {
         // F-12: a complex (two-tier) header's primary heading lives in headerGroups[].text,
         // not in the flat headers row — kept here too, or it reads as a lost word (BANA §11.4.3).
         const groupTexts = (b.headerGroups || []).map((g) => (g && g.text) || '');
-        text += ` ${[...(b.headers || []), ...(b.rows || []).flat()].map(cell).join(' ')} ${groupTexts.join(' ')} ${b.caption || ''}`;
+        // 24 Sep (EMBOSS-TASKS.md section T): a table's own HEADING (block.title, BANA §11.3.1a
+        // — e.g. a bana-heading caption, or a leading spanning-title row parse.mjs's parseTable
+        // now moves here instead of leaving it as a fake column heading) is print text too, same
+        // as block.title is for every other block type below (else branch); left out here it
+        // read as words lost from the source.
+        const titleText = Array.isArray(b.title) ? b.title.join(' ') : (b.title || '');
+        text += ` ${[...(b.headers || []), ...(b.rows || []).flat()].map(cell).join(' ')} ${groupTexts.join(' ')} ${b.caption || ''} ${titleText}`;
       }
       else if (b.type === 'pagenum' || b.type === 'math') { /* not running text */ }
       else if (b.type === 'graphic') text += ` ${b.caption || ''} ${b.description || ''}`;   // caption + prodnote (alt is not running text)
       else text += ` ${b.segments ? seg(b.segments) : (b.text || '')} ${b.title && b.type !== 'box' && b.type !== 'sidebar' ? b.title : ''}`;
-      for (const it of b.items || []) text += ` ${it.segments ? seg(it.segments) : (it.text || '')} ${it.term || ''} ${it.def || ''} ${it.page || ''} ${it.marker || ''}`;   // contents/index page references are kept as item.page
+      for (const it of b.items || []) {
+        text += ` ${it.segments ? seg(it.segments) : (it.text || '')} ${it.term || ''} ${it.def || ''} ${it.page || ''} ${it.marker || ''}`;   // contents/index page references are kept as item.page
+        if (it && Array.isArray(it.blocks)) walk(it.blocks);   // an item's further paragraphs / table (item.blocks)
+      }
       for (const l of b.lines || []) text += ` ${l}`;
       walk(b.blocks);
     }

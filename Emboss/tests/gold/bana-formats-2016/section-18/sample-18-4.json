@@ -15,16 +15,12 @@
   "print": {
     "blocks": [
       {
-        "kind": "paragraph",
-        "text": "Note: This sample uses the proofreading marks and terminology from Sample 18-3."
-      },
-      {
         "kind": "other",
         "text": "The full embedded transcriber’s note/key (back-translated): \"The sentence is marked with proofreading marks. Each mark is keyed. The keyed mark is inserted after each affected word. Key to marks: 1 last. Take out period; 2 pierre Make the p a capital letter; 3 agree Add d; 4 fir Check the spelling; 5 too Check the spelling; 6 lesons Check the spelling\" — one continuous TN (14913-14923) whose own internal blank line (before \"Key to marks:\") and numbered sub-list have no equivalent inside a single `note` block, which only ever wraps its content as one flat run-on paragraph (formatTranscriberNote, no internal blank-line/list support) — not modeled."
       },
       {
         "kind": "paragraph",
-        "text": "At last. 1 the head chef, pierre 2 agree 3 to take Greg aside fir 4 too 5 hours every week for cooking lesons. 6"
+        "text": "At last. the head chef, pierre agree to take Greg aside fir too hours every week for cooking lesons."
       }
     ],
     "notes": "The marked passage's own words with handwritten proofreading marks (a deletion sign over the period in 'last.', three underlines under the 'p' in 'pierre', a caret inserting 'd' after 'agree', circled 'sp' under 'fir'/'too'/'lesons') are represented in braille purely by the plain numeral key (1-6) placed after each affected word/phrase — this final passage IS fully representable as ordinary text (the numbers are plain UEB numerals, no grouping indicator or typeform needed here since the marks themselves, not phrases, are keyed).",
@@ -58,5 +54,13 @@
     "A",
     "B"
   ],
-  "resolution": "Run B's braille.lines is correct: it correctly excluded the unnumbered 'Note: This sample uses...' intro (source lines 14907-14908, genuinely print-only — the braille's own numbering starts at 5, confirming lines 1-4 were never brailled at all) and started directly at the numbered content. Run A's own braille.lines wrongly spliced that print-only intro text in verbatim as if it were unnumbered braille content, with four spurious extra blank lines. illustrates.rule/quote corrected from run A's own caption-text guess to run B's own already-correct full rule text (18.6.2, stem+a-e)."
+  "resolution": "Run B's braille.lines is correct: it correctly excluded the unnumbered 'Note: This sample uses...' intro (source lines 14907-14908, genuinely print-only — the braille's own numbering starts at 5, confirming lines 1-4 were never brailled at all) and started directly at the numbered content. Run A's own braille.lines wrongly spliced that print-only intro text in verbatim as if it were unnumbered braille content, with four spurious extra blank lines. illustrates.rule/quote corrected from run A's own caption-text guess to run B's own already-correct full rule text (18.6.2, stem+a-e). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "block 0 'Note: This sample uses ...' plus a paragraph containing braille key numerals 1-6",
+      "now": "the 'other' key block and a paragraph without the key numerals",
+      "evidence": "Page image references/_gemini/_done/gold-18-B/page-515.png (Sample 18-4): 'Note: This sample uses the proofreading marks and terminology from Sample 18-3.' is the standard's own caption above the picture, not print content; the printed sentence carries proofreading marks but no key numerals (1-6 are the transcriber's keys, added in braille only): 'At last. the head chef, pierre agree to take Greg aside fir too hours every week for cooking lesons.'"
+    }
+  ]
 }

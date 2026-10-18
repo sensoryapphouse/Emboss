@@ -1,0 +1,57 @@
+{
+  "id": "sample-2-21-pronunciation-key-in-front-matter-pages",
+  "title": "Pronunciation Key in Front Matter Pages",
+  "pdfPages": [
+    54
+  ],
+  "textLines": [
+    2916,
+    2928
+  ],
+  "illustrates": {
+    "rule": "2.11.1",
+    "quote": "A wide variety of material appears in the front matter of textbooks. Use the guidelines throughout this document to determine the best format to use. (See Sample 2-21: Transcriber-Generated and Front Matter Pages on page 2-50.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No print original: this Sample 2-21 component is itself a transcriber-generated page (BANA §2.5/2.6/2.7) -- the book's own page shows only the boxed braille and its line-numbered key, confirmed directly against the page image (references/_gemini/gold-2-A/page-098.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,pronuncia;n ,key        #ghb",
+      "",
+      "a ^2asp1 f^2at1 p^2>rot",
+      "@-a ^2ape1 d^2ate1 pl^2ay",
+      "^3a ^2ah1 c^2>1 f^2a!r",
+      ";e ^2elf1 t^251 b^2]ry",
+      "@-e ^2ev51 m^1ee^'t1 mon^2ey",
+      "444",
+      "",
+      "                                    p#bi"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.98: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 1"
+    }
+  ]
+}

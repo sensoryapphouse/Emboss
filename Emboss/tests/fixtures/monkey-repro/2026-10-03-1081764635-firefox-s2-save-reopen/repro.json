@@ -1,0 +1,545 @@
+{
+ "version": 2,
+ "runSeed": "1081764635",
+ "session": 2,
+ "engine": "firefox",
+ "kind": "editor",
+ "doc": "tests/real_samples/md/ch08-01-vectors.md",
+ "docSource": "real-samples",
+ "docFeatures": null,
+ "docs": {
+  "tests/real_samples/md/ch08-01-vectors.md": "docs/00-ch08-01-vectors.md"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1000,
+  "height": 700
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: attribution",
+ "message": "the saved file reopens to different braille [first differing block: attribution] (block #24 not counting empty ones, attribution / heading): first tab has 502 lines, reopened tab has 502; first differences: line 71: first tab \"    ,THE FIRST COLLECTION TYPE WE'LL\\r\" / reopened tab \"\\r\" | line 72: first tab \"    LOOK AT IS ;;,VEC@<,T@>1 ALSO\\r\" / reopened tab \",THE FIRST COLLECTION TYPE WE'LL LOOK\\r\" | line 73: first tab \"    KNOWN AS A VECTOR4 ,VECTORS ALLOW\\r\" / reopened tab \"    AT IS ;;,VEC@<,T@>1 ALSO KNOWN AS\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 10,
+ "originalActions": 91,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.3499,
+   "i": 29,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1606,
+   "i": 30,
+   "q": "h",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2304,
+   "i": 31,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9954,
+   "i": 32,
+   "q": "h",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 2
+  },
+  {
+   "t": "insertAll",
+   "i": 3
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3811,
+   "i": 33,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 4
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8976,
+   "i": 34,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5546,
+   "i": 35,
+   "q": "h",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8245,
+   "i": 36,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1141,
+   "i": 37,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9876,
+   "i": 38,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3862,
+   "i": 39,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2722,
+   "i": 40,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6731,
+   "i": 41,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "selOp",
+   "fx": 0.6323,
+   "fy": 0.5674,
+   "ext": "shiftUp",
+   "n": 10,
+   "fx2": 0.1409,
+   "fy2": 0.8461,
+   "op": "delete",
+   "dx": 0.9235,
+   "dy": 0.6583,
+   "key": "Backspace",
+   "text": "{x} & A v",
+   "f": 0.2325,
+   "fmt": "i"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8968,
+   "i": 42,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9116,
+   "i": 43,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1303,
+   "i": 44,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6276,
+   "i": 45,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1585,
+   "i": 46,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 15
+  },
+  {
+   "t": "insertAll",
+   "i": 16
+  },
+  {
+   "t": "insertAll",
+   "i": 17
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4633,
+   "i": 47,
+   "q": "p",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4835,
+   "i": 48,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 18
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4498,
+   "i": 49,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7598,
+   "i": 50,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4325,
+   "i": 51,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7676,
+   "i": 52,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1959,
+   "i": 53,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7758,
+   "i": 54,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 19
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9775,
+   "i": 55,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8311,
+   "i": 56,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6228,
+   "i": 57,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 20
+  },
+  {
+   "t": "insertAll",
+   "i": 21
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.244,
+   "i": 58,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7141,
+   "i": 59,
+   "q": "h",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4729,
+   "i": 60,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9948,
+   "i": 61,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 22
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3022,
+   "i": 62,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 23
+  },
+  {
+   "t": "insertAll",
+   "i": 24
+  },
+  {
+   "t": "insertAll",
+   "i": 25
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.029,
+   "i": 63,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 26
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3213,
+   "i": 64,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8935,
+   "i": 65,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9782,
+   "i": 66,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5657,
+   "i": 67,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "insertAll",
+   "i": 27
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2255,
+   "i": 68,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 28
+  },
+  {
+   "t": "insertAll",
+   "i": 29
+  },
+  {
+   "t": "insertAll",
+   "i": 30
+  },
+  {
+   "t": "insertAll",
+   "i": 31
+  },
+  {
+   "t": "insertAll",
+   "i": 32
+  },
+  {
+   "t": "insertAll",
+   "i": 33
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0419,
+   "i": 69,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 34
+  },
+  {
+   "t": "insertAll",
+   "i": 35
+  },
+  {
+   "t": "insertAll",
+   "i": 36
+  },
+  {
+   "t": "insertAll",
+   "i": 37
+  },
+  {
+   "t": "insertAll",
+   "i": 38
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5977,
+   "i": 70,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9663,
+   "i": 71,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 39
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8373,
+   "i": 72,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 40
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4938,
+   "i": 73,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 41
+  },
+  {
+   "t": "check",
+   "which": "save"
+  }
+ ]
+}

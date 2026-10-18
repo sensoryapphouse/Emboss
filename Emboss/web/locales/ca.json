@@ -60,10 +60,13 @@
     "toc": "TAULA DE CONTINGUTS",
     "print": "Vista d'impressió (LHS)",
     "braille": "Braille",
+    "export": "Exporta",
+    "export_title": "Exporta el braille (BRF, eBraille) o envia'l a l'embossador",
+    "emboss_menu": "Envia a l'embossador",
     "braille_view": "Vista Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Embossa",
     "emboss_tooltip": "Envia document a l'embossador o impressora braille",
     "clear_doc": "Neteja document",
@@ -133,8 +136,6 @@
     "poem_desc": "Línia de vers estròfica poètica (1-3)",
     "exercise_title": "Pregunta d'exercici",
     "exercise_desc": "Pregunta d'exercici numerada (1-5 / 3-5)",
-    "caption_title": "Llegenda/atribució",
-    "caption_desc": "Llegenda de figura o atribució (7-5)",
     "footnote_title": "Nota al peu",
     "footnote_desc": "Text de nota al peu (1-3)",
     "note_title": "Nota del transcriptor",
@@ -163,8 +164,6 @@
     "page_desc": "Insereix indicador de salt de pàgina impressa",
     "printpage_title": "Número de pàgina impressa",
     "printpage_desc": "Insereix indicador de salt de pàgina impressa",
-    "code_title": "Codi de computadora",
-    "code_desc": "Insereix bloc de codi amb indicadors UEB",
     "indent_title": "Indentació / Element imbricat",
     "indent_desc": "Imbrica element de llista o exercici més profund (Tab)",
     "outdent_title": "Reduc indentació / Promou element",
@@ -185,8 +184,8 @@
     "language_label": "Idioma de la interfície",
     "language_help": "Selecciona l'idioma utilitzat per a botons, menús, diàlegs i anuncis del lector de pantalla.",
     "standard_label": "Estàndard Braille",
-    "standard_bana": "BANA (EUA i Canadà — 40×25 cel·les)",
-    "standard_ukaaf": "UKAAF (Regne Unit i internacional — 38×25 cel·les)",
+    "standard_bana": "BANA (EUA i Canadà — 38×25 cel·les)",
+    "standard_ukaaf": "UKAAF (Regne Unit i internacional — 38×27 cel·les)",
     "grade_label": "Nivell de contracció",
     "grade_1": "Grau 1 (Sense contracció / Lletra per lletra)",
     "grade_2": "Grau 2 (Contret)",
@@ -261,7 +260,7 @@
     "size_full": "Full complet (línia 1 anti-tallat)",
     "lead_lines": "Línies de guia tàctils",
     "braille_labels": "Etiquetes Braille",
-    "footer_tip": "💡 Els contorns negres es converteixen en límits tàctils sòlids; els colors es mapegen automàticament a textures tàctils diferents.",
+    "footer_tip": "Els contorns negres es converteixen en límits tàctils sòlids; els colors es mapegen automàticament a textures tàctils diferents.",
     "open_repositories": "Obri repositoris tàctils:",
     "no_diagrams": "No s'han trobat diagrames coincidents."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Estat de viatge de retorn sense pèrdues",
     "precedence_status": "Estat de regles de precedència braille",
     "perfect_match": "Coincidència de viatge de retorn 100% (0 discrepàncies)",
-    "badge_warn": "⚠ {count} per revisar",
+    "badge_warn": "{count} per revisar",
     "badge_title": "{count} discrepàncis de paraula trobades durant la retrotraducció de viatge de retorn. Feu clic per anar al primer.",
     "badge_clean": "Comprovació de viatge de retorn: no s'han trobat discrepàncis de paraula."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Tens canvis sense desar. Estàs segur que vols sortir sense desar?",
     "unsaved_load": "Tens canvis sense desar. Carregar un fitxer nou substituirà el teu document actual. Continuar?",
     "unsaved_clear": "Tens canvis sense desar. Estàs segur que vols netejar el document?",
-    "drop_hint": "⬇ Deixa un document per importar-lo a l'editor",
+    "drop_hint": "Deixa un document per importar-lo a l'editor",
     "notice": "Notificació",
     "close_notice": "Tanca notificació"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Text del document",
+      "math_keyboard_toggle": "Teclat de matemàtiques",
       "label": "Text",
       "toolbar_aria": "Formatació",
       "style_label": "Estil de paràgraf",
@@ -443,8 +443,8 @@
       "graphic_cats": "Categories de gràfics",
       "graphic_list": "Diagrames gràfics tàctils",
       "formula_search_label": "Cerca fórmules",
-      "btactile_link": "BTactile (gratuït) ↗",
-      "tgil_link": "APH TGIL (1.800+ plantilles) ↗"
+      "btactile_link": "BTactile (gratuït)",
+      "tgil_link": "APH TGIL (1.800+ plantilles)"
     },
     "settings": {
       "list_spaced": "Llista amb línies en blanc (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Connexió directa a màquines de microcontrolador personalitzades (ESP32-S3, RP2040/RP2350, STM32, Arduino) evitant bloquejos de controladors d'impressora del sistema operatiu.",
       "graphics_hint": "Quan està desmarcat, els diagrames s'exporten com descripcions de nota del transcriptor accessibles per a màquines i pantalles braille només de text.",
       "tactile_heading": "Transmissió en directe de pantalla tàctil (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Connecta Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Connecta USB / HID (Monarch)",
+      "tactile_connect_ble": "Connecta Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Connecta USB / HID (Monarch)",
       "tactile_disconnect": "Desconnecta pantalla",
       "tactile_sim_monarch": "Prova Monarch simulada (32×10)",
       "tactile_sim_dotpad": "Prova DotPad simulada (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Transmet la vista prèvia de braille en viu i gràfics tàctils directament sobre WebBluetooth (DotPad BLE UART) o WebHID (Monarch/USB) sense controladors externs.",
       "perkins_hint": "— escriu braille amb tecles SDF i JKL",
       "ascii_hint": "— mostra caràcters braille ASCII bruts",
+      "show_explanation_bar": "Mostra la barra d'explicació",
+      "show_explanation_bar_hint": "— la franja sota el text i el braille que explica el braille de la paraula on ets",
+      "simple_mode_hint": "— obre Emboss al convertidor simple. Canviar entre el Mode ràpid i l'editor no ho modifica.",
       "covers_hint": "— portades de títol en relleu quan es divideixen llibres"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Capçalera {n}",
       "cell_aria_named": "{header}, fila {row}",
       "cell_aria": "Columna {col}, fila {row}",
-      "too_wide_listed": "⚠ Massa ampla per a columnes — es braillarà com a taula llistada",
+      "too_wide_listed": "Massa ampla per a columnes — es braillarà com a taula llistada",
       "too_wide_listed_title": "Aquesta taula no cap en columnes amb el nombre de cel·les per línia i el mode braille actuals, per això es braillarà com a taula llistada (BANA Formats §11.9) en lloc de columnes en paral·lel.",
-      "too_wide_paragraph": "⚠ Massa ampla per a columnes — es braillarà en forma de paràgraf",
+      "too_wide_paragraph": "Massa ampla per a columnes — es braillarà en forma de paràgraf",
       "too_wide_paragraph_title": "Aquesta taula no cap en columnes amb el nombre de cel·les per línia i el mode braille actuals, per això es braillarà en forma de paràgraf (UKAAF B004 §12) en lloc de columnes en paral·lel."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "No s'han pogut carregar les taules per a \"{code}\" — segueix utilitzant el codi braille anterior.",
-      "failed": "⚠ No s'ha pogut generar el braille.",
+      "failed": "No s'ha pogut generar el braille.",
       "failed_hint": "(Si diu que el motor no està inicialitzat, el motor braille no es va carregar — actualització dura amb Cmd/Ctrl+Shift+R.)",
       "error_status": "Error de representació: {message}"
     },
     "engine": {
       "loading": "Carregant motor braille…",
-      "failed": "⚠ Motor braille no s'ha carregat.",
+      "failed": "Motor braille no s'ha carregat.",
       "failed_hint": "Actualització dura amb Cmd/Ctrl+Shift+R. Si continua, obriu la consola del navegador (Visualització ▸ Desenvolupador) i envieu els errors.",
       "failed_status": "El motor no s'ha carregat: {message}",
       "ready": "Preparat — escriu o formata a l'esquerra; braille s'actualitza en viu."
@@ -715,7 +718,7 @@
       "network_unreachable": "No s'ha pogut arribar a {url}: {message}. Els navegadors no poden obrir connexions TCP brutes (port 9100); la màquina ha d'acceptar HTTP POST o descarrega el .brf i envia-ho amb el teu gestor d'impressió.",
       "usb_bridge_done": "Treball de gofrat entregat a la impressora USB!",
       "needs_webserial": "El gofrat sèrie directe necessita un navegador amb WebSerial (Chrome, Edge, Opera). Pots descarregar l'arxiu .brf per gofrat amb el teu gestor d'impressió o usar mode Xarxa (Port 9100) a Configuració.",
-      "detected": "🔌 Detectat {name} — establit a {cells}×{lines} a {baud} baud."
+      "detected": "Detectat {name} — establit a {cells}×{lines} a {baud} baud."
     },
     "symbols": {
       "title": "Biblioteca de símbols tàctils",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matriu dinàmica",
       "badge_text_only": "Només text",
       "badge_index": "Matriu de punts"
+    },
+    "offline": {
+      "ready": "Emboss està a punt per treballar sense connexió.",
+      "ready_short": "A punt per treballar sense connexió",
+      "not_yet": "Encara es prepara per treballar sense connexió…"
     }
   }
 }

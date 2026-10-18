@@ -206,7 +206,7 @@ describe('F-229 — an image inside a bai-exercise item becomes an embedded tran
     // branch does).
     assert.equal(item.marker, '1.', `item must keep its synthesised print number: ${JSON.stringify(item)}`);
     for (const mode of ['bana', 'ukaaf']) {
-      const out = lines(formatDocument(d, opts(mode))).join('\n');
+      const out = lines(formatDocument(d, opts(mode, { listStyle: 'spaced', docEndMarker: false }))).join('\n');   // UK-5: pin the pre-UK-5 'spaced' style (this test is about marker survival, not list house style) and turn off the UK-6 doc-end marker
       assert.match(out, /^1\. THE @\.<BUTTERFLY@\.> FLEW SOUTH FOR/m,
         `${mode}: the number must lead, and the note must sit INLINE where the picture was:\n${out}`);
       assert.doesNotMatch(out, /\n\s*@\.<BUTTERFLY@\.>\s*\n/, `${mode}: no standalone note line:\n${out}`);
@@ -225,7 +225,7 @@ describe('F-229 — an image inside a bai-exercise item becomes an embedded tran
     const note = list.items[0].segments.find((s) => s.type === 'imgnote');
     assert.ok(note, JSON.stringify(list.items[0]));
     for (const mode of ['bana', 'ukaaf']) {
-      const out = lines(formatDocument(d, opts(mode))).join('\n');
+      const out = lines(formatDocument(d, opts(mode, { listStyle: 'spaced', docEndMarker: false }))).join('\n');   // UK-5: pin the pre-UK-5 'spaced' style (this test is about marker survival, not list house style) and turn off the UK-6 doc-end marker
       assert.match(out, /1\. THE @\.<BUTTERFLY@\.> FLEW SOUTH\./, `${mode}:\n${out}`);
       assert.match(out, /2\. NAME TWO INSECTS\./, `${mode}:\n${out}`);
     }

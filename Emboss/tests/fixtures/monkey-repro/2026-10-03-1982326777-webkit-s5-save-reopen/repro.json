@@ -1,0 +1,41 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 5,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "web/test_corpus_1000/file_0373_Volume_373_Diverse_Corpus.xml",
+ "docSource": "corpus",
+ "docFeatures": null,
+ "docs": {
+  "web/test_corpus_1000/file_0373_Volume_373_Diverse_Corpus.xml": "docs/00-file_0373_Volume_373_Diverse_Corpus.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: note",
+ "message": "the saved file reopens to different braille [first differing block: note] (block #7 not counting empty ones, note / note): first tab has 326 lines, reopened tab has 326; first differences: line 39: first tab \"      @.<,TAB ^1LE@.>\\r\" / reopened tab \"      @.<,TAB LE@.>\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 10,
+ "originalActions": 23,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.1637,
+   "i": 29,
+   "q": "b",
+   "end": "Enter"
+  }
+ ]
+}

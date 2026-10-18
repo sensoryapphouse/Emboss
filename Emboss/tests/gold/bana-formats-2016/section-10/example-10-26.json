@@ -40,7 +40,7 @@
         "items": [
           {
             "level": 0,
-            "text": "1.\\_cast sky"
+            "text": "1. \\_cast sky"
           },
           {
             "level": 0,
@@ -77,5 +77,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; item 3 (visible as \"curricular sports\" behind a torn-paper line, per gold-10-B’s own note) is not in the given braille and is recorded as 'other'."
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; item 3 (visible as \"curricular sports\" behind a torn-paper line, per gold-10-B’s own note) is not in the given braille and is recorded as 'other'. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[2].items[0].text",
+      "was": "1.\\_cast sky",
+      "now": "1. \\_cast sky",
+      "evidence": "references/_gemini/_done/gold-10-A/page-264.png, Example 10-26 print box: \"1. ____cast sky\" - a space follows \"1.\"; the braille line \"#a4 .-ca/ sky\" agrees."
+    }
+  ]
 }

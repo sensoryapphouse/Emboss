@@ -1,0 +1,49 @@
+✖ huge file in a child (5.24125ms)
+✖ big table is read in time (0.978334ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 695.379458
+
+✖ failing tests:
+
+test at tests/d_inner_timeout.test.mjs:2:1
+✖ huge file in a child (5.24125ms)
+  AssertionError [ERR_ASSERTION]: huge-nimas: still running after 90 s (hang)
+  
+  null !== 'x'
+  
+      at TestContext.<anonymous> (file:///scratch/fakeEmboss/tests/d_inner_timeout.test.mjs:2:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'x',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/d_inner_timeout.test.mjs:3:1
+✖ big table is read in time (0.978334ms)
+  AssertionError [ERR_ASSERTION]: big table: took 71234 ms (limit 60000)
+      at TestContext.<anonymous> (file:///scratch/fakeEmboss/tests/d_inner_timeout.test.mjs:3:48)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

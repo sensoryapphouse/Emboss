@@ -19,7 +19,8 @@
         "level": null,
         "text": "script[ref:1] or libretto[ref:a]",
         "features": "Single print line with a superscript numeral 1 after \"script\" and a superscript letter a after \"libretto\".",
-        "items": null
+        "items": null,
+        "blocked": true
       }
     ],
     "notes": [],
@@ -39,5 +40,13 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: no page/line-number evidence; both runs agree, left null. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.2.2.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: no page/line-number evidence; both runs agree, left null. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image PDF p.431 (Example 16-4): the boxed print line(s) start flush at the box's left margin, the same x-position as the box's other lines, with no first-line indent; braille first line is likewise flush. Builder reads blocked:true on the print block."
+    }
+  ]
 }

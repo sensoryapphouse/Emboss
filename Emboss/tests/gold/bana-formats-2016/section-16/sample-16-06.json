@@ -19,12 +19,13 @@
         "level": null,
         "text": "… Do you feel that it is acceptable for a counselor to act as an expert in viability—or employment opportunities that could result from a music education[ref:4]?",
         "features": "First print page, ending with a superscript numeral-4 reference mark; print page number '72' boxed at the top right.",
-        "items": null
+        "items": null,
+        "blocked": true
       },
       {
         "kind": "note",
         "level": null,
-        "text": "[ref:4] See: A Blind Music Student's College Survival Guide",
+        "text": "[ref:4] See: *A Blind Music Student’s College Survival Guide*",
         "features": "Footnote at the foot of print page 72.",
         "items": null
       },
@@ -33,7 +34,8 @@
         "level": null,
         "text": "… And, how many are aware that published labor statistics clearly dispel these myths[ref:5]? …",
         "features": "Second print page (73), ending with a superscript numeral-5 reference mark; print page number '73' boxed at the top right.",
-        "items": null
+        "items": null,
+        "blocked": true
       },
       {
         "kind": "note",
@@ -47,7 +49,7 @@
       {
         "ref": "4",
         "placement": "footnote",
-        "text": "See: A Blind Music Student's College Survival Guide"
+        "text": "See: *A Blind Music Student’s College Survival Guide*"
       },
       {
         "ref": "5",
@@ -87,5 +89,31 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.5.d per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13044 and 13052 (field width 5, digits(17)+3) are each exactly 40 characters, the second a dashed page-change rule ending '#gc'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.5.d per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13044 and 13052 (field width 5, digits(17)+3) are each exactly 40 characters, the second a dashed page-change rule ending '#gc'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "[ref:4] See: A Blind Music Student's College Survival Guide",
+      "now": "[ref:4] See: *A Blind Music Student’s College Survival Guide*",
+      "evidence": "Page image PDF p.451 (Sample 16-6), 300 dpi crop: the title 'A Blind Music Student's College Survival Guide' is italic (the gold braille shows an italic passage indicator around it); 'See:' is plain."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "See: A Blind Music Student's College Survival Guide",
+      "now": "See: *A Blind Music Student’s College Survival Guide*",
+      "evidence": "Same crop; note text now carries the italic title."
+    },
+    {
+      "field": "print.blocks[paragraph].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image PDF p.451 (Sample 16-6), 110 dpi: each body paragraph ('Do you feel...' and 'And, how many...') has its first line at the same left x-position as its continuation line; no first-line indent, so the paragraph is blocked. Builder reads blocked:true."
+    },
+    {
+      "field": "print.blocks[paragraph].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image PDF p.451 (Sample 16-6), 110 dpi: each body paragraph ('Do you feel...' and 'And, how many...') has its first line at the same left x-position as its continuation line; no first-line indent, so the paragraph is blocked. Builder reads blocked:true."
+    }
+  ]
 }

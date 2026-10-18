@@ -1,0 +1,41 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 13,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "web/test_corpus_1000/file_0338_Volume_338_Diverse_Corpus.xml",
+ "docSource": "corpus",
+ "docFeatures": null,
+ "docs": {
+  "web/test_corpus_1000/file_0338_Volume_338_Diverse_Corpus.xml": "docs/00-file_0338_Volume_338_Diverse_Corpus.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: caption",
+ "message": "the saved file reopens to different braille [first differing block: caption] (block #8 not counting empty ones, caption / note): first tab has 321 lines, reopened tab has 321; first differences: line 52: first tab \"    ,TABLE ^2#A4A3 ,EMPIRICAL\\r\" / reopened tab \"@.<,TAB _/LE NOTE3 ,VALUES NORMALIZ$\\r\" | line 53: first tab \"    ,M1SURE;TS & ,9V>I.E ,VALUES\\r\" / reopened tab \"  AG/ BASEL9E METRICS4@.>\\r\" | line 54: first tab \"@.<,TAB _/LE NOTE3 ,VALUES NORMALIZ$\\r\" / reopened tab \"\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 17,
+ "originalActions": 82,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.0925,
+   "i": 73,
+   "q": "",
+   "end": "Enter"
+  }
+ ]
+}

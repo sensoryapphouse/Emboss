@@ -44,7 +44,7 @@
     ],
     "notes": "\"Cigarettes\" is a cell-5-style group heading with no entries of its own; \"Daily\" and \"Half pack or more per day\" are the actual data rows, every entry being a percentage.",
     "surroundingText": null,
-    "printFeatures": "Bordered box; title above the box, bold; header row (years) bold with ruled line beneath."
+    "printFeatures": "Bordered box; the title (\"Table 16\" / \"Long-Term Trends in Grade 12\", bold, centred) is INSIDE the box at the top, above a ruled line; header row (years) with ruled line beneath; the group heading \"Cigarettes\" stands alone in its row, with the two data rows indented beneath it."
   },
   "braille": {
     "width": 40,
@@ -58,12 +58,12 @@
       "      @.<,figures 9 ! table >e",
       "    p]c5tages4@.>",
       "",
-      "                 #aiib #aiic #aiid",
-      "                 \"3333 \"3333 \"3333",
+      "                 #aiib  #aiic  #aiid",
+      "                 \"3333  \"3333  \"3333",
       ",cig>ettes",
-      "  ,daily \"\"\"\"\"\" #ag4b #ai4j #ai4d",
+      "  ,daily \"\"\"\"\"\"  #ag4b  #ai4j  #ai4d",
       "  ,half pack or",
-      "    m p] \"d \"\"\" #aj4j #aj4i #aa4b",
+      "    m p] \"d \"\"\"  #aj4j  #aj4i  #aa4b",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -75,5 +75,33 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers' first cell resolved to '' (blank above the year columns in print, confirmed against the PDF image, p. 321), not a fabricated '(row)' placeholder."
+  "resolution": "print.headers' first cell resolved to '' (blank above the year columns in print, confirmed against the PDF image, p. 321), not a fabricated '(row)' placeholder. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box; title above the box, bold; header row (years) bold with ruled line beneath.",
+      "now": "Bordered box; the title (\"Table 16\" / \"Long-Term Trends in Grade 12\", bold, centred) is INSIDE the box at the top, above a ruled line; header row (years) with ruled line beneath; the group heading \"Cigarettes\" stands alone in its row, with the two data rows indented beneath it.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.321 (90 dpi): the outer box encloses the title lines. The old text said \"title above the box, bold\"."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "                 #aiib #aiic #aiid",
+        "                 \"3333 \"3333 \"3333",
+        "  ,daily \"\"\"\"\"\" #ag4b #ai4j #ai4d",
+        "    m p] \"d \"\"\" #aj4j #aj4i #aa4b"
+      ],
+      "after": [
+        "                 #aiib  #aiic  #aiid",
+        "                 \"3333  \"3333  \"3333",
+        "  ,daily \"\"\"\"\"\"  #ag4b  #ai4j  #ai4d",
+        "    m p] \"d \"\"\"  #aj4j  #aj4i  #aa4b"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 9, 10, 12, 14 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 321 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (4). Where: column gap (table / related columns / columned list) (3); column gap after guide dots (2); table separation line (1)."
+    }
+  ]
 }

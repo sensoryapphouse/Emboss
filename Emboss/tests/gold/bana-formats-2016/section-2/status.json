@@ -1,0 +1,194 @@
+{
+  "example-2-1": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: Title Page 2.3.5e (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8c: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8d(1): Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-12": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8d(2): Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-13": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8d(1): Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-14": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -4 (expected 4, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8d(4): Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-15": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -8 (expected 8, actual 0). Input-model limitation: Second Title Page (BANA 2.4): Emboss has no Second Title Page overflow renderer (Emboss/docs/transcriber-pages-plan.md stage 7); gold has no print model for the original title page."
+  },
+  "example-2-16": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -8 (expected 8, actual 0). Input-model limitation: Dedication page (BANA 2.9): Emboss has no dedication front-matter block with its own page and p-prefixed number (Emboss/docs/transcriber-pages-plan.md stages 1-2); gold has no print model."
+  },
+  "example-2-17": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Table of contents 2.10.8a: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "example-2-18": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -12 (expected 12, actual 0). Input-model limitation: Table of contents 2.10.8b: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "example-2-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6a(1): Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-3": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6a(2): Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-4": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6d(2): Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-5": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6f(6): Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-6": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6g(2): Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "example-2-7": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8a: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-8": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8a: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "example-2-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8b: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "sample-2-01": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,,X CAME F 2N ! S9K6,'\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: Title Page 2.3.4e (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-02": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",H\\\"\\\\ON ,MI6L9 ,CALI=NIA ,MA?\" vs actual null. line count differs by -10 (expected 10, actual 0). Input-model limitation: Title Page 2.3.4f (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-03": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",MC,D\\\\GAL ,LITTELL ,,,! LANGUAGE (,'\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: Title Page 2.3.4g (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-04": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,MACMILLAN_/,MC,,GRAW-,,HILL ,LANGUAGE\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: Title Page 2.3.4g (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-05": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,,HOLT ELE;TS ( LIT]ATURE,'\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: Title Page 2.3.4h (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-06": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",WE/]N ,CIVILIZA;N2 ,,F\\\\R? ,,$I;N\" vs actual null. line count differs by -2 (expected 2, actual 0). Input-model limitation: Title Page 2.3.4h (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-07": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,ELECTRA\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: Title Page 2.3.5g (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-08": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",PUBLI%$ BY ,?OMSON ,C\\\\RSE ,TE*NOLOGY\" vs actual null. line count differs by -3 (expected 3, actual 0). Input-model limitation: Title Page publisher/copyright/transcriber segment 2.3.6c: Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; Emboss/docs/transcriber-pages-plan.md stages 5-6)."
+  },
+  "sample-2-09": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",TITLE2 ,$I;N2 ,GRADE ,LEVEL\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: Title Page volume, braille-page and print-page information 2.3.8 cross-reference: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "sample-2-10": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"          ,,RELUCTANT ,,G5IUS\" vs actual null. line count differs by -29 (expected 29, actual 0). Input-model limitation: Second Title Page (BANA 2.4): Emboss has no Second Title Page overflow renderer (Emboss/docs/transcriber-pages-plan.md stage 7); gold has no print model for the original title page."
+  },
+  "sample-2-11": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                ,,3T5TS               VI\" vs actual null. line count differs by -11 (expected 11, actual 0). Input-model limitation: Table of contents 2.10 cross-reference: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-12": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"            ,,BRIEF ,,3T5TS          VII\" vs actual null. line count differs by -21 (expected 21, actual 0). Input-model limitation: Table of contents 2.10.1e: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-13": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                 ,3T5TS               #B\" vs actual null. line count differs by -19 (expected 19, actual 0). Input-model limitation: Table of contents 2.10.7 cross-reference: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-14": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"            @.<,VOLUME #A@.>          IV\" vs actual null. line count differs by -13 (expected 13, actual 0). Input-model limitation: Table of contents 2.10.7 cross-reference: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-15": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                ,,3T5TS               VI\" vs actual null. line count differs by -14 (expected 14, actual 0). Input-model limitation: Table of contents 2.10.9d: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-16": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                 ,3T5TS               VI\" vs actual null. line count differs by -15 (expected 15, actual 0). Input-model limitation: Table of contents 2.10.10b: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-17": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -17 (expected 17, actual 0). Input-model limitation: Table of contents 2.10.11: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-18": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"\" vs actual null. line count differs by -14 (expected 14, actual 0). Input-model limitation: Table of contents 2.10.11: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-19": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"            ,DETAIL$ ,3T5TS          XIV\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: Table of contents 2.10.12c: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-20": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"         ,/UD5T ,RES\\\\RCE ,BANK       XIV\" vs actual null. line count differs by -11 (expected 11, actual 0). Input-model limitation: Table of contents 2.10.13 cross-reference: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-21-pronunciation-key-in-front-matter-pages": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"           ,PRONUNCIA;N ,KEY        #GHB\" vs actual null. line count differs by -10 (expected 10, actual 0). Input-model limitation: Pronunciation key among the front matter pages (BANA 2.11.1): no print model for it, and Emboss has no p-prefixed front-matter page numbering or forced front-matter page-per-item breaks for it (Emboss/docs/transcriber-pages-plan.md stages 1-2)."
+  },
+  "sample-2-21-special-symbols": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"           ,,,SPECIAL SYMBOLS\" vs actual null. line count differs by -11 (expected 11, actual 0). Input-model limitation: Special Symbols page (BANA 2.5): Emboss now has the sympage renderer (G8 stage 5: centred heading, .= entries with 1-3 margins, t-number), but the gold gives no print description (print.blocks is [] and there is no print field naming the symbols). Its entries (dot locator, boldface word indicator, boldface passage indicator, acute accent abov"
+  },
+  "sample-2-21-table-of-contents-volume-1": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                ,,3T5TS               ;V\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: Table of contents front matter page (BANA 2.10, 2.11.1): gold has no print model to build headings from, and Emboss's buildToc numbers pages with a P prefix and its own layout, not the p-prefixed front-matter series and multi-volume/brief-contents rules of 2.10 (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-21-table-of-contents-volume-2": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"                ,,3T5TS               ;V\" vs actual null. line count differs by -14 (expected 14, actual 0). Input-model limitation: Table of contents front matter page (BANA 2.10, 2.11.1): gold has no print model to build headings from, and Emboss's buildToc numbers pages with a P prefix and its own layout, not the p-prefixed front-matter series and multi-volume/brief-contents rules of 2.10 (Emboss/docs/transcriber-pages-plan.md stage 1)."
+  },
+  "sample-2-21-title-page-volume-1": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \",,,PR5TICE HALL LIT]ATURE3,' ,BRONZE\" vs actual null. line count differs by -25 (expected 25, actual 0). Input-model limitation: Title page for volume 1 (BANA 2.3, 2.11.1): Emboss has no data-driven Title Page with publisher, copyright, transcriber and volume segments, and volumeTitlePage renders no t-prefixed page number (F-57; Emboss/docs/transcriber-pages-plan.md stages 1, 5, 6)."
+  },
+  "sample-2-21-transcribers-notes": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"        ,,TRANSCRIB]',S ,,NOTES\" vs actual null. line count differs by -11 (expected 11, actual 0). Input-model limitation: Transcriber's Notes page (BANA 2.6.1): Emboss now has the tnpage renderer (centred heading, 3-1 entries, t-number; plan stage 3), but the gold gives no print wording for the entries (print.blocks is [] and there is no print.tnEntries; only \"The atlas is omitted.\" is stated in print form, BANA 2.6.1d, and its other two entries appear only as"
+  },
+  "sample-2-3-7a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-2-6-1c": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-2-6-1d": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-2-8-1a": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

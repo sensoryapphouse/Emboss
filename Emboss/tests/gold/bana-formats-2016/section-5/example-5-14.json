@@ -27,7 +27,7 @@
         "text": null,
         "features": "Single numbered grammar-rule item; 'and' is italicized.",
         "items": [
-          "Use a plural verb with subjects joined by *and*."
+          "1. Use a plural verb with subjects joined by *and*."
         ]
       },
       {
@@ -66,5 +66,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on braille byte-for-byte. The demonstration sentence's double-underline SPAN was a genuine disagreement: A said the underline covers all three words 'orchestra and band' (with italic 'and' nested inside); B's own {{tdN}} markup excluded 'and band' from the underline span. Resolved in favor of A, directly verified against the braille: '@#7' opens before 'orchestra' and '@#'' does not close until immediately after 'band' (line 9, 'my s*ool's @#7or*e/ra .1& b&@#''), with '.1' (italic) opening and implicitly closing on 'and' strictly inside that still-open underline — B's account is a transcription error, not a valid alternative reading. Both runs agree on `illustrates.rule` (5.5.3); only the exact quote text differed (A paraphrased the braille symbols as bracketed descriptions, B quoted the literal .txt ASCII) — B's literal quote is used here since it matches the primary source exactly."
+  "resolution": "Both runs agree on braille byte-for-byte. The demonstration sentence's double-underline SPAN was a genuine disagreement: A said the underline covers all three words 'orchestra and band' (with italic 'and' nested inside); B's own {{tdN}} markup excluded 'and band' from the underline span. Resolved in favor of A, directly verified against the braille: '@#7' opens before 'orchestra' and '@#'' does not close until immediately after 'band' (line 9, 'my s*ool's @#7or*e/ra .1& b&@#''), with '.1' (italic) opening and implicitly closing on 'and' strictly inside that still-open underline — B's account is a transcription error, not a valid alternative reading. Both runs agree on `illustrates.rule` (5.5.3); only the exact quote text differed (A paraphrased the braille symbols as bracketed descriptions, B quoted the literal .txt ASCII) — B's literal quote is used here since it matches the primary source exactly. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.1.items.0",
+      "was": "Use a plural verb with subjects joined by *and*.",
+      "now": "1. Use a plural verb with subjects joined by *and*.",
+      "evidence": "Page image PDF p.136 (Example 5-14): the print line begins with the numeral '1.' (plain weight) before 'Use a plural verb'; the braille also has #a4. Gold item text omitted it."
+    }
+  ]
 }

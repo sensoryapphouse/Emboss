@@ -23,23 +23,23 @@
         "kind": "list",
         "items": [
           {
-            "marker": "a.",
+            "marker": "1.",
             "text": "Divide between 2 consonants (`rab-bit`, `mon-key`)"
           },
           {
-            "marker": "b.",
+            "marker": "2.",
             "text": "Divide between 2 words (`back-yard`, `lip-stick`)"
           },
           {
-            "marker": "c.",
+            "marker": "3.",
             "text": "Divide before and after blends (`trans-fer`, `brink-man-ship`)"
           }
         ]
       }
     ],
-    "notes": "A cell-5 heading, then a lettered list of three syllable-division rules, each with two hyphen-joined, wholly-uncontracted example words in parentheses.",
+    "notes": "A cell-5 heading, then a numbered list of three syllable-division rules, each with two hyphen-joined, wholly-uncontracted example words in parentheses.",
     "surroundingText": [],
-    "printFeatures": "Italicised heading; a numbered/lettered rules list."
+    "printFeatures": "Italicised heading; a numbered rules list (1. 2. 3.)."
   },
   "braille": {
     "width": 40,
@@ -61,5 +61,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. illustrates.rule: corrected to '17.8.1a' — this exact sample is the one the source itself cross-references by name at the end of clause a ('If a word is divided between lines... (See Sample 17-10...)'); both runs' own bare '17.8.1'/'17.8.1' is less precise. Modeled as a lettered list; each example word wholly uncontracted (17.8.1). EXPECT PARTIAL: standards-map.md (BANA 17.8.1a) already confirms a space-syllabified word wraps correctly at the syllable break (wrapCells only breaks at a space), but a HYPHEN-joined syllabified word with no spaces (e.g. 'brink-man-ship') does NOT — wrapCells' hard-chunk fallback has no hyphen awareness, splitting mid-syllable instead."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. illustrates.rule: corrected to '17.8.1a' — this exact sample is the one the source itself cross-references by name at the end of clause a ('If a word is divided between lines... (See Sample 17-10...)'); both runs' own bare '17.8.1'/'17.8.1' is less precise. Modeled as a lettered list; each example word wholly uncontracted (17.8.1). EXPECT PARTIAL: standards-map.md (BANA 17.8.1a) already confirms a space-syllabified word wraps correctly at the syllable break (wrapCells only breaks at a space), but a HYPHEN-joined syllabified word with no spaces (e.g. 'brink-man-ship') does NOT — wrapCells' hard-chunk fallback has no hyphen awareness, splitting mid-syllable instead. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[*].marker",
+      "was": "a. b. c.",
+      "now": "1. 2. 3.",
+      "evidence": "references/_gemini/_done/gold-17-A/page-487.png: the printed list is numbered \"1. Divide between 2 consonants (rab-bit, mon-key)\", \"2. ...\", \"3. ...\". Braille lines 2/4/6 begin #A4 #B4 #C4 (number sign + digit + period), i.e. numerals, matching the print."
+    },
+    {
+      "field": "print.printFeatures / print.notes",
+      "was": "a numbered/lettered rules list; lettered list",
+      "now": "numbered rules list",
+      "evidence": "same image: numerals, not letters."
+    }
+  ]
 }

@@ -60,10 +60,13 @@
     "toc": "OBSAH",
     "print": "Tiskový náhled (LHS)",
     "braille": "Braille",
+    "export": "Exportovat",
+    "export_title": "Exportovat Braille (BRF, eBraille) nebo odeslat do tiskárny na Braille",
+    "emboss_menu": "Odeslat do tiskárny na Braille",
     "braille_view": "Přehled Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Vytlačit",
     "emboss_tooltip": "Odeslat dokument do tiskárny na Braille",
     "clear_doc": "Vymazat dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Poetická strofa verš řádek (1-3)",
     "exercise_title": "Otázka cvičení",
     "exercise_desc": "Číslovaná otázka cvičení (1-5 / 3-5)",
-    "caption_title": "Popisek/přiřazení",
-    "caption_desc": "Popisek obrázku nebo přiřazení (7-5)",
     "footnote_title": "Poznámka pod čarou",
     "footnote_desc": "Text poznámky pod čarou (1-3)",
     "note_title": "Poznámka překladatele",
@@ -163,8 +164,6 @@
     "page_desc": "Vložit indikátor zalomení tiskové stránky",
     "printpage_title": "Číslo tiskové stránky",
     "printpage_desc": "Vložit indikátor zalomení tiskové stránky",
-    "code_title": "Kód počítače",
-    "code_desc": "Vložit blok kódu s ukazateli UEB",
     "indent_title": "Odsazení / vnořený podpunkt",
     "indent_desc": "Vnořit položku seznamu nebo cvičení hlouběji (Tab)",
     "outdent_title": "Zmenšit odsazení / zvýšit položku",
@@ -185,8 +184,8 @@
     "language_label": "Jazyk rozhraní",
     "language_help": "Zvolte jazyk používaný pro tlačítka, nabídky, dialogy a oznámení čtečky obrazovky.",
     "standard_label": "Norma Braille",
-    "standard_bana": "BANA (USA a Kanada — 40×25 buněk)",
-    "standard_ukaaf": "UKAAF (Spojené království a mezinárodní — 38×25 buněk)",
+    "standard_bana": "BANA (USA a Kanada — 38×25 buněk)",
+    "standard_ukaaf": "UKAAF (Spojené království a mezinárodní — 38×27 buněk)",
     "grade_label": "Úroveň kontrakce",
     "grade_1": "Stupeň 1 (Bez kontrakce / Písmeno po písmeni)",
     "grade_2": "Stupeň 2 (Smluvní)",
@@ -261,7 +260,7 @@
     "size_full": "Plný list (řádek 1 bez řezu)",
     "lead_lines": "Hmatové vodící čáry",
     "braille_labels": "Štítky Braille",
-    "footer_tip": "💡 Černé obrysy se stanou pevnými hmatovými hranicemi; barvy se automaticky mapují na odlišné hmatové textury.",
+    "footer_tip": "Černé obrysy se stanou pevnými hmatovými hranicemi; barvy se automaticky mapují na odlišné hmatové textury.",
     "open_repositories": "Otevřete hmatové úložiště:",
     "no_diagrams": "Nebyli nalezeni žádní odpovídající diagramy."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Stav bezeztrátového zpáteční cesty",
     "precedence_status": "Stav pravidel priorit Braille",
     "perfect_match": "100% shoda zpáteční cesty (0 nesoulad)",
-    "badge_warn": "⚠ {count} ke kontrole",
+    "badge_warn": "{count} ke kontrole",
     "badge_title": "{count} nesoulad slov nalezen během zpáteční překladu. Kliknutím přejdete na první.",
     "badge_clean": "Kontrola zpáteční cesty: není nalezeno žádné nesoulad slov."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Máte neuložené změny. Jste si jisti, že chcete skončit bez uložení?",
     "unsaved_load": "Máte neuložené změny. Načtení nového souboru nahradí váš aktuální dokument. Pokračovat?",
     "unsaved_clear": "Máte neuložené změny. Jste si jisti, že chcete vymazat dokument?",
-    "drop_hint": "⬇ Přetáhněte dokument pro jeho import do editoru",
+    "drop_hint": "Přetáhněte dokument pro jeho import do editoru",
     "notice": "Oznámení",
     "close_notice": "Zavřít oznámení"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Text dokumentu",
+      "math_keyboard_toggle": "Matematická klávesnice",
       "label": "Text",
       "toolbar_aria": "Formátování",
       "style_label": "Styl odstavce",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategorie grafiky",
       "graphic_list": "Diagramy hmatové grafiky",
       "formula_search_label": "Vyhledejte vzorce",
-      "btactile_link": "BTactile (zdarma) ↗",
-      "tgil_link": "APH TGIL (1 800+ šablon) ↗"
+      "btactile_link": "BTactile (zdarma)",
+      "tgil_link": "APH TGIL (1 800+ šablon)"
     },
     "settings": {
       "list_spaced": "Seznam s prázdnými řádky (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Přímé připojení k vlastním strojům mikrokontroléru (ESP32-S3, RP2040/RP2350, STM32, Arduino) obcházejícím blokování ovladačů tiskárny OS.",
       "graphics_hint": "Pokud není zaškrtnuto, jsou diagramy exportovány jako přístupné popisy poznámky pisatele pro textové tiskárny a Braillovy displeje.",
       "tactile_heading": "Živé streamování hmatového displeje (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Připojit Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Připojit USB / HID (Monarch)",
+      "tactile_connect_ble": "Připojit Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Připojit USB / HID (Monarch)",
       "tactile_disconnect": "Odpojit displej",
       "tactile_sim_monarch": "Testovat simulovaný Monarch (32×10)",
       "tactile_sim_dotpad": "Testovat simulovaný DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Streamujte živý Braillův náhled a hmatovou grafiku přímo přes WebBluetooth (DotPad BLE UART) nebo WebHID (Monarch/USB) bez externích ovladačů.",
       "perkins_hint": "— napsaní Braillu s klávesami SDF a JKL",
       "ascii_hint": "— zobrazit surové znaky ASCII Braillu",
+      "show_explanation_bar": "Zobrazit panel s vysvětlením",
+      "show_explanation_bar_hint": "— pruh pod textem a Braillem, který vysvětluje Braille pro slovo, na kterém jste",
+      "simple_mode_hint": "— otevřít Emboss v jednoduchém převodníku. Přepínání mezi Rychlým režimem a editorem to nemění.",
       "covers_hint": "— embosované titulní obálky při rozdělování knih"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Záhlaví {n}",
       "cell_aria_named": "{header}, řádek {row}",
       "cell_aria": "Sloupec {col}, řádek {row}",
-      "too_wide_listed": "⚠ Příliš široká pro sloupce — vytištěna v Braillu jako vypsaná tabulka",
+      "too_wide_listed": "Příliš široká pro sloupce — vytištěna v Braillu jako vypsaná tabulka",
       "too_wide_listed_title": "Tato tabulka se nevejde do sloupců při aktuálním počtu buněk na řádek a režimu Braillu, proto bude vytištěna v Braillu jako vypsaná tabulka (BANA Formats §11.9) místo sloupců vedle sebe.",
-      "too_wide_paragraph": "⚠ Příliš široká pro sloupce — vytištěna v Braillu ve formě odstavce",
+      "too_wide_paragraph": "Příliš široká pro sloupce — vytištěna v Braillu ve formě odstavce",
       "too_wide_paragraph_title": "Tato tabulka se nevejde do sloupců při aktuálním počtu buněk na řádek a režimu Braillu, proto bude vytištěna v Braillu ve formě odstavce (UKAAF B004 §12) místo sloupců vedle sebe."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nelze načíst tabulky pro \"{code}\" — stále používáte předchozí kód Braillu.",
-      "failed": "⚠ Braille nelze vygenerovat.",
+      "failed": "Braille nelze vygenerovat.",
       "failed_hint": "(Pokud říká, že engine není inicializován, Braillův engine se nenačetl — tvrdé obnovení pomocí Cmd/Ctrl+Shift+R.)",
       "error_status": "Chyba při vykreslování: {message}"
     },
     "engine": {
       "loading": "Načítání Braillova enginu…",
-      "failed": "⚠ Braillův engine se nenačetl.",
+      "failed": "Braillův engine se nenačetl.",
       "failed_hint": "Tvrdé obnovení pomocí Cmd/Ctrl+Shift+R. Pokud to pokračuje, otevřete konzolu prohlížeče (Zobrazit ▸ Vývojář) a odešlete chyby.",
       "failed_status": "Engine se nenačetl: {message}",
       "ready": "Připraveno — pište nebo formátujte vlevo; Braille se aktualizuje živě."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nelze dosáhnout {url}: {message}. Prohlížeče nemohou otevírat surová TCP připojení (port 9100); stroj musí přijmout HTTP POST nebo si stáhněte .brf a odešlete jej vaším správcem tisku.",
       "usb_bridge_done": "Práce embosování doručena na USB tiskárnu!",
       "needs_webserial": "Přímé sériové embosování potřebuje prohlížeč s WebSerial (Chrome, Edge, Opera). Můžete si stáhnout soubor .brf pro embosování vaším správcem tisku nebo použít režim sítě (port 9100) v Nastavení.",
-      "detected": "🔌 Detekováno {name} — nastaveno na {cells}×{lines} na {baud} baud."
+      "detected": "Detekováno {name} — nastaveno na {cells}×{lines} na {baud} baud."
     },
     "symbols": {
       "title": "Knihovna hmatových symbolů",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamická matrice",
       "badge_text_only": "Pouze text",
       "badge_index": "Bodová matrice"
+    },
+    "offline": {
+      "ready": "Emboss je připraven pracovat offline.",
+      "ready_short": "Připraveno pro práci offline",
+      "not_yet": "Stále se připravuje na práci offline…"
     }
   }
 }

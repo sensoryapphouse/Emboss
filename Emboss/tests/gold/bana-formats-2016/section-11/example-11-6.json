@@ -37,10 +37,10 @@
     "lines": [
       "",
       "7777777777777777777777777777777777777777",
-      "               ,habitat ,pot5tial",
+      "               ,habitat  ,pot5tial",
       ",species       ,unit     ,popula;n",
-      "\"333333333333 \"3333333 \"333333333",
-      ",grizzly ,be> ,v>iable ,undet]m9$"
+      "\"333333333333  \"3333333  \"333333333",
+      ",grizzly ,be>  ,v>iable  ,undet]m9$"
     ],
     "pageBreaks": [],
     "notes": "'Potential Population' runs over two lines: 'Habitat Potential' appears on the heading's first line (left-justified over its own column, i.e. 'Habitat' over the Habitat-Unit column and 'Potential' over the Potential-Population column) and 'Species / Unit / Population' complete each heading on the second line — all column headings end together on that same (second) line per rule 11.4.1.d. No separation line appears until after both heading lines are complete."
@@ -52,5 +52,23 @@
     "A",
     "B"
   ],
-  "resolution": "No content differences beyond header-schema normalization."
+  "resolution": "No content differences beyond header-schema normalization.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "               ,habitat ,pot5tial",
+        "\"333333333333 \"3333333 \"333333333",
+        ",grizzly ,be> ,v>iable ,undet]m9$"
+      ],
+      "after": [
+        "               ,habitat  ,pot5tial",
+        "\"333333333333  \"3333333  \"333333333",
+        ",grizzly ,be>  ,v>iable  ,undet]m9$"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 2, 4, 5 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 290 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (3). Where: column gap (table / related columns / columned list) (2); table separation line (1)."
+    }
+  ]
 }

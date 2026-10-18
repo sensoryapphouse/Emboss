@@ -56,10 +56,10 @@
       ",se5 f abv1 ! sky",
       ",is deep4 ,cl\\ds float d[n \"!1",
       "",
-      "   ^/   @+ @+^/     @+ ^/",
+      "   ^/   @+  @+^/    @+  ^/",
       "  ,seen from above1 the sky",
       "",
-      "   @+ ^/     ^/     ^/     @+  ^/",
+      "   @+ ^/     ^/     ^/    @+   ^/",
       "  ,is deep4 ,clouds float down there1"
     ],
     "pageBreaks": [],
@@ -71,5 +71,21 @@
     "A",
     "B"
   ],
-  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "   ^/   @+ @+^/     @+ ^/",
+        "   @+ ^/     ^/     ^/     @+  ^/"
+      ],
+      "after": [
+        "   ^/   @+  @+^/    @+  ^/",
+        "   @+ ^/     ^/     ^/    @+   ^/"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 12, 15 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 377 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (1); run misplaced (1). Where: poetry stress/scansion mark positions (2)."
+    }
+  ]
 }

@@ -17,14 +17,15 @@
       {
         "kind": "paragraph",
         "blocked": true,
-        "text": "Picture Riddle",
+        "text": "PICTURE RIDDLE",
         "features": "Flush title line (braille shows zero extra indent), not a centred heading."
       },
       {
         "kind": "paragraph",
         "blocked": true,
         "text": "Solve the following riddle with the help of the pictures under it.",
-        "features": "Given braille shows a uniform indent on every line — built blocked:true."
+        "features": "Given braille shows a uniform indent on every line — built blocked:true.",
+        "directions": true
       },
       {
         "kind": "other",
@@ -34,7 +35,7 @@
       {
         "kind": "paragraph",
         "blocked": true,
-        "text": "Why do golfers carry an extra pair of socks?"
+        "text": "WHY DO GOLFERS CARRY AN EXTRA PAIR OF SOCKS?"
       },
       {
         "kind": "note",
@@ -77,19 +78,19 @@
       "    sep>ates symbols t =m a ^w4 ,spaces",
       "    sep>ate ea* set ( symbols4@.>",
       "\"\"=;;;                              a#bi",
-      "k   e   y         c a k     e",
+      "k   e   y         c  a  k   e",
       ".--#bc-#aj       #c-#ad-.--#ah",
       "",
-      "b   a g          f   i   s h",
+      "b   a  g         f   i   s  h",
       ".--#d-#aa        .--#ai-#e-#ae",
       "",
-      " h o s     e      n a    i l",
+      " h  o  s   e      n  a   i  l",
       "#h-#ba-.--#f     #bj-.--#a-#ag",
       "",
-      "c l    o w    n   t r   e e",
-      ".--.--#af-.--#b #g-.--#ab-#i",
+      "c  l   o  w   n   t r   e  e",
+      ".--.--#af-.--#b  #g-.--#ab-#i",
       "",
-      " t e    n t",
+      " t  e   n  t",
       "#ac-.--#bb-.-",
       "\"\"=;'",
       "",
@@ -108,5 +109,49 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged from A (independently re-derived and confirmed; B's 4 extra blank lines between the two pages were a fabrication not present in the source, replaced with the standard pageBreaks marker). Print side reconciled from a fresh back-translation of the whole passage; B's own guessed riddle answer (\"IN CASE THEY GET A HOLE IN ONE!\") is corroborated independently here by checking the answer's own word-length pattern (2,4,4,3,1,4,2,3) against the numbered blank-groups in the given braille, which match exactly."
+  "resolution": "Braille unchanged from A (independently re-derived and confirmed; B's 4 extra blank lines between the two pages were a fabrication not present in the source, replaced with the standard pageBreaks marker). Print side reconciled from a fresh back-translation of the whole passage; B's own guessed riddle answer (\"IN CASE THEY GET A HOLE IN ONE!\") is corroborated independently here by checking the answer's own word-length pattern (2,4,4,3,1,4,2,3) against the numbered blank-groups in the given braille, which match exactly. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Picture Riddle",
+      "now": "PICTURE RIDDLE",
+      "evidence": "Page image references/_gemini/_done/gold-19-B/page-530.png (Sample 19-4): title printed in capitals, 'PICTURE RIDDLE', large orange display type."
+    },
+    {
+      "field": "print.print.blocks.1.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Same image: 'Solve the following riddle with the help of the pictures under it. ...' is the puzzle's instruction paragraph; gold braille sets it 5-5. (Gold's text stops after the first sentence because the braille excerpt ends with an elision; print continues 'First, write the name of each item ...'.)"
+    },
+    {
+      "field": "print.print.blocks.3.text",
+      "was": "Why do golfers carry an extra pair of socks?",
+      "now": "WHY DO GOLFERS CARRY AN EXTRA PAIR OF SOCKS?",
+      "evidence": "Same image: the riddle question is printed in bold red capitals; gold braille also uses a capitals passage (,,,)."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "k   e   y         c a k     e",
+        "b   a g          f   i   s h",
+        " h o s     e      n a    i l",
+        "c l    o w    n   t r   e e",
+        ".--.--#af-.--#b #g-.--#ab-#i",
+        " t e    n t"
+      ],
+      "after": [
+        "k   e   y         c  a  k   e",
+        "b   a  g         f   i   s  h",
+        " h  o  s   e      n  a   i  l",
+        "c  l   o  w   n   t r   e  e",
+        ".--.--#af-.--#b  #g-.--#ab-#i",
+        " t  e   n  t"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 14, 17, 20, 23, 24, 26 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 532 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (5); two blank cells collapsed to one (1). Where: code/puzzle spacing (6)."
+    }
+  ]
 }

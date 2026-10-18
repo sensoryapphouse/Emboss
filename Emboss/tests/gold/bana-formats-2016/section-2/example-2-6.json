@@ -1,0 +1,40 @@
+{
+  "id": "example-2-6",
+  "title": "Example 2-6: Printing History",
+  "pdfPages": [
+    9
+  ],
+  "textLines": [
+    1713,
+    1719
+  ],
+  "illustrates": {
+    "rule": "2.3.6g(2)",
+    "quote": "(2) The format of the printing history is an agency decision. It is recommended that print be followed. Precede the printing history letters/numbers with the identifier “Printing history:”."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-053.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",pr9t+ hi/ory3 #d #e #f #g #h #i",
+      "  \"<#jdb_/#jdc\"> #jh #jg #jf #je"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 8"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id."
+}

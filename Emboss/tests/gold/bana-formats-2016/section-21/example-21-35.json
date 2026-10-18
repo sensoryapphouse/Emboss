@@ -19,12 +19,12 @@
         "style": "glossary",
         "items": [
           {
-            "term": null,
+            "term": "live¹",
             "def": "/lĭv/ v. intr. To be alive; exist",
             "level": 1
           },
           {
-            "term": null,
+            "term": "live²",
             "def": "/līv/ adj. Having life; alive: live animals",
             "level": 1
           }
@@ -53,5 +53,13 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[*].term",
+      "was": "null (the entry word \"live\" and its superscript number were missing)",
+      "now": "\"live¹\" and \"live²\"",
+      "evidence": "references/_gemini/_done/gold-21-A/page-575.png (Example 21-35): the print entries read \"live¹ /lĭv/ v. intr. To be alive; exist\" and \"live² /līv/ adj. Having life; alive: live animals\" - the entry word with its superscript number, then the pronunciation. Braille: live;9#a _/l@+iv_/ ;v4 ... The superscript is written with the Unicode superscript digit; the runner has no superscript-number-after-entry-word mechanism (F-199), so the example stays not-modelled/mismatch."
+    }
+  ]
 }

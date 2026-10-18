@@ -1,0 +1,50 @@
+{
+ "version": 2,
+ "runSeed": "1081764635",
+ "session": 10,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "tests/fixtures/import-audit/html/h03-lists.html",
+ "docSource": "import-audit",
+ "docFeatures": null,
+ "docs": {
+  "tests/fixtures/import-audit/html/h03-lists.html": "docs/00-h03-lists.html"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: heading",
+ "message": "the saved file reopens to different braille [first differing block: heading] (block #0 not counting empty ones, heading / table): first tab has 51 lines, reopened tab has 51; first differences: line 1: first tab \"\\r\" / reopened tab \"           NOT SEEN HEADER\\r\" | line 2: first tab \",HEADER #A   ,HEADER #B   ,HEADER #C\\r\" / reopened tab \"\\r\" | line 3: first tab \"\\\"3333333333  \\\"3333333333  \\\"3333333333\\r\" / reopened tab \",HEADER #A   ,HEADER #B   ,HEADER #C\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 25,
+ "originalActions": 25,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.0905,
+   "i": 27,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 3
+  },
+  {
+   "t": "key",
+   "key": "Shift+Enter",
+   "n": 3
+  }
+ ]
+}

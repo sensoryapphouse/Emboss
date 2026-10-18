@@ -1,0 +1,32 @@
+{
+ "id": "05-headings:5000-txt",
+ "budget": {
+  "timeSec": 30,
+  "heapMB": 1024,
+  "rssMB": 800
+ },
+ "status": "FAIL",
+ "timeSec": 0,
+ "peakMB": 0,
+ "failures": [
+  {
+   "item": "5000-txt",
+   "reason": "not run: the unit's time budget of 1 s was used up by the items before it",
+   "file": "/scratch/ex-slow/inputs/05-headings_5000-txt/001-5000-txt.txt"
+  }
+ ],
+ "warns": [],
+ "notes": [],
+ "items": [
+  {
+   "id": "5000-txt",
+   "file": "/scratch/ex-slow/inputs/05-headings_5000-txt/001-5000-txt.txt",
+   "status": "FAIL",
+   "reasons": [
+    "not run: the unit's time budget of 1 s was used up by the items before it"
+   ],
+   "warns": [],
+   "notes": []
+  }
+ ]
+}

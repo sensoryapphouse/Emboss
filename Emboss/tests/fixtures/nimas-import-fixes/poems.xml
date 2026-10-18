@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-GB">
+<head><meta name="dc:Title" content="Poems fixture"/><meta name="dc:Identifier" content="poems-fixture"/></head>
+<book>
+<frontmatter><doctitle>Poems fixture</doctitle><docauthor>Fixture Author</docauthor></frontmatter>
+<bodymatter>
+<level1><h1>Poems</h1>
+<p>Text before the first poem.</p>
+<poem><title>Poem One Title</title><author>Poet One</author><linegroup><line>First line of one</line><line>Second line of one</line></linegroup><linegroup><line>Second stanza of one</line></linegroup></poem>
+<p>Text between the poems.</p>
+<poem><title>Only A Title</title><linegroup><line>Untitled-author line A</line><line>Untitled-author line B</line></linegroup></poem>
+<poem><author>Only An Author</author><linegroup><line>Author-only line A</line></linegroup></poem>
+<poem><linegroup><line>Bare poem line A</line><line>Bare poem line B</line></linegroup><byline>Byline after the lines</byline></poem>
+<poem><title>Adjacent Poem X</title><author>Poet X</author><linegroup><line>Adjacent X line</line></linegroup></poem>
+<poem><title>Adjacent Poem Y</title><author>Poet Y</author><linegroup><line>Adjacent Y line</line></linegroup></poem>
+<poem><title>Title Only Poem</title></poem>
+<p>Text after the poems.</p>
+</level1>
+<level1><h1>Next chapter</h1><p>Text of the next chapter.</p></level1>
+</bodymatter>
+</book>
+</dtbook>

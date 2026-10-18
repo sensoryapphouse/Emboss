@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 13 Poetry"/><meta name="dc:Identifier" content="stage4-13"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 13 Poetry</doctitle></frontmatter><bodymatter><level1>
+<h1>Poems and Songs</h1>
+<poem><title>Evening</title>
+<linegroup><line>The sun goes down behind the hill,</line><line>The fields are quiet, calm and still.</line></linegroup>
+<linegroup><line>A single star begins to glow,</line><line>The river murmurs soft and low.</line></linegroup></poem>
+<byline>Anonymous</byline>
+<poem><title>Round the Garden</title>
+<linegroup><line>Round and round the garden</line><line>Like a teddy bear;</line><line>One step, two step,</line><line>Tickle you under there.</line></linegroup></poem>
+<p>Refrain:</p>
+<poem><linegroup><line>Sing hey, sing ho,</line><line>Away we go.</line></linegroup></poem>
+</level1></bodymatter></book></dtbook>

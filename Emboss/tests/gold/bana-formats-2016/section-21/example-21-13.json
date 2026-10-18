@@ -30,7 +30,7 @@
           },
           {
             "level": 1,
-            "text": "Acquired immune deficiency syndrome “(AIDS)”"
+            "text": "Acquired immune deficiency syndrome (AIDS)"
           },
           {
             "level": 2,
@@ -68,5 +68,13 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[1].text",
+      "was": "Acquired immune deficiency syndrome “(AIDS)”",
+      "now": "Acquired immune deficiency syndrome (AIDS)",
+      "evidence": "references/_gemini/_done/gold-21-A/page-564.png (Example 21-13): the print entry reads \"Acquired immune deficiency syndrome (AIDS)\" with plain parentheses; there are no quotation marks. The braille has \"<,,aids\"> (parentheses)."
+    }
+  ]
 }

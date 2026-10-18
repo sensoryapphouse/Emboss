@@ -83,12 +83,12 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "A centered heading followed by a list of simple glossary entries. The terms are bold, and the word 'uxil' is italicized."
+    "printFeatures": "A centered heading followed by a list of simple glossary entries. Each bold entry word is followed by a colon (the colon is roman), and the word 'uxil' is italicized."
   },
   "braille": {
     "width": 41,
     "lines": [
-      "      ,gloss>y ( ,botanical ,t]ms    #ajb",
+      "      ,gloss>y ( ,botanical ,t]ms   #ajb",
       "",
       ",appress$3 ,ly+ close & flat ag/1 z",
       "  hairs ag/ a surface4",
@@ -112,7 +112,7 @@
       "  color4",
       ",ligule3 ,a t9y membran\\s projec;n (t5",
       "  fr+$ ) hairs1 f ! summit ( ! %1? (",
-      "          ,appress$,-,ligule          #,-",
+      "          ,appress$,-,ligule         #,-",
       "  grasses1 locat$ 9 ! .1uxil4      a#ajb",
       ",panicle3 ,a loose irregul>ly bran*$",
       "  9floresc;e \"<fl[] clu/]\">4"
@@ -130,5 +130,29 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "The terms are bold, and the word 'uxil' is italicized.",
+      "now": "Each bold entry word is followed by a colon (roman); 'uxil' is italic",
+      "evidence": "references/_gemini/_done/gold-21-A/page-582.png (Sample 21-1): every entry begins \"Appressed:\", \"Axil:\", \"Axillary:\", \"Bipinnately Compound:\", \"Calyx:\" ... with a colon after the bold entry word. The item terms in the print blocks stay without the colon; gold-run.mjs restores it when printFeatures says an entry word is followed by a colon (printColonAfterEntryWord21), so the description now says so. The print page number (102, boxed, top right) is page furniture and is not in print.blocks."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      ,gloss>y ( ,botanical ,t]ms    #ajb",
+        "          ,appress$,-,ligule          #,-"
+      ],
+      "after": [
+        "      ,gloss>y ( ,botanical ,t]ms   #ajb",
+        "          ,appress$,-,ligule         #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 24 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 583 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (2). Where: before right-margin page number (2)."
+    }
+  ]
 }

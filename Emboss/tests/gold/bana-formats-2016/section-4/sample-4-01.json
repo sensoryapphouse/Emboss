@@ -43,21 +43,21 @@
       {
         "kind": "list-item",
         "level": null,
-        "text": "Compare and contrast nonspecific and specific immunity.",
+        "text": "**Compare and contrast** nonspecific and specific immunity.",
         "features": "Bulleted sidebar list item (1 of 3).",
         "marker": "•"
       },
       {
         "kind": "list-item",
         "level": null,
-        "text": "Summarize the structure and function of the lymphatic system.",
+        "text": "**Summarize** the structure and function of the lymphatic system.",
         "features": "Bulleted sidebar list item (2 of 3); this and the next item are present in print but the braille excerpt transcribes only item 1, replacing items 2-3 with a \"444\" continuation marker -- see uncertain.",
         "marker": "•"
       },
       {
         "kind": "list-item",
         "level": null,
-        "text": "Distinguish between passive and active immunity.",
+        "text": "**Distinguish** between passive and active immunity.",
         "features": "Bulleted sidebar list item (3 of 3); see uncertain.",
         "marker": "•"
       },
@@ -70,7 +70,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "white blood cells: large, nucleated blood cells that play a major role in protecting the body from foreign substances and microorganisms",
+        "text": "**white blood cells:** large, nucleated blood cells that play a major role in protecting the body from foreign substances and microorganisms",
         "features": "Glossary-style definition entry, bold term followed by definition."
       },
       {
@@ -232,7 +232,7 @@
       ",! immune sy/em has two ma9 compon5ts3",
       "nonspecific immun;y & specific immun;y4",
       "                                     #,-",
-      "      ,r1l-,_w ,r1d+ ,l9k          a#ajhd",
+      "      ,r1l-,_w ,r1d+ ,l9k         a#ajhd",
       ",we live ) a numb] ( pot5tial pa?og5s s*",
       "z bact]ia & viruses t c cause 41se4 444",
       "",
@@ -274,5 +274,33 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree byte-for-byte between runs (independently re-checked). print.blocks structure was substantially rebuilt from the PDF page image (p.118) directly, since the two runs disagreed extensively on block order/kind/level (84 raw diffs): run A omitted \"Reading Preview\" as a separate block (folding it into descriptive text) even though the braille gives it its own centered line; run B, conversely, is missing several blocks A has and mis-orders/mis-levels others. The image (references/bana/braille-formats-2016.pdf, p.118) was read directly to rebuild the full, correctly-ordered block list, and every heading's level was independently verified against the (agreed) braille.lines' own leading-blank-cell counts (see differences.md for the line-by-line indent table). `illustrates.rule` resolved to \"4.1.1\" only (run A), not run B's \"4.1.1 / 4.2.1\": rule 4.1.1's own text is what explicitly cross-references \"Sample 4-1\" (line ~3143 of the .txt); rule 4.2.1 cross-references Example 4-1 instead, and the §11 precedent's illustrates schema names one specific rule."
+  "resolution": "braille.lines agree byte-for-byte between runs (independently re-checked). print.blocks structure was substantially rebuilt from the PDF page image (p.118) directly, since the two runs disagreed extensively on block order/kind/level (84 raw diffs): run A omitted \"Reading Preview\" as a separate block (folding it into descriptive text) even though the braille gives it its own centered line; run B, conversely, is missing several blocks A has and mis-orders/mis-levels others. The image (references/bana/braille-formats-2016.pdf, p.118) was read directly to rebuild the full, correctly-ordered block list, and every heading's level was independently verified against the (agreed) braille.lines' own leading-blank-cell counts (see differences.md for the line-by-line indent table). `illustrates.rule` resolved to \"4.1.1\" only (run A), not run B's \"4.1.1 / 4.2.1\": rule 4.1.1's own text is what explicitly cross-references \"Sample 4-1\" (line ~3143 of the .txt); rule 4.2.1 cross-references Example 4-1 instead, and the §11 precedent's illustrates schema names one specific rule. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[4..6].text (Reading Preview objectives)",
+      "was": "plain text",
+      "now": "first word or phrase in **bold**: \"Compare and contrast\", \"Summarize\", \"Distinguish\"",
+      "evidence": "Page image p.118 (PDF page 118), sidebar Objectives: each bullet opens with a bold verb (\"Compare and contrast\", \"Summarize\", \"Distinguish\") followed by roman text."
+    },
+    {
+      "field": "print.blocks[8].text (white blood cells)",
+      "was": "plain text",
+      "now": "\"white blood cells:\" in **bold**",
+      "evidence": "Page image p.118, Review Vocabulary: the term \"white blood cells:\" is bold, the definition roman."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      ,r1l-,_w ,r1d+ ,l9k          a#ajhd"
+      ],
+      "after": [
+        "      ,r1l-,_w ,r1d+ ,l9k         a#ajhd"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 25 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 120 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

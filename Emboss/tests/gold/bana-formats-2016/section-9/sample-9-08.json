@@ -35,7 +35,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "          ,am]ica1 ! ,b1uti;l        #fij",
+      "          ,am]ica1 ! ,b1uti;l       #fij",
       "              ^c ,copy\"r #aigf by ,fr$",
       "              ,bock ,music ,company4",
       "              ,all \"rs res]v$4 ,us$ by",
@@ -55,5 +55,19 @@
     "Braille line 1 (heading + hymn number) measures 41 characters, one more than the 40-cell width used throughout the rest of this file. Left as measured/verbatim; confirmed identically present in both the .txt and the PDF page image, so it is a property of the source itself, not a disagreement between the two runs or between the two source formats."
   ],
   "sources": ["A", "B"],
-  "resolution": "A and B disagreed on exactly one point in `braille.lines`: B measured line 1 at 41 characters (flagged as an anomaly, not corrected); A's own array (reproduced identically otherwise) implicitly treats it as an ordinary line without separately flagging the width. Settled directly against the primary source: a byte-precise Python read of braille-formats-2016.txt line 7067 confirms the post-gutter content is exactly 41 characters (10 blank cells + 19-character title braille + 8 blank cells + 4-character '#fij'), and the PDF page image (p.245) shows nothing anomalous about this specific line's dot pattern -- both source formats agree the line is genuinely 41 cells wide. Kept at 41, per B's measurement, not silently corrected to 40. Print-content structure: A folded the hymn number and composer credits into the heading's own `features` and gave the byline+credits+copyright notice as one combined block; B separated the copyright notice as its own 'source' block (matching the braille's own cell-14 lines 2-5) and the credits as 'other', keeping only the byline as 'attribution' -- but neither run's account puts the copyright notice back in the right place relative to the byline/credits stack. Rebuilt directly from the agreed `braille.lines`' own line-by-line indentation: heading, then the copyright notice ('source', matching lines 2-5's cell-14 indent, immediately after the heading per 9.5.5), then the byline+3-credit-line stack (cell 7, lines 7-10) bundled into one 'other' block since Emboss has no block type that reproduces 4 short forced-line-break phrases with no blank line between any of them (an attribution block wraps continuously; 4 separate ones would each force an unwanted trailing blank)."
+  "resolution": "A and B disagreed on exactly one point in `braille.lines`: B measured line 1 at 41 characters (flagged as an anomaly, not corrected); A's own array (reproduced identically otherwise) implicitly treats it as an ordinary line without separately flagging the width. Settled directly against the primary source: a byte-precise Python read of braille-formats-2016.txt line 7067 confirms the post-gutter content is exactly 41 characters (10 blank cells + 19-character title braille + 8 blank cells + 4-character '#fij'), and the PDF page image (p.245) shows nothing anomalous about this specific line's dot pattern -- both source formats agree the line is genuinely 41 cells wide. Kept at 41, per B's measurement, not silently corrected to 40. Print-content structure: A folded the hymn number and composer credits into the heading's own `features` and gave the byline+credits+copyright notice as one combined block; B separated the copyright notice as its own 'source' block (matching the braille's own cell-14 lines 2-5) and the credits as 'other', keeping only the byline as 'attribution' -- but neither run's account puts the copyright notice back in the right place relative to the byline/credits stack. Rebuilt directly from the agreed `braille.lines`' own line-by-line indentation: heading, then the copyright notice ('source', matching lines 2-5's cell-14 indent, immediately after the heading per 9.5.5), then the byline+3-credit-line stack (cell 7, lines 7-10) bundled into one 'other' block since Emboss has no block type that reproduces 4 short forced-line-break phrases with no blank line between any of them (an attribution block wraps continuously; 4 separate ones would each force an unwanted trailing blank).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "          ,am]ica1 ! ,b1uti;l        #fij"
+      ],
+      "after": [
+        "          ,am]ica1 ! ,b1uti;l       #fij"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 245 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

@@ -1,0 +1,84 @@
+{
+  "id": "example-22-3",
+  "title": "Example 22-3: Bibliography with Three-Hyphen Dash",
+  "pdfPages": [
+    2
+  ],
+  "textLines": [
+    17276,
+    17289
+  ],
+  "illustrates": {
+    "rule": "22.2.3",
+    "quote": "If two or more works by the same author are listed, a long print dash frequently is substituted for the author’s name. Use the long dash, spaced as shown in print, to reflect this type of print dash accurately. Follow print if other symbols are used."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "Puzo, Mario. The Family: A Novel. Completed by Carol Gino. New York: Harper, 2001.",
+        "features": "Hanging indent. 'The Family: A Novel.' in italics, including the full stop (the braille passage terminator follows the period).",
+        "emphasis": [
+          [
+            "The Family: A Novel.",
+            "i"
+          ]
+        ]
+      },
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "Rowling, J. K. Harry Potter and the Chamber of Secrets. New York: Scholastic, 1999.",
+        "features": "Hanging indent. 'Harry Potter and the Chamber of Secrets.' in italics, including the full stop.",
+        "emphasis": [
+          [
+            "Harry Potter and the Chamber of Secrets.",
+            "i"
+          ]
+        ]
+      },
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "---. Harry Potter and the Prisoner of Azkaban. Thorndike, ME: Thorndike, 2000.",
+        "features": "Hanging indent. Begins with three bold hyphens in place of the author's name. 'Harry Potter and the Prisoner of Azkaban.' in italics, including the full stop.",
+        "emphasis": [
+          [
+            "---",
+            "b"
+          ],
+          [
+            "Harry Potter and the Prisoner of Azkaban.",
+            "i"
+          ]
+        ]
+      }
+    ],
+    "notes": "Print original is the picture in the example box (gold-22-A/page-598.png).",
+    "surroundingText": null,
+    "printFeatures": "Bibliography entries with hanging indents and long print dashes."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",puzo1 ,m>io4 .7,! ,family3 ,a ,novel4.'",
+      "  ,complet$ by ,c>ol ,g9o4 ,new ,york3",
+      "  ,h>p]1 #bjja4",
+      ",r[l+1 ;,j4 ;,k4 .7,h>ry ,pott] & !",
+      "  ,*amb] ( ,secrets4.' ,new ,york3",
+      "  ,s*ola/ic1 #aiii4",
+      "---4 .7,h>ry ,pott] & ! ,prison] (",
+      "  ,azkaban4.' ,?orndike1 ,,me3",
+      "  ,?orndike1 #bjjj4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. Runover indent kept as spaces (U+2800 cells converted). 4 blank picture-area source lines after the caption are excluded."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree with the source and with each other. Neither run listed the print-picture blank lines here, so no gap handling was needed in the runs; the 4 blank source lines after the caption are print-original area and are excluded, as in section 20. illustrates: A and B rule text agrees with the source (verified). print: A and B agree in text; italic extents checked against the braille passage indicators and the page image (the italic run includes the full stop where the braille terminator follows the period). pdfPages: A gave the PNG number ([598]), B the section page; B's is used."
+}

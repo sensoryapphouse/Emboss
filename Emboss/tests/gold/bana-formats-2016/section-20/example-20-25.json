@@ -1,0 +1,58 @@
+{
+  "id": "example-20-25",
+  "title": "Example 20-25: Stressed/Syllabified, No Pronunciation",
+  "pdfPages": [
+    8
+  ],
+  "textLines": [
+    15838,
+    15844
+  ],
+  "illustrates": {
+    "rule": "20.6.1",
+    "quote": "Entry words may or may not be syllabified and/or include pronunciation or stress."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "HEAD-piece  A helmet or cap worn to protect the head.",
+        "features": "'HEAD-piece' in ordinary (roman) type, NOT bold; stress shown by capitals, syllable break by hyphen; definition in roman",
+        "entry": {
+          "term": "HEAD-piece",
+          "termBold": "HEAD-piece",
+          "def": "A helmet or cap worn to protect the head."
+        }
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-546.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "h1dpiece ,,h1d-piece ,a helmet or cap",
+      "  worn to protect ! h1d4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Cited rule: as Example 20-21."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (as Example 20-21). print: B left blocks empty; A's blocks checked against the page image; text accepted, features expanded from the image. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].features",
+      "was": "'HEAD-piece' in bold (stress shown by capitals, syllable break by hyphen); definition in roman",
+      "now": "'HEAD-piece' in ordinary roman type, not bold",
+      "evidence": "references/bana/braille-formats-2016.pdf p.546, rendered at 300 dpi and cropped to the Example 20-25 box: \"HEAD-piece\" is the same weight as the definition \"A helmet or cap worn to protect the head.\"; in the neighbouring boxes (20-21..20-24, 20-26) the entry word is clearly bold, here it is not. The gold braille has no bold indicator either (h1dpiece ,,h1d-piece ,a helmet ...). Builder must learn: the ENTRY20 table in gold-run.mjs still bolds \"HEAD-piece\" (termB); it should not."
+    }
+  ]
+}

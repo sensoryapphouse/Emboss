@@ -15,7 +15,7 @@
   "print": {
     "blocks": [
       {
-        "kind": "paragraph",
+        "kind": "directions",
         "text": "Who did what? Before each name below, write the letter of the statement you associate with that person."
       },
       {
@@ -103,5 +103,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8181-8198). Print: the synthesised first heading corrected from A/B’s shared guess \"Who\" to \"Name\" after back-translating the given braille (louis.backTranslate('\"N') = \"name\"); the file’s own bold citation title, present in A’s own print.blocks, is dropped here per this reconciliation’s convention — matching every other gold section — that a sample’s own citation title lives only in `title`/`id`, never a print.blocks heading, since the given braille has no row for it at all)."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8181-8198). Print: the synthesised first heading corrected from A/B’s shared guess \"Who\" to \"Name\" after back-translating the given braille (louis.backTranslate('\"N') = \"name\"); the file’s own bold citation title, present in A’s own print.blocks, is dropped here per this reconciliation’s convention — matching every other gold section — that a sample’s own citation title lives only in `title`/`id`, never a print.blocks heading, since the given braille has no row for it at all). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].kind",
+      "was": "paragraph",
+      "now": "directions",
+      "evidence": "references/_gemini/_done/gold-10-A/page-281.png, Sample 10-12: the opening \"Who did what? Before each name below, write the letter ...\" is the exercise directions, and the braille (lines 5-6) sets it with 5-5 directions margins."
+    }
+  ]
 }

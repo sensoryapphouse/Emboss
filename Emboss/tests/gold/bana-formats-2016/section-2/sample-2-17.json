@@ -1,0 +1,52 @@
+{
+  "id": "sample-2-17",
+  "title": "Sample 2-17: Dots Separating Linear Contents Entries",
+  "pdfPages": [
+    43
+  ],
+  "textLines": [
+    2680,
+    2699
+  ],
+  "illustrates": {
+    "rule": "2.10.11",
+    "quote": "Short-listed or linear contents entries without page numbers are listed at the correct subentry level. (See Sample 2-17: Dots Separating Linear Contents Entries on page 2-43 and Sample 2-18: Listed Unnumbered Contents Entries on page 2-44.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-087.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",writ+ ,ab ,lit]ature",
+      "  #c4e ,analyz+ ,\"* ,descrip;ns \"\"\" #aef",
+      "    ,write a ,\"* ,analysis2 ,us+",
+      "        ,comput]s2 ,view+ &",
+      "        ,repres5t+2 @#1,gramm>",
+      "        @#1,l9k",
+      ",writ+ ,process 9 ,ac;n",
+      "  ,descriptive ,writ+ ,project \"\"\"\" #afj",
+      "    ,write ab an imag9$ place4",
+      "      ,prewrit+",
+      "      ,draft+",
+      "      ,revis+",
+      "      ,$it+_/,pro(r1d+",
+      "      ,publi%+_/,pres5t+"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id."
+}

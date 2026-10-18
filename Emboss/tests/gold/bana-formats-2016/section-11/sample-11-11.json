@@ -69,7 +69,7 @@
     ],
     "notes": "Several cells are blank in print because that survey question was not asked/reported in earlier years (e.g. no 1986 data at all for Amy/butyl nitrites, PCP, or Ecstasy; no 1986-1988 data for Ecstasy).",
     "surroundingText": null,
-    "printFeatures": "Bordered box; two-line bold centered title above the box, italic subtitle line (\"Percentage saying...\") beneath the title; header row (years) bold with ruled line beneath; row headings left-aligned, some wrapping to two lines (\"Amy/butyl nitrites\", \"Some other hallucinogen\", \"Ecstasy (MDMA)\")."
+    "printFeatures": "Bordered box; the title block is INSIDE the box at the top, centred: \"Table 13\" and \"Trends in Availability of Drugs by 12th Graders\" in bold, then a plain (not italic) left-aligned sub-line (\"Percentage saying “fairly easy” or “very easy” to get\"); header row (years) bold with ruled line beneath; row headings bold and left-aligned, some wrapping to two lines."
   },
   "braille": {
     "width": 40,
@@ -85,17 +85,17 @@
       "      @.<,a s]ies ( dot #es acr ! wid? (",
       "    a column 9dicates a blank space4@.>",
       "",
-      "              #aihf #aihg #aihh #aihi",
-      "              \"3333 \"3333 \"3333 \"3333",
-      ",m>ijuana \"\" #he4b #hd4h #he4j #hd4c",
+      "              #aihf  #aihg  #aihh  #aihi",
+      "              \"3333  \"3333  \"3333  \"3333",
+      ",m>ijuana \"\"  #he4b  #hd4h  #he4j  #hd4c",
       ",amy_/butyl",
-      "  nitrites    \"\"\"\"\" #bc4i #be4i #bf4h",
-      ",,lsd \"\"\"\"\"\" #bh4e #ca4d #cc4c #ch4c",
+      "  nitrites    \"\"\"\"\"  #bc4i  #be4i  #bf4h",
+      ",,lsd \"\"\"\"\"\"  #bh4e  #ca4d  #cc4c  #ch4c",
       ",\"s o!r",
-      "  halluc9og5 #bd4i #be4j #bf4b #bh4b",
-      ",,pcp \"\"\"\"\"\" \"\"\"\"\" #bb4h #bd4i #bh4i",
+      "  halluc9og5  #bd4i  #be4j  #bf4b  #bh4b",
+      ",,pcp \"\"\"\"\"\"  \"\"\"\"\"  #bb4h  #bd4i  #bh4i",
       ",ec/asy",
-      "  \"<,,mdma\"> \"\"\"\"\" \"\"\"\"\" \"\"\"\"\" #ba4g",
+      "  \"<,,mdma\">  \"\"\"\"\"  \"\"\"\"\"  \"\"\"\"\"  #ba4g",
       "gggggggggggggggggggggggggggggggggggggggg"
     ],
     "pageBreaks": [],
@@ -106,5 +106,41 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers' first cell resolved to '' (blank above the drug-name row headings in print, confirmed against the PDF image, p. 318), not a fabricated '(drug)' placeholder."
+  "resolution": "print.headers' first cell resolved to '' (blank above the drug-name row headings in print, confirmed against the PDF image, p. 318), not a fabricated '(drug)' placeholder. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box; two-line bold centered title above the box, italic subtitle line (\"Percentage saying...\") beneath the title; header row (years) bold with ruled line beneath; row headings left-aligned, some wrapping to two lines (\"Amy/butyl nitrites\", \"Some other hallucinogen\", \"Ecstasy (MDMA)\").",
+      "now": "Bordered box; the title block is INSIDE the box at the top, centred: \"Table 13\" and \"Trends in Availability of Drugs by 12th Graders\" in bold, then a plain (not italic) left-aligned sub-line (\"Percentage saying “fairly easy” or “very easy” to get\"); header row (years) bold with ruled line beneath; row headings bold and left-aligned, some wrapping to two lines.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.318 (rendered at 200 dpi, cropped): the box border encloses the title lines; \"Table 13\" and the title line are bold and centred; the sub-line is plain type, left-aligned, and not italic. The old text said \"two-line bold centered title above the box, italic subtitle line beneath the title\"."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "              #aihf #aihg #aihh #aihi",
+        "              \"3333 \"3333 \"3333 \"3333",
+        ",m>ijuana \"\" #he4b #hd4h #he4j #hd4c",
+        "  nitrites    \"\"\"\"\" #bc4i #be4i #bf4h",
+        ",,lsd \"\"\"\"\"\" #bh4e #ca4d #cc4c #ch4c",
+        "  halluc9og5 #bd4i #be4j #bf4b #bh4b",
+        ",,pcp \"\"\"\"\"\" \"\"\"\"\" #bb4h #bd4i #bh4i",
+        "  \"<,,mdma\"> \"\"\"\"\" \"\"\"\"\" \"\"\"\"\" #ba4g"
+      ],
+      "after": [
+        "              #aihf  #aihg  #aihh  #aihi",
+        "              \"3333  \"3333  \"3333  \"3333",
+        ",m>ijuana \"\"  #he4b  #hd4h  #he4j  #hd4c",
+        "  nitrites    \"\"\"\"\"  #bc4i  #be4i  #bf4h",
+        ",,lsd \"\"\"\"\"\"  #bh4e  #ca4d  #cc4c  #ch4c",
+        "  halluc9og5  #bd4i  #be4j  #bf4b  #bh4b",
+        ",,pcp \"\"\"\"\"\"  \"\"\"\"\"  #bb4h  #bd4i  #bh4i",
+        "  \"<,,mdma\">  \"\"\"\"\"  \"\"\"\"\"  \"\"\"\"\"  #ba4g"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 11, 12, 13, 15, 16, 18, 19, 21 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 318 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (8). Where: column gap (table / related columns / columned list) (6); column gap after guide dots (5); table separation line (1); column gap before a guide-dotted (blank) entry (1)."
+    }
+  ]
 }

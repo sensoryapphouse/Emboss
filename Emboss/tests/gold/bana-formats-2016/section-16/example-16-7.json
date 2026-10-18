@@ -24,7 +24,7 @@
       {
         "kind": "note",
         "level": null,
-        "text": "[ref:†]ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians.",
+        "text": "[ref:†]**ka'tsina spirit:** A mountain spirit of the Laguna Pueblo Indians.",
         "features": "Set below a short horizontal rule at the foot of the print page; \"ka'tsina spirit\" is bold, the dagger mark precedes it.",
         "items": null
       }
@@ -33,7 +33,7 @@
       {
         "ref": "†",
         "placement": "footnote",
-        "text": "ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians."
+        "text": "**ka'tsina spirit:** A mountain spirit of the Laguna Pueblo Indians."
       }
     ],
     "surroundingText": "Illustration directly below rule 16.5.1a, showing the note separation line placed between the passage and the foot-of-page note, followed by a cross-reference to Sample 16-3: Sequentially Numbered Notes on page 16-20.",
@@ -63,5 +63,19 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12531 is a full 40-cell blank line and line 12532 (the page-change dashed rule ending '#gbc') is exactly 40 characters, with no left padding on this item at all. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12531 is a full 40-cell blank line and line 12532 (the page-change dashed rule ending '#gbc') is exactly 40 characters, with no left padding on this item at all. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "[ref:†]ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians.",
+      "now": "[ref:†]**ka'tsina spirit:** A mountain spirit of the Laguna Pueblo Indians.",
+      "evidence": "Page image PDF p.434 (Example 16-7), zoomed 250 dpi: 'ka'tsina spirit:' (both words and the colon) is bold, the rest of the note plain. Gold text carried no markup (only in features)."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "ka'tsina spirit: A mountain spirit of the Laguna Pueblo Indians.",
+      "now": "**ka'tsina spirit:** A mountain spirit of the Laguna Pueblo Indians.",
+      "evidence": "Same image as above; note text now carries the bold headword. Builder must learn: splitParagraphRefs passes note text through esc(), so this markup is not yet read."
+    }
+  ]
 }

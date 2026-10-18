@@ -24,7 +24,7 @@
     "width": 40,
     "lines": [
       "444",
-      "          ,table #i4e \"<3t4\">                           #de"
+      "          ,table #i4e \"<3t4\">        #de"
     ],
     "pageBreaks": [],
     "notes": "The two lines shown are explicitly labelled by the book as physical braille-page lines 24 and 25 (not sequential lines 1-2 of a normal excerpt): line 24 is blank (rendered here as the omission/ellipsis marker '444' — see uncertain note), and line 25 repeats the centered table number 'Table 9.5' followed by the transcriber's-note-bracketed '(cont.)' and the braille page number on the far right ('#de' = 45)."
@@ -37,5 +37,19 @@
     "A",
     "B"
   ],
-  "resolution": "No braille.lines differences (both runs match the source exactly). Decoded, with reasonable confidence, what '444' most likely represents (see uncertain notes)."
+  "resolution": "No braille.lines differences (both runs match the source exactly). Decoded, with reasonable confidence, what '444' most likely represents (see uncertain notes).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "          ,table #i4e \"<3t4\">                           #de"
+      ],
+      "after": [
+        "          ,table #i4e \"<3t4\">        #de"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 1 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 289 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

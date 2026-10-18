@@ -1,4 +1,4 @@
-import path from 'path'; import fs from 'fs'; import { fileURLToPath } from 'url';
+import path from 'path'; import fs from 'fs'; import zlib from 'zlib'; import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Maths gate: validates the four maths improvements end-to-end in Node.
 //   1. Nemeth code-switch wrap (engine/maths.mjs logic, mirrored here with the
@@ -164,20 +164,21 @@ function mathToBrf(seg, mode) {
   check('HTML: block math carries MathML with <mfrac>', /<mfrac>/.test(htmlDoc.blocks[1]?.mathml || ''));
 
   console.log('\n--- 4b. docx inline m:oMath (interleaved with text runs) ---');
-  // Minimal STORED-entry zip writer (unzipEntry only needs a valid EOCD/central
-  // directory + local header; CRC is not checked), matching format/test-scripts.mjs.
+  // Minimal STORED-entry zip writer (unzipEntry needs a valid EOCD/central
+  // directory + local header, and the true CRC-32: it is checked, audit S2b #21), matching format/test-scripts.mjs.
   function storedZip(name, content) {
     const enc = new TextEncoder();
     const nameB = enc.encode(name), data = enc.encode(content);
     const nlen = nameB.length, dlen = data.length;
+    const crc = zlib.crc32(data);   // S2b item 21 (audit 15 Oct 2026): the reader now checks the zip's CRC-32, so the test zip carries the true one (it wrote 0)
     const b = [];
     const u16 = (v) => b.push(v & 0xff, (v >> 8) & 0xff);
     const u32 = (v) => b.push(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >>> 24) & 0xff);
-    u32(0x04034b50); u16(20); u16(0); u16(0); u16(0); u16(0); u32(0); u32(dlen); u32(dlen); u16(nlen); u16(0);
+    u32(0x04034b50); u16(20); u16(0); u16(0); u16(0); u16(0); u32(crc); u32(dlen); u32(dlen); u16(nlen); u16(0);
     for (const x of nameB) b.push(x);
     for (const x of data) b.push(x);
     const cdOffset = b.length;
-    u32(0x02014b50); u16(20); u16(20); u16(0); u16(0); u16(0); u16(0); u32(0); u32(dlen); u32(dlen);
+    u32(0x02014b50); u16(20); u16(20); u16(0); u16(0); u16(0); u16(0); u32(crc); u32(dlen); u32(dlen);
     u16(nlen); u16(0); u16(0); u16(0); u16(0); u32(0); u32(0);
     for (const x of nameB) b.push(x);
     const cdSize = b.length - cdOffset;

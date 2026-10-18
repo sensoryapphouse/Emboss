@@ -1,15 +1,25 @@
 {
   "id": "sample-12-7",
   "title": "Sample 12-7: Word List in a Sidebar",
-  "pdfPages": [352],
-  "textLines": [10181, 10206],
+  "pdfPages": [
+    352
+  ],
+  "textLines": [
+    10181,
+    10206
+  ],
   "illustrates": {
     "rule": "12.3.1g",
     "quote": "When a sidebar is necessary for the understanding of a particular text, insert that sidebar before the related text. (See Sample 12-7: Word List in a Sidebar on page 12-12.)"
   },
   "print": {
     "blocks": [
-      { "kind": "heading", "level": 1, "text": "Chapter 6 Review", "features": "White text on a red banner with a large numeral '6'." },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Chapter 6 Review",
+        "features": "White text on a red banner with a large numeral '6'."
+      },
       {
         "kind": "sidebar",
         "title": "Chapter Summary",
@@ -19,17 +29,41 @@
             "kind": "list",
             "features": "Each item begins with a bold 'Lesson N' label followed by a bullet, then the lesson's summary sentence(s).",
             "items": [
-              { "marker": "Lesson 1 •", "text": "Violence is a serious public health problem in the United States. You can help to prevent violence in your community." },
-              { "marker": "Lesson 2 •", "text": "To prevent violent situations and make your school a safe place, avoid weapons and gangs and deal with bullies in a healthful way." },
-              { "marker": "Lesson 3 •", "text": "Knowing and practicing safe habits can help you prevent unintentional injuries at home, outdoors, and on the road." },
-              { "marker": "Lesson 4 •", "text": "Identifying severe weather conditions and natural disasters and being aware of the safety measures for each type of weather emergency will help you avoid unintentional injuries." },
-              { "marker": "Lesson 5 •", "text": "Being skilled in first aid procedures will prepare you to respond in a medical emergency. These skills will also enable you to take safe actions to reduce your risk of illness or injury." }
+              {
+                "marker": "Lesson 1 •",
+                "text": "Violence is a serious public health problem in the United States. You can help to prevent violence in your community."
+              },
+              {
+                "marker": "Lesson 2 •",
+                "text": "To prevent violent situations and make your school a safe place, avoid weapons and gangs and deal with bullies in a healthful way."
+              },
+              {
+                "marker": "Lesson 3 •",
+                "text": "Knowing and practicing safe habits can help you prevent unintentional injuries at home, outdoors, and on the road."
+              },
+              {
+                "marker": "Lesson 4 •",
+                "text": "Identifying severe weather conditions and natural disasters and being aware of the safety measures for each type of weather emergency will help you avoid unintentional injuries."
+              },
+              {
+                "marker": "Lesson 5 •",
+                "text": "Being skilled in first aid procedures will prepare you to respond in a medical emergency. These skills will also enable you to take safe actions to reduce your risk of illness or injury."
+              }
             ]
           }
         ]
       },
-      { "kind": "heading", "level": 1, "text": "Use Vocabulary", "features": "White text on an orange banner; confirmed CENTRED (12 leading blank cells, matching floor((40-15)/2)=12 for its own 15-cell braille text ',use ,vocabul>y') by forward-translating this heading and matching byte-for-byte against the given braille line 1." },
-      { "kind": "attribution", "text": "Choose the correct term from the list to complete each sentence.", "features": "Directions line, bold." },
+      {
+        "kind": "heading",
+        "level": 1,
+        "text": "Use Vocabulary",
+        "features": "White text on an orange banner; confirmed CENTRED (12 leading blank cells, matching floor((40-15)/2)=12 for its own 15-cell braille text ',use ,vocabul>y') by forward-translating this heading and matching byte-for-byte against the given braille line 1."
+      },
+      {
+        "kind": "attribution",
+        "text": "Choose the correct term from the list to complete each sentence.",
+        "features": "Directions line, bold."
+      },
       {
         "kind": "sidebar",
         "features": "Small boxed word-list callout to the left of the fill-in-the-blank sentences, cream background; each term is bold with its glossary page reference following. An arrow labelled '(Formats: Suggested Location)' points from this box across to the directions line.",
@@ -37,33 +71,77 @@
           {
             "kind": "list",
             "items": [
-              { "text": "assault, C45" },
-              { "text": "first-degree burn, C76" },
-              { "text": "flammable, C59" },
-              { "text": "gang, C54" },
-              { "text": "heatstroke, C67" },
-              { "text": "homicide, C45" },
-              { "text": "hypothermia, C67" },
-              { "text": "shock, C75" }
+              {
+                "text": "assault, C45"
+              },
+              {
+                "text": "first-degree burn, C76"
+              },
+              {
+                "text": "flammable, C59"
+              },
+              {
+                "text": "gang, C54"
+              },
+              {
+                "text": "heatstroke, C67"
+              },
+              {
+                "text": "homicide, C45"
+              },
+              {
+                "text": "hypothermia, C67"
+              },
+              {
+                "text": "shock, C75"
+              }
             ]
           }
         ]
       },
       {
         "kind": "list",
-        "features": "Numbered fill-in-the-blank sentences; each blank is a printed underscore rule (escaped here as \\_ so Emboss's cell-markup DSL does not read the run as an <u>underline</u> toggle -- Emboss has no dot-5 blank-fill mechanism at all, F-36, so this is expected to mismatch either way).",
+        "features": "Numbered fill-in-the-blank sentences; each blank is ONE printed ruled line (a single underscore rule, escaped here as \\_ so Emboss's cell-markup DSL does not read it as an <u>underline</u> toggle), followed by the sentence-final full stop. Emboss has no dot-5 blank-fill mechanism at all (F-36).",
         "items": [
-          { "marker": "1.", "text": "If a material is able to catch fire easily, it is \\_\\_\\_\\_\\_\\_." },
-          { "marker": "2.", "text": "A physical attack or the threat of a physical attack is an example of \\_\\_\\_\\_\\_\\_." },
-          { "marker": "3.", "text": "A group of people who are often involved in illegal and violent activities is a(n) \\_\\_\\_\\_\\_\\_." },
-          { "marker": "4.", "text": "A dangerous reduction in blood flow within the body is \\_\\_\\_\\_\\_\\_." },
-          { "marker": "5.", "text": "The killing of one person by another person is \\_\\_\\_\\_\\_\\_." },
-          { "marker": "6.", "text": "A condition in which the body's temperature falls significantly below normal is \\_\\_\\_\\_\\_\\_." },
-          { "marker": "7.", "text": "An overheating of the body that is life-threatening is \\_\\_\\_\\_\\_\\_." },
-          { "marker": "8.", "text": "A mild burn that affects the first, or outer layer of the skin, causing pain, redness, and swelling is a(n) \\_\\_\\_\\_\\_\\_." }
+          {
+            "marker": "1.",
+            "text": "If a material is able to catch fire easily, it is \\_."
+          },
+          {
+            "marker": "2.",
+            "text": "A physical attack or the threat of a physical attack is an example of \\_."
+          },
+          {
+            "marker": "3.",
+            "text": "A group of people who are often involved in illegal and violent activities is a(n) \\_."
+          },
+          {
+            "marker": "4.",
+            "text": "A dangerous reduction in blood flow within the body is \\_."
+          },
+          {
+            "marker": "5.",
+            "text": "The killing of one person by another person is \\_."
+          },
+          {
+            "marker": "6.",
+            "text": "A condition in which the body's temperature falls significantly below normal is \\_."
+          },
+          {
+            "marker": "7.",
+            "text": "An overheating of the body that is life-threatening is \\_."
+          },
+          {
+            "marker": "8.",
+            "text": "A mild burn that affects the first, or outer layer of the skin, causing pain, redness, and swelling is a(n) \\_."
+          }
         ]
       },
-      { "kind": "other", "text": "C78", "features": "Page number, bottom left corner." }
+      {
+        "kind": "other",
+        "text": "C78",
+        "features": "Page number, bottom left corner."
+      }
     ],
     "notes": "This sample illustrates rule 12.3.1g: the word-list sidebar is necessary for understanding the fill-in-the-blank sentences that follow, so it is inserted immediately BEFORE that related text (matching its own print position here, unlike Sample 12-3 where the sidebar's braille position is moved to follow an arrow). The braille excerpt (source .txt lines 10188-10206, PDF p.353) begins only at the 'Use Vocabulary' heading -- the 'Chapter 6 Review' heading and the entire 'Chapter Summary' sidebar (all five lesson summaries) have no braille counterpart anywhere in this excerpt, with no omission marker of any kind at that point (unlike Sample 12-3's two explicit '444' markers). The braille also transcribes only the first 2 of the print's 8 fill-in-the-blank sentences, ending in a '444' omission marker.",
     "surroundingText": null,
@@ -72,7 +150,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "            ,use ,vocabul>y         ,c#gh",
+      "            ,use ,vocabul>y        ,c#gh",
       "",
       "    ,*oose ! correct t]m f ! li/ to",
       "    complete ea* s5t;e4",
@@ -98,6 +176,31 @@
   "uncertain": [
     "The heading 'Chapter 6 Review' and the 'Chapter Summary' sidebar's own 'Lesson N' items have no braille counterpart anywhere in this excerpt (not even an omission marker); their exact braille formatting (whether boxed, and at what margin) cannot be verified from this source."
   ],
-  "sources": ["A", "B"],
-  "resolution": "Run B's braille.lines were empty for this file (an apparent extraction failure in that run); run A's 19-line transcription is used, corrected against the source .txt and the rendered PDF page image (p.353) exactly as for Sample 12-3: line 19, a literal '444' omission marker in the source, was recorded as a blank line by run A and is restored here. Print.blocks records the FULL print content, including the 'Chapter 6 Review' heading and the entire 'Chapter Summary' sidebar that this braille excerpt omits with no marker at all (per the section-7 sample-7-03 precedent for an unmarked print/braille length mismatch in the source corpus) and the full 8-item fill-in-the-blank list (per the section-3 sample-3-01 / section-7 sample-7-03 precedent for a '444'-marked truncation) rather than the 2 items the braille actually transcribes -- buildModel12 is expected to over-produce at both points, a documented excerpt limitation, not an Emboss defect. The vocabulary word-list sidebar itself is a genuine new finding: BANA 12.3.1f treats box lines as being added only 'for clarity if the content of the sidebar interrupts the flow of text', implying they are conditional, but this sample's own braille shows a sidebar transcribed with NO box-line border at all (plain inserted text, blank line before and after per 12.3.1e) -- Emboss's `formatBox` (shared by every 'box'/'sidebar' document-model block) unconditionally emits top and bottom border lines with no way to omit them, so buildModel12's box-based rendering of this sidebar is expected to mismatch on that account; recorded as new finding F-230."
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "Run B's braille.lines were empty for this file (an apparent extraction failure in that run); run A's 19-line transcription is used, corrected against the source .txt and the rendered PDF page image (p.353) exactly as for Sample 12-3: line 19, a literal '444' omission marker in the source, was recorded as a blank line by run A and is restored here. Print.blocks records the FULL print content, including the 'Chapter 6 Review' heading and the entire 'Chapter Summary' sidebar that this braille excerpt omits with no marker at all (per the section-7 sample-7-03 precedent for an unmarked print/braille length mismatch in the source corpus) and the full 8-item fill-in-the-blank list (per the section-3 sample-3-01 / section-7 sample-7-03 precedent for a '444'-marked truncation) rather than the 2 items the braille actually transcribes -- buildModel12 is expected to over-produce at both points, a documented excerpt limitation, not an Emboss defect. The vocabulary word-list sidebar itself is a genuine new finding: BANA 12.3.1f treats box lines as being added only 'for clarity if the content of the sidebar interrupts the flow of text', implying they are conditional, but this sample's own braille shows a sidebar transcribed with NO box-line border at all (plain inserted text, blank line before and after per 12.3.1e) -- Emboss's `formatBox` (shared by every 'box'/'sidebar' document-model block) unconditionally emits top and bottom border lines with no way to omit them, so buildModel12's box-based rendering of this sidebar is expected to mismatch on that account; recorded as new finding F-230. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[list 1-8].items[*].text",
+      "was": "six escaped underscores per blank (\\_\\_\\_\\_\\_\\_)",
+      "now": "one escaped underscore per blank (\\_)",
+      "evidence": "Page image p.352 (PDF page 352): each blank in items 1-8 is a single unbroken ruled line before the full stop, not six separate characters; the six-underscore spelling was an approximation of line length."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "            ,use ,vocabul>y         ,c#gh"
+      ],
+      "after": [
+        "            ,use ,vocabul>y        ,c#gh"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 353 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

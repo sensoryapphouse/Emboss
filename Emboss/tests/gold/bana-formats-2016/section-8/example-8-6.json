@@ -18,51 +18,52 @@
         "kind": "paragraph",
         "text": "This is his wish list from the Louis L’Amour collection. Bulleted items are out of stock.",
         "level": null,
-        "features": "Introductory sentence above the two-column list."
+        "features": "Introductory sentence above the two-column list, roman (not italic), set flush at the left margin with no first-line indent.",
+        "blocked": true
       },
       {
         "kind": "list",
         "level": null,
         "text": null,
         "columns": 2,
-        "features": "Two side-by-side columns of book/story titles, three per column; four of the six titles carry a small solid round bullet ('out of stock'); two are unbulleted.",
+        "features": "Two side-by-side columns of book/story titles, three per column, all titles in italic; three of the six titles (Chancy, The Lonely Men, Radigan) carry a small solid round bullet (out of stock); three are unbulleted.",
         "items": [
           {
             "marker": null,
             "level": 1,
-            "text": "Bowdrie"
+            "text": "*Bowdrie*"
           },
           {
             "marker": "•",
             "level": 1,
-            "text": "Chancy"
+            "text": "*Chancy*"
           },
           {
             "marker": null,
             "level": 1,
-            "text": "Flint"
+            "text": "*Flint*"
           },
           {
             "marker": "•",
             "level": 1,
-            "text": "The Lonely Men"
+            "text": "*The Lonely Men*"
           },
           {
             "marker": "•",
             "level": 1,
-            "text": "Radigan"
+            "text": "*Radigan*"
           },
           {
             "marker": null,
             "level": 1,
-            "text": "The Skyliners"
+            "text": "*The Skyliners*"
           }
         ]
       }
     ],
     "notes": "Items listed in print's own column-major reading order (left column top-to-bottom, then right column top-to-bottom), matching the vertical order the braille transcription uses.",
     "surroundingText": null,
-    "printFeatures": "Boxed illustration; italic introductory sentence; two columns of titles, four marked with a small solid round bullet."
+    "printFeatures": "Boxed illustration; roman introductory sentence; two columns of italic titles, three marked with a small solid round bullet."
   },
   "braille": {
     "width": 40,
@@ -82,9 +83,29 @@
     "notes": "The introductory sentence (lines 1-2) precedes a blank line, then the six titles are transcribed as a single vertical column (lines 4-9) preserving the print's left-column-then-right-column order exactly, per 8.7.1.c; each bulleted title keeps the '_4' dot-bullet symbol in cell 1, unbulleted titles begin directly with the capital sign in cell 1."
   },
   "uncertain": [],
-  "resolution": "braille.lines byte-identical between A and B. \"Louis L’Amour\": confirmed curly apostrophe (’, U+2019) directly against the PDF page image (p. 205) — B was right, A’s straight apostrophe (') was a retyping slip; fixed here. Item marker/column structure (already A’s own clean {marker:’•’|null, level, text} shape, columns:2, column-major order) confirmed correct against the same page image and kept as-is.",
+  "resolution": "braille.lines byte-identical between A and B. \"Louis L’Amour\": confirmed curly apostrophe (’, U+2019) directly against the PDF page image (p. 205) — B was right, A’s straight apostrophe (') was a retyping slip; fixed here. Item marker/column structure (already A’s own clean {marker:’•’|null, level, text} shape, columns:2, column-major order) confirmed correct against the same page image and kept as-is. Print description corrected 23 Sep 2026 (see printCorrections).",
   "sources": [
     "A",
     "B"
+  ],
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[*].text",
+      "was": "plain roman titles",
+      "now": "each title wrapped in *...* (italic)",
+      "evidence": "Page image p.205: all six titles (Bowdrie, Chancy, Flint, The Lonely Men, Radigan, The Skyliners) are set in italic; the intro sentence is roman."
+    },
+    {
+      "field": "print.blocks[0].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image p.205: the intro sentence starts flush at the left margin of the box with no first-line indent."
+    },
+    {
+      "field": "print.blocks[1].features / print.printFeatures",
+      "was": "four of the six titles carry a bullet, two unbulleted; italic introductory sentence",
+      "now": "three bulleted (Chancy, The Lonely Men, Radigan), three unbulleted; roman intro, italic titles",
+      "evidence": "Page image p.205: bullets sit beside Chancy, The Lonely Men and Radigan only; the items array already had exactly those three markers."
+    }
   ]
 }

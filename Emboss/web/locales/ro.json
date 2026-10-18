@@ -60,10 +60,13 @@
     "toc": "Cuprins",
     "print": "Vizualizare imprimare (stânga)",
     "braille": "Braille",
+    "export": "Exportă",
+    "export_title": "Exportă Braille (BRF, eBraille) sau trimite la embosator",
+    "emboss_menu": "Trimitere la embosator",
     "braille_view": "Vizualizare Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Embosare",
     "emboss_tooltip": "Trimitere document la embosator sau imprimantă",
     "clear_doc": "Curăță document",
@@ -133,8 +136,6 @@
     "poem_desc": "Linie vers strofă poetică (1-3)",
     "exercise_title": "Întrebare exercițiu",
     "exercise_desc": "Întrebare exercițiu numerată (1-5 / 3-5)",
-    "caption_title": "Titlu / atribuire",
-    "caption_desc": "Titlu figură sau atribuire (7-5)",
     "footnote_title": "Notă de subsol",
     "footnote_desc": "Text notă subsol (1-3)",
     "note_title": "Notă transcriptor",
@@ -163,8 +164,6 @@
     "page_desc": "Inserare indicator salt pagină sursă",
     "printpage_title": "Număr pagină imprimare",
     "printpage_desc": "Inserare indicator salt pagină sursă",
-    "code_title": "Cod calculator",
-    "code_desc": "Inserare bloc cod cu indicatori UEB",
     "indent_title": "Indentare / Imbricare sub-element",
     "indent_desc": "Imbricare mai adâncă a elementului de listă sau exercițiu (Tab)",
     "outdent_title": "Anulare indentare / Promovare element",
@@ -185,8 +184,8 @@
     "language_label": "Limbă interfață",
     "language_help": "Selectați limba folosită pentru butoane, meniuri, dialoguri și anunțuri cititor ecran.",
     "standard_label": "Standard Braille",
-    "standard_bana": "BANA (SUA și Canada — 40×25 celule)",
-    "standard_ukaaf": "UKAAF (Regatul Unit și internațional — 38×25 celule)",
+    "standard_bana": "BANA (SUA și Canada — 38×25 celule)",
+    "standard_ukaaf": "UKAAF (Regatul Unit și internațional — 38×27 celule)",
     "grade_label": "Nivel contracție",
     "grade_1": "Gradul 1 (necontractat / literă-cu-literă)",
     "grade_2": "Gradul 2 (contractat)",
@@ -261,7 +260,7 @@
     "size_full": "Foaie completă (linie 1 anti-feliat)",
     "lead_lines": "Linii conducătoare tactile",
     "braille_labels": "Etichete Braille",
-    "footer_tip": "💡 Contururile negre devin granițe tactile solide; culorile se mapează automat pe texturi tactile distincte.",
+    "footer_tip": "Contururile negre devin granițe tactile solide; culorile se mapează automat pe texturi tactile distincte.",
     "open_repositories": "Deschidere depozite tactile:",
     "no_diagrams": "Niciun diagram potrivit găsit."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Status de drum complet fără pierdere",
     "precedence_status": "Status reguli prioritate Braille",
     "perfect_match": "100% potrivire drum complet (0 discrepanțe)",
-    "badge_warn": "⚠ {count} de examinat",
+    "badge_warn": "{count} de examinat",
     "badge_title": "{count} discrepanțe de cuvânt găsite în timpul drumului complet. Faceți clic pentru a sări la prima.",
     "badge_clean": "Verificare drum complet: nicio discrepanță de cuvânt găsită."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Aveți modificări nesalvate. Sunteți sigur că doriți să ieșiți fără a salva?",
     "unsaved_load": "Aveți modificări nesalvate. Încărcarea unui fișier nou va înlocui documentul curent. Continuare?",
     "unsaved_clear": "Aveți modificări nesalvate. Sunteți sigur că doriți să ștergeți documentul?",
-    "drop_hint": "⬇ Glisați un document pentru a-l importa în editor",
+    "drop_hint": "Glisați un document pentru a-l importa în editor",
     "notice": "Notificare",
     "close_notice": "Închidere notificare"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Text document",
+      "math_keyboard_toggle": "Tastatură matematică",
       "label": "Text",
       "toolbar_aria": "Formatare",
       "style_label": "Stil paragraf",
@@ -443,8 +443,8 @@
       "graphic_cats": "Categorii de grafică",
       "graphic_list": "Diagrame grafice tactile",
       "formula_search_label": "Căutare formule",
-      "btactile_link": "BTactile (gratuit) ↗",
-      "tgil_link": "APH TGIL (peste 1.800 de șabloane) ↗"
+      "btactile_link": "BTactile (gratuit)",
+      "tgil_link": "APH TGIL (peste 1.800 de șabloane)"
     },
     "settings": {
       "list_spaced": "Listă cu linie goală (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Conectare directă la embosatoare cu microcontroler personalizat (ESP32-S3, RP2040/RP2350, STM32, Arduino), ocolind blocajele driverelor de imprimantă ale sistemului.",
       "graphics_hint": "Când este debifat, diagramele sunt exportate ca descrieri accesibile de tip Notă transcriptor pentru embosatoare doar-text și afișaje Braille.",
       "tactile_heading": "Transmisie live afișaj tactil (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Conectare Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Conectare USB / HID (Monarch)",
+      "tactile_connect_ble": "Conectare Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Conectare USB / HID (Monarch)",
       "tactile_disconnect": "Deconectare afișaj",
       "tactile_sim_monarch": "Testare Monarch simulat (32×10)",
       "tactile_sim_dotpad": "Testare DotPad simulat (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Transmite live fereastra Braille și grafica tactilă direct prin WebBluetooth (DotPad BLE UART) sau WebHID (Monarch/USB), fără drivere externe.",
       "perkins_hint": "— tastați Braille cu tastele SDF și JKL",
       "ascii_hint": "— afișare caractere Braille ASCII brute",
+      "show_explanation_bar": "Afișează bara de explicații",
+      "show_explanation_bar_hint": "— banda de sub text și Braille care explică Braille-ul pentru cuvântul la care vă aflați",
+      "simple_mode_hint": "— deschide Emboss în convertorul simplu. Comutarea între Mod rapid și editor nu schimbă acest lucru.",
       "covers_hint": "— coperte cu titlu embosate la divizarea cărților"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Antet {n}",
       "cell_aria_named": "{header}, rând {row}",
       "cell_aria": "Coloană {col}, rând {row}",
-      "too_wide_listed": "⚠ Prea lat pentru coloane — va fi tipărit în Braille ca tabel enumerat",
+      "too_wide_listed": "Prea lat pentru coloane — va fi tipărit în Braille ca tabel enumerat",
       "too_wide_listed_title": "Acest tabel nu încape în coloane la numărul curent de celule pe linie și modul Braille, așa că va fi tipărit în Braille ca tabel enumerat (BANA Formats §11.9) în loc de coloane alăturate.",
-      "too_wide_paragraph": "⚠ Prea lat pentru coloane — va fi tipărit în Braille în formă de paragraf",
+      "too_wide_paragraph": "Prea lat pentru coloane — va fi tipărit în Braille în formă de paragraf",
       "too_wide_paragraph_title": "Acest tabel nu încape în coloane la numărul curent de celule pe linie și modul Braille, așa că va fi tipărit în Braille în formă de paragraf (UKAAF B004 §12) în loc de coloane alăturate."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nu s-au putut încărca tabelele pentru „{code}” — se folosește în continuare codul Braille anterior.",
-      "failed": "⚠ Braille nu a putut fi generat.",
+      "failed": "Braille nu a putut fi generat.",
       "failed_hint": "(Dacă se indică faptul că motorul nu este inițializat, motorul Braille nu s-a încărcat — reîmprospătați forțat cu Cmd/Ctrl+Shift+R.)",
       "error_status": "Eroare de randare: {message}"
     },
     "engine": {
       "loading": "Se încarcă motorul Braille…",
-      "failed": "⚠ Motorul Braille nu a putut fi încărcat.",
+      "failed": "Motorul Braille nu a putut fi încărcat.",
       "failed_hint": "Reîmprospătați forțat cu Cmd/Ctrl+Shift+R. Dacă persistă, deschideți consola browserului (Vizualizare ▸ Dezvoltator) și trimiteți erorile.",
       "failed_status": "Motorul nu a putut fi încărcat: {message}",
       "ready": "Gata — tastați sau formatați în stânga; Braille se actualizează în timp real."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nu s-a putut contacta {url}: {message}. Browserele nu pot deschide conexiuni TCP brute (port 9100); embosatorul trebuie să accepte HTTP POST, sau descărcați fișierul .brf și trimiteți-l cu managerul de imprimare.",
       "usb_bridge_done": "Lucrarea de embosare a fost livrată la imprimanta USB!",
       "needs_webserial": "Embosarea serială directă necesită un browser cu WebSerial (Chrome, Edge, Opera). Puteți descărca fișierul .brf pentru a emboasa cu managerul de imprimare sau puteți folosi modul Rețea (port 9100) din Setări.",
-      "detected": "🔌 {name} detectat — setat la {cells}×{lines} la {baud} baud."
+      "detected": "{name} detectat — setat la {cells}×{lines} la {baud} baud."
     },
     "symbols": {
       "title": "Bibliotecă de simboluri tactile",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrice dinamică",
       "badge_text_only": "Doar text",
       "badge_index": "Matrice de puncte"
+    },
+    "offline": {
+      "ready": "Emboss este gata să funcționeze offline.",
+      "ready_short": "Gata de lucru offline",
+      "not_yet": "Se pregătește încă pentru lucrul offline…"
     }
   }
 }

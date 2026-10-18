@@ -4,12 +4,12 @@
     "note": "Standard gives no braille for this sample (print-only worked example)."
   },
   "example-4-10": {
-    "status": "not-representable",
-    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -8 (expected 9, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Positive / Comparative / Superlative\""
+    "status": "match",
+    "note": "match"
   },
   "example-4-11": {
-    "status": "not-representable",
-    "note": "first differing line 2: expected \"\" vs actual null. line count differs by -6 (expected 7, actual 1). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"beat/blow/catch/do; become/break/choose/draw; begin/bring/come/drink; bet/burst/cut/drive; bite/buy/dive/eat\""
+    "status": "match",
+    "note": "match"
   },
   "example-4-12": {
     "status": "match",
@@ -28,8 +28,8 @@
     "note": "first differing line 1: expected \"    @$P ,WE ,REMEMB]\" vs actual \"    ,WE ,REMEMB]\"."
   },
   "example-4-2": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"\" vs actual \"           ,SAN?A ,RAMA ,RAU\". line count differs by -1 (expected 3, actual 2)."
+    "status": "match",
+    "note": "match"
   },
   "example-4-3": {
     "status": "match",
@@ -41,15 +41,15 @@
   },
   "example-4-5": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"#E4 ,AM;G ! MUSEUM'S O!R            C#ADG\" vs actual \"#E4 ,AM;G/ ! MUSEUM'S O!R TR1SURES >E\". line count differs by -2 (expected 9, actual 7). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"—New Print Page—\""
+    "note": "first differing line 1: expected \"#E4 ,AM;G ! MUSEUM'S O!R           C#ADG\" vs actual \"#E4 ,AM;G ! MUSEUM'S O!R TR1SURES \\\"<IS1\". line count differs by -2 (expected 9, actual 7). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"—New Print Page—\""
   },
   "example-4-6": {
     "status": "mismatch",
     "note": "first differing line 5: expected \"  UP\\\"R1 Y R$UCE BLOOD PRESSURE 9 ! VE9S\" vs actual \"UP\\\"R1 Y R$UCE BLOOD PRESSURE 9 ! VE9S (\"."
   },
   "example-4-7": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"   ,H5RIK ,IBS51 .7,A ,DOLL'S ,H\\\\SE.'\" vs actual \"     ,H5RIK ,IBS51 ,A ,DOLL'S ,H\\\\SE\"."
+    "status": "match",
+    "note": "match"
   },
   "example-4-8": {
     "status": "match",
@@ -61,7 +61,7 @@
   },
   "sample-4-01": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"              ,SEC;N #CG4B         #AJHD\" vs actual \"              ,SEC;N #CG4B\". line count differs by +4 (expected 48, actual 52)."
+    "note": "first differing line 1: expected \"              ,SEC;N #CG4B         #AJHD\" vs actual \"              ,SEC;N #CG4B\". line count differs by +7 (expected 48, actual 55)."
   },
   "sample-4-02": {
     "status": "mismatch",
@@ -69,11 +69,11 @@
   },
   "sample-4-03": {
     "status": "mismatch",
-    "note": "first differing line 11: expected \"    .1,NOCTURNAL .1,SPECTATOR\" vs actual \"    ,NOCTURNAL ,SPECTATOR\"."
+    "note": "first differing line 14: expected \"! ,PLACE 444\" vs actual \"! ,PLACE\"."
   },
   "sample-4-04": {
-    "status": "not-representable",
-    "note": "first differing line 7: expected \"        ,,PRIM>Y ,S\\\\RCES\" vs actual \"      ,,PRIM>Y ,S\\\\RCES\". line count differs by -5 (expected 14, actual 9). Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"\"Must a government of necessity be too strong for the liberties of its own people, or too weak to maintain its own existence?\"\""
+    "status": "mismatch",
+    "note": "first differing line 7: expected \"        ,,PRIM>Y ,S\\\\RCES\" vs actual \"      ,,PRIM>Y ,S\\\\RCES\". line count differs by +2 (expected 14, actual 16)."
   },
   "sample-4-05-option-1": {
     "status": "match",
@@ -92,11 +92,11 @@
     "note": "first differing line 3: expected \"AM.TS ( FOOD E6ICI5TLY4 444\" vs actual \"AM.TS ( FOOD E6ICI5TLY4\"."
   },
   "sample-4-07-option-1": {
-    "status": "not-representable",
-    "note": "first differing line 6: expected \"#A4 ,R1D & COMPLETE ! LAB SAFETY =M4\" vs actual \"  #A4 ,R1D & COMPLETE ! LAB SAFETY =M4\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Full Text of Icon Descriptions in Front of Book\""
+    "status": "match",
+    "note": "match"
   },
   "sample-4-07-option-2": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"    ,PROC$URE @$ES @$CP @$HW\" vs actual \"    ,PROC$URE\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Full Text of Icon Descriptions in Front of Book\""
+    "note": "first differing line 1: expected \"    ,PROC$URE @$ES @$CP @$HW\" vs actual \"    ,PROC$URE\". Input-model limitation: print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): \"Eye Safety: Proper eye protection must be worn at all times by anyone performing or observing science activities.\""
   }
 }

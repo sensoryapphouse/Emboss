@@ -21,7 +21,7 @@
       },
       {
         "kind": "directions",
-        "text": "Identify what statement in each set is a generalization by marking an X in the space provided."
+        "text": "Identify which statement in each set is a generalization by marking an X in the space provided."
       },
       {
         "kind": "exercise",
@@ -89,5 +89,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7909-7926). Print unchanged from A/B."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7909-7926). Print unchanged from A/B. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].text",
+      "was": "Identify what statement in each set ...",
+      "now": "Identify which statement in each set ...",
+      "evidence": "references/_gemini/_done/gold-10-A/page-270.png, Sample 10-1 print: \"Identify which statement in each set is a generalization ...\"; the gold braille reads \":\" (which) too."
+    }
+  ]
 }

@@ -42,13 +42,13 @@
   "braille": {
     "width": 56,
     "lines": [
-      "               9f],-9h]it                           #cca",
+      "               9f],-9h]it           #cca",
       "",
-      "               9f]_49h]it                           #cca",
+      "               9f]_49h]it           #cca",
       "",
-      "              9f];\\o9h]it                           #cca",
+      "              9f];\\o9h]it           #cca",
       "",
-      "               9f] _\\ 9h]it                         #cca"
+      "               9f] _\\ 9h]it         #cca"
     ],
     "pageBreaks": [],
     "notes": "Re-extracted from source: the given run kept only the LAST of the four separator-demonstration lines (dropping the first three entirely) and mislabelled the width. All four lines (dash, underscore/bullet, semicolon-backslash-o/arrow, space-backslash-space/vertical-line braille forms), each followed by a blank line except the last, are restored; width is the true longest-line width (56), not the nominal 40."
@@ -58,5 +58,25 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines corrected: restored the 3 missing guide-word-separator lines the given run dropped; width set to the actual 56-cell extent."
+  "resolution": "braille.lines corrected: restored the 3 missing guide-word-separator lines the given run dropped; width set to the actual 56-cell extent.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "               9f],-9h]it                           #cca",
+        "               9f]_49h]it                           #cca",
+        "              9f];\\o9h]it                           #cca",
+        "               9f] _\\ 9h]it                         #cca"
+      ],
+      "after": [
+        "               9f],-9h]it           #cca",
+        "               9f]_49h]it           #cca",
+        "              9f];\\o9h]it           #cca",
+        "               9f] _\\ 9h]it         #cca"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 2, 4, 6 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 562 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (4). Where: before right-margin page number (4)."
+    }
+  ]
 }

@@ -1,0 +1,60 @@
+{
+  "id": "sample-2-02",
+  "title": "Sample 2-2: Titles in a Set",
+  "pdfPages": [
+    25
+  ],
+  "textLines": [
+    2325,
+    2344
+  ],
+  "illustrates": {
+    "rule": "2.3.4f",
+    "quote": "f. A book may have a group of separate ancillary books as part of the set. The primary book title is used as the subtitle for the secondary books when the transcriber has the main text and the ancillary books. (See Sample 2-2: Titles in a Set on page 2-25.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-069.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",h\"\\on ,mi6l9 ,cali=nia ,ma?",
+      ",b5*m>k ,9t]v5;n",
+      ",alt]nate ,approa* ,\"w%eets",
+      ",h\"\\on ,mi6l9 ,cali=nia ,ma?",
+      ",daily ,r\\t9es & ,practice2 ,,grade #c",
+      ",/ud5t ,book",
+      ",h\"\\on ,mi6l9 ,cali=nia ,ma?",
+      ",home\"w & ,problem ,solv+2 ,,grade #e",
+      ",/ud5t ,book",
+      ",h\"\\on ,mi6l9 ,cali=nia ,ma?"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.69: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 4"
+    }
+  ]
+}

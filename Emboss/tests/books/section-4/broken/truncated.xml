@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-4"/>
+<meta name="dc:Title" content="Headings"/>
+<meta name="dc:Identifier" content="test-section-4"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Headings</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>Absolutism in Wes

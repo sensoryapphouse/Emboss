@@ -1,0 +1,48 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 4,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "gen:1982326777-s4",
+ "docSource": "generated",
+ "docFeatures": [
+  "h2",
+  "h3",
+  "inline-math",
+  "link",
+  "poem",
+  "script:arabic",
+  "script:cjk",
+  "script:combining",
+  "script:cyrillic",
+  "script:emoji",
+  "script:greek",
+  "script:hebrew",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1982326777-s4": "docs/00-gen-1982326777-s4.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: list",
+ "message": "the saved file reopens to different braille [first differing block: list] (block #19 not counting empty ones, list / list): first tab has 576 lines, reopened tab has 576; first differences: line 437: first tab \"         _<;X_> ) \\\"<SEE PAGE #AB\\\">\\r\" / reopened tab \"      _<;X_> ) \\\"<SEE PAGE #AB\\\"> %AD[\\r\" | line 438: first tab \"           %AD[\\r\" / reopened tab \"    RIV]4 SCI;E S5T;E ,MRS4 TH %AD[\\r\" | line 439: first tab \"    RIV]4 SCI;E S5T;E ,MRS4 TH %AD[\\r\" / reopened tab \"        DOT 5CE NUMB] P>AGRAPH 2T 2T'S\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 2,
+ "originalActions": 18,
+ "actions": []
+}

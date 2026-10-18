@@ -20,7 +20,7 @@
         "items": [
           {
             "term": "acronym",
-            "def": "a word formed by using the initial letters of other words: radar “*radio* *detecting* *and* *ranging*”",
+            "def": "a word formed by using the initial letters of other words: radar (*ra*dio *d*etecting *a*nd *r*anging)",
             "level": 1
           }
         ]
@@ -28,7 +28,7 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "Bold entry word; bold word within the definition; italicized phrase within parentheses in the definition."
+    "printFeatures": "Bold entry word; inside the parentheses only the initial letters are italic: ra of radio, d of detecting, a of and, r of ranging; the parentheses and \"radar\" are roman."
   },
   "braille": {
     "width": 40,
@@ -45,5 +45,19 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[0].def",
+      "was": "radar “*radio* *detecting* *and* *ranging*” (curly quotes, four whole italic words)",
+      "now": "radar (*ra*dio *d*etecting *a*nd *r*anging) (plain parentheses, italic initial letters only)",
+      "evidence": "references/bana/braille-formats-2016.pdf p.566, rendered at 300 dpi and cropped to the Example 21-18 box: \"words: radar (radio detecting and ranging)\" with italic only on \"ra\", \"d\", \"a\" and \"r\" - the first letters spelling radar; no quotation marks. The gold braille (.1ra.'dio .2detect+ .2& .2rang+) is therefore not garbled: it is per-letter italics, as the print shows."
+    },
+    {
+      "field": "print.printFeatures",
+      "was": "Bold entry word; bold word within the definition; italicized phrase within parentheses in the definition.",
+      "now": "Bold entry word; only the initial letters (ra, d, a, r) inside the parentheses are italic; \"radar\" is not bold",
+      "evidence": "references/bana/braille-formats-2016.pdf p.566 (same crop): \"radar\" is roman, not bold."
+    }
+  ]
 }

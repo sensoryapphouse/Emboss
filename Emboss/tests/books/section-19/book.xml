@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 19 Codes and Puzzles"/><meta name="dc:Identifier" content="stage4-19"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 19 Codes and Puzzles</doctitle></frontmatter><bodymatter><level1>
+<h1>Codes and Puzzles</h1>
+<p>Decode the message using the key below.</p>
+<prodnote render="required">Transcriber's note: the key uses letters in place of the print symbols.</prodnote>
+<list type="pl"><li>A = 1</li><li>B = 2</li><li>C = 3</li></list>
+<p>Scrambled word: <code>tac</code></p>
+<p>Riddle: What has keys but cannot open locks?</p>
+<list type="ol"><li>Across: a pet that meows</li><li>Down: a flying insect</li></list>
+</level1></bodymatter></book></dtbook>

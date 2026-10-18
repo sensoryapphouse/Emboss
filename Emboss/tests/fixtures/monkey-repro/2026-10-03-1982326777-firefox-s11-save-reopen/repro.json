@@ -1,0 +1,145 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 11,
+ "engine": "firefox",
+ "kind": "editor",
+ "doc": "tests/nimas_samples/9780076996285NIMAS.xml",
+ "docSource": "nimas-samples",
+ "docFeatures": null,
+ "docs": {
+  "tests/nimas_samples/9780076996285NIMAS.xml": "docs/00-9780076996285NIMAS.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: para",
+ "message": "the saved file reopens to different braille [first differing block: para] (block #0 not counting empty ones, para / titlepage): first tab has 4713 lines, reopened tab has 4659; first differences: line 50: first tab \"\\r\" / reopened tab \"               \\\"9 \\\"9 \\\"9\\r\" | line 51: first tab \"\\r\" / reopened tab \"77777777777777777777777777777777777777\\r\" | line 52: first tab \"\\r\" / reopened tab \",SIDEB> ,TITLE\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 12,
+ "originalActions": 22,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.2039,
+   "i": 21,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 2
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4671,
+   "i": 22,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 3
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9882,
+   "i": 23,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 4
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7195,
+   "i": 24,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5678,
+   "i": 25,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0331,
+   "i": 26,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3323,
+   "i": 27,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.312,
+   "i": 28,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.981,
+   "i": 29,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "all"
+  }
+ ]
+}

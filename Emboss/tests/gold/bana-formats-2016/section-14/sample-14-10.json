@@ -17,12 +17,12 @@
       {
         "kind": "speech",
         "speaker": "Webster",
-        "text": "**Webster** (moving to center stage, and joining *Jabez'* hands and *Mary’s).* And whom God hath joined let no man put asunder. (He kisses *Mary* and turns, dusting his hands.) Well, that job’s done. I hope there’s pie for breakfast, neighbor Stone."
+        "text": "**Webster** (*moving to center stage, and joining* Jabez' *hands and* Mary’s). And whom God hath joined let no man put asunder. (*He kisses* Mary *and turns, dusting his hands.*) Well, that job’s done. I hope there’s pie for breakfast, neighbor Stone."
       },
-      { "kind": "stage-direction", "text": "(And, as some of the women, dancing, bring in pies from the kitchen)" },
+      { "kind": "stage-direction", "text": "(*And, as some of the women, dancing, bring in pies from the kitchen*)" },
       { "kind": "heading", "level": 1, "text": "THE CURTAIN FALLS" }
     ],
-    "notes": "The speaker name 'Webster' is bold (retained, 14.1.3); the two parenthetical stage directions embedded within Webster's own dialogue keep the character names 'Jabez'’/’Mary’s’/’Mary’ in italics for distinction (14.4.1c), with the rest of each parenthetical plain; the closing paren and full stop right after ‘Mary’s’ are kept INSIDE that same italic run since they sit with no space before the next word (confirmed by forward translation: keeping them italic reproduces the given braille's own single italic-word indicator with no separate terminator, exactly like Example 14-4's ‘hysterically:’). The standalone stage direction between Webster's speech and the closing phrase drops its own italics entirely, per the ordinary 'stage' default (14.5.3c/14.4.1c — no distinction needed here, unlike the embedded names above). 'THE CURTAIN FALLS' is printed in full capitals — built as a centred heading (14.8.1), blank line before and after (formatHeading's own default for a centred/level-1 heading, no special-casing needed).",
+    "notes": "Print (page image): the speaker name is bold; both parenthetical stage directions are italic, with the character names Jabez', Mary’s and Mary in roman (upright) type inside them; the parentheses and the full stop after 'Mary’s)' are roman. The standalone stage direction is wholly italic inside roman parentheses. 'THE CURTAIN FALLS' is printed in full capitals, centred.",
     "surroundingText": [],
     "printFeatures": "Bold speaker name; two parenthetical, partly-italicised stage directions embedded in the dialogue; a standalone (non-embedded) stage direction; a centred, all-caps closing phrase."
   },
@@ -38,7 +38,8 @@
       "      \"<,&1 z \"s ( ! wom51 danc+1 br+ 9",
       "      pies f ! kit*5\">",
       "",
-      "          ,,,! curta9 falls,'"
+      "          ,,,! curta9 falls,'",
+      ""
     ],
     "pageBreaks": [],
     "notes": "1-3 margins for the speech (14.5.1a); 7-7 for the standalone stage direction (14.5.3a), no blank line around it (14.5.3d); a blank line then the centred closing phrase (14.8.1), no blank line needed after since this excerpt ends there."
@@ -48,5 +49,38 @@
     "A",
     "B"
   ],
-  "resolution": "A/B agreed on braille (byte-for-byte) and on print substance; both described the bold/italic emphasis only in prose `features` fields (B) or left it out of `text` (A) rather than marking it in place. Per this repo's own established convention, `text` was rewritten with **Webster**/*Jabez'*/*Mary's).*'/*Mary* embedded directly — the exact italic-run boundary (including the closing paren and period right after ‘Mary’s’) was determined by forward-translation testing until an EXACT MATCH was reached, matching Example 14-4's own already-documented italic-terminator behaviour. A's own illustrates.rule/quote (14.8.1, the actual rule text) kept over B's own null/title-repeat. Forward-translated through Emboss's translator (one {type:'play',subtype:'prose'} block with bold/italic segments, one {type:'stage'} block, one centred {type:'heading'} block): EXACT MATCH (see differences.md)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "**Webster** (moving to center stage, and joining *Jabez'* hands and *Mary’s).* And whom God hath joined let no man put asunder. (He kisses *Mary* and turns, dusting his hands.) Well, that job’s done. I hope there’s pie for breakfast, neighbor Stone.",
+      "now": "**Webster** (*moving to center stage, and joining* Jabez' *hands and* Mary’s). And whom God hath joined let no man put asunder. (*He kisses* Mary *and turns, dusting his hands.*) Well, that job’s done. I hope there’s pie for breakfast, neighbor Stone.",
+      "evidence": "references/_gemini/_done/gold-14-A/page-405.png: the print shows italic \"moving to center stage, and joining\", roman \"Jabez’\", italic \"hands and\", roman \"Mary’s).\", and \"(He kisses\" italic, roman \"Mary\", italic \"and turns, dusting his hands.\" then a roman \")\". The old text had the italics on the names instead, the reverse of print, with the run boundary chosen so forward translation reproduced the braille."
+    },
+    {
+      "field": "print.blocks[1].text",
+      "was": "(And, as some of the women, dancing, bring in pies from the kitchen)",
+      "now": "(*And, as some of the women, dancing, bring in pies from the kitchen*)",
+      "evidence": "page-405.png: \"(And, as some of the women, dancing, bring in pies from the kitchen)\" is italic between roman parentheses; the old text dropped the italics."
+    },
+    {
+      "field": "print.notes",
+      "was": "The speaker name 'Webster' is bold (retained, 14.1.3); the two parenthetical stage directions embedded within Webster's own dialogue keep the character names 'Jabez'’/’Mary’s’/’Mary’ in italics for distinction (14.4.1c), with the rest of each parenthetical plain; the closing paren and full stop right after ‘Mary’s’ are kept INSIDE that same italic run since they sit with no space before the next word (confirmed by forward translation: keeping them italic reproduces the given braille's own single italic-word indicator with no separate terminator, exactly like Example 14-4's ‘hysterically:’). The standalone stage direction between Webster's speech and the closing phrase drops its own italics entirely, per the ordinary 'stage' default (14.5.3c/14.4.1c — no distinction needed here, unlike the embedded names above). 'THE CURTAIN FALLS' is printed in full capitals — built as a centred heading (14.8.1), blank line before and after (formatHeading's own default for a centred/level-1 heading, no special-casing needed).",
+      "now": "Print (page image): the speaker name is bold; both parenthetical stage directions are italic, with the character names Jabez', Mary’s and Mary in roman (upright) type inside them; the parentheses and the full stop after 'Mary’s)' are roman. The standalone stage direction is wholly italic inside roman parentheses. 'THE CURTAIN FALLS' is printed in full capitals, centred.",
+      "evidence": "Rewritten to describe only what the print page image shows."
+    }
+  ],
+  "resolution": "A/B agreed on braille (byte-for-byte) and on print substance; both described the bold/italic emphasis only in prose `features` fields (B) or left it out of `text` (A) rather than marking it in place. Per this repo's own established convention, `text` was rewritten with **Webster**/*Jabez'*/*Mary's).*'/*Mary* embedded directly — the exact italic-run boundary (including the closing paren and period right after ‘Mary’s’) was determined by forward-translation testing until an EXACT MATCH was reached, matching Example 14-4's own already-documented italic-terminator behaviour. A's own illustrates.rule/quote (14.8.1, the actual rule text) kept over B's own null/title-repeat. Forward-translated through Emboss's translator (one {type:'play',subtype:'prose'} block with bold/italic segments, one {type:'stage'} block, one centred {type:'heading'} block): EXACT MATCH (see differences.md). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [],
+      "after": [
+        ""
+      ],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 insert. Evidence per gap: PDF p.405, margin line numbers 20..20 (confirmed blank, immediately following this box's last matched line): 1 trailing blank line(s); gold had 0"
+    }
+  ]
 }

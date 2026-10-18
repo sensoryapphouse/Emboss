@@ -1,31 +1,31 @@
 {
   "BANA Example 17-1": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"EL MEDIO AMBIENTE3 5VIRON;T\" vs actual \"EL M$IO AMBI5TE3 5VIRON;T\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-10": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"WRITE WRIT\\\"<E\\\">ING\" vs actual \"  ;;;WRITE WRIT\\\"<E\\\">ING;'\"."
+    "note": "first differing line 1: expected \"WRITE WRIT\\\"<E\\\">ING\" vs actual \"  WRITE WRIT\\\"<E\\\">ING\"."
   },
   "BANA Example 17-11": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,WRITE LI/ ^WS BY ADD+ ! 5D+ 9\" vs actual \"  ,WRITE LI/ ^WS BY ADD+ ! 5D+ 9 P>5!SES\". line count differs by +1 (expected 5, actual 6)."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-12": {
     "status": "mismatch",
-    "note": "first differing line 4: expected \"\" vs actual \";;;,THE BEEPING WAS CONTINUE\\\"<OUS\\\">4;'\". line count differs by -1 (expected 8, actual 7)."
+    "note": "first differing line 7: expected \",I TRY\\\"<IED\\\"> @.<TR-\\\"<IED\\\">@.> TO RUN A\" vs actual \",I TRY\\\"<IED\\\"> TO RUN A M>A?ON4\"."
   },
   "BANA Example 17-13": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"AMAZE \\\"6 ^1MENT \\\"7 AMAZE^1MENT\" vs actual \";;;AMAZE \\\"6 MENT \\\"7 AMAZEMENT;'\"."
+    "status": "not-representable",
+    "note": "first differing line 3: expected \"  @.<AMAZE;T@.>\" vs actual \"HOPE \\\"6 ^1FUL \\\"7 HOPE^1FUL\". line count differs by -1 (expected 4, actual 3). Input-model limitation: the expected braille contains transcriber-supplied content that the print original does not show: the contracted repeat of each result word in transcriber's note indicators (17.13.1b): @.<amaze;t@.> and @.<hope;l@.> (\"amazement\", \"hopeful\") — not built (it would have to be read back from the braille)."
   },
   "BANA Example 17-2": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \" LA MEDICINA3 M$IC9E\" vs actual \"LA M$IC9A3 M$IC9E\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-3": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"EN ER GY\" vs actual \";;;EN ER GY;'\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-4": {
     "status": "match",
@@ -40,48 +40,48 @@
     "note": "match"
   },
   "BANA Example 17-7": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"TODAY ,I WINT SHOPPING FOR NEW SHOES8\" vs actual \";;;TODAY ,I WINT SHOPPING FOR NEW SHOES8\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-8": {
-    "status": "mismatch",
-    "note": "first differing line 5: expected \"GEAR GE-R\" vs actual \";;GEAR ;;GE-R\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 17-9": {
-    "status": "mismatch",
-    "note": "first differing line 6: expected \"\" vs actual \";;;,THE HEATER;' \\\"<HE-T]\\\"> ;;;IN THE\". line count differs by +1 (expected 12, actual 13)."
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,^WS ) CROSS$-\\\\ LRS >E\" vs actual \",! HEATER 9 ! ROOM DID N \\\"W4\". line count differs by -8 (expected 12, actual 4). Input-model limitation: the expected braille contains transcriber-supplied content that the print original does not show: the explanatory transcriber's note (17.11.2c); the hyphen-substituted repeat of each crossed-out word in transcriber's note indicators: he-ter, je-ns, ge-r, ide-l — not built (it would have to be read back from the br"
   },
   "BANA Sample 17-1": {
-    "status": "mismatch",
-    "note": "first differing line 4: expected \"BRA9 BRAIN\" vs actual \"BRA9 ;;BRAIN\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-10": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"#A4 ,DIVIDE 2T #B 3SONANTS \\\"<RAB-BIT1\" vs actual \"A4 ,DIVIDE 2T #B 3SONANTS \\\"<;;RAB-BIT1\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-11": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"    ,WRITE EA* ^W1 ADD+ IE OR ;EI4 ,IF Y\" vs actual \"  ,WRITE EA* ^W1 ADD+ IE OR ;EI4 ,IF Y\"."
+    "status": "not-representable",
+    "note": "first differing line 5: expected \"      @.<,PR9T USES A SQU>E TO REPRES5T\" vs actual \"#A4 W$#D<T\". line count differs by -3 (expected 11, actual 8). Input-model limitation: the expected braille contains transcriber-supplied content that the print original does not show: the transcriber's note explaining the print square and the braille underscore (17.9.2a), and the substitution of an underscore for each printed square — not built (it would have to be read back from the braille)."
   },
   "BANA Sample 17-12": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"    ,? H1DL9E & PLAY REVIEW H SIX\" vs actual \"  ,? H1DL9E & PLAY REVIEW H SIX\". line count differs by +2 (expected 15, actual 17)."
+    "note": "first differing line 2: expected \"    ,? H1DL9E & PLAY REVIEW H SIX\" vs actual \"  ,? H1DL9E & PLAY REVIEW H SIX\". line count differs by +1 (expected 15, actual 16)."
   },
   "BANA Sample 17-13": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,R1D ? N>RATIVE & REWRITE ! \\\"UL9$\" vs actual \"  ,R1D ? N>RATIVE & REWRITE ! \\\"UL9$ ^WS\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-14": {
     "status": "not-representable",
-    "note": "first differing line 1: expected \"    ,WRITE ! LR ( ! ANSW] T CORRECTLY\" vs actual \"  ,WRITE ! LR ( ! ANSW] T CORRECTLY\". line count differs by -9 (expected 15, actual 6). Input-model limitation: print block kind 'other' (not modeled — a devised picture-icon marker with no print character, a transcriber-linearised table, or an abridged answer grid, per F-213/F-212/F-211): \"a. A beleaves  B beleives  C beleifs  D No error"
+    "note": "first differing line 4: expected \"  ,ANTON \\\"<#A\\\"> _1BELIEVES T\" vs actual \"  ,ANTON \\\"<A\\\"> ;;BELIEVES T \\\"<;B\\\">\". line count differs by -9 (expected 15, actual 6). Input-model limitation: print block kind 'other' (not modeled — a devised picture-icon marker with no print character, a transcriber-linearised table, or an abridged answer grid, per F-213/F-212/F-211): \"a. A beleaves  B beleives  C beleifs  D No error"
   },
   "BANA Sample 17-15": {
     "status": "mismatch",
-    "note": "first differing line 2: expected \"    ,COMPLETE EA* EQUA;N TO MAKE A ^W\" vs actual \"  ,COMPLETE EA* EQUA;N TO MAKE A ^W LI/4\". line count differs by -2 (expected 11, actual 9)."
+    "note": "first differing line 4: expected \"      @.<,SYMBOLS US$3\" vs actual \"      @.<,SYMBOLS US$3 \\\"6 PLUS SIGN2 \\\"7\". line count differs by -2 (expected 11, actual 9)."
   },
   "BANA Sample 17-16": {
     "status": "mismatch",
-    "note": "first differing line 9: expected \",I HAVE @.<--VE@.> \\\"7 ,I'VE\" vs actual \";;;,I HAVE;' \\\"<--VE\\\"> ;;;\\\"7 ,I'VE;'\". line count differs by +2 (expected 14, actual 16)."
+    "note": "first differing line 11: expected \"THERE IS @.<-S@.> \\\"7 THERE'S @.<\\\"!'S@.>\" vs actual \"THERE IS @.<-S@.> \\\"7 THERE'S \\\"<86'S\\\">\"."
   },
   "BANA 17.11.1d Sample": {
     "status": "no-braille",
@@ -93,39 +93,39 @@
   },
   "BANA Sample 17-17": {
     "status": "mismatch",
-    "note": "first differing line 3: expected \"      @.<,SYMBOLS US$3\" vs actual \"      @.<,SYMBOLS US$3 ^@- MACRON ABV\". line count differs by -4 (expected 22, actual 18)."
+    "note": "first differing line 3: expected \"      @.<,SYMBOLS US$3\" vs actual \"      @.<,SYMBOLS US$3 ^@- MACRON ABV\". line count differs by -3 (expected 22, actual 19)."
   },
   "BANA Sample 17-18": {
     "status": "mismatch",
     "note": "first differing line 3: expected \"      @.<,SYMBOLS US$3\" vs actual \"      @.<,SYMBOLS US$3 ;\\\\O >R[2 \\\"6 PLUS\". line count differs by -2 (expected 19, actual 17)."
   },
   "BANA Sample 17-2": {
-    "status": "mismatch",
-    "note": "first differing line 3: expected \"    ,WRITE ^! ^WS 9 ALPHABETICAL ORD]4\" vs actual \"  ,WRITE ^! ^WS 9 ALPHABETICAL ORD]4\". line count differs by +1 (expected 12, actual 13)."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-3": {
-    "status": "mismatch",
-    "note": "first differing line 4: expected \"THEIR\" vs actual \";;THEIR\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-4": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"    ,UNSCRAMBLE ! FOLL[+ SPELL+ ^WS4\" vs actual \"  ,UNSCRAMBLE ! FOLL[+ SPELL+ ^WS4\". line count differs by +1 (expected 7, actual 8)."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-5": {
     "status": "not-representable",
-    "note": "first differing line 2: expected \"    ,WRITE ! ^W F ! BOX T IS ASSOCIAT$ )\" vs actual \"  ,WRITE ! ^W F ! BOX T IS ASSOCIAT$ )\". Input-model limitation: print block kind 'other' (not modeled — a devised picture-icon marker with no print character, a transcriber-linearised table, or an abridged answer grid, per F-213/F-212/F-211): \"(box continues in print: sign, signature, dream, dreamt, part — abridged in the given braille by a vertical-ellipsis symbol, then the box's own last word)\""
+    "note": "first differing line 10: expected \"444\" vs actual \"\". Input-model limitation: print block kind 'other' (not modeled — a devised picture-icon marker with no print character, a transcriber-linearised table, or an abridged answer grid, per F-213/F-212/F-211): \"(box continues in print: sign, signature, dream, dreamt, part — abridged in the given braille by a vertical-ellipsis symbol, then the box's own last word)\""
   },
   "BANA Sample 17-6": {
-    "status": "mismatch",
-    "note": "first differing line 7: expected \"A3ID5TALLY ACCIDENTALLY\" vs actual \"A3ID5TALLY ;;ACCIDENTALLY ;;ACCIDENTALLY\". line count differs by -1 (expected 10, actual 9)."
+    "status": "not-representable",
+    "note": "first differing line 7: expected \"A3ID5TALLY ACCIDENTALLY\" vs actual \"A^1CC^'ID5T^1ALLY\". line count differs by -1 (expected 10, actual 9). Input-model limitation: the expected braille contains transcriber-supplied content that the print original does not show: the contracted and the plain uncontracted repeat of each word (17.4.1b): \"accidentally accidentally\", \"advisable\", \"arrangement arrangement\" before the bold form — not built (it would have to be read back from the braille)."
   },
   "BANA Sample 17-7": {
     "status": "mismatch",
     "note": "first differing line 1: expected \"@$PEN ,WAT* \\\\ = FREQU5TLY MISSPELL$ ^WS6\" vs actual \"  ,WAT* \\\\ = FREQU5TLY MISSPELL$ ^WS6\"."
   },
   "BANA Sample 17-8": {
-    "status": "mismatch",
-    "note": "first differing line 4: expected \"DOCTOR  A PHYSICIAN\" vs actual \"DOCTOR3 A PHYSICIAN\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Sample 17-9": {
     "status": "match",

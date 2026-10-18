@@ -60,10 +60,13 @@
     "toc": "Ebirimu",
     "print": "Endabika y'Okukuba (Kkono)",
     "braille": "Braille",
+    "export": "Fulumiza",
+    "export_title": "Fulumiza Braille (BRF, eBraille) oba ogisindike ku mmasini ya Braille",
+    "emboss_menu": "Sindika ku mmasini ya Braille",
     "braille_view": "Endabika ya Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Sindika ku Ppulinta",
     "emboss_tooltip": "Sindika ekiwandiiko ku mmasini ya Braille oba ppulinta",
     "clear_doc": "Yerula Ekiwandiiko",
@@ -133,8 +136,6 @@
     "poem_desc": "Olunyiriri lw'oluyimba (1-3)",
     "exercise_title": "Ekibuuzo ky'Ekikolwa",
     "exercise_desc": "Ekibuuzo ky'ekikolwa ekiriko ennamba (1-5 / 3-5)",
-    "caption_title": "Ennyinyonyola / Ayogedde",
-    "caption_desc": "Ennyinyonyola y'ekifaananyi oba ayogedde (7-5)",
     "footnote_title": "Ekiwandiiko wansi",
     "footnote_desc": "Ebigambo by'ekiwandiiko wansi (1-3)",
     "note_title": "Akawandiiko k'Omuvvuunuzi",
@@ -163,8 +164,6 @@
     "page_desc": "Teekamu akabonero k'ekiwula olupapula lw'ekitabo",
     "printpage_title": "Ennamba y'Olupapula lw'Ekitabo",
     "printpage_desc": "Teekamu akabonero k'ekiwula olupapula lw'ekitabo",
-    "code_title": "Koodi ya Kompyuta",
-    "code_desc": "Teekamu ekitundu kya koodi ekiriko obubonero bwa UEB",
     "indent_title": "Yongera Ebbanga / Teeka Ekitundu Munda",
     "indent_desc": "Teeka ekintu ky'olukalala oba ekikolwa munda ennyo (Tab)",
     "outdent_title": "Kendeeza Ebbanga / Yimusa Ekintu",
@@ -185,8 +184,8 @@
     "language_label": "Olulimi lw'Endabika y'Omukozesa",
     "language_help": "Londa olulimi olunaakozesebwa ku bukonezi, mu mikutu, mu mboozi, ne mu bubaka bwa puloguramu esoma ku lw'eddoboozi.",
     "standard_label": "Enkola ya Braille",
-    "standard_bana": "BANA (Amerika ne Kanada — obusanduuko 40×25)",
-    "standard_ukaaf": "UKAAF (Bungereza n'Ensi Endala — obusanduuko 38×25)",
+    "standard_bana": "BANA (Amerika ne Kanada — obusanduuko 38×25)",
+    "standard_ukaaf": "UKAAF (Bungereza n'Ensi Endala — obusanduuko 38×27)",
     "grade_label": "Omutindo gw'Okufunza",
     "grade_1": "Omutindo 1 (Tegufunzibwa / Ennukuta ku Nnukuta)",
     "grade_2": "Omutindo 2 (Gufunziddwa)",
@@ -261,7 +260,7 @@
     "size_full": "Olupapula Lwonna (Omutindo 1 Tegusalibwa)",
     "lead_lines": "Emiguwa Egikulembera mu Ngalo",
     "braille_labels": "Amannya ga Braille",
-    "footer_tip": "💡 Emiguwa emyirundu gifuuka enkomerero ennywevu ezikwatibwa mu ngalo; langi zifuuka byokka ebika by'ebifaananyi ebikwatibwa mu ngalo ebitali bimu.",
+    "footer_tip": "Emiguwa emyirundu gifuuka enkomerero ennywevu ezikwatibwa mu ngalo; langi zifuuka byokka ebika by'ebifaananyi ebikwatibwa mu ngalo ebitali bimu.",
     "open_repositories": "Amateeka Amagazi ag'Ebikwatibwa mu Ngalo:",
     "no_diagrams": "Tewali bifaananyi bituukanyiziddwa ebizuuliddwa."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Embeera y'Okuvvuunula Awatali Kufiirwa",
     "precedence_status": "Embeera y'Amateeka g'Obukulu bwa Braille",
     "perfect_match": "Okutuukagana kwa 100% (Tewali Njawulo)",
-    "badge_warn": "⚠ {count} ateekeddwa okukebejjebwa",
+    "badge_warn": "{count} ateekeddwa okukebejjebwa",
     "badge_title": "Ebigambo {count} ebitatuukagana byazuuliddwa mu kukebera okuddiŋŋanya. Nyiga ogende ku sooka.",
     "badge_clean": "Okukebera okuddiŋŋanya: tewali njawulo za bigambo ezizuuliddwa."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Olina enkyukakyuka ezitatereke. Oyagala okufuluma nga tozitereka?",
     "unsaved_load": "Olina enkyukakyuka ezitatereke. Okutegeka ffayiro empya kijja kudiŋŋanya ekiwandiiko ky'olina kati. Weyongereyo?",
     "unsaved_clear": "Olina enkyukakyuka ezitatereke. Oyagala okuyerula ekiwandiiko?",
-    "drop_hint": "⬇ Teeka ekiwandiiko wano okukiyingiza mu kiddirira",
+    "drop_hint": "Teeka ekiwandiiko wano okukiyingiza mu kiddirira",
     "notice": "Okulangirira",
     "close_notice": "Ggalawo Okulangirira"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Ebigambo by'ekiwandiiko",
+      "math_keyboard_toggle": "Kibooda ya Kubala",
       "label": "Ebigambo",
       "toolbar_aria": "Okutegeka",
       "style_label": "Omutindo gw'akatundu",
@@ -443,8 +443,8 @@
       "graphic_cats": "Ebika by'Ebifaananyi",
       "graphic_list": "Ebifaananyi ebikwatibwa mu ngalo",
       "formula_search_label": "Noonya ebyokulabirako by'ebigera",
-      "btactile_link": "BTactile (Bwereere) ↗",
-      "tgil_link": "APH TGIL (Ebyokulabirako ebisukka mu 1,800) ↗"
+      "btactile_link": "BTactile (Bwereere)",
+      "tgil_link": "APH TGIL (Ebyokulabirako ebisukka mu 1,800)"
     },
     "settings": {
       "list_spaced": "Olukalala olw'omutindo ogutaliimu kintu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Yeegatte butereevu ne mmasini za Braille eza microcontroller (ESP32-S3, RP2040/RP2350, STM32, Arduino) nga tosaanidde kukozesa puloguramu za sisitemu.",
       "graphics_hint": "Bwe kitaakkirizibwe, ebifaananyi bifulumizibwa ng'ennyinyonyola z'Akawandiiko k'Omuvvuunuzi ezisobola okutuukibwako, ku mmasini za Braille ezikuba bigambo byokka n'endabika za Braille.",
       "tactile_heading": "Okusindika ku Bwangu Endabika Ekwatibwa mu Ngalo (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Yeegatte Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Yeegatte USB / HID (Monarch)",
+      "tactile_connect_ble": "Yeegatte Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Yeegatte USB / HID (Monarch)",
       "tactile_disconnect": "Yawukanya Endabika",
       "tactile_sim_monarch": "Gezesa Monarch Ey'Ekifaanana (32×10)",
       "tactile_sim_dotpad": "Gezesa DotPad Ey'Ekifaanana (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Esindika ku bwangu endabika ya Braille n'ebifaananyi ebikwatibwa mu ngalo nga bayita mu WebBluetooth (DotPad BLE UART) oba WebHID (Monarch/USB) awatali puloguramu za bweru.",
       "perkins_hint": "— wandiika Braille ng'okozesa obutuufu SDF ne JKL",
       "ascii_hint": "— laga ennukuta za ASCII Braille butereevu",
+      "show_explanation_bar": "Laga olubaawo olunnyonnyola",
+      "show_explanation_bar_hint": "— olukalala wansi w'ebigambo ne Braille olunnyonnyola Braille ey'ekigambo ky'oliko",
+      "simple_mode_hint": "— zuukusa Emboss ku kyuusa ekyangu. Okukyusa wakati wa Enkola Ey'Amangu n'omuwandiisi tekikyusa kino.",
       "covers_hint": "— ebikuta ebiriko amannya ebikubiddwa nga ekitabo kyawuliddwamu"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Omutwe {n}",
       "cell_aria_named": "{header}, omutindo {row}",
       "cell_aria": "Empanga {col}, omutindo {row}",
-      "too_wide_listed": "⚠ Nnene nnyo ku mpanga — ejja kuwandiikibwa mu Braille nga emmeeza ekalaliddwa",
+      "too_wide_listed": "Nnene nnyo ku mpanga — ejja kuwandiikibwa mu Braille nga emmeeza ekalaliddwa",
       "too_wide_listed_title": "Emmeeza eno tesobola kutuuka mu mpanga ku obusanduuko obuliwo kati ku mutindo gumu ne engeri ya Braille, noolwekyo ejja kuwandiikibwa mu Braille nga emmeeza ekalaliddwa (BANA Formats §11.9) mu kifo ky'empanga eziri kumpi n'endala.",
-      "too_wide_paragraph": "⚠ Nnene nnyo ku mpanga — ejja kuwandiikibwa mu Braille mu ngeri y'akatundu",
+      "too_wide_paragraph": "Nnene nnyo ku mpanga — ejja kuwandiikibwa mu Braille mu ngeri y'akatundu",
       "too_wide_paragraph_title": "Emmeeza eno tesobola kutuuka mu mpanga ku obusanduuko obuliwo kati ku mutindo gumu ne engeri ya Braille, noolwekyo ejja kuwandiikibwa mu Braille mu ngeri y'akatundu (UKAAF B004 §12) mu kifo ky'empanga eziri kumpi n'endala."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Tewasobose kutegeka mmeeza za \"{code}\" — kikyakozesa enkola ya Braille eyasooka.",
-      "failed": "⚠ Braille teyayinzikanye kukolebwa.",
+      "failed": "Braille teyayinzikanye kukolebwa.",
       "failed_hint": "(Bwe kiba kigamba nti enjini teyatandikiddwa, enjini ya Braille teyategekeddwa — ddaabiriza n'amaanyi nga okozesa Cmd/Ctrl+Shift+R.)",
       "error_status": "Ensobi mu kukola: {message}"
     },
     "engine": {
       "loading": "Okutegeka enjini ya Braille…",
-      "failed": "⚠ Enjini ya Braille teyategekeddwa.",
+      "failed": "Enjini ya Braille teyategekeddwa.",
       "failed_hint": "Ddaabiriza n'amaanyi nga okozesa Cmd/Ctrl+Shift+R. Bwe kiba kigenda mu maaso, ggulawo console y'omulambuzi (View ▸ Developer) ovubuke ensobi.",
       "failed_status": "Enjini teyategekeddwa: {message}",
       "ready": "Teekateeka — wandiika oba otegeke ku kkono; Braille edda mu maaso ku bwangu."
@@ -715,7 +718,7 @@
       "network_unreachable": "Tewasobose kutuuka ku {url}: {message}. Abalambuzi tebasobola kuggulawo enyunga za TCP (omukutu 9100) butereevu; mmasini ya Braille kiteekwa okukkiriza HTTP POST, oba ossaamu ffayiro ya .brf ogisindike nga okozesa puloguramu yo ey'okukuba.",
       "usb_bridge_done": "Omulimu gw'okukuba gutuuse ku ppulinta ya USB!",
       "needs_webserial": "Okukuba butereevu nga oyita mu Serial kwetaagisa omulambuzi alina WebSerial (Chrome, Edge, Opera). Osobola ossa ffayiro ya .brf ogikube nga okozesa puloguramu yo ey'okukuba, oba okozese enkola ya Network (Omukutu 9100) mu Ntegeka.",
-      "detected": "🔌 {name} ezuuliddwa — eteekeddwa ku {cells}×{lines} ku {baud} baud."
+      "detected": "{name} ezuuliddwa — eteekeddwa ku {cells}×{lines} ku {baud} baud."
     },
     "symbols": {
       "title": "Amateeka g'Obubonero Obukwatibwa mu Ngalo",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matulikisi Ekyusakyusa",
       "badge_text_only": "Ebigambo Byokka",
       "badge_index": "Matulikisi y'Obutonnyeze"
+    },
+    "offline": {
+      "ready": "Emboss eli mwetegefu okukola awatali intaneeti.",
+      "ready_short": "Weetegese okukola awatali intaneeti",
+      "not_yet": "Kikyali kyetegekera okukola awatali intaneeti…"
     }
   }
 }

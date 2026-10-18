@@ -56,7 +56,13 @@
     ],
     "notes": "Two-row column heading: primary heading \"In Millions of Dollars\" spans the three sub-columns Total/Direct/Grants; \"Fiscal Year\" has no sub-heading (single-row heading, taller box cell).",
     "surroundingText": null,
-    "printFeatures": "Bordered box; centered bold two-line title above the box (\"Table 11.1\" / \"Summary Comparison...\"); primary heading \"In Millions of Dollars\" bold and centered over its three sub-columns; \"Fiscal Year\", \"Total\", \"Direct\", \"Grants\" bold; ruled lines separate the heading rows from data and each data row from the next."
+    "printFeatures": "Bordered box; centered bold two-line title above the box (\"Table 11.1\" / \"Summary Comparison...\"); primary heading \"In Millions of Dollars\" bold and centered over its three sub-columns; \"Fiscal Year\", \"Total\", \"Direct\", \"Grants\" bold; ruled lines separate the heading rows from data and each data row from the next.",
+    "columnAlign": [
+      "left",
+      "right",
+      "right",
+      "right"
+    ]
   },
   "braille": {
     "width": 40,
@@ -71,11 +77,11 @@
       "         \"33333333333333333333333333333",
       ",fiscal",
       ",ye>     ,total      ,direct   ,grants",
-      "\"333333 \"333333333 \"3333333 \"3333333",
-      "#aiih      #iha1gab #hag1ggj #afc1idb",
-      "#aiii    #a1jja1fgf #hbe1hcc #age1hdc",
-      "#bjjj    #a1jed1ejc #hfg1gac #ahf1gij",
-      "#bjja    #a1abh1dcb #ibj1cid #bjh1jch",
+      "\"333333  \"333333333  \"3333333  \"3333333",
+      "#aiih      #iha1gab  #hag1ggj  #afc1idb",
+      "#aiii    #a1jja1fgf  #hbe1hcc  #age1hdc",
+      "#bjjj    #a1jed1ejc  #hfg1gac  #ahf1gij",
+      "#bjja    #a1abh1dcb  #ibj1cid  #bjh1jch",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -89,5 +95,40 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers: row 2 col 1 resolved to '' (blank), not a repeated 'Fiscal Year' -- confirmed against the PDF image (p. 308): 'Fiscal Year' is one rowspan-style label covering both header rows, not printed twice. Run A's shape was correct; run B's was not."
+  "resolution": "print.headers: row 2 col 1 resolved to '' (blank), not a repeated 'Fiscal Year' -- confirmed against the PDF image (p. 308): 'Fiscal Year' is one rowspan-style label covering both header rows, not printed twice. Run A's shape was correct; run B's was not.",
+  "printCorrections": [
+    {
+      "field": "print.columnAlign",
+      "was": null,
+      "now": [
+        "left",
+        "right",
+        "right",
+        "right"
+      ],
+      "evidence": "PDF p308 (printed 11-26) page image rendered from references/bana/braille-formats-2016.pdf (25 Sep 2026): Page image (PDF p.308, Sample 11-2): the four number columns are right-aligned in print; Fiscal Year is left-aligned. Added for K3 (alignment follows print, BANA 11.6.1d); the print description never recorded alignment."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"333333 \"333333333 \"3333333 \"3333333",
+        "#aiih      #iha1gab #hag1ggj #afc1idb",
+        "#aiii    #a1jja1fgf #hbe1hcc #age1hdc",
+        "#bjjj    #a1jed1ejc #hfg1gac #ahf1gij",
+        "#bjja    #a1abh1dcb #ibj1cid #bjh1jch"
+      ],
+      "after": [
+        "\"333333  \"333333333  \"3333333  \"3333333",
+        "#aiih      #iha1gab  #hag1ggj  #afc1idb",
+        "#aiii    #a1jja1fgf  #hbe1hcc  #age1hdc",
+        "#bjjj    #a1jed1ejc  #hfg1gac  #ahf1gij",
+        "#bjja    #a1abh1dcb  #ibj1cid  #bjh1jch"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 10, 11, 12, 13, 14 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 308 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (5). Where: column gap (table / related columns / columned list) (4); table separation line (1)."
+    }
+  ]
 }

@@ -1,0 +1,3 @@
+build-info: 6d71f654 (2026-10-15); sw.js cache "emboss-6d71f654", 131 precached assets
+built dist/ at /scratch/wt-parent/wt/dist
+check-dist: ok

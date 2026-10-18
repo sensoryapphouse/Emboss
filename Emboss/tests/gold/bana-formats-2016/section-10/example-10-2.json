@@ -31,15 +31,15 @@
         "items": [
           {
             "level": 0,
-            "text": "A. The chalkboard is green."
+            "text": "1. The chalkboard is green."
           },
           {
             "level": 0,
-            "text": "B. Sometimes the erasers are dusty."
+            "text": "2. Sometimes the erasers are dusty."
           },
           {
             "level": 0,
-            "text": "C. Our chalk is new."
+            "text": "3. Our chalk is new."
           }
         ]
       }
@@ -68,5 +68,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print reconstructed from A (B agrees); three directions paragraphs (5-5, then two 7-5 \"additional paragraphs\" per 10.3.2) followed by three lettered items with no further subentries."
+  "resolution": "Braille matches both A and B exactly. Print reconstructed from A (B agrees); three directions paragraphs (5-5, then two 7-5 \"additional paragraphs\" per 10.3.2) followed by three lettered items with no further subentries. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[3].items[0..2].text",
+      "was": "A. The chalkboard is green. / B. Sometimes the erasers are dusty. / C. Our chalk is new.",
+      "now": "1. The chalkboard is green. / 2. Sometimes the erasers are dusty. / 3. Our chalk is new.",
+      "evidence": "references/_gemini/_done/gold-10-A/page-254.png, Example 10-2 print box: the three sentences are numbered \"1.\" \"2.\" \"3.\" (not letters); the braille numeric-indicator lines #a #b #c agree."
+    }
+  ]
 }

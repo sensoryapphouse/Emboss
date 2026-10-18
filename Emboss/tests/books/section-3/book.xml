@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-3"/>
+<meta name="dc:Title" content="Transcriber's notes"/>
+<meta name="dc:Identifier" content="test-section-3"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Transcriber's notes</doctitle></frontmatter>
+<bodymatter>
+<level1>
+<h1>Symbols</h1>
+<prodnote render="required">The symbol × represents multiplication.</prodnote>
+<p>I have trouble with multiplication tables, especially the 9 ×'s.</p>
+<p>Electrical energy → <prodnote render="required">right arrow</prodnote> light and heat</p>
+<prodnote render="optional">This optional note may be dropped by a reader.</prodnote>
+<level2><h2>Later notes</h2>
+<p>Text with a page reference.</p>
+<prodnote render="required">The map on page 5 is described in the next volume.</prodnote>
+</level2>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

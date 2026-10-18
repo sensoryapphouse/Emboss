@@ -1,0 +1,43 @@
+{
+  "id": "example-2-16",
+  "title": "Example 2-16: Dedication Page",
+  "pdfPages": [
+    16
+  ],
+  "textLines": [
+    1994,
+    2003
+  ],
+  "illustrates": {
+    "rule": "2.9.1",
+    "quote": "Dedications and acknowledgements are formatted the same way."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-060.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      "1    ,= ,frank ,vattano1 ma/] t1*]1        ;v",
+      "2    m5tor to t1*]s1 wellspr+ ( cr1tive",
+      "3    res\\rces1 & 5c\\rag+ fr",
+      "",
+      "25                                        p#h"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used)."
+}

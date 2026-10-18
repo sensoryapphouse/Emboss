@@ -17,21 +17,21 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Columbus sailed from Spain on August 3, 1492. On October 12 he sighted land, an island in what is now called the West Indies. About two weeks later he sighted what he thought was Japan, also called Zipangu at the time.",
+        "text": "Columbus sailed from Spain on August 3, 1492. On October 12 he sighted land, an island in what is now called the **West Indies.** About two weeks later he sighted what he thought was Japan, also called Zipangu at that time.",
         "features": "Plain body paragraph; the proper noun 'West Indies' is bold.",
         "items": null
       },
       {
         "kind": "paragraph",
         "level": null,
-        "text": "<b><i>All my globes and maps seem to indicate that the island of Japan is in that vicinity, and I am sure that Cuba and Zipangu are close.</i></b>",
+        "text": "<b><i>“All my globes and world maps seem to indicate that the island of Japan is in this vicinity and I am sure that Cuba and Zipangu are one.”</i></b>",
         "features": "Indented pull-quote, set in bold italics on a tinted background — the decorative quotation styling that rule 5.3.10 says to ignore.",
         "items": null
       },
       {
         "kind": "paragraph",
         "level": null,
-        "text": "By 1493 Columbus had completed three more expeditions.",
+        "text": "By 1504 Columbus had completed three more expeditions.",
         "features": "Plain body text, resumes after the quotation.",
         "items": null
       }
@@ -84,5 +84,25 @@
     "A",
     "B"
   ],
-  "resolution": "Braille re-derived independently from .txt lines 4289-4302 (field width 5); matches run A's rendering, which correctly preserves the genuine 2-cell block-quote indent on every line of the quotation (run B stripped this on the quotation's own lines, the same section-wide indentation-stripping bug found elsewhere in this section). `lineNumbers` (7-20) adopted per run B's schema addition, matching the task brief's known fact that this Sample starts at line 7."
+  "resolution": "Braille re-derived independently from .txt lines 4289-4302 (field width 5); matches run A's rendering, which correctly preserves the genuine 2-cell block-quote indent on every line of the quotation (run B stripped this on the quotation's own lines, the same section-wide indentation-stripping bug found elsewhere in this section). `lineNumbers` (7-20) adopted per run B's schema addition, matching the task brief's known fact that this Sample starts at line 7. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Columbus sailed from Spain on August 3, 1492. On October 12 he sighted land, an island in what is now called the West Indies. About two weeks later he sighted what he thought was Japan, also called Zipangu at the time.",
+      "now": "Columbus sailed from Spain on August 3, 1492. On October 12 he sighted land, an island in what is now called the **West Indies.** About two weeks later he sighted what he thought was Japan, also called Zipangu at that time.",
+      "evidence": "Page image PDF p.141 (Sample 5-2): 'West Indies.' is set in bold (sans-serif, including the full stop); final clause reads 'at that time', not 'at the time'."
+    },
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "<b><i>All my globes and maps seem to indicate that the island of Japan is in that vicinity, and I am sure that Cuba and Zipangu are close.</i></b>",
+      "now": "<b><i>“All my globes and world maps seem to indicate that the island of Japan is in this vicinity and I am sure that Cuba and Zipangu are one.”</i></b>",
+      "evidence": "Page image PDF p.141: pull-quote in bold italics wrapped in curly quotation marks; wording is 'world maps', 'in this vicinity and I am sure', 'Zipangu are one.'"
+    },
+    {
+      "field": "print.print.blocks.2.text",
+      "was": "By 1493 Columbus had completed three more expeditions.",
+      "now": "By 1504 Columbus had completed three more expeditions.",
+      "evidence": "Page image PDF p.141: closing paragraph reads 'By 1504 Columbus ...' (gold said 1493)."
+    }
+  ]
 }

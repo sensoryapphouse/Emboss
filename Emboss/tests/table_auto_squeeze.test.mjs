@@ -60,6 +60,14 @@ const squeezeBlock = {
 // never inserts one just because a row happens to wrap. formatColumnar used to insert a
 // blank line after every row once ANY row wrapped, citing a "BANA §11.3.4" that does not
 // exist in this edition — removed; see the dedicated F-77 tests below for the fix itself.
+// A9 (standards-findings.md F-9/EMBOSS-TASKS.md): both row headings here ("United
+// Kingdom"/"United States") squeeze to two lines. BANA §11.6.1b/§11.5.2a ("Begin all
+// column entries on the line on which the row heading ends") means the entries
+// ("London"/"67 million", "Washington City"/"331 million") must start on the row
+// heading's SECOND line ("KINGDOM"/"STATES"), not its first ("UNITED") — the shape
+// asserted below, replacing an earlier version of this test that (before the A9 fix)
+// baked in the bug it was actually exercising: entries lined up against the row
+// heading's FIRST line instead.
 test('T9: auto mode squeezes into columnar when every entry fits two squeezed lines', () => {
   assert.equal(tableLayout(squeezeBlock, opts(36)), 'columnar',
     'the whole table (62 cells natural) does not fit unsqueezed at width 36 — the pre-T9 ' +
@@ -67,12 +75,13 @@ test('T9: auto mode squeezes into columnar when every entry fits two squeezed li
   const lines = clean(formatBlock(squeezeBlock, opts(36)));
   assert.deepEqual(lines, [
     '',
-    'COUNTRY    CAPITAL CITY POPULATION',
-    '"33333333 "33333333333 "333333333',
-    'UNITED "" LONDON """"" 67 MILLION',
-    '  KINGDOM',
-    'UNITED "" WASHINGTON    331',
-    '  STATES     CITY          MILLION',
+    'COUNTRY    CAPITAL CITY  POPULATION',   // two blank cells between columns (11.2.5b, K33)
+    '"33333333  "33333333333  "333333333',
+    'UNITED ""',
+    '  KINGDOM  LONDON """""  67 MILLION',
+    'UNITED ""',
+    '  STATES   WASHINGTON    331',
+    '             CITY          MILLION',
     '',
   ], JSON.stringify(lines));
 });
@@ -85,7 +94,10 @@ test('T9: auto mode squeezes into columnar when every entry fits two squeezed li
 // its own column's left margin, indented 2, the same way.
 test('T9: column entry runovers are indented two cells (§11.6.1a)', () => {
   const lines = clean(formatBlock(squeezeBlock, opts(36)));
-  assert.equal(lines[4], '  KINGDOM', 'row 1 column 1 runover, 2-cell indent (from the squeezed table above)');
+  // A9: the row heading's own runover ("KINGDOM") is what's 2-cell indented here — this
+  // is also the line the row's column entries begin on (§11.6.1b), so the line carries
+  // both; only the row-heading prefix is this assertion's own concern.
+  assert.ok(lines[4].startsWith('  KINGDOM'), 'row 1 column 0 (row heading) runover, 2-cell indent (from the squeezed table above)');
   const single = {
     type: 'table', format: 'auto',
     headers: ['Description'],
@@ -97,15 +109,17 @@ test('T9: column entry runovers are indented two cells (§11.6.1a)', () => {
 });
 
 // §11.6.1g: "Do not insert guide dots after a column runover (other than the first
-// column), as the runover is not leading to the beginning of the next column." None of
-// this table's three runover lines above are preceded by a guide-dot run — a genuine
-// guide-dot fill (`""` after "UNITED"/"LONDON" on the row's FIRST line) is a different,
-// unaffected mechanism (§11.6.1f, bridging a short entry to the next column).
+// column), as the runover is not leading to the beginning of the next column." Row 2's
+// last line ('             CITY          MILLION') is a pure column-entry runover line —
+// column 0 (the row heading) has already finished, so this line is entirely entry
+// runovers (§11.6.1a) — and carries no guide-dot run; a genuine guide-dot fill (`""`
+// after "UNITED"/"LONDON" on a row's FIRST line) is a different, unaffected mechanism
+// (§11.6.1f, bridging a short entry to the next column).
 test('T9: no guide dots inserted after a column runover (§11.6.1g)', () => {
   const lines = clean(formatBlock(squeezeBlock, opts(36)));
-  for (const runover of ['  KINGDOM', '  STATES     CITY          MILLION']) {
-    assert.ok(!runover.includes('"'), `runover line must carry no guide dots: ${JSON.stringify(runover)}`);
-  }
+  const runover = lines[7];
+  assert.equal(runover, '             CITY          MILLION');
+  assert.ok(!runover.includes('"'), `runover line must carry no guide dots: ${JSON.stringify(runover)}`);
 });
 
 test('T9: formatBlock and traceBlock agree on the squeezed columnar table', () => {
@@ -223,12 +237,12 @@ test('F-77: no blank line around a wrapped LAST row (BANA Sample 7-1, Kinetic En
   const lines = clean(formatBlock(block, opts(40)));
   assert.deepEqual(lines, [
     '',
-    'KINETIC ENERGY EXAMPLE',
-    '"3333333333333 "33333333333333333333333',
-    'SOUND """""""" VIBRATING OBJECT',
-    'THERMAL """""" HOT COCOA',
-    'MECHANICAL """ FALLING ROCK',
-    'ELECTRICAL """ ELECTRONS IN AN',
+    'KINETIC ENERGY  EXAMPLE',   // two blank cells between columns (11.2.5b, K33); the runover below is 2 in from column 2's start
+    '"3333333333333  "33333333333333333333333',
+    'SOUND """"""""  VIBRATING OBJECT',
+    'THERMAL """"""  HOT COCOA',
+    'MECHANICAL """  FALLING ROCK',
+    'ELECTRICAL """  ELECTRONS IN AN',
     '                  ELECTRICAL CURRENT',
     '',
   ], JSON.stringify(lines));
@@ -249,11 +263,11 @@ test('F-77: no blank line around a wrapped MIDDLE row', () => {
   const lines = clean(formatBlock(block, opts(30)));
   assert.deepEqual(lines, [
     '',
-    'ANIMAL NOTE',
-    '"33333 "333333333333333333333',
-    'FOX "" QUICK AND CLEVER',
+    'ANIMAL  NOTE',   // two blank cells between columns (11.2.5b, K33)
+    '"33333  "333333333333333333333',
+    'FOX ""  QUICK AND CLEVER',
     '          ANIMAL',
-    'OWL "" WISE',
+    'OWL ""  WISE',
     'BEAR    STRONG',
     '',
   ], JSON.stringify(lines));

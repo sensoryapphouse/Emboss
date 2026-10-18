@@ -1,0 +1,584 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 0,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "gen:1982326777-s0",
+ "docSource": "generated",
+ "docFeatures": [
+  "display-math",
+  "h3",
+  "h4",
+  "h6",
+  "inline-math",
+  "link",
+  "note",
+  "pagenum",
+  "picture-noalt",
+  "script:arabic",
+  "script:cjk",
+  "script:combining",
+  "script:emoji",
+  "script:greek",
+  "script:hebrew",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1982326777-s0": "docs/00-gen-1982326777-s0.html"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: pagenum",
+ "message": "the saved file reopens to different braille [first differing block: pagenum] (block #0 not counting empty ones, pagenum / titlepage): first tab has 465 lines, reopened tab has 444; first differences: line 42: first tab \"\\r\" / reopened tab \",H1D] #A     ,H1D] #B     ,H1D] #C\\r\" | line 43: first tab \"\\r\" / reopened tab \",R[ #A1 \\\"\\\"\\\"\\\"\\r\" | line 44: first tab \"\\r\" / reopened tab \"  ,COL #A    ,R[ #A1 \\\"\\\"\\\"\\\" ,R[ #A1\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 12,
+ "originalActions": 90,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.9594,
+   "i": 9,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7127,
+   "i": 10,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "clickText",
+   "fx": 0.0771,
+   "fy": 0.8946,
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9612,
+   "i": 11,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6966,
+   "i": 12,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowLeft",
+   "n": 2,
+   "word": false
+  },
+  {
+   "t": "clickBraille",
+   "fx": 0.3298,
+   "fy": 0.1254,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.318,
+   "i": 13,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "dragText",
+   "fx": 0.2322,
+   "fy": 0.1762,
+   "ext": "shiftEnd",
+   "n": 4,
+   "tx": 0.6365,
+   "ty": 0.51,
+   "alt": false
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "clickCard",
+   "f": 0.4416,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0456,
+   "i": 14,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "modNav",
+   "key": "Home",
+   "shift": false
+  },
+  {
+   "t": "scroll",
+   "where": "editor",
+   "dy": -3000
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4509,
+   "i": 15,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "clickText",
+   "fx": 0.5489,
+   "fy": 0.9939,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4015,
+   "i": 16,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4553,
+   "i": 17,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2785,
+   "i": 18,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3406,
+   "i": 19,
+   "q": "h",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5867,
+   "i": 20,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8051,
+   "i": 21,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0296,
+   "i": 22,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3531,
+   "i": 23,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8462,
+   "i": 24,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9,
+   "i": 25,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowRight",
+   "n": 6
+  },
+  {
+   "t": "menu",
+   "which": "settings",
+   "f": 0.7744,
+   "g": 0.933,
+   "close": "escape"
+  },
+  {
+   "t": "insert",
+   "f": 0.219
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5751,
+   "i": 26,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "check",
+   "which": "recovery"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6749,
+   "i": 27,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7389,
+   "i": 28,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "scroll",
+   "where": "braille",
+   "dy": 800
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2991,
+   "i": 29,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8458,
+   "i": 30,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "key",
+   "key": "Alt+ArrowUp",
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5148,
+   "i": 31,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "key",
+   "key": "Tab",
+   "n": 4
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.198,
+   "i": 32,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "dragText",
+   "fx": 0.6841,
+   "fy": 0.0358,
+   "ext": "triple",
+   "n": 3,
+   "tx": 0.2592,
+   "ty": 0.6926,
+   "alt": false
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6645,
+   "i": 33,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "clickCard",
+   "f": 0.2338,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2958,
+   "i": 34,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "slash",
+   "q": "",
+   "down": 4,
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9656,
+   "i": 35,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8252,
+   "i": 36,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "selOp",
+   "fx": 0.1457,
+   "fy": 0.2686,
+   "ext": "shiftClick",
+   "n": 6,
+   "fx2": 0.6236,
+   "fy2": 0.1152,
+   "op": "typeOver",
+   "dx": 0.0749,
+   "dy": 0.6768,
+   "key": "Delete",
+   "text": ".",
+   "f": 0.2177,
+   "fmt": "u"
+  },
+  {
+   "t": "colorScheme",
+   "v": "dark"
+  },
+  {
+   "t": "clickCard",
+   "f": 0.8876,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7448,
+   "i": 37,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "paste",
+   "how": "html",
+   "html": "<h2>A heading</h2><p>and a paragraph</p>",
+   "text": "\tindented\n\t\tdeeper\nback"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6241,
+   "i": 38,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9111,
+   "i": 39,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowLeft",
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 15
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6817,
+   "i": 40,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6817,
+   "i": 41,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "menu",
+   "which": "settings",
+   "f": 0.9442,
+   "g": 0.7734,
+   "close": "leave"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0625,
+   "i": 42,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "format",
+   "which": "btnUnderline"
+  },
+  {
+   "t": "insertAll",
+   "i": 16
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2402,
+   "i": 43,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 17
+  },
+  {
+   "t": "insertAll",
+   "i": 18
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3855,
+   "i": 44,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 19
+  },
+  {
+   "t": "format",
+   "which": "kbdItalic"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6354,
+   "i": 45,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1731,
+   "i": 46,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 20
+  },
+  {
+   "t": "key",
+   "key": "Enter",
+   "n": 1
+  },
+  {
+   "t": "insertAll",
+   "i": 21
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2225,
+   "i": 47,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1106,
+   "i": 48,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "type",
+   "text": "Ω ½ it's A"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4393,
+   "i": 49,
+   "q": "",
+   "end": "Enter"
+  }
+ ]
+}

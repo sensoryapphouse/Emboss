@@ -47,10 +47,10 @@
       "ru2] raft",
       "be>",
       "",
-      ",big ,bi7] ,bi7e/",
-      "\"333 \"3333 \"33333",
-      ".-    .- \"\" .-",
-      ".-    .- \"\" .-",
+      ",big  ,bi7]  ,bi7e/",
+      "\"333  \"3333  \"33333",
+      ".-    .- \"\"  .-",
+      ".-    .- \"\"  .-",
       ""
     ],
     "pageBreaks": [],
@@ -60,5 +60,25 @@
     "The exact braille cell-pattern used for the worksheet's blank ruled answer lines (encoded as repeated '.-' groups) is transcribed verbatim from the ASCII source without independently confirming its dot-pattern meaning against a Special Symbols page."
   ],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6965-6980 after stripping the 5-character line-number field (the '(Return to Text)' line 6981 excluded). `illustrates.rule` narrowed to 9.2.5.d (both runs agreed, dotted per convention). Structural disagreement over the answer-chart block: A recorded it as one non-modelled 'other' block; B modelled it as a second 'list' (items: 'Big'/'Bigger'/'Biggest') which would cause buildModel9 to build an actual formatted list -- not matching the chart's real guide-dot/ruled-blank-line braille at all. Resolved to A's 'other' treatment: Emboss has no mechanism to build a worksheet answer grid (column headings + guide dots + blank ruled lines), so it is recorded as a limitation rather than mis-modelled as an ordinary list."
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6965-6980 after stripping the 5-character line-number field (the '(Return to Text)' line 6981 excluded). `illustrates.rule` narrowed to 9.2.5.d (both runs agreed, dotted per convention). Structural disagreement over the answer-chart block: A recorded it as one non-modelled 'other' block; B modelled it as a second 'list' (items: 'Big'/'Bigger'/'Biggest') which would cause buildModel9 to build an actual formatted list -- not matching the chart's real guide-dot/ruled-blank-line braille at all. Resolved to A's 'other' treatment: Emboss has no mechanism to build a worksheet answer grid (column headings + guide dots + blank ruled lines), so it is recorded as a limitation rather than mis-modelled as an ordinary list.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",big ,bi7] ,bi7e/",
+        "\"333 \"3333 \"33333",
+        ".-    .- \"\" .-",
+        ".-    .- \"\" .-"
+      ],
+      "after": [
+        ",big  ,bi7]  ,bi7e/",
+        "\"333  \"3333  \"33333",
+        ".-    .- \"\"  .-",
+        ".-    .- \"\"  .-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 11, 12, 13, 14 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 241 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (4). Where: column gap after guide dots (2); column gap (table / related columns / columned list) (1); table separation line (1)."
+    }
+  ]
 }

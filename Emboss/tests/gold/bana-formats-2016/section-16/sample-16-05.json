@@ -17,14 +17,14 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "'Sheridan will not succeed at Bath with his oratory. Ridicule has gone down before him, and, I doubt, Derrick is his enemy.'[ref:*]",
+        "text": "‘Sheridan will not succeed at Bath with his oratory. Ridicule has gone down before him, and, I doubt, Derrick is his enemy.’[ref:*]",
         "features": "Single quoted sentence with an asterisk reference mark at the end.",
         "items": null
       },
       {
         "kind": "note",
         "level": null,
-        "text": "*Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample:\n“None but the brave\nNone but the brave.\nNone but the brave deserve the fair.”\nNaughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11.",
+        "text": "[ref:*]Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him ‘as a wrong-headed, whimsical man.’ … Take a sample:\n“*None* but the brave\nNone but the *brave.*\nNone *but* the brave deserve the fair.”\nNaughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.’ Moore’s *Sheridan*, i. 9, 11.",
         "features": "Long footnote containing, part-way through, a three-line displayed poem quotation set off by its own blank lines and centered layout, followed by a closing attribution.",
         "items": null
       }
@@ -33,7 +33,7 @@
       {
         "ref": "*",
         "placement": "footnote",
-        "text": "Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample: “None but the brave / None but the brave. / None but the brave deserve the fair.” Naughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11."
+        "text": "Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him ‘as a wrong-headed, whimsical man.’ … Take a sample: “*None* but the brave / None but the *brave.* / None *but* the brave deserve the fair.” Naughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.’ Moore’s *Sheridan*, i. 9, 11."
       }
     ],
     "surroundingText": "Cross-referenced from rule 16.7.4, illustrating a footnote that itself contains displayed quoted material (a three-line poem) using listed 1-3 format.",
@@ -42,7 +42,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "  ,8,%]idan w n su3e$ at ,ba? ) 8    a#,-",
+      "  ,8,%]idan w n su3e$ at ,ba? ) 8   a#,-",
       "oratory4 ,ridicule has g\"o d[n 2f hm1 &1",
       ",i d\\bt1 ,d]rick is 8 5emy4,0\"9",
       "\"333333",
@@ -70,5 +70,39 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.4 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988(sic)/13014/13018/13023/13027/13029/13030 area (field width 5, digits(19)+3) reach exactly 40 characters on several lines; line 13013 (41 characters) is a genuine one-cell source anomaly, flagged in uncertain, not a transcription slip -- both runs already agree on this line's content. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.4 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988(sic)/13014/13018/13023/13027/13029/13030 area (field width 5, digits(19)+3) reach exactly 40 characters on several lines; line 13013 (41 characters) is a genuine one-cell source anomaly, flagged in uncertain, not a transcription slip -- both runs already agree on this line's content. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "'Sheridan will not succeed at Bath with his oratory. Ridicule has gone down before him, and, I doubt, Derrick is his enemy.'[ref:*]",
+      "now": "‘Sheridan will not succeed at Bath with his oratory. Ridicule has gone down before him, and, I doubt, Derrick is his enemy.’[ref:*]",
+      "evidence": "Page image PDF p.450 (Sample 16-5) and a 300 dpi crop: the quotation and the note use curly single quotes (‘ ’), not straight ones; the reference asterisk follows the closing quote; the ellipsis is followed by a space (… Take a sample:); in the displayed poem 'None' (line 1), 'brave.' (line 2) and 'but' (line 3) are italic; 'Sheridan' (not its comma) is italic in the closing attribution."
+    },
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "*Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample:\n“None but the brave\nNone but the brave.\nNone but the brave deserve the fair.”\nNaughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11.",
+      "now": "[ref:*]Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him ‘as a wrong-headed, whimsical man.’ … Take a sample:\n“*None* but the brave\nNone but the *brave.*\nNone *but* the brave deserve the fair.”\nNaughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.’ Moore’s *Sheridan*, i. 9, 11.",
+      "evidence": "Page image PDF p.450 (Sample 16-5) and a 300 dpi crop: the quotation and the note use curly single quotes (‘ ’), not straight ones; the reference asterisk follows the closing quote; the ellipsis is followed by a space (… Take a sample:); in the displayed poem 'None' (line 1), 'brave.' (line 2) and 'but' (line 3) are italic; 'Sheridan' (not its comma) is italic in the closing attribution. The leading mark is written [ref:*] so it is not read as italic markup."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him 'as a wrong-headed, whimsical man.' …Take a sample: “None but the brave / None but the brave. / None but the brave deserve the fair.” Naughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.' Moore's Sheridan, i. 9, 11.",
+      "now": "Mr. Sheridan was then reading lectures upon Oratory at Bath, where Derrick was Master of the Ceremonies; or, as the phrase is, KING BOSWELL. Dr. Parr, who knew Sheridan well, describes him ‘as a wrong-headed, whimsical man.’ … Take a sample: “*None* but the brave / None but the *brave.* / None *but* the brave deserve the fair.” Naughty Richard [R. B. Sheridan], like Gallio, seemed to care nought for these things.’ Moore’s *Sheridan*, i. 9, 11.",
+      "evidence": "Page image PDF p.450 (Sample 16-5) and a 300 dpi crop: the quotation and the note use curly single quotes (‘ ’), not straight ones; the reference asterisk follows the closing quote; the ellipsis is followed by a space (… Take a sample:); in the displayed poem 'None' (line 1), 'brave.' (line 2) and 'but' (line 3) are italic; 'Sheridan' (not its comma) is italic in the closing attribution."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "  ,8,%]idan w n su3e$ at ,ba? ) 8    a#,-"
+      ],
+      "after": [
+        "  ,8,%]idan w n su3e$ at ,ba? ) 8   a#,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 450 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

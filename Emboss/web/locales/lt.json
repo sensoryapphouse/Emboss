@@ -60,10 +60,13 @@
     "toc": "Turinys",
     "print": "Spausdinti (kairė)",
     "braille": "Braillis",
+    "export": "Eksportuoti",
+    "export_title": "Eksportuoti brailį (BRF, eBraille) arba siųsti brailymo spaudai",
+    "emboss_menu": "Siųsti brailymo spaudai",
     "braille_view": "Brailio vaizd",
     "download_brf": "Braillis (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Brailymo spaudos",
     "emboss_tooltip": "Siųsti dokumentą spaudai arba spausdintuvui",
     "clear_doc": "Išvalyti dokumentą",
@@ -133,8 +136,6 @@
     "poem_desc": "Poetinė strofos eilutė (1-3)",
     "exercise_title": "Pratimo klausimas",
     "exercise_desc": "Numeruotas pratimo klausimas (1-5 / 3-5)",
-    "caption_title": "Antraštė / Atitikimas",
-    "caption_desc": "Paveikslės antraštė ar atitikimas (7-5)",
     "footnote_title": "Pastaba",
     "footnote_desc": "Pastabos tekstas (1-3)",
     "note_title": "Vertėjo pastaba",
@@ -163,8 +164,6 @@
     "page_desc": "Įterpti šaltinio spaudos puslapio lūžio indikatorių",
     "printpage_title": "Spaudos puslapio numeris",
     "printpage_desc": "Įterpti šaltinio spaudos puslapio lūžio indikatorių",
-    "code_title": "Kompiuterio kodas",
-    "code_desc": "Įterpti kodo bloką su UEB rodikliais",
     "indent_title": "Įtraukti / Įdėti poelementį",
     "indent_desc": "Įdėti sąrašo elementą ar pratimą giliau (Tab)",
     "outdent_title": "Iškelti / Paaukštinti elementą",
@@ -185,8 +184,8 @@
     "language_label": "Sąsajos kalba",
     "language_help": "Pasirinkite kalbą, naudojamą mygtukams, meniu, dialogo langams ir ekrano skaitytuvo pranešimams.",
     "standard_label": "Brailyno standartas",
-    "standard_bana": "BANA (JAV ir Kanada — 40×25 ląstelės)",
-    "standard_ukaaf": "UKAAF (Jungtinė Karalystė ir tarptautinis — 38×25 ląstelės)",
+    "standard_bana": "BANA (JAV ir Kanada — 38×25 ląstelės)",
+    "standard_ukaaf": "UKAAF (Jungtinė Karalystė ir tarptautinis — 38×27 ląstelės)",
     "grade_label": "Sutrumpinimo lygis",
     "grade_1": "1 pakopa (Nesutrumpinta / Raidė po raidės)",
     "grade_2": "2 pakopa (Sutrumpinta)",
@@ -261,7 +260,7 @@
     "size_full": "Visas lapas (1-eilutė Anti-pjaustas)",
     "lead_lines": "Taktilios vadovaujančios linijos",
     "braille_labels": "Brailyno etiketės",
-    "footer_tip": "💡 Juodi kontūrai tampa tvirta taktilia riba; spalvos automatiškai susiejamos su skirtingomis taktilinėmis tekstūromis.",
+    "footer_tip": "Juodi kontūrai tampa tvirta taktilia riba; spalvos automatiškai susiejamos su skirtingomis taktilinėmis tekstūromis.",
     "open_repositories": "Atidarykite taktilines saugyklas:",
     "no_diagrams": "Atitikimo diagramų nerasta."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Nuotolinės grąžinimo būsena",
     "precedence_status": "Brailyno pirmumo taisyklių būsena",
     "perfect_match": "100% Nuotolinės grąžinimo atitiktis (0 neatitikimas)",
-    "badge_warn": "⚠ {count} peržiūrai",
+    "badge_warn": "{count} peržiūrai",
     "badge_title": "{count} žodžio neatitikimas (-ai) aptikti nuotolinės grąžinimo perarantu. Spustelėkite pirmaisiais.",
     "badge_clean": "Nuotolinės grąžinimo patikra: žodžio neatitikimas neaptiktas."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Turite neišsaugotus pakeitimus. Ar tikrai norite išeiti be išsaugojimo?",
     "unsaved_load": "Turite neišsaugotus pakeitimus. Naujo failo įkėlimas pakeisys jūsų dabartinį dokumentą. Tęsti?",
     "unsaved_clear": "Turite neišsaugotus pakeitimus. Ar tikrai norite išvalyti dokumentą?",
-    "drop_hint": "⬇ Nuvilkite dokumentą redaktoriui į importą",
+    "drop_hint": "Nuvilkite dokumentą redaktoriui į importą",
     "notice": "Pranešimas",
     "close_notice": "Uždaryti pranešimą"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumento tekstas",
+      "math_keyboard_toggle": "Matematikos klaviatūra",
       "label": "Tekstas",
       "toolbar_aria": "Formatavimas",
       "style_label": "Pastraipos stilius",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafikos kategorijos",
       "graphic_list": "Taktilios grafikos diagramos",
       "formula_search_label": "Ieškoti formulių",
-      "btactile_link": "BTactile (nemokama) ↗",
-      "tgil_link": "APH TGIL (1800+ šablonų) ↗"
+      "btactile_link": "BTactile (nemokama)",
+      "tgil_link": "APH TGIL (1800+ šablonų)"
     },
     "settings": {
       "list_spaced": "Sąrašas su tuščiomis eilutėmis (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Jungtis tiesiogiai prie pasirinktinių mikrovaldiklių brailymo spaudų (ESP32-S3, RP2040/RP2350, STM32, Arduino), apeinant OS spausdintuvo tvarkyklių apribojimus.",
       "graphics_hint": "Kai nepažymėta, diagramos eksportuojamos kaip prieinami vertėjo pastabų aprašymai tik tekstą palaikančioms brailymo spaudoms ir brailio ekranams.",
       "tactile_heading": "Taktilaus ekrano tiesioginė transliacija (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Prijungti „Bluetooth“ (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Prijungti USB / HID (Monarch)",
+      "tactile_connect_ble": "Prijungti „Bluetooth“ (DotPad BLE)",
+      "tactile_connect_hid": "Prijungti USB / HID (Monarch)",
       "tactile_disconnect": "Atjungti ekraną",
       "tactile_sim_monarch": "Testuoti simuliuotą Monarch (32×10)",
       "tactile_sim_dotpad": "Testuoti simuliuotą DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Tiesiogiai transliuoja brailyno rodinį ir taktilią grafiką per WebBluetooth (DotPad BLE UART) arba WebHID (Monarch/USB) be išorinių tvarkyklių.",
       "perkins_hint": "— rašykite brailį klavišais SDF ir JKL",
       "ascii_hint": "— rodyti neapdorotus ASCII brailio ženklus",
+      "show_explanation_bar": "Rodyti paaiškinimų juostą",
+      "show_explanation_bar_hint": "— juosta po tekstu ir brailiu, paaiškinanti brailį žodžiui, ties kuriuo esate",
+      "simple_mode_hint": "— atverti Emboss paprastame keitiklyje. Perjungimas tarp Greito režimo ir redaktoriaus to nekeičia.",
       "covers_hint": "— brailio viršeliai skaidant knygas į tomus"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Antraštė {n}",
       "cell_aria_named": "{header}, eilutė {row}",
       "cell_aria": "Stulpelis {col}, eilutė {row}",
-      "too_wide_listed": "⚠ Per plati stulpeliams — bus perrašyta Brailio raštu kaip sąrašo lentelė",
+      "too_wide_listed": "Per plati stulpeliams — bus perrašyta Brailio raštu kaip sąrašo lentelė",
       "too_wide_listed_title": "Ši lentelė netelpa į stulpelius esant dabartiniam ląstelių skaičiui eilutėje ir Brailio režimui, todėl ji bus perrašyta Brailio raštu kaip sąrašo lentelė (BANA Formats §11.9) vietoj greta esančių stulpelių.",
-      "too_wide_paragraph": "⚠ Per plati stulpeliams — bus perrašyta Brailio raštu pastraipos forma",
+      "too_wide_paragraph": "Per plati stulpeliams — bus perrašyta Brailio raštu pastraipos forma",
       "too_wide_paragraph_title": "Ši lentelė netelpa į stulpelius esant dabartiniam ląstelių skaičiui eilutėje ir Brailio režimui, todėl ji bus perrašyta Brailio raštu pastraipos forma (UKAAF B004 §12) vietoj greta esančių stulpelių."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nepavyko įkelti „{code}“ lentelių — vis dar naudojamas ankstesnis brailio kodas.",
-      "failed": "⚠ Nepavyko sugeneruoti brailio.",
+      "failed": "Nepavyko sugeneruoti brailio.",
       "failed_hint": "(Jei sakoma, kad variklis neinicijuotas, brailio variklis neįsikėlė — perkraukite iš naujo Cmd/Ctrl+Shift+R.)",
       "error_status": "Atvaizdavimo klaida: {message}"
     },
     "engine": {
       "loading": "Įkeliamas brailio variklis…",
-      "failed": "⚠ Nepavyko įkelti brailio variklio.",
+      "failed": "Nepavyko įkelti brailio variklio.",
       "failed_hint": "Perkraukite iš naujo Cmd/Ctrl+Shift+R. Jei nepadeda, atidarykite naršyklės konsolę (View ▸ Developer) ir atsiųskite klaidas.",
       "failed_status": "Nepavyko įkelti variklio: {message}",
       "ready": "Paruošta — rašykite arba formatuokite kairėje; brailis atnaujinamas gyvai."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nepavyko pasiekti {url}: {message}. Naršyklės negali atverti tiesioginių TCP (9100 prievado) ryšių; brailymo spauda turi priimti HTTP POST, arba atsisiųskite .brf failą ir siųskite jį spausdinimo tvarkytuve.",
       "usb_bridge_done": "Brailymo darbas pristatytas į USB spausdintuvą!",
       "needs_webserial": "Tiesioginiam nuosekliajam brailinimui reikia naršyklės su WebSerial (Chrome, Edge, Opera). Galite atsisiųsti .brf failą ir brailinti spausdinimo tvarkytuve arba naudoti tinklo (9100 prievado) režimą nustatymuose.",
-      "detected": "🔌 Aptikta {name} — nustatyta {cells}×{lines} esant {baud} baud."
+      "detected": "Aptikta {name} — nustatyta {cells}×{lines} esant {baud} baud."
     },
     "symbols": {
       "title": "Taktilių simbolių biblioteka",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinaminė matrica",
       "badge_text_only": "Tik tekstas",
       "badge_index": "Taškų matrica"
+    },
+    "offline": {
+      "ready": "Emboss paruoštas darbui be interneto.",
+      "ready_short": "Paruošta darbui be interneto",
+      "not_yet": "Vis dar ruošiama darbui be interneto…"
     }
   }
 }

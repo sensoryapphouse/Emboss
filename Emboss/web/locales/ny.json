@@ -60,10 +60,13 @@
     "toc": "Zam'katimo",
     "print": "Chionetsero cha Kusindikiza (Kumanzere)",
     "braille": "Braille",
+    "export": "Tumizani kunja",
+    "export_title": "Tumizani Braille kunja (BRF, eBraille) kapena itumizeni ku makina a Braille",
+    "emboss_menu": "Tumizani ku makina a Braille",
     "braille_view": "Chionetsero cha Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Tumizani ku Makina",
     "emboss_tooltip": "Tumizani chikalata ku makina osindikiza Braille kapena pulinta",
     "clear_doc": "Yeretsani Chikalata",
@@ -133,8 +136,6 @@
     "poem_desc": "Mzere wa ndakatulo (1-3)",
     "exercise_title": "Funso la Maphunziro",
     "exercise_desc": "Funso la maphunziro lokhala ndi nambala (1-5 / 3-5)",
-    "caption_title": "Mafotokozedwe / Wolemba",
-    "caption_desc": "Mafotokozedwe a chithunzi kapena wolemba (7-5)",
     "footnote_title": "Cholemba Pansi",
     "footnote_desc": "Mawu a cholemba pansi (1-3)",
     "note_title": "Chidziwitso cha Womasulira",
@@ -163,8 +164,6 @@
     "page_desc": "Ikani chizindikiro cha kugawa tsamba la bukhu",
     "printpage_title": "Nambala ya Tsamba la Bukhu",
     "printpage_desc": "Ikani chizindikiro cha kugawa tsamba la bukhu",
-    "code_title": "Khodi ya Kompyuta",
-    "code_desc": "Ikani gawo la khodi lokhala ndi zizindikiro za UEB",
     "indent_title": "Onjezani Mpata / Ikani Chinthu Mkati",
     "indent_desc": "Ikani chinthu cha mndandanda kapena funso mkati kwambiri (Tab)",
     "outdent_title": "Chepetsani Mpata / Kwezani Chinthu",
@@ -185,8 +184,8 @@
     "language_label": "Chinenero cha Chionetsero",
     "language_help": "Sankhani chinenero chomwe chidzagwiritsidwa ntchito pa mabatani, mamenyu, makonzedwe, ndi mauthenga a pulogalamu yowerenga pa kanjira ka mawu.",
     "standard_label": "Muyezo wa Braille",
-    "standard_bana": "BANA (United States ndi Canada — makaselo 40×25)",
-    "standard_ukaaf": "UKAAF (United Kingdom ndi Mayiko Ena — makaselo 38×25)",
+    "standard_bana": "BANA (United States ndi Canada — makaselo 38×25)",
+    "standard_ukaaf": "UKAAF (United Kingdom ndi Mayiko Ena — makaselo 38×27)",
     "grade_label": "Muyezo wa Kufupikitsa",
     "grade_1": "Muyezo 1 (Wosafupikitsidwa / Kalata ndi Kalata)",
     "grade_2": "Muyezo 2 (Wofupikitsidwa)",
@@ -261,7 +260,7 @@
     "size_full": "Tsamba Lonse (Mzere 1 Wosadulidwa)",
     "lead_lines": "Mizere Yotsogolera mu Zala",
     "braille_labels": "Mayina a Braille",
-    "footer_tip": "💡 Mizere yakuda imasanduka malire olimba okhudzika; mitundu imasandulika yokha mitundu yosiyanasiyana yokhudzika.",
+    "footer_tip": "Mizere yakuda imasanduka malire olimba okhudzika; mitundu imasandulika yokha mitundu yosiyanasiyana yokhudzika.",
     "open_repositories": "Malo Otseguka a Zithunzi Zokhudzika:",
     "no_diagrams": "Palibe zithunzi zofanana zapezeka."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Mkhalidwe wa Kumasulira Kopanda Kutaya",
     "precedence_status": "Mkhalidwe wa Malamulo a Ulamuliro wa Braille",
     "perfect_match": "Kugwirizana kwa 100% (Palibe Kusiyana)",
-    "badge_warn": "⚠ {count} zofunika kuwunikidwa",
+    "badge_warn": "{count} zofunika kuwunikidwa",
     "badge_title": "Mawu {count} osiyana apezeka pakuwunika komasulira mobwereza. Dinani kuti mupite ku woyamba.",
     "badge_clean": "Kuwunika kwa kumasulira mobwereza: palibe kusiyana kwa mawu kopezeka."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Muli ndi zosintha zosasungidwa. Kodi mukufuna kutuluka wopanda kuzisunga?",
     "unsaved_load": "Muli ndi zosintha zosasungidwa. Kukonza fayilo yatsopano kudzasintha chikalata chomwe muli nacho pano. Pitirizani?",
     "unsaved_clear": "Muli ndi zosintha zosasungidwa. Kodi mukufuna kuyeretsa chikalata?",
-    "drop_hint": "⬇ Ikani chikalata pano kuti muchiyike mu zolemberapo",
+    "drop_hint": "Ikani chikalata pano kuti muchiyike mu zolemberapo",
     "notice": "Chidziwitso",
     "close_notice": "Tsekani Chidziwitso"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Mawu a Chikalata",
+      "math_keyboard_toggle": "Kiyibodi ya Masamu",
       "label": "Mawu",
       "toolbar_aria": "Kukonza",
       "style_label": "Mtundu wa Ndime",
@@ -443,8 +443,8 @@
       "graphic_cats": "Magulu a Zithunzi",
       "graphic_list": "Zithunzi zokhudzika",
       "formula_search_label": "Sakani mafomula",
-      "btactile_link": "BTactile (Zaulere) ↗",
-      "tgil_link": "APH TGIL (Zitsanzo zoposa 1,800) ↗"
+      "btactile_link": "BTactile (Zaulere)",
+      "tgil_link": "APH TGIL (Zitsanzo zoposa 1,800)"
     },
     "settings": {
       "list_spaced": "Mndandanda wa mzere wopanda kanthu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Lumikizanani mwachindunji ndi makina a Braille a microcontroller (ESP32-S3, RP2040/RP2350, STM32, Arduino) osadalira mapulogalamu a machitidwe.",
       "graphics_hint": "Ngati sichisankhidwa, zithunzi zimatumizidwa ngati mafotokozedwe a Chidziwitso cha Womasulira omwe amapezeka pa makina a Braille amawu okha ndi zionetsero za Braille.",
       "tactile_heading": "Kutumiza Mwachindunji ku Chionetsero Chokhudzika (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Lumikizanani ndi Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Lumikizanani ndi USB / HID (Monarch)",
+      "tactile_connect_ble": "Lumikizanani ndi Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Lumikizanani ndi USB / HID (Monarch)",
       "tactile_disconnect": "Chotsani Chionetsero",
       "tactile_sim_monarch": "Yesani Monarch Wofanizira (32×10)",
       "tactile_sim_dotpad": "Yesani DotPad Wofanizira (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Imatumiza mwachindunji chionetsero cha Braille ndi zithunzi zokhudzika kudzera mu WebBluetooth (DotPad BLE UART) kapena WebHID (Monarch/USB) popanda mapulogalamu akunja.",
       "perkins_hint": "— lembani Braille pogwiritsa ntchito mabatani a SDF ndi JKL",
       "ascii_hint": "— sonyezani zilembo zenizeni za ASCII Braille",
+      "show_explanation_bar": "Onetsani mzere wofotokozera",
+      "show_explanation_bar_hint": "— mzere womwe uli pansi pa mawu ndi Braille womwe umafotokoza Braille ya mawu omwe muliko",
+      "simple_mode_hint": "— tsegulani Emboss pa chosinthira chosavuta. Kusintha pakati pa Njira Yofulumira ndi cholembera sikusintha izi.",
       "covers_hint": "— zikuto zosindikizidwa dzina pamene mukugawa mabuku"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Mutu {n}",
       "cell_aria_named": "{header}, mzere {row}",
       "cell_aria": "Gawo {col}, mzere {row}",
-      "too_wide_listed": "⚠ Yotambasuka kwambiri pa magawo — idzalembedwa mu Braille ngati tebulo yotchulidwa",
+      "too_wide_listed": "Yotambasuka kwambiri pa magawo — idzalembedwa mu Braille ngati tebulo yotchulidwa",
       "too_wide_listed_title": "Tebulo iyi sikukwanira m'magawo pa chiwerengero cha makaselo pa mzere umodzi pano ndi njira ya Braille, choncho idzalembedwa mu Braille ngati tebulo yotchulidwa (BANA Formats §11.9) m'malo mwa magawo oyandikana.",
-      "too_wide_paragraph": "⚠ Yotambasuka kwambiri pa magawo — idzalembedwa mu Braille mu njira ya ndime",
+      "too_wide_paragraph": "Yotambasuka kwambiri pa magawo — idzalembedwa mu Braille mu njira ya ndime",
       "too_wide_paragraph_title": "Tebulo iyi sikukwanira m'magawo pa chiwerengero cha makaselo pa mzere umodzi pano ndi njira ya Braille, choncho idzalembedwa mu Braille mu njira ya ndime (UKAAF B004 §12) m'malo mwa magawo oyandikana."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Sizinathe kukonza matebulo a \"{code}\" — akugwiritsabe ntchito khodi ya Braille yapitayo.",
-      "failed": "⚠ Braille sichinathe kupangidwa.",
+      "failed": "Braille sichinathe kupangidwa.",
       "failed_hint": "(Ngati izi zikunena kuti injini sinayambitsidwe, injini ya Braille sinakonzeke — konzaninso mwamphamvu ndi Cmd/Ctrl+Shift+R.)",
       "error_status": "Cholakwika pakupanga: {message}"
     },
     "engine": {
       "loading": "Kukonza injini ya Braille…",
-      "failed": "⚠ Injini ya Braille sinakonzeke.",
+      "failed": "Injini ya Braille sinakonzeke.",
       "failed_hint": "Konzaninso mwamphamvu ndi Cmd/Ctrl+Shift+R. Ngati zikupitirira, tsegulani console ya bulawuza (View ▸ Developer) ndikutumiza zolakwika.",
       "failed_status": "Injini sinakonzeke: {message}",
       "ready": "Yakonzeka — lembani kapena konzani kumanzere; Braille imasinthidwa nthawi yomweyo."
@@ -715,7 +718,7 @@
       "network_unreachable": "Sizinathe kufikira {url}: {message}. Ma bulawuza sangathe kutsegula kulumikizana kwa TCP (njira 9100) mwachindunji; makina a Braille ayenera kuvomereza HTTP POST, kapena tsitsani fayilo ya .brf ndikuitumiza ndi pulogalamu yanu yosindikiza.",
       "usb_bridge_done": "Ntchito yosindikiza yafika ku pulinta ya USB!",
       "needs_webserial": "Kusindikiza mwachindunji kudzera mu Serial kumafuna bulawuza yokhala ndi WebSerial (Chrome, Edge, Opera). Mukhoza kutsitsa fayilo ya .brf kuti musindikize ndi pulogalamu yanu yosindikiza, kapena gwiritsani ntchito njira ya Network (Njira 9100) mu Makonzedwe.",
-      "detected": "🔌 {name} yapezeka — yaikidwa pa {cells}×{lines} pa {baud} baud."
+      "detected": "{name} yapezeka — yaikidwa pa {cells}×{lines} pa {baud} baud."
     },
     "symbols": {
       "title": "Laibulale ya Zizindikiro Zokhudzika",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrix Yosinthasintha",
       "badge_text_only": "Mawu Okha",
       "badge_index": "Matrix ya Madontho"
+    },
+    "offline": {
+      "ready": "Emboss yakonzeka kugwira ntchito popanda intaneti.",
+      "ready_short": "Yakonzeka kugwira ntchito popanda intaneti",
+      "not_yet": "Ikukonzekerabe kugwira ntchito popanda intaneti…"
     }
   }
 }

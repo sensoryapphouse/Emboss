@@ -60,10 +60,13 @@
     "toc": "Sisällys",
     "print": "Tulostusnäkymä (vasen)",
     "braille": "Pistekirjoitus",
+    "export": "Vie",
+    "export_title": "Vie pistekirjoitus (BRF, eBraille) tai lähetä se kohotuslaitteeseen",
+    "emboss_menu": "Lähetä kohotuslaitteeseen",
     "braille_view": "Pistekirjoitusnäkymä",
     "download_brf": "Pistekirjoitus (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Kohouta",
     "emboss_tooltip": "Lähetä asiakirja kohotuslaitteeseen tai tulostimeen",
     "clear_doc": "Tyhjennä asiakirja",
@@ -133,8 +136,6 @@
     "poem_desc": "Runosäkeistön rivi (1-3)",
     "exercise_title": "Harjoituskysymys",
     "exercise_desc": "Numeroitu harjoituskysymys (1-5 / 3-5)",
-    "caption_title": "Kuvateksti / Lähdemerkintä",
-    "caption_desc": "Kuvan kuvateksti tai lähdemerkintä (7-5)",
     "footnote_title": "Alaviite",
     "footnote_desc": "Alaviitteen teksti (1-3)",
     "note_title": "Kääntäjän huomautus",
@@ -163,8 +164,6 @@
     "page_desc": "Lisää alkuperäisen painetun sivun vaihtomerkintä",
     "printpage_title": "Alkuperäisen sivun numero",
     "printpage_desc": "Lisää alkuperäisen painetun sivun vaihtomerkintä",
-    "code_title": "Tietokonekoodi",
-    "code_desc": "Lisää koodilohko UEB-merkein",
     "indent_title": "Sisennä / lisää alakohta",
     "indent_desc": "Sisennä luettelokohta tai harjoitus syvemmälle (Tab)",
     "outdent_title": "Vähennä sisennystä / ylennä kohta",
@@ -185,8 +184,8 @@
     "language_label": "Käyttöliittymän kieli",
     "language_help": "Valitse painikkeissa, valikoissa, valintaikkunoissa ja ruudunlukijan ilmoituksissa käytettävä kieli.",
     "standard_label": "Pistekirjoitusstandardi",
-    "standard_bana": "BANA (Yhdysvallat ja Kanada — 40×25 solua)",
-    "standard_ukaaf": "UKAAF (Yhdistynyt kuningaskunta ja kansainvälinen — 38×25 solua)",
+    "standard_bana": "BANA (Yhdysvallat ja Kanada — 38×25 solua)",
+    "standard_ukaaf": "UKAAF (Yhdistynyt kuningaskunta ja kansainvälinen — 38×27 solua)",
     "grade_label": "Lyhennystaso",
     "grade_1": "Taso 1 (lyhentämätön / kirjain kirjaimelta)",
     "grade_2": "Taso 2 (lyhennetty)",
@@ -261,7 +260,7 @@
     "size_full": "Koko arkki (rivi 1 viistetty)",
     "lead_lines": "Kohokuvion johtoviivat",
     "braille_labels": "Pistekirjoitusmerkinnät",
-    "footer_tip": "💡 Mustat ääriviivat muuttuvat umpinaisiksi kohoreunoiksi; värit sovitetaan automaattisesti eri kohotekstuureihin.",
+    "footer_tip": "Mustat ääriviivat muuttuvat umpinaisiksi kohoreunoiksi; värit sovitetaan automaattisesti eri kohotekstuureihin.",
     "open_repositories": "Avoimet kohokuviovarastot:",
     "no_diagrams": "Kaavioita ei löytynyt."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Häviöttömän takaisinkäännöksen tila",
     "precedence_status": "Pistekirjoituksen etusijasääntöjen tila",
     "perfect_match": "100 % vastaavuus takaisinkäännöksessä (0 poikkeamaa)",
-    "badge_warn": "⚠ {count} tarkistettavaa",
+    "badge_warn": "{count} tarkistettavaa",
     "badge_title": "{count} sanapoikkeamaa löytyi takaisinkäännöksessä. Napsauta siirtyäksesi ensimmäiseen.",
     "badge_clean": "Takaisinkäännöstarkistus: sanapoikkeamia ei löytynyt."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Sinulla on tallentamattomia muutoksia. Haluatko varmasti poistua tallentamatta?",
     "unsaved_load": "Sinulla on tallentamattomia muutoksia. Uuden tiedoston lataaminen korvaa nykyisen asiakirjan. Jatketaanko?",
     "unsaved_clear": "Sinulla on tallentamattomia muutoksia. Haluatko varmasti tyhjentää asiakirjan?",
-    "drop_hint": "⬇ Pudota asiakirja tuodaksesi sen editoriin",
+    "drop_hint": "Pudota asiakirja tuodaksesi sen editoriin",
     "notice": "Ilmoitus",
     "close_notice": "Sulje ilmoitus"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Asiakirjan teksti",
+      "math_keyboard_toggle": "Matematiikkanäppäimistö",
       "label": "Teksti",
       "toolbar_aria": "Muotoilu",
       "style_label": "Kappaleen tyyli",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kaavioluokat",
       "graphic_list": "Kohokuviokaaviot",
       "formula_search_label": "Etsi kaavoja",
-      "btactile_link": "BTactile (ilmainen) ↗",
-      "tgil_link": "APH TGIL (yli 1 800 mallia) ↗"
+      "btactile_link": "BTactile (ilmainen)",
+      "tgil_link": "APH TGIL (yli 1 800 mallia)"
     },
     "settings": {
       "list_spaced": "Tyhjärivinen luettelo (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Yhdistä suoraan mukautettuihin mikro-ohjainpohjaisiin kohotuslaitteisiin (ESP32-S3, RP2040/RP2350, STM32, Arduino) ohittaen käyttöjärjestelmän tulostinajurirajoitukset.",
       "graphics_hint": "Kun ei valittu, kaaviot viedään esteettöminä kääntäjän huomautuksina tekstitulostimille ja pistekirjoitusnäytöille.",
       "tactile_heading": "Kohonäytön suoratoisto (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Yhdistä Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Yhdistä USB / HID (Monarch)",
+      "tactile_connect_ble": "Yhdistä Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Yhdistä USB / HID (Monarch)",
       "tactile_disconnect": "Katkaise näytön yhteys",
       "tactile_sim_monarch": "Testaa simuloitua Monarchia (32×10)",
       "tactile_sim_dotpad": "Testaa simuloitua DotPadia (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Suoratoistaa pistekirjoitusnäkymän ja kohokuviot reaaliaikaisesti suoraan WebBluetoothin (DotPad BLE UART) tai WebHID:n (Monarch/USB) kautta ilman ulkoisia ajureita.",
       "perkins_hint": "— kirjoita pistekirjoitusta näppäimillä SDF ja JKL",
       "ascii_hint": "— näytä raa'at ASCII-pistekirjoitusmerkit",
+      "show_explanation_bar": "Näytä selitepalkki",
+      "show_explanation_bar_hint": "— tekstin ja pistekirjoituksen alla oleva kaista, joka selittää pistekirjoituksen sanalle, jonka kohdalla olet",
+      "simple_mode_hint": "— avaa Emboss yksinkertaisessa muuntimessa. Vaihtaminen Pikatilan ja editorin välillä ei muuta tätä.",
       "covers_hint": "— kohotetut nimiökannet kirjoja osiin jaettaessa"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Otsikko {n}",
       "cell_aria_named": "{header}, rivi {row}",
       "cell_aria": "Sarake {col}, rivi {row}",
-      "too_wide_listed": "⚠ Liian leveä sarakkeille — pistekirjoitetaan luetteloituna taulukkona",
+      "too_wide_listed": "Liian leveä sarakkeille — pistekirjoitetaan luetteloituna taulukkona",
       "too_wide_listed_title": "Tämä taulukko ei mahdu sarakkeisiin nykyisellä solujen määrällä riviä kohden ja pistekirjoitustilassa, joten se pistekirjoitetaan luetteloituna taulukkona (BANA Formats §11.9) rinnakkaisten sarakkeiden sijaan.",
-      "too_wide_paragraph": "⚠ Liian leveä sarakkeille — pistekirjoitetaan kappaleina",
+      "too_wide_paragraph": "Liian leveä sarakkeille — pistekirjoitetaan kappaleina",
       "too_wide_paragraph_title": "Tämä taulukko ei mahdu sarakkeisiin nykyisellä solujen määrällä riviä kohden ja pistekirjoitustilassa, joten se pistekirjoitetaan kappaleina (UKAAF B004 §12) rinnakkaisten sarakkeiden sijaan."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Koodin \"{code}\" taulukoita ei voitu ladata — käytetään edelleen edellistä pistekirjoituskoodia.",
-      "failed": "⚠ Pistekirjoitusta ei voitu luoda.",
+      "failed": "Pistekirjoitusta ei voitu luoda.",
       "failed_hint": "(Jos tässä sanotaan, ettei moottoria ole alustettu, pistekirjoitusmoottori ei latautunut — tee kova päivitys näppäimillä Cmd/Ctrl+Shift+R.)",
       "error_status": "Renderöintivirhe: {message}"
     },
     "engine": {
       "loading": "Ladataan pistekirjoitusmoottoria…",
-      "failed": "⚠ Pistekirjoitusmoottoria ei voitu ladata.",
+      "failed": "Pistekirjoitusmoottoria ei voitu ladata.",
       "failed_hint": "Tee kova päivitys näppäimillä Cmd/Ctrl+Shift+R. Jos ongelma jatkuu, avaa selaimen konsoli (Näytä ▸ Kehittäjä) ja lähetä virheet.",
       "failed_status": "Moottoria ei voitu ladata: {message}",
       "ready": "Valmis — kirjoita tai muotoile vasemmalla; pistekirjoitus päivittyy reaaliajassa."
@@ -715,7 +718,7 @@
       "network_unreachable": "Osoitetta {url} ei tavoitettu: {message}. Selaimet eivät voi avata raakaa TCP-yhteyttä (portti 9100); kohotuslaitteen on tuettava HTTP POST -pyyntöjä, tai lataa .brf-tiedosto ja lähetä se tulostuksenhallinnalla.",
       "usb_bridge_done": "Kohotustyö toimitettu USB-tulostimeen!",
       "needs_webserial": "Suora sarjaporttikohotus vaatii WebSerial-yhteensopivan selaimen (Chrome, Edge, Opera). Voit ladata .brf-tiedoston ja kohottaa sen tulostuksenhallinnalla, tai käyttää verkkotilaa (portti 9100) asetuksissa.",
-      "detected": "🔌 Tunnistettu {name} — asetettu {cells}×{lines}, nopeus {baud} baudia."
+      "detected": "Tunnistettu {name} — asetettu {cells}×{lines}, nopeus {baud} baudia."
     },
     "symbols": {
       "title": "Kohokuviosymbolikirjasto",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynaaminen matriisi",
       "badge_text_only": "Vain teksti",
       "badge_index": "Pistematriisi"
+    },
+    "offline": {
+      "ready": "Emboss on valmis toimimaan ilman internetyhteyttä.",
+      "ready_short": "Valmis toimimaan ilman internetyhteyttä",
+      "not_yet": "Valmistellaan vielä toimimaan ilman internetyhteyttä…"
     }
   }
 }

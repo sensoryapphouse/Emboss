@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+<meta charset="utf-8">
+<title>Audit HTML web page CSS</title>
+<!-- What Google Docs and Word write when a document is saved as a web page: the look is in style rules and style attributes. -->
+<style type="text/css">
+.c1 { font-weight: 700 }
+.c2 { font-style: italic; text-decoration: underline }
+.c3 { text-transform: uppercase }
+.c4 { font-variant: small-caps }
+.c5 { font-weight: 400; font-style: normal }
+.c9 { display: none }
+h2 { font-weight: bold }
+@media print { .c1 { font-weight: 400 } }
+</style>
+</head>
+<body>
+<b style="font-weight:normal;" id="docs-internal-guid-audit">
+<h2>Web page CSS heading alphacssheading</h2>
+<p dir="ltr"><span class="c1">alphac1bold</span> <span class="c2">alphac2italicunder</span> <span class="c3">alphac3upper</span> <span class="c4">alphac4smallcaps</span> <span class="c5">alphac5plain</span></p>
+<p style="font-weight:bold">alphapbold whole paragraph with <i>italic</i> inside</p>
+<div style="font-style:italic"><p>alphadivitalic first</p><p>alphadivitalic second</p></div>
+<p>Inline <span style="font-weight:600">alphaw600</span>, <span style="font-style:oblique">alphaoblique</span>, <ins>alphains</ins>, <cite>alphacitedfn</cite>, <q>alphaquote <q>alphainner</q></q>.</p>
+<p class="c9">alphahiddenclass is not transcribed</p>
+<p>Visible <span class="c9">alphahiddenspan </span>text <span style="visibility:hidden">alphavisibilityhidden </span>after <span aria-hidden="true">alphaariahiddenspan </span>hidden things.</p>
+<blockquote><p>alphabqpara quoted paragraph.</p><footer>alphabqfooter, <cite>alphabqcite</cite></footer></blockquote>
+<blockquote><div>alphabqdiv first</div><ul><li>alphabqli1</li><li>alphabqli2</li></ul></blockquote>
+<p>A line<br>alphabrsecondline<br>alphabrthirdline</p>
+<pre>alphaprefirst
+    alphapreindented
+alphaprethird</pre>
+<ol reversed><li>alphaolrev1</li><li>alphaolrev2</li><li>alphaolrev3</li></ol>
+<ol start="7"><li>alphaolstart1</li><li value="20">alphaolvalue</li><li>alphaolafter</li></ol>
+<dl><dt>alphadlterm</dt><dd>alphadldef1</dd><dd>alphadldef2</dd></dl>
+<ul><li><input type="checkbox" checked disabled> alphataskdone</li><li><input type="checkbox"> alphataskopen</li></ul>
+<p>Footnote<sup><a role="doc-noteref" href="#fnaudit1" id="rnaudit1">1</a></sup> reference, then a page break<span epub:type="pagebreak" role="doc-pagebreak" id="pgaudit" title="9"></span> inside the paragraph.</p>
+<aside role="doc-footnote" id="fnaudit1"><p>alphafootnotebody <a role="doc-backlink" href="#rnaudit1">&#8617;</a></p></aside>
+<svg width="30" height="30" role="img" aria-labelledby="svgt"><title id="svgt">alphasvgtitle</title><circle cx="15" cy="15" r="10"/></svg>
+<table><tr><th>alphahead1</th><th>alphahead2</th></tr><tr><td><p>alphacellp1</p><p>alphacellp2</p></td><td>alphacell<br>alphabr</td></tr></table>
+</b>
+</body>
+</html>

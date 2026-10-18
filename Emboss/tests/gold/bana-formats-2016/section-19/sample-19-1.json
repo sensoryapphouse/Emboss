@@ -17,14 +17,15 @@
       {
         "kind": "paragraph",
         "blocked": true,
-        "text": "Symbolically Speaking",
-        "features": "Large bold stylized pink title graphic at the top of the puzzle page; braille shows it as a plain flush capitalized-words line, not a centred heading (verified against the given braille's own zero indent)."
+        "text": "SYMBOLICALLY SPEAKING",
+        "features": "Large bold stylized pink capital-letter title graphic at the top of the puzzle page (two lines, left-aligned in print). The gold braille centres it, which is the transcriber's treatment, not shown in print."
       },
       {
         "kind": "paragraph",
         "blocked": true,
         "text": "These days, weather is predicted using computers and radar, but did you know that you can predict the weather just by looking at a pine cone? To find out how, use the letters and symbols chart to decode the sentence that follows.",
-        "features": "Given braille (lines 3-8) shows a uniform indent on every line (first and runover alike) — built blocked:true to match."
+        "features": "Given braille (lines 3-8) shows a uniform indent on every line (first and runover alike) — built blocked:true to match.",
+        "directions": true
       },
       {
         "kind": "note",
@@ -48,7 +49,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "         ,,symbolically ,,sp1k+       #,-",
+      "         ,,symbolically ,,sp1k+      #,-",
       "",
       "    ,^! \"ds1 w1!r is pr$ict$ us+",
       "    comput]s & rad>1 b did y \"k t y c",
@@ -79,5 +80,39 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side substantially reconciled: A's own decoded answer to the cryptogram (\"WHEN IT IS GOING TO RAIN, SCALES OF A PINE CONE CLOSE; IN DRY WEATHER, THEY OPEN.\") was close but wrong in two places (missing \"THE\" before \"SCALES\", and \"CLOSE;\" instead of \"CLOSE UP;\") — corrected here by an independent, from-scratch key-substitution decode, cross-checked against the PDF page image (p.526) for the key table and against the source's own symbols appendix for the punctuation digits. B's own text field for the puzzle was left empty (understandable, since the coded message is not real text) but B's own key-table transcription (18 individual named icon descriptions) is far more detailed than A's bare letters; kept a condensed version of B's icon list. illustrates.rule: both runs guessed '19.2.2' (B additionally flagged this as uncertain, wondering whether it should be 19.2.1, 19.2.2, or both); this reconciliation's first pass wrongly 'corrected' it to '19.2.1' on the assumption that a symbol-substitution sample must belong to 19.2.1 rather than 19.2.2's own 'Linear Key Format' — re-reading 19.2.2's own text directly (source lines 15023-15025) shows its closing cross-reference explicitly names BOTH 'Sample 19-1: Symbol Code on page 19-10 and Sample 19-2: Linear Key Format on page 19-12', and Sample 19-1's own braille genuinely exercises 19.2.2's own linear-key mechanism (its two-line letter/symbol key at margins 1-1, one code character directly below each letter, per 19.2.2b/d) in addition to 19.2.1's substitution concept for the coded message itself. Reverted to both runs' own original '19.2.2', now confirmed correct by the rule's own explicit cross-reference rather than either run's or this reconciliation's own first-pass guess."
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side substantially reconciled: A's own decoded answer to the cryptogram (\"WHEN IT IS GOING TO RAIN, SCALES OF A PINE CONE CLOSE; IN DRY WEATHER, THEY OPEN.\") was close but wrong in two places (missing \"THE\" before \"SCALES\", and \"CLOSE;\" instead of \"CLOSE UP;\") — corrected here by an independent, from-scratch key-substitution decode, cross-checked against the PDF page image (p.526) for the key table and against the source's own symbols appendix for the punctuation digits. B's own text field for the puzzle was left empty (understandable, since the coded message is not real text) but B's own key-table transcription (18 individual named icon descriptions) is far more detailed than A's bare letters; kept a condensed version of B's icon list. illustrates.rule: both runs guessed '19.2.2' (B additionally flagged this as uncertain, wondering whether it should be 19.2.1, 19.2.2, or both); this reconciliation's first pass wrongly 'corrected' it to '19.2.1' on the assumption that a symbol-substitution sample must belong to 19.2.1 rather than 19.2.2's own 'Linear Key Format' — re-reading 19.2.2's own text directly (source lines 15023-15025) shows its closing cross-reference explicitly names BOTH 'Sample 19-1: Symbol Code on page 19-10 and Sample 19-2: Linear Key Format on page 19-12', and Sample 19-1's own braille genuinely exercises 19.2.2's own linear-key mechanism (its two-line letter/symbol key at margins 1-1, one code character directly below each letter, per 19.2.2b/d) in addition to 19.2.1's substitution concept for the coded message itself. Reverted to both runs' own original '19.2.2', now confirmed correct by the rule's own explicit cross-reference rather than either run's or this reconciliation's own first-pass guess. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Symbolically Speaking",
+      "now": "SYMBOLICALLY SPEAKING",
+      "evidence": "Page image references/_gemini/_done/gold-19-B/page-526.png (Sample 19-1): the title is printed in capitals, 'SYMBOLICALLY SPEAKING' on two lines of large bold pink display type (left-aligned in the graphic); gold had title case."
+    },
+    {
+      "field": "print.print.blocks.0.features",
+      "was": "Large bold stylized pink title graphic at the top of the puzzle page; braille shows it as a plain flush capitalized-words line, not a centred heading (verified against the given braille's own zero indent).",
+      "now": "Large bold stylized pink capital-letter title graphic at the top of the puzzle page (two lines, left-aligned in print). The gold braille centres it, which is the transcriber's treatment, not shown in print.",
+      "evidence": "Same image; the earlier features text claimed a plain title-case line."
+    },
+    {
+      "field": "print.print.blocks.1.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Same image: the paragraph is an instruction to the reader ('use the letters and symbols chart to decode the sentence that follows'); gold braille sets it 5-5 (directions). 'blocked' left as is: print shows no first-line indent."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "         ,,symbolically ,,sp1k+       #,-"
+      ],
+      "after": [
+        "         ,,symbolically ,,sp1k+      #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 527 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

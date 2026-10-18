@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-9"/>
+<meta name="dc:Title" content="Displayed material"/>
+<meta name="dc:Identifier" content="test-section-9"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Displayed material</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>The Son from America</h1>
+<p>Notice the simple nouns the author uses to describe the home.</p>
+<blockquote><p>The hut consisted of one room, which contained all their belongings: the table, the shelf for meat, the two beds, and the clay oven.</p></blockquote>
+<blockquote><p>To strive, to seek, to find, and not to yield.</p><byline>Alfred, Lord Tennyson</byline></blockquote>
+<epigraph><p>The journey of a thousand miles begins with a single step.</p><byline>Lao Tzu</byline></epigraph>
+<p>A short paragraph resumes here.</p>
+<blockquote><p>Source information may follow a displayed quotation.</p><p><cite>Adapted from a public-domain essay, 1902</cite></p></blockquote>
+<p class="source">Source: Test Press, 2026.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

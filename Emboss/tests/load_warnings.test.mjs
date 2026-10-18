@@ -42,7 +42,10 @@ for (const [name, body] of Object.entries(CASES)) {
 test('block children of a list item are separate words', () => {
   const d = parseDtbook(wrap(CASES['blocks in a list item']));
   const item = d.blocks.find((b) => b.type === 'list').items[0];
-  assert.match(item.text, /amber bq/);
+  // Since 25 Sep each block child after the item's first paragraph is a paragraph of its own (item.blocks,
+  // list_item_blocks.test.mjs): the words stay apart, and now so do the paragraphs.
+  assert.match([item.text, ...(item.blocks || []).map((b) => b.text)].join(' '), /amber bq/);
+  assert.doesNotMatch(item.text, /amberbq/);
 });
 
 test('an image in a table cell and a table in a note are saved', () => {

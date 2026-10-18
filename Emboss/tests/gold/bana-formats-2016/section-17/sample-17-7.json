@@ -86,7 +86,8 @@
       "@$pen outside",
       "      couch",
       "      surround",
-      "gggggggggggggggggggggggggggggggggggggggg"
+      "gggggggggggggggggggggggggggggggggggggggg",
+      ""
     ],
     "pageBreaks": [],
     "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
@@ -96,5 +97,18 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: A's '17.5.1' kept over B's wrong '17.4' (a different rule, about partial-emphasis word lists, not marked/icon lists) — the source's own cross-reference at the end of clause d explicitly names 'Sample 17-7'. Modeled with the icon markers dropped (no print character exists for a genuine picture icon — recorded via `features`, not guessed as some placeholder glyph, matching F-213's own finding that an unmapped icon leaks a raw hex escape rather than any braille sign); the box's own multi-column layout is collapsed to one column, matching 17.5.1c's own requirement AND Emboss's own only-ever-one-column list behaviour (F-34, cited here as confirming, not a gap, per standards-map.md's own BANA 17.5.1c row)."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: A's '17.5.1' kept over B's wrong '17.4' (a different rule, about partial-emphasis word lists, not marked/icon lists) — the source's own cross-reference at the end of clause d explicitly names 'Sample 17-7'. Modeled with the icon markers dropped (no print character exists for a genuine picture icon — recorded via `features`, not guessed as some placeholder glyph, matching F-213's own finding that an unmapped icon leaks a raw hex escape rather than any braille sign); the box's own multi-column layout is collapsed to one column, matching 17.5.1c's own requirement AND Emboss's own only-ever-one-column list behaviour (F-34, cited here as confirming, not a gap, per standards-map.md's own BANA 17.5.1c row).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [],
+      "after": [
+        ""
+      ],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 insert. Evidence per gap: PDF p.484, margin line numbers 20..20 (confirmed blank, immediately following this box's last matched line): 1 trailing blank line(s); gold had 0"
+    }
+  ]
 }

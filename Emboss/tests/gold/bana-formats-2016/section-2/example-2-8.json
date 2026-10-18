@@ -1,0 +1,40 @@
+{
+  "id": "example-2-8",
+  "title": "Example 2-8: Volume Identification",
+  "pdfPages": [
+    10
+  ],
+  "textLines": [
+    1752,
+    1758
+  ],
+  "illustrates": {
+    "rule": "2.3.8a",
+    "quote": "a. Volume Identification (1) An agency may require the total number of volumes of the transcription. (2) Individual volumes in the braille edition are indicated with consecutive arabic numbers. (3) Preliminary and/or supplemental volumes are included with the total number of volumes."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-054.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",9 #a ,prelim9>y ,volume & #i ,volumes",
+      ",volume #a"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 0"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used)."
+}

@@ -21,9 +21,9 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "The word wooded in Spanish is leñera.",
+        "text": "The word for woodshed in Spanish is leñera.",
         "continuation": true,
-        "features": "Single sentence; the foreign (Spanish) word 'leñera' (with accented/modified letter ñ) is italicised in the print original."
+        "features": "Single sentence; the foreign (Spanish) word 'leñera' (with accented/modified letter ñ) is in plain type in the print original (not italicised)."
       }
     ]
   },
@@ -40,5 +40,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on wording; same F-68 rationale as example-1-18."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "The word wooded in Spanish is leñera.",
+      "now": "The word for woodshed in Spanish is leñera.",
+      "evidence": "PDF p35 (printed 1-19) page image rendered from references/bana/braille-formats-2016.pdf: the Example 1-19 box reads \"The word for woodshed in Spanish is leñera.\" (\"for\" present, \"woodshed\" not \"wooded\")."
+    },
+    {
+      "field": "print.blocks[0].features",
+      "was": "'leñera' ... is italicised in the print original.",
+      "now": "'leñera' ... is in plain type in the print original (not italicised).",
+      "evidence": "Same page image: leñera is set in the same upright type as the rest of the sentence; only the grey shading in the braille line below (not the print) highlights the accented word. text therefore carries no italic markup."
+    }
+  ],
+  "resolution": "Both runs agree on wording; same F-68 rationale as example-1-18. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

@@ -58,12 +58,12 @@
       "    ellipsis4@.>",
       "",
       "      ,sunrise      ,sunset",
-      "      \"33333333333 \"3333333333",
-      ",jan #i3#dg ,,am    #d3#ce ,,pm",
-      ",feb #h3#bg ,,am    #f3#ja ,,pm",
+      "      \"33333333333  \"3333333333",
+      ",jan  #i3#dg ,,am   #d3#ce ,,pm",
+      ",feb  #h3#bg ,,am   #f3#ja ,,pm",
       "444",
-      ",nov #i3#ai ,,am    #d3#aj ,,pm",
-      ",dec #aj3#ad ,,am #c3#da ,,pm",
+      ",nov  #i3#ai ,,am   #d3#aj ,,pm",
+      ",dec  #aj3#ad ,,am  #c3#da ,,pm",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -77,5 +77,27 @@
     "A",
     "B"
   ],
-  "resolution": "print.rows trimmed to the 4 real data rows; the Mar-Oct gap is print's wavy/zig-zag divider graphic, not literal text, so no invented character ('≈' in run A) or descriptive string as a cell value (run B) is kept for it -- explained in a note instead. print.headers' first cell resolved to '' (blank above the month column in print), not a fabricated '(month)' placeholder."
+  "resolution": "print.rows trimmed to the 4 real data rows; the Mar-Oct gap is print's wavy/zig-zag divider graphic, not literal text, so no invented character ('≈' in run A) or descriptive string as a cell value (run B) is kept for it -- explained in a note instead. print.headers' first cell resolved to '' (blank above the month column in print), not a fabricated '(month)' placeholder.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      \"33333333333 \"3333333333",
+        ",jan #i3#dg ,,am    #d3#ce ,,pm",
+        ",feb #h3#bg ,,am    #f3#ja ,,pm",
+        ",nov #i3#ai ,,am    #d3#aj ,,pm",
+        ",dec #aj3#ad ,,am #c3#da ,,pm"
+      ],
+      "after": [
+        "      \"33333333333  \"3333333333",
+        ",jan  #i3#dg ,,am   #d3#ce ,,pm",
+        ",feb  #h3#bg ,,am   #f3#ja ,,pm",
+        ",nov  #i3#ai ,,am   #d3#aj ,,pm",
+        ",dec  #aj3#ad ,,am  #c3#da ,,pm"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 8, 9, 10, 12, 13 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 326 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (3); two blank cells collapsed to one (2). Where: column gap (table / related columns / columned list) (4); table separation line (1)."
+    }
+  ]
 }

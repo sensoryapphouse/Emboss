@@ -69,10 +69,13 @@ transcription run's own documentation described:
   order within that file's own print text (not tied to a Special-Symbols legend's own listed
   order, which is a book-wide, not per-passage, ordering — see sample-5-03, where the legend
   lists pink before purple but the passage's own colour sequence uses purple before pink ever
-  appears). There is deliberately no real markup token for this: Emboss's own `TYPEFORM`
-  bitmask has no bit for any of UEB's five transcriber-defined indicators or for script at all
-  (`standards-findings.md` F-86, cross-referenced from the new F-83/F-84 this reconciliation
-  adds). `buildModel5` unwraps every `{{tdN: X}}` span to its own inner text X (recording a
+  appears). There is deliberately no real markup token for this. (Update 26 Sep 2026: script is
+  now its own typeform — `tf` bit 8, EMBOSS-TASKS K5 — and the braille can carry all five
+  transcriber-defined indicators through `segment.transcriberTypeform`, used today for hyperlinks
+  (first), strikethrough (second) and BrailleBlaster's own trans1–trans5. What is still missing is
+  a way to assign an arbitrary print feature such as a colour or a double underline to one, and
+  this runner does not map `{{tdN}}` to them — `standards-findings.md` F-86, cross-referenced from
+  F-83/F-84.) `buildModel5` unwraps every `{{tdN: X}}` span to its own inner text X (recording a
   limitation once per distinct symbol number actually used) before the string reaches
   `textOrSegments`/`parseCellMarkup` — so a genuine `*italic*`/`<u>underline</u>` run nested
   inside an otherwise-unrepresentable transcriber-defined span (example-5-14's own
@@ -148,9 +151,12 @@ purely as braille-cell content while still preserving this genuinely-present str
   paragraph in Emboss never drops a `tf` bit for any reason. Affects example-5-1, 5-2, 5-3,
   5-7, 5-8, 5-9, 5-10, 5-13, sample-5-02 — the majority of this section's `mismatch` files.
 - **F-86** (`assess-5/typeforms-writeup.md`, scratch — not yet merged into
-  `standards-findings.md` by number, cross-referenced from F-83/F-84) — script and the five
-  UEB transcriber-defined typeform indicators are fully supported by the bundled liblouis UEB
-  table but completely unreachable from Emboss's own `TYPEFORM` constant/parser/editor.
+  `standards-findings.md` by number, cross-referenced from F-83/F-84) — as written 17 Sep, script
+  and the five UEB transcriber-defined typeform indicators were supported by the bundled liblouis
+  UEB table but unreachable from Emboss. **Update 26 Sep 2026:** script is reachable (K5), and the
+  five indicators are reachable in the braille (`transcriberTypeform`: hyperlinks, strikethrough,
+  BrailleBlaster imports); only assigning an arbitrary print feature (colour, double underline, a
+  shape outline) to one is still not built, and `{{tdN}}` spans are still unwrapped here.
   Affects every `{{tdN}}`-bearing file: example-5-14, 5-16, 5-17, sample-5-01, sample-5-03.
 - **F-84 (new)** — `HEADING_JOIN_TIERS` (`document.mjs:273`) unconditionally suppresses the
   blank line between two consecutive centred (or cell5→cell5/cell5→cell7) headings, with no

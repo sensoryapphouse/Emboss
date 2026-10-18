@@ -1,0 +1,37 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 1,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "tests/fixtures/libreoffice/lo-math-char.rtf",
+ "docSource": "libreoffice",
+ "docFeatures": null,
+ "docs": {
+  "tests/fixtures/libreoffice/lo-math-char.rtf": "docs/00-lo-math-char.rtf"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: first-tab-has-no-braille",
+ "message": "the saved file reopens to different braille [first differing block: first-tab-has-no-braille] (block #0 not counting empty ones, (none) / para): first tab has 1 lines, reopened tab has 4; first differences: line 1: first tab \"\" / reopened tab \"                                              #A\\r\" | line 2: first tab \"(no such line)\" / reopened tab \"  ,EMBOSS ,DOCU;T\\r\" | line 3: first tab \"(no such line)\" / reopened tab \"                  \\\"33333333333\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 13,
+ "originalActions": 82,
+ "actions": [
+  {
+   "t": "clear"
+  }
+ ]
+}

@@ -15,6 +15,7 @@ function collectGraphics(blocks) {
     if (!v || typeof v !== 'object' || seen.has(v)) return;
     seen.add(v);
     if (v.type === 'graphic') out.push(v);
+    else if (v.type === 'imgnote' && v.src) out.push(v);   // a picture kept inside a table cell (exported as the cell's own <img src>)
     for (const k in v) if (v[k] && typeof v[k] === 'object') deep(v[k]);
   })(blocks);
   return out;
@@ -56,6 +57,54 @@ function decodeDataUri(uri) {
   }
   const text = decodeURIComponent(m[3] || '');
   return { mime, bytes: new TextEncoder().encode(text) };
+}
+
+// ---- One allocator for every resource path in a saved package (audit batch S2b, items 6 and 7) ----
+// Every file the package carries (pictures, source PDFs, and the book and OPF themselves) gets its name from here, so two of them can never
+// share one: a resource an imported package already carried keeps its own name when that name is a clean path inside the package; one whose
+// path is not (it climbs out with "../", is absolute, or has a character a reader would take for something else: % # ? \) is moved to
+// images/<its file name>; a new picture gets images/emboss-N.<ext> with the first N not yet taken; a name already taken (compared without
+// regard to letter case, as macOS and Windows unpack) gets -2, -3 ... before its extension.
+const UNCLEAN_PATH_RE = /[%#?\\\x00-\x1f]/;
+export function isCleanPackagePath(p) {
+  if (typeof p !== 'string' || !p || p.startsWith('/') || /^[A-Za-z]:/.test(p) || UNCLEAN_PATH_RE.test(p)) return false;
+  const parts = p.split('/');
+  return parts.every((seg) => seg !== '' && seg !== '.' && seg !== '..' && seg.trim() === seg);
+}
+function resourceBaseName(p, fallback) {
+  const last = String(p ?? '').replace(/\\/g, '/').split('/').pop() || '';
+  const clean = last.replace(/[%#?\\\x00-\x1f]/g, '_').trim().replace(/^\.+/, '');
+  return clean || fallback;
+}
+function makePathAllocator(reserved = []) {
+  const taken = new Set(reserved.map((n) => n.toLowerCase()));
+  const take = (wanted) => {
+    let name = wanted, n = 2;
+    const dot = wanted.lastIndexOf('.'), slash = wanted.lastIndexOf('/');
+    const stem = dot > slash + 1 ? wanted.slice(0, dot) : wanted, ext = dot > slash + 1 ? wanted.slice(dot) : '';
+    while (taken.has(name.toLowerCase())) name = `${stem}-${n++}${ext}`;
+    taken.add(name.toLowerCase());
+    return name;
+  };
+  return {
+    /** An existing resource: its own clean path, else images/<file name> (dir: 'images' or '' for a source PDF), made unique. */
+    existing(path, dir = 'images') { return take(isCleanPackagePath(path) ? path : `${dir ? `${dir}/` : ''}${resourceBaseName(path, 'resource')}`); },
+    /** A new picture: images/emboss-N.<ext>, the first N whose name is free. */
+    fresh(ext) { for (let n = 1; ; n++) { const name = `images/emboss-${n}.${ext}`; if (!taken.has(name.toLowerCase())) return take(name); } },
+  };
+}
+/** Throws (a plain message, userFacing) if the files of a package would not unpack to exactly the files intended: two entries with one name
+ *  (compared without regard to letter case), or a name that is absolute or climbs out of the package root. Never write such a zip. */
+export function checkPackagePaths(files) {
+  const seen = new Map();
+  for (const f of files) {
+    const name = String(f && f.name);
+    const bad = !name || name.startsWith('/') || /^[A-Za-z]:/.test(name) || /[\\\x00-\x1f]/.test(name) || name.split('/').some((seg) => seg === '' || seg === '.' || seg === '..');
+    if (bad) { const e = new Error(`The package cannot be saved: it would contain a file with an unsafe path ("${name}"). The file was not written.`); e.userFacing = true; throw e; }
+    const key = name.toLowerCase();
+    if (seen.has(key)) { const e = new Error(`The package cannot be saved: it would contain a duplicate file name: two files called "${name}" and "${seen.get(key)}". The file was not written.`); e.userFacing = true; throw e; }
+    seen.set(key, name);
+  }
 }
 
 // A unique, valid NCName manifest item id derived from a resource's own filename (falls back
@@ -199,8 +248,23 @@ export function buildNimasPackage(model, options = {}) {
   const referencedPaths = new Set(
     collectGraphics(blocks).map((g) => g.src).filter((src) => src && !/^data:/i.test(src))
   );
-  const usedImages = resources.filter((r) => r && r.role !== 'source-pdf' && r.path && r.bytes && referencedPaths.has(r.path));
   const sourcePdfs = resources.filter((r) => r && r.role === 'source-pdf' && r.path && r.bytes);
+  // A resource is found by its path; the first of two with one path is the one the graphics mean (the second is never written: it could
+  // only be told apart from the first by its position, and the file it would be saved over is the first's).
+  const seenResourcePaths = new Set();
+  const usedImages = resources.filter((r) => {
+    if (!r || r.role === 'source-pdf' || !r.path || !r.bytes || !referencedPaths.has(r.path) || seenResourcePaths.has(r.path)) return false;
+    seenResourcePaths.add(r.path);
+    return true;
+  });
+
+  const bookFile0 = `${id}.xml`, opfFile0 = `${id}.opf`;
+  const alloc = makePathAllocator([bookFile0, opfFile0]);
+  // Names first: the resources the package already has (so they keep theirs), then the new pictures.
+  const finalPathOf = new Map();                       // an existing resource's path -> its path in this package (what graphic.src becomes)
+  for (const r of usedImages) finalPathOf.set(r.path, alloc.existing(r.path, 'images'));
+  const pdfPaths = new Map();
+  for (const r of sourcePdfs) pdfPaths.set(r, alloc.existing(r.path, ''));
 
   const usedIds = new Set();
   const manifestItems = [];
@@ -211,23 +275,26 @@ export function buildNimasPackage(model, options = {}) {
   const blocksForXml = JSON.parse(JSON.stringify(blocks));
   let dataGraphicN = 0;
   for (const g of collectGraphics(blocksForXml)) {
-    if (!g.src || !/^data:/i.test(g.src)) continue;
+    if (!g.src) continue;
+    if (!/^data:/i.test(g.src)) { if (finalPathOf.has(g.src)) g.src = finalPathOf.get(g.src); continue; }   // (rewritten to the path it was given: the same one for a clean name)
     const decoded = decodeDataUri(g.src);
     if (!decoded) continue;
     dataGraphicN++;
     const ext = IMAGE_EXT_BY_MIME[decoded.mime] || 'bin';
-    const relPath = `images/emboss-${dataGraphicN}.${ext}`;
+    const relPath = alloc.fresh(ext);
     manifestItems.push({ id: makeItemId(relPath, usedIds), href: relPath, mediaType: decoded.mime });
     resourceFiles.push({ name: `${id}/${relPath}`, data: decoded.bytes });
     g.src = relPath;
   }
   for (const r of usedImages) {
-    manifestItems.push({ id: makeItemId(r.path, usedIds), href: r.path, mediaType: r.mime || 'application/octet-stream' });
-    resourceFiles.push({ name: `${id}/${r.path}`, data: r.bytes });
+    const relPath = finalPathOf.get(r.path);
+    manifestItems.push({ id: makeItemId(relPath, usedIds), href: relPath, mediaType: r.mime || 'application/octet-stream' });
+    resourceFiles.push({ name: `${id}/${relPath}`, data: r.bytes });
   }
   for (const r of sourcePdfs) {
-    manifestItems.push({ id: makeItemId(r.path, usedIds), href: r.path, mediaType: 'application/pdf' });
-    resourceFiles.push({ name: `${id}/${r.path}`, data: r.bytes });
+    const relPath = pdfPaths.get(r);
+    manifestItems.push({ id: makeItemId(relPath, usedIds), href: relPath, mediaType: 'application/pdf' });
+    resourceFiles.push({ name: `${id}/${relPath}`, data: r.bytes });
   }
 
   const bookFile = `${id}.xml`;
@@ -242,6 +309,13 @@ export function buildNimasPackage(model, options = {}) {
     { name: `${id}/${opfFile}`, data: new TextEncoder().encode(opfString) },
     ...resourceFiles,
   ];
+  // Never write a package that would unpack to other files than the ones meant: two entries with one name, or a path out of the root.
+  checkPackagePaths(files);
+  const hrefs = new Set();
+  for (const it of manifestItems) {
+    if (hrefs.has(it.href.toLowerCase())) { const e = new Error(`The package cannot be saved: its manifest would list "${it.href}" twice. The file was not written.`); e.userFacing = true; throw e; }
+    hrefs.add(it.href.toLowerCase());
+  }
 
   return { zipName: `${id}.zip`, id, files, imageCount: dataGraphicN + usedImages.length, pdfCount: sourcePdfs.length };
 }

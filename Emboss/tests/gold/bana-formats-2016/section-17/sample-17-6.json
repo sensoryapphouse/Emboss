@@ -28,20 +28,23 @@
         "kind": "list",
         "items": [
           {
-            "text": "accidentally `accidentally` `accidentally`"
+            "text": "a**cc**ident**ally**"
           },
           {
-            "text": "advisable `advisable`"
+            "text": "advi**sa**ble"
           },
           {
-            "text": "arrangement `arrangement` `arrangement`"
+            "text": "a**rr**angement"
           }
         ]
       }
     ],
     "notes": "A cell-5 heading, a flush (1-1) introductory paragraph directly beneath it (no blank line between, per §1.9.3's own cell-5/7-heading exception), then a 3-item word list each given THREE forms per 17.4.1b: contracted, plain uncontracted, and uncontracted WITH print's own partial bold on specific letter groups (bold retained on 'advisable' only where contracted and plain-uncontracted happen to coincide, per B's own resolution note: 'advisable' appears twice, not three times, because its contracted and uncontracted forms are identical in UEB).",
     "surroundingText": [],
-    "printFeatures": "Centred/cell-5 all-caps heading; partial (letter-group) bold emphasis in the word list."
+    "printFeatures": "Centred/cell-5 small-caps heading; partial (letter-group) bold emphasis in the word list, one form of each word.",
+    "transcriberSupplied": [
+      "the contracted and the plain uncontracted repeat of each word (17.4.1b): \"accidentally accidentally\", \"advisable\", \"arrangement arrangement\" before the bold form"
+    ]
   },
   "braille": {
     "width": 40,
@@ -65,5 +68,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.4.1', matches source). Print's own partial bold on 'cc'/'ally'/'sa'/'rr' is NOT re-encoded (as with Example 17-13, F-210 drops all typeform from an uncontracted run regardless, so marking it changes nothing observable). The introductory paragraph is built 'blocked:true' since the given braille shows it flush (1-1) directly under the cell-5 heading with no blank line, matching document.mjs's own §1.9.3 cell-5/7-heading exception exactly."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.4.1', matches source). Print's own partial bold on 'cc'/'ally'/'sa'/'rr' is NOT re-encoded (as with Example 17-13, F-210 drops all typeform from an uncontracted run regardless, so marking it changes nothing observable). The introductory paragraph is built 'blocked:true' since the given braille shows it flush (1-1) directly under the cell-5 heading with no blank line, matching document.mjs's own §1.9.3 cell-5/7-heading exception exactly. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[2].items[*].text (third form)",
+      "was": "third form plain `accidentally` / `advisable`(second) / `arrangement`",
+      "now": "third form carries the print bold on the letter groups: a**cc**ident**ally**, advi**sa**ble, a**rr**angement",
+      "evidence": "references/_gemini/_done/gold-17-A/page-483.png: the printed words show bold on \"cc\" and \"ally\" (accidentally), \"sa\" (advisable), \"rr\" (arrangement). Braille lines 17-19 carry the same bold: a^1cc^'ident^1ally, advi^1sa^'ble, a^1rr^'angement. The uncontracted forms are split with backticks around the unbolded pieces because the markup cannot combine bold with the uncontracted flag; the first (contracted) and plain uncontracted forms are transcriber-supplied repeats (17.4.1b) not in the print image."
+    },
+    {
+      "field": "print.blocks[2].items[*].text",
+      "was": "three forms per item: contracted word, plain uncontracted word, and the uncontracted bold form (e.g. \"accidentally `accidentally` `a`**cc**`ident`**ally**\")",
+      "now": "the single printed form of each word with its bold letter groups: a**cc**ident**ally**, advi**sa**ble, a**rr**angement; the repeats are listed in print.transcriberSupplied",
+      "evidence": "references/bana/braille-formats-2016.pdf p.483, rendered at 110 dpi: the print original shows each of the three words once (accidentally, advisable, arrangement) with bold letter groups. The contracted and plain uncontracted repeats appear only in braille lines 17-19 (17.4.1b: transcriber-supplied)."
+    }
+  ]
 }

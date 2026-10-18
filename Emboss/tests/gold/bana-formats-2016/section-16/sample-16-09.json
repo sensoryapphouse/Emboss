@@ -26,7 +26,7 @@
           "4 | Jail term | 63",
           "5 | Death of close family member | 63",
           "6 | Personal injury or illness | 53",
-          "7 | Marriage[ref:*] | 50",
+          "7 | Marriage | 50[ref:*]",
           "8 | Fired at work | 47"
         ],
         "headers": [
@@ -49,7 +49,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "              ,,table #g4a            #,-",
+      "              ,,table #g4a           #,-",
       "    ,social ,readju/;t ,rat+ ,scale",
       "      \"<f ,holmes & ,rahe1 #aifg\">",
       "",
@@ -59,15 +59,15 @@
       "  value ( #ejj2 444",
       "",
       "                                  ,m1n",
-      ",rank ,life ev5t                   value",
-      "\"3333 \"333333333333333333333333 \"33333",
-      "#a \"\" ,d1? ( sp\\se \"\"\"\"\"\"\"\"\"\"\"\" #ajj",
-      "#b \"\" ,divorce \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #gc",
-      "#c \"\" ,m>ital sep>a;n \"\"\"\"\"\"\"\"\"     #fe",
-      "#d \"\" ,jail t]m \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #fc",
-      "#e \"\" ,d1? ( close family memb]     #fc",
-      "#f \"\" ,p]sonal 9jury or ill;s       #ec",
-      "#g \"\" ,m>riage \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #ej\"9",
+      ",rank  ,life ev5t                 value",
+      "\"3333  \"333333333333333333333333  \"33333",
+      "#a \"\"  ,d1? ( sp\\se \"\"\"\"\"\"\"\"\"\"\"\"  #ajj",
+      "#b \"\"  ,divorce \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #gc",
+      "#c \"\"  ,m>ital sep>a;n \"\"\"\"\"\"\"\"\"   #fe",
+      "#d \"\"  ,jail t]m \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #fc",
+      "#e \"\"  ,d1? ( close family memb]   #fc",
+      "#f \"\"  ,p]sonal 9jury or ill;s     #ec",
+      "#g \"\"  ,m>riage \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #ej\"9",
       "444"
     ],
     "pageBreaks": [],
@@ -78,5 +78,45 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.8.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13143 (the table's own header row, field width 5, digits(20)+3) is exactly 40 characters; the title line (13133, 41 characters) and the footnoted 'Marriage' row (13151, 41 characters) are one cell over, a genuine source anomaly on those two lines only, not grounds to null the whole item's width. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+  "resolution": "illustrates.rule set to 16.8.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13143 (the table's own header row, field width 5, digits(20)+3) is exactly 40 characters; the title line (13133, 41 characters) and the footnoted 'Marriage' row (13151, 41 characters) are one cell over, a genuine source anomaly on those two lines only, not grounds to null the whole item's width. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.items.6",
+      "was": "7 | Marriage[ref:*] | 50",
+      "now": "7 | Marriage | 50[ref:*]",
+      "evidence": "Page image PDF p.455 (Sample 16-9): the asterisk is printed after the mean value ('50*'), not after 'Marriage'; the gold braille also places the asterisk after #ej (50)."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "              ,,table #g4a            #,-",
+        ",rank ,life ev5t                   value",
+        "\"3333 \"333333333333333333333333 \"33333",
+        "#a \"\" ,d1? ( sp\\se \"\"\"\"\"\"\"\"\"\"\"\" #ajj",
+        "#b \"\" ,divorce \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #gc",
+        "#c \"\" ,m>ital sep>a;n \"\"\"\"\"\"\"\"\"     #fe",
+        "#d \"\" ,jail t]m \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #fc",
+        "#e \"\" ,d1? ( close family memb]     #fc",
+        "#f \"\" ,p]sonal 9jury or ill;s       #ec",
+        "#g \"\" ,m>riage \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"     #ej\"9"
+      ],
+      "after": [
+        "              ,,table #g4a           #,-",
+        ",rank  ,life ev5t                 value",
+        "\"3333  \"333333333333333333333333  \"33333",
+        "#a \"\"  ,d1? ( sp\\se \"\"\"\"\"\"\"\"\"\"\"\"  #ajj",
+        "#b \"\"  ,divorce \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #gc",
+        "#c \"\"  ,m>ital sep>a;n \"\"\"\"\"\"\"\"\"   #fe",
+        "#d \"\"  ,jail t]m \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #fc",
+        "#e \"\"  ,d1? ( close family memb]   #fc",
+        "#f \"\"  ,p]sonal 9jury or ill;s     #ec",
+        "#g \"\"  ,m>riage \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"   #ej\"9"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 10, 11, 12, 13, 14, 15, 16, 17, 18 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 455 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (7); two blank cells collapsed to one (2); spurious extra blanks (gold line wider than 40 cells) (1). Where: column gap after guide dots (7); column gap (table / related columns / columned list) (3); before right-margin page number (1); table separation line (1)."
+    }
+  ]
 }

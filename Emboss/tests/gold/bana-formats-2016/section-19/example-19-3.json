@@ -18,7 +18,7 @@
         "kind": "paragraph",
         "blocked": true,
         "text": "dah-dah dah-dah-dah di-dah-dit di-di-dit dit, dah-di-dah-dit dah-dah-dah dah-di-dit dit.",
-        "features": "Braille shows this flush (zero indent), so built blocked:true."
+        "features": "Print paragraph is set flush left: its first line is not indented and lines up with the wrapped second line."
       }
     ],
     "notes": "Plain prose paragraph (Morse sounds spelled out as words) with ordinary comma/period punctuation — 19.4.2's own point is that this needs no special handling at all, unlike 19.4.1's dot/dash symbol form.",
@@ -40,5 +40,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree; independently re-derived and forward-translation-verified). Print side: both runs agreed on the wording; adopted B's single flowing block (A's internal line break was an arbitrary transcription artifact, not something in the source — Emboss wraps the one paragraph itself)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].features",
+      "was": "Braille shows this flush (zero indent), so built blocked:true.",
+      "now": "Print paragraph is set flush left: its first line is not indented and lines up with the wrapped second line.",
+      "evidence": "references/_gemini/_done/gold-19-A/page-520.png (Example 19-3 print box): the first line \"dah-dah dah-dah-dah ...\" starts at the same left edge as the second line \"dah-di-dit dit.\", so the print paragraph has no first-line indent. The old text justified blocked:true by what the braille shows."
+    }
+  ],
+  "resolution": "Braille unchanged (A and B agree; independently re-derived and forward-translation-verified). Print side: both runs agreed on the wording; adopted B's single flowing block (A's internal line break was an arbitrary transcription artifact, not something in the source — Emboss wraps the one paragraph itself). Print description corrected 23 Sep 2026 (see printCorrections)."
 }

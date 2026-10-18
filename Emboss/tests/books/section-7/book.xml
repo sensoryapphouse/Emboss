@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-7"/>
+<meta name="dc:Title" content="Boxed material"/>
+<meta name="dc:Identifier" content="test-section-7"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Boxed material</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>Grammar Notes</h1>
+<p>The forms of the verb are shown below.</p>
+<sidebar render="required"><hd>Forms of be</hd>
+<table><thead><tr><th>Singular</th><th>Plural</th></tr></thead>
+<tbody><tr><td>is</td><td>are</td></tr><tr><td>was</td><td>were</td></tr></tbody></table>
+</sidebar>
+<sidebar render="required"><p>A plain box with a single paragraph and no title.</p></sidebar>
+<sidebar render="required"><hd>Try it</hd><p>Answer these:</p>
+<list type="ol"><li>What is a noun?</li><li>What is a verb?</li></list></sidebar>
+<p>Text resumes after the boxes.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

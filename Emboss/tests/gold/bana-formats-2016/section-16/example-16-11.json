@@ -24,7 +24,7 @@
       {
         "kind": "note",
         "level": null,
-        "text": "[ref:†]syllabus: the subject studied for a particular course\n[ref:‡]syllabus: a summary outline of a course of study",
+        "text": "[ref:†]*syllabus*: the subject studied for a particular course\n[ref:‡]*syllabus*: a summary outline of a course of study",
         "features": "Two short glossary-style notes stacked at the right margin, each repeating \"syllabus\" in italics with its own mark.",
         "items": null
       }
@@ -33,12 +33,12 @@
       {
         "ref": "†",
         "placement": "margin",
-        "text": "syllabus: the subject studied for a particular course"
+        "text": "*syllabus*: the subject studied for a particular course"
       },
       {
         "ref": "‡",
         "placement": "margin",
-        "text": "syllabus: a summary outline of a course of study"
+        "text": "*syllabus*: a summary outline of a course of study"
       }
     ],
     "surroundingText": "Illustration directly below rule 16.7.2, showing two reference marks stacked at the same point in the text, transcribed as two separate indicators in print order.",
@@ -65,5 +65,25 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.2 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A itself flagged this as weak evidence (\"no line reaches exactly column 40, max observed is 39\") before still recording 40; direct verification (lines 12618-12626, 9-space padding stripped) confirms no line reaches 40 (max 39, on four separate lines) and no page/line-number token anchors the right edge. Left null, per the same \"never guess\" convention applied to Examples 16-1..16-4 (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.2 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A itself flagged this as weak evidence (\"no line reaches exactly column 40, max observed is 39\") before still recording 40; direct verification (lines 12618-12626, 9-space padding stripped) confirms no line reaches 40 (max 39, on four separate lines) and no page/line-number token anchors the right edge. Left null, per the same \"never guess\" convention applied to Examples 16-1..16-4 (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "[ref:†]syllabus: the subject studied for a particular course\n[ref:‡]syllabus: a summary outline of a course of study",
+      "now": "[ref:†]*syllabus*: the subject studied for a particular course\n[ref:‡]*syllabus*: a summary outline of a course of study",
+      "evidence": "Page image PDF p.437 (Example 16-11), zoomed 400 dpi: 'syllabus' is italic in both notes, the colon plain."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "syllabus: the subject studied for a particular course",
+      "now": "*syllabus*: the subject studied for a particular course",
+      "evidence": "Same as above."
+    },
+    {
+      "field": "print.print.notes.1.text",
+      "was": "syllabus: a summary outline of a course of study",
+      "now": "*syllabus*: a summary outline of a course of study",
+      "evidence": "Same as above."
+    }
+  ]
 }

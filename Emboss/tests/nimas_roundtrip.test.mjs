@@ -120,6 +120,12 @@ function normalizeBlock(b) {
   // Note ids are link targets, not content: the save normalises them to XML NCNames
   // ("3" -> "id_3") and supplies one when missing.
   if (copy.type === 'footnote') delete copy.id;
+  if (copy.type === 'note' && !copy.render) {
+    // DTD: prodnote@render is #REQUIRED too, so a note Emboss created with no value of its
+    // own is saved as "required" (D6/A43) and comes back carrying it. An imported note's own
+    // value is kept either way (A22) and is compared normally.
+    copy.render = 'required';
+  }
   if (copy.type === 'box' && !copy.render) {
     // DTD: sidebar@render is #REQUIRED, so the exporter supplies "required" when the
     // source omitted it; the re-parse is richer by design.
@@ -281,6 +287,10 @@ console.log('--- Section 1: Synthetic AST Block Types ---');
       },
       {
         type: 'list',
+        // Items with no marker/bullet are a plain list: saved as <list type="pl"> (a "ul" would give them bullets on re-open),
+        // which the parser reads back as kind/style 'plain'. (Previously written as a markerless "ul" list.)
+        kind: 'plain',
+        style: 'plain',
         items: [
           { text: 'First bullet point' },
           { text: 'Second bullet point' }
@@ -311,7 +321,11 @@ console.log('--- Section 1: Synthetic AST Block Types ---');
         ]
       },
       { type: 'play', subtype: 'prose', text: 'HAMLET: To be, or not to be.' },
-      { type: 'play', subtype: 'verse', style: 'verse', text: 'Two roads diverged in a yellow wood,' },
+      // playVerse: true (F-180) matches what this block already becomes on export (no
+      // fromPoem here, so exportToNimasXml's own A19-Stage-2 poem-vs-verse-drama choice
+      // already writes it as <p class="bai-verse">, D5's "verse drama, no <poem> source"
+      // shape) — keeps AST1/AST2 consistent through the export/reparse round trip.
+      { type: 'play', subtype: 'verse', style: 'verse', playVerse: true, text: 'Two roads diverged in a yellow wood,' },
       { type: 'stage', text: 'Exeunt Ghost and Hamlet.' },
       { type: 'caption', text: 'Figure 1. Diagram of the solar system.' },
       { type: 'attribution', text: '— William Shakespeare' },

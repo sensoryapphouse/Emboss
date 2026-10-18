@@ -33,16 +33,30 @@
       "",
       ",we",
       "",
-      "  ;\\[333333333333\\[333333333\\[33333",
+      "  ;\\[\"33333333333\\[\"33333333\\[\"3333",
       "  f.d ! di>y 9 ! middle ( a box ( ru2i%"
     ],
     "pageBreaks": [],
-    "notes": "Re-extracted from source (lines 14710-14719, margin 0). Includes the REQUIRED leading blank braille line (14715, a genuine row of 40 blank cells, not merely a page-layout gap — distinct from the truly-empty lines 14711-14714) that BANA 18.8.1 requires ('Precede and follow each arrow/sentence pair by blank lines'); \"We\" then sits alone on its own line (14716) because the arrow-shaft line below it (14718) is itself 38 cells wide and cannot share a line with any more text at 40-cell width."
+    "notes": "Re-extracted from source (lines 14710-14719, margin 0). Includes the REQUIRED leading blank braille line (14715, a genuine row of 40 blank cells, not merely a page-layout gap — distinct from the truly-empty lines 14711-14714) that BANA 18.8.1 requires ('Precede and follow each arrow/sentence pair by blank lines'); \"We\" then sits alone on its own line (14716) because the arrow-shaft line below it (14718) is itself 38 cells wide and cannot share a line with any more text at 40-cell width. BANA Errata March 2024 (C12) adds dot 5 (\") immediately after each of the three arrow symbols on this line, replacing one trailing '3' cell per arrow so line length is unchanged."
   },
   "uncertain": [],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "Run B's braille.lines is correct: it kept the leading blank line (14715) that BANA 18.8.1 requires and that genuinely appears in the source as a full 40-blank-cell row, distinct from an ordinary page gap. Run A's own braille.lines dropped this line entirely (4 lines instead of 5) — confirmed wrong by directly re-deriving the file's own textLines range from source. illustrates.rule already correct in both (18.8.3); quote unified to the rule's own text."
+  "resolution": "Run B's braille.lines is correct: it kept the leading blank line (14715) that BANA 18.8.1 requires and that genuinely appears in the source as a full 40-blank-cell row, distinct from an ordinary page gap. Run A's own braille.lines dropped this line entirely (4 lines instead of 5) — confirmed wrong by directly re-deriving the file's own textLines range from source. illustrates.rule already correct in both (18.8.3); quote unified to the rule's own text.",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA Errata March 2024",
+      "field": "braille.lines",
+      "before": [
+        "  ;\\[333333333333\\[333333333\\[33333"
+      ],
+      "after": [
+        "  ;\\[\"33333333333\\[\"33333333\\[\"3333"
+      ],
+      "note": "Errata (C12): dot 5 of the horizontal line mode indicator is missing after each of the three arrows on line 4. The errata BRF counts the arrow spacing as 11/8/4 cells (each cell keeping each arrow above its word); the PDF text's '7' in the middle position is a slip. Line keeps its original length."
+    }
+  ]
 }

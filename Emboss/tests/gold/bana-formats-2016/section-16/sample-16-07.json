@@ -50,7 +50,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "444 n\"e 3fess$ until n[4            a#dcc",
+      "444 n\"e 3fess$ until n[4           a#dcc",
       "",
       "         ,f ,susy's ,biography4",
       "",
@@ -84,5 +84,19 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.6 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13077 (field width 5, digits(25)+3), stripped, is 31 characters at 9 leading spaces (matching Run B, not Run A's 8); line 13075 (41 characters, 'a#dcc' page-number token) is a genuine anomaly both runs already agree on verbatim. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.6 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13077 (field width 5, digits(25)+3), stripped, is 31 characters at 9 leading spaces (matching Run B, not Run A's 8); line 13075 (41 characters, 'a#dcc' page-number token) is a genuine anomaly both runs already agree on verbatim. braille.lines: the two runs agreed byte-for-byte; kept as transcribed.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "444 n\"e 3fess$ until n[4            a#dcc"
+      ],
+      "after": [
+        "444 n\"e 3fess$ until n[4           a#dcc"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 453 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

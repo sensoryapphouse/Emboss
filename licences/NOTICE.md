@@ -42,6 +42,32 @@ from what is actually shipped.
 * Licence: **SIL Open Font License 1.1** — full text in `Inter-OFL-1.1.txt`.
 * Upstream: https://rsms.me/inter/
 
+## Iconoir — UI icons
+
+* Regular style, 24x24, stroke-based. The settings, close, focus-mode and
+  export-arrow icons are inlined as an SVG `<symbol>` sprite directly in
+  `Translate/index.html`, rather than shipped as separate files — nothing to
+  vendor beyond the path data itself.
+* Licence: **MIT** — full text in `Iconoir-MIT.txt` (© 2021 Luca Burgio).
+* Upstream: https://iconoir.com
+
+**Why they replaced emoji, which is the part worth not undoing.** The four
+controls used emoji glyphs, and some mobile fonts render those as full-colour
+pictures rather than as a symbol that takes the surrounding text's colour. A
+coloured pictogram ignores the palette, ignores a high-contrast setting, and
+cannot be recoloured for focus mode — so on exactly the devices where the app
+most needs to be legible, the icons stopped obeying it. Swapped in the brand
+audit of 2026-09-12; reasoning recorded here on 10 Oct from Paige's own notes
+in their fork (`web/icons/README.md`, PaigeBraille/translate#10), which our
+copy had not carried across.
+
+| emoji replaced | Iconoir icon | used for |
+|---|---|---|
+| ⚙ | `settings` | the Settings button, and inline in Help wherever it says "Settings" |
+| ✕ | `xmark` | closing the Help dialog |
+| ⛶ | `maximize` | entering and leaving focus mode |
+| ▾ | `nav-arrow-down` | the Export button's dropdown indicator |
+
 ## APH Braille Shadows — the braille typeface
 
 * Used by permission of the American Printing House for the Blind. What is known

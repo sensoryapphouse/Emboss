@@ -17,23 +17,23 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "The building had a festive air on the outside that contrasted with its inner [ref:*]staidness. Little by little, Juan was absorbed by his job, and he felt at peace since he was doing everything he could to get his letter for Mariana.",
+        "text": "The building had a festive air on the outside that contrasted with its inner <u>staidness</u>. Little by little, Juan was absorbed by his job, and he felt at peace since he was doing everything he could to get his letter for Mariana.",
         "features": "The word \"staidness\" is underlined in print, marking it as having a footnote (per 16.3), immediately followed by a pronunciation-and-definition footnote.",
         "items": null
       },
       {
         "kind": "note",
         "level": null,
-        "text": "staidness (stād’nįs) n. a quiet, often strait-laced dignity",
+        "text": "**staidness** (stād′nĭs) *n.* a quiet, often strait-laced dignity",
         "features": "Set below a horizontal rule; \"staidness\" bold, its phonetic respelling in parentheses, the part of speech (n.) in italics.",
         "items": null
       }
     ],
     "notes": [
       {
-        "ref": "*",
+        "ref": "",
         "placement": "footnote",
-        "text": "staidness (stād’nįs) n. a quiet, often strait-laced dignity"
+        "text": "**staidness** (stād′nĭs) *n.* a quiet, often strait-laced dignity"
       }
     ],
     "surroundingText": "Illustration directly below rule 16.7.3, showing a note that supplies a print pronunciation respelling -- rule 16.7.3 requires not adding a second, separate uncontracted spelling in braille alongside this pronunciation.",
@@ -63,5 +63,31 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12645 (the page-change dashed rule ending '#ahh'), stripped of its 9-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12645 (the page-change dashed rule ending '#ahh'), stripped of its 9-space left padding, is exactly 40 characters. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "The building had a festive air on the outside that contrasted with its inner [ref:*]staidness. Little by little, Juan was absorbed by his job, and he felt at peace since he was doing everything he could to get his letter for Mariana.",
+      "now": "The building had a festive air on the outside that contrasted with its inner <u>staidness</u>. Little by little, Juan was absorbed by his job, and he felt at peace since he was doing everything he could to get his letter for Mariana.",
+      "evidence": "Page image PDF p.437 (Example 16-12): 'staidness' is underlined in print, with no reference mark; gold encoded the underline as a [ref:*] mark. Gold braille shows the underline word indicator (_1) on the word. Builder must learn: a note keyed to an underlined word without a mark."
+    },
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "staidness (stād’nįs) n. a quiet, often strait-laced dignity",
+      "now": "**staidness** (stād′nĭs) *n.* a quiet, often strait-laced dignity",
+      "evidence": "Zoomed 400 dpi crop: 'staidness' bold, respelling reads (stād′nĭs) with a breve on the i (U+012D) and a prime (U+2032), 'n.' italic. Gold had 'į' (i with ogonek) and a curly apostrophe."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "staidness (stād’nįs) n. a quiet, often strait-laced dignity",
+      "now": "**staidness** (stād′nĭs) *n.* a quiet, often strait-laced dignity",
+      "evidence": "Same as above."
+    },
+    {
+      "field": "print.print.notes.0.ref",
+      "was": "*",
+      "now": "(empty: no printed mark)",
+      "evidence": "Print shows no reference mark before the note."
+    }
+  ]
 }

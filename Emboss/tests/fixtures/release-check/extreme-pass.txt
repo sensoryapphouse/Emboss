@@ -1,0 +1,14 @@
+Extreme-document test set: 2 unit(s), seed 20261002, 1 job(s), time scale 8
+node v26.5.1, 10 cpus, load 86.5 48.3 64.0, 32 GB RAM
+working folder: /scratch/ex-pass2
+[1/2] 05-headings:10000chars-md                            pass              11.7 s    211 MB
+[2/2] 05-headings:10000chars-txt                           pass              14.7 s    216 MB
+
+UNIT (case:format)          RESULT                  TIME s  PEAK MB    INPUT   BUDGET s/MB  WHY (first failure)
+------------------------------------------------------------------------------------------------------------------
+05-headings:10000chars-md   pass                      11.7      211    10 KB       240/800
+05-headings:10000chars-txt  pass                      14.7      216    10 KB       240/800
+
+2/2 units passed, 0 failed; 0 min 26 s
+inputs and logs kept in /scratch/ex-pass2
+exit 0

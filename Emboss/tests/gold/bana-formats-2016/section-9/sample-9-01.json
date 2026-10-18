@@ -12,6 +12,7 @@
       {
         "kind": "paragraph",
         "level": null,
+        "blocked": true,
         "text": "Soviet premier Joseph Stalin was more of a mystery. Churchill and Roosevelt agreed that",
         "features": "Leads directly into the displayed quotation, which interrupts this very sentence in print (it resumes below with 'defeating Hitler should be...')."
       },
@@ -24,7 +25,7 @@
       {
         "kind": "attribution",
         "level": null,
-        "text": "—Labor Secretary Frances Perkins—",
+        "text": "—*Labor Secretary Frances Perkins*—",
         "features": "Right below the quotation, centred, smaller type, em-dashes on both sides."
       },
       {
@@ -71,5 +72,19 @@
     "The last visible print sentence ('With the President's attention focused on military matters,') is cut off at the bottom edge of the source scan; whatever text follows is not shown and not reproduced."
   ],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6887-6901 after stripping the 5-character line-number field (the '(Return to Text)' line 6902 excluded as PDF-navigation furniture). Structural disagreement over print.blocks: A ordered them to match PRINT's own mid-sentence interruption (paragraph ending 'agreed that', quote, attribution, paragraph continuing 'defeating Hitler...followed', new paragraph); B ordered them to match the ALREADY-RELOCATED braille (one whole uninterrupted sentence, then quote+attribution, then the new paragraph). Settled by reading the PDF page image directly (braille-formats-2016.pdf, p.238): print genuinely shows the quotation interrupting the sentence between 'agreed that' and 'defeating Hitler', confirming A's account of PRINT's own layout -- which is also the only correct input for `buildModel9` (built from `print` only, per this runner's own rule), since B's structure describes the ALREADY-TRANSCRIBED braille, not the print original. Kept A's block order; added the print's own quotation marks (visible in the PDF image but omitted from A's `text`) around the quote, matching B."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p238 (Sample 9-1): the opening paragraph \"Soviet premier Joseph Stalin ...\" starts flush left with no first-line indent (only \"With the President’s ...\" is indented)."
+    },
+    {
+      "field": "print.blocks[2].text (italics)",
+      "was": "—Labor Secretary Frances Perkins—",
+      "now": "—*Labor Secretary Frances Perkins*—",
+      "evidence": "Same page image: the attribution line is italic. The dashes are placed outside the italics because the book braille shows italic opening after the dash; the image does not settle whether the dashes are italic."
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6887-6901 after stripping the 5-character line-number field (the '(Return to Text)' line 6902 excluded as PDF-navigation furniture). Structural disagreement over print.blocks: A ordered them to match PRINT's own mid-sentence interruption (paragraph ending 'agreed that', quote, attribution, paragraph continuing 'defeating Hitler...followed', new paragraph); B ordered them to match the ALREADY-RELOCATED braille (one whole uninterrupted sentence, then quote+attribution, then the new paragraph). Settled by reading the PDF page image directly (braille-formats-2016.pdf, p.238): print genuinely shows the quotation interrupting the sentence between 'agreed that' and 'defeating Hitler', confirming A's account of PRINT's own layout -- which is also the only correct input for `buildModel9` (built from `print` only, per this runner's own rule), since B's structure describes the ALREADY-TRANSCRIBED braille, not the print original. Kept A's block order; added the print's own quotation marks (visible in the PDF image but omitted from A's `text`) around the quote, matching B. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

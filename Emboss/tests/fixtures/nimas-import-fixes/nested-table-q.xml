@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-GB">
+<head><meta name="dc:Title" content="Nested table and quotation fixture"/><meta name="dc:Identifier" content="nested-q-fixture"/></head>
+<book>
+<frontmatter><doctitle>Nested table and quotation fixture</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>Quotations and tables</h1>
+<p>The <abbr title="North Atlantic Treaty Organization">NATO</abbr> delegate said <q>these are <q>quoted words</q> indeed</q> and left.</p>
+<p>A second paragraph: <q>“already marked”</q> stays as it is.</p>
+<table><caption>Outer caption</caption><thead><tr><th>Name</th><th>Detail</th></tr></thead><tbody><tr><td>Alpha</td><td><table><tbody><tr><td>Inner one</td><td>Inner two</td></tr><tr><td>Inner three</td><td>Inner four</td></tr></tbody></table></td></tr><tr><td>Beta</td><td>Plain cell</td></tr></tbody></table>
+<p>Text after the tables.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

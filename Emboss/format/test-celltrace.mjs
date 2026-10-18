@@ -64,8 +64,13 @@ function cellsForWord(block, o, unit, wordStart, wordEnd) {
   // plain paragraph: "brown" chars 10..15 → BR[N
   const plain = model.blocks[2];
   ok(cellsForWord(plain, o, 0, 10, 15) === 'BR[N', '"brown" in the plain paragraph → BR[N');
-  // H1: rule line cells are all null; "one" (chars 8..11) still maps
-  const h1 = traceBlock(model.blocks[0], o);
+  // H1: rule line cells are all null; "one" (chars 8..11) still maps.
+  // UK-1 (docs/decisions.md "UKAAF", 26 Sep 2026): the dot-2s end-marker/rule line this checks is now OFF
+  // by default (it was previously emitted unconditionally whenever atStart was falsy, which a bare
+  // traceBlock(block, o) call — no third argument — always is). `endMarkerBefore: true` asks for it
+  // explicitly here so the rule line exists to probe; the property under test (a decorative line has no
+  // source cells) is unaffected by UK-1 either way.
+  const h1 = traceBlock({ ...model.blocks[0], endMarkerBefore: true }, o);
   const ruleLine = h1.find((l) => l.s.includes('3') && l.src.every((s) => s == null));
   ok(!!ruleLine, 'H1 rule line has no source cells (all null)');
   ok(cellsForWord(model.blocks[0], o, 0, 8, 11).length > 0, 'H1 heading text still maps ("One")');

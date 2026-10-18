@@ -15,33 +15,34 @@
   "print": {
     "blocks": [
       {
-        "kind": "note",
-        "text": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter. The repeated word is enclosed within transcriber’s note indicators."
-      },
-      {
         "kind": "paragraph",
-        "text": "`The heater` (he-ter) `in the room did not work.`",
+        "text": "The `heater` in the room did not work.",
         "continuation": true
       },
       {
         "kind": "paragraph",
-        "text": "`My jeans` (je-ns) `shrunk in the dryer.`",
+        "text": "My `jeans` shrunk in the dryer.",
         "continuation": true
       },
       {
         "kind": "paragraph",
-        "text": "`Did you pack your gear` (ge-r) `for the camping trip?`",
+        "text": "Did you pack your `gear` for the camping trip?",
         "continuation": true
       },
       {
         "kind": "paragraph",
-        "text": "`That is my ideal` (ide-l) `vacation!`",
+        "text": "That is my `ideal` vacation!",
         "continuation": true
       }
     ],
-    "notes": "Four sentences, each with one word carrying a single crossed-out letter, the hyphen-substituted repeat embedded inline (parenthesised here) rather than as a separate list.",
+    "notes": "Four sentences, each with one word carrying a single crossed-out letter (marked here with backticks).",
     "surroundingText": [],
-    "printFeatures": "Four unnumbered sentences."
+    "printFeatures": "Four unnumbered sentences.",
+    "transcriberNote": "Words with crossed-out letters are uncontracted, then repeated with a hyphen substituted for each crossed-out letter. The repeated word is enclosed within transcriber’s note indicators.",
+    "transcriberSupplied": [
+      "the explanatory transcriber's note (17.11.2c)",
+      "the hyphen-substituted repeat of each crossed-out word in transcriber's note indicators: he-ter, je-ns, ge-r, ide-l"
+    ]
   },
   "braille": {
     "width": 40,
@@ -67,5 +68,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.11.2', matches source). Modeled as a standalone TN (its own explanatory text, 17.11.2c, 'done') followed by four sentences; the repeated hyphen-substituted word is written here in ordinary parentheses (not enclosed by any inline-TN markup this flat print schema can express) because Emboss has NO inline/embedded transcriber's-note segment type (F-211) — this is the file's own expected mismatch: the given braille wraps the repeated word in `@.<...@.>` brackets inline within the sentence; Emboss can only emit that wrapper at block level."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.11.2', matches source). Modeled as a standalone TN (its own explanatory text, 17.11.2c, 'done') followed by four sentences; the repeated hyphen-substituted word is written here in ordinary parentheses (not enclosed by any inline-TN markup this flat print schema can express) because Emboss has NO inline/embedded transcriber's-note segment type (F-211) — this is the file's own expected mismatch: the given braille wraps the repeated word in `@.<...@.>` brackets inline within the sentence; Emboss can only emit that wrapper at block level. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1..4].text",
+      "was": "backticks (uncontracted) wrapped \"The heater\" ... \"in the room did not work.\" i.e. the whole sentence apart from the parenthesis",
+      "now": "backticks only round the crossed-out word: heater, jeans, gear, ideal",
+      "evidence": "references/_gemini/_done/gold-17-A/page-474.png: the print shows four ordinary sentences with one word each carrying a crossed-out letter (heat-e-r, jeans, gear, ideal). Rule 17.11.1c on the page: \"Words with crossed-out letters are uncontracted\". Braille lines: \",! heater @.<he-ter@.> 9 ! room did n / w\" - \"The\", \"in\", \"the\" are contracted; only the crossed-out word is written out. (The parenthesised \"(he-ter)\" etc. is the transcriber-supplied hyphen repeat in note indicators, not in the print image; left as it was.)"
+    },
+    {
+      "field": "print.blocks (note block removed) and print.blocks[*].text",
+      "was": "a 'note' block \"Words with crossed-out letters are uncontracted, then repeated...\" and sentence texts ending each crossed-out word with its hyphen repeat, e.g. \"The `heater` (he-ter) in the room did not work.\"",
+      "now": "four sentences with the crossed-out word only (backticks mark the crossed-out word): \"The `heater` in the room did not work.\" etc.; the note and the repeats are listed in print.transcriberNote / print.transcriberSupplied",
+      "evidence": "references/bana/braille-formats-2016.pdf p.474, rendered at 110 dpi: the print original is four sentences; \"heater\", \"jeans\", \"gear\" and \"ideal\" each have a letter struck through. The explanatory note is transcriber prose (17.11.2c) and the hyphenated repeats appear only in the braille lines."
+    }
+  ]
 }

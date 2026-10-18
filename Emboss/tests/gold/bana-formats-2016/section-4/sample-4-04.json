@@ -35,8 +35,8 @@
       {
         "kind": "other",
         "level": null,
-        "text": "—Response to a Serenade, November 10, 1864",
-        "features": "Right-aligned italic citation line, below the quotation, indented differently from the quotation body."
+        "text": "—*Response to a Serenade*, November 10, 1864",
+        "features": "Right-aligned citation line below the quotation, indented differently from the quotation body; the title \"Response to a Serenade\" is italic, the date is roman."
       },
       {
         "kind": "paragraph",
@@ -77,5 +77,13 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree. Text resolved to \"PRIMARY Sources\" (matching run B): the braille's double-comma indicator on \"prim>y\" (whole-word caps) but single-comma on \"s\\rces\" (initial cap only) shows print reads \"PRIMARY Sources\", not run A's \"Primary Sources\" (which the same braille contradicts). `print.blocks` kept as run A's 5-block split (quotation body and citation as two separate `other` blocks, matching their different braille indents) rather than run B's single merged block -- a documentation-only choice since `other` blocks are excluded from modeling either way."
+  "resolution": "braille.lines agree. Text resolved to \"PRIMARY Sources\" (matching run B): the braille's double-comma indicator on \"prim>y\" (whole-word caps) but single-comma on \"s\\rces\" (initial cap only) shows print reads \"PRIMARY Sources\", not run A's \"Primary Sources\" (which the same braille contradicts). `print.blocks` kept as run A's 5-block split (quotation body and citation as two separate `other` blocks, matching their different braille indents) rather than run B's single merged block -- a documentation-only choice since `other` blocks are excluded from modeling either way. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[3].text (citation)",
+      "was": "—Response to a Serenade, November 10, 1864",
+      "now": "—*Response to a Serenade*, November 10, 1864",
+      "evidence": "Page image p.123 (PDF page 123): in the citation line only \"Response to a Serenade\" is italic; \", November 10, 1864\" is roman."
+    }
+  ]
 }

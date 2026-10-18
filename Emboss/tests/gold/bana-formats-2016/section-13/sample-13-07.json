@@ -17,7 +17,7 @@
       {
         "kind": "heading",
         "level": 1,
-        "text": "Tender Buttons [A Chair]",
+        "text": "*Tender Buttons* [A Chair]",
         "features": "Italic work-title, followed by the bracketed section title 'A Chair' in plain roman."
       },
       {
@@ -27,27 +27,37 @@
         "features": "Byline below the title."
       },
       {
-        "kind": "heading",
-        "level": 2,
+        "kind": "paragraph",
+        "level": null,
         "text": "A CHAIR.",
-        "features": "Small-caps section heading."
+        "blocked": true,
+        "features": "Section title in small caps, flush left like the paragraphs (not a separately styled heading)."
       },
       {
         "kind": "paragraph",
         "level": null,
         "text": "A widow in a wise veil and more garments shows that shadows are even. It addresses no more, it shadows the stage and learning. A regular arrangement, the severest and the most preserved is that which has the arrangement not more than always authorised.",
-        "features": "First prose paragraph, ordinary indented paragraph format."
+        "features": "First prose paragraph, flush-left blocked paragraph (no first-line indent), blank space above and below.",
+        "blocked": true
       },
       {
         "kind": "paragraph",
         "level": null,
         "text": "A suitable establishment, well housed, practical, patient and staring, a suitable bedding, very suitable and not more particularly than complaining, anything suitable is so necessary.",
-        "features": "Second prose paragraph; print excerpt ends with an ellipsis, showing more text follows that is not included."
+        "features": "Second prose paragraph, flush-left blocked paragraph.",
+        "blocked": true
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "…",
+        "blocked": true,
+        "features": "A lone ellipsis on its own line below the second paragraph: the excerpt continues."
       }
     ],
     "notes": "Picture on PDF p.375; this is an excerpt from Gertrude Stein's Tender Buttons prose-poem sequence, printed and transcribed as ordinary paragraphs (no poetic line breaks), matching this sample's title.",
     "surroundingText": null,
-    "printFeatures": "Italic work title; small-caps section heading; ordinary indented prose paragraphs; trailing ellipsis showing the excerpt continues beyond what is shown."
+    "printFeatures": "Italic work title; small-caps section title; flush-left blocked prose paragraphs separated by blank space; a trailing ellipsis on its own line showing the excerpt continues."
   },
   "braille": {
     "width": 40,
@@ -75,5 +85,31 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines differ between runs at 2 of 13 lines (indices 0, 2 -- leading blank-cell counts); run A's counts (4 and 12) confirmed exactly against the source (.txt lines 10839 and 10841: 4 and 12 literal U+2800 characters respectively, after the reference-number field), correcting run B's counts (6 and 11). The remaining 11 lines were already identical between runs and independently confirmed correct."
+  "resolution": "braille.lines differ between runs at 2 of 13 lines (indices 0, 2 -- leading blank-cell counts); run A's counts (4 and 12) confirmed exactly against the source (.txt lines 10839 and 10841: 4 and 12 literal U+2800 characters respectively, after the reference-number field), correcting run B's counts (6 and 11). The remaining 11 lines were already identical between runs and independently confirmed correct. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "Tender Buttons [A Chair]",
+      "now": "*Tender Buttons* [A Chair]",
+      "evidence": "PDF p.375 (references/bana/braille-formats-2016.pdf, 110 dpi), Sample 13-7: \"Tender Buttons\" is italic, \"[A Chair]\" roman; italics moved from the prose features into the text markup the builder reads."
+    },
+    {
+      "field": "print.blocks[2]",
+      "was": "heading level 2 \"A CHAIR.\"",
+      "now": "paragraph \"A CHAIR.\" blocked (small caps in features)",
+      "evidence": "PDF p.375: \"A CHAIR.\" is a flush-left line of the same type size as the prose, set in small caps; the braille (line 15) is at cell 1, not a cell-5 heading."
+    },
+    {
+      "field": "print.blocks[3].blocked, [4].blocked, features",
+      "was": "\"ordinary indented paragraph format\"",
+      "now": "blocked:true, flush left",
+      "evidence": "PDF p.375: both prose paragraphs start flush at the left margin with no first-line indent and blank space between them."
+    },
+    {
+      "field": "print.blocks[5] (new)",
+      "was": "(absent; notes said the excerpt ends with an ellipsis but text had none)",
+      "now": "paragraph \"…\" on its own line",
+      "evidence": "PDF p.375: a lone \"...\" line sits below the second paragraph."
+    }
+  ]
 }

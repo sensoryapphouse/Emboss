@@ -154,9 +154,17 @@ function check(name, cond, detail = '') {
   };
 
   const narrowTrace = {};
-  const narrowBrf = formatDocument(narrowTableDoc, baseOpts({ tableFormat: 'columnar', trace: narrowTrace }));
+  // UK-6 (28 Sep, James / decisions.md "UKAAF"): tableEndMarker defaults true, adding a dot-2s
+  // line ("111...") after the table — turned off here so the "no header separation line" check
+  // below isn't confused by the (unrelated, expected) end marker.
+  const narrowBrf = formatDocument(narrowTableDoc, baseOpts({ tableFormat: 'columnar', trace: narrowTrace, tableEndMarker: false, docEndMarker: false }));
   check('spatial table: formats without crash', narrowBrf.length > 0);
-  check('spatial table: contains header separation line', narrowBrf.includes('---') || narrowBrf.includes('===') || narrowBrf.includes('333') || narrowBrf.includes('111') || narrowBrf.includes('---'));
+  // Task 2, 26 Sep 2026: a header-separation dot-run line is BANA §11.4.2b only — B004's own
+  // worked table examples (§12, Appendix E) never show one between a header row and the body,
+  // so UKAAF (baseOpts' own default mode here) correctly has none; check BANA specifically.
+  const narrowBrfBana = formatDocument(narrowTableDoc, baseOpts({ mode: 'bana', tableFormat: 'columnar' }));
+  check('spatial table (BANA): contains header separation line', narrowBrfBana.includes('333') || narrowBrfBana.includes('111'));
+  check('spatial table (UKAAF): has NO header separation line (B004 §12/Appendix E)', !narrowBrf.includes('333') && !narrowBrf.includes('111'));
   check('spatial table: trace contains cell mappings', narrowTrace.rowCells && narrowTrace.rowCells.some(r => r && r.some(c => c && c.c >= 0)));
 
   // Test 2.2: Over-Wide Table (10 columns, must automatically fall back to Listed format)

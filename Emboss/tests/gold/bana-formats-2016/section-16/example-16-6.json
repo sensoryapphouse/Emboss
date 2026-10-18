@@ -19,7 +19,8 @@
         "level": null,
         "text": "That floating stuff is called slag. The slag is then skimmed off.",
         "features": "Plain body text, no reference symbol or emphasis marking the word \"slag\".",
-        "items": null
+        "items": null,
+        "blocked": true
       },
       {
         "kind": "note",
@@ -55,5 +56,13 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.4.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12476, stripped of its 9-space left padding, is exactly 40 characters, ending in the embedded TN indicator. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.4.c per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12476, stripped of its 9-space left padding, is exactly 40 characters, ending in the embedded TN indicator. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks.0.blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image PDF p.433 (Example 16-6), 150 dpi: the first print line 'That floating stuff is called slag. The slag' starts at the same left x-position as the second line 'is then skimmed off.'; no first-line indent. Builder reads blocked:true on the paragraph."
+    }
+  ]
 }

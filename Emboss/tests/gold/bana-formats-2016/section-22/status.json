@@ -1,0 +1,18 @@
+{
+  "example-22-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-22-2": {
+    "status": "mismatch",
+    "note": "first differing line 4: expected \"\\\",-4 #AIGA4 ,CANADA'S ,RAILROADS4\" vs actual \",-,-4 #AIGA4 ,CANADA'S ,RAILROADS4\"."
+  },
+  "example-22-3": {
+    "status": "mismatch",
+    "note": "first differing line 7: expected \"---4 .7,H>RY ,POTT] & ! ,PRISON] (\" vs actual \"^1---^'4 .7,H>RY ,POTT] & ! ,PRISON] (\"."
+  },
+  "example-22-4": {
+    "status": "mismatch",
+    "note": "first differing line 7: expected \"\\\",-4 .7,! ,SMALL ,RA9.' \\\"<#AIDE\\\">4 ,NEW\" vs actual \",-,-4 .7,! ,SMALL ,RA9.' \\\"<#AIDE\\\">4 ,NEW\"."
+  }
+}

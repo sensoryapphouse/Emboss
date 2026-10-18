@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Audit HTML lists</title></head>
+<body>
+<h2>Three-level bullets</h2>
+<ul>
+<li>alphaB1
+  <ul>
+    <li>alphaB2
+      <ul><li>alphaB3</li><li>alphaB4</li></ul>
+    </li>
+    <li>alphaB5</li>
+  </ul>
+</li>
+<li>alphaB6</li>
+</ul>
+<h2>Nested numbers</h2>
+<ol>
+<li>alphaN1
+  <ol><li>alphaN2<ol><li>alphaN3</li></ol></li><li>alphaN4</li></ol>
+</li>
+<li>alphaN5</li>
+</ol>
+<h2>Start at 5, type a, type I, reversed</h2>
+<ol start="5"><li>alphastart5a</li><li>alphastart5b</li></ol>
+<ol type="a"><li>alphatypea1</li><li>alphatypea2</li></ol>
+<ol type="I"><li>alphatypeI1</li><li>alphatypeI2</li></ol>
+<ol reversed><li>alphareversed1</li><li>alphareversed2</li><li>alphareversed3</li></ol>
+<ol><li>alphaone</li><li value="10">alphavalue10</li><li>alphaafter10</li></ol>
+<h2>Bullet styles</h2>
+<ul style="list-style-type:square"><li>alphasquare</li></ul>
+<ul style="list-style-type:circle"><li>alphacircle</li></ul>
+<ul style="list-style-type:none"><li>alphanone</li></ul>
+<h2>Definition list</h2>
+<dl><dt>alphaterm1</dt><dd>alphadef1</dd><dt>alphaterm2</dt><dd>alphadef2a</dd><dd>alphadef2b</dd></dl>
+<h2>Complex items</h2>
+<ul>
+<li><p>alphaparaitem first paragraph</p><p>alphaparaitem second paragraph</p></li>
+<li>alphaitemwith <b>bold</b> and <sup>sup</sup> and <a href="http://example.org/x">alphalistlink</a></li>
+<li>alphaitemquote<blockquote>alphaitembq</blockquote></li>
+<li>alphaitemtable<table><tr><td>alphalt1</td><td>alphalt2</td></tr></table></li>
+<li><input type="checkbox" checked> alphachecked task</li>
+<li><input type="checkbox"> alphaunchecked task</li>
+</ul>
+<h2>Menu and directory</h2>
+<menu><li>alphamenu1</li><li>alphamenu2</li></menu>
+<h2>Empty and text-only</h2>
+<ul><li></li><li>alphaafterempty</li></ul>
+<ul><li>alphatext</li>loose text alphaloose<li>alphaafterloose</li></ul>
+</body></html>

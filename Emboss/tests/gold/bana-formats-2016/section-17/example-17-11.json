@@ -22,13 +22,16 @@
         "kind": "list",
         "items": [
           {
-            "text": "`wrap (ing)`"
+            "text": "`wrap (ing)`",
+            "marker": "1."
           },
           {
-            "text": "`cute (er)`"
+            "text": "`cute (er)`",
+            "marker": "2."
           },
           {
-            "text": "`early (est)`"
+            "text": "`early (est)`",
+            "marker": "3."
           }
         ]
       }
@@ -54,5 +57,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: kept B's more specific '17.12.1c, d, e' (A's bare '17.12.1' is less precise) — the example is embedded directly under clauses c-e's own text (space-separated word+insertable-part, combined without contraction, print spacing followed). Modeled as a directions paragraph (expect a margin mismatch, see the new 'activity-directions margin' finding below) plus a 3-item wholly-uncontracted list."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille unchanged. illustrates.rule: kept B's more specific '17.12.1c, d, e' (A's bare '17.12.1' is less precise) — the example is embedded directly under clauses c-e's own text (space-separated word+insertable-part, combined without contraction, print spacing followed). Modeled as a directions paragraph (expect a margin mismatch, see the new 'activity-directions margin' finding below) plus a 3-item wholly-uncontracted list. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[*].marker",
+      "was": "(no marker)",
+      "now": "1. 2. 3.",
+      "evidence": "references/_gemini/_done/gold-17-A/page-475.png: the boxed print shows \"1. wrap (ing)  2. cute (er)  3. early (est)\"; printFeatures already said \"numbered word list\". Braille lines 3-5 begin #A4 #B4 #C4."
+    }
+  ]
 }

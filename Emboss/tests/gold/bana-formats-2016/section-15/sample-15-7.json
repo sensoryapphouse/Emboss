@@ -10,17 +10,17 @@
   "print": {
     "blocks": [
       { "kind": "other", "text": "–107–", "features": "Print page number, centred above the excerpt." },
-      { "kind": "numbered", "text": "SECOND CITIZEN. Truly, Sir, all that I live by is with the awl; I meddle with", "number": "21", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "Second Citizen. Truly, Sir, all that I live by is with the awl; I meddle with", "number": "21", "printVisible": false, "newPara": true },
       { "kind": "numbered", "text": "no tradesman's matters, nor women's matters, but with awl.", "number": "22", "printVisible": false },
       { "kind": "numbered", "text": "I am indeed, sir, a surgeon to old shoes; when they are in", "number": "23", "printVisible": false },
       { "kind": "numbered", "text": "great danger, I re-cover them. As proper men as ever trod upon", "number": "24", "printVisible": false },
       { "kind": "numbered", "text": "neat's-leather have gone upon my handiwork", "number": "25", "printVisible": true },
-      { "kind": "dialogue", "text": "FLAVIUS. But wherefore art not in thy shop today?", "level": 0 },
+      { "kind": "dialogue", "text": "Flavius. But wherefore art not in thy shop today?", "level": 0 },
       { "kind": "dialogue", "text": "Why dost thou lead these men about the streets?", "level": 0 },
-      { "kind": "numbered", "text": "SECOND CITIZEN. Truly, sir, to wear out their shoes to get myself into more", "number": "28", "printVisible": false, "newPara": true },
+      { "kind": "numbered", "text": "Second Citizen. Truly, sir, to wear out their shoes to get myself into more", "number": "28", "printVisible": false, "newPara": true },
       { "kind": "numbered", "text": "work. But indeed, sir, we make holiday to see Caesar and to", "number": "29", "printVisible": false },
       { "kind": "numbered", "text": "rejoice in his triumph", "number": "30", "printVisible": true },
-      { "kind": "dialogue", "text": "MARULLUS. Wherefore rejoice? What conquest brings he home?", "level": 0 },
+      { "kind": "dialogue", "text": "Marullus. Wherefore rejoice? What conquest brings he home?", "level": 0 },
       { "kind": "dialogue", "text": "What tributaries follow him to Rome,", "level": 0 },
       { "kind": "dialogue", "text": "To grace in captive bonds his chariot wheels?", "level": 0 },
       { "kind": "dialogue", "text": "You blocks, you stones, you worse than senseless things!", "level": 0 },
@@ -71,5 +71,13 @@
     "The trailing '#cf' (36) on the braille's own last row ('Knew you not Pompey? Many a time and oft') could not be confirmed as a genuine verse line number — the print page shows no number there, and neither original transcription run proposed one. Not built into buildModel15's model; if it IS a genuine 15.6.1b verse number, this file's own 'verse: only print-shown numbers' data would need a fifth entry."
   ],
   "sources": ["A", "B"],
-  "resolution": "Braille: B's 29-line array (no spurious running-head line) is correct per direct re-reading of the source; A's 30-line version is wrong. Print: B's prose/verse split and rule id (15.6.1) are correct, matching standards-map.md's own table and the PDF page image's own visible typography; A's uniform 'line' kind and invented '15.10' rule id are wrong. This reconciliation additionally merges each speaker name into its own first line of dialogue (both runs wrongly kept them as separate blocks) and computes the intervening sequential prose numbers per 15.6.1a. Modeled by buildModel15 as: the prose portion (SECOND CITIZEN) via the same genuine-linenum/wrapNumbered mechanism as Sample 15-2/15-3/15-4 (expected to work, per the 'done' findings); the verse portion (FLAVIUS/MARULLUS) as play/verse dialogue with a genuine linenum segment on the two numbered lines, expected to hit F-181 (silently dropped, not merely misplaced) exactly as Sample 15-6."
+  "printCorrections": [
+    {
+      "field": "print.blocks[1,6,8,11].text (speaker names)",
+      "was": "SECOND CITIZEN. / FLAVIUS. / SECOND CITIZEN. / MARULLUS. (all capitals)",
+      "now": "Second Citizen. / Flavius. / Second Citizen. / Marullus. (initial capital plus small caps, written as capital initials)",
+      "evidence": "PDF p.424 of references/bana/braille-formats-2016.pdf (rendered 110 dpi), Sample 15-7: each speaker name is set in small caps with a larger initial letter (S, C / F / M), not in full capitals; the rest of the block text is unchanged. Small caps cannot be expressed in the JSON, so the initial-capital spelling is used (the builder and the braille both treat this as capitalised words)."
+    }
+  ],
+  "resolution": "Braille: B's 29-line array (no spurious running-head line) is correct per direct re-reading of the source; A's 30-line version is wrong. Print: B's prose/verse split and rule id (15.6.1) are correct, matching standards-map.md's own table and the PDF page image's own visible typography; A's uniform 'line' kind and invented '15.10' rule id are wrong. This reconciliation additionally merges each speaker name into its own first line of dialogue (both runs wrongly kept them as separate blocks) and computes the intervening sequential prose numbers per 15.6.1a. Modeled by buildModel15 as: the prose portion (SECOND CITIZEN) via the same genuine-linenum/wrapNumbered mechanism as Sample 15-2/15-3/15-4 (expected to work, per the 'done' findings); the verse portion (FLAVIUS/MARULLUS) as play/verse dialogue with a genuine linenum segment on the two numbered lines, expected to hit F-181 (silently dropped, not merely misplaced) exactly as Sample 15-6. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

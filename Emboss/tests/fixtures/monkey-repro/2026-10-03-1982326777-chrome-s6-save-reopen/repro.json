@@ -1,0 +1,103 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 6,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "empty",
+ "docSource": "empty",
+ "docFeatures": null,
+ "docs": {
+  "web/test_corpus_1000/file_0665_Volume_665_Large_Academic_Textbook.xml": "docs/00-file_0665_Volume_665_Large_Academic_Textbook.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: box",
+ "message": "the saved file reopens to different braille [first differing block: box] (block #120 not counting empty ones, box / box): first tab has 834 lines, reopened tab has 834; first differences: line 549: first tab \"      A4 ,EVALUATE THE INVARIANT\\r\" / reopened tab \"      #B4 ,EVALUATE THE INVARIANT\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 21,
+ "originalActions": 73,
+ "actions": [
+  {
+   "t": "clickCard",
+   "f": 0.5273,
+   "n": 1
+  },
+  {
+   "t": "key",
+   "key": "Delete",
+   "n": 2
+  },
+  {
+   "t": "setting",
+   "what": "ui",
+   "close": "button",
+   "lang": "he"
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "dragText",
+   "fx": 0.2897,
+   "fy": 0.3683,
+   "ext": "triple",
+   "n": 1,
+   "tx": 0.862,
+   "ty": 0.2984,
+   "alt": false
+  },
+  {
+   "t": "load",
+   "doc": "web/test_corpus_1000/file_0665_Volume_665_Large_Academic_Textbook.xml"
+  },
+  {
+   "t": "clickBraille",
+   "fx": 0.4433,
+   "fy": 0.9745,
+   "n": 1
+  },
+  {
+   "t": "clickText",
+   "fx": 0.0048,
+   "fy": 0.8287,
+   "n": 2
+  },
+  {
+   "t": "menu",
+   "which": "braille",
+   "f": 0.4382,
+   "g": 0.9625,
+   "close": "leave"
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowDown",
+   "n": 11,
+   "word": false
+  },
+  {
+   "t": "insert",
+   "f": 0.9169
+  },
+  {
+   "t": "clickText",
+   "fx": 0.0017,
+   "fy": 0.6216,
+   "n": 1
+  }
+ ]
+}

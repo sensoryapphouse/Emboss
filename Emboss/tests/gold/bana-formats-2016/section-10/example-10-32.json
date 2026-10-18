@@ -23,15 +23,15 @@
           },
           {
             "level": 1,
-            "text": "a. girl eating candy"
+            "text": "a. [picture of girl eating candy]"
           },
           {
             "level": 1,
-            "text": "b. two boys eating ice cream from the carton"
+            "text": "b. [picture of two boys eating ice cream from the carton]"
           },
           {
             "level": 1,
-            "text": "c. girl eating a carrot"
+            "text": "c. [picture of girl eating a carrot]"
           }
         ]
       }
@@ -59,5 +59,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print: both runs agree the photographs carry no print text at all; confirmed directly against the PDF page image."
+  "resolution": "Braille matches both A and B exactly. Print: both runs agree the photographs carry no print text at all; confirmed directly against the PDF page image. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[1..3].text",
+      "was": "a. girl eating candy / b. two boys eating ice cream from the carton / c. girl eating a carrot (as plain text)",
+      "now": "same descriptions wrapped as \"[picture of ...]\" image markers",
+      "evidence": "references/_gemini/_done/gold-10-A/page-268.png, Example 10-32 print box: the three answer choices a. b. c. are photographs (girl with sweets, two boys with an ice-cream carton, girl eating a carrot), no printed words; the builder reads \"[picture of X]\" as the embedded image note (as for Example 10-31)."
+    }
+  ]
 }

@@ -1,0 +1,167 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 3,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "tests/fixtures/import-audit/rtf/lo-w11-boxes.rtf",
+ "docSource": "import-audit",
+ "docFeatures": null,
+ "docs": {
+  "tests/fixtures/import-audit/rtf/lo-w11-boxes.rtf": "docs/00-lo-w11-boxes.rtf"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g1",
+  "brailleCode": "en-ueb-g1",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "navigated-away",
+ "key": "navigated-away",
+ "message": "the page navigated away to http://localhost:8297/web/index.html",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 16,
+ "originalActions": 84,
+ "actions": [
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 3
+  },
+  {
+   "t": "clickCard",
+   "f": 0.0221,
+   "n": 1
+  },
+  {
+   "t": "paste",
+   "how": "html",
+   "html": "<table><tr><td>lonely</td></tr></table>",
+   "text": "# Heading\nbody text\n## Sub\nmore"
+  },
+  {
+   "t": "clear"
+  },
+  {
+   "t": "paste",
+   "how": "html",
+   "html": "<h2>A heading</h2><p>and a paragraph</p>",
+   "text": "שלום עולם\nمرحبا بالعالم\n中文字符\n😀😀😀"
+  },
+  {
+   "t": "paste",
+   "how": "text",
+   "text": ""
+  },
+  {
+   "t": "selOp",
+   "fx": 0.7907,
+   "fy": 0.0811,
+   "ext": "shiftEnd",
+   "n": 9,
+   "fx2": 0.2827,
+   "fy2": 0.7079,
+   "op": "format",
+   "dx": 0.9217,
+   "dy": 0.6094,
+   "key": "Backspace",
+   "text": "%\n0\nto\n,\nx+y=z\nA\né\n \np\nB\n中文\nﬁ",
+   "f": 0.8919,
+   "fmt": "b"
+  },
+  {
+   "t": "insert",
+   "f": 0.115
+  },
+  {
+   "t": "type",
+   "text": "/ u"
+  },
+  {
+   "t": "zoom",
+   "how": "css",
+   "z": 1.5
+  },
+  {
+   "t": "modNav",
+   "key": "ArrowDown",
+   "shift": false
+  },
+  {
+   "t": "type",
+   "text": "$"
+  },
+  {
+   "t": "clickCard",
+   "f": 0.5738,
+   "n": 1
+  },
+  {
+   "t": "slash",
+   "q": "",
+   "down": 0,
+   "end": "Enter"
+  },
+  {
+   "t": "key",
+   "key": "Enter",
+   "n": 3
+  },
+  {
+   "t": "check",
+   "which": "recovery"
+  },
+  {
+   "t": "undoRun",
+   "n": 21,
+   "redo": 12
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 10
+  },
+  {
+   "t": "type",
+   "text": "to😀*3.14"
+  },
+  {
+   "t": "key",
+   "key": "Tab",
+   "n": 1
+  },
+  {
+   "t": "zoom",
+   "how": "css",
+   "z": 1
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowUp",
+   "n": 1,
+   "word": false
+  },
+  {
+   "t": "slash",
+   "q": "li",
+   "down": 4,
+   "end": "Escape"
+  },
+  {
+   "t": "clickCard",
+   "f": 0.4822,
+   "n": 1
+  },
+  {
+   "t": "selectAllType",
+   "text": "  x+y=z"
+  }
+ ]
+}

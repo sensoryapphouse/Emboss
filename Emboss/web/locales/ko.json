@@ -60,10 +60,13 @@
     "toc": "목차",
     "print": "인쇄 보기 (LHS)",
     "braille": "점자",
+    "export": "내보내기",
+    "export_title": "점자(BRF, eBraille) 내보내기 또는 점자 프린터로 전송",
+    "emboss_menu": "점자 프린터로 전송",
     "braille_view": "점자 보기",
     "download_brf": "점자 (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "점자 인쇄",
     "emboss_tooltip": "문서를 점자 프린터 또는 프린터로 전송",
     "clear_doc": "문서 초기화",
@@ -133,8 +136,6 @@
     "poem_desc": "시적 연 운문 라인 (1-3)",
     "exercise_title": "연습 문제",
     "exercise_desc": "번호가 있는 연습 문제 (1-5 / 3-5)",
-    "caption_title": "캡션/저작권 표시",
-    "caption_desc": "그림 캡션 또는 저작권 표시 (7-5)",
     "footnote_title": "각주",
     "footnote_desc": "각주 텍스트 (1-3)",
     "note_title": "점역자의 주석",
@@ -163,8 +164,6 @@
     "page_desc": "원본 인쇄 페이지 나누기 지시자 삽입",
     "printpage_title": "인쇄 페이지 번호",
     "printpage_desc": "원본 인쇄 페이지 나누기 지시자 삽입",
-    "code_title": "컴퓨터 코드",
-    "code_desc": "UEB 지시자가 있는 코드 블록 삽입",
     "indent_title": "들여쓰기 / 중첩 항목",
     "indent_desc": "목록 항목 또는 연습을 더 깊이 중첩 (Tab)",
     "outdent_title": "내어쓰기 / 항목 승격",
@@ -185,8 +184,8 @@
     "language_label": "인터페이스 언어",
     "language_help": "버튼, 메뉴, 대화 상자 및 스크린 리더 알림에 사용되는 언어를 선택하세요.",
     "standard_label": "점자 표준",
-    "standard_bana": "BANA (미국 & 캐나다 — 40×25 셀)",
-    "standard_ukaaf": "UKAAF (영국 & 국제 — 38×25 셀)",
+    "standard_bana": "BANA (미국 & 캐나다 — 38×25 셀)",
+    "standard_ukaaf": "UKAAF (영국 & 국제 — 38×27 셀)",
     "grade_label": "축약 수준",
     "grade_1": "그레이드 1 (축약 없음/글자별)",
     "grade_2": "그레이드 2 (축약)",
@@ -261,7 +260,7 @@
     "size_full": "전체 시트 (1행 안티 슬라이스)",
     "lead_lines": "촉각 리드 라인",
     "braille_labels": "점자 레이블",
-    "footer_tip": "💡 검은색 윤곽선은 단단한 촉각 테두리가 됩니다. 색상은 자동으로 구별되는 촉각 질감에 매핑됩니다.",
+    "footer_tip": "검은색 윤곽선은 단단한 촉각 테두리가 됩니다. 색상은 자동으로 구별되는 촉각 질감에 매핑됩니다.",
     "open_repositories": "촉각 리포지토리 열기:",
     "no_diagrams": "일치하는 다이어그램을 찾을 수 없습니다."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "무손실 왕복 상태",
     "precedence_status": "점자 우선순위 규칙 상태",
     "perfect_match": "100% 왕복 일치 (불일치 0개)",
-    "badge_warn": "⚠ {count}개 검토 필요",
+    "badge_warn": "{count}개 검토 필요",
     "badge_title": "왕복 역번역 중에 {count}개의 단어 불일치를 발견했습니다. 클릭하여 첫 번째로 이동합니다.",
     "badge_clean": "왕복 확인: 단어 불일치가 없습니다."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "저장하지 않은 변경 사항이 있습니다. 저장하지 않고 종료하시겠습니까?",
     "unsaved_load": "저장하지 않은 변경 사항이 있습니다. 새 파일을 로드하면 현재 문서가 바뀝니다. 계속하시겠습니까?",
     "unsaved_clear": "저장하지 않은 변경 사항이 있습니다. 문서를 초기화하시겠습니까?",
-    "drop_hint": "⬇ 문서를 끌어놓아 편집기로 임포트",
+    "drop_hint": "문서를 끌어놓아 편집기로 임포트",
     "notice": "알림",
     "close_notice": "알림 닫기"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "문서 텍스트",
+      "math_keyboard_toggle": "수학 키보드",
       "label": "텍스트",
       "toolbar_aria": "서식",
       "style_label": "단락 스타일",
@@ -443,8 +443,8 @@
       "graphic_cats": "그래픽 카테고리",
       "graphic_list": "촉각 그래픽 다이어그램",
       "formula_search_label": "수식 검색",
-      "btactile_link": "BTactile (무료) ↗",
-      "tgil_link": "APH TGIL (1,800개 이상의 템플릿) ↗"
+      "btactile_link": "BTactile (무료)",
+      "tgil_link": "APH TGIL (1,800개 이상의 템플릿)"
     },
     "settings": {
       "list_spaced": "빈 줄 목록 (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "OS 프린터 드라이버 잠금을 우회하여 사용자 정의 마이크로컨트롤러 점자 프린터 (ESP32-S3, RP2040/RP2350, STM32, Arduino)에 직접 연결합니다.",
       "graphics_hint": "선택을 해제하면 다이어그램은 텍스트 전용 점자 프린터 및 점자 디스플레이용 접근 가능한 점역자 주의 설명으로 내보내집니다.",
       "tactile_heading": "촉각 디스플레이 라이브 스트림 (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Bluetooth 연결 (DotPad BLE)",
-      "tactile_connect_hid": "🔌 USB / HID 연결 (Monarch)",
+      "tactile_connect_ble": "Bluetooth 연결 (DotPad BLE)",
+      "tactile_connect_hid": "USB / HID 연결 (Monarch)",
       "tactile_disconnect": "디스플레이 연결 해제",
       "tactile_sim_monarch": "시뮬레이션된 Monarch 테스트 (32×10)",
       "tactile_sim_dotpad": "시뮬레이션된 DotPad 테스트 (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "WebBluetooth (DotPad BLE UART) 또는 WebHID (Monarch/USB)를 통해 외부 드라이버 없이 라이브 점자 뷰포트와 촉각 그래픽을 스트리밍합니다.",
       "perkins_hint": "— SDF 및 JKL 키로 점자 입력",
       "ascii_hint": "— 원시 ASCII 점자 문자 표시",
+      "show_explanation_bar": "설명 표시줄 표시",
+      "show_explanation_bar_hint": "— 텍스트와 점자 아래에서 현재 단어의 점자를 설명하는 줄",
+      "simple_mode_hint": "— Emboss를 간단 변환기에서 엽니다. 빠른 모드와 편집기 사이를 전환해도 이 설정은 바뀌지 않습니다.",
       "covers_hint": "— 책을 나눌 때 제목 표지를 점자 인쇄"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "헤더 {n}",
       "cell_aria_named": "{header}, {row}행",
       "cell_aria": "{col}열, {row}행",
-      "too_wide_listed": "⚠ 열에 비해 너무 넓어 나열 표로 점자화됩니다",
+      "too_wide_listed": "열에 비해 너무 넓어 나열 표로 점자화됩니다",
       "too_wide_listed_title": "이 표는 현재 한 줄의 셀 수와 점자 모드에서 열에 맞지 않으므로, 나란히 배열된 열 대신 나열 표 (BANA Formats §11.9)로 점자화됩니다.",
-      "too_wide_paragraph": "⚠ 열에 비해 너무 넓어 단락 형식으로 점자화됩니다",
+      "too_wide_paragraph": "열에 비해 너무 넓어 단락 형식으로 점자화됩니다",
       "too_wide_paragraph_title": "이 표는 현재 한 줄의 셀 수와 점자 모드에서 열에 맞지 않으므로, 나란히 배열된 열 대신 단락 형식 (UKAAF B004 §12)으로 점자화됩니다."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "\"{code}\"의 테이블을 로드할 수 없음 — 여전히 이전 점자 코드 사용",
-      "failed": "⚠ 점자를 생성할 수 없습니다.",
+      "failed": "점자를 생성할 수 없습니다.",
       "failed_hint": "(엔진이 초기화되지 않았다고 표시되면 점자 엔진이 로드되지 않음 — Cmd/Ctrl+Shift+R로 하드 새로 고침)",
       "error_status": "렌더링 오류: {message}"
     },
     "engine": {
       "loading": "점자 엔진 로딩 중…",
-      "failed": "⚠ 점자 엔진이 로드되지 않았습니다.",
+      "failed": "점자 엔진이 로드되지 않았습니다.",
       "failed_hint": "Cmd/Ctrl+Shift+R로 하드 새로 고침하세요. 계속되면 브라우저 콘솔 (보기 ▸ 개발자)을 열고 오류를 보내세요.",
       "failed_status": "엔진 로드 실패: {message}",
       "ready": "준비 — 왼쪽에서 입력하거나 서식 지정; 점자가 실시간으로 업데이트됩니다."
@@ -715,7 +718,7 @@
       "network_unreachable": "{url}에 도달할 수 없음: {message}. 브라우저는 원시 TCP (포트 9100) 연결을 열 수 없습니다. 점자 프린터는 HTTP POST를 수락하거나 .brf를 다운로드하고 인쇄 관리자로 전송해야 합니다.",
       "usb_bridge_done": "점자 인쇄 작업이 USB 프린터로 배송되었습니다!",
       "needs_webserial": "직접 시리얼 점자 인쇄는 WebSerial이 있는 브라우저 (Chrome, Edge, Opera)가 필요합니다. .brf 파일을 다운로드하고 인쇄 관리자로 점자 인쇄하거나 설정에서 네트워크 (포트 9100) 모드를 사용할 수 있습니다.",
-      "detected": "🔌 감지됨 {name} — {cells}×{lines} 설정 ({baud} 보드)."
+      "detected": "감지됨 {name} — {cells}×{lines} 설정 ({baud} 보드)."
     },
     "symbols": {
       "title": "촉각 기호 라이브러리",
@@ -752,6 +755,11 @@
       "badge_dotpad": "동적 매트릭스",
       "badge_text_only": "텍스트만",
       "badge_index": "도트 매트릭스"
+    },
+    "offline": {
+      "ready": "Emboss를 오프라인에서 사용할 준비가 되었습니다.",
+      "ready_short": "오프라인 사용 준비 완료",
+      "not_yet": "오프라인 사용을 아직 준비하는 중…"
     }
   }
 }

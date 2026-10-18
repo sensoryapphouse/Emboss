@@ -22,25 +22,25 @@
         "items": null
       },
       {
-        "kind": "note",
+        "kind": "list",
         "level": null,
-        "text": "[ref:1] my Lord's: Edward Montagu (1625-1672), earl of Sandwich; he was a cousin of Pepys and his superior at the Naval Office.\n[ref:2] Harrison: Thomas Harrison (1606-1660), one of the people responsible for the execution of King Charles I in 1649.",
-        "features": "Two notes below a horizontal rule, numbered sequentially 1 and 2 in the order their marks appear in the passage above (not grouped by any other criterion).",
-        "items": null
+        "text": null,
+        "features": "Two notes below a horizontal rule, printed as a numbered list \"1.\" and \"2.\" (bold headword and colon after each numeral), in the order their marks appear in the passage; the numerals are list markers, not superscript reference marks.",
+        "items": [
+          {
+            "marker": "1.",
+            "level": 1,
+            "text": "**my Lord's:** Edward Montagu (1625-1672), earl of Sandwich; he was a cousin of Pepys and his superior at the Naval Office."
+          },
+          {
+            "marker": "2.",
+            "level": 1,
+            "text": "**Harrison:** Thomas Harrison (1606-1660), one of the people responsible for the execution of King Charles I in 1649."
+          }
+        ]
       }
     ],
-    "notes": [
-      {
-        "ref": "1",
-        "placement": "footnote",
-        "text": "my Lord's: Edward Montagu (1625-1672), earl of Sandwich; he was a cousin of Pepys and his superior at the Naval Office."
-      },
-      {
-        "ref": "2",
-        "placement": "footnote",
-        "text": "Harrison: Thomas Harrison (1606-1660), one of the people responsible for the execution of King Charles I in 1649."
-      }
-    ],
+    "notes": [],
     "surroundingText": "Cross-referenced from Example 16-7, illustrating rule 16.5.1c's sequential (not grouped) note numbering. This is a genuine excerpt: its braille line numbering begins at 15, not 1, matching the print passage's own starting line number.",
     "printFeatures": "Boxed screenshot of a diary-excerpt page, print line number '15' in the margin, horizontal rule, two numbered notes beneath."
   },
@@ -78,5 +78,19 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.5.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12960/12963/12969/12971/12974 (field width 5, digits(25)+3) are each exactly 40 characters after stripping the line-number field. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.5.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12960/12963/12969/12971/12974 (field width 5, digits(25)+3) are each exactly 40 characters after stripping the line-number field. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "paragraph + kind:note block \"[ref:1] my Lord's: ... [ref:2] Harrison: ...\" (notes as superscript-marked footnotes, no bold)",
+      "now": "paragraph (marks 1 and 2 kept as superscripts in the text) + a list block with markers \"1.\" / \"2.\" and bold headwords",
+      "evidence": "Page image PDF p.448 (Sample 16-3): the notes under the rule read \"1. my Lord's: Edward Montagu ...\" and \"2. Harrison: Thomas Harrison ...\" -- full-size numerals with a full stop, i.e. a numbered list, not superscript marks; \"my Lord's:\" and \"Harrison:\" are bold (colon included). The in-text marks after \"Lord's\" and \"Harrison\" ARE superscripts. Builder reads list items {marker,text,level}."
+    },
+    {
+      "field": "print.print.notes",
+      "was": "2 footnote entries (ref 1, 2)",
+      "now": "[] (the notes are the list block above)",
+      "evidence": "Same image; with the notes carried by the list block, print.notes[] would duplicate them as superscript-marked footnotes."
+    }
+  ]
 }

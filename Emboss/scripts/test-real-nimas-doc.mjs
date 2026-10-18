@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import { launchBrowser, ENGINE_LABEL } from '../tests/lib/launch-browser.mjs';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
@@ -156,11 +156,11 @@ async function run() {
   console.log('  ✅ Orphan prevention 100% verified clean across all physical pages.');
 
   // --- PART 2: Real Browser E2E Interaction Test (Playwright) ---
-  console.log('\n--- PART 2: Real Browser E2E Interaction Test (Playwright / Chromium) ---');
+  console.log('\n--- PART 2: Real Browser E2E Interaction Test (Playwright) ---');
   const server = await startServer();
   console.log(`Test server running on port ${PORT}`);
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
 
@@ -378,7 +378,7 @@ async function run() {
       throw new Error(`Test failed with ${consoleErrors.length} console errors!`);
     }
 
-    console.log('\n🎉 ALL REAL NIMAS 1.4MB DOCUMENT SYNCHRONIZATION AND VISUAL TESTS PASSED!');
+    console.log(`\n🎉 ALL REAL NIMAS 1.4MB DOCUMENT SYNCHRONIZATION AND VISUAL TESTS PASSED [${ENGINE_LABEL}]!`);
   } finally {
     await browser.close();
     server.close();

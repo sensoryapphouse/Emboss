@@ -43,9 +43,9 @@
     "width": 40,
     "lines": [
       "------\"o-?\\s& ?ree-hundr$          #acge",
-      "                 sev5ty-five",
-      "                    ,title",
-      "                  ,subtitle"
+      "      sev5ty-five",
+      "                 ,title",
+      "               ,subtitle"
     ],
     "pageBreaks": [],
     "notes": "Braille page lines 1-4, line 1-2 reconstructed to 40 cells each (same raw-extraction artefact as example-1-7/14/15). Lines 1-2 carry the long alphabetic page number, preceded by six cells of the page-change-indicator symbol and ending with the numeric page number 1375 ('#acge': a=1,c=3,g=7,e=5) at the end of line 1, with the runover ('seventy-five') beginning in cell 7 of line 2, per 1.14.1.c. Line 3 (the placeholder title) follows immediately with NO intervening blank line, per 1.14.1.g (the rule this example illustrates); line 4 the placeholder subtitle."
@@ -55,5 +55,23 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49)."
+  "resolution": "Both runs agree on the braille content and on there being no real print excerpt to build from. Emboss has no spelled-out (alphabetic) page-number feature at all (standards-findings.md F-49) -- there is also no real print content behind the placeholder. status: not-representable (limitation: no print given, and F-49).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "                 sev5ty-five",
+        "                    ,title",
+        "                  ,subtitle"
+      ],
+      "after": [
+        "      sev5ty-five",
+        "                 ,title",
+        "               ,subtitle"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 1, 2, 3 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 34 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: run misplaced (3). Where: leading indentation / centring (3)."
+    }
+  ]
 }

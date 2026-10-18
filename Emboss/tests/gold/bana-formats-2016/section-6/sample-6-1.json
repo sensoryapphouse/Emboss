@@ -18,12 +18,12 @@
         "kind": "figure",
         "figure": {
           "type": "drawing",
-          "description": "A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask.",
+          "description": "Drawing: A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask.",
           "labels": [
             "Copyrighted Image"
           ]
         },
-        "description": "A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask."
+        "description": "Drawing: A diver with an air bag and a valve. The diver is wearing a full body diving suit, fins, cap, and a mask."
       },
       {
         "kind": "caption",
@@ -63,5 +63,13 @@
     "A",
     "B"
   ],
-  "resolution": "A and B agreed byte-for-byte, but BOTH share the same margin defect (exactly the 'agreement is no evidence' risk flagged in the task): the caption's margins are given as 5/3 instead of 6/4, and the description's and citation's margins as 4/2 instead of 6/4. This was caught by decoding the raw source text directly (source-6.txt lines 4783-4793 carry the book's own per-line numbering, e.g. '4    ', '10   ', stripped here with a small script, engine/brf-ascii.mjs's unicodeBrailleToBrf used to decode the Unicode braille glyphs to BRF ASCII) rather than by trusting either run: every one of the three blocks' own first line in the raw source begins with exactly 6 Unicode braille-blank cells (U+2800) after its line-number prefix, and every runover with exactly 4, confirmed byte-for-byte. The print text content of all three blocks (caption, description, citation) was independently confirmed correct in both runs by forward-translating each verbatim through Emboss's translator and matching the corrected braille exactly, including the bold passage on 'Diving's early history.' (confirmed by forward-translating with that span marked TF_BOLD; neither run's caption text carried a features/markup field for it, corrected here). The citation ('Courtesy of Historical Diving Society, USA') is recorded as kind 'other' and is expected to be dropped by buildModel6, not built — matching F-168 (source citations/credits inside an imggroup are lost by Emboss)."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].description",
+      "was": "A diver with an air bag and a valve. ...",
+      "now": "Drawing: A diver with an air bag and a valve. ...",
+      "evidence": "The description is transcriber-supplied, not print (page-157.png shows only the Copyrighted Image box, the caption and the \"Courtesy of Historical Diving Society, USA\" line). The book's own sample text, references/_text/braille-formats-2016.txt lines 4789-4791, opens the transcriber's note with the label \",draw+3\" (Drawing:) before \",a div] ) an air bag\". Caveat: braille line is the only place the description exists."
+    }
+  ],
+  "resolution": "A and B agreed byte-for-byte, but BOTH share the same margin defect (exactly the 'agreement is no evidence' risk flagged in the task): the caption's margins are given as 5/3 instead of 6/4, and the description's and citation's margins as 4/2 instead of 6/4. This was caught by decoding the raw source text directly (source-6.txt lines 4783-4793 carry the book's own per-line numbering, e.g. '4    ', '10   ', stripped here with a small script, engine/brf-ascii.mjs's unicodeBrailleToBrf used to decode the Unicode braille glyphs to BRF ASCII) rather than by trusting either run: every one of the three blocks' own first line in the raw source begins with exactly 6 Unicode braille-blank cells (U+2800) after its line-number prefix, and every runover with exactly 4, confirmed byte-for-byte. The print text content of all three blocks (caption, description, citation) was independently confirmed correct in both runs by forward-translating each verbatim through Emboss's translator and matching the corrected braille exactly, including the bold passage on 'Diving's early history.' (confirmed by forward-translating with that span marked TF_BOLD; neither run's caption text carried a features/markup field for it, corrected here). The citation ('Courtesy of Historical Diving Society, USA') is recorded as kind 'other' and is expected to be dropped by buildModel6, not built — matching F-168 (source citations/credits inside an imggroup are lost by Emboss). Print description corrected 23 Sep 2026 (see printCorrections)."
 }

@@ -25,7 +25,7 @@
           },
           {
             "term": "Coordinating",
-            "def": "Connects words, phrases, or clauses of equal rank: *and, but, or, and nor.*",
+            "def": "Connects words, phrases, or clauses of equal rank: *and, but, or,* and *nor.*",
             "level": 2
           },
           {
@@ -38,7 +38,7 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "A multilevel glossary entry. The main entry word is bold and starts at the margin. Subentry words are bold and indented. Following the text of the subentry, there are examples in italics on a new line, further indented."
+    "printFeatures": "A multilevel glossary entry. The main entry word is bold and starts at the margin. Subentry words are bold and indented. Following the text of the subentry, there are examples in italics on a new line, further indented. In the coordinating example line the second \"and\" is roman: \"and, but, or,\" italic, \"and\" roman, \"nor.\" italic."
   },
   "braille": {
     "width": 40,
@@ -60,5 +60,13 @@
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": "Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[1].def (Coordinating)",
+      "was": "...equal rank: *and, but, or, and nor.*",
+      "now": "...equal rank: *and, but, or,* and *nor.*",
+      "evidence": "references/_gemini/_done/gold-21-A/page-584.png (Sample 21-2): the italic example line reads \"and, but, or, and nor.\" with the second \"and\" in roman type (upright); the gold braille agrees (.7&1 b1 or1.' & .1nor4: passage of \"and, but, or,\" then plain \"&\" then italic word \"nor\")."
+    }
+  ]
 }

@@ -1,0 +1,41 @@
+{
+  "id": "example-2-13",
+  "title": "Example 2-13: Print Pages with Continuation Letter (the c is a continuation indicator)",
+  "pdfPages": [
+    11
+  ],
+  "textLines": [
+    1809,
+    1817
+  ],
+  "illustrates": {
+    "rule": "2.3.8d(1)",
+    "quote": "(1) Inclusive print page numbers (including continuation letter), both roman and arabic, are indicated for all transcribed print pages in the volume, e.g., transposed materials, repeated materials, and text. Any continuation letter(s) are included."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-055.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",pr9t pages i-cx & a#fi-#abe",
+      "  or",
+      ",pr9t pages ci-;x & #abe-b#ahb"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 8. Both run A and run B additionally, and identically, mis-included the print caption's own wrapped second line (\"continuation indicator)\", the tail of \"Example 2-13: Print Pages with Continuation Letter (the c is a continuation indicator)\", source line 1810) as if it were a first braille line; removed here -- it is plain print caption text, not braille (confirmed: it is not valid BRF ASCII and has no corresponding line-number field in the source)."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: see braille.notes for the specific correction made against source-lines-1390-2934.txt. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id."
+}

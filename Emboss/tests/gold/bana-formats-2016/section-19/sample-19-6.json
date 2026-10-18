@@ -16,7 +16,7 @@
     "blocks": [
       {
         "kind": "other",
-        "text": "whiskers   small\news        gray\ntail       brown\nnose       cheese\nfurry      cat\ntrap",
+        "text": "whiskers   small\nears        gray\ntail       brown\nnose       cheese\nfurry      cat\ntrap",
         "features": "A 2-column, 11-word word-bank (to be found inside the mouse-shaped grid below), in uncontracted braille (e.g. 'small' is spelled out letter-by-letter, s-m-a-l-l, rather than contracting to its usual one-cell whole-word sign) — column alignment is not reproducible (F-219)."
       },
       {
@@ -36,7 +36,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "whiskers small                       #,-",
+      "whiskers  small                      #,-",
       "ears      gray",
       "tail      brown",
       "nose      cheese",
@@ -46,13 +46,13 @@
       "      @.<,! puzzle is %ap$ l a m\\se4@.>",
       "",
       "\"\"=;;;,,,",
-      " kf gh",
+      " kf  gh",
       " sfhbkn",
       " grayco   ejaxtf",
       "ghmdoqsgycatmjcuft",
       "hwhiskersqrqpodrrap",
       "wbamelvefksmallreie",
-      " hhan cheesehwyhlj",
+      " hhan  cheesehwyhlj",
       "       browngbfekf",
       "          hetrap",
       "\"\"=,';'"
@@ -65,5 +65,31 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived, matches exactly). Print side reconciled: the transcriber's note is back-translation-verified verbatim; the word-bank list and the shaped grid are both documented as not braille-buildable (F-217/219/222), matching both runs' own general understanding."
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived, matches exactly). Print side reconciled: the transcriber's note is back-translation-verified verbatim; the word-bank list and the shaped grid are both documented as not braille-buildable (F-217/219/222), matching both runs' own general understanding. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "whiskers   small\news        gray\ntail       brown\nnose       cheese\nfurry      cat\ntrap",
+      "now": "whiskers   small\nears        gray\ntail       brown\nnose       cheese\nfurry      cat\ntrap",
+      "evidence": "Page image references/_gemini/_done/gold-19-B/page-536.png (Sample 19-6): the word bank's second entry is 'ears' (left column: whiskers, ears, tail, nose, furry, trap); gold text had the typo 'ews'."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "whiskers small                       #,-",
+        " kf gh",
+        " hhan cheesehwyhlj"
+      ],
+      "after": [
+        "whiskers  small                      #,-",
+        " kf  gh",
+        " hhan  cheesehwyhlj"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 10, 16 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 537 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2); two blank cells collapsed to one, with a later gap widened by one (1). Where: code/puzzle spacing (3)."
+    }
+  ]
 }

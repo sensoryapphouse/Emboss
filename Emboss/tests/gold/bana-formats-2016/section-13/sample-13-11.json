@@ -18,17 +18,17 @@
         "kind": "poem",
         "level": null,
         "text": null,
-        "features": "Opening two lines of Poe's \"The Raven\", shown twice: first as ordinary verse, then repeated with vertical-pipe foot marks and a double-pipe caesura mark, syllables hyphenated for meter.",
+        "features": "Opening two lines of Poe's \"The Raven\" printed once, in the monospaced marked form: vertical-pipe foot marks, double pipe (caesura) after \"remember\"/\"ember\", syllables split with hyphens. The plain first writing and the grade-1 second writing seen in the braille are the transcriber's two writings, not print.",
         "stanzas": [
           {
             "lines": [
               {
-                "text": "Ah, distinctly I remember it was in the bleak December;",
+                "text": "Ah, dis | -tinct-ly | I re | -mem-ber || it was | in the | bleak De | -cem-ber;",
                 "indent": 0,
                 "number": null
               },
               {
-                "text": "And each separate dying ember wrought its ghost upon the floor.",
+                "text": "And each | sep-'rate | dy-ing | em-ber || wrought its | ghost u | -pon the | floor.",
                 "indent": 0,
                 "number": null
               }
@@ -44,7 +44,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      ",ah1 4t9ctly ,i rememb] x 0 9 !       #,-",
+      ",ah1 4t9ctly ,i rememb] x 0 9 !      #,-",
       "  bl1k ,decemb]2",
       ",& ea* sep'rate dy+ emb] wr\"\\ xs <o/ ^u",
       "  ! floor4",
@@ -67,5 +67,27 @@
     "A",
     "B"
   ],
-  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+  "resolution": "Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].stanzas[0].lines[0..1].text",
+      "was": "Ah, distinctly I remember it was in the bleak December; / And each separate dying ember wrought its ghost upon the floor.",
+      "now": "the two lines exactly as printed: \"Ah, dis | -tinct-ly | I re | -mem-ber || it was | in the | bleak De | -cem-ber;\" / \"And each | sep-'rate | dy-ing | em-ber || wrought its | ghost u | -pon the | floor.\"",
+      "evidence": "PDF p.379 (references/bana/braille-formats-2016.pdf, 110 dpi), Sample 13-11: the print box shows only the marked lines (pipes orange/pink, \"sep-'rate\" with an apostrophe elision, \"u | -pon\"); the unmarked \"sep'rate\" line in the braille is not in print."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",ah1 4t9ctly ,i rememb] x 0 9 !       #,-"
+      ],
+      "after": [
+        ",ah1 4t9ctly ,i rememb] x 0 9 !      #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 379 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

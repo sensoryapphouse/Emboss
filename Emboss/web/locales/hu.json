@@ -60,10 +60,13 @@
     "toc": "Tartalomjegyzék",
     "print": "Nyomtatási nézet (bal)",
     "braille": "Braille",
+    "export": "Exportálás",
+    "export_title": "A braille exportálása (BRF, eBraille) vagy küldés braille-nyomónak",
+    "emboss_menu": "Küldés braille-nyomónak",
     "braille_view": "Braille nézet",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Braille-nyomás",
     "emboss_tooltip": "Dokumentum küldése braille-nyomónak vagy nyomtatónak",
     "clear_doc": "Dokumentum törlése",
@@ -133,8 +136,6 @@
     "poem_desc": "Költői strófa verssor (1-3)",
     "exercise_title": "Gyakorlat kérdés",
     "exercise_desc": "Sorszámozott gyakorlat kérdés (1-5 / 3-5)",
-    "caption_title": "Felirat / Attribúció",
-    "caption_desc": "Ábra felirata vagy attribúciója (7-5)",
     "footnote_title": "Lábjegyzet",
     "footnote_desc": "Lábjegyzet szöveg (1-3)",
     "note_title": "Átdolgozó megjegyzés",
@@ -163,8 +164,6 @@
     "page_desc": "Forrás nyomtatási oldal szünet jelzésének beszúrása",
     "printpage_title": "Nyomtatás oldal száma",
     "printpage_desc": "Forrás nyomtatási oldal szünet jelzésének beszúrása",
-    "code_title": "Számítógépes kód",
-    "code_desc": "Kódblokk beszúrása UEB jelzésekkel",
     "indent_title": "Bejelölés / Alsóelem beágyazása",
     "indent_desc": "Listaelement vagy gyakorlat mélyebbre ágyazása (Tab)",
     "outdent_title": "Kijelölés feloldása / Elem előléptetése",
@@ -185,8 +184,8 @@
     "language_label": "Felhasználói felület nyelve",
     "language_help": "Válassza ki a gombokhoz, menükhez, párbeszédablakokhoz és képernyőolvasó közleményekhez használt nyelvet.",
     "standard_label": "Braille szabvány",
-    "standard_bana": "BANA (USA és Kanada — 40×25 cella)",
-    "standard_ukaaf": "UKAAF (Egyesült Királyság és nemzetközi — 38×25 cella)",
+    "standard_bana": "BANA (USA és Kanada — 38×25 cella)",
+    "standard_ukaaf": "UKAAF (Egyesült Királyság és nemzetközi — 38×27 cella)",
     "grade_label": "Contraction szint",
     "grade_1": "Grade 1 (Rövidítetlen / Betűről betűre)",
     "grade_2": "Grade 2 (Rövidítve)",
@@ -261,7 +260,7 @@
     "size_full": "Teljes lap (1. sor Anti-szeletelt)",
     "lead_lines": "Tapintható vezetővonalak",
     "braille_labels": "Braille feliratok",
-    "footer_tip": "💡 A fekete körvonalak szilárd tapintható határokká válnak; a színek automatikusan leképeződnek a különálló tapintható textúrákra.",
+    "footer_tip": "A fekete körvonalak szilárd tapintható határokká válnak; a színek automatikusan leképeződnek a különálló tapintható textúrákra.",
     "open_repositories": "Nyissa meg a tapintható tárakat:",
     "no_diagrams": "Nem található megfelelő diagram."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Veszteségmentes oda-vissza állapot",
     "precedence_status": "Braille precedencia szabályok állapota",
     "perfect_match": "100% oda-vissza egyezés (0 eltérés)",
-    "badge_warn": "⚠ {count} átnézéshez",
+    "badge_warn": "{count} átnézéshez",
     "badge_title": "{count} szóeltérés (ek) található az oda-vissza visszhang-fordítás során. Kattintson az elsőhöz való ugráshoz.",
     "badge_clean": "Oda-vissza ellenőrzés: nem található szóeltérés."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Nem mentett módosítások vannak. Biztosan ki szeretne lépni mentés nélkül?",
     "unsaved_load": "Nem mentett módosítások vannak. Egy új fájl betöltése felülírja az aktuális dokumentumot. Folytatja?",
     "unsaved_clear": "Nem mentett módosítások vannak. Biztosan ki szeretne törlődni a dokumentumot?",
-    "drop_hint": "⬇ Dobjon egy dokumentumot a szerkesztőbe való importálásához",
+    "drop_hint": "Dobjon egy dokumentumot a szerkesztőbe való importálásához",
     "notice": "Értesítés",
     "close_notice": "Értesítés bezárása"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumentum szövege",
+      "math_keyboard_toggle": "Matematikai billentyűzet",
       "label": "Szöveg",
       "toolbar_aria": "Formázás",
       "style_label": "Bekezdésstílus",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafika kategóriák",
       "graphic_list": "Tapintható grafika diagramok",
       "formula_search_label": "Keresési képletek",
-      "btactile_link": "BTactile (ingyenes) ↗",
-      "tgil_link": "APH TGIL (1800+ sablonok) ↗"
+      "btactile_link": "BTactile (ingyenes)",
+      "tgil_link": "APH TGIL (1800+ sablonok)"
     },
     "settings": {
       "list_spaced": "Üres sor lista (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Közvetlenül csatlakozzon az egyéni mikrovezérlő nyomtatókhoz (ESP32-S3, RP2040/RP2350, STM32, Arduino) megkerülve az OS nyomtatóillesztőprogram zárolásait.",
       "graphics_hint": "Ha nincs bejelölve, a diagramok hozzáférhető átírómegjegyzés leírásként exportálódnak csak szöveges nyomtatók és Braille-kijelzők számára.",
       "tactile_heading": "Tapintható kijelző élő adatfolyam (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Bluetooth csatlakoztatása (DotPad BLE)",
-      "tactile_connect_hid": "🔌 USB / HID csatlakoztatása (Monarch)",
+      "tactile_connect_ble": "Bluetooth csatlakoztatása (DotPad BLE)",
+      "tactile_connect_hid": "USB / HID csatlakoztatása (Monarch)",
       "tactile_disconnect": "Kijelző leválasztása",
       "tactile_sim_monarch": "Szimulált Monarch tesztelése (32×10)",
       "tactile_sim_dotpad": "Szimulált DotPad tesztelése (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Az élő Braille-nézetet és tapintható grafikákat közvetlenül a WebBluetooth-on (DotPad BLE UART) vagy WebHID-on (Monarch/USB) keresztül adatfolyamozza külső illesztőprogram nélkül.",
       "perkins_hint": "— írja be a Braille-t az SDF és JKL gombokkal",
       "ascii_hint": "— nyers ASCII Braille-karakterek megjelenítése",
+      "show_explanation_bar": "A magyarázósáv megjelenítése",
+      "show_explanation_bar_hint": "— a szöveg és a braille alatti sáv, amely elmagyarázza a braille-t arra a szóra, amelyiken áll",
+      "simple_mode_hint": "— az Emboss megnyitása az egyszerű átalakítóban. A Gyors mód és a szerkesztő közötti váltás ezt nem módosítja.",
       "covers_hint": "— felnyomtatott cím borítók könyvek osztásakor"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Fejléc {n}",
       "cell_aria_named": "{header}, sor {row}",
       "cell_aria": "Oszlop {col}, sor {row}",
-      "too_wide_listed": "⚠ Túl széles oszlopokhoz — felsorolt táblázatként lesz Braille-ba írva",
+      "too_wide_listed": "Túl széles oszlopokhoz — felsorolt táblázatként lesz Braille-ba írva",
       "too_wide_listed_title": "Ez a táblázat nem fér el oszlopokban a jelenlegi cellák soronként számánál és Braille módnál, ezért felsorolt táblázatként (BANA Formats §11.9) lesz Braille-ba írva az egymás melletti oszlopok helyett.",
-      "too_wide_paragraph": "⚠ Túl széles oszlopokhoz — bekezdés formában lesz Braille-ba írva",
+      "too_wide_paragraph": "Túl széles oszlopokhoz — bekezdés formában lesz Braille-ba írva",
       "too_wide_paragraph_title": "Ez a táblázat nem fér el oszlopokban a jelenlegi cellák soronként számánál és Braille módnál, ezért bekezdés formában (UKAAF B004 §12) lesz Braille-ba írva az egymás melletti oszlopok helyett."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nem lehet betölteni a táblákat a \"{code}\" esetén — még mindig az előző Braille-kódot használom.",
-      "failed": "⚠ Braille nem jeleníthető meg.",
+      "failed": "Braille nem jeleníthető meg.",
       "failed_hint": "(Ha ez azt mondja, hogy a motor nincs inicializálva, a Braille-motor nem töltődött be — hard frissítés a Cmd/Ctrl+Shift+R-rel.)",
       "error_status": "Renderelési hiba: {message}"
     },
     "engine": {
       "loading": "Braille-motor betöltése…",
-      "failed": "⚠ Braille-motor betöltése sikertelen.",
+      "failed": "Braille-motor betöltése sikertelen.",
       "failed_hint": "Hard frissítés Cmd/Ctrl+Shift+R-rel. Ha ez továbbra is fennáll, nyissa meg a böngésző konzolját (Nézet ▸ Fejlesztés) és küldje el a hibákat.",
       "failed_status": "Motor betöltése sikertelen: {message}",
       "ready": "Kész — írjon vagy formázzon baloldalon; a Braille élőben frissül."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nem lehet elérni a {url}: {message}. A böngészők nem nyithatnak meg nyers TCP-kapcsolatokat (9100-as port); a nyomtatónak HTTP POST-ot kell fogadnia, vagy töltse le a .brf fájlt és küldje el az nyomtatókezelővel.",
       "usb_bridge_done": "Nyomás feladat szállítva az USB nyomtatónak!",
       "needs_webserial": "A közvetlen soros nyomás WebSerial-al rendelkező böngészőt igényel (Chrome, Edge, Opera). Letöltheti a .brf fájlt a nyomtatókezelővel való nyomáshoz, vagy használhatja a hálózati (9100-as port) módot a Beállításokban.",
-      "detected": "🔌 Detektálva {name} — beállítva {cells}×{lines} baudra {baud}."
+      "detected": "Detektálva {name} — beállítva {cells}×{lines} baudra {baud}."
     },
     "symbols": {
       "title": "Tapintható szimbólum könyvtár",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamikus mátrix",
       "badge_text_only": "Csak szöveg",
       "badge_index": "Pont mátrix"
+    },
+    "offline": {
+      "ready": "Az Emboss készen áll az internet nélküli munkára.",
+      "ready_short": "Készen áll az internet nélküli munkára",
+      "not_yet": "Még készül az internet nélküli munkára…"
     }
   }
 }

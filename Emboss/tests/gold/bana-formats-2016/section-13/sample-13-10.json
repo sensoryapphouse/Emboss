@@ -62,10 +62,10 @@
       "    @+   ^/      @+^/",
       "    nal ,prov- _/ idence4",
       "",
-      "   @+ ^/       @+^/    @+ ^/",
+      "   @+  ^/      @+^/    @+  ^/",
       "  ,and jus- _/ tify _/ the ways _/",
       "",
-      "    @+ ^/      @+ ^/",
+      "    @+  ^/     @+ ^/",
       "    of ,god _/ to men4",
       ""
     ],
@@ -80,5 +80,21 @@
     "A",
     "B"
   ],
-  "resolution": "Run A's braille.lines has 17 entries, run B has 18. The source (.txt lines 10915-10932) numbers 18 reference lines (1 through 18) for this sample, the 18th (.txt line 10932) a full 40-cell blank row -- confirmed directly, and matching this section's usual practice of one final blank row closing a stress-diagram excerpt (cf. Sample 13-9, Sample 13-12). Run A silently dropped this trailing line; run B's 18-line array (with a trailing \"\") is adopted, appended here to run A's otherwise-identical 17 lines. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+  "resolution": "Run A's braille.lines has 17 entries, run B has 18. The source (.txt lines 10915-10932) numbers 18 reference lines (1 through 18) for this sample, the 18th (.txt line 10932) a full 40-cell blank row -- confirmed directly, and matching this section's usual practice of one final blank row closing a stress-diagram excerpt (cf. Sample 13-9, Sample 13-12). Run A silently dropped this trailing line; run B's 18-line array (with a trailing \"\") is adopted, appended here to run A's otherwise-identical 17 lines. Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "   @+ ^/       @+^/    @+ ^/",
+        "    @+ ^/      @+ ^/"
+      ],
+      "after": [
+        "   @+  ^/      @+^/    @+  ^/",
+        "    @+  ^/     @+ ^/"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 12, 15 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 378 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one, with a later gap widened by one (2). Where: poetry stress/scansion mark positions (2)."
+    }
+  ]
 }

@@ -29,6 +29,11 @@
           "coal | 4,600,000 | China (24%), U.S. (20%)",
           "petroleum | 3,000,000 | Russia (15%), Saudi Arabia (13%)",
           "natural gas | 2,000,000[ref:**] | Russia (31%), U.S. (24%)"
+        ],
+        "headers": [
+          "PRODUCT",
+          "ANNUAL PRODUCTION*",
+          "LEADING PRODUCERS (% TOTAL)"
         ]
       }
     ],
@@ -50,7 +55,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "              ,ma9 ,products ( !        #,-",
+      "           ,ma9 ,products ( !        #,-",
       "              ,_w's ,m9es",
       "7777777777777777777777777777777777777777",
       "      @.<,key3",
@@ -112,5 +117,27 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.8.2.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13161 (field width 5, digits(25 or more)+3... actually digits(2)+3) is exactly 40 characters, right-justified to a page-change token '#,-'; several \"9 sequences Run A inserted into the percentage-range tokens (e.g. '<#ae.0\"9\">') do not appear in the source at all (line 13175 reads '<#ae.0\">' with no '\"9') -- corrected throughout to match the source exactly (Run B). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+  "resolution": "illustrates.rule set to 16.8.2.f per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 13161 (field width 5, digits(25 or more)+3... actually digits(2)+3) is exactly 40 characters, right-justified to a page-change token '#,-'; several \"9 sequences Run A inserted into the percentage-range tokens (e.g. '<#ae.0\"9\">') do not appear in the source at all (line 13175 reads '<#ae.0\">' with no '\"9') -- corrected throughout to match the source exactly (Run B). braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.headers",
+      "was": "(absent; only described in features)",
+      "now": "headers: PRODUCT | ANNUAL PRODUCTION* | LEADING PRODUCERS (% TOTAL)",
+      "evidence": "Page image PDF p.456 (Sample 16-10): the boxed table has a shaded header row in capitals: PRODUCT, ANNUAL PRODUCTION* (with an asterisk), LEADING PRODUCERS (% TOTAL); the gold braille's key repeats them as 'Annual' / 'Producers'. The builder reads block.headers."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "              ,ma9 ,products ( !        #,-"
+      ],
+      "after": [
+        "           ,ma9 ,products ( !        #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 456 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: leading indentation / centring (1)."
+    }
+  ]
 }

@@ -600,6 +600,13 @@ export class TactileDisplayManager {
     this.lastGraphic = null;
     this.autoFollowCursor = true;
     this.listeners = new Set();
+
+    // A38: bound how long a single hardware push may take, and never let pushes
+    // pile up against a stalled display (a stuck serial `getWriter()` throws on
+    // a second lock; a stuck Bluetooth/HID write would otherwise hang forever).
+    this.pushTimeoutMs = 3000;
+    this._pushInFlight = null; // Promise of the hardware write currently running, or null
+    this._pendingPush = null;  // { viewport, activeFrame } for the latest content still to push
   }
 
   isSupported() {
@@ -897,9 +904,20 @@ export class TactileDisplayManager {
             } catch (_) {}
           }
 
-          // If no known device connected, prompt user for pairing
+          // If no known device connected, prompt user for pairing. A12 (23 Sep): this used to be
+          // acceptAllDevices:true, which puts every nearby Bluetooth device (not just braille
+          // hardware) in the picker. Scope it the same way spoolViaWebBluetooth (spooler.mjs)
+          // already does: match on the advertised service or a known device name, never "any".
           const device = await navigator.bluetooth.requestDevice({
-            acceptAllDevices: true,
+            filters: [
+              { services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455'] }, // Official DotPad Microchip ISSC BLE UART
+              { services: ['0000fef5-0000-1000-8000-00805f9b34fb'] }, // Dot Inc. GATT Service
+              { services: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e'] }, // Nordic UART Service
+              { services: ['d0611e78-bbb4-4591-a5f8-487910ae4366'] }, // BlueS iOS Service
+              { services: ['9fa480e0-4967-4542-9390-d343dc5d04ae'] }, // BlueS Peripheral Service
+              { namePrefix: 'DotPad' },
+              { namePrefix: 'Monarch' }
+            ],
             optionalServices: [
               '49535343-fe7d-4ae5-8fa9-9fafd205e455', // Official DotPad Microchip ISSC BLE UART
               '0000fef5-0000-1000-8000-00805f9b34fb', // Dot Inc. GATT Service
@@ -926,7 +944,7 @@ export class TactileDisplayManager {
       try {
         const devices = await navigator.hid.requestDevice({
           filters: [
-            { usagePage: 0x41 },   // USB-IF Braille Display Usage Page
+            { usagePage: 0x41 },   // USB HID "Braille Display" usage page (USB-IF HUTRR78, usb.org) — matches by declared device class, not vendor
             { vendorId: 0x32ac },   // Dot Inc.
             { vendorId: 0x0bd7 },   // HumanWare / ViewPlus
             { vendorId: 0x11a9 },   // Index
@@ -955,12 +973,16 @@ export class TactileDisplayManager {
     // 4. WebSerial (Monarch / DotPad FTDI USB UART)
     if ((transport === 'auto' || transport === 'serial') && typeof navigator !== 'undefined' && navigator.serial) {
       try {
+        // A12 (23 Sep): this used to fall back to an unfiltered requestPort() whenever the
+        // vendor-id-filtered request found nothing (or the user cancelled), which reopens the
+        // browser's port chooser with every serial device on the system. That defeats the
+        // vendor-id filter above, so on failure we now just report no device found instead.
         const port = await navigator.serial.requestPort({
           filters: [
             { usbVendorId: 0x0403, usbProductId: 0x6010 }, // DotPad FTDI FT2232
             { usbVendorId: 0x0403, usbProductId: 0x6015 }  // DotPad FTDI FT-X
           ]
-        }).catch(() => navigator.serial.requestPort().catch(() => null));
+        }).catch(() => null);
         if (port) {
           await port.open({ baudRate: 115200 });
           this.connection = {
@@ -1172,64 +1194,134 @@ export class TactileDisplayManager {
 
     if (!this.connection) return viewport;
 
-    try {
-      const isDot = this.deviceProfile.id === 'dotpad';
+    if (this._pushInFlight) {
+      // A push is already running against the hardware. Don't start a second
+      // write on top of it (a second `getWriter()` on a locked serial port
+      // throws); just remember this newer content and return the viewport
+      // straight away so the on-screen emulator keeps updating.
+      this._pendingPush = { viewport, activeFrame };
+      return viewport;
+    }
 
-      if (isDot) {
-        // Dual-zone DotPad payload: 300 bytes graphics + 20 bytes text
-        const activeGraphic = activeFrame.graphicMatrix || viewport.lines;
-        const activeBrailleLine = activeFrame.brailleLine;
-        const dotpadPackets = encodeDotPadDualZonePackets(activeGraphic, activeBrailleLine);
+    await this._pushViewportToHardware(viewport, activeFrame);
+    return viewport;
+  }
 
-        if (this.connection.type === 'bluetooth' && this.connection.characteristic) {
-          const char = this.connection.characteristic;
-          for (const packet of dotpadPackets) {
-            try {
-              if (char.writeValue) {
-                await char.writeValue(packet);
-              } else if (char.writeValueWithResponse) {
-                await char.writeValueWithResponse(packet);
-              } else if (char.writeValueWithoutResponse) {
-                await char.writeValueWithoutResponse(packet);
-              }
-            } catch (wErr) {
-              try {
-                if (char.writeValueWithResponse) await char.writeValueWithResponse(packet);
-                else if (char.writeValueWithoutResponse) await char.writeValueWithoutResponse(packet);
-              } catch (retryErr) {
-                console.warn('Bluetooth line write error:', retryErr);
-              }
+  /**
+   * Starts a bounded hardware push for the given viewport/activeFrame. Races the
+   * actual write against `pushTimeoutMs`; on timeout it reports the error and
+   * returns without waiting further, but the underlying write is left to finish
+   * (or hang) on its own. Once that write eventually settles, any newer content
+   * queued via `_pendingPush` while it was in flight is pushed once.
+   * @private
+   */
+  _pushViewportToHardware(viewport, activeFrame) {
+    if (!this.connection) {
+      // The connection was dropped (e.g. disconnect()) between this push being
+      // queued and it now running — nothing to write to, and nothing to report.
+      return Promise.resolve();
+    }
+
+    const writePromise = this._writeToHardware(viewport, activeFrame).catch((err) => {
+      console.warn('Error transmitting to tactile display:', err);
+      this.notify('error', err);
+    });
+    this._pushInFlight = writePromise;
+
+    writePromise.then(() => {
+      if (this._pushInFlight === writePromise) {
+        this._pushInFlight = null;
+      }
+      if (this._pendingPush) {
+        const next = this._pendingPush;
+        this._pendingPush = null;
+        this._pushViewportToHardware(next.viewport, next.activeFrame);
+      }
+    });
+
+    const timeoutMs = this.pushTimeoutMs || 3000;
+    return new Promise((resolve) => {
+      let settled = false;
+      const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        const seconds = Math.round(timeoutMs / 100) / 10;
+        this.notify('error', new Error(`The tactile display did not respond within ${seconds} seconds`));
+        resolve();
+      }, timeoutMs);
+
+      writePromise.then(() => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Performs the actual hardware write (Bluetooth/Serial/HID) for one viewport/activeFrame.
+   * Unbounded by design — callers race this against `pushTimeoutMs`.
+   * @private
+   */
+  async _writeToHardware(viewport, activeFrame) {
+    const isDot = this.deviceProfile.id === 'dotpad';
+
+    if (isDot) {
+      // Dual-zone DotPad payload: 300 bytes graphics + 20 bytes text
+      const activeGraphic = activeFrame.graphicMatrix || viewport.lines;
+      const activeBrailleLine = activeFrame.brailleLine;
+      const dotpadPackets = encodeDotPadDualZonePackets(activeGraphic, activeBrailleLine);
+
+      if (this.connection.type === 'bluetooth' && this.connection.characteristic) {
+        const char = this.connection.characteristic;
+        for (const packet of dotpadPackets) {
+          try {
+            if (char.writeValue) {
+              await char.writeValue(packet);
+            } else if (char.writeValueWithResponse) {
+              await char.writeValueWithResponse(packet);
+            } else if (char.writeValueWithoutResponse) {
+              await char.writeValueWithoutResponse(packet);
             }
-            // Pacing delay between line writes for BLE buffer stability
-            await new Promise(r => setTimeout(r, 20));
+          } catch (wErr) {
+            try {
+              if (char.writeValueWithResponse) await char.writeValueWithResponse(packet);
+              else if (char.writeValueWithoutResponse) await char.writeValueWithoutResponse(packet);
+            } catch (retryErr) {
+              console.warn('Bluetooth line write error:', retryErr);
+            }
           }
-        } else if (this.connection.type === 'serial' && this.connection.port?.writable) {
-          const writer = this.connection.port.writable.getWriter();
+          // Pacing delay between line writes for BLE buffer stability
+          await new Promise(r => setTimeout(r, 20));
+        }
+      } else if (this.connection.type === 'serial' && this.connection.port?.writable) {
+        const writer = this.connection.port.writable.getWriter();
+        try {
           for (const packet of dotpadPackets) {
             await writer.write(packet);
           }
-          writer.releaseLock();
-        }
-      } else {
-        // Standard Monarch / HumanWare / USB-IF HID payload
-        if (this.connection.type === 'hid' && this.connection.device?.opened) {
-          for (let i = 0; i < viewport.lines.length; i++) {
-            const report = encodeHidBrailleReport(i + 1, viewport.lines[i]);
-            await this.connection.device.sendReport(i + 1, report.subarray(1));
-          }
-        } else if (this.connection.type === 'serial' && this.connection.port?.writable) {
-          const packet = encodeHumanWareFrame(viewport.lines);
-          const writer = this.connection.port.writable.getWriter();
-          await writer.write(packet);
+        } finally {
           writer.releaseLock();
         }
       }
-    } catch (err) {
-      console.warn('Error transmitting to tactile display:', err);
-      this.notify('error', err);
+    } else {
+      // Standard Monarch / HumanWare / USB-IF HID payload
+      if (this.connection.type === 'hid' && this.connection.device?.opened) {
+        for (let i = 0; i < viewport.lines.length; i++) {
+          const report = encodeHidBrailleReport(i + 1, viewport.lines[i]);
+          await this.connection.device.sendReport(i + 1, report.subarray(1));
+        }
+      } else if (this.connection.type === 'serial' && this.connection.port?.writable) {
+        const packet = encodeHumanWareFrame(viewport.lines);
+        const writer = this.connection.port.writable.getWriter();
+        try {
+          await writer.write(packet);
+        } finally {
+          writer.releaseLock();
+        }
+      }
     }
-
-    return viewport;
   }
 }
 

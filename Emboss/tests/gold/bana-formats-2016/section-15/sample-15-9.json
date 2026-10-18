@@ -35,7 +35,7 @@
       "      ,! ,rat ,t ,_h a ,fa/ ,rate",
       "",
       "  ,s&y _h a rat t ate fa/4 ,%e sd1",
-      "8,t rat eats too   m*4 ,i m/ make ! #ac",
+      "8,t rat eats too   m*4 ,i m/ make !  #ac",
       "rat sl[ d[n40                        #ba",
       "  ,s&y w5t to ! /ore & got t5 packs",
       "( gum4 ,%e sd1   8,i w sme> ! gum    #cd",
@@ -49,5 +49,19 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs already agreed on wording and every word-count number; no numeric correction needed. The transcriber's-note text is NOT modeled as a print.blocks entry (matching Sample 15-3's own reasoning) so that Emboss's own automatic line-numbered-text note is what gets compared against 15.8.1b's own worked example. Modeled by buildModel15 the same way as Sample 15-2/15-3/15-4 (a genuine linenum segment per print line feeding wrapNumbered); per standards-findings.md F-208, wrapNumbered hardcodes a 2-cell minimum gap for every caller with no parameter for 15.8.1a's own required 3-cell gap, so this file's own mismatch cause is expected to be F-208 (and, if the note-wording mismatch found for Sample 15-3 is confirmed as a genuine new gap, that same finding applies here too)."
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs already agreed on wording and every word-count number; no numeric correction needed. The transcriber's-note text is NOT modeled as a print.blocks entry (matching Sample 15-3's own reasoning) so that Emboss's own automatic line-numbered-text note is what gets compared against 15.8.1b's own worked example. Modeled by buildModel15 the same way as Sample 15-2/15-3/15-4 (a genuine linenum segment per print line feeding wrapNumbered); per standards-findings.md F-208, wrapNumbered hardcodes a 2-cell minimum gap for every caller with no parameter for 15.8.1a's own required 3-cell gap, so this file's own mismatch cause is expected to be F-208 (and, if the note-wording mismatch found for Sample 15-3 is confirmed as a genuine new gap, that same finding applies here too).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "8,t rat eats too   m*4 ,i m/ make ! #ac"
+      ],
+      "after": [
+        "8,t rat eats too   m*4 ,i m/ make !  #ac"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 10 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 427 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (1). Where: before line number (15.3.1c: at least two blank cells) (1)."
+    }
+  ]
 }

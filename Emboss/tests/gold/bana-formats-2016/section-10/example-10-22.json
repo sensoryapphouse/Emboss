@@ -15,22 +15,19 @@
   "print": {
     "blocks": [
       {
-        "kind": "note",
-        "text": "Print shows a question mark over an underscore. In braille, the question mark is omitted."
-      },
-      {
         "kind": "exercise",
         "items": [
           {
             "level": 0,
-            "text": "What is \\_ right now?"
+            "text": "What is \\_?\\_ right now?"
           }
         ]
       }
     ],
     "notes": "",
     "surroundingText": "",
-    "printFeatures": "A question mark is printed directly above a write-on-line underscore."
+    "printFeatures": "A question mark is printed directly above a write-on-line underscore. The transcriber's note (print.transcriberNote) is braille-side text, not shown in the print.",
+    "transcriberNote": "Print shows a question mark over an underscore. In braille, the question mark is omitted."
   },
   "braille": {
     "width": 40,
@@ -48,5 +45,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; the TN wording is the given braille’s own note, back-translated."
+  "resolution": "Braille matches both A and B exactly. Print unchanged from A/B; the TN wording is the given braille’s own note, back-translated. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks (note block removed) and print.blocks[..].items[0].text",
+      "was": "a 'note' block \"Print shows a question mark over an underscore. In braille, the question mark is omitted.\" before the exercise; item text \"What is \\\\_ right now?\" (question mark dropped)",
+      "now": "print.blocks holds the exercise item only, with the question mark kept: \"What is \\\\_?\\\\_ right now?\"; the note text is in print.transcriberNote",
+      "evidence": "references/bana/braille-formats-2016.pdf p.262 (the file's pdfPages says 261; Example 10-22 is on the next page, printed 10-12), rendered at 110 dpi: the print original reads \"What is _?_ right now?\" with the question mark above the underline. The note is transcriber-written (10.6.10) and appears only in the braille lines; dropping the question mark from the item text was the transcriber's decision read off the braille."
+    }
+  ]
 }

@@ -15,21 +15,15 @@
   "print": {
     "blocks": [
       {
-        "kind": "note",
-        "text": "The symbol × represents multiplication.",
-        "features": "Standard transcriber's note (7-5 margins), before the affected text per 3.2.2; introduces a transcriber-defined replacement symbol for the print's own × sign."
-      },
-      {
         "kind": "paragraph",
         "text": "I have trouble with multiplication tables, especially the 9 ×'s.",
-        "features": "Plain body paragraph; print itself uses a literal × (multiplication sign) glyph. Flush (no first-line indent) in the given braille, matching the section-1 gold precedent's own 'a worked excerpt's own leading text, flush because it is a continuation of a longer document rather than a fresh paragraph start' convention (buildModel1) — marked continuation:true.",
-        "continuation": true
+        "features": "Plain body paragraph; print itself uses a literal × (multiplication sign) glyph."
       }
     ],
     "transcriberNote": "The symbol × represents multiplication.",
     "notes": "Direct read of references/bana/braille-formats-2016.pdf p.100 (print 3-2): the paragraph reads 'I have trouble with multiplication tables, especially the 9 ×'s.' Both prior transcription runs (A and B) independently mis-read the print's × sign as the digit 8 and dropped the '9', producing 'especially the 8's.' The transcriber's note precedes the paragraph per 3.2.2 ('before the affected text').",
     "surroundingText": null,
-    "printFeatures": "A transcriber's note (7-5 margins) followed by a paragraph; the paragraph's own text includes the literal × sign the note explains."
+    "printFeatures": "One plain paragraph whose text includes the literal × sign. The transcriber's note before it (print.transcriberNote) is braille-side text, not shown in the print."
   },
   "braille": {
     "width": 40,
@@ -47,5 +41,13 @@
     "A",
     "B"
   ],
-  "resolution": "print.blocks[0].text ('The symbol × represents multiplication.') and the paragraph's own 'the 9 ×'s' were corrected against a direct read of references/bana/braille-formats-2016.pdf p.100 (print 3-2): both run A and run B independently mis-transcribed the print's literal × (multiplication sign) as the digit 8, and both dropped the leading '9', giving 'especially the 8's.' Refuted by forward-translating candidate wordings through Emboss's own UEB translator (engine/louis.mjs, uebG2 table) and comparing byte-for-byte against the already-agreed braille.lines: translate(\"I have trouble with multiplication tables, especially the 9 ×'s.\") reproduces ',i h tr\\ble ) multiplica;n tables1' / 'especially ! #i \"8's4' EXACTLY (character for character, including the compound quote+digit cell \"8 for × and the numeral-sign digit #i for 9); translate of either run's own text ('...the 8's.') does not (produces '#h's4', missing the required \"8 cell and using the wrong digit letter). translate('The symbol × represents multiplication.') likewise reproduces the note's own text exactly (up to the .= first-use locator, a separate, already-known Emboss limitation — see braille.notes above). See differences.md §1."
+  "resolution": "print.blocks[0].text ('The symbol × represents multiplication.') and the paragraph's own 'the 9 ×'s' were corrected against a direct read of references/bana/braille-formats-2016.pdf p.100 (print 3-2): both run A and run B independently mis-transcribed the print's literal × (multiplication sign) as the digit 8, and both dropped the leading '9', giving 'especially the 8's.' Refuted by forward-translating candidate wordings through Emboss's own UEB translator (engine/louis.mjs, uebG2 table) and comparing byte-for-byte against the already-agreed braille.lines: translate(\"I have trouble with multiplication tables, especially the 9 ×'s.\") reproduces ',i h tr\\ble ) multiplica;n tables1' / 'especially ! #i \"8's4' EXACTLY (character for character, including the compound quote+digit cell \"8 for × and the numeral-sign digit #i for 9); translate of either run's own text ('...the 8's.') does not (produces '#h's4', missing the required \"8 cell and using the wrong digit letter). translate('The symbol × represents multiplication.') likewise reproduces the note's own text exactly (up to the .= first-use locator, a separate, already-known Emboss limitation — see braille.notes above). See differences.md §1. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0] (note block) removed; print.blocks[1].continuation and .features",
+      "was": "a 'note' block \"The symbol × represents multiplication.\" before the paragraph; paragraph marked continuation:true with \"Flush (no first-line indent) in the given braille\"",
+      "now": "print.blocks holds only the paragraph, with no continuation flag; the note stays in print.transcriberNote",
+      "evidence": "references/bana/braille-formats-2016.pdf p.100, rendered at 110 dpi (Example box): the print original shows only the line \"I have trouble with multiplication tables, especially the 9 ×'s.\"; the note text and the flush margin appear only in the braille lines below it (the note is transcriber-written, 3.2.2). The old wording took the flush margin from the braille."
+    }
+  ]
 }

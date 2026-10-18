@@ -60,10 +60,13 @@
     "toc": "Sisukord",
     "print": "Trükivaade (vasak pool)",
     "braille": "Punktkiri",
+    "export": "Ekspordi",
+    "export_title": "Ekspordi punktkiri (BRF, eBraille) või saada reljeeftrükkurisse",
+    "emboss_menu": "Saada reljeeftrükkurisse",
     "braille_view": "Punktkirja vaade",
     "download_brf": "Punktkiri (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Trüki punktkirjas",
     "emboss_tooltip": "Saada dokument reljeeftrükkurisse või printerisse",
     "clear_doc": "Tühjenda dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Luuletuse salmirida (1-3)",
     "exercise_title": "Harjutusküsimus",
     "exercise_desc": "Nummerdatud harjutusküsimus (1-5 / 3-5)",
-    "caption_title": "Pealdis / Autorimärge",
-    "caption_desc": "Joonise pealdis või autorimärge (7-5)",
     "footnote_title": "Allmärkus",
     "footnote_desc": "Allmärkuse tekst (1-3)",
     "note_title": "Tõlkija märkus",
@@ -163,8 +164,6 @@
     "page_desc": "Lisa algse trükise leheküljepiiri tähis",
     "printpage_title": "Trükise leheküljenumber",
     "printpage_desc": "Lisa algse trükise leheküljepiiri tähis",
-    "code_title": "Arvutikood",
-    "code_desc": "Lisa koodiplokk UEB tähistega",
     "indent_title": "Taanda / pesasta alampunkt",
     "indent_desc": "Pesasta loendipunkt või harjutus sügavamale (Tab)",
     "outdent_title": "Vähenda taanet / tõsta punkt",
@@ -185,8 +184,8 @@
     "language_label": "Kasutajaliidese keel",
     "language_help": "Vali keel, mida kasutatakse nuppude, menüüde, dialoogide ja ekraanilugeja teadete jaoks.",
     "standard_label": "Punktkirja standard",
-    "standard_bana": "BANA (USA ja Kanada — 40×25 rakku)",
-    "standard_ukaaf": "UKAAF (Ühendkuningriik ja rahvusvaheline — 38×25 rakku)",
+    "standard_bana": "BANA (USA ja Kanada — 38×25 rakku)",
+    "standard_ukaaf": "UKAAF (Ühendkuningriik ja rahvusvaheline — 38×27 rakku)",
     "grade_label": "Lühendustase",
     "grade_1": "1. aste (lühendamata / täht-tähe haaval)",
     "grade_2": "2. aste (lühendatud)",
@@ -261,7 +260,7 @@
     "size_full": "Terve leht (rida 1 lõigatud servaga)",
     "lead_lines": "Reljeefsed juhtjooned",
     "braille_labels": "Punktkirjas sildid",
-    "footer_tip": "💡 Mustad piirjooned muutuvad ühtlasteks reljeefpiirideks; värvid vastendatakse automaatselt eri reljeeftekstuurideks.",
+    "footer_tip": "Mustad piirjooned muutuvad ühtlasteks reljeefpiirideks; värvid vastendatakse automaatselt eri reljeeftekstuurideks.",
     "open_repositories": "Avatud reljeefjooniste kogud:",
     "no_diagrams": "Sobivaid jooniseid ei leitud."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Kadudeta tagasitõlke olek",
     "precedence_status": "Punktkirja eesõigusreeglite olek",
     "perfect_match": "100% vastavus tagasitõlkes (0 lahknevust)",
-    "badge_warn": "⚠ {count} vaatamist vajab",
+    "badge_warn": "{count} vaatamist vajab",
     "badge_title": "{count} sõnalahknevust leiti tagasitõlkes. Klõpsa, et minna esimese juurde.",
     "badge_clean": "Tagasitõlke kontroll: sõnalahknevusi ei leitud."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Sul on salvestamata muudatusi. Kas soovid kindlasti väljuda ilma salvestamata?",
     "unsaved_load": "Sul on salvestamata muudatusi. Uue faili laadimine asendab praeguse dokumendi. Kas jätkata?",
     "unsaved_clear": "Sul on salvestamata muudatusi. Kas soovid dokumendi kindlasti tühjendada?",
-    "drop_hint": "⬇ Lohista dokument selle importimiseks redaktorisse",
+    "drop_hint": "Lohista dokument selle importimiseks redaktorisse",
     "notice": "Teade",
     "close_notice": "Sulge teade"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumendi tekst",
+      "math_keyboard_toggle": "Matemaatikaklaviatuur",
       "label": "Tekst",
       "toolbar_aria": "Vormindus",
       "style_label": "Lõigu stiil",
@@ -443,8 +443,8 @@
       "graphic_cats": "Joonisekategooriad",
       "graphic_list": "Reljeefjoonised",
       "formula_search_label": "Otsi valemeid",
-      "btactile_link": "BTactile (tasuta) ↗",
-      "tgil_link": "APH TGIL (üle 1800 malli) ↗"
+      "btactile_link": "BTactile (tasuta)",
+      "tgil_link": "APH TGIL (üle 1800 malli)"
     },
     "settings": {
       "list_spaced": "Tühja reaga loetelu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Ühenda otse kohandatud mikrokontrolleril põhinevate reljeeftrükkuritega (ESP32-S3, RP2040/RP2350, STM32, Arduino), vältides operatsioonisüsteemi printeridraiveri piiranguid.",
       "graphics_hint": "Kui märkimata, eksporditakse joonised ligipääsetavate tõlkija märkuste kirjeldustena ainult-teksti reljeeftrükkuritele ja punktkirjakuvaritele.",
       "tactile_heading": "Reljeefkuvari otseülekanne (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Ühenda Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Ühenda USB / HID (Monarch)",
+      "tactile_connect_ble": "Ühenda Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Ühenda USB / HID (Monarch)",
       "tactile_disconnect": "Katkesta kuvari ühendus",
       "tactile_sim_monarch": "Testi simuleeritud Monarchit (32×10)",
       "tactile_sim_dotpad": "Testi simuleeritud DotPadi (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Voogedastab punktkirja vaate ja reljeefjoonised reaalajas otse WebBluetoothi (DotPad BLE UART) või WebHID (Monarch/USB) kaudu ilma väliste draiveriteta.",
       "perkins_hint": "— kirjuta punktkirja SDF ja JKL klahvidega",
       "ascii_hint": "— kuva toorest ASCII-punktkirja märke",
+      "show_explanation_bar": "Näita selgitusriba",
+      "show_explanation_bar_hint": "— teksti ja punktkirja all olev riba, mis selgitab punktkirja sõna jaoks, mille juures oled",
+      "simple_mode_hint": "— ava Emboss lihtsas konverteris. Kiirrežiimi ja redaktori vahel vahetamine seda ei muuda.",
       "covers_hint": "— trükitud tiitelkaaned raamatute jagamisel köideteks"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Päis {n}",
       "cell_aria_named": "{header}, rida {row}",
       "cell_aria": "Veerg {col}, rida {row}",
-      "too_wide_listed": "⚠ Liiga lai veergude jaoks — trükitakse punktkirjas loendtabelina",
+      "too_wide_listed": "Liiga lai veergude jaoks — trükitakse punktkirjas loendtabelina",
       "too_wide_listed_title": "See tabel ei mahu veergudesse praeguse rea kohta rakkude arvu ja punktkirja režiimi juures, seega trükitakse see punktkirjas loendtabelina (BANA Formats §11.9), mitte kõrvutiasetsevate veergudena.",
-      "too_wide_paragraph": "⚠ Liiga lai veergude jaoks — trükitakse punktkirjas lõikudena",
+      "too_wide_paragraph": "Liiga lai veergude jaoks — trükitakse punktkirjas lõikudena",
       "too_wide_paragraph_title": "See tabel ei mahu veergudesse praeguse rea kohta rakkude arvu ja punktkirja režiimi juures, seega trükitakse see punktkirjas lõikudena (UKAAF B004 §12), mitte kõrvutiasetsevate veergudena."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Tabeleid koodi „{code}” jaoks ei õnnestunud laadida — kasutatakse endiselt eelmist punktkirjakoodi.",
-      "failed": "⚠ Punktkirja ei õnnestunud genereerida.",
+      "failed": "Punktkirja ei õnnestunud genereerida.",
       "failed_hint": "(Kui siin öeldakse, et mootor pole lähtestatud, ei laadinud punktkirjamootor — tee täisvärskendus klahvidega Cmd/Ctrl+Shift+R.)",
       "error_status": "Renderdusviga: {message}"
     },
     "engine": {
       "loading": "Punktkirjamootori laadimine…",
-      "failed": "⚠ Punktkirjamootorit ei õnnestunud laadida.",
+      "failed": "Punktkirjamootorit ei õnnestunud laadida.",
       "failed_hint": "Tee täisvärskendus klahvidega Cmd/Ctrl+Shift+R. Kui probleem püsib, ava brauseri konsool (Vaade ▸ Arendaja) ja saada veateated.",
       "failed_status": "Mootorit ei õnnestunud laadida: {message}",
       "ready": "Valmis — kirjuta või vorminda vasakul; punktkiri uueneb reaalajas."
@@ -715,7 +718,7 @@
       "network_unreachable": "Aadressiga {url} ei õnnestunud ühendust luua: {message}. Brauserid ei saa avada toorest TCP-ühendust (port 9100); reljeeftrükkur peab toetama HTTP POST-päringuid, või laadi alla .brf fail ja saada see oma trükihalduriga.",
       "usb_bridge_done": "Trükitöö edastatud USB-printerile!",
       "needs_webserial": "Otsene jadaport-trükkimine vajab WebSeriali toega brauserit (Chrome, Edge, Opera). Võid laadida alla .brf-faili ja trükkida selle oma trükihalduriga või kasutada seadetes võrgurežiimi (port 9100).",
-      "detected": "🔌 Tuvastatud {name} — seatud {cells}×{lines}, kiirus {baud} baud."
+      "detected": "Tuvastatud {name} — seatud {cells}×{lines}, kiirus {baud} baud."
     },
     "symbols": {
       "title": "Reljeefsümbolite kogu",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dünaamiline maatriks",
       "badge_text_only": "Ainult tekst",
       "badge_index": "Punktmaatriks"
+    },
+    "offline": {
+      "ready": "Emboss on valmis ilma internetita töötamiseks.",
+      "ready_short": "Valmis ilma internetita töötamiseks",
+      "not_yet": "Valmistub veel ilma internetita töötamiseks…"
     }
   }
 }

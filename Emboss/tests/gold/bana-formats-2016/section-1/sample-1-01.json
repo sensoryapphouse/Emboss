@@ -25,7 +25,7 @@
           {
             "level": 1,
             "marker": "1",
-            "text": "Older adults increasingly use words to convey positive emotions."
+            "text": "Older adults increasingly use words that convey positive emotions."
           },
           {
             "level": 1,
@@ -76,5 +76,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs independently transcribed BOTH variants shown in the source, agreeing on wording; they diverged only on file shape (run A used a non-standard 'braille.variants' extension array, run B flattened both variants plus the source's own English subheadings into one 'lines' array, which is unusable directly -- English caption lines are not braille and would corrupt any real comparison). Resolved by using ONLY the mid-page variant as braille.lines/print.blocks (the one Emboss's pagenum-block mechanic can actually reproduce, verified empirically: a 'list' block followed by a 'pagenum' block followed by a 'para' block renders the identical blank-line + indicator + paragraph shape). id normalised to 'sample-1-01' (zero-padded, matching the file name and this section's own precedent, e.g. section-8/11's sample-N-0M convention) rather than either run's own 'sample-1-1'/'sample-1-01' choice made inconsistently across files."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[0].text",
+      "was": "Older adults increasingly use words to convey positive emotions.",
+      "now": "Older adults increasingly use words that convey positive emotions.",
+      "evidence": "PDF p37 page image rendered from references/bana/braille-formats-2016.pdf (Sample 1-1, printed 1-21): first print line reads \"1 Older adults increasingly use words that convey positive emotions.\" The pdfPages value [21] in this file is the printed page number; the PDF page is 37."
+    }
+  ],
+  "resolution": "Both runs independently transcribed BOTH variants shown in the source, agreeing on wording; they diverged only on file shape (run A used a non-standard 'braille.variants' extension array, run B flattened both variants plus the source's own English subheadings into one 'lines' array, which is unusable directly -- English caption lines are not braille and would corrupt any real comparison). Resolved by using ONLY the mid-page variant as braille.lines/print.blocks (the one Emboss's pagenum-block mechanic can actually reproduce, verified empirically: a 'list' block followed by a 'pagenum' block followed by a 'para' block renders the identical blank-line + indicator + paragraph shape). id normalised to 'sample-1-01' (zero-padded, matching the file name and this section's own precedent, e.g. section-8/11's sample-N-0M convention) rather than either run's own 'sample-1-1'/'sample-1-01' choice made inconsistently across files. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

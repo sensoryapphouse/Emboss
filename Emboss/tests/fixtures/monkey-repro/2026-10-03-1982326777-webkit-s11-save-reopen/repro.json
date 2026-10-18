@@ -1,0 +1,220 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 11,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "tests/nimas_samples/9780076996285NIMAS.xml",
+ "docSource": "nimas-samples",
+ "docFeatures": null,
+ "docs": {
+  "tests/nimas_samples/9780076996285NIMAS.xml": "docs/00-9780076996285NIMAS.xml"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: table",
+ "message": "the saved file reopens to different braille [first differing block: table] (block #0 not counting empty ones, table / titlepage): first tab has 4732 lines, reopened tab has 4705; first differences: line 36: first tab \"\\f                                    #C\\r\" / reopened tab \"\\f;,C                                 #C\\r\" | line 48: first tab \"\\r\" / reopened tab \"  _/\\r\" | line 49: first tab \"\\r\" / reopened tab \"               \\\"9 \\\"9 \\\"9\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 12,
+ "originalActions": 38,
+ "actions": [
+  {
+   "t": "insertAll",
+   "i": 3
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9882,
+   "i": 22,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 4
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7195,
+   "i": 23,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5678,
+   "i": 24,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "clickText",
+   "fx": 0.6523,
+   "fy": 0.0331,
+   "n": 1
+  },
+  {
+   "t": "docTitle",
+   "text": "i"
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.312,
+   "i": 25,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.981,
+   "i": 26,
+   "q": "l",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.504,
+   "i": 27,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "recovery"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9263,
+   "i": 28,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7274,
+   "i": 29,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0199,
+   "i": 30,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0519,
+   "i": 31,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4596,
+   "i": 32,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4109,
+   "i": 33,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 15
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0348,
+   "i": 34,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 16
+  },
+  {
+   "t": "dragText",
+   "fx": 0.7013,
+   "fy": 0.4414,
+   "ext": "shiftEnd",
+   "n": 4,
+   "tx": 0.7058,
+   "ty": 0.6598,
+   "alt": false
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4754,
+   "i": 35,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 17
+  },
+  {
+   "t": "check",
+   "which": "all"
+  }
+ ]
+}

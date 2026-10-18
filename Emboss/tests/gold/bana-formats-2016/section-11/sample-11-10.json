@@ -56,10 +56,10 @@
       "    an answ]4@.>",
       "",
       ",\"d       ,temp]ature at #aj3#jj",
-      "\"3333333 \"333333333333333333333",
+      "\"3333333  \"333333333333333333333",
       ",mon\"d    \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
       ",tues\"d   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
-      ",w$nes\"d \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
+      ",w$nes\"d  \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
       ",?urs\"d   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
       ",fri\"d    \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"",
       "gggggggggggggggggggggggggggggggggggggggg",
@@ -73,5 +73,21 @@
     "A",
     "B"
   ],
-  "resolution": "No content differences beyond header-schema normalization; both runs match the source exactly."
+  "resolution": "No content differences beyond header-schema normalization; both runs match the source exactly.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"3333333 \"333333333333333333333",
+        ",w$nes\"d \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\""
+      ],
+      "after": [
+        "\"3333333  \"333333333333333333333",
+        ",w$nes\"d  \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\""
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 7, 10 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 317 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2). Where: table separation line (1); column gap before a guide-dotted (blank) entry (1)."
+    }
+  ]
 }

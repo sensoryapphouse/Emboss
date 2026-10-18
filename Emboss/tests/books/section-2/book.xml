@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-2"/>
+<meta name="dc:Title" content="Preliminary pages"/>
+<meta name="dc:Identifier" content="test-section-2"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>A Short History of Bridges</doctitle>
+<docauthor>Ada Example</docauthor>
+<level1 class="bana-transcriber-notes"><h1>Transcriber's Notes</h1><p>The following notes apply to the whole volume.</p><p>Print page numbers are shown at the right margin.</p></level1>
+<level1 class="toc"><h1>Contents</h1>
+<list type="pl" class="toc">
+<li class="bai-toc-entry"><lic class="bai-toc-text">Early Bridges</lic><lic class="bai-toc-page">1</lic></li>
+<li class="bai-toc-entry"><lic class="bai-toc-text">Iron and Steel</lic><lic class="bai-toc-page">12</lic></li>
+</list></level1>
+</frontmatter>
+<bodymatter>
+<level1><h1>Early Bridges</h1><p>The first bridges were fallen trees laid across streams.</p></level1>
+<level1><h1>Iron and Steel</h1><p>Iron changed everything for engineers.</p></level1>
+</bodymatter>
+</book>
+</dtbook>

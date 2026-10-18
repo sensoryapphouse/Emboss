@@ -60,10 +60,13 @@
     "toc": "目录",
     "print": "打印视图 (LHS)",
     "braille": "盲文",
+    "export": "导出",
+    "export_title": "导出盲文 (BRF、eBraille) 或发送到压印机",
+    "emboss_menu": "发送到压印机",
     "braille_view": "盲文视图",
     "download_brf": "盲文 (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "压印",
     "emboss_tooltip": "将文档发送到压印机或打印机",
     "clear_doc": "清除文档",
@@ -133,8 +136,6 @@
     "poem_desc": "诗歌诗节韵文行 (1-3)",
     "exercise_title": "练习题",
     "exercise_desc": "编号练习题 (1-5 / 3-5)",
-    "caption_title": "图说/著作权",
-    "caption_desc": "图形图说或著作权标示 (7-5)",
     "footnote_title": "脚注",
     "footnote_desc": "脚注文字 (1-3)",
     "note_title": "译者的注释",
@@ -163,8 +164,6 @@
     "page_desc": "插入原始打印页面分隔符指示符",
     "printpage_title": "打印页码",
     "printpage_desc": "插入原始打印页面分隔符指示符",
-    "code_title": "计算机代码",
-    "code_desc": "插入带 UEB 指示符的代码块",
     "indent_title": "缩进 / 嵌套子项",
     "indent_desc": "将列表项或练习缩进更深 (Tab)",
     "outdent_title": "减少缩进 / 提升项目",
@@ -185,8 +184,8 @@
     "language_label": "界面语言",
     "language_help": "选择用于按钮、菜单、对话框和屏幕阅读器通知的语言。",
     "standard_label": "盲文标准",
-    "standard_bana": "BANA (美国和加拿大 — 40×25 点)",
-    "standard_ukaaf": "UKAAF (英国和国际 — 38×25 点)",
+    "standard_bana": "BANA (美国和加拿大 — 38×25 点)",
+    "standard_ukaaf": "UKAAF (英国和国际 — 38×27 点)",
     "grade_label": "缩写级别",
     "grade_1": "第 1 级 (无缩写/逐字)",
     "grade_2": "第 2 级 (缩写)",
@@ -261,7 +260,7 @@
     "size_full": "整张 (第 1 行反切片)",
     "lead_lines": "触觉前导线",
     "braille_labels": "盲文标签",
-    "footer_tip": "💡 黑色边框变成坚实的触觉边界；颜色自动映射到不同的触觉纹理。",
+    "footer_tip": "黑色边框变成坚实的触觉边界；颜色自动映射到不同的触觉纹理。",
     "open_repositories": "打开触觉仓库：",
     "no_diagrams": "找不到匹配的图表。"
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "无损往返状态",
     "precedence_status": "盲文优先级规则状态",
     "perfect_match": "100% 往返匹配 (0 个不符)",
-    "badge_warn": "⚠ {count} 个待检视",
+    "badge_warn": "{count} 个待检视",
     "badge_title": "在往返反向翻译中发现 {count} 个单词不符。点击以跳至第一个。",
     "badge_clean": "往返检查：未发现单词不符。"
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "您有未保存的更改。确定要在未保存的情况下退出?",
     "unsaved_load": "您有未保存的更改。加载新文件将替换您当前的文档。是否继续?",
     "unsaved_clear": "您有未保存的更改。确定要清除文档?",
-    "drop_hint": "⬇ 拖放文件以将其导入编辑器",
+    "drop_hint": "拖放文件以将其导入编辑器",
     "notice": "通知",
     "close_notice": "关闭通知"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "文档文本",
+      "math_keyboard_toggle": "数学键盘",
       "label": "文本",
       "toolbar_aria": "格式设置",
       "style_label": "段落样式",
@@ -443,8 +443,8 @@
       "graphic_cats": "图形类别",
       "graphic_list": "触觉图形图表",
       "formula_search_label": "搜索公式",
-      "btactile_link": "BTactile (免费) ↗",
-      "tgil_link": "APH TGIL (1,800+ 模板) ↗"
+      "btactile_link": "BTactile (免费)",
+      "tgil_link": "APH TGIL (1,800+ 模板)"
     },
     "settings": {
       "list_spaced": "空白行列表 (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "直接连接到自定义微控制器盲文打印机 (ESP32-S3、RP2040/RP2350、STM32、Arduino)，绕过操作系统打印机驱动程序锁定。",
       "graphics_hint": "取消选中时，图表将作为无文本盲文打印机和盲文显示器的无障碍设计转录者注导出。",
       "tactile_heading": "触觉显示器实时流 (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 连接蓝牙 (DotPad BLE)",
-      "tactile_connect_hid": "🔌 连接 USB / HID (Monarch)",
+      "tactile_connect_ble": "连接蓝牙 (DotPad BLE)",
+      "tactile_connect_hid": "连接 USB / HID (Monarch)",
       "tactile_disconnect": "断开显示器连接",
       "tactile_sim_monarch": "测试模拟 Monarch (32×10)",
       "tactile_sim_dotpad": "测试模拟 DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "无需外部驱动程序，通过 WebBluetooth (DotPad BLE UART) 或 WebHID (Monarch/USB) 流式传输实时盲文视口和触觉图形。",
       "perkins_hint": "— 使用 SDF 和 JKL 键输入盲文",
       "ascii_hint": "— 显示原始 ASCII 盲文字符",
+      "show_explanation_bar": "显示说明栏",
+      "show_explanation_bar_hint": "— 文本和盲文下方、说明您所在单词盲文的栏",
+      "simple_mode_hint": "— 在简易转换器中打开 Emboss。在快速模式与编辑器之间切换不会改变此设置。",
       "covers_hint": "— 分割书籍时压印标题封面"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "标头 {n}",
       "cell_aria_named": "{header}，第 {row} 行",
       "cell_aria": "第 {col} 列，第 {row} 行",
-      "too_wide_listed": "⚠ 对列而言太宽 — 将以盲文转为列表表",
+      "too_wide_listed": "对列而言太宽 — 将以盲文转为列表表",
       "too_wide_listed_title": "此表格在当前每行的点数与盲文模式下无法容纳于列中，因此将以盲文转为列表表 (BANA Formats §11.9)，而非并排的列。",
-      "too_wide_paragraph": "⚠ 对列而言太宽 — 将以盲文转为段落格式",
+      "too_wide_paragraph": "对列而言太宽 — 将以盲文转为段落格式",
       "too_wide_paragraph_title": "此表格在当前每行的点数与盲文模式下无法容纳于列中，因此将以盲文转为段落格式 (UKAAF B004 §12)，而非并排的列。"
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "无法为 \"{code}\" 加载表格 — 仍使用之前的盲文代码。",
-      "failed": "⚠ 无法生成盲文。",
+      "failed": "无法生成盲文。",
       "failed_hint": "(如果显示引擎未初始化，表示盲文引擎未加载 — 以 Cmd/Ctrl+Shift+R 进行硬刷新。)",
       "error_status": "渲染错误: {message}"
     },
     "engine": {
       "loading": "正在加载盲文引擎…",
-      "failed": "⚠ 盲文引擎加载失败。",
+      "failed": "盲文引擎加载失败。",
       "failed_hint": "以 Cmd/Ctrl+Shift+R 进行硬刷新。如果仍然存在，请打开浏览器控制台 (查看 ▸ 开发者) 并发送错误。",
       "failed_status": "引擎加载失败: {message}",
       "ready": "准备就绪 — 在左侧输入或格式化; 盲文将实时更新。"
@@ -715,7 +718,7 @@
       "network_unreachable": "无法到达 {url}: {message}。浏览器无法打开原始 TCP (端口 9100) 连接; 盲文打印机必须接受 HTTP POST，或下载 .brf 并使用打印管理器发送。",
       "usb_bridge_done": "压印工作已传递至 USB 打印机!",
       "needs_webserial": "直接串行压印需要具有 WebSerial 的浏览器 (Chrome、Edge、Opera)。您可以下载 .brf 文件使用打印管理器进行压印，或在设置中使用网络 (端口 9100) 模式。",
-      "detected": "🔌 已检测 {name} — 设置为 {cells}×{lines}，{baud} 波特。"
+      "detected": "已检测 {name} — 设置为 {cells}×{lines}，{baud} 波特。"
     },
     "symbols": {
       "title": "触觉符号库",
@@ -752,6 +755,11 @@
       "badge_dotpad": "动态矩阵",
       "badge_text_only": "纯文本",
       "badge_index": "点矩阵"
+    },
+    "offline": {
+      "ready": "Emboss 已准备好离线工作。",
+      "ready_short": "已准备好离线工作",
+      "not_yet": "仍在准备离线工作…"
     }
   }
 }

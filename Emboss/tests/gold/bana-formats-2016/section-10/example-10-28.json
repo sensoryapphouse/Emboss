@@ -15,13 +15,9 @@
   "print": {
     "blocks": [
       {
-        "kind": "exercise",
-        "items": [
-          {
-            "level": 0,
-            "text": "1 <u>In the drama,</u> *The Phantom Tollbooth,* <u>Milo is bored.</u> He is a restless boy who is never satisfied with what he has."
-          }
-        ]
+        "kind": "paragraph",
+        "blocked": true,
+        "text": "1 <u>In the drama,</u> *The Phantom Tollbooth,* <u>Milo is bored</u>. He is a restless boy who is never satisfied with what he has."
       }
     ],
     "notes": "",
@@ -44,5 +40,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print reconstructed from A/B with emphasis markup added for the underlined/italicized spans the given braille itself shows (underline-word and italic-word indicators)."
+  "resolution": "Braille matches both A and B exactly. Print reconstructed from A/B with emphasis markup added for the underlined/italicized spans the given braille itself shows (underline-word and italic-word indicators). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0]",
+      "was": "kind exercise, one list item whose text put the period inside the underline of \"Milo is bored.\"",
+      "now": "kind paragraph, blocked:true (plain flush paragraph with a raised \"1\"), underline ends before the period",
+      "evidence": "references/_gemini/_done/gold-10-A/page-266.png, Example 10-28 print box: a small raised \"1\" above the first word of an ordinary running paragraph (not a numbered list item, no hanging indent); the underline under \"Milo is bored\" stops at the word, the period is outside it; the braille has the period after the terminator (_' 4)."
+    }
+  ]
 }

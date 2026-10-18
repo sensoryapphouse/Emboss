@@ -15,8 +15,13 @@ const GREEK_MAP = {
 const MATH_FUNCS = new Set([
   'sin', 'cos', 'tan', 'cot', 'sec', 'csc', 'arcsin', 'arccos', 'arctan',
   'sinh', 'cosh', 'tanh', 'coth', 'sech', 'csch',
-  'log', 'ln', 'exp', 'lim', 'max', 'min', 'det', 'gcd', 'deg', 'dim', 'ker', 'hom', 'arg'
+  'log', 'ln', 'lg', 'exp', 'lim', 'liminf', 'limsup', 'max', 'min', 'sup', 'inf', 'Pr',
+  'det', 'gcd', 'deg', 'dim', 'ker', 'hom', 'arg'
 ]);
+
+// Function names that take their limit underneath (\lim_{x\to 0}, \max_{x}): a stacked <munder> over one of
+// these is written as a subscript in LaTeX, like \sum_{i}.
+const LIMIT_FUNCS_TEX = new Set(['\\lim', '\\liminf', '\\limsup', '\\max', '\\min', '\\sup', '\\inf', '\\Pr', '\\gcd', '\\det']);
 
 const OP_MAP = {
   '±': '\\pm ', '∓': '\\mp ', '×': '\\times ', '÷': '\\div ', '·': '\\cdot ',
@@ -32,14 +37,34 @@ const OP_MAP = {
   '⁣': ''  // &InvisibleComma;
 };
 
+// Accent character (over an <mover>) -> LaTeX accent command. Both the spacing characters MathML uses and the
+// combining characters Word / MathType store are listed; omml.mjs turns the latter into the former.
 const ACCENT_MAP = {
-  '^': '\\hat', '̂': '\\hat', 'ˆ': '\\hat',
-  '¯': '\\bar', 'ˉ': '\\bar', '_': '\\bar',
-  '→': '\\vec', '⃗': '\\vec',
-  '~': '\\tilde', '̃': '\\tilde',
-  '˙': '\\dot', '̇': '\\dot',
-  '¨': '\\ddot', '̈': '\\ddot',
-  '˚': '\\mathring', '̊': '\\mathring'
+  '^': '\\hat', '\u0302': '\\hat', '\u02C6': '\\hat',
+  '\u00AF': '\\bar', '\u02C9': '\\bar', '_': '\\bar', '\u0304': '\\bar', '\u0305': '\\bar', '\u203E': '\\bar',
+  '\u2192': '\\vec', '\u20D7': '\\vec',
+  '\u2190': '\\overleftarrow', '\u20D6': '\\overleftarrow',
+  '\u2194': '\\overleftrightarrow', '\u20E1': '\\overleftrightarrow',
+  '~': '\\tilde', '\u0303': '\\tilde',
+  '\u02D9': '\\dot', '\u0307': '\\dot',
+  '\u00A8': '\\ddot', '\u0308': '\\ddot', '..': '\\ddot',   // '..' is omml.mjs's form (MathCAT has no Nemeth entry for U+00A8)
+  '\u02DA': '\\mathring', '\u030A': '\\mathring',
+  '\u00B4': '\\acute', '\u0301': '\\acute',
+  '`': '\\grave', '\u0300': '\\grave',
+  '\u02C7': '\\check', '\u030C': '\\check',
+  '\u02D8': '\\breve', '\u0306': '\\breve'
+};
+
+// The bracket characters a fenced group can carry, and their LaTeX form after \left / \right. '' (an empty
+// fence: no bracket on that side) is written "."; a character not listed is not something LaTeX can size,
+// so the group is left as ordinary characters. A command ends in a space so the next letter is not read
+// as part of its name (\left\langle x).
+const FENCE_LATEX = {
+  '': '.', '(': '(', ')': ')', '[': '[', ']': ']', '|': '|', '{': '\\{', '}': '\\}',
+  '\u27E8': '\\langle ', '\u2329': '\\langle ', '\u3008': '\\langle ',
+  '\u27E9': '\\rangle ', '\u232A': '\\rangle ', '\u3009': '\\rangle ',
+  '\u230A': '\\lfloor ', '\u230B': '\\rfloor ', '\u2308': '\\lceil ', '\u2309': '\\rceil ',
+  '\u2016': '\\|', '\u2225': '\\|', '/': '/'
 };
 
 function getLocalTagName(node) {
@@ -108,7 +133,17 @@ export function mathmlToLatex(mathmlStr) {
 }
 
 function postProcessLatex(latex) {
-  return (latex || '')
+  const raw = latex || '';
+  // Protect \text{...} spans before the generic "trim whitespace touching a brace" cleanup
+  // below: every OTHER {...} group this converter builds (a sup/sub argument, \frac{}{},
+  // \left(...\right)) only ever picks up leading/trailing whitespace as incidental
+  // formatting noise, so trimming it is safe — but \text{...}'s own interior spacing is
+  // semantic (real words, e.g. omml.mjs's plain-text-run fix, "AGENTS.md" fix 2, builds
+  // "\text{ if }" specifically so "if" reads as its own word): trimming it back out here
+  // would silently undo that fix and mash the words together again in the print pane.
+  const texts = [];
+  const masked = raw.replace(/\\text\{[^{}]*\}/g, (m) => { texts.push(m); return `\u0000${texts.length - 1}\u0000`; });
+  const cleaned = masked
     .replace(/\s+/g, ' ')
     .replace(/\s+([,;:])/g, '$1')
     .replace(/\\left\s*([(\[{|])/g, '\\left$1')
@@ -120,6 +155,7 @@ function postProcessLatex(latex) {
     .replace(/\{\s+/g, '{')
     .replace(/\s+\}/g, '}')
     .trim();
+  return cleaned.replace(/\u0000(\d+)\u0000/g, (m, i) => texts[Number(i)] ?? m);
 }
 
 function convertNode(node) {
@@ -141,8 +177,12 @@ function convertNode(node) {
   };
 
   switch (tag) {
+    case 'mrow': {
+      const fenced = convertFencedRow(node);
+      return fenced !== null ? fenced : convertChildren();
+    }
+
     case 'math':
-    case 'mrow':
     case 'mstyle':
     case 'merror':
     case 'mphantom':
@@ -154,7 +194,16 @@ function convertNode(node) {
       if (!txt) return '';
       if (GREEK_MAP[txt]) return GREEK_MAP[txt] + ' ';
       if (MATH_FUNCS.has(txt)) return `\\${txt} `;
+      // A multi-letter name that is applied as a function (U+2061 follows it: Word's m:func, MathML from
+      // MathType or MathLive) but has no LaTeX command of its own (sgn, cosec ...).
+      if (txt.length > 1 && /^[a-zA-Z]+$/.test(txt) && isAppliedFunction(node)) return `\\operatorname{${txt}} `;
       if (txt.length > 1 && /^[a-zA-Z]+$/.test(txt)) return `\\mathrm{${txt}}`;
+      // A single upright letter (omml.mjs's plainTextToMathML: Word's "Normal Text" style
+      // on e.g. the "d" in "dx", or a one-letter unit) is still italic by default here
+      // (the length>1 branch above is the only other place this print renderer asks for
+      // upright) — match it so the print pane shows the same upright glyph the braille
+      // already reflects, instead of a "d" indistinguishable from a variable.
+      if (node.getAttribute && node.getAttribute('mathvariant') === 'normal') return `\\mathrm{${txt}}`;
       return txt;
     }
 
@@ -164,15 +213,18 @@ function convertNode(node) {
     case 'mo': {
       const txt = (node.textContent || (node.firstChild && node.firstChild.nodeValue) || '').trim();
       if (!txt) return '';
-      if (OP_MAP[txt] !== undefined) return OP_MAP[txt];
-      if (txt === '{' || txt === '}') return `\\${txt}`;
-      if (/^[a-zA-Z0-9]$/.test(txt)) return txt;
-      if (txt === '(' || txt === ')' || txt === '[' || txt === ']' || txt === '|') return txt;
-      return ` ${txt} `;
+      return operatorToLatex(txt);
     }
 
     case 'mtext': {
       const txt = (node.textContent || '').replace(/\s+/g, ' ');
+      const word = txt.trim();
+      // LibreOffice (ODT/ODF MathML) and MathType (.doc) write operators and function names as <mtext>:
+      // "+", "=", "-" and "sin", "log". As \text{} they showed as upright prose in the print view ("a\text{+}b")
+      // and lost the function. An mtext that is only a mathematical operator is the operator; one that is a
+      // known function name is the function.
+      if (word && word.length <= 3 && !/[\p{L}\p{N}\s]/u.test(word) && (OP_MAP[word] !== undefined || /^[-+=<>*\/,;:!?.|()[\]{}]+$/.test(word))) return operatorToLatex(word);
+      if (MATH_FUNCS.has(word)) return `\\${word} `;
       return `\\text{${txt}}`;
     }
 
@@ -227,7 +279,7 @@ function convertNode(node) {
       const [base, under] = getElementChildren(node);
       const bTxt = convertNode(base).trim();
       const uTxt = convertNode(under).trim();
-      if (bTxt === '\\sum' || bTxt === '\\prod' || bTxt === '\\lim' || bTxt === '\\int') {
+      if (bTxt === '\\sum' || bTxt === '\\prod' || bTxt === '\\int' || LIMIT_FUNCS_TEX.has(bTxt)) {
         return `${bTxt}_{${uTxt}} `;
       }
       return `\\underset{${uTxt}}{${wrapBase(base)}}`;
@@ -240,6 +292,8 @@ function convertNode(node) {
       if (ACCENT_MAP[oRaw]) {
         return `${ACCENT_MAP[oRaw]}{${bLatex}}`;
       }
+      // Three dots above (Word's U+20DB, omml.mjs writes "..."): LaTeX's \dddot is not in MathLive.
+      if (oRaw === '\u20DB' || oRaw === '...') return `\\overset{\\cdot\\cdot\\cdot}{${wrapBase(base)}}`;
       const oTxt = convertNode(over).trim();
       return `\\overset{${oTxt}}{${wrapBase(base)}}`;
     }
@@ -256,10 +310,12 @@ function convertNode(node) {
     }
 
     case 'mfenced': {
-      const open = node.getAttribute ? (node.getAttribute('open') || '(') : '(';
-      const close = node.getAttribute ? (node.getAttribute('close') || ')') : ')';
-      const openTex = open === '{' ? '\\{' : open;
-      const closeTex = close === '}' ? '\\}' : close;
+      // open/close default to ( ) only when the attribute is ABSENT; open="" means no bracket ("\left.").
+      const has = (a) => !!(node.hasAttribute && node.hasAttribute(a));
+      const open = has('open') ? node.getAttribute('open') : '(';
+      const close = has('close') ? node.getAttribute('close') : ')';
+      const openTex = FENCE_LATEX[open.trim()] ?? open;
+      const closeTex = FENCE_LATEX[close.trim()] ?? close;
       return `\\left${openTex}${convertChildren().trim()}\\right${closeTex}`;
     }
 
@@ -285,6 +341,42 @@ function convertNode(node) {
     default:
       return convertChildren();
   }
+}
+
+// The LaTeX for one operator character (what an <mo> holds; also an <mtext> that is only an operator).
+function operatorToLatex(txt) {
+  if (OP_MAP[txt] !== undefined) return OP_MAP[txt];
+  if (txt === '{' || txt === '}') return `\\${txt}`;
+  if (/^[a-zA-Z0-9]$/.test(txt)) return txt;
+  if (txt === '(' || txt === ')' || txt === '[' || txt === ']' || txt === '|') return txt;
+  return ` ${txt} `;
+}
+
+// True when the element is directly followed by U+2061 (function application) - the marker that a multi-letter
+// <mi> is a function name and not a product of variables.
+function isAppliedFunction(node) {
+  let next = node.nextSibling;
+  while (next && next.nodeType !== 1 && !(next.nodeType === 3 && (next.nodeValue || '').trim())) next = next.nextSibling;
+  return !!next && next.nodeType === 1 && getLocalTagName(next) === 'mo' && (next.textContent || '').trim() === '\u2061';
+}
+
+// <mrow> whose first and last children are stretchy fences (<mo fence="true">, as Word's brackets, LibreOffice's
+// scalable brackets and MathLive write them) -> \left( ... \right). Returns null when the row is not a fenced
+// group (so it is written as ordinary characters): no fence flags, a non-stretchy bracket (stretchy="false":
+// Word with "stretch brackets" off, LibreOffice's plain brackets), or a bracket LaTeX cannot size.
+function convertFencedRow(node) {
+  const kids = getElementChildren(node);
+  if (kids.length < 2) return null;
+  const first = kids[0];
+  const last = kids[kids.length - 1];
+  const isFence = (k) => getLocalTagName(k) === 'mo' && k.getAttribute && k.getAttribute('fence') === 'true' && k.getAttribute('stretchy') !== 'false';
+  if (!isFence(first) || !isFence(last)) return null;
+  const open = FENCE_LATEX[(first.textContent || '').trim()];
+  const close = FENCE_LATEX[(last.textContent || '').trim()];
+  if (open === undefined || close === undefined) return null;
+  let body = '';
+  for (let i = 1; i < kids.length - 1; i++) body += convertNode(kids[i]);
+  return `\\left${open}${body.trim()}\\right${close}`;
 }
 
 function wrapBase(baseNode) {

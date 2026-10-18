@@ -2,6 +2,8 @@
 // Reuses the gold-validated engine (/format + /engine). Adds inline MathLive
 // equations, a "* * *" document break, a Table-of-Contents toggle, real UEB
 // typeform emphasis, a braille-cell preview, and ARIA-toolbar a11y.
+// First, so it records any error from the moment the page starts (A89 step 2, Report a problem).
+import { openProblemDialog, recordProblem, problemCount, problemLog } from '/web/problem-report.mjs';
 import {
   createEditor, $getRoot, $getSelection, $isRangeSelection,
   ParagraphNode, $createParagraphNode, $createTextNode, FORMAT_TEXT_COMMAND,
@@ -9,66 +11,407 @@ import {
   registerRichText, HeadingNode, QuoteNode, $createHeadingNode, $isHeadingNode,
   ListNode, ListItemNode, INSERT_UNORDERED_LIST_COMMAND, INSERT_ORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND, registerList, $isListNode, $createListNode, $createListItemNode,
-  $setBlocksType, TextNode,
+  $setBlocksType, TextNode, KEY_BACKSPACE_COMMAND, KEY_DELETE_COMMAND, COMMAND_PRIORITY_HIGH,
+  $setSelection, $createNodeSelection, $isNodeSelection,
+  PASTE_COMMAND, $insertDataTransferForRichText,
 } from './vendor-lexical.mjs';
 
 const $isTextNode = (n) => n instanceof TextNode;
 const $isElementNode = (n) => typeof n?.getChildren === 'function';
 const $isQuoteNode = (n) => n instanceof QuoteNode;
 const $isListItemNode = (n) => n instanceof ListItemNode;
-import { formatDocument, formatDocumentAsync, formatVolumes, tableLayout } from '/format/document.mjs?v=20260918_100000';
-import { formatStyleInspectorBadge, STYLE_DEFINITIONS, getStyleMargins } from '/format/styles.mjs?v=20260918_050000';
-import { exportToNimasXml } from '/input/nimas-export.mjs?v=20260918_090000';
-import { buildNimasPackage } from '/input/nimas-package.mjs?v=20260918_090000';
-import { cellSegments, cellPlainText, cellToMarkup } from '/format/cell-markup.mjs?v=20260918_100000';
+import { formatDocument, formatDocumentAsync, formatVolumes, tableLayout, collectSpecialSymbols, symbolMeaning, suggestTranscriberNotes, titlePageFieldsFrom, withListNestLevel } from '/format/document.mjs';
+import { formatStyleInspectorBadge, STYLE_DEFINITIONS, getStyleMargins } from '/format/styles.mjs';
+import { exportToNimasXml, isBulletMarker, bulletName, synthesizeOrderedMarker } from '/input/nimas-export.mjs';
+import { FMT_OFF as REGISTRY_FMT_OFF, GROUPS as FIELD_GROUPS, CODECS as FIELD_CODECS, fieldByKey, controlById, groupControlIds, groupsForKind, fmtKeysFor, fmtOffKeys, docOptionFields, TRANSCRIBER_STYLES, TRANSCRIBER_BUTTONS, EVERYDAY_STYLES, titlepageBookDetails, REPRODUCTION_NOTICES, ukAccessibleCopyStatement, titlePageTemplateSegments, refreshTitlePageValues, titlePageStructureSig, TP_FIELD_LABELS, tpInsertableFields, tpFieldCurrentValue } from '/format/field-registry.mjs';
+import { titlePagePrintHtml } from '/format/titlepage-print.mjs';   // K29 Stage 1d: "Print title page…" — see that module's own header comment
+import { buildNimasPackage } from '/input/nimas-package.mjs';
+import { checkPackagePaths } from '/input/nimas-package.mjs';   // (a separate line: tests/nimas_package_export.test.mjs matches the line above)
+import { htmlNamedCharsToText } from '/input/omml.mjs';
+import { cellSegments, cellPlainText, cellToMarkup } from '/format/cell-markup.mjs';
 // Table cell rich editing (G15): segments <-> the small HTML string a contenteditable
 // table cell shows/edits, so a cell displays real bold/italic/underline/uncontracted
 // formatting and atomic maths/note-reference chips instead of markup characters.
-import { cellToEditableHtml, cellHtmlToSegments, cellFromEditableHtml } from '/format/cell-dom.mjs?v=20260918_110000';
+import { cellToEditableHtml, cellHtmlToSegments, cellFromEditableHtml } from '/format/cell-dom.mjs';
 import { makeZip } from '/web/zip.mjs';
 import { exportToDocxBlob } from '/web/docx-export.mjs';
-import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs?v=20260914_192000';
+import { exportToText, exportToMarkdown, exportToHtml, bytesToBase64 } from '/web/export-formats.mjs';   // S5d: the alternative saves (txt, md, html), one traversal of the model
+import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs';
 import * as louis from '/engine/louis-browser.mjs';
-import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs?v=20260915_102500';
-import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs?v=20260912_180700';
-import { parseFile, BINARY_EXTS } from '/input/parse.mjs?v=20260918_090000';
+import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs';
+import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs';
+import { parseFile, BINARY_EXTS } from '/input/parse.mjs';
 import { BRF64, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
 import * as maths from '/engine/maths.mjs';
 import { mathmlToLatex } from '/engine/mathml-to-latex.mjs';
-import { styledTranslate, exchangeQuotes } from '/format/text-style.mjs';
-import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, isGraphicsSupported, effectiveMathCode } from '/web/settings.mjs';
-import { resolveTable, makeTranslators, UEB_TABLES } from '/web/braille-table.mjs';
-import { spoolToEmbosser, spoolToNetworkEmbosser, isWebSerialSupported, initEmbosserAutoDetect } from '/format/spooler.mjs?v=20260918_050000';
-import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs?v=20260915_142000';
-import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs?v=20260915_142000';
+import { styledTranslate, styledTranslatePos, SCRIPT_MARKS, normalizeTextAndTypeform } from '/format/text-style.mjs';
+import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, PAGE_SIZE_PRESETS, fillPageSizeSelect, isGraphicsSupported, effectiveMathCode, isPhoneScreen, PHONE_EDITOR_ANYWAY_KEY, markStayInQuick, betaLocked, keepNumbersInRange, largeFileWarning, largeFileQuestion } from '/web/settings.mjs';
+keepNumbersInRange(document.getElementById('settingsDialog'));   // Settings only: dialogs that check their own numbers say why (Braille formatting)
+import { resolveTable, makeTranslators, UEB_TABLES, registryName, codeLanguage, settingsForTable } from '/web/braille-table.mjs';
+import { spoolToNetworkEmbosser, connectionSupport, chooseEmbosserTarget, sendToEmbosserTarget, initEmbosserAutoDetect } from '/format/spooler.mjs';
+import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs';
+import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs';
 import { TACTILE_SVG_LIBRARY, TACTILE_SVG_CATEGORIES } from '/web/tactile-library.js';
 import { exportToPef } from '/format/pef.mjs';
-import { exportToEbraille } from '/format/ebraille.mjs';
-import { tactileDisplay, rasterizeSvgToDotPadCells, rasterizeSvgToMonarchCells, charToDotMask } from '/format/tactile-display.mjs?v=20260915_142000';
-import { openTactileSymbolBrowser } from '/web/tactile-browser.mjs?v=20260918_050000';
+import { exportToEbraille, ebrailleWarningText } from '/format/ebraille.mjs';
+import { tactileDisplay, rasterizeSvgToDotPadCells, rasterizeSvgToMonarchCells, charToDotMask } from '/format/tactile-display.mjs';
+import { openTactileSymbolBrowser } from '/web/tactile-browser.mjs';
 import { CODES } from '/Translate/braille-codes.mjs';
 import { describeUebMaths } from '/Translate/ueb-maths-to-latex.mjs';
 import { describeNemeth } from '/Translate/nemeth-symbols.mjs';
-import { getAndClearHandoffDoc } from '/web/handoff-db.mjs';
-import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs?v=20260918_050000';
+import { readHandoff, confirmHandoff, setHandoffDoc, newHandoffId, handoffHash, brailleKey, brailleFlags } from '/web/handoff-db.mjs';
+import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, getOrderedLocales, translateDOM, registerLocale } from '/web/i18n.mjs';
+import { watchOfflineReady } from '/web/offline-ready.mjs';
+import { getBuildInfo } from '/web/build-info.mjs';
+import { iconSvg, iconEl } from '/web/icons.mjs';   // Iconoir line icons; also adds the page's icon symbols (feedback 30 Sep, item 18)
+import { mountSettingsDialog } from '/web/settings-panes.mjs';
+import { initAutosave, checkForRecovery, clearSnapshot as clearAutosaveSnapshot, forceAutosaveTick, noteChange as noteAutosaveChange } from '/web/editor/autosave.mjs';
+
+// The Settings dialog is made from the one source Quick Mode uses too (web/settings-panes.mjs; feedback 17 Oct 2026, item 9a), before anything below looks for its controls.
+mountSettingsDialog(document.getElementById('settingsDialog'), { page: 'editor' });
 
 if (typeof window !== 'undefined') {
   window.parseFile = parseFile;
   window.exportToNimasXml = exportToNimasXml;
   window.exportCurrentDocumentXml = () => {
     let currentDocModel = null;
-    editor.getEditorState().read(() => { currentDocModel = buildModel(); });
+    editor.getEditorState().read(() => { currentDocModel = mergeListItemBlocks(buildModel()); });
     const doc = currentDocModel || lastModel || { title: 'Document', blocks: [] };
-    return exportToNimasXml(doc, { title: doc.title || 'Document' });
+    return exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode });   // UK-9: an auto title page's saved wording follows the current format mode
   };
   window.importFile = importFile;
   window.showRuleInfo = showRuleInfo;
   window.indentCurrentItem = indentCurrentItem;
   window.outdentCurrentItem = outdentCurrentItem;
+  // Test hooks (Emboss/tests/test-autosave.mjs): force an immediate autosave write instead of
+  // waiting for the real 30s interval, and check/clear the stored snapshot directly.
+  window.__forceAutosaveTick = forceAutosaveTick;
+  window.__clearAutosaveSnapshot = clearAutosaveSnapshot;
 }
 
 let settings = loadSettings();                 // standard / grade / geometry / quotes / lists / toc (shared with the converter)
+// "Transcriber tools" (settings.transcriberTools, off by default): see applyTranscriberTools. Declared here, before any
+// code that may ask for it (toolbar-button updates run from editor update listeners).
+// A beta build keeps it off, its switch hidden, unless unlocked with ?tools=1 (feedback item 15; betaLocked, settings.mjs).
+const BETA_LOCKED = betaLocked();
+if (BETA_LOCKED) document.body.classList.add('beta-locked');
+let transcriberTools = settings.transcriberTools === true && !BETA_LOCKED;
+function transcriberToolsOn() { return transcriberTools; }
+// The caret's last known place in the editor. Declared up here (not with the other caret state further down) because the
+// Transcriber tools setup runs at load and asks the remove-box check where the caret is (it read this variable before
+// its `let` ran — a temporal-dead-zone ReferenceError, caught and logged).
+let lastActiveEditorSelection = null;
 const $id = (id) => document.getElementById(id);
+// State of the explanation bar's typing hold (see TYPING_PAUSE_MS, below), declared up here so nothing that runs early can reach it before it exists.
+let typingAt = 0;
+let typingTimer = null;
+let pendingRuleWord = null;
+// Scroll one pane to an element WITHOUT scrolling the page round it (feedback 17 Oct 2026, item 6). element.scrollIntoView() also scrolls every
+// scrollable ancestor — <main> is overflow:hidden but can still be scrolled by a script — so a click on a Table of Contents link (block:'center')
+// pushed the whole interface up and left a band of white under the explanation bar. This moves `container` only.
+function scrollWithin(container, el, { block = 'center', behavior = 'auto' } = {}) {
+  if (!container || !el) return;
+  const c = container.getBoundingClientRect(), r = el.getBoundingClientRect();
+  let delta = 0;
+  if (block === 'center') delta = (r.top + r.height / 2) - (c.top + c.height / 2);
+  else if (r.top < c.top) delta = r.top - c.top;
+  else if (r.bottom > c.bottom) delta = r.bottom - c.bottom;
+  if (Math.abs(delta) < 1) return;
+  const top = Math.max(0, container.scrollTop + delta);
+  if (behavior === 'smooth' && typeof container.scrollTo === 'function') container.scrollTo({ top, behavior }); else container.scrollTop = top;
+}
+// Nothing but the two panes scrolls: if anything else is moved (an equation scrolling itself into view, a browser scrolling the caret), put it back.
+for (const holder of [document.querySelector('main'), document.body, document.documentElement]) {
+  if (holder) holder.addEventListener('scroll', () => { if (holder.scrollTop || holder.scrollLeft) { holder.scrollTop = 0; holder.scrollLeft = 0; } }, { passive: true });
+}
+
+// ---- One style registry for the style dropdown AND the slash menu (G1) ----
+// Every block style the editor can apply is listed here once. The dropdown (#blockStyle,
+// built by buildBlockStyleSelect) and the slash menu (SLASH_COMMANDS, below) are both made
+// from this list, so they always offer the same styles. `slash` is the slash id (what the
+// user types after "/"), `slashKey` the i18n key stem if it differs, `slashAction` an
+// override for styles whose slash command inserts rather than converts. full/short/mini
+// are the dropdown label at wide / compact / ultra-compact toolbar widths.
+//
+// "Computer code" (import fix list #40, 1 Oct 2026) is a paragraph style like Blockquote: the paragraph keeps its spaces and
+// line breaks (a line break is a line of the code), paraBlock() turns it into a `{ type: 'code', text }` block (the formatter's
+// grade-1 passage, BANA 19 / UEB technical 17) and the save writes <p class="bana-code"> with <br/>. See paraBlock, appendBlock and the Enter rule (ParagraphNode.insertNewAfter).
+const tOr = (key, fallback) => { const v = t(key); return v && v !== key ? v : fallback; };
+const BLOCK_STYLES = [
+  { value: 'p', slash: 'p', icon: 'i:text', title: 'Paragraph (Body)', desc: 'Standard body paragraph (3-1)',
+    keywords: ['p', 'para', 'paragraph', 'body', 'text', 'standard'],
+    full: () => tOr('styles.body', 'Body Text'), short: () => tOr('app.styles.short_text', 'Text'), mini: () => '' },
+  { value: 'h1', slash: 'h1', icon: 'H1', title: 'Heading 1', desc: 'Major centered heading (1-1)',
+    keywords: ['h1', 'heading 1', 'title', 'centered', 'major'],
+    full: () => tOr('styles.h1', 'H1 Heading'), short: () => 'H1', mini: () => 'H1' },
+  { value: 'h2', slash: 'h2', icon: 'H2', title: 'Heading 2', desc: 'Section heading (Cell 5)',
+    keywords: ['h2', 'heading 2', 'section', 'subheading'],
+    full: () => tOr('styles.h2', 'H2 Subheading'), short: () => 'H2', mini: () => 'H2' },
+  { value: 'h3', slash: 'h3', icon: 'H3', title: 'Heading 3', desc: 'Subsection heading (Cell 7)',
+    keywords: ['h3', 'heading 3', 'sub', 'subsection', 'minor'],
+    full: () => tOr('styles.h3', 'H3 Sub-subheading'), short: () => 'H3', mini: () => 'H3' },
+  { value: 'bullet', slash: 'ul', icon: 'i:list', title: 'Bulleted List', desc: 'Create bulleted list items (1-3)',
+    keywords: ['ul', 'bullet', 'bullets', 'list', 'unordered'],
+    full: () => tOr('styles.bullet_list', 'Bullet List'), short: () => tOr('app.styles.short_list', 'List'), mini: () => '' },
+  { value: 'number', slash: 'ol', icon: '1.', title: 'Numbered List', desc: 'Create numbered list items (1-3)',
+    keywords: ['ol', 'number', 'numbered', 'list', 'ordered'],
+    full: () => `1. ${tOr('styles.number_list', 'Numbered List')}`, short: () => `1. ${tOr('app.styles.short_list', 'List')}`, mini: () => '1.' },
+  { value: 'plain', slash: 'plain', icon: 'i:align-left', title: 'Plain List', desc: 'Unmarked list, DTBook <list type="pl"> (1-3; nested 1-5, 3-5)',
+    keywords: ['plain', 'pl', 'list', 'unmarked', 'simple', 'no bullets'],
+    full: () => tOr('app.style_names.plain', 'Plain List'), short: () => tOr('app.styles.short_plain', 'Plain'), mini: () => tOr('app.styles.mini_plain', 'Pl') },
+  { value: 'index', slash: 'index', icon: 'i:page-search', title: 'Index Entry', desc: 'BANA §21 index entry (1-3; nested 1-5, 3-5; new braille page)',
+    keywords: ['index', 'entry', 'subentry', 'alphabetic', 'reference', 'skill', 'skills'],
+    full: () => `${tOr('app.styles.index', 'Index Entry')}`, short: () => tOr('app.styles.short_index', 'Index'), mini: () => tOr('app.styles.mini_index', 'Idx') },
+  { value: 'toc', slash: 'toc', icon: 'i:list', title: 'TOC Entry', desc: 'Table of Contents entry with dot leaders (1-3)',
+    keywords: ['toc', 'table of contents', 'contents', 'dot leaders', 'leader'],
+    full: () => `${tOr('styles.toc_entry', 'TOC Entry')}`, short: () => tOr('app.styles.short_toc', 'TOC'), mini: () => tOr('app.styles.short_toc', 'TOC') },
+  { value: 'dialogue', slash: 'dialogue', icon: 'i:chat-lines', title: 'Play Dialogue', desc: 'Prose drama dialogue speaker line (1-3)',
+    keywords: ['dialogue', 'play', 'drama', 'speaker', 'character', 'line', 'script', 'speech'],
+    full: () => `${tOr('styles.dialogue', 'Play Dialogue')}`, short: () => tOr('app.styles.short_play', 'Play'), mini: () => tOr('app.styles.short_play', 'Play') },
+  { value: 'stage', slash: 'stage', icon: 'i:movie', title: 'Stage Direction', desc: 'Drama stage direction indented (7-7)',
+    keywords: ['stage', 'direction', 'play', 'drama', 'setting', 'action', 'parenthetical'],
+    full: () => `${tOr('styles.stage', 'Stage Direction')}`, short: () => tOr('app.styles.short_stage', 'Stage'), mini: () => tOr('app.styles.short_stage', 'Stage') },
+  { value: 'poem', slash: 'poem', icon: 'i:journal-page', title: 'Poetry / Verse', desc: 'Poetic stanza verse line (1-3)',
+    keywords: ['poem', 'poetry', 'verse', 'stanza', 'rhyme', 'lines', 'lyric'],
+    full: () => `${tOr('styles.poem', 'Poetry / Verse')}`, short: () => tOr('app.styles.short_poem', 'Poem'), mini: () => tOr('app.styles.short_poem', 'Poem') },
+  { value: 'exercise', slash: 'exercise', icon: 'i:help-circle', title: 'Exercise Question', desc: 'Numbered exercise question (1-5 / 3-5)',
+    keywords: ['exercise', 'question', 'problem', 'homework', 'task', 'exam', 'quiz', 'subquestion'],
+    full: () => `${tOr('styles.exercise', 'Exercise Question')}`, short: () => tOr('app.styles.short_exercise', 'Exercise'), mini: () => tOr('app.styles.mini_exercise', 'Ex') },
+  // A caption and an attribution are two different DTBook elements (<caption>, <byline>).
+  // There is only ONE attribution style — no separate "Byline" style (G1, 16 Sep).
+  { value: 'caption', slash: 'caption', slashKey: 'figcaption', icon: 'i:chat-bubble-empty', title: 'Caption', desc: 'Figure or image caption (7-5)',
+    keywords: ['caption', 'photo', 'figure', 'image', 'label'],
+    full: () => `${tOr('app.styles.caption', 'Caption')}`, short: () => tOr('app.styles.short_caption', 'Caption'), mini: () => tOr('app.styles.mini_caption', 'Cap') },
+  { value: 'attribution', slash: 'attribution', icon: 'i:edit-pencil', title: 'Attribution', desc: 'Source or author line, saved as <byline> (cell 5)',
+    keywords: ['attribution', 'byline', 'author', 'source', 'credit'],
+    full: () => `${tOr('app.styles.attribution', 'Attribution')}`, short: () => tOr('app.styles.short_attribution', 'Attrib'), mini: () => tOr('app.styles.mini_attribution', 'Attr') },
+  { value: 'footnote', slash: 'footnote', icon: 'i:notes', title: 'Footnote', desc: 'Footnote note text (1-3)',
+    keywords: ['footnote', 'note', 'reference', 'citation', 'annotation', 'fn'],
+    full: () => `${tOr('styles.footnote', 'Footnote')}`, short: () => tOr('app.styles.short_footnote', 'Footnote'), mini: () => tOr('app.styles.mini_footnote', 'Fn') },
+  { value: 'note', slash: 'note', icon: 'i:info-circle', title: "Transcriber's Note", desc: "Transcriber's note with BANA indicators (7-5)",
+    keywords: ['note', 'transcriber', 'transcriber note', 'tn', 'prodnote', 'comment', 'remark'],
+    full: () => `${tOr('styles.note', "Transcriber's Note")}`, short: () => tOr('app.styles.short_note', 'Note'), mini: () => tOr('app.styles.mini_note', 'TN') },
+  { value: 'sidebar', slash: 'sidebar', icon: 'i:box-iso', title: 'Sidebar Box', desc: 'Insert callout box with BANA boxlines',
+    keywords: ['sidebar', 'box', 'callout', 'panel', 'aside'], slashAction: () => insertSidebar(),
+    full: () => `${tOr('app.styles.sidebar', 'Sidebar Box')}`, short: () => tOr('app.styles.short_sidebar', 'Sidebar'), mini: () => tOr('app.styles.mini_sidebar', 'Box') },
+  { value: 'titlepage', slash: 'titlepage', icon: 'i:open-book', title: 'Title Page', desc: 'Insert the Title Page (BANA 2.3.3), at the start of the book',
+    keywords: ['title', 'titlepage', 'title page', 'cover', 'front matter'], slashAction: () => insertTitlePage(),
+    full: () => `${tOr('app.styles.titlepage', 'Title Page')}`, short: () => tOr('app.styles.short_titlepage', 'Title Page'), mini: () => tOr('app.styles.mini_titlepage', 'TP') },
+  { value: 'tnpage', slash: 'tnpage', icon: 'i:multiple-pages-empty', title: "Transcriber's Notes Page", desc: "Insert a Transcriber's Notes page (own page, 3-1 entries, no indicators)",
+    keywords: ['transcriber', 'notes', 'tn', 'tnpage', 'page', 'front matter', 'notes page'], slashAction: () => insertTnPage(),
+    full: () => `${tOr('app.styles.tnpage', "Transcriber's Notes Page")}`, short: () => tOr('app.styles.short_tnpage', 'TN Page'), mini: () => tOr('app.styles.mini_tnpage', 'TNP') },
+  // UK-8 (28 Sep): "UKAAF has no Special Symbols page... the style/slash/insert UI doesn't offer it in
+  // UKAAF mode" — `when` keeps it out of the dropdown/slash menu while settings.mode isn't 'bana' (a
+  // UKAAF document that already has one still shows/keeps it: the "current block's own style" exception
+  // in syncStyleOptionVisibility, and the page itself is untouched either way).
+  { value: 'sympage', slash: 'sympage', icon: 'i:hashtag', title: 'Special Symbols Page', desc: 'Insert a Special Symbols page (own page, listed automatically from the document until edited)',
+    keywords: ['special', 'symbols', 'symbol', 'sympage', 'page', 'front matter', 'dot locator', 'bullets'], slashAction: () => insertSymPage(), when: () => settings.mode === 'bana',
+    full: () => `${tOr('app.styles.sympage', 'Special Symbols Page')}`, short: () => tOr('app.styles.short_sympage', 'Symbols Page'), mini: () => tOr('app.styles.mini_sympage', 'SSP') },
+  { value: 'table-spatial', slash: 'table', icon: 'i:table', title: 'Spatial Braille Table', desc: 'Insert 3×3 columnar data table',
+    keywords: ['table', 'grid', 'column', 'row', 'spatial', 'data'], slashAction: () => insertTable(3, 3, 'spatial'),
+    full: () => `${tOr('app.styles.table_spatial', 'Table (Spatial)')}`, short: () => tOr('app.styles.short_table', 'Table'), mini: () => tOr('app.styles.mini_table', 'Tbl') },
+  { value: 'table-listed', slash: 'listedtable', icon: 'i:table-rows', title: 'Listed Table', desc: 'Insert BANA listed linear table format',
+    keywords: ['listedtable', 'table', 'listed', 'linear'], slashAction: () => insertTable(3, 3, 'listed'),
+    full: () => `${tOr('app.styles.table_listed', 'Table (Listed)')}`, short: () => tOr('app.styles.short_table_listed', 'Tbl-List'), mini: () => tOr('app.styles.mini_table_listed', 'List') },
+  { value: 'quote', slash: 'quote', icon: 'i:quote', title: 'Blockquote', desc: 'Indented quotation block (3-1)',
+    keywords: ['quote', 'blockquote', 'quotation', 'citation', 'excerpt', 'indent'],
+    full: () => tOr('styles.quote', 'Blockquote'), short: () => tOr('app.styles.short_quote', 'Quote'), mini: () => tOr('app.styles.mini_quote', 'Quote') },
+  // A print structure (like Blockquote), not a transcriber judgement: in the same audience group as Blockquote (not an everyday
+  // style, so offered with Transcriber tools on; a code block that is already in the document always shows its style).
+  { value: 'code', slash: 'code', icon: 'i:code', title: 'Computer Code', desc: 'Displayed computer code: lines and spaces kept, a grade 1 passage (BANA 19)',
+    keywords: ['code', 'computer', 'program', 'source', 'listing', 'preformatted', 'pre', 'monospace', 'script'],
+    full: () => tOr('styles.code', 'Computer Code'), short: () => tOr('app.styles.short_code', 'Code'), mini: () => tOr('app.styles.mini_code', 'Code') },
+];
+
+// Audience of each style (format/field-registry.mjs EVERYDAY_STYLES, Paul 26 Sep): only the everyday styles are for
+// everyone; the rest, the transcriber pages included, are hidden from the dropdown and the slash menu while
+// "Transcriber tools" is off (the current block's own style excepted — syncStyleOptionVisibility).
+for (const d of BLOCK_STYLES) d.audience = EVERYDAY_STYLES.includes(d.value) ? 'everyone' : 'transcriber';
+
+// (Re)write the dropdown's option labels for a toolbar width mode: 'full' | 'short' | 'mini'.
+// data-full/short/mini carry all three so a screen-reader announcement can use the full one.
+function refreshBlockStyleLabels(mode = 'full') {
+  const sel = document.getElementById('blockStyle');
+  if (!sel) return;
+  const byValue = new Map(BLOCK_STYLES.map((d) => [d.value, d]));
+  for (const opt of allBlockStyleOptions) {
+    const def = byValue.get(opt.value);
+    if (!def) continue;
+    opt.dataset.full = def.full();
+    opt.dataset.short = def.short();
+    opt.dataset.mini = def.mini();
+    opt.textContent = (def[mode] || def.full)();
+  }
+  updateStyleMenuUI();
+}
+// Every style's <option>, in BLOCK_STYLES order, whether or not it is in the dropdown just now: the styles hidden while
+// Transcriber tools is off are taken out of the select, not marked hidden, because Safari's dropdown still lists a
+// hidden option (Paul, 30 Sep) — see syncStyleOptionVisibility.
+const allBlockStyleOptions = [];
+// Build the dropdown's options from BLOCK_STYLES (index.html only holds an empty select).
+function buildBlockStyleSelect() {
+  const sel = document.getElementById('blockStyle');
+  if (!sel) return;
+  sel.textContent = '';
+  allBlockStyleOptions.length = 0;
+  for (const def of BLOCK_STYLES) {
+    const opt = document.createElement('option');
+    opt.value = def.value;
+    allBlockStyleOptions.push(opt);
+    sel.appendChild(opt);
+  }
+  refreshBlockStyleLabels('full');
+}
+buildBlockStyleSelect();
+
+// ---- The style menu: the Insert menu's look, an icon per style (F9 item C1, Paul 9 Oct 2026: "give the style menu icons, so the
+// two menus are one style") ----
+// The toolbar's style control used to be a native <select>, whose dropdown the browser draws (no icons possible). It is now a button
+// (#btnStyleMenu) that opens a listbox (#styleDropdown) styled as the Insert menu (.insert-dropdown / .insert-item / .insert-icon),
+// each row carrying the same icon the slash menu gives that style (BLOCK_STYLES[].icon). The <select id="blockStyle"> STAYS in the
+// page, out of sight and hidden from screen readers (aria-hidden, tabindex -1), as the model: every other part of the editor (and the
+// test suites) reads and sets its value and listens to its `change` event, and picking a row does exactly that. Keyboard: Up/Down
+// (or Alt+Up/Down) on the button open the list on the current style; Up/Down, Home/End and typing a letter move; Enter or Space pick;
+// Esc closes and puts the keyboard back on the button; Tab closes. aria-haspopup=listbox / aria-expanded on the button, role=listbox
+// / option / aria-selected in the list, and the button's name says which style is current.
+function styleMenuBtn() { return document.getElementById('btnStyleMenu'); }   // function declarations: buildBlockStyleSelect() above runs first
+function styleMenuList() { return document.getElementById('styleDropdown'); }
+// A row's label without the leading glyph the toolbar label carries ("¶ Body Text", "1. Numbered List", "H1 Heading"): the icon is
+// shown on its own beside it. The row keeps the full label as its accessible name, so "H1 Heading" is still spoken.
+function styleRowLabel(full, icon) {
+  const ic = String(icon || '');
+  if (!ic || ic.startsWith('i:') || !full.startsWith(ic)) return full;
+  const rest = full.slice(ic.length).replace(/^\s+/, '');
+  return rest || full;
+}
+function styleIconNode(def) {
+  const ico = document.createElement('span');
+  ico.className = 'insert-icon style-icon';
+  ico.setAttribute('aria-hidden', 'true');
+  const ic = String(def.icon || '');
+  if (ic.startsWith('i:')) ico.append(iconEl(ic.slice(2)));
+  else { ico.textContent = ic; if (ic.length > 2) ico.classList.add('style-icon-wide'); if (/^H\d$/.test(ic)) ico.classList.add('style-icon-h'); }
+  return ico;
+}
+function updateStyleMenuUI() {
+  const btn = styleMenuBtn(); const sel = document.getElementById('blockStyle');
+  if (!btn || !sel) return;
+  const opt = sel.selectedOptions[0];
+  const shown = opt ? opt.textContent : '';
+  const lbl = document.getElementById('styleBtnLabel'); if (lbl) lbl.textContent = shown;
+  // The current style's Iconoir icon beside its name (feedback 17 Oct, item 3: the "¶" in "¶ Body Text" was a symbol used as an icon). A style whose
+  // icon is lettering (H1, 1.) keeps its name alone, as before.
+  const def = BLOCK_STYLES.find((d) => d.value === sel.value);
+  const ico = document.getElementById('styleBtnIcon');
+  if (ico) { ico.replaceChildren(); const n = def && String(def.icon || ''); if (n && n.startsWith('i:')) ico.append(iconEl(n.slice(2))); ico.hidden = !ico.firstChild; }
+  const name = `${tOr('app.editor.style_label', 'Paragraph style')}: ${(opt && opt.dataset.full) || shown}`;
+  btn.setAttribute('aria-label', name);
+  btn.title = name;
+  const list = styleMenuList();
+  if (list && !list.hidden) for (const row of list.querySelectorAll('[role=option]')) row.setAttribute('aria-selected', String(row.dataset.value === sel.value));
+}
+function buildStyleMenuRows() {
+  const list = styleMenuList(); const sel = document.getElementById('blockStyle');
+  if (!list || !sel) return;
+  list.setAttribute('aria-label', tOr('app.editor.style_label', 'Paragraph style'));
+  list.textContent = '';
+  for (const opt of sel.options) {
+    const def = BLOCK_STYLES.find((d) => d.value === opt.value);
+    if (!def) continue;
+    const full = opt.dataset.full || def.full();
+    const row = document.createElement('div');
+    row.className = 'insert-item style-item';
+    row.setAttribute('role', 'option');
+    row.tabIndex = -1;
+    row.dataset.value = opt.value;
+    row.setAttribute('aria-selected', String(opt.value === sel.value));
+    row.setAttribute('aria-label', full);
+    const lbl = document.createElement('span');
+    lbl.className = 'insert-lbl';
+    lbl.textContent = styleRowLabel(full, def.icon);
+    const tick = document.createElement('span');
+    tick.className = 'style-tick';
+    tick.setAttribute('aria-hidden', 'true');
+    tick.append(iconEl('check', 'icon icon-inline'));   // Iconoir, not a ✓ character (feedback 17 Oct 2026, item 3)
+    row.append(styleIconNode(def), lbl, tick);
+    list.appendChild(row);
+  }
+}
+function closeStyleMenu(returnFocus = false) {
+  const list = styleMenuList(); const btn = styleMenuBtn();
+  if (!list || list.hidden) return;
+  list.hidden = true;
+  btn?.setAttribute('aria-expanded', 'false');
+  if (returnFocus) btn?.focus({ preventScroll: true });
+}
+function openStyleMenu() {
+  const list = styleMenuList(); const btn = styleMenuBtn(); const wrap = document.getElementById('styleMenuWrap');
+  if (!list || !btn) return;
+  closeAllDropdownMenus();                                   // one menu open at a time (feedback 30 Sep item 16)
+  buildStyleMenuRows();
+  list.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  if (wrap) {                                                // right of the button if it fits, else pinned inside the window's edge (as Insert)
+    const rect = wrap.getBoundingClientRect(); const dropWidth = list.offsetWidth || 200;
+    let left = 0;
+    if (rect.left + dropWidth > window.innerWidth - 8) left = rect.right - dropWidth >= 8 ? rect.width - dropWidth : 8 - rect.left;
+    list.style.left = `${left}px`; list.style.right = 'auto';
+  }
+  const cur = list.querySelector('[aria-selected="true"]') || list.querySelector('[role=option]');
+  cur?.focus({ preventScroll: false });
+  cur?.scrollIntoView?.({ block: 'nearest' });
+}
+function chooseStyle(value) {
+  const sel = document.getElementById('blockStyle');
+  closeStyleMenu(false);
+  if (!sel || !value) return;
+  if (sel.value !== value) { sel.value = value; sel.dispatchEvent(new Event('change', { bubbles: true })); }   // applyBlockStyle listens to this
+  else editor.focus();
+}
+{
+  let typed = ''; let typedAt = 0;
+  const rows = () => [...(styleMenuList()?.querySelectorAll('[role=option]') || [])];
+  const move = (to) => { const r = rows(); if (!r.length) return; const i = Math.max(0, Math.min(r.length - 1, to)); r[i].focus(); r[i].scrollIntoView?.({ block: 'nearest' }); };
+  styleMenuBtn()?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (styleMenuList()?.hidden === false) closeStyleMenu(true); else openStyleMenu();
+  });
+  styleMenuBtn()?.addEventListener('keydown', (e) => {
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !e.ctrlKey && !e.metaKey) { e.preventDefault(); e.stopPropagation(); openStyleMenu(); }
+  });
+  styleMenuList()?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const row = e.target.closest?.('[role=option]');
+    if (row) chooseStyle(row.dataset.value);
+  });
+  styleMenuList()?.addEventListener('keydown', (e) => {
+    const r = rows(); const i = r.indexOf(document.activeElement);
+    const k = e.key;
+    if (k === 'ArrowDown') { e.preventDefault(); e.stopPropagation(); move(i < 0 ? 0 : i + 1); }
+    else if (k === 'ArrowUp') { e.preventDefault(); e.stopPropagation(); move(i < 0 ? r.length - 1 : i - 1); }
+    else if (k === 'Home') { e.preventDefault(); e.stopPropagation(); move(0); }
+    else if (k === 'End') { e.preventDefault(); e.stopPropagation(); move(r.length - 1); }
+    else if (k === 'Enter' || k === ' ') { e.preventDefault(); e.stopPropagation(); if (i >= 0) chooseStyle(r[i].dataset.value); }
+    else if (k === 'Escape') { e.preventDefault(); e.stopPropagation(); closeStyleMenu(true); }
+    else if (k === 'Tab') { closeStyleMenu(false); }
+    else if (k.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {                      // type-ahead, as the native list had
+      const now = Date.now(); typed = now - typedAt > 700 ? k.toLowerCase() : typed + k.toLowerCase(); typedAt = now;
+      const labels = r.map((row) => (row.querySelector('.insert-lbl')?.textContent || '').toLowerCase());
+      const from = typed.length === 1 ? i + 1 : i;                                          // a repeated letter steps on; a longer prefix stays
+      let hit = -1;
+      for (let n = 0; n < labels.length; n++) { const j = (from + n) % labels.length; if (labels[j].startsWith(typed)) { hit = j; break; } }
+      if (hit >= 0) { e.preventDefault(); e.stopPropagation(); move(hit); }
+    }
+  });
+  // Focus leaving the list (a click elsewhere) closes it, unless it went to the button itself.
+  styleMenuList()?.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget;
+    if (next && (styleMenuList().contains(next) || next === styleMenuBtn())) return;
+    if (next === null) return;                                // clicks on non-focusable page areas are closed by the document click handler
+    closeStyleMenu(false);
+  });
+}
+updateStyleMenuUI();
 const brailleEl = $id('braille');
 const editorEl = $id('editor');
 let currentStatusText = '';
@@ -184,6 +527,79 @@ ParagraphNode.prototype.setBlocked = function(v) { this.getWritable().__blocked 
 // A footnote paragraph keeps its note id (the target of note references, A5) and kind.
 ParagraphNode.prototype.getNote = function() { return this.getLatest().__note || null; };
 ParagraphNode.prototype.setNote = function(v) { this.getWritable().__note = v && v.id ? { id: String(v.id), kind: v.kind || null } : null; return this; };
+// A22 / A19-A21 Stage 9: an *imported* <prodnote render="required"> (A19/A21 Stage 7) keeps
+// that value through the editor too — null means "not set", so the exporter's own D6 default
+// ("optional") applies, exactly as for a transcriber's note block Emboss itself creates.
+ParagraphNode.prototype.getRender = function() { return this.getLatest().__render || null; };
+ParagraphNode.prototype.setRender = function(v) { this.getWritable().__render = v || null; return this; };
+// F-5: a transcriber's note that belongs to a table (parse.mjs's parseTable pushes it as a
+// standalone {type:'note', kind:'tabletn'} block right before the table). Both are the same
+// "note" style in the editor, so without this flag the kind is lost on save and
+// nimas-export.mjs's tableIndexForCaption can no longer see past the note to pair the table's
+// caption with the table (the caption then saves as an orphan <imggroup><caption>) and the
+// note loses class="tabletn". Only meaningful while the style is 'note'.
+ParagraphNode.prototype.getTabletn = function() { return !!this.getLatest().__tabletn; };
+ParagraphNode.prototype.setTabletn = function(v) { this.getWritable().__tabletn = !!v; return this; };
+// A19/A21 Stage 2/9: a verse line's own <poem> provenance (parse.mjs's parsePoem/fromPoem) —
+// only a line tagged fromPoem sweeps back into <poem>/<linegroup>/<line> on save; an untagged
+// verse-styled paragraph (BrailleBlaster's own bai-verse, verse drama, D5) is unaffected and
+// keeps saving as <p class="bai-verse">.
+ParagraphNode.prototype.getFromPoem = function() { return !!this.getLatest().__fromPoem; };
+ParagraphNode.prototype.setFromPoem = function(v) { this.getWritable().__fromPoem = !!v; return this; };
+// #49 (D14): which poem a line, stanza break, page turn, title or author belongs to (poemId, parse.mjs's parsePoem) and what a
+// poem's own title / author / byline is (poemRole 'title' | 'author' | 'byline'), so a poem saved from the editor keeps its title and
+// author inside its <poem> and two adjacent titled poems stay two, as when saved straight from the reader (nimas-export.mjs
+// renderPoemRun). Carried on ParagraphNode, HeadingNode, BreakNode and PrintPageNode, the same way as bareLinegroupId.
+ParagraphNode.prototype.getPoemId = function() { const n = this.getLatest().__poemId; return n != null ? n : null; };
+ParagraphNode.prototype.setPoemId = function(v) { this.getWritable().__poemId = v != null ? v : null; return this; };
+ParagraphNode.prototype.getPoemRole = function() { return this.getLatest().__poemRole || null; };
+ParagraphNode.prototype.setPoemRole = function(v) { this.getWritable().__poemRole = v || null; return this; };
+// A verse line of a play (D5: <p class="bai-verse">, block.playVerse): the formatter gives it BANA 14.6.1a's verse-play margins (runover
+// in cell 5), not poetry's (cell 3). Dropped by the editor before 1 Oct 2026, so the editor brailled verse drama as poetry.
+ParagraphNode.prototype.getPlayVerse = function() { return !!this.getLatest().__playVerse; };
+ParagraphNode.prototype.setPlayVerse = function(v) { this.getWritable().__playVerse = !!v; return this; };
+// A19/A21 Stage 5/9: a generic <div class="…"> parse.mjs could not attribute to a single block
+// on its own — see parse.mjs's walk(), the "unknown container" branch's `tag === 'div' && cls`
+// case. divId (a source-side sequence number, not shown or saved on its own) distinguishes two
+// separate, adjacent, identically-classed <div>s from one <div>'s own contiguous content — see
+// nimas-export.mjs's isDivClassBlock/renderDivRun.
+ParagraphNode.prototype.getDivClass = function() { return this.getLatest().__divClass || null; };
+ParagraphNode.prototype.setDivClass = function(v) { this.getWritable().__divClass = v || null; return this; };
+ParagraphNode.prototype.getDivId = function() { const n = this.getLatest().__divId; return n != null ? n : null; };
+ParagraphNode.prototype.setDivId = function(v) { this.getWritable().__divId = v != null ? v : null; return this; };
+// A42: a verse line read from a bare <linegroup>/<stanza> (no <poem> wrapper in the source —
+// see parse.mjs's parsePoem call sites and block.bareLinegroup) must save back without a
+// newly-invented <poem> — see nimas-export.mjs's renderPoemRun's wrapInPoem flag. Same shape
+// as divClass/divId: bareLinegroupId distinguishes two separate, adjacent bare linegroups
+// (no stanza-break between them) from one linegroup's own contiguous content.
+ParagraphNode.prototype.getBareLinegroup = function() { return !!this.getLatest().__bareLinegroup; };
+ParagraphNode.prototype.setBareLinegroup = function(v) { this.getWritable().__bareLinegroup = !!v; return this; };
+ParagraphNode.prototype.getBareLinegroupId = function() { const n = this.getLatest().__bareLinegroupId; return n != null ? n : null; };
+ParagraphNode.prototype.setBareLinegroupId = function(v) { this.getWritable().__bareLinegroupId = v != null ? v : null; return this; };
+// A35/A19-A21 Stage 9 shape: a verse line parsed from a genuine source <line> element (not
+// D5's bare verse drama, <p class="bai-verse"> with no source <line> — see parse.mjs's
+// fromLineTag note) must round-trip as <line>, not collapse to <p class="bai-verse">.
+// blockquoteId (mirrors divClass/divId exactly) marks a run of blocks that came from one source
+// <blockquote> that needed the run mechanism at all — either because its direct children mixed
+// a <line> with other block content (A35, a quoted letter's salutation/signature lines alongside
+// its body <p> — those blocks are additionally tagged fromBlockquoteLines) or simply because it
+// had more than one block child (A40, e.g. a plain multi-paragraph quoted letter). The id (not
+// either flag alone) distinguishes two separate, adjacent such blockquotes from one blockquote's
+// own contiguous content; blockquoteClass (A40) is the source's own <blockquote class="…">, kept
+// alongside — see nimas-export.mjs's isBlockquoteRunBlock/renderBlockquoteRun.
+ParagraphNode.prototype.getFromLineTag = function() { return !!this.getLatest().__fromLineTag; };
+ParagraphNode.prototype.setFromLineTag = function(v) { this.getWritable().__fromLineTag = !!v; return this; };
+ParagraphNode.prototype.getFromBlockquoteLines = function() { return !!this.getLatest().__fromBlockquoteLines; };
+ParagraphNode.prototype.setFromBlockquoteLines = function(v) { this.getWritable().__fromBlockquoteLines = !!v; return this; };
+ParagraphNode.prototype.getBlockquoteId = function() { const n = this.getLatest().__blockquoteId; return n != null ? n : null; };
+ParagraphNode.prototype.setBlockquoteId = function(v) { this.getWritable().__blockquoteId = v != null ? v : null; return this; };
+// F-164 / BANA 3.2.1b: consecutive note paragraphs sharing a noteGroup are ONE transcriber's
+// note (a <prodnote> with several <p>): one @.< ... @.> pair around the whole run, one
+// <prodnote> on save (nimas-export.mjs's mergeNoteGroups). Same run idea as blockquoteId.
+ParagraphNode.prototype.getNoteGroup = function() { const n = this.getLatest().__noteGroup; return n != null ? n : null; };
+ParagraphNode.prototype.setNoteGroup = function(v) { this.getWritable().__noteGroup = v != null ? v : null; return this; };
+ParagraphNode.prototype.getBlockquoteClass = function() { return this.getLatest().__blockquoteClass || null; };
+ParagraphNode.prototype.setBlockquoteClass = function(v) { this.getWritable().__blockquoteClass = v || null; return this; };
 const origParaClone = ParagraphNode.prototype.afterCloneFrom;
 ParagraphNode.prototype.afterCloneFrom = function(prev) {
   if (origParaClone) origParaClone.call(this, prev);
@@ -191,6 +607,32 @@ ParagraphNode.prototype.afterCloneFrom = function(prev) {
   this.__pageTurn = prev.__pageTurn || null;
   this.__note = prev.__note || null;
   this.__blocked = !!prev.__blocked;
+  this.__render = prev.__render || null;
+  this.__tabletn = !!prev.__tabletn;
+  this.__fromPoem = !!prev.__fromPoem;
+  this.__poemId = prev.__poemId != null ? prev.__poemId : null;
+  this.__poemRole = prev.__poemRole || null;
+  this.__playVerse = !!prev.__playVerse;
+  this.__divClass = prev.__divClass || null;
+  this.__divId = prev.__divId != null ? prev.__divId : null;
+  this.__bareLinegroup = !!prev.__bareLinegroup;
+  this.__bareLinegroupId = prev.__bareLinegroupId != null ? prev.__bareLinegroupId : null;
+  this.__fromLineTag = !!prev.__fromLineTag;
+  this.__fromBlockquoteLines = !!prev.__fromBlockquoteLines;
+  this.__blockquoteId = prev.__blockquoteId != null ? prev.__blockquoteId : null;
+  this.__blockquoteClass = prev.__blockquoteClass || null;
+  this.__noteGroup = prev.__noteGroup != null ? prev.__noteGroup : null;
+};
+// #57c: Enter in a footnote paragraph that has a note id (at its end, or in the middle: Lexical then moves the rest into the new
+// paragraph) makes a further paragraph of the SAME note, as Word does -- a footnote paragraph with the same id and kind -- rather than
+// a body paragraph. buildModel marks it noteCont (markNoteParts), so it braille as the note's next paragraph and saves as its next
+// <p>. The style menu still turns it into a body paragraph (a footnote with no id is not joined to the one above, so it stays apart).
+const origParaInsertNewAfterNote = ParagraphNode.prototype.insertNewAfter;   // the "Computer code" Enter rule (#40) wraps this one in turn
+ParagraphNode.prototype.insertNewAfter = function(...args) {
+  const next = origParaInsertNewAfterNote.apply(this, args);
+  const note = this.getNote();
+  if (note && this.getBanaStyle() === 'footnote' && next && typeof next.setNote === 'function') next.setBanaStyle('footnote').setNote({ id: note.id, kind: note.kind });
+  return next;
 };
 const origParaCreateDOM = ParagraphNode.prototype.createDOM;
 ParagraphNode.prototype.createDOM = function(config) {
@@ -253,6 +695,27 @@ ParagraphNode.prototype.exportJSON = function() {
   const note = this.getNote();
   if (note) json.note = note;
   if (this.getBlocked()) json.blocked = true;
+  const render = this.getRender();
+  if (render) json.render = render;
+  if (this.getTabletn()) json.tabletn = true;
+  if (this.getFromPoem()) json.fromPoem = true;
+  if (this.getPoemId() != null) json.poemId = this.getPoemId();
+  if (this.getPoemRole()) json.poemRole = this.getPoemRole();
+  if (this.getPlayVerse()) json.playVerse = true;
+  const divClass = this.getDivClass();
+  if (divClass) { json.divClass = divClass; const divId = this.getDivId(); if (divId != null) json.divId = divId; }
+  if (this.getBareLinegroup()) { json.bareLinegroup = true; const blgId = this.getBareLinegroupId(); if (blgId != null) json.bareLinegroupId = blgId; }
+  if (this.getFromLineTag()) json.fromLineTag = true;
+  if (this.getNoteGroup() != null) json.noteGroup = this.getNoteGroup();
+  // A40: gate on blockquoteId (any run at all), not fromBlockquoteLines (only the A35 subset
+  // that also had a <line>) — see the field comment above ParagraphNode's own getters.
+  const bqId = this.getBlockquoteId();
+  if (bqId != null) {
+    json.blockquoteId = bqId;
+    if (this.getFromBlockquoteLines()) json.fromBlockquoteLines = true;
+    const bqClass = this.getBlockquoteClass();
+    if (bqClass) json.blockquoteClass = bqClass;
+  }
   return json;
 };
 const origParaUpdateFromJSON = ParagraphNode.prototype.updateFromJSON;
@@ -262,6 +725,21 @@ ParagraphNode.prototype.updateFromJSON = function(serializedNode) {
   if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
   if (serializedNode?.note) node.setNote(serializedNode.note);
   if (serializedNode?.blocked) node.setBlocked(true);
+  if (serializedNode?.render) node.setRender(serializedNode.render);
+  if (serializedNode?.tabletn) node.setTabletn(true);
+  if (serializedNode?.fromPoem) node.setFromPoem(true);
+  if (serializedNode?.poemId != null) node.setPoemId(serializedNode.poemId);
+  if (serializedNode?.poemRole) node.setPoemRole(serializedNode.poemRole);
+  if (serializedNode?.playVerse) node.setPlayVerse(true);
+  if (serializedNode?.divClass) { node.setDivClass(serializedNode.divClass); node.setDivId(serializedNode.divId); }
+  if (serializedNode?.bareLinegroup) { node.setBareLinegroup(true); node.setBareLinegroupId(serializedNode.bareLinegroupId); }
+  if (serializedNode?.fromLineTag) node.setFromLineTag(true);
+  if (serializedNode?.noteGroup != null) node.setNoteGroup(serializedNode.noteGroup);
+  if (serializedNode?.blockquoteId != null) {
+    node.setBlockquoteId(serializedNode.blockquoteId);
+    if (serializedNode.fromBlockquoteLines) node.setFromBlockquoteLines(true);
+    if (serializedNode.blockquoteClass) node.setBlockquoteClass(serializedNode.blockquoteClass);
+  }
   return node;
 };
 // A node class's own static importJSON, or null. Lexical nodes declared with $config()
@@ -275,6 +753,21 @@ ParagraphNode.importJSON = function(serializedNode) {
   if (serializedNode?.pageTurn) node.setPageTurn(serializedNode.pageTurn);
   if (serializedNode?.note) node.setNote(serializedNode.note);
   if (serializedNode?.blocked) node.setBlocked(true);
+  if (serializedNode?.render) node.setRender(serializedNode.render);
+  if (serializedNode?.tabletn) node.setTabletn(true);
+  if (serializedNode?.fromPoem) node.setFromPoem(true);
+  if (serializedNode?.poemId != null) node.setPoemId(serializedNode.poemId);
+  if (serializedNode?.poemRole) node.setPoemRole(serializedNode.poemRole);
+  if (serializedNode?.playVerse) node.setPlayVerse(true);
+  if (serializedNode?.divClass) { node.setDivClass(serializedNode.divClass); node.setDivId(serializedNode.divId); }
+  if (serializedNode?.bareLinegroup) { node.setBareLinegroup(true); node.setBareLinegroupId(serializedNode.bareLinegroupId); }
+  if (serializedNode?.fromLineTag) node.setFromLineTag(true);
+  if (serializedNode?.noteGroup != null) node.setNoteGroup(serializedNode.noteGroup);
+  if (serializedNode?.blockquoteId != null) {
+    node.setBlockquoteId(serializedNode.blockquoteId);
+    if (serializedNode.fromBlockquoteLines) node.setFromBlockquoteLines(true);
+    if (serializedNode.blockquoteClass) node.setBlockquoteClass(serializedNode.blockquoteClass);
+  }
   return node;
 };
 
@@ -356,6 +849,11 @@ ListNode.importJSON = function(serializedNode) {
 
 ListItemNode.prototype.getPage = function() { return this.getLatest().__page || null; };
 ListItemNode.prototype.setPage = function(p) { this.getWritable().__page = p || null; return this; };
+// A36: a TOC/index page number that was itself a link (parse.mjs's pageColumnHref) — kept
+// alongside the plain page number, same shape as getPage/setPage, so a save can put the href
+// back around the visible number (see nimas-export.mjs's toc/index list-item cases).
+ListItemNode.prototype.getPageHref = function() { return this.getLatest().__pageHref || null; };
+ListItemNode.prototype.setPageHref = function(h) { this.getWritable().__pageHref = h || null; return this; };
 // The print marker a loaded item had ("3.", "b)") — kept so braille and the save follow print
 // (A26); items typed in the editor have none and are numbered by position.
 const NO_MARKER = '\u0000';                    // a loaded item that had no print marker
@@ -385,6 +883,7 @@ ListItemNode.prototype.afterCloneFrom = function(prev) {
   if (origItemClone) origItemClone.call(this, prev);
   this.__banaStyle = prev.__banaStyle || null;
   this.__page = prev.__page || null;
+  this.__pageHref = prev.__pageHref || null;
   this.__marker = prev.__marker || null;
   this.__bulletPrefix = prev.__bulletPrefix || null;
   this.__level = prev.__level != null ? prev.__level : (prev.__indent != null ? prev.__indent : null);
@@ -399,6 +898,8 @@ ListItemNode.prototype.createDOM = function(config) {
   }
   const page = this.getPage();
   if (page) dom.dataset.page = String(page);
+  const pageHref = this.getPageHref();
+  if (pageHref) dom.dataset.pageHref = String(pageHref);
   const lvl = this.getLevel();
   if (lvl) dom.dataset.level = String(lvl);
   return dom;
@@ -425,12 +926,18 @@ ListItemNode.prototype.updateDOM = function(prevNode, dom, config) {
     else delete dom.dataset.page;
     updated = true;
   }
-  const prevLvl = prevNode ? prevNode.getLevel() : null;
+  const prevPageHref = prevNode ? prevNode.getPageHref() : null;
+  const nextPageHref = this.getPageHref();
+  if (prevPageHref !== nextPageHref) {
+    if (nextPageHref) dom.dataset.pageHref = String(nextPageHref);
+    else delete dom.dataset.pageHref;
+    updated = true;
+  }
+  // prevNode.getLatest() is the new node, so compare with what the DOM shows (Tab / Shift+Tab changed only the level).
   const nextLvl = this.getLevel();
-  if (prevLvl !== nextLvl) {
+  if ((Number(dom.dataset.level) || 0) !== nextLvl) {
     if (nextLvl) dom.dataset.level = String(nextLvl);
     else delete dom.dataset.level;
-    updated = true;
   }
   return updated;
 };
@@ -450,6 +957,8 @@ ListItemNode.prototype.exportJSON = function() {
   if (style) json.banaStyle = style;
   const page = this.getPage();
   if (page != null) json.page = page;
+  const pageHref = this.getPageHref();
+  if (pageHref != null) json.pageHref = pageHref;
   const marker = this.getMarker();
   if (marker) json.marker = marker;
   const bullet = this.getBulletPrefix();
@@ -463,6 +972,7 @@ ListItemNode.prototype.updateFromJSON = function(serializedNode) {
   const node = origItemUpdateFromJSON ? origItemUpdateFromJSON.call(this, serializedNode) : this;
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.pageHref != null) node.setPageHref(serializedNode.pageHref);
   if (serializedNode?.marker) node.setMarker(serializedNode.marker);
   if (serializedNode?.bulletPrefix) node.setBulletPrefix(serializedNode.bulletPrefix);
   if (serializedNode?.level != null) node.setLevel(serializedNode.level);
@@ -473,6 +983,7 @@ ListItemNode.importJSON = function(serializedNode) {
   const node = origItemImportJSON ? origItemImportJSON.call(this, serializedNode) : $createListItemNode(serializedNode?.checked).updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
   if (serializedNode?.page != null) node.setPage(serializedNode.page);
+  if (serializedNode?.pageHref != null) node.setPageHref(serializedNode.pageHref);
   if (serializedNode?.marker) node.setMarker(serializedNode.marker);
   if (serializedNode?.bulletPrefix) node.setBulletPrefix(serializedNode.bulletPrefix);
   if (serializedNode?.level != null) node.setLevel(serializedNode.level);
@@ -481,10 +992,23 @@ ListItemNode.importJSON = function(serializedNode) {
 
 HeadingNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
 HeadingNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
+// #49: a poem's own title (poemRole 'title', poemId), as on ParagraphNode
+HeadingNode.prototype.getPoemId = function() { const n = this.getLatest().__poemId; return n != null ? n : null; };
+HeadingNode.prototype.setPoemId = function(v) { this.getWritable().__poemId = v != null ? v : null; return this; };
+HeadingNode.prototype.getPoemRole = function() { return this.getLatest().__poemRole || null; };
+HeadingNode.prototype.setPoemRole = function(v) { this.getWritable().__poemRole = v || null; return this; };
+// Import fix list #57b (Paul, 1 Oct 2026: "the editor should keep the title as its own type"): the document title (a Word/ODT/RTF Title
+// with its Subtitle, Markdown's first heading) is a `title` block to the readers — formatTitle centres each line of it — so a heading
+// that came from one carries this flag (always an h1). A new heading made by the style menu is a fresh node and so is not a title.
+HeadingNode.prototype.getIsTitle = function() { return !!this.getLatest().__isTitle; };
+HeadingNode.prototype.setIsTitle = function(v) { this.getWritable().__isTitle = !!v; return this; };
 const origHeadingClone = HeadingNode.prototype.afterCloneFrom;
 HeadingNode.prototype.afterCloneFrom = function(prev) {
   if (origHeadingClone) origHeadingClone.call(this, prev);
   this.__banaStyle = prev.__banaStyle || null;
+  this.__poemId = prev.__poemId != null ? prev.__poemId : null;
+  this.__poemRole = prev.__poemRole || null;
+  this.__isTitle = !!prev.__isTitle;
 };
 const origHeadingCreateDOM = HeadingNode.prototype.createDOM;
 HeadingNode.prototype.createDOM = function(config) {
@@ -526,20 +1050,192 @@ HeadingNode.prototype.exportJSON = function() {
   };
   const style = this.getBanaStyle();
   if (style) json.banaStyle = style;
+  if (this.getPoemId() != null) json.poemId = this.getPoemId();
+  if (this.getPoemRole()) json.poemRole = this.getPoemRole();
+  if (this.getIsTitle()) json.isTitle = true;
   return json;
 };
 const origHeadingUpdateFromJSON = HeadingNode.prototype.updateFromJSON;
 HeadingNode.prototype.updateFromJSON = function(serializedNode) {
   const node = origHeadingUpdateFromJSON ? origHeadingUpdateFromJSON.call(this, serializedNode) : this;
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.poemId != null) node.setPoemId(serializedNode.poemId);
+  if (serializedNode?.poemRole) node.setPoemRole(serializedNode.poemRole);
+  if (serializedNode?.isTitle) node.setIsTitle(true);
   return node;
 };
 const origHeadingImportJSON = ownImportJSON(HeadingNode);
 HeadingNode.importJSON = function(serializedNode) {
   const node = origHeadingImportJSON ? origHeadingImportJSON.call(this, serializedNode) : $createHeadingNode(serializedNode?.tag || 'h1').updateFromJSON(serializedNode);
   if (serializedNode?.banaStyle) node.setBanaStyle(serializedNode.banaStyle);
+  if (serializedNode?.poemId != null) node.setPoemId(serializedNode.poemId);
+  if (serializedNode?.poemRole) node.setPoemRole(serializedNode.poemRole);
+  if (serializedNode?.isTitle) node.setIsTitle(true);
   return node;
 };
+
+// Optional BANA formatter fields (see nimas-export.mjs's BANA_FLAG_FIELDS for the DTBook forms) live on
+// the node as ONE plain object, `fmt` — only set (truthy) keys are stored, so a node without any is
+// exactly as before. It follows the same paths as every other node field: clone, the DOM (data-bana-fmt,
+// so a change re-renders), exportJSON/importJSON (undo history, editor-state snapshots) and the
+// model <-> node conversion (fmtToBlock / fmtFromBlock below).
+const cleanFmt = (o) => {
+  const out = {};
+  for (const [k, v] of Object.entries(o || {})) if (v !== undefined && v !== null && v !== false && v !== '' && !(Array.isArray(v) && !v.length)) out[k] = v;
+  return Object.keys(out).length ? out : null;
+};
+function installFmt(Klass) {
+  const P = Klass.prototype;
+  P.getFmt = function() { return this.getLatest().__fmt || null; };
+  P.setFmt = function(o) { this.getWritable().__fmt = cleanFmt(o); return this; };
+  const oc = P.afterCloneFrom;
+  P.afterCloneFrom = function(prev) { if (oc) oc.call(this, prev); this.__fmt = prev.__fmt ? { ...prev.__fmt } : null; };
+  const od = P.createDOM;
+  P.createDOM = function(config) {
+    const dom = od.call(this, config);
+    const f = this.getFmt();
+    if (f) dom.dataset.banaFmt = Object.keys(f).join(' ');
+    return dom;
+  };
+  const ou = P.updateDOM;
+  P.updateDOM = function(prevNode, dom, config) {
+    let updated = ou.call(this, prevNode, dom, config);
+    const a = prevNode ? prevNode.getFmt() : null, b = this.getFmt();
+    if (JSON.stringify(a) !== JSON.stringify(b)) {
+      if (b) dom.dataset.banaFmt = Object.keys(b).join(' '); else delete dom.dataset.banaFmt;
+      updated = true;
+    }
+    return updated;
+  };
+  const oe = P.exportJSON;
+  P.exportJSON = function() { const json = oe.call(this); const f = this.getFmt(); if (f) json.fmt = { ...f }; return json; };
+  const ouf = P.updateFromJSON;
+  P.updateFromJSON = function(serializedNode) { const node = ouf.call(this, serializedNode); if (serializedNode?.fmt) node.setFmt(serializedNode.fmt); return node; };
+  const oi = Klass.importJSON;
+  Klass.importJSON = function(serializedNode) { const node = oi.call(this, serializedNode); if (serializedNode?.fmt) node.setFmt(serializedNode.fmt); return node; };
+}
+[ParagraphNode, HeadingNode, ListNode, ListItemNode].forEach(installFmt);
+// Which optional formatter fields each kind of node keeps in its fmt: DERIVED from format/field-registry.mjs (each
+// field's `carry` list), so the editor, the save format and the dialog cannot drift apart. Buckets: a heading, a list,
+// a list item, any paragraph (body / verse / speaker / note / footnote / code), the note-level fields repeated on every
+// paragraph of a note group, a print page change, a table, and the page-break-only nodes (box, picture, tactile graphic).
+const FMT_HEADING_KEYS = fmtKeysFor('heading');
+const FMT_CODE_KEYS = fmtKeysFor('code');             // dotLocator / keepSpaces / spaceLetters: the paragraph is a code block
+const FMT_LIST_KEYS = fmtKeysFor('list');
+const FMT_ITEM_KEYS = fmtKeysFor('item');
+const FMT_PARA_KEYS = fmtKeysFor('para');
+const FMT_NOTE_KEYS = fmtKeysFor('note');
+const FMT_PAGENUM_KEYS = fmtKeysFor('pagenum');
+const FMT_TABLE_KEYS = fmtKeysFor('table');
+const FMT_PBB_KEYS = fmtKeysFor('pbb');   // a box, a picture or a tactile graphic
+// A field whose explicit "off" (false) matters (repeatHeadings, continuedNote: an opt-out of a default) is kept as a marker,
+// because fmt drops false values; it is turned back into false on the way to the model (registry `offMarker`).
+const FMT_OFF_KEYS = fmtOffKeys();
+const FMT_OFF = REGISTRY_FMT_OFF;
+const fmtOf = (node) => (node && typeof node.getFmt === 'function' ? node.getFmt() : null);
+
+// ---- G8 stage 3: print markers of a (flat, level-tagged) list, per LEVEL and per sibling group ----
+// A sibling group = the run of items at one level between two items of a shallower level. Its first item carries the
+// group's `enum` (1/a/A/i/I) and `start` in fmt (same place parse/export put them). One pure function is used by the
+// print view (data-marker), by save (nodeToBlocks) and by the chooser, so they cannot disagree.
+const LIST_DEFAULT_GLYPHS = ['•', '◦', '▪'];
+const LIST_ENUMS = ['1', 'a', 'A', 'i', 'I'];
+const BULLET_NAME_GLYPH = { dot: '•', 'hollow square': '□', 'solid square': '■', 'hollow circle': '○', triangle: '▲', checkmark: '√' };
+const defaultEnumForLevel = (lvl) => (lvl === 1 ? 'a' : lvl === 2 ? 'i' : lvl === 3 ? 'A' : '1');
+// Group index of every item: gi[i] = index of the first item of i's group; pos[i] = 0-based place in the group.
+// An `empty` item takes a place without using one (save drops empty items, so numbering must not count them).
+function listGroups(items) {
+  const n = items.length, gi = new Array(n), pos = new Array(n), first = [], cnt = [];
+  for (let i = 0; i < n; i++) {
+    const L = Math.max(0, Math.min(9, items[i].level | 0));
+    if (first[L] == null) { first[L] = i; cnt[L] = 0; }
+    gi[i] = first[L];
+    pos[i] = cnt[L];
+    if (!items[i].empty) cnt[L]++;
+    for (let l = L + 1; l < 10; l++) first[l] = null;
+  }
+  return { gi, pos };
+}
+// items: [{ level, kept (li.getMarker(): null | NO_MARKER | text), fmt, empty }]; listType 'number' | 'bullet'.
+// Returns [{ kind: 'none'|'ordered'|'bullet', text (what the print view shows), marker (what save stores for a typed item) }].
+function planListMarkers(items, listType, symbols) {
+  const { gi, pos } = listGroups(items);
+  const seq = Array.isArray(symbols) && symbols.length ? symbols : LIST_DEFAULT_GLYPHS;
+  const levelGlyph = (lvl) => seq[Math.min(lvl, seq.length - 1)];
+  const groupKind = new Map();
+  items.forEach((it, i) => { if (it.kept && it.kept !== NO_MARKER && !groupKind.has(gi[i])) groupKind.set(gi[i], isBulletMarker(it.kept) ? 'bullet' : 'ordered'); });
+  return items.map((it, i) => {
+    const lvl = Math.max(0, Math.min(9, it.level | 0));
+    const f = it.fmt || {};
+    const g = groupKind.get(gi[i]) || (listType === 'bullet' ? 'bullet' : 'ordered');
+    let kind = g;
+    if (it.kept === NO_MARKER) kind = 'none';
+    else if (it.kept) kind = isBulletMarker(it.kept) ? 'bullet' : 'ordered';
+    if (kind === 'none') return { kind, text: '', marker: null };
+    const explicit = (f.bullet && BULLET_NAME_GLYPH[bulletName(f.bullet)]) || (f.bulletMarker && f.bulletMarker !== '•' ? f.bulletMarker : null) || (it.kept && it.kept !== '•' && isBulletMarker(it.kept) ? it.kept : null);
+    const glyph = explicit || levelGlyph(lvl);
+    if (kind === 'bullet') return { kind, text: glyph, marker: explicit ? null : '•' };
+    let text = it.kept;
+    if (!text) {
+      const gf = items[gi[i]].fmt || {};
+      const en = LIST_ENUMS.includes(gf.enum) ? gf.enum : defaultEnumForLevel(lvl);
+      const st = Math.max(1, Math.floor(Number(gf.start)) || 1);
+      const n = st + pos[i];
+      text = (!LIST_ENUMS.includes(gf.enum) && lvl >= 4) ? `(${n})` : synthesizeOrderedMarker(n, en);
+    }
+    return { kind, text: f.bullet && BULLET_NAME_GLYPH[bulletName(f.bullet)] ? `${glyph} ${text}` : text, marker: it.kept ? null : text };
+  });
+}
+// Lexical list -> planListMarkers input (runs in an editor read/update).
+// A list item's further paragraph (model item.blocks, see document.mjs formatItemBlocks) is a list line of its own in the
+// editor, flagged fmt.itemCont: it shows no marker and takes no place in the numbering (planned as an empty, unmarked item).
+const isItemContLi = (li) => !!(fmtOf(li) || {}).itemCont;
+const listItemsForPlan = (list, emptyOf) => list.getChildren().filter($isListItemNode).map((li) => ({
+  node: li, level: li.getLevel() || 0, kept: isItemContLi(li) ? NO_MARKER : li.getMarker(), fmt: fmtOf(li),
+  empty: isItemContLi(li) || (emptyOf ? emptyOf(li) : li.getTextContent().trim() === '' && !li.getChildren().some((c) => typeof c.getType === 'function' && !['text', 'linebreak'].includes(c.getType()))),
+}));
+// Print view: put each list item's marker on its <li> as data-marker (CSS draws it). Only DOM attributes; the model is untouched.
+function refreshListMarkers(editorState, dirtyElements, tags) {
+  try {
+    editorState.read(() => {
+      const lists = new Map();
+      const add = (n) => { if ($isListNode(n)) lists.set(n.getKey(), n); };
+      if (!dirtyElements || (tags && tags.has('historic'))) { for (const n of editorState._nodeMap.values()) add(n); }
+      else for (const k of dirtyElements.keys()) { const n = $getNodeByKey(k); if ($isListItemNode(n)) add(n.getParent()); else add(n); }
+      for (const list of lists.values()) {
+        const type = typeof list.getListType === 'function' ? list.getListType() : null;
+        const kind = (typeof list.getListKind === 'function' ? list.getListKind() : null) || (typeof list.getBanaStyle === 'function' ? list.getBanaStyle() : null);
+        const eligible = (type === 'number' || type === 'bullet') && !['toc', 'index', 'plain', 'glossary'].includes(kind);
+        const items = listItemsForPlan(list);
+        const plan = eligible ? planListMarkers(items, type, (fmtOf(list) || {}).symbols) : null;
+        items.forEach((it, i) => {
+          const el = editor.getElementByKey(it.node.getKey());
+          if (!el) return;
+          const txt = plan && !it.node.getChildren().some($isListNode) ? plan[i].text : '';
+          if (txt) { if (el.dataset.marker !== txt) el.dataset.marker = txt; }
+          // An item planned with no marker (its printed label, e.g. "1.1", is part of its text): an EMPTY data-marker, so
+          // the CSS still hides the browser's own a./i. marker (30 Sep: "a. 1.1 alphalegal11" in an ODT legal list).
+          else if (plan && plan[i].kind === 'none') { if (el.dataset.marker !== '') el.dataset.marker = ''; }
+          else if (el.dataset.marker != null) delete el.dataset.marker;
+        });
+      }
+    });
+  } catch (err) { console.warn('refreshListMarkers', err); }
+}
+function fmtToBlock(block, node, keys) {
+  const f = fmtOf(node);
+  if (f) for (const k of keys) if (f[k] != null) block[k] = f[k] === FMT_OFF && FMT_OFF_KEYS.includes(k) ? false : f[k];
+  return block;
+}
+function fmtFromBlock(node, b, keys) {
+  const o = {};
+  for (const k of keys) {
+    if (b[k] === false && FMT_OFF_KEYS.includes(k)) o[k] = FMT_OFF;
+    else if (b[k] != null && b[k] !== false && b[k] !== '') o[k] = b[k];
+  }
+  if (Object.keys(o).length) node.setFmt({ ...(fmtOf(node) || {}), ...o });
+  return node;
+}
 
 QuoteNode.prototype.getBanaStyle = function() { return this.getLatest().__banaStyle || null; };
 QuoteNode.prototype.setBanaStyle = function(s) { this.getWritable().__banaStyle = s || null; return this; };
@@ -602,6 +1298,33 @@ const $createBanaParagraphNode = (style) => {
   return p;
 };
 
+// Enter in a "Computer code" paragraph (#40) is a new LINE of the same block, as Shift+Enter: a listing is one block (one grade-1
+// passage in the braille, one <p class="bana-code"> in the save), not a paragraph per line, which would braille as many
+// passages. Pasted lines (Lexical's paste calls insertParagraph for each newline) stay in the block the same way. Enter on an
+// empty last line (a second Enter at the end) leaves the block: the empty line goes and an ordinary paragraph follows; Enter in
+// an empty code paragraph turns it into an ordinary one. (Lexical's insertParagraph asks the paragraph for the node to continue
+// in; answering null after the line break is inserted leaves it nothing else to do.)
+const origParaInsertNewAfter = ParagraphNode.prototype.insertNewAfter;
+ParagraphNode.prototype.insertNewAfter = function(selection, restoreSelection) {
+  if (this.getBanaStyle() !== 'code' || !$isRangeSelection(selection)) return origParaInsertNewAfter.call(this, selection, restoreSelection);
+  const last = this.getLastChild();
+  const a = selection.anchor, at = a.getNode();
+  const atEnd = selection.isCollapsed() && (at.is(this) ? a.offset >= this.getChildrenSize() : ($isTextNode(at) && this.isParentOf(at) && a.offset >= at.getTextContentSize() && !at.getNextSibling()));
+  if (!last) {                                              // an empty code paragraph: Enter makes it an ordinary one
+    const plain = $createParagraphNode();
+    this.replace(plain);
+    return plain;
+  }
+  if (atEnd && $isLineBreakNode(last)) {                    // on the empty last line: leave the block
+    last.remove();
+    const plain = $createParagraphNode();
+    this.insertAfter(plain, restoreSelection);
+    return plain;
+  }
+  selection.insertLineBreak();
+  return null;
+};
+
 // ---- custom nodes ----
 // An equation. The editor edits LaTeX (MathLive), but an equation loaded from a document
 // also keeps its original MathML: until the user changes it, that MathML is what is saved
@@ -641,22 +1364,55 @@ const $isNoteRefNode = (n) => n instanceof NoteRefNode;
 // alt="…"/> again (the src is kept only for that round trip, never shown or brailled).
 class ImgNoteNode extends TextNode {
   static getType() { return 'emboss-imgnote'; }
-  static clone(n) { return new ImgNoteNode(n.__text, n.__src, n.__key); }
+  static clone(n) { const c = new ImgNoteNode(n.__text, n.__src, n.__key); c.__extra = n.__extra ? { ...n.__extra } : null; return c; }
   constructor(text = '', src = null, key) {
     super(text, key);
     this.__src = src || null;
+    this.__extra = null;     // { uncontracted, prodnote, render } of the source note (17.11.2b, F-S4-02), kept for the save
   }
   getSrc() { return this.getLatest().__src; }
+  getExtra() { return this.getLatest().__extra || null; }
+  setExtra(o) {
+    const e = {};
+    if (o && o.uncontracted) e.uncontracted = true;
+    if (o && o.spanTypeform) e.spanTypeform = true;   // 18.3.3c
+    if (o && o.prodnote) { e.prodnote = true; if (o.render) e.render = o.render; }
+    this.getWritable().__extra = Object.keys(e).length ? e : null;
+    return this;
+  }
   createDOM(config) {
     const dom = super.createDOM(config);
     dom.classList.add('ed-imgnote');
     return dom;
   }
-  exportJSON() { return { ...super.exportJSON(), type: 'emboss-imgnote', version: 1, src: this.__src }; }
-  static importJSON(j) { return new ImgNoteNode(j.text || '', j.src || null).updateFromJSON(j).setMode('token'); }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-imgnote', version: 1, src: this.__src, ...(this.__extra ? { extra: { ...this.__extra } } : {}) }; }
+  static importJSON(j) { return new ImgNoteNode(j.text || '', j.src || null).updateFromJSON(j).setMode('token').setExtra(j.extra); }
 }
-const $createImgNoteNode = (text, src = null) => new ImgNoteNode(text, src).setMode('token');
+const $createImgNoteNode = (text, src = null, extra = null) => new ImgNoteNode(text, src).setMode('token').setExtra(extra);
 const $isImgNoteNode = (n) => n instanceof ImgNoteNode;
+// Literal braille cells inside prose ({type:'brl'}: grouping indicators, transcriber-defined symbols, dot locators):
+// an atomic run carrying the cells (title on the save's <span class="bana-brl">) and its print text (may be empty:
+// a zero-width space keeps the run alive in the editor and is dropped again on save). Same token shape as ImgNoteNode.
+const BRL_EMPTY = '\u200B';
+class BrlNode extends TextNode {
+  static getType() { return 'emboss-brl'; }
+  static clone(n) { return new BrlNode(n.__text, n.__brl, n.__key); }
+  constructor(text = '', brl = '', key) {
+    super(text || BRL_EMPTY, key);
+    this.__brl = brl || '';
+  }
+  getBrl() { return this.getLatest().__brl; }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-brl');
+    dom.title = this.__brl;
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-brl', version: 1, brl: this.__brl }; }
+  static importJSON(j) { return new BrlNode(j.text || '', j.brl || '').updateFromJSON(j).setMode('token'); }
+}
+const $createBrlNode = (text, brl) => new BrlNode(text, brl).setMode('token');
+const $isBrlNode = (n) => n instanceof BrlNode;
 // A print line number in prose (A30): an atomic mark, shown small in the margin colour;
 // braille puts it at the right margin (BANA Formats §15.3) and the save writes
 // <span class="linenum"> again.
@@ -676,6 +1432,46 @@ class LineNumberNode extends TextNode {
 }
 const $createLineNumberNode = (text) => new LineNumberNode(text).setMode('token');
 const $isLineNumberNode = (n) => n instanceof LineNumberNode;
+// A hyperlink (DTBook <a href>, A19/A21 Stage 3): an atomic run carrying its target href,
+// so a save round trip keeps the link instead of silently unwrapping it to plain text.
+// Braille still renders the link text as ordinary text — BANA has no convention for print
+// hyperlinks, so the href is carried for the save only, same as ImgNoteNode's @src.
+// Same token-node shape as NoteRefNode/ImgNoteNode above (see those for why): the run is
+// one atomic unit rather than per-character editable text.
+class LinkNode extends TextNode {
+  static getType() { return 'emboss-link'; }
+  static clone(n) { return new LinkNode(n.__text, n.__href, n.__key); }
+  constructor(text = '', href = null, key) {
+    super(text, key);
+    this.__href = href || null;
+  }
+  getHref() { return this.getLatest().__href; }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-link');
+    if (this.__href) dom.title = this.__href;
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-link', version: 1, href: this.__href }; }
+  static importJSON(j) { return new LinkNode(j.text || '', j.href || null).updateFromJSON(j).setMode('token'); }
+}
+const $createLinkNode = (text, href = null) => new LinkNode(text, href).setMode('token');
+const $isLinkNode = (n) => n instanceof LinkNode;
+// An inline citation (DTBook <cite>, A19/A21 Stage 4): same shape as LinkNode — an atomic
+// run marked so the save writes <cite> around it again. Braille renders it as ordinary text.
+class CiteNode extends TextNode {
+  static getType() { return 'emboss-cite'; }
+  static clone(n) { return new CiteNode(n.__text, n.__key); }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-cite');
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-cite', version: 1 }; }
+  static importJSON(j) { return new CiteNode(j.text || '').updateFromJSON(j).setMode('token'); }
+}
+const $createCiteNode = (text) => new CiteNode(text).setMode('token');
+const $isCiteNode = (n) => n instanceof CiteNode;
 
 class MathNode extends DecoratorNode {
   static getType() { return 'emboss-math'; }
@@ -719,13 +1515,60 @@ const $isMathNode = (n) => n instanceof MathNode;
 class BreakNode extends DecoratorNode {
   __kind = 'asterisks';
   static getType() { return 'emboss-break'; }
-  static clone(n) { return new BreakNode(n.__kind || 'asterisks', n.__key); }
+  static clone(n) {
+    const c = new BreakNode(n.__kind || 'asterisks', n.__key);
+    c.__fromPoem = !!n.__fromPoem;
+    c.__poemId = n.__poemId != null ? n.__poemId : null;   // #49
+    c.__divClass = n.__divClass || null;
+    c.__divId = n.__divId != null ? n.__divId : null;
+    c.__bareLinegroup = !!n.__bareLinegroup;
+    c.__bareLinegroupId = n.__bareLinegroupId != null ? n.__bareLinegroupId : null;
+    c.__fromBlockquoteLines = !!n.__fromBlockquoteLines;
+    c.__blockquoteId = n.__blockquoteId != null ? n.__blockquoteId : null;
+    c.__blockquoteClass = n.__blockquoteClass || null;
+    return c;
+  }
   constructor(kind = 'asterisks', key) {
     super(key);
     this.__kind = kind || 'asterisks';
+    // A19/A21 Stage 2/9: a stanza-break indicator inside a poem (parse.mjs's parsePoem tags
+    // it fromPoem, same as its verse lines) and/or a generic <div class="…"> wrapper
+    // (Stage 5/9) — same shape as ParagraphNode's own fields, see there for why.
+    this.__fromPoem = false;
+    this.__poemId = null;       // #49
+    this.__divClass = null;
+    this.__divId = null;
+    // A42: same shape as divClass/divId, for a stanza-break indicator that fell inside a bare
+    // <linegroup>/<stanza> (no <poem> wrapper in the source).
+    this.__bareLinegroup = false;
+    this.__bareLinegroupId = null;
+    // A35/A40: same shape as divClass/divId, for a break indicator that fell inside a
+    // <blockquote> run (see ParagraphNode's own fromBlockquoteLines/blockquoteId/
+    // blockquoteClass note).
+    this.__fromBlockquoteLines = false;
+    this.__blockquoteId = null;
+    this.__blockquoteClass = null;
   }
   getKind() { return this.getLatest().__kind || 'asterisks'; }
   setKind(k) { this.getWritable().__kind = k || 'asterisks'; }
+  getFromPoem() { return !!this.getLatest().__fromPoem; }
+  setFromPoem(v) { this.getWritable().__fromPoem = !!v; return this; }
+  getPoemId() { const n = this.getLatest().__poemId; return n != null ? n : null; }   // #49
+  setPoemId(v) { this.getWritable().__poemId = v != null ? v : null; return this; }
+  getDivClass() { return this.getLatest().__divClass || null; }
+  setDivClass(v) { this.getWritable().__divClass = v || null; return this; }
+  getDivId() { const n = this.getLatest().__divId; return n != null ? n : null; }
+  setDivId(v) { this.getWritable().__divId = v != null ? v : null; return this; }
+  getBareLinegroup() { return !!this.getLatest().__bareLinegroup; }
+  setBareLinegroup(v) { this.getWritable().__bareLinegroup = !!v; return this; }
+  getBareLinegroupId() { const n = this.getLatest().__bareLinegroupId; return n != null ? n : null; }
+  setBareLinegroupId(v) { this.getWritable().__bareLinegroupId = v != null ? v : null; return this; }
+  getFromBlockquoteLines() { return !!this.getLatest().__fromBlockquoteLines; }
+  setFromBlockquoteLines(v) { this.getWritable().__fromBlockquoteLines = !!v; return this; }
+  getBlockquoteId() { const n = this.getLatest().__blockquoteId; return n != null ? n : null; }
+  setBlockquoteId(v) { this.getWritable().__blockquoteId = v != null ? v : null; return this; }
+  getBlockquoteClass() { return this.getLatest().__blockquoteClass || null; }
+  setBlockquoteClass(v) { this.getWritable().__blockquoteClass = v || null; return this; }
   createDOM() {
     const d = document.createElement('div');
     d.className = 'doc-break';
@@ -735,20 +1578,74 @@ class BreakNode extends DecoratorNode {
   updateDOM() { return false; }
   decorate() { return null; }              // static content — nothing to mount
   isInline() { return false; }
-  exportJSON() { return { type: 'emboss-break', version: 1, kind: this.__kind }; }
-  static importJSON(j) { return new BreakNode(j?.kind || 'asterisks'); }
+  exportJSON() {
+    const j = { type: 'emboss-break', version: 1, kind: this.__kind };
+    if (this.__fromPoem) j.fromPoem = true;
+    if (this.__poemId != null) j.poemId = this.__poemId;   // #49
+    if (this.__divClass) { j.divClass = this.__divClass; j.divId = this.__divId; }
+    if (this.__bareLinegroup) { j.bareLinegroup = true; j.bareLinegroupId = this.__bareLinegroupId; }
+    // A40: gate on blockquoteId (any run at all), not fromBlockquoteLines (only the A35 subset).
+    if (this.__blockquoteId != null) {
+      j.blockquoteId = this.__blockquoteId;
+      if (this.__fromBlockquoteLines) j.fromBlockquoteLines = true;
+      if (this.__blockquoteClass) j.blockquoteClass = this.__blockquoteClass;
+    }
+    return j;
+  }
+  static importJSON(j) {
+    const n = new BreakNode(j?.kind || 'asterisks');
+    if (j?.fromPoem) n.__fromPoem = true;
+    if (j?.poemId != null) n.__poemId = j.poemId;   // #49
+    if (j?.divClass) { n.__divClass = j.divClass; n.__divId = j.divId != null ? j.divId : null; }
+    if (j?.bareLinegroup) { n.__bareLinegroup = true; n.__bareLinegroupId = j.bareLinegroupId != null ? j.bareLinegroupId : null; }
+    if (j?.blockquoteId != null) {
+      n.__blockquoteId = j.blockquoteId;
+      if (j.fromBlockquoteLines) n.__fromBlockquoteLines = true;
+      if (j.blockquoteClass) n.__blockquoteClass = j.blockquoteClass;
+    }
+    return n;
+  }
 }
 const $createBreakNode = (kind = 'asterisks') => new BreakNode(kind);
 const $isBreakNode = (n) => n instanceof BreakNode;
 
 class PrintPageNode extends DecoratorNode {
   static getType() { return 'emboss-print-page'; }
-  static clone(n) { const c = new PrintPageNode(n.__page, n.__key); c.__pnId = n.__pnId || null; c.__pageType = n.__pageType || null; return c; }
+  static clone(n) {
+    const c = new PrintPageNode(n.__page, n.__key);
+    c.__pnId = n.__pnId || null;
+    c.__pageType = n.__pageType || null;
+    c.__fromPoem = !!n.__fromPoem;
+    c.__poemId = n.__poemId != null ? n.__poemId : null;   // #49
+    c.__divClass = n.__divClass || null;
+    c.__divId = n.__divId != null ? n.__divId : null;
+    c.__bareLinegroup = !!n.__bareLinegroup;
+    c.__bareLinegroupId = n.__bareLinegroupId != null ? n.__bareLinegroupId : null;
+    c.__fromBlockquoteLines = !!n.__fromBlockquoteLines;
+    c.__blockquoteId = n.__blockquoteId != null ? n.__blockquoteId : null;
+    c.__blockquoteClass = n.__blockquoteClass || null;
+    return c;
+  }
   constructor(page = '1', key) {
     super(key);
     this.__page = String(page);
     this.__pnId = null;          // the source <pagenum> id and page type, kept for the save (A26)
     this.__pageType = null;
+    // Same shape as BreakNode above (A19/A21 Stage 2/5/9): a print page turn that fell inside
+    // a <poem>, or inside a generic classed <div> — parse.mjs tags either onto a pagenum block.
+    this.__fromPoem = false;
+    this.__poemId = null;       // #49
+    this.__divClass = null;
+    this.__divId = null;
+    // A42: same shape as divClass/divId, for a print-page turn that fell inside a bare
+    // <linegroup>/<stanza> (no <poem> wrapper in the source).
+    this.__bareLinegroup = false;
+    this.__bareLinegroupId = null;
+    // A35/A40: same shape as divClass/divId, for a pagenum that fell inside a <blockquote>
+    // run (see ParagraphNode's own fromBlockquoteLines/blockquoteId/blockquoteClass note).
+    this.__fromBlockquoteLines = false;
+    this.__blockquoteId = null;
+    this.__blockquoteClass = null;
   }
   createDOM() {
     const d = document.createElement('div');
@@ -758,13 +1655,77 @@ class PrintPageNode extends DecoratorNode {
   updateDOM() { return false; }
   setPage(p) { this.getWritable().__page = String(p); }
   getPage() { return this.getLatest().__page; }
+  getFromPoem() { return !!this.getLatest().__fromPoem; }
+  setFromPoem(v) { this.getWritable().__fromPoem = !!v; return this; }
+  getPoemId() { const n = this.getLatest().__poemId; return n != null ? n : null; }   // #49
+  setPoemId(v) { this.getWritable().__poemId = v != null ? v : null; return this; }
+  getDivClass() { return this.getLatest().__divClass || null; }
+  setDivClass(v) { this.getWritable().__divClass = v || null; return this; }
+  getDivId() { const n = this.getLatest().__divId; return n != null ? n : null; }
+  setDivId(v) { this.getWritable().__divId = v != null ? v : null; return this; }
+  getBareLinegroup() { return !!this.getLatest().__bareLinegroup; }
+  setBareLinegroup(v) { this.getWritable().__bareLinegroup = !!v; return this; }
+  getBareLinegroupId() { const n = this.getLatest().__bareLinegroupId; return n != null ? n : null; }
+  setBareLinegroupId(v) { this.getWritable().__bareLinegroupId = v != null ? v : null; return this; }
+  getFromBlockquoteLines() { return !!this.getLatest().__fromBlockquoteLines; }
+  setFromBlockquoteLines(v) { this.getWritable().__fromBlockquoteLines = !!v; return this; }
+  getBlockquoteId() { const n = this.getLatest().__blockquoteId; return n != null ? n : null; }
+  setBlockquoteId(v) { this.getWritable().__blockquoteId = v != null ? v : null; return this; }
+  getBlockquoteClass() { return this.getLatest().__blockquoteClass || null; }
+  setBlockquoteClass(v) { this.getWritable().__blockquoteClass = v || null; return this; }
   decorate() { return { type: 'print-page', page: this.getPage() }; }
   isInline() { return false; }
   getSource() { const n = this.getLatest(); return { id: n.__pnId, pageType: n.__pageType }; }
-  exportJSON() { return { type: 'emboss-print-page', version: 1, page: this.__page, ...(this.__pnId ? { id: this.__pnId } : {}), ...(this.__pageType ? { pageType: this.__pageType } : {}) }; }
-  static importJSON(j) { const n = new PrintPageNode(j.page); n.__pnId = j.id || null; n.__pageType = j.pageType || null; return n; }
+  exportJSON() {
+    return {
+      type: 'emboss-print-page', version: 1, page: this.__page,
+      ...(this.__pnId ? { id: this.__pnId } : {}),
+      ...(this.__pageType ? { pageType: this.__pageType } : {}),
+      ...(this.__fromPoem ? { fromPoem: true } : {}),
+      ...(this.__poemId != null ? { poemId: this.__poemId } : {}),   // #49
+      ...(this.__divClass ? { divClass: this.__divClass, divId: this.__divId } : {}),
+      ...(this.__bareLinegroup ? { bareLinegroup: true, bareLinegroupId: this.__bareLinegroupId } : {}),
+      // A40: gate on blockquoteId (any run at all), not fromBlockquoteLines (only the A35 subset).
+      ...(this.__blockquoteId != null ? {
+        blockquoteId: this.__blockquoteId,
+        ...(this.__fromBlockquoteLines ? { fromBlockquoteLines: true } : {}),
+        ...(this.__blockquoteClass ? { blockquoteClass: this.__blockquoteClass } : {}),
+      } : {}),
+    };
+  }
+  static importJSON(j) {
+    const n = new PrintPageNode(j.page);
+    n.__pnId = j.id || null;
+    n.__pageType = j.pageType || null;
+    if (j.fromPoem) n.__fromPoem = true;
+    if (j.poemId != null) n.__poemId = j.poemId;   // #49
+    if (j.divClass) { n.__divClass = j.divClass; n.__divId = j.divId != null ? j.divId : null; }
+    if (j.bareLinegroup) { n.__bareLinegroup = true; n.__bareLinegroupId = j.bareLinegroupId != null ? j.bareLinegroupId : null; }
+    if (j.blockquoteId != null) {
+      n.__blockquoteId = j.blockquoteId;
+      if (j.fromBlockquoteLines) n.__fromBlockquoteLines = true;
+      if (j.blockquoteClass) n.__blockquoteClass = j.blockquoteClass;
+    }
+    return n;
+  }
 }
-const $createPrintPageNode = (page, src = null) => { const n = new PrintPageNode(page); if (src) { n.__pnId = src.id || null; n.__pageType = src.pageType || null; } return n; };
+const $createPrintPageNode = (page, src = null) => {
+  const n = new PrintPageNode(page);
+  if (src) {
+    n.__pnId = src.id || null;
+    n.__pageType = src.pageType || null;
+    if (src.fromPoem) n.__fromPoem = true;
+    if (src.poemId != null) n.__poemId = src.poemId;   // #49
+    if (src.divClass) { n.__divClass = src.divClass; n.__divId = src.divId != null ? src.divId : null; }
+    if (src.bareLinegroup) { n.__bareLinegroup = true; n.__bareLinegroupId = src.bareLinegroupId != null ? src.bareLinegroupId : null; }
+    if (src.blockquoteId != null) {
+      n.__blockquoteId = src.blockquoteId;
+      if (src.fromBlockquoteLines) n.__fromBlockquoteLines = true;
+      if (src.blockquoteClass) n.__blockquoteClass = src.blockquoteClass;
+    }
+  }
+  return n;
+};
 const $isPrintPageNode = (n) => n instanceof PrintPageNode;
 
 class GraphicNode extends DecoratorNode {
@@ -850,9 +1811,50 @@ class ImageNode extends DecoratorNode {
       caption: image.caption ? String(image.caption) : '',
       captionSegments: Array.isArray(image.captionSegments) ? image.captionSegments : null,
       description: image.description ? String(image.description) : '',
+      // A22 / A19-A21 Stage 9: an imported <prodnote render="required"> used as this image's
+      // description (parse.mjs's parseImgGroup) keeps that value — null/absent means the
+      // exporter's own D6 default ("optional") applies, same as ParagraphNode's getRender above.
+      descriptionRender: image.descriptionRender === 'required' ? 'required' : null,
+      // A34: several source <prodnote>s in one <imggroup> (parse.mjs's parseImgGroup) are kept
+      // separately here too — null/absent (no source array at all, e.g. an Emboss-created
+      // description) means the exporter falls back to the single description/descriptionRender
+      // pair above, unchanged (D6). description/descriptionRender themselves are unaffected —
+      // every other reader (the braille formatter, docx export, this node's own display above)
+      // keeps working off the merged single field.
+      descriptions: Array.isArray(image.descriptions) && image.descriptions.length
+        ? image.descriptions.map((d) => ({
+          text: String((d && d.text) || ''),
+          ...(d && d.render === 'required' ? { render: 'required' } : {}),
+          ...(d && d.id ? { id: String(d.id) } : {}),
+        }))
+        : null,
+      // F-231 — BANA 6.2.2b: the transcriber's-note label word for an unidentified
+      // illustration (e.g. "Photograph", "Picture") — document.mjs's traceOrFormatPrintImage
+      // reads this straight from the block, defaulting to "Illustration" when unset.
+      figureType: image.figureType ? String(image.figureType) : '',
+      // BANA 6.2.2c source citation (block.citation), carried for the save and the formatter.
+      citation: image.citation ? String(image.citation) : '',
+      // A picture the document marks as decoration (Word's IMP-W12; HTML alt="", S5D-Q4): no "picture has no description" warning. It counts
+      // only while the description is empty (imageBlock): typing one makes it an ordinary described picture (17 Oct 2026).
+      decorative: !!image.decorative,
     };
   }
   getImage() { return this.getLatest().__image; }
+  // F-231 / Stage 2 (23 Sep 2026): the picture-type control's read/write pair — the field
+  // itself already round-trips through load/save/undo via __image (F-231's fix, above);
+  // this just lets the Advanced Editor's dropdown (registerDecoratorListener, below) change it.
+  // Feedback 30 Sep item 8 (Paul, 1 Oct): the picture's alt text — the description the braille reader is given, which the
+  // formatter puts in a transcriber's note (BANA 6.2.2) — is edited on the picture card (registerDecoratorListener, below).
+  getAlt() { return this.getLatest().__image.alt || ''; }
+  setAlt(v) {
+    const w = this.getWritable();
+    w.__image = { ...w.__image, alt: String(v ?? '').replace(/\s+/g, ' ').trim() };
+  }
+  getFigureType() { return this.getLatest().__image.figureType || ''; }
+  setFigureType(v) {
+    const w = this.getWritable();
+    w.__image = { ...w.__image, figureType: v ? String(v) : '' };
+  }
   createDOM() {
     const img = this.__image;
     const d = document.createElement('figure');
@@ -873,15 +1875,19 @@ class ImageNode extends DecoratorNode {
     const meta = document.createElement('div');
     meta.className = 'doc-image-meta';
     const line = (cls, text) => { if (!text) return; const x = document.createElement('div'); x.className = cls; x.textContent = text; meta.appendChild(x); };
-    line('doc-image-src', `🖼 ${img.src ? img.src.replace(/^data:[^,]*,.*/, 'embedded image') : 'image'}`);
+    line('doc-image-src', `${img.src ? img.src.replace(/^data:[^,]*,.*/, 'embedded image') : 'image'}`);
     line('doc-image-caption', img.caption);
-    line('doc-image-desc', img.description || (img.alt ? `Alt: ${img.alt}` : ''));
-    if (!img.caption && !img.description && !img.alt) line('doc-image-desc', t('app.editor.decorative_image'));
+    // The alt text is edited in its own box (the decorator, feedback item 8); a production note (img.description) stays shown here.
+    line('doc-image-desc', img.description || '');
     d.appendChild(meta);
     return d;
   }
   updateDOM() { return true; }
-  decorate() { return null; }
+  // Stage 2 (23 Sep 2026): decorate() used to return null (ImageNode had no interactive
+  // control at all). It now carries figureType so registerDecoratorListener can mount the
+  // picture-type dropdown into the meta area createDOM already built, the same way
+  // GraphicNode/TableNode mount their own controls onto their static shells.
+  decorate() { return { type: 'image', figureType: this.getLatest().__image.figureType || '', alt: this.getLatest().__image.alt || '' }; }
   isInline() { return false; }
   exportJSON() { return { type: 'emboss-image', version: 1, image: this.__image }; }
   static importJSON(j) { return new ImageNode(j?.image || {}); }
@@ -912,6 +1918,36 @@ class TableNode extends DecoratorNode {
   // addColumn/removeColumn below do not adjust it (no UI path exercises that
   // combination yet, so it is left rather than half-fixed).
   __headerGroups = null;
+  // K3 (BANA §11.6.1d/§11.6.1c, transcriber KD): per-column place-value alignment.
+  // __printAlign ('right'|'decimal'|undefined per column) is what a reader read from PRINT's
+  // own column-alignment markup (parse.mjs's parseTable/DOCX/HTML/ODT/RTF readers, doc.mjs) —
+  // read-only in the editor, same as __headerGroups above: data only, carried through
+  // clone/JSON/undo/save/load so opening and re-saving a document never silently drops what
+  // was read from its source file, but not user-editable here yet. __columnAlign
+  // ('left'|'right' per column) is the transcriber's own override (F-7/standards-findings.md
+  // — "a way to mark a column as 'don't align'"), which always wins over __printAlign
+  // (document.mjs's numericAlignApplies); also data only for now — no dialog control exists
+  // to set it yet (Emboss/format/field-registry.mjs, the Braille formatting dialog's own
+  // data source, has no per-column entry — a per-column control is a UI design task of its
+  // own, out of scope here). addColumn/removeColumn below do not adjust either array (no UI
+  // path exercises that combination yet, so left rather than half-fixed, same as headerGroups).
+  __printAlign = null;
+  __columnAlign = null;
+  // BANA §11.18.1j (stairstep only): 0-based body-row indexes shown as cell-5 subdivision
+  // headings + the heading's own text. Data only, carried through clone/JSON/undo/save/load
+  // like __headerGroups; there is no editor UI to author them yet.
+  __subdivisionRows = null;
+  __subdivisionHeading = null;
+  // F-5: the table block's own caption / transcriber's note / note render, for a model that
+  // carries them directly on the table (nimas-export.mjs and format/document.mjs both read
+  // block.caption / block.tabletn / block.tabletnRender). The parser itself puts a table's
+  // caption and note in separate sibling blocks instead (Caption / Note paragraphs, kept by
+  // ParagraphNode's own fields); these are plain data carried through so a table that has
+  // them is never silently stripped. No editor UI: the siblings are the visible way to edit.
+  __caption = null;
+  __tabletn = null;
+  __tabletnRender = null;
+  __noGuideDots = false;   // block.guideDots === false (BANA 10.9.1d matching columns), carried for the save and the formatter
 
   static getType() { return 'emboss-table'; }
   static clone(n) {
@@ -920,6 +1956,14 @@ class TableNode extends DecoratorNode {
     node.__title = Array.isArray(n.__title) ? [...n.__title] : (n.__title ?? null);
     node.__titlePosition = n.__titlePosition || 'in-box';
     node.__headerGroups = Array.isArray(n.__headerGroups) ? n.__headerGroups.map((g) => ({ ...g })) : null;
+    node.__printAlign = Array.isArray(n.__printAlign) ? [...n.__printAlign] : null;
+    node.__columnAlign = Array.isArray(n.__columnAlign) ? [...n.__columnAlign] : null;
+    node.__subdivisionRows = Array.isArray(n.__subdivisionRows) ? [...n.__subdivisionRows] : null;
+    node.__subdivisionHeading = n.__subdivisionHeading ?? null;
+    node.__caption = n.__caption ?? null;
+    node.__tabletn = n.__tabletn ?? null;
+    node.__tabletnRender = n.__tabletnRender ?? null;
+    node.__noGuideDots = !!n.__noGuideDots;
     return node;
   }
   constructor(headers = [], rows = [], key) {
@@ -934,6 +1978,22 @@ class TableNode extends DecoratorNode {
   setTitlePosition(p) { this.getWritable().__titlePosition = p === 'before-box' ? 'before-box' : 'in-box'; }
   getHeaderGroups() { return this.getLatest().__headerGroups; }
   setHeaderGroups(g) { this.getWritable().__headerGroups = Array.isArray(g) && g.length ? g : null; }
+  getPrintAlign() { return this.getLatest().__printAlign; }
+  setPrintAlign(a) { this.getWritable().__printAlign = Array.isArray(a) && a.some(Boolean) ? [...a] : null; }
+  getColumnAlign() { return this.getLatest().__columnAlign; }
+  setColumnAlign(a) { this.getWritable().__columnAlign = Array.isArray(a) && a.some(Boolean) ? [...a] : null; }
+  getSubdivisionRows() { return this.getLatest().__subdivisionRows; }
+  setSubdivisionRows(r) { this.getWritable().__subdivisionRows = Array.isArray(r) && r.length ? [...r] : null; }
+  getSubdivisionHeading() { return this.getLatest().__subdivisionHeading ?? null; }
+  setSubdivisionHeading(h) { this.getWritable().__subdivisionHeading = (h == null || h === '') ? null : String(h); }
+  getCaption() { return this.getLatest().__caption ?? null; }
+  setCaption(c) { this.getWritable().__caption = (c == null || c === '') ? null : c; }
+  getTabletn() { return this.getLatest().__tabletn ?? null; }
+  setTabletn(t) { this.getWritable().__tabletn = (t == null || t === '') ? null : t; }
+  getTabletnRender() { return this.getLatest().__tabletnRender ?? null; }
+  setTabletnRender(r) { this.getWritable().__tabletnRender = r === 'required' || r === 'optional' ? r : null; }
+  getNoGuideDots() { return !!this.getLatest().__noGuideDots; }
+  setNoGuideDots(v) { this.getWritable().__noGuideDots = !!v; }
   getFormat() { return this.getLatest().__format || 'spatial'; }
   setFormat(f) { this.getWritable().__format = f || 'spatial'; }
   createDOM() {
@@ -969,6 +2029,10 @@ class TableNode extends DecoratorNode {
       title: this.__title ?? null,
       titlePosition: this.__titlePosition || 'in-box',
       ...(this.__headerGroups ? { headerGroups: this.__headerGroups } : {}),
+      ...(this.__printAlign ? { printAlign: this.__printAlign } : {}),
+      ...(this.__columnAlign ? { columnAlign: this.__columnAlign } : {}),
+      ...(this.__subdivisionRows ? { subdivisionRows: this.__subdivisionRows } : {}),
+      ...(this.__subdivisionHeading != null ? { subdivisionHeading: this.__subdivisionHeading } : {}),
     };
   }
   isInline() { return false; }
@@ -1004,6 +2068,17 @@ class TableNode extends DecoratorNode {
     const w = this.getWritable();
     if (w.__rows && w.__rows.length > 1) {
       w.__rows = w.__rows.filter((_, idx) => idx !== ri);
+      if (Array.isArray(w.__subdivisionRows)) {
+        const sr = w.__subdivisionRows.filter((i) => i !== ri).map((i) => (i > ri ? i - 1 : i));
+        w.__subdivisionRows = sr.length ? sr : null;
+      }
+      // fmt row indexes (total rows, subheadings above a row) follow the rows they name.
+      if (w.__fmt && (w.__fmt.totalRows || w.__fmt.rowSubheadings)) {
+        const f = { ...w.__fmt };
+        if (Array.isArray(f.totalRows)) f.totalRows = f.totalRows.filter((i) => i !== ri).map((i) => (i > ri ? i - 1 : i));
+        if (Array.isArray(f.rowSubheadings)) f.rowSubheadings = f.rowSubheadings.filter((e) => e && e.row !== ri).map((e) => (e.row > ri ? { ...e, row: e.row - 1 } : e));
+        w.__fmt = cleanFmt(f);
+      }
     }
   }
   addColumn() {
@@ -1025,6 +2100,14 @@ class TableNode extends DecoratorNode {
       format: this.__format || 'spatial',
       ...(this.__title != null ? { title: this.__title, titlePosition: this.__titlePosition || 'in-box' } : {}),
       ...(this.__headerGroups ? { headerGroups: this.__headerGroups } : {}),
+      ...(this.__printAlign ? { printAlign: this.__printAlign } : {}),
+      ...(this.__columnAlign ? { columnAlign: this.__columnAlign } : {}),
+      ...(this.__subdivisionRows ? { subdivisionRows: this.__subdivisionRows } : {}),
+      ...(this.__subdivisionHeading != null ? { subdivisionHeading: this.__subdivisionHeading } : {}),
+      ...(this.__caption != null ? { caption: this.__caption } : {}),
+      ...(this.__tabletn != null ? { tabletn: this.__tabletn } : {}),
+      ...(this.__tabletnRender != null ? { tabletnRender: this.__tabletnRender } : {}),
+      ...(this.__noGuideDots ? { noGuideDots: true } : {}),
     };
   }
   static importJSON(j) {
@@ -1033,6 +2116,14 @@ class TableNode extends DecoratorNode {
     if (j.title != null) n.__title = j.title;
     if (j.titlePosition) n.__titlePosition = j.titlePosition === 'before-box' ? 'before-box' : 'in-box';
     if (Array.isArray(j.headerGroups) && j.headerGroups.length) n.__headerGroups = j.headerGroups;
+    if (Array.isArray(j.printAlign) && j.printAlign.some(Boolean)) n.__printAlign = j.printAlign;
+    if (Array.isArray(j.columnAlign) && j.columnAlign.some(Boolean)) n.__columnAlign = j.columnAlign;
+    if (Array.isArray(j.subdivisionRows) && j.subdivisionRows.length) n.__subdivisionRows = j.subdivisionRows;
+    if (j.subdivisionHeading != null) n.__subdivisionHeading = j.subdivisionHeading;
+    if (j.caption != null) n.__caption = j.caption;
+    if (j.tabletn != null) n.__tabletn = j.tabletn;
+    if (j.tabletnRender === 'required' || j.tabletnRender === 'optional') n.__tabletnRender = j.tabletnRender;
+    if (j.noGuideDots) n.__noGuideDots = true;
     return n;
   }
 }
@@ -1108,22 +2199,1485 @@ class SidebarNode extends ElementNode {
 }
 const $createSidebarNode = (title) => new SidebarNode(title);
 const $isSidebarNode = (n) => n instanceof SidebarNode;
+[PrintPageNode, TableNode, SidebarNode, ImageNode, GraphicNode].forEach(installFmt);   // same per-node `fmt` as paragraphs (page-turn flags, table extras, box lines, page break before a picture)
+
+// Transcriber's Notes page (block `tnpage`, BANA 2.6.1; transcriber-pages-plan.md stage 3).
+// A titled container of plain paragraphs: each paragraph is one entry, and paragraphs that share
+// a noteGroup (ParagraphNode.getNoteGroup, the F-164 mechanism) are ONE entry's further
+// paragraphs. The heading is NOT a child node: it is the fixed heading of the page (or the
+// block's own `heading`, kept here for the save) and is shown by CSS from data-heading, so the
+// braille pane's heading line has no print counterpart to link to (formatter's traceBlock gives
+// it no source either) -- only the entries map to units (data-unit-idx = the k-th non-empty entry
+// paragraph, tagPrintBlocks). Saves as <level1 class="bana-transcriber-notes"> (nimas-export.mjs).
+class TnPageNode extends ElementNode {
+  __heading = '';
+  __dismissed = [];   // ids of suggested notes the transcriber added or dismissed (kept in the undo snapshots; NOT in the saved file)
+  static getType() { return 'emboss-tnpage'; }
+  static clone(n) { return new TnPageNode(n.__heading, n.__key); }
+  constructor(heading = '', key) {
+    super(key);
+    this.__heading = heading || '';
+  }
+  createDOM() {
+    const aside = document.createElement('aside');
+    aside.className = 'emboss-sidebar-card emboss-tnpage-card bana-style-tnpage';
+    aside.dataset.banaStyle = 'tnpage';
+    aside.dataset.heading = this.__heading || TNPAGE_DEFAULT_HEADING_UI();
+    aside.setAttribute('role', 'group');
+    aside.setAttribute('aria-label', aside.dataset.heading);
+    return aside;
+  }
+  updateDOM(prevNode, dom) {
+    if (prevNode.__heading !== this.__heading) {
+      dom.dataset.heading = this.__heading || TNPAGE_DEFAULT_HEADING_UI();
+      dom.setAttribute('aria-label', dom.dataset.heading);
+    }
+    return false;
+  }
+  afterCloneFrom(prevNode) {
+    if (super.afterCloneFrom) super.afterCloneFrom(prevNode);
+    this.__heading = prevNode.__heading || '';
+    this.__dismissed = [...(prevNode.__dismissed || [])];
+  }
+  getDismissed() { return this.getLatest().__dismissed || []; }
+  setDismissed(ids) { this.getWritable().__dismissed = [...ids]; return this; }
+  getHeading() { return this.getLatest().__heading || ''; }
+  setHeading(h) { this.getWritable().__heading = h || ''; return this; }
+  getBanaStyle() { return 'tnpage'; }
+  setBanaStyle() { return this; }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-tnpage', version: 1, heading: this.__heading, dismissed: this.__dismissed }; }
+  updateFromJSON(j) {
+    if (super.updateFromJSON) super.updateFromJSON(j);
+    this.__heading = j.heading || '';
+    this.__dismissed = Array.isArray(j.dismissed) ? [...j.dismissed] : [];
+    return this;
+  }
+  static importJSON(j) { const node = new TnPageNode(j.heading); node.updateFromJSON(j); return node; }
+}
+const $createTnPageNode = (heading) => new TnPageNode(heading);
+const $isTnPageNode = (n) => n instanceof TnPageNode;
+// UK-8 (28 Sep, James via Paul): the UK equivalent of the Transcriber's Notes page is called "Note to
+// Braille Edition" \u2014 its heading in the braille (document.mjs's tnpageHeading) AND its label here in
+// the editor card, whenever the page's own heading has not been typed over.
+function TNPAGE_DEFAULT_HEADING_UI() {
+  return settings.mode === 'bana' ? tOr('app.editor.tnpage_heading', 'Transcriber\u2019s Notes')
+    : tOr('app.editor.tnpage_heading_ukaaf', 'Note to Braille Edition');
+}
+
+// Special Symbols page (block `sympage`, BANA 2.5; G8 stage 5). Same shape as TnPageNode: a titled
+// container whose heading is CSS (data-heading), not a child; each child paragraph is one entry: an
+// atomic BrlNode (the symbol: braille cells in its title, print glyph as text) then the meaning as
+// plain text. While `auto` is on the page is derived: syncSymPages rewrites the children from the
+// document's symbols and the save writes only {auto:true}. Once the transcriber edits an entry the
+// children no longer match the last sync (__sig), `auto` goes off and the entries are saved explicitly.
+class SymPageNode extends ElementNode {
+  __heading = '';
+  __auto = true;
+  __sig = '[]';
+  static getType() { return 'emboss-sympage'; }
+  static clone(n) { const c = new SymPageNode(n.__heading, n.__auto, n.__sig, n.__key); return c; }
+  constructor(heading = '', auto = true, sig = '[]', key) {
+    super(key);
+    this.__heading = heading || '';
+    this.__auto = auto !== false;
+    this.__sig = sig || '[]';
+  }
+  createDOM() {
+    const aside = document.createElement('aside');
+    aside.className = 'emboss-sidebar-card emboss-sympage-card bana-style-sympage';
+    aside.dataset.banaStyle = 'sympage';
+    aside.dataset.heading = this.__heading || SYMPAGE_DEFAULT_HEADING_UI();
+    aside.dataset.auto = this.__auto ? '1' : '';
+    aside.dataset.autoNote = tOr('app.editor.sympage_auto_note', 'Listed automatically from the document. Edit an entry to fix the list.');
+    aside.setAttribute('role', 'group');
+    aside.setAttribute('aria-label', aside.dataset.heading);
+    return aside;
+  }
+  updateDOM(prevNode, dom) {
+    if (prevNode.__heading !== this.__heading) {
+      dom.dataset.heading = this.__heading || SYMPAGE_DEFAULT_HEADING_UI();
+      dom.setAttribute('aria-label', dom.dataset.heading);
+    }
+    if (prevNode.__auto !== this.__auto) dom.dataset.auto = this.__auto ? '1' : '';
+    return false;
+  }
+  afterCloneFrom(prevNode) {
+    if (super.afterCloneFrom) super.afterCloneFrom(prevNode);
+    this.__heading = prevNode.__heading || '';
+    this.__auto = prevNode.__auto;
+    this.__sig = prevNode.__sig;
+  }
+  getHeading() { return this.getLatest().__heading || ''; }
+  setHeading(h) { this.getWritable().__heading = h || ''; return this; }
+  getAuto() { return this.getLatest().__auto; }
+  setAuto(v) { this.getWritable().__auto = !!v; return this; }
+  getSig() { return this.getLatest().__sig; }
+  setSig(v) { this.getWritable().__sig = v; return this; }
+  getBanaStyle() { return 'sympage'; }
+  setBanaStyle() { return this; }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-sympage', version: 1, heading: this.__heading, auto: this.__auto, sig: this.__sig }; }
+  updateFromJSON(j) {
+    if (super.updateFromJSON) super.updateFromJSON(j);
+    this.__heading = j.heading || '';
+    this.__auto = j.auto !== false;
+    this.__sig = j.sig || '[]';
+    return this;
+  }
+  static importJSON(j) { const node = new SymPageNode(j.heading, j.auto, j.sig); node.updateFromJSON(j); return node; }
+}
+const $createSymPageNode = (heading, auto) => new SymPageNode(heading, auto);
+const $isSymPageNode = (n) => n instanceof SymPageNode;
+function SYMPAGE_DEFAULT_HEADING_UI() { return tOr('app.editor.sympage_heading', 'Special Symbols Used in This Volume'); }
+// One entry paragraph <-> { braille, print?, description? } (the block's entry shape).
+function $symEntryOfParagraph(p) {
+  let braille = '', print = '', hasBrl = false, desc = '';
+  for (const c of p.getChildren()) {
+    if ($isBrlNode(c)) {
+      if (!hasBrl) { hasBrl = true; braille = c.getBrl(); const tx = c.getTextContent().replace(/\u200B/g, ''); print = tx === braille ? '' : tx; }
+    } else desc += c.getTextContent();
+  }
+  desc = desc.replace(/\s+/g, ' ').trim();
+  if (!hasBrl && !desc) return null;
+  const e = { braille };
+  if (print) e.print = print;
+  if (desc) e.description = desc;
+  return e;
+}
+function $symNodeEntries(node) {
+  const out = [];
+  for (const c of node.getChildren()) { if (c instanceof ParagraphNode) { const e = $symEntryOfParagraph(c); if (e) out.push(e); } }
+  return out;
+}
+function $fillSymPage(node, entries) {
+  for (const c of node.getChildren()) c.remove();
+  for (const e of entries) {
+    const p = $createParagraphNode();
+    if (e.braille || e.print) p.append($createBrlNode(e.print || e.braille, e.braille || ''));
+    if (e.description) p.append($createTextNode(`${e.braille || e.print ? ' ' : ''}${e.description}`));
+    node.append(p);
+  }
+  if (!entries.length) node.append($createParagraphNode());
+}
+// The automatic page's entries for a model: the dot locator, then the document's special symbols in
+// braille order (collectSpecialSymbols), worded by the formatter's own symbolMeaning (format/document.mjs).
+function symDerivedEntries(blocks) {
+  const found = collectSpecialSymbols(blocks.filter((b) => b && b.type !== 'sympage'), {});
+  if (!found.length) return [];
+  return [{ braille: '', print: '.=', description: 'Dot locator, precedes listed symbols' },
+    ...found.map((d) => {
+      const t = String(d.print ?? '').trim();
+      const description = symbolMeaning({ print: d.print, name: d.name });
+      return { braille: d.braille, ...(t ? { print: t } : {}), ...(description ? { description } : {}) };
+    })];
+}
+
+// ---- Title Page (block `titlepage`, BANA Formats 2016 §2.3, K29 Stage 1c; design doc
+// transcriber-pages-customisation-design.md §4). Three node types, nested like ListNode/ListItemNode:
+//   TitlePageNode (the card, an <aside role="group">) -> TpSegmentNode (one per segment, a labelled
+//   <div role="group">, design §4 "labelled segment groups") -> ordinary ParagraphNode lines, each a
+//   mix of plain TextNode runs and TpFieldNode chips (atomic, like BrlNode — design §4 "Fields are
+//   atomic chips, like the existing BrlNode").
+// `auto`/`sig` on TitlePageNode is the SAME pattern as SymPageNode's own auto/sig (see that class's
+// comment): while auto, the WHOLE card is regenerated from the document's live fields on every render
+// (syncTitlePages, called from render()); the transcriber typing on the page (adding/deleting/retyping
+// a line) flips auto off (the update listener below), same trigger as SymPageNode's. Unlike SymPageNode,
+// `sig` here is a STRUCTURAL signature ONLY (titlePageStructureSig, field-registry.mjs) — which lines,
+// fields and (for a list field) indices exist, with field VALUES stripped out — because TP-6
+// (decisions.md) requires field values to keep updating even on an edited page ("fields are always
+// live... typing over a field's value turns that field into plain text on that page only"); only a
+// change to the STRUCTURE (a line added/removed/retyped) counts as an edit. syncTitlePages refreshes
+// an edited page's existing chips' VALUES in place (never touching line structure) using
+// field-registry.mjs's refreshTitlePageValues — the SAME function format/document.mjs's traceTitlePage
+// now uses for the braille, so the card and the braille can never show two different current values.
+// K29 Stage 1c rework (Fable review): a chip's `idx` (only set for a LIST field — authors, isbn —
+// design §3.1) identifies WHICH entry it stands for, so refreshTitlePageValues can find the right
+// value again even if the list has since grown or shrunk, rather than assuming chips stay lined up
+// by position (this stage's ORIGINAL, since-removed limitation).
+const TP_FIELD_EMPTY = '​';   // keeps an empty chip's TextNode alive, same technique as BrlNode's BRL_EMPTY
+function tpFieldAriaLabel(field, rawText) {
+  const label = TP_FIELD_LABELS[field] || field || '';
+  const value = String(rawText || '').replace(/​/g, '');
+  // design §4: "A screen reader announces a chip as, for example, 'Print pages, field, i-x and 1-44';
+  // an empty field says 'empty, line not brailled'."
+  return value ? (t('app.titlepage_card.field_aria', { label, value }) || `${label}, field, ${value}`)
+    : (t('app.titlepage_card.field_empty_aria', { label }) || `${label}, empty, line not brailled`);
+}
+class TpFieldNode extends TextNode {
+  static getType() { return 'emboss-tpfield'; }
+  static clone(n) { return new TpFieldNode(n.__text, n.__field, n.__idx, n.__key); }
+  constructor(value = '', field = '', idx = null, key) {
+    super(value || TP_FIELD_EMPTY, key);
+    this.__field = field || '';
+    this.__idx = idx == null ? null : Number(idx);
+  }
+  getField() { return this.getLatest().__field; }
+  getIdx() { return this.getLatest().__idx; }
+  getFieldValue() { return this.getTextContent().replace(/​/g, ''); }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('tp-field-chip');
+    dom.title = this.__field;
+    dom.setAttribute('aria-label', tpFieldAriaLabel(this.__field, this.getTextContent()));
+    return dom;
+  }
+  updateDOM(prevNode, dom, config) {
+    const changed = super.updateDOM(prevNode, dom, config) || false;
+    if (prevNode.__field !== this.__field || prevNode.getTextContent() !== this.getTextContent()) {
+      dom.title = this.__field;
+      dom.setAttribute('aria-label', tpFieldAriaLabel(this.__field, this.getTextContent()));
+    }
+    return changed;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-tpfield', version: 1, field: this.__field, idx: this.__idx }; }
+  static importJSON(j) { return new TpFieldNode(j.text || '', j.field || '', j.idx ?? null).updateFromJSON(j).setMode('token'); }
+}
+const $createTpFieldNode = (value, field, idx) => new TpFieldNode(value, field, idx).setMode('token');
+const $isTpFieldNode = (n) => n instanceof TpFieldNode;
+
+class TpSegmentNode extends ElementNode {
+  __name = '';
+  static getType() { return 'emboss-tpsegment'; }
+  static clone(n) { return new TpSegmentNode(n.__name, n.__key); }
+  constructor(name = '', key) { super(key); this.__name = name || ''; }
+  createDOM() {
+    const div = document.createElement('div');
+    div.className = 'tp-segment';
+    div.setAttribute('role', 'group');
+    div.setAttribute('aria-label', this.__name);
+    div.dataset.segment = this.__name;
+    return div;
+  }
+  updateDOM(prevNode, dom) {
+    if (prevNode.__name !== this.__name) { dom.setAttribute('aria-label', this.__name); dom.dataset.segment = this.__name; }
+    return false;
+  }
+  afterCloneFrom(prevNode) { if (super.afterCloneFrom) super.afterCloneFrom(prevNode); this.__name = prevNode.__name || ''; }
+  getName() { return this.getLatest().__name; }
+  setName(n) { this.getWritable().__name = n || ''; return this; }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-tpsegment', version: 1, name: this.__name }; }
+  updateFromJSON(j) { if (super.updateFromJSON) super.updateFromJSON(j); this.__name = j.name || ''; return this; }
+  static importJSON(j) { const node = new TpSegmentNode(j.name); node.updateFromJSON(j); return node; }
+}
+const $createTpSegmentNode = (name) => new TpSegmentNode(name);
+const $isTpSegmentNode = (n) => n instanceof TpSegmentNode;
+
+function TITLEPAGE_HEADING_UI() { return tOr('app.editor.titlepage_heading', 'Title Page'); }
+class TitlePageNode extends ElementNode {
+  __auto = true;
+  __sig = '[]';
+  static getType() { return 'emboss-titlepage'; }
+  static clone(n) { return new TitlePageNode(n.__auto, n.__sig, n.__key); }
+  constructor(auto = true, sig = '[]', key) {
+    super(key);
+    this.__auto = auto !== false;
+    this.__sig = sig || '[]';
+  }
+  createDOM() {
+    const aside = document.createElement('aside');
+    aside.className = 'emboss-sidebar-card emboss-titlepage-card bana-style-titlepage';
+    aside.dataset.banaStyle = 'titlepage';
+    aside.dataset.heading = TITLEPAGE_HEADING_UI();
+    aside.dataset.auto = this.__auto ? '1' : '';
+    aside.dataset.editedNote = tOr('app.editor.titlepage_edited_note', 'The template changed since you edited this page.');
+    aside.setAttribute('role', 'group');
+    aside.setAttribute('aria-label', aside.dataset.heading);
+    return aside;
+  }
+  updateDOM(prevNode, dom) {
+    if (prevNode.__auto !== this.__auto) dom.dataset.auto = this.__auto ? '1' : '';
+    return false;
+  }
+  afterCloneFrom(prevNode) { if (super.afterCloneFrom) super.afterCloneFrom(prevNode); this.__auto = prevNode.__auto; this.__sig = prevNode.__sig; }
+  getAuto() { return this.getLatest().__auto; }
+  setAuto(v) { this.getWritable().__auto = !!v; return this; }
+  getSig() { return this.getLatest().__sig; }
+  setSig(v) { this.getWritable().__sig = v; return this; }
+  getBanaStyle() { return 'titlepage'; }
+  setBanaStyle() { return this; }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-titlepage', version: 1, auto: this.__auto, sig: this.__sig }; }
+  updateFromJSON(j) { if (super.updateFromJSON) super.updateFromJSON(j); this.__auto = j.auto !== false; this.__sig = j.sig || '[]'; return this; }
+  static importJSON(j) { const node = new TitlePageNode(j.auto, j.sig); node.updateFromJSON(j); return node; }
+}
+const $createTitlePageNode = (auto = true, sig = '[]') => new TitlePageNode(auto, sig);
+const $isTitlePageNode = (n) => n instanceof TitlePageNode;
+
+// Build/replace a TitlePageNode's full content from a titlePageTemplateSegments()-shaped array (used for a
+// fresh auto page, Regenerate, and restoring an edited page's saved segments on load — all three just
+// hand this a segments array; only WHERE the array comes from differs).
+function $fillTitlePage(node, segments) {
+  for (const c of node.getChildren()) c.remove();
+  for (const seg of Array.isArray(segments) ? segments : []) {
+    if (!seg || !Array.isArray(seg.lines) || !seg.lines.length) continue;
+    const segNode = $createTpSegmentNode(seg.name);
+    for (const l of seg.lines) {
+      const p = $createParagraphNode();
+      for (const part of (l.parts || [])) {
+        if (part && 'fld' in part) p.append($createTpFieldNode(part.value, part.fld, part.idx));
+        else if (part && part.lit) p.append($createTextNode(part.lit));
+      }
+      // K29 Stage 1c rework: etAl/cell3 are LAYOUT hints the shared template still decides
+      // (field-registry.mjs's titlePageTemplateSegments) — kept on the paragraph's own `fmt` (the
+      // same per-node mechanism BANA margins/page-turn flags already use, installFmt above) so an
+      // edited page's braille (format/document.mjs's traceTitlePage) can still apply the "et al."
+      // uncontracted tail / cell-3 indent even after a save/reload — see nimas-export.mjs/parse.mjs
+      // for the DTBook form (bana-tp-etal/bana-tp-cell3 class tokens on the <p>).
+      if (l.etAl || l.cell3) p.setFmt({ ...(l.etAl ? { etAl: true } : {}), ...(l.cell3 ? { cell3: true } : {}) });
+      if (p.getChildrenSize()) segNode.append(p);
+    }
+    if (segNode.getChildrenSize()) node.append(segNode);
+  }
+}
+// Read a TitlePageNode's current content back into the same titlePageTemplateSegments() shape (for
+// saving to the block model, and for computing its structural signature) — the inverse of $fillTitlePage.
+function $titlePageSegments(node) {
+  const segs = [];
+  for (const c of node.getChildren()) {
+    if (!$isTpSegmentNode(c)) continue;
+    const lines = [];
+    for (const p of c.getChildren()) {
+      if (!(p instanceof ParagraphNode)) continue;
+      const parts = [];
+      for (const ch of p.getChildren()) {
+        if ($isTpFieldNode(ch)) parts.push({ fld: ch.getField(), ...(ch.getIdx() != null ? { idx: ch.getIdx() } : {}), value: ch.getFieldValue() });
+        else { const txt = ch.getTextContent(); if (txt) parts.push({ lit: txt }); }
+      }
+      if (parts.length) {
+        const f = typeof p.getFmt === 'function' ? p.getFmt() : null;
+        lines.push({ parts, ...(f?.etAl ? { etAl: true } : {}), ...(f?.cell3 ? { cell3: true } : {}) });
+      }
+    }
+    segs.push({ name: c.getName(), lines });
+  }
+  return segs;
+}
 
 // ---- editor ----
+// Every error Lexical reports while applying a change (it then discards that change) is counted — so a paste that failed can
+// be retried as plain text (below) — and goes into Report a problem's log (A89 step 3).
+let lexicalErrorCount = 0;
 const editor = createEditor({
   namespace: 'emboss',
-  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, ImgNoteNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode],
-  onError: (e) => { console.warn('Lexical non-fatal state warning:', e); },
+  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, ImgNoteNode, BrlNode, LinkNode, CiteNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode, TnPageNode, SymPageNode, TitlePageNode, TpSegmentNode, TpFieldNode],
+  onError: (e) => { lexicalErrorCount++; recordProblem('editor', `Lexical: ${e?.message || e}`, { stack: e?.stack || '' }); console.warn('Lexical non-fatal state warning:', e); },
   theme: { heading: { h1: 'ed-h1', h2: 'ed-h2', h3: 'ed-h3' }, list: { ul: 'ed-ul', ol: 'ed-ol' }, paragraph: 'ed-p',
     text: { bold: 'ed-b', italic: 'ed-i', underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
 });
 editor.setRootElement($id('editor'));
 window.editor = editor;
+// Test hooks (tests/test-decorator-delete.mjs): make a node selection the way the arrow keys do.
+window.__createNodeSelectionForTest = $createNodeSelection;
+window.__setSelectionForTest = $setSelection;
 // Lexical's core line-break node (not exported by the vendored bundle; registered on every editor).
 const $createLineBreakNode = () => new (editor._nodes.get('linebreak').klass)();
 const $isLineBreakNode = (n) => !!n && typeof n.getType === 'function' && n.getType() === 'linebreak';
 registerRichText(editor);
 registerList(editor);
+
+// ---- Never let Backspace/Delete pull content across a box/tnpage/sympage boundary (Paul, 26 Sep
+// bug report: "If you delete all the text in a sidebar then the sidebar is not removed and in
+// fact it seems to be impossible to delete it.") Testing traced the "impossible to delete" symptom
+// to this: triple-clicking a box's only paragraph to select "all its text" — an ordinary way to
+// clear it — is a well-known contenteditable quirk where the browser's own selection actually
+// extends to the very START of the NEXT paragraph, not just to the end of the box's own text.
+// Lexical's default Backspace/Delete has no notion that an aside/page element is a boundary, so it
+// deleted the box's text AND merged the following paragraph's content bodily INSIDE the box —
+// the box then looked "empty" in the print pane but was never actually empty (it had adopted its
+// neighbour's text), so no further Backspace ever removed it. The fix clamps such a selection to
+// stay on whichever side its OWN start point is on before the deletion runs, so a container can
+// never adopt a sibling's content, and a sibling can never be pulled into a container, as a side
+// effect of a delete. Registered above registerRichText's own (COMMAND_PRIORITY_EDITOR) handler so
+// it gets first refusal; returns false for every ordinary (non-boundary-crossing) selection, which
+// is the overwhelming majority of Backspace/Delete presses, leaving those to Lexical as before.
+// K29 Stage 1c rework: TitlePageNode joins the container guard/auto-remove — an emptied Title Page
+// card is removable the same way an emptied Transcriber's Notes page is (containerRemovedMessageKey,
+// below, gives it its own announcement).
+function $isEmbossContainerNode(n) { return $isSidebarNode(n) || $isTnPageNode(n) || $isSymPageNode(n) || $isTitlePageNode(n); }
+function $nearestEmbossContainer(node) {
+  for (let n = node; n; n = n.getParent ? n.getParent() : null) if ($isEmbossContainerNode(n)) return n;
+  return null;
+}
+// Mutates `selection` in place, clamping it to stop at the boundary; returns true if it changed
+// anything (a boundary was actually crossed), false for an ordinary same-side selection.
+function $clampSelectionToContainerBoundary(selection) {
+  if (!$isRangeSelection(selection) || selection.isCollapsed()) return false;
+  const backward = selection.isBackward();
+  const startPoint = backward ? selection.focus : selection.anchor;   // earlier of the two in document order
+  const endPoint = backward ? selection.anchor : selection.focus;
+  const startContainer = $nearestEmbossContainer(startPoint.getNode());
+  const endContainer = $nearestEmbossContainer(endPoint.getNode());
+  if (startContainer === endContainer) return false;   // both outside every container, or both in the SAME one
+  if (startContainer) {
+    // Starts inside a container and reaches past its end (outside it, or into a different one):
+    // clamp the far point back to the container's own last text position.
+    let last = startContainer.getLastDescendant();
+    if (!last) return false;
+    if (typeof last.getTextContentSize === 'function') endPoint.set(last.getKey(), last.getTextContentSize(), 'text');
+    else endPoint.set(startContainer.getKey(), startContainer.getChildrenSize(), 'element');
+  } else if (endContainer) {
+    // Starts outside and reaches INTO a container: clamp the far point back to just before the
+    // container begins, so nothing inside it is touched (and the container cannot be dragged out).
+    const parent = endContainer.getParent();
+    if (!parent) return false;
+    endPoint.set(parent.getKey(), endContainer.getIndexWithinParent(), 'element');
+  }
+  return true;
+}
+
+// ---- A69: never let a single Backspace/Delete silently delete a table/picture/diagram/equation.
+// TableNode/ImageNode/GraphicNode/MathNode are Lexical DecoratorNodes; a collapsed caret sitting
+// right next to one of them and Backspace/Delete goes through LexicalSelection.ts's
+// $deleteCharacter, whose decorator branch calls `caret.origin.remove()` directly for the
+// overwhelmingly common case (the "select first" safety Lexical does have only kicks in via a
+// narrower path this direct single-boundary adjacency never takes) -- so a whole table's cells, a
+// picture, a tactile diagram or an equation could vanish on one keystroke with no undo prompt and
+// no announcement. Fixed the same way many editors handle an embedded object: the first
+// Backspace/Delete at the boundary turns the caret into a NodeSelection on the decorator (Lexical's
+// own "selected object" pattern, same mechanism the click handling elsewhere in this file already
+// uses) instead of deleting anything, and announces what happened. The SECOND Backspace/Delete
+// needs no new code at all: registerRichText's own DELETE_CHARACTER_COMMAND handler already calls
+// `selection.deleteNodes()` whenever the current selection is a NodeSelection -- this fix only had
+// to stop the FIRST press reaching that point by accident.
+// A print-page marker is protected too: losing one silently renumbers every later print page in the braille.
+function $isProtectedDecoratorNode(n) { return $isTableNode(n) || $isImageNode(n) || $isGraphicNode(n) || $isMathNode(n) || $isPrintPageNode(n); }
+// A block-level equation (appendBlock's top-level 'math' case, below) is wrapped in its own
+// single-child paragraph, so the boundary sibling found is that paragraph, not the MathNode
+// itself -- unwrap one level. An inline equation within running text, or a table/image/graphic
+// (never paragraph-wrapped), resolve directly.
+function $resolveProtectedDecorator(sib, forward) {
+  if ($isProtectedDecoratorNode(sib)) return sib;
+  if ($isElementNode(sib) && sib.getChildrenSize() === 1) {
+    const only = forward ? sib.getFirstChild() : sib.getLastChild();
+    if ($isProtectedDecoratorNode(only)) return only;
+  }
+  return null;
+}
+// The node immediately adjacent to a COLLAPSED caret sitting at the very edge of its own text (or
+// of an empty element), walking up out of every ancestor for which the caret's own node is the
+// first/last child -- mirrors Lexical's own decorator-adjacency walk. Returns null unless the
+// caret is a genuine boundary caret (an ordinary mid-text caret never matches).
+function $boundarySibling(caret, forward) {
+  if (!caret) return null;
+  const point = caret;
+  const origin = caret.node;
+  if (!origin) return null;
+  if ($isElementNode(origin)) {
+    if ((forward ? origin.getChildrenSize() : 0) !== point.offset) return null;
+  } else {
+    const size = typeof origin.getTextContentSize === 'function' ? origin.getTextContentSize() : (origin.getTextContent ? origin.getTextContent().length : 0);
+    if ((forward ? size : 0) !== point.offset) return null;
+  }
+  let cur = origin;
+  while (cur) {
+    const parent = typeof cur.getParent === 'function' ? cur.getParent() : null;
+    if (!parent) return null;
+    const sib = forward ? cur.getNextSibling() : cur.getPreviousSibling();
+    if (sib) return sib;
+    cur = parent;
+    if (typeof cur.getType === 'function' && cur.getType() === 'root') return null;
+  }
+  return null;
+}
+function protectedDecoratorArmedMessageKey(node) {
+  if ($isTableNode(node)) return 'app.editor.table_selected_for_delete';
+  if ($isImageNode(node)) return 'app.editor.image_selected_for_delete';
+  if ($isGraphicNode(node)) return 'app.editor.graphic_selected_for_delete';
+  if ($isPrintPageNode(node)) return 'app.editor.printpage_selected_for_delete';
+  return 'app.editor.equation_selected_for_delete';   // $isMathNode -- the only remaining case
+}
+// Returns true (handled) when the boundary in the given direction is a protected decorator AND
+// the selection is not already a NodeSelection on it (that second-press case is
+// $deleteArmedProtectedDecorator, below).
+// The key of the decorator the first press armed. A delete needs this exact arming: a table,
+// picture or page number that became selected some other way (arrow keys, a click) is armed and
+// announced by the first press too, never deleted by it. Cleared as soon as the selection moves.
+let armedDecoratorKey = null;
+// Where the caret was when the first press armed the item ({ key, offset, forward }), or null when it was armed from
+// a node selection made some other way. A second press from that same caret deletes the item; any other move or edit
+// cancels the arm. (Seen in Chrome, 28 Sep: a screen-reader user, who always waits for the announcement, could not
+// delete the item when the second press depended on a node selection that Chrome had already dropped.)
+let armedFrom = null;
+function setArmedOutline(key) {
+  document.querySelectorAll('.emboss-armed').forEach((el) => el.classList.remove('emboss-armed'));
+  if (key != null) { const el = editor.getElementByKey(key); if (el) el.classList.add('emboss-armed'); }
+}
+function clearArm() { armedDecoratorKey = null; armedFrom = null; setArmedOutline(null); }
+window.__armStateForTest = () => ({ key: armedDecoratorKey, from: armedFrom });
+// Feedback 30 Sep item 9 (Paul, 1 Oct): a click on a picture, a tactile graphic or a table's bar selects it (a node selection,
+// outlined), so Delete and Backspace work for a mouse user as they do from the keyboard — the first press says what is selected,
+// the second removes it (the arming above). A click on a control, a table cell or a text box inside the card is left alone.
+editorEl.addEventListener('click', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  if (!el || el.closest('button, input, select, textarea, a, label, math-field, td, th, [contenteditable="true"]:not(#editor)')) return;
+  const keyProp = `__lexicalKey_${editor.getKey()}`;
+  let dom = el, key = null;
+  while (dom && dom !== editorEl) { if (dom[keyProp] != null) { key = dom[keyProp]; break; } dom = dom.parentElement; }
+  if (key == null) return;
+  let picked = null;
+  editor.update(() => {
+    const n = $getNodeByKey(key);
+    // Any card in the document — a picture, a graphic, a table (outside its cells), a ⁂ break, a print page marker … — not only
+    // pictures, graphics and a table's bar (A89, found by random-action testing: a click on a break or a print page selected
+    // nothing and, in WebKit, left the caret inside the card).
+    // …and wherever it sits: a picture inside a box was not selected, and left the caret inside the card (A89, the nightly run).
+    if (!n || !(n instanceof DecoratorNode) || n.isInline() || !n.getParent()) return;
+    const ns = $createNodeSelection();
+    ns.add(n.getKey());
+    $setSelection(ns);
+    picked = n;
+  });
+  if (!picked) return;
+  clearArm();
+  if (document.activeElement !== editorEl) editorEl.focus({ preventScroll: true });
+  // WebKit keeps its own text caret where the click put it, inside the card, beside the node selection: take it out.
+  const ds = window.getSelection();
+  const cardEl = editor.getElementByKey(picked.getKey());
+  if (ds && ds.rangeCount && cardEl && cardEl.contains(ds.anchorNode)) ds.removeAllRanges();
+});
+// The keys stay with the text (A89, found by random-action testing): a button on a card's bar re-rendered under the pointer, or a
+// menu item that closes its menu (Braille › Download BRF), left the keyboard focus on the page itself, so the keys did nothing
+// until the text was clicked again. After a click or a key, if the focus has fallen to the page while the caret (or a selected
+// card) is still in the text and no dialog is open, the focus goes back to the text. And Backspace with the focus on the page
+// never takes the browser "Back" (Playwright's WebKit did, leaving the editor).
+// Where the keyboard last was: in the text (or something inside it — an equation, a card's control), or elsewhere.
+let keysLastInText = false;
+document.addEventListener('focusin', (e) => { keysLastInText = editorEl.contains(e.target); });
+function rescueEditorFocus() {
+  if (document.activeElement && document.activeElement !== document.body) return;
+  if (document.querySelector('dialog[open]')) return;
+  // nor while a menu or a list is open: it takes the focus a moment after it opens (Ctrl/⌘+Shift+F's Insert-field menu)
+  if ([...document.querySelectorAll('[role="menu"], [role="listbox"], .menu-dropdown, .slash-menu')].some((m) => !m.hidden && m.getClientRects().length > 0)) return;
+  const ds = window.getSelection();
+  const caretInText = ds && ds.rangeCount > 0 && editorEl.contains(ds.anchorNode);
+  let cardSelected = false;
+  editor.getEditorState().read(() => { cardSelected = $isNodeSelection($getSelection()); });
+  // …or, with no caret to go by (an equation's own caret is not the page's), when the keyboard was last in the text
+  if (caretInText || cardSelected || keysLastInText) {
+    editorEl.focus({ preventScroll: true });
+    // A click on the page itself (the explanation bar, a blank area) took the page's caret away: the focus coming back put it at the start
+    // of the document, where the next key acted (18 Oct 2026). It goes back where it was instead.
+    if (!caretInText && !cardSelected && lastActiveEditorSelection) {
+      const last = lastActiveEditorSelection;
+      editor.update(() => {
+        const a = $getNodeByKey(last.anchorKey), f = $getNodeByKey(last.focusKey);
+        if (!a || !f) return;
+        const sel = $getSelection();
+        if (!$isRangeSelection(sel)) { if ($isTextNode(a)) a.select(last.anchorOffset, a === f ? last.focusOffset : last.anchorOffset); return; }
+        sel.anchor.set(last.anchorKey, last.anchorOffset, $isTextNode(a) ? 'text' : 'element');
+        sel.focus.set(last.focusKey, last.focusOffset, $isTextNode(f) ? 'text' : 'element');
+      });
+    }
+  }
+}
+// at once and again a moment later: a card's bar is re-rendered, and a download started, after the click itself
+const rescueSoon = () => { setTimeout(rescueEditorFocus, 0); setTimeout(rescueEditorFocus, 450); };
+document.addEventListener('click', rescueSoon);
+document.addEventListener('keyup', rescueSoon);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Backspace' && (!document.activeElement || document.activeElement === document.body)) e.preventDefault();
+});
+// A navigation key while a card is node-selected (Up/Down, Home/End, Page Up/Down, with or without Cmd/Ctrl) first puts the caret
+// just after the card, then does its usual job — a selected picture otherwise swallowed Cmd+Down (end of document) and the typing
+// after it. Left/Right are Lexical's own (they step off the card). Delete/Backspace are the arming above.
+// Up/Down (no modifier) from a selected card go to the block below (above) it — into its text, or selecting it when it is a
+// card too (a ⁂ break followed by a print page, item 19) — and Lexical does nothing more with the key.
+editorEl.addEventListener('keydown', (e) => {
+  if (!['ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) return;
+  const plainUpDown = (e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.shiftKey && !e.metaKey && !e.ctrlKey && !e.altKey;
+  let handled = false;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isNodeSelection(sel)) return;
+    const n = sel.getNodes()[0];
+    if (!n) return;
+    if (plainUpDown && n.getParent() && n.getParent().is($getRoot())) {
+      const down = e.key === 'ArrowDown';
+      const sib = down ? n.getNextSibling() : n.getPreviousSibling();
+      if (sib && sib instanceof DecoratorNode) { const ns = $createNodeSelection(); ns.add(sib.getKey()); $setSelection(ns); handled = true; return; }
+      if (sib && typeof sib.selectStart === 'function') { if (down) sib.selectStart(); else sib.selectEnd(); handled = true; return; }
+    }
+    if (typeof n.selectNext === 'function') n.selectNext(0, 0);
+  }, { discrete: true });
+  if (handled) { e.preventDefault(); e.stopImmediatePropagation(); }
+}, true);
+// Up/Down in a paragraph that holds an equation (feedback 30 Sep, item 19). In WebKit (Safari) the caret could not leave a line
+// with a MathLive <math-field> on it, to the next line or the next paragraph; in Chrome, with a ⁂ break and a print page after
+// such a paragraph, it jumped to the end of the book. In such a paragraph Emboss moves the caret itself: to the next (previous)
+// line at the same distance across, and off its last (first) line into the next (previous) paragraph, or onto a ⁂ break / print
+// page as a node selection (as a click does), from which the next Down goes on below it (the handler above). In paragraphs
+// without an equation the browser moves the caret as before.
+function caretClientRect(range) {
+  // Measured from the character after the caret (before it, at the end): a caret where a line wraps belongs to the line it is
+  // shown on, while the collapsed range's own rectangle sits at the end of the line above, in Chrome.
+  const c = range.startContainer, o = range.startOffset;
+  if (c.nodeType === 3) {
+    const x = document.createRange();
+    if (o < c.length && c.data[o] !== '\n') {
+      x.setStart(c, o); x.setEnd(c, o + 1);
+      const xr = x.getClientRects()[0];
+      if (xr && xr.height) return { left: xr.left, top: xr.top, bottom: xr.bottom };
+    }
+    if (o > 0) {
+      x.setStart(c, o - 1); x.setEnd(c, o);
+      const rs = x.getClientRects(); const xr = rs[rs.length - 1];
+      if (xr && xr.height) return { left: xr.right, top: xr.top, bottom: xr.bottom };
+    }
+  }
+  const r = range.getClientRects()[0];
+  if (r && r.height) return r;
+  const el = c.nodeType === 1 ? c : c.parentElement;
+  return el ? el.getBoundingClientRect() : null;
+}
+// a caret position at (x, y) inside `box`, not inside an equation or a card
+function caretPointIn(box, x, y) {
+  let pos = null;
+  if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); if (p) pos = { node: p.offsetNode, offset: p.offset }; }
+  else if (document.caretRangeFromPoint) { const p = document.caretRangeFromPoint(x, y); if (p) pos = { node: p.startContainer, offset: p.startOffset }; }
+  if (!pos || !box.contains(pos.node)) return null;
+  const el = pos.node.nodeType === 1 ? pos.node : pos.node.parentElement;
+  return el?.closest('math-field, .math-embed, [contenteditable="false"]') ? null : pos;
+}
+// The boxes of a block's lines: its text, and each equation as one box. Not Range.getClientRects of the whole block — Firefox
+// includes every glyph inside an equation, and a raised one (∞ over a ∑) looked like a line above the caret (found by
+// random-action testing: Up stuck after an equation in Firefox).
+function lineRects(box) {
+  const out = [];
+  const w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, { acceptNode: (t) => (t.parentElement?.closest('math-field, .math-embed') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const r = document.createRange();
+  for (let t = w.nextNode(); t; t = w.nextNode()) { r.selectNodeContents(t); out.push(...r.getClientRects()); }
+  for (const m of box.querySelectorAll('.math-embed')) out.push(m.getBoundingClientRect());
+  return out.filter((x) => x.height > 0 && x.width > 0);
+}
+function placeCaret(pos) {
+  const sel = window.getSelection();
+  const r = document.createRange(); r.setStart(pos.node, pos.offset); r.collapse(true);
+  sel.removeAllRanges(); sel.addRange(r);
+}
+// Moves the caret one line down (up) from where it is, when that is Emboss's job (see above); false when the browser should.
+// With `extend` (Shift+Down / Shift+Up) the selection's moving end goes one line instead: the browser's own Shift+Down past an
+// equation took the selection to the end of the book in Chrome, and could not get past it in WebKit (A89, random-action testing).
+function moveCaretVertically(down, extend = false) {
+  const sel = window.getSelection();
+  if (!sel.rangeCount || (!extend && !sel.isCollapsed) || !editorEl.contains(sel.focusNode)) return false;
+  const put = (node, offset) => { if (extend) sel.extend(node, offset); else placeCaret({ node, offset }); };
+  const at = sel.focusNode.nodeType === 1 ? sel.focusNode : sel.focusNode.parentElement;
+  // Inside the equation's own field the key is MathLive's. A caret Lexical puts beside an equation can sit on the equation's
+  // wrapper (.math-embed); that is the paragraph's caret, not the equation's (A89: Up stuck there after an equation-only paragraph).
+  if (at?.closest('math-field')) return false;
+  const li = at?.closest('li');
+  const unit = li && editorEl.contains(li) ? li : at?.closest('#editor > *');
+  if (!unit) return false;
+  const step = (el) => (down ? el.nextElementSibling : el.previousElementSibling);
+  const nextBlock = (u) => { let t = step(u); if (!t && u.tagName === 'LI') { const top = u.closest('#editor > *'); t = top && step(top); } return t; };
+  // A paragraph with an equation, or the line next to one: off a plain paragraph's last (first) line into a paragraph with an
+  // equation, Chrome skipped a paragraph that is only an equation (A89, random-action testing).
+  const ownMath = !!unit.querySelector('math-field');
+  // …or a card (a print page, a ⁂ break, a table, a picture) next: the browsers skipped past a run of cards (Chrome, Firefox),
+  // left the caret between them, or did not move at all (WebKit) — found by random-action testing (A89). The card is selected,
+  // as a click does, and the next key goes on from it (the handler above).
+  const next = nextBlock(unit);
+  const nextIsCard = !!next && (next.getAttribute('data-lexical-decorator') === 'true' || next.getAttribute('contenteditable') === 'false');
+  if (!ownMath && !nextIsCard && !next?.querySelector?.('math-field')) return false;
+  // positions are found by point, which needs the paragraph on screen
+  const ub0 = unit.getBoundingClientRect();
+  if (ub0.top < 0 || ub0.bottom > window.innerHeight) unit.scrollIntoView({ block: 'nearest' });
+  const range = document.createRange(); range.setStart(sel.focusNode, sel.focusOffset); range.collapse(true);
+  const embed = at?.closest('.math-embed');
+  const caret = embed ? embed.getBoundingClientRect() : caretClientRect(range);
+  if (!caret) return false;
+  // the next (previous) line of this paragraph, if there is one
+  const rects = lineRects(unit);
+  const beyond = rects.filter((r) => (down ? r.top >= caret.bottom - 1 : r.bottom <= caret.top + 1));
+  if (!ownMath && beyond.length) return false;   // inside a plain paragraph the browser moves the caret, as before
+  if (beyond.length) {
+    const edge = down ? Math.min(...beyond.map((r) => r.top)) : Math.max(...beyond.map((r) => r.bottom));
+    const line = beyond.filter((r) => (down ? r.top < edge + 4 : r.bottom > edge - 4));
+    const textLine = line.reduce((a, r) => (!a || r.height < a.height ? r : a), null);
+    const y = (textLine.top + textLine.bottom) / 2;
+    const ub = unit.getBoundingClientRect();
+    const pos = caretPointIn(unit, caret.left, y) || caretPointIn(unit, ub.left + 2, y) || caretPointIn(unit, ub.right - 2, y);
+    if (pos) { put(pos.node, pos.offset); return true; }
+  }
+  // off the paragraph: the next (previous) block
+  const target = nextBlock(unit);
+  if (!target) return true;
+  const keyProp = `__lexicalKey_${editor.getKey()}`;
+  target.scrollIntoView({ block: 'nearest' });
+  if (target.getAttribute('data-lexical-decorator') === 'true' || target.getAttribute('contenteditable') === 'false') {
+    if (extend) { sel.extend(editorEl, [...editorEl.children].indexOf(target) + (down ? 1 : 0)); return true; }   // the whole card
+    const key = target[keyProp];
+    if (key != null) editor.update(() => { const n = $getNodeByKey(key); if (!n) return; const ns = $createNodeSelection(); ns.add(n.getKey()); $setSelection(ns); }, { discrete: true });
+    return true;
+  }
+  const tr = target.getBoundingClientRect();
+  const tRects = lineRects(target);
+  const first = tRects.length ? (down ? tRects.reduce((a, r) => (r.top < a.top ? r : a)) : tRects.reduce((a, r) => (r.bottom > a.bottom ? r : a))) : tr;
+  const y = (first.top + first.bottom) / 2;
+  const x = Math.min(Math.max(caret.left, tr.left + 1), tr.right - 2);
+  const pos = caretPointIn(target, x, y) || caretPointIn(target, tr.left + 2, y);
+  if (pos) { put(pos.node, pos.offset); return true; }
+  if (extend) { put(target, down ? 0 : target.childNodes.length); return true; }
+  let key = null; for (let d = target; d && d !== editorEl && key == null; d = d.firstElementChild) key = d[keyProp] ?? null;
+  editor.update(() => { const n = key != null ? $getNodeByKey(key) : null; if (n && typeof n.selectStart === 'function') { if (down) n.selectStart(); else n.selectEnd(); } }, { discrete: true });
+  return true;
+}
+editorEl.addEventListener('keydown', (e) => {
+  if ((e.key !== 'ArrowDown' && e.key !== 'ArrowUp') || e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented) return;
+  if (e.target !== editorEl) return;   // a math-field or a card's own control has the key
+  if (moveCaretVertically(e.key === 'ArrowDown', e.shiftKey)) {
+    e.preventDefault();
+    e.stopImmediatePropagation();   // Lexical's own arrow handling would move on again from where this puts the caret
+  }
+}, true);
+// Pasting (A89 step 3, found by random-action testing in Chrome and WebKit): Lexical's own rich-text paste threw "Expected node
+// to have a parent" pasting formatted text at the very start of a heading, and the pasted words were lost. Emboss now runs the
+// paste itself — exactly what Lexical's rich-text paste does — and if Lexical reports an error (it discards the failed change),
+// pastes the clipboard's plain text at the caret instead: the words always arrive, only their formatting can be lost. With no caret
+// in the text at all, the paste goes to the end of the document (as Word and Google Docs do when nothing was clicked). Pastes into
+// a table cell, an equation or a description box are theirs, and a paste of files only (no text) is left to Lexical, as before.
+editor.registerCommand(PASTE_COMMAND, (event) => {
+  const dt = event && event.clipboardData;
+  if (!dt) return false;
+  const tgt = event.target && event.target.nodeType === 1 ? event.target : event.target?.parentElement;
+  if (tgt && tgt !== editorEl && (tgt.closest('input, textarea, math-field') || (tgt.closest('[contenteditable="true"]') && tgt.closest('[contenteditable="true"]') !== editorEl))) return false;
+  const text = dt.getData('text/plain') || '';
+  if (!text && !dt.getData('text/html') && dt.files && dt.files.length) return false;
+  event.preventDefault();
+  // A command runs inside Lexical's own update, where a failure surfaces only after this returns; so the clipboard is copied now
+  // and the paste done as an update of its own straight after, where a failure can be seen and the document put back.
+  const data = {};
+  for (const type of ['application/x-lexical-editor', 'text/html', 'text/plain', 'text/uri-list']) { try { const v = dt.getData(type); if (v) data[type] = v; } catch { /* not offered */ } }
+  const copy = { types: Object.keys(data), files: [], getData: (type) => data[type] || '' };
+  setTimeout(() => {
+    const before = lexicalErrorCount;
+    const logged = problemCount();   // Lexical can catch an insert's failure itself, log it with console.error and carry on half-done
+    const saved = editor.getEditorState();
+    let threw = null;
+    try {
+      editor.update(() => {
+        let sel = $getSelection();
+        if (!sel) {
+          const root = $getRoot();
+          const last = root.getLastChild();
+          if (last && last instanceof ElementNode && !last.isInline()) last.selectEnd();
+          else { const p = $createParagraphNode(); root.append(p); p.select(); }
+          sel = $getSelection();
+        }
+        // At the very start of a paragraph or heading that has text, Lexical's own insert of pasted paragraphs fails ("Expected
+        // node to have a parent": it splits the block in two and loses the empty first half). Paste into a new empty paragraph just
+        // before the block instead — what a word processor does — and drop it again if the paste left it empty.
+        let spare = null;
+        if ($isRangeSelection(sel) && sel.isCollapsed() && sel.anchor.offset === 0) {
+          const top = sel.anchor.getNode().getTopLevelElement();
+          const first = top && top.getFirstDescendant ? top.getFirstDescendant() : null;
+          const atStart = top && top instanceof ElementNode && top.getTextContentSize() > 0 && (first === sel.anchor.getNode() || top.is(sel.anchor.getNode()));
+          if (atStart) { spare = $createParagraphNode(); top.insertBefore(spare); spare.select(); sel = $getSelection(); }
+        }
+        $insertDataTransferForRichText(copy, sel, editor);
+        if (spare && spare.isAttached() && spare.getTextContentSize() === 0 && spare.getChildrenSize() === 0) spare.remove();
+      }, { discrete: true, tag: 'paste' });
+    } catch (e) { threw = e; }
+    const newProblems = problemCount() - logged;
+    const lexicalLogged = newProblems > 0 && problemLog().slice(-newProblems).some((p) => /Lexical/.test(p.message));
+    if (threw || lexicalErrorCount !== before || lexicalLogged) {
+      recordProblem('paste', `The formatted paste failed (${threw?.message || 'Lexical error'}); pasted as plain text instead`, { stack: threw?.stack || '' });
+      editor.setEditorState(saved);
+      if (text) editor.update(() => { const sel = $getSelection(); if ($isRangeSelection(sel)) sel.insertRawText(text); }, { discrete: true, tag: 'paste' });
+    }
+  }, 0);
+  return true;
+}, COMMAND_PRIORITY_HIGH);
+// A letter typed inside a formatted run joins it — its typeform (italic, bold …) and its marks (ignore-font, hyperlink …) — in
+// every browser, as in Word (Paul, 2 Oct, A89: "inside"). Lexical types with the selection's own format and style, which Chrome
+// (and WebKit for a typeform run) left empty for a caret moved into the middle of a run, so the letter split it: "mar" + "y" +
+// "ked", the y plain — and the braille differed by browser. Just before text goes in, a collapsed caret strictly inside a text
+// run takes that run's format and style. At a run's edge Lexical's own rule (the run before the caret) is unchanged.
+editorEl.addEventListener('beforeinput', (e) => {
+  if (e.isComposing || (e.inputType !== 'insertText' && e.inputType !== 'insertReplacementText')) return;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel) || !sel.isCollapsed() || sel.anchor.type !== 'text') return;
+    const n = sel.anchor.getNode();
+    const off = sel.anchor.offset;
+    if (!(n instanceof TextNode) || off <= 0 || off >= n.getTextContentSize()) return;
+    if (sel.format !== n.getFormat()) sel.format = n.getFormat();
+    if (sel.style !== n.getStyle()) sel.style = n.getStyle();
+  }, { discrete: true });
+}, true);
+// The node-selected card is outlined (class emboss-selected), and the outline goes when the selection moves.
+editor.registerUpdateListener(({ editorState }) => {
+  const keys = editorState.read(() => { const sel = $getSelection(); return $isNodeSelection(sel) ? sel.getNodes().map((n) => n.getKey()) : []; });
+  document.querySelectorAll('#editor .emboss-selected').forEach((x) => { if (!keys.includes(x[`__lexicalKey_${editor.getKey()}`])) x.classList.remove('emboss-selected'); });
+  for (const k of keys) { const x = editor.getElementByKey(k); if (x) x.classList.add('emboss-selected'); }
+});
+function $armProtectedDecorator(target, from = null) {
+  // Armed from a caret: the caret stays where it is (the outline and the announcement say what is armed). Switching
+  // to a node selection here made real Chrome lose the caret on the next click, so the next key acted at the start
+  // of the document (28 Sep). An item that is already node-selected (arrow keys, a click on it) stays selected.
+  if (!from) {
+    const nodeSelection = $createNodeSelection();
+    nodeSelection.add(target.getKey());
+    $setSelection(nodeSelection);
+  }
+  armedDecoratorKey = target.getKey();
+  armedFrom = from;
+  queueMicrotask(() => setArmedOutline(armedDecoratorKey));   // after the DOM is reconciled
+  announce(t(protectedDecoratorArmedMessageKey(target)));
+}
+const caretOf = (sel) => ($isRangeSelection(sel) && sel.isCollapsed() ? { key: sel.anchor.key, offset: sel.anchor.offset, node: sel.anchor.getNode() } : null);
+const sameCaret = (c) => !!(c && armedFrom && c.key === armedFrom.key && c.offset === armedFrom.offset);
+const atArmedCaret = (sel) => sameCaret(caretOf(sel));
+// The caret as the page shows it. Lexical takes its caret from the browser's selectionchange event, which can arrive
+// after a quick next key (Home then Backspace a few milliseconds apart, seen in Chrome 28 Sep), so a Backspace or Delete
+// reads it from the page itself. Null when the page's selection is not a collapsed caret in this editor's text.
+function $domCaret() {
+  const ds = typeof window !== 'undefined' && window.getSelection ? window.getSelection() : null;
+  if (!ds || !ds.rangeCount || !ds.isCollapsed || !ds.anchorNode) return null;
+  const dom = ds.anchorNode;
+  const el = dom.nodeType === 3 ? dom.parentNode : dom;
+  const key = el ? el[`__lexicalKey_${editor.getKey()}`] : null;
+  const node = key != null ? $getNodeByKey(key) : null;
+  if (!node) return null;
+  if (dom.nodeType === 3) return node instanceof TextNode && ds.anchorOffset <= node.getTextContentSize() ? { key, offset: ds.anchorOffset, node } : null;
+  return $isElementNode(node) && ds.anchorOffset <= node.getChildrenSize() ? { key, offset: ds.anchorOffset, node } : null;
+}
+function $armProtectedDecoratorOnBoundary(selection, caret, forward) {
+  if ($isNodeSelection(selection)) return false;   // a selected decorator: handled below
+  const sib = $boundarySibling(caret, forward);
+  if (!sib) return false;
+  const target = $resolveProtectedDecorator(sib, forward);
+  if (!target) return false;
+  $armProtectedDecorator(target, { key: caret.key, offset: caret.offset, forward });
+  return true;
+}
+// The second Backspace/Delete, now that a protected decorator is NodeSelection'd. Lexical's own
+// registerRichText DELETE_CHARACTER_COMMAND handler already does `selection.deleteNodes()` for a
+// NodeSelection, which would be enough on its own -- but a block-level equation lives alone inside
+// its OWN wrapping paragraph (appendBlock's top-level 'math' case builds `p.append($createMathNode(...))`
+// then appends `p`), so deleting just the MathNode leaves that now-empty paragraph behind as a
+// stray blank line. Handled here instead, at the same COMMAND_PRIORITY_HIGH as the arming step
+// above, so the whole two-press gesture is one clean codepath: remove the wrapper too when the
+// decorator was its only content, and land the caret on whichever neighbour is left.
+function $removeProtectedDecorator(node) {
+  clearArm();
+  const parent = node.getParent();
+  const wrapperIsMathOnly = $isMathNode(node) && parent instanceof ParagraphNode && parent.getChildrenSize() === 1;
+  const target = wrapperIsMathOnly ? parent : node;
+  const prev = target.getPreviousSibling();
+  const next = target.getNextSibling();
+  target.remove();
+  if (prev && typeof prev.selectEnd === 'function') prev.selectEnd();
+  else if (next && typeof next.selectStart === 'function') next.selectStart();
+}
+function $deleteArmedProtectedDecorator(selection, caret, forward) {
+  // The caret is still where the first press armed the item: this press is the second one.
+  if (sameCaret(caret) && armedFrom.forward === forward) {
+    const node = $getNodeByKey(armedDecoratorKey);
+    if (node && $isProtectedDecoratorNode(node)) { $removeProtectedDecorator(node); return true; }
+    clearArm();
+    return false;
+  }
+  if (!$isNodeSelection(selection)) return false;
+  const nodes = selection.getNodes();
+  if (nodes.length !== 1 || !$isProtectedDecoratorNode(nodes[0])) return false;
+  const node = nodes[0];
+  if (node.getKey() !== armedDecoratorKey) { $armProtectedDecorator(node); return true; }   // selected, but not armed by a first press
+  $removeProtectedDecorator(node);
+  return true;
+}
+for (const CMD of [KEY_BACKSPACE_COMMAND, KEY_DELETE_COMMAND]) {
+  editor.registerCommand(CMD, (event) => {
+    const sel = $getSelection();
+    const forward = CMD === KEY_DELETE_COMMAND;
+    // Lexical takes its caret from the browser's selectionchange event, which can arrive after a quick next key or
+    // click (seen in Chrome, 28 Sep): bring it to where the page shows the caret first, so neither this handler nor
+    // Lexical's own delete acts at the old spot.
+    const pageCaret = $isRangeSelection(sel) ? $domCaret() : null;
+    if (pageCaret && (!sel.isCollapsed() || sel.anchor.key !== pageCaret.key || sel.anchor.offset !== pageCaret.offset)) {
+      const type = pageCaret.node instanceof TextNode ? 'text' : 'element';
+      sel.anchor.set(pageCaret.key, pageCaret.offset, type);
+      sel.focus.set(pageCaret.key, pageCaret.offset, type);
+    }
+    if ($clampSelectionToContainerBoundary(sel)) {
+      if (event && typeof event.preventDefault === 'function') event.preventDefault();   // stop the browser's own native contenteditable deletion too, not just Lexical's
+      sel.removeText();
+      return true;   // handled: stop registerRichText's own default from ALSO running
+    }
+    const caret = caretOf(sel);
+    if ($deleteArmedProtectedDecorator(sel, caret, forward)) {
+      if (event && typeof event.preventDefault === 'function') event.preventDefault();
+      return true;   // handled: the second press removes the armed decorator (or a first press arms one selected another way)
+    }
+    if ($armProtectedDecoratorOnBoundary(sel, caret, forward)) {
+      if (event && typeof event.preventDefault === 'function') event.preventDefault();
+      return true;   // handled: the first press only selects the decorator, never deletes it
+    }
+    return false;   // neither case applies: let the normal handler run
+  }, COMMAND_PRIORITY_HIGH);
+}
+
+// The arm lasts while the item is still selected, or while the caret is back where it armed (see armedFrom); any
+// other move, a change to the document, or the item's removal cancels it.
+editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves }) => {
+  if (armedDecoratorKey == null) return;
+  editorState.read(() => {
+    const sel = $getSelection();
+    const stillSelected = $isNodeSelection(sel) && sel.has(armedDecoratorKey);
+    const contentChanged = dirtyLeaves.size > 0 || [...dirtyElements.keys()].some((k) => k !== 'root');
+    if (!$getNodeByKey(armedDecoratorKey) || (!stillSelected && !atArmedCaret(sel)) || (contentChanged && !stillSelected)) clearArm();
+  });
+});
+
+// ---- Auto-remove an emptied box/tnpage/sympage. A SidebarNode/TnPageNode/SymPageNode is an
+// ordinary ElementNode with no canBeEmpty()/collapseAtStart() override, so once the boundary-clamp
+// above stops it adopting a neighbour's content, Lexical's own default Backspace/Delete leaves it
+// sitting there empty rather than removing it (the other half of the same bug report). Rather than
+// trying to special-case every keyboard path into these containers, this instead watches every
+// update for one whose container just LOST its last content (compares against prevEditorState, so
+// a freshly-inserted, still-empty page — insertTnPage()'s placeholder entry, insertSidebar()'s
+// heading+placeholder are never empty at birth anyway — is never touched: it was never "non-empty
+// a moment ago") and removes it in the same update, tagged 'history-merge' (same pattern as the
+// SymPage auto-sync below) so Undo restores the box and its last content in one step, not two.
+// The caret goes to the end of the block that is now just before it (or the start of the block
+// after, if the container was the document's first block).
+// "Empty" = no real content anywhere inside: no non-blank text, and no picture/table/equation/etc.
+// (a container holding only a picture, say, is not "empty" even though getTextContent() is '').
+function $isContainerEmpty(node) {
+  if (node.getTextContent().replace(/[\s ]+/g, '') !== '') return false;
+  const stack = node.getChildren();
+  for (let i = 0; i < stack.length; i++) {
+    const n = stack[i];
+    if (n instanceof DecoratorNode) return false;
+    if (typeof n.getChildren === 'function') stack.push(...n.getChildren());
+  }
+  return true;
+}
+function containerRemovedMessageKey(node) {
+  if ($isTnPageNode(node)) return 'app.editor.tnpage_auto_removed';
+  if ($isSymPageNode(node)) return 'app.editor.sympage_auto_removed';
+  if ($isTitlePageNode(node)) return 'app.editor.titlepage_auto_removed';
+  return 'app.editor.box_auto_removed';
+}
+editor.registerUpdateListener(({ editorState, prevEditorState, dirtyElements, dirtyLeaves, tags }) => {
+  if (tags.has('emboss-skip-empty-container-check')) return;
+  if (!dirtyElements.size && !dirtyLeaves.size) return;
+  const candidateKeys = new Set();
+  editorState.read(() => {
+    const dirtyKeys = [...dirtyElements.keys(), ...dirtyLeaves];
+    for (const key of dirtyKeys) {
+      let n = $getNodeByKey(key);
+      while (n) {
+        if ($isEmbossContainerNode(n)) { candidateKeys.add(n.getKey()); break; }
+        n = n.getParent ? n.getParent() : null;
+      }
+    }
+  });
+  if (!candidateKeys.size) return;
+  const toRemove = [];   // [{ key, msgKey }]
+  editorState.read(() => {
+    for (const key of candidateKeys) {
+      const node = $getNodeByKey(key);
+      if (!node || !$isContainerEmpty(node)) continue;
+      // An automatic Special Symbols page ($isSymPageNode && getAuto()) legitimately passes
+      // through a transiently-empty state of its own: regenerateSymPage() clears it back to one
+      // empty paragraph before syncSymPages (called from render(), a moment later) refills it
+      // from the document's actual symbols. That is not a user emptying real content — it must
+      // never be treated as one, or "Regenerate" would delete the page out from under itself.
+      if ($isSymPageNode(node) && node.getAuto()) continue;
+      let wasNonEmpty = false;
+      try {
+        prevEditorState.read(() => {
+          const prev = $getNodeByKey(key);
+          wasNonEmpty = !!prev && $isEmbossContainerNode(prev) && !$isContainerEmpty(prev);
+        });
+      } catch (_) {}
+      if (wasNonEmpty) toRemove.push({ key, msgKey: containerRemovedMessageKey(node) });
+    }
+  });
+  if (!toRemove.length) return;
+  let announceMsg = null;
+  // Called from inside a registerUpdateListener callback, editor.update() here does not commit
+  // synchronously (Lexical defers a nested/re-entrant update to its own microtask) — so the
+  // announce() call must happen in the onUpdate callback, not straight after this call returns
+  // (which was tried first: announceMsg was always still null at that point).
+  editor.update(() => {
+    for (const { key, msgKey } of toRemove) {
+      const node = $getNodeByKey(key);
+      if (!node || !$isEmbossContainerNode(node)) continue;
+      const prev = node.getPreviousSibling();
+      const next = node.getNextSibling();
+      node.remove();
+      if (prev && typeof prev.selectEnd === 'function') prev.selectEnd();
+      else if (next && typeof next.selectStart === 'function') next.selectStart();
+      announceMsg = t(msgKey);   // last one wins if several were removed in the same update, same as elsewhere in this file
+    }
+  }, { tag: 'history-merge', onUpdate: () => { if (announceMsg) announce(announceMsg); } });
+});
+
+editor.registerUpdateListener(({ editorState, dirtyElements, tags }) => refreshListMarkers(editorState, dirtyElements, tags));
+
+// Special Symbols page (SymPageNode): (1) the transcriber editing an entry of an automatic page turns
+// `auto` off (the children no longer match what the last sync wrote), so the entries are saved
+// explicitly from then on; (2) syncSymPages, called by render() with the fresh model, rewrites an
+// untouched automatic page from the document's symbols and marks an edited page whose list has
+// symbols it lacks (data-stale; the CSS shows the note). Both use 'history-merge' so undo stays one step.
+editor.registerUpdateListener(({ editorState }) => {
+  const flip = [];
+  editorState.read(() => {
+    for (const c of $getRoot().getChildren()) {
+      if ($isSymPageNode(c) && c.getAuto() && JSON.stringify($symNodeEntries(c)) !== c.getSig()) flip.push(c.getKey());
+    }
+  });
+  if (!flip.length) return;
+  editor.update(() => {
+    for (const k of flip) { const n = $getNodeByKey(k); if ($isSymPageNode(n)) n.setAuto(false); }
+  }, { tag: 'history-merge' });
+});
+function syncSymPages(model) {
+  const targets = (model.blocks || []).filter((b) => b && b.type === 'sympage' && b._key);
+  if (!targets.length) return;
+  const derived = symDerivedEntries(model.blocks);
+  const dsig = JSON.stringify(derived);
+  const need = [];
+  editor.getEditorState().read(() => {
+    for (const b of targets) {
+      const n = $getNodeByKey(b._key);
+      if (!$isSymPageNode(n)) continue;
+      const cur = JSON.stringify($symNodeEntries(n));
+      const el = editor.getElementByKey(b._key);
+      if (n.getAuto()) { if (cur === n.getSig() && cur !== dsig) need.push(b._key); }
+      else if (el) {
+        const have = new Set($symNodeEntries(n).map((e) => e.braille));
+        const stale = derived.some((d) => d.braille && !have.has(d.braille));
+        const next = stale ? '1' : '';
+        if ((el.dataset.stale || '') !== next) { el.dataset.stale = next; el.dataset.staleNote = tOr('app.editor.sympage_stale_note', 'Symbols changed since you edited this page.'); }
+      }
+    }
+  });
+  if (!need.length) return;
+  editor.update(() => {
+    for (const k of need) {
+      const n = $getNodeByKey(k);
+      if (!$isSymPageNode(n)) continue;
+      $fillSymPage(n, derived);
+      n.setSig(JSON.stringify($symNodeEntries(n)));
+    }
+  }, { tag: 'history-merge' });
+}
+// Turn an edited Special Symbols page back into an automatic one (the 'regenerate' action). One undo step:
+// the update below and the render's own history-merge refill (syncSymPages) share one history entry.
+function regenerateSymPage(key) {
+  let done = false;
+  editor.update(() => {
+    const n = key ? $getNodeByKey(key) : $getRoot().getChildren().find($isSymPageNode);
+    if (!$isSymPageNode(n)) return;
+    $fillSymPage(n, []);
+    n.setSig('[]');
+    n.setAuto(true);
+    done = true;
+  }, { discrete: true });
+  scheduleRender();
+  if (done) announce(t('app.editor.sympage_regenerated'));
+  return done;
+}
+// The toolbar button: shown when the document has a Special Symbols page, enabled only when the page the cursor is
+// in (else the first one) is explicit. It lives in the toolbar, outside the editable root, so Lexical never sees it.
+function symRegenTarget(state) {
+  return state.read(() => {
+    const pages = $getRoot().getChildren().filter($isSymPageNode);
+    if (!pages.length) return { any: false, key: null, explicit: false };
+    let page = null;
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) { for (let n = sel.anchor.getNode(); n; n = n.getParent()) if ($isSymPageNode(n)) { page = n; break; } }
+    page = page || pages.find((p) => !p.getAuto()) || pages[0];
+    return { any: true, key: page.getKey(), explicit: !page.getAuto() };
+  });
+}
+function updateSymRegenBtn() {
+  const btn = $id('btnSymRegen');
+  if (!btn) return;
+  const r = symRegenTarget(editor.getEditorState());
+  btn.hidden = !r.any || !transcriberToolsOn();   // a transcriber tool: hidden while Transcriber tools is off (the page itself stays)
+  btn.disabled = !r.explicit;
+}
+editor.registerUpdateListener(() => updateSymRegenBtn());
+$id('btnSymRegen')?.addEventListener('click', () => { const r = symRegenTarget(editor.getEditorState()); if (r.explicit) regenerateSymPage(r.key); });
+window.regenerateSymPage = regenerateSymPage;
+
+// Title Page (TitlePageNode): the transcriber typing on the page (adding/deleting/retyping a line —
+// anything that changes the STRUCTURAL signature, field values excluded, TP-6) turns `auto` off, same
+// trigger/shape as SymPageNode's own listener just above. syncTitlePages (called by render(), below)
+// keeps an auto page's fields live and (only while still auto) refilled from the document; an edited
+// page instead gets its existing chips' VALUES refreshed in place, never its structure — see that
+// function's own comment.
+editor.registerUpdateListener(({ editorState }) => {
+  const flip = [];
+  editorState.read(() => {
+    for (const c of $getRoot().getChildren()) {
+      if ($isTitlePageNode(c) && c.getAuto() && titlePageStructureSig($titlePageSegments(c)) !== c.getSig()) flip.push(c.getKey());
+    }
+  });
+  if (!flip.length) return;
+  editor.update(() => {
+    for (const k of flip) { const n = $getNodeByKey(k); if ($isTitlePageNode(n)) n.setAuto(false); }
+  }, { tag: 'history-merge' });
+});
+function syncTitlePages(model) {
+  const targets = (model.blocks || []).filter((b) => b && b.type === 'titlepage' && b._key);
+  if (!targets.length) return;
+  const fields = titlePageFieldsFrom(tpCurrentModel());
+  // Filtered to lines-that-actually-exist, matching $fillTitlePage's OWN rule ("no lines" segments,
+  // e.g. an empty Publisher and copyright, are never appended to the node) — comparing against the
+  // unfiltered array here would never match the rendered content and refill in an endless loop.
+  const freshSegments = titlePageTemplateSegments(fields, undefined, tpMode()).filter((s) => s && Array.isArray(s.lines) && s.lines.length);
+  const freshFullJson = JSON.stringify(freshSegments);
+  const freshSig = titlePageStructureSig(freshSegments);
+  const need = [];          // auto pages whose live field values moved on: full refill
+  const fieldUpdates = [];  // edited pages: [{ key: TpFieldNode key, value }] — values only, never structure
+  editor.getEditorState().read(() => {
+    for (const b of targets) {
+      const n = $getNodeByKey(b._key);
+      if (!$isTitlePageNode(n)) continue;
+      if (n.getAuto()) {
+        // Still auto (the flip-listener above would have turned it off on any real edit): a full
+        // refill here can only be catching up with the document's own fields, never discarding
+        // anything the transcriber typed — same reasoning as syncSymPages' own refill.
+        if (JSON.stringify($titlePageSegments(n)) !== freshFullJson) need.push(b._key);
+        continue;
+      }
+      // Edited page (TP-6 "fields stay live" on an edited page too, exactly as format/document.mjs's
+      // traceTitlePage now does for the braille — field-registry.mjs's refreshTitlePageValues is the
+      // ONE function both use): each chip's own field name AND index (K29 Stage 1c rework) says which
+      // value it wants, so this is correct even if a list field (authors/isbn) has grown or shrunk
+      // since the page was last saved — no more "only if the whole chip sequence still lines up".
+      const current = $titlePageSegments(n);
+      const refreshed = refreshTitlePageValues(current, fields, fields);
+      const currentChips = [], refreshedValues = [];
+      current.forEach((seg, si) => seg.lines.forEach((l, li) => l.parts.forEach((part, pi) => { if ('fld' in part) { currentChips.push({ si, li, pi }); refreshedValues.push(refreshed[si].lines[li].parts[pi].value); } })));
+      // Map each logical (segment,line,part) position back to its live TpFieldNode, in the SAME
+      // document order $titlePageSegments walked them in.
+      const nodeChips = [];
+      for (const seg of n.getChildren()) { if (!$isTpSegmentNode(seg)) continue; for (const p of seg.getChildren()) { if (!(p instanceof ParagraphNode)) continue; for (const ch of p.getChildren()) if ($isTpFieldNode(ch)) nodeChips.push(ch); } }
+      nodeChips.forEach((ch, i) => { if (i < refreshedValues.length && ch.getFieldValue() !== refreshedValues[i]) fieldUpdates.push({ key: ch.getKey(), value: refreshedValues[i] }); });
+    }
+  });
+  if (need.length) {
+    editor.update(() => {
+      for (const k of need) {
+        const n = $getNodeByKey(k);
+        if (!$isTitlePageNode(n)) continue;
+        $fillTitlePage(n, freshSegments);
+        n.setSig(freshSig);
+      }
+    }, { tag: 'history-merge' });
+  }
+  if (fieldUpdates.length) {
+    editor.update(() => {
+      for (const { key, value } of fieldUpdates) {
+        const n = $getNodeByKey(key);
+        if ($isTpFieldNode(n)) n.setTextContent(value || TP_FIELD_EMPTY);
+      }
+    }, { tag: 'history-merge' });
+  }
+}
+// Turn an edited Title Page back into an automatic one (the 'Regenerate' action) — one undo step,
+// same pattern as regenerateSymPage.
+function regenerateTitlePage(key) {
+  let done = false;
+  editor.update(() => {
+    const n = key ? $getNodeByKey(key) : $getRoot().getChildren().find($isTitlePageNode);
+    if (!$isTitlePageNode(n)) return;
+    const segments = titlePageTemplateSegments(titlePageFieldsFrom(tpCurrentModel()), undefined, tpMode());
+    $fillTitlePage(n, segments);
+    n.setSig(titlePageStructureSig(segments));
+    n.setAuto(true);
+    done = true;
+  }, { discrete: true });
+  scheduleRender();
+  if (done) announce(t('app.editor.titlepage_regenerated'));
+  return done;
+}
+function titlePageRegenTarget(state) {
+  return state.read(() => {
+    const pages = $getRoot().getChildren().filter($isTitlePageNode);
+    if (!pages.length) return { any: false, key: null, explicit: false };
+    let page = null;
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) { for (let n = sel.anchor.getNode(); n; n = n.getParent()) if ($isTitlePageNode(n)) { page = n; break; } }
+    page = page || pages.find((p) => !p.getAuto()) || pages[0];
+    return { any: true, key: page.getKey(), explicit: !page.getAuto() };
+  });
+}
+function updateTitlePageRegenBtn() {
+  const btn = $id('btnTitlepageRegen');
+  if (!btn) return;
+  const r = titlePageRegenTarget(editor.getEditorState());
+  btn.hidden = !r.any || !transcriberToolsOn();
+  btn.disabled = !r.explicit;
+}
+editor.registerUpdateListener(() => updateTitlePageRegenBtn());
+$id('btnTitlepageRegen')?.addEventListener('click', () => { const r = titlePageRegenTarget(editor.getEditorState()); if (r.explicit) regenerateTitlePage(r.key); });
+window.regenerateTitlePage = regenerateTitlePage;
+
+// ---- K29 Stage 1d: "Insert field" (design §4) — a field chip put at the CURSOR inside a title page
+// line (a ParagraphNode that is a direct child of a TpSegmentNode), reached from the card's own toolbar
+// button, the slash menu, or Ctrl/⌘+Shift+F. Inserting a chip changes the page's STRUCTURE, so the same
+// update listener that already watches for a typed edit (above) turns `auto` off for it, exactly as
+// typing a new line would (TP-6) — no separate handling needed here.
+// $titlePageLineTarget(): read-only, must run inside an editor.read()/update() callback — returns true
+// when the (collapsed) selection is inside such a line, false otherwise (no line, or a range selection).
+function $titlePageLineTarget() {
+  const sel = $getSelection();
+  if (!$isRangeSelection(sel) || !sel.isCollapsed()) return false;
+  let node = sel.anchor.getNode();
+  let para = node instanceof ParagraphNode ? node : null;
+  if (!para) { for (let n = node; n; n = (typeof n.getParent === 'function' ? n.getParent() : null)) { if (n instanceof ParagraphNode) { para = n; break; } } }
+  if (!para) return false;
+  return $isTpSegmentNode(para.getParent());
+}
+function titlePageInsertFieldTarget(state) { return { available: state.read(() => $titlePageLineTarget()) }; }
+// Puts a field chip (its CURRENT value, field-registry.mjs's tpFieldCurrentValue — the same rule
+// titlePageTemplateSegments itself uses) at the cursor. List fields (authors/isbn) default to their
+// first entry (see tpFieldCurrentValue's own comment). Returns false (and announces where to put the
+// caret) when there is nowhere to insert.
+function insertTitlePageField(fld, idx) {
+  let inserted = null;
+  editor.update(() => {
+    if (!$titlePageLineTarget()) return;
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel) || !sel.isCollapsed()) return;
+    const fields = titlePageFieldsFrom(tpCurrentModel());
+    const value = tpFieldCurrentValue(fields, undefined, fld, idx);
+    sel.insertNodes([$createTpFieldNode(value, fld, idx ?? null)]);
+    inserted = { field: fld, value };
+  }, { discrete: true });
+  if (inserted) {
+    const label = TP_FIELD_LABELS[inserted.field] || inserted.field;
+    // design §4: "A screen reader announces a chip as, for example, 'Print pages, field, i-x and 1-44'" —
+    // the same announcement an inserted chip gets here, so insertion is confirmed the same way reading one is.
+    announce(t('app.titlepage_card.field_inserted', { label, value: inserted.value || '' }) || `Inserted ${label} field: ${inserted.value || ''}.`);
+    scheduleRender();
+  } else {
+    announce(t('app.editor.titlepage_insertfield_none') || 'Place the caret in a Title Page line first.');
+  }
+  return !!inserted;
+}
+function updateTpInsertFieldBtn() {
+  const btn = $id('btnTpInsertField');
+  if (!btn) return;
+  const show = transcriberToolsOn() && titlePageInsertFieldTarget(editor.getEditorState()).available;
+  btn.hidden = !show;
+  if (!show) closeTpInsertFieldMenu();
+}
+editor.registerUpdateListener(() => updateTpInsertFieldBtn());
+function renderTpInsertFieldMenu() {
+  const menu = $id('tpInsertFieldMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  for (const fld of tpInsertableFields(tpMode())) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.setAttribute('role', 'menuitem');
+    item.className = 'menu-dropdown-item';
+    item.textContent = TP_FIELD_LABELS[fld] || fld;
+    item.addEventListener('click', () => { closeTpInsertFieldMenu(); insertTitlePageField(fld); });
+    menu.appendChild(item);
+  }
+}
+function openTpInsertFieldMenu() {
+  const menu = $id('tpInsertFieldMenu'), btn = $id('btnTpInsertField');
+  if (!menu || !btn || btn.hidden) return;
+  closeAllDropdownMenus();
+  renderTpInsertFieldMenu();
+  menu.hidden = false;
+  btn.setAttribute('aria-expanded', 'true');
+  const first = menu.querySelector('.menu-dropdown-item');
+  first?.focus({ preventScroll: true });
+  // Opened from Ctrl/⌘+Shift+F, Lexical is still handling that key: its update then restores the caret, which takes the focus
+  // back to the text and leaves the open menu out of the keyboard's reach (A89, found running the suites in real Chrome). After
+  // that update, the focus goes back to the menu's first item if the menu is still open and the text took it.
+  const unregister = editor.registerUpdateListener(() => {
+    unregister();
+    setTimeout(() => { if (!menu.hidden && document.activeElement === editorEl) first?.focus({ preventScroll: true }); }, 0);
+  });
+  setTimeout(() => unregister(), 1000);
+}
+function closeTpInsertFieldMenu() {
+  const menu = $id('tpInsertFieldMenu'), btn = $id('btnTpInsertField');
+  if (menu && !menu.hidden) { menu.hidden = true; btn?.setAttribute('aria-expanded', 'false'); }
+}
+function toggleTpInsertFieldMenu() {
+  const menu = $id('tpInsertFieldMenu');
+  if (menu && !menu.hidden) closeTpInsertFieldMenu(); else openTpInsertFieldMenu();
+}
+window.insertTitlePageField = insertTitlePageField;   // Playwright test hook (test-titlepage-editor.mjs)
+
+// ---- K29 Stage 1d: "Print title page…" (design §4/§5 row "1d Print copy"; addendum 2.3.1/2.3.6e; KD's
+// round-2 answer 5d, questions-register.md). format/titlepage-print.mjs builds the HTML (pure, unit-
+// tested by tests/titlepage_print_copy.test.mjs); this is the one place that opens a window and prints it.
+function tpFullDocForPrint() {
+  let currentDocModel = null;
+  editor.getEditorState().read(() => { currentDocModel = mergeListItemBlocks(buildModel()); });
+  return currentDocModel || lastModel || { title: null, blocks: [] };
+}
+// Runs on every update, so it only looks for a Title Page node rather than building the document model.
+function printTitlePageAvailable() { return editor.getEditorState().read(() => $getRoot().getChildren().some((n) => $isTitlePageNode(n))); }
+function updatePrintTitlepageMenuItem() {
+  const item = $id('printTitlepageItem'), div = $id('printTitlepageDivider');
+  const show = printTitlePageAvailable();
+  if (item) item.hidden = !show;
+  if (div) div.hidden = !show;
+}
+editor.registerUpdateListener(() => updatePrintTitlepageMenuItem());
+function openPrintTitlePage() {
+  const doc = tpFullDocForPrint();
+  if (!(doc.blocks || []).some((b) => b && b.type === 'titlepage')) { announce(t('app.titlepage_print.unavailable') || 'There is no Title Page to print. Insert one first.'); return; }
+  const html = titlePagePrintHtml(doc, { mode: settings.mode, exhaustiveSymbols: doc.exhaustiveSymbols });
+  const win = window.open('', '_blank');
+  if (!win) { announce(t('app.titlepage_print.blocked') || 'Pop-up blocked: allow pop-ups for this page to print the Title Page.'); return; }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  win.print();
+  announce(t('app.titlepage_print.opened') || 'Print copy opened in a new window.');
+}
+window.openPrintTitlePage = openPrintTitlePage;   // Playwright test hook (test-titlepage-editor.mjs)
+
+// Enter makes a new item that copies the old one's marker and enum/start: the new item is numbered by position, not by copy.
+const origItemInsertNewAfter = ListItemNode.prototype.insertNewAfter;
+ListItemNode.prototype.insertNewAfter = function(...args) {
+  const r = origItemInsertNewAfter.apply(this, args);
+  if ($isListItemNode(r) && r !== this) {
+    if (r.getMarker()) r.setMarker(null);
+    const f = fmtOf(r);
+    if (f && (f.enum != null || f.start != null || f.itemCont)) r.setFmt({ ...f, enum: null, start: null, itemCont: null });   // Enter after an item's further paragraph starts a new item
+  }
+  return r;
+};
+// Deleting the first item of a sibling group must not lose the group's enum/start: they move to the group's new first item
+// (unless that item has its own). Done inside remove()/replace(), i.e. in the same update, so one undo restores everything.
+function keepGroupFmtOnRemove(item) {
+  try {
+    const f = fmtOf(item);
+    if (!f || (f.enum == null && f.start == null)) return;
+    const lvl = item.getLevel() || 0;
+    for (let p = item.getPreviousSibling(); p; p = p.getPreviousSibling()) {
+      if (!$isListItemNode(p)) continue;
+      const pl = p.getLevel() || 0;
+      if (pl === lvl) return;                           // not the first item of its group
+      if (pl < lvl) break;                              // a shallower item opens the group: this is its first
+    }
+    for (let n = item.getNextSibling(); n; n = n.getNextSibling()) {
+      if (!$isListItemNode(n)) continue;
+      const nl = n.getLevel() || 0;
+      if (nl > lvl) continue;
+      if (nl < lvl) return;                             // the group ended with it
+      const nf = fmtOf(n) || {};
+      if (nf.enum == null && nf.start == null) n.setFmt({ ...nf, enum: f.enum != null ? f.enum : null, start: f.start != null ? f.start : null });
+      return;
+    }
+  } catch (err) { console.warn('keepGroupFmtOnRemove', err); }
+}
+for (const method of ['remove', 'replace']) {
+  const orig = ListItemNode.prototype[method];
+  ListItemNode.prototype[method] = function(...args) {
+    if (this.isAttached()) keepGroupFmtOnRemove(this);
+    return orig.apply(this, args);
+  };
+}
+// A89 (random-action testing, seed 614743370): a document that begins with a box, then select all + type, left the typed
+// text loose inside the box -- Lexical keeps the first block's container and puts the text straight into it -- and every
+// other part of the editor (the braille, the save) expects text to sit inside a paragraph. Loose text, line breaks and
+// inline equations directly under the document or a box are gathered into a paragraph as soon as they appear.
+function $wrapLooseInlines(container) {
+  if (!container.isAttached()) return;
+  let para = null;
+  for (const child of container.getChildren()) {
+    const loose = !(child instanceof ElementNode || child instanceof DecoratorNode) || child.isInline();
+    if (!loose) { para = null; continue; }
+    if (!para) { para = $createParagraphNode(); child.insertBefore(para); }
+    para.append(child);
+  }
+}
+for (const C of [SidebarNode, TnPageNode, SymPageNode, TpSegmentNode]) editor.registerNodeTransform(C, $wrapLooseInlines);
+// The Title Page begins the book (BANA 2.2.1), and a save writes one Title Page, first (nimas-export.mjs), so in the editor too
+// there is one, and it is the first block: whatever is put above it (pasted, typed or moved there) ends up just after it, and a
+// second one (a paste or a load can bring one) is dropped. It was brailled where it stood, twice when there were two, and the
+// reopened document's braille differed (A89, random-action testing; tests/test-titlepage-first.mjs). Checked on the document
+// itself, which changes whenever a top-level block is added, moved or removed (a change further down does not touch the page).
+const RootNodeClass = editor.getEditorState().read(() => $getRoot().constructor);
+editor.registerNodeTransform(RootNodeClass, (root) => {
+  const tps = root.getChildren().filter($isTitlePageNode);
+  if (!tps.length) return;
+  for (const extra of tps.slice(1)) extra.remove();
+  const first = root.getFirstChild();
+  if (first && !first.is(tps[0])) first.insertBefore(tps[0]);
+});
+// A pasted native (Lexical) list nests real ListNodes inside a ListItemNode. The editor's model is flat (one ListNode, items
+// tagged with __level), so a pasted nested list is flattened on arrival: order kept, level = nesting depth, and a group whose
+// type differs from the list's own (bullets under numbers, numbers under bullets) gets literal item markers so it still
+// shows and saves as what it was. Plain-text paste ('- ', '1.' prefixes) never makes nested nodes and is not touched.
+editor.registerNodeTransform(ListNode, (list) => {
+  if (!list.isAttached() || typeof list.getListType !== 'function') return;
+  const host = list.getListType();
+  if (host !== 'number' && host !== 'bullet') return;
+  for (const li of list.getChildren().filter($isListItemNode)) {
+    const nestedLists = li.getChildren().filter($isListNode);
+    if (!nestedLists.length) continue;
+    let cursor = li;
+    const flat = [];
+    const walk = (nl, level) => {
+      const type = nl.getListType();
+      let n = 0;
+      for (const it of nl.getChildren()) {
+        if (!$isListItemNode(it)) continue;
+        const inner = it.getChildren().filter($isListNode);
+        const hasOwn = it.getChildren().some((c) => !$isListNode(c));
+        if (hasOwn) {
+          it.setLevel(level);
+          if (type !== host) it.setMarker(type === 'bullet' ? '•' : synthesizeOrderedMarker(n + 1, defaultEnumForLevel(level)));
+          n++;
+          flat.push(it);
+        }
+        for (const sub of inner) walk(sub, level + 1);
+      }
+    };
+    for (const nl of nestedLists) walk(nl, (li.getLevel() || 0) + 1);
+    for (const it of flat) { cursor.insertAfter(it); cursor = it; }
+    for (const nl of nestedLists) if (nl.isAttached()) nl.remove();
+    if (!li.getChildren().length) li.remove();
+  }
+});
+// Print markers that are plain 1-2-3 / a-b-c / i-ii-iii runs agreeing with the group's enum/start are computed, not kept: then
+// Enter, delete, Tab and undo renumber. Groups with literal print markers (3. 5. 6., a) b) …) keep them. Same text on save, so
+// an unedited document saves as before. Also: only the first item of a group carries enum/start.
+editor.registerNodeTransform(ListNode, (list) => {
+  if (!list.isAttached() || typeof list.getListType !== 'function' || list.getListType() !== 'number') return;
+  const kind = (typeof list.getListKind === 'function' ? list.getListKind() : null) || (typeof list.getBanaStyle === 'function' ? list.getBanaStyle() : null);
+  if (['toc', 'index', 'plain', 'glossary'].includes(kind)) return;
+  const its = listItemsForPlan(list);
+  const { gi, pos } = listGroups(its);
+  its.forEach((it, i) => {
+    if (gi[i] !== i && it.fmt && (it.fmt.enum != null || it.fmt.start != null)) it.node.setFmt({ ...it.fmt, enum: null, start: null });
+  });
+  const groups = new Map();
+  its.forEach((it, i) => { if (!groups.has(gi[i])) groups.set(gi[i], []); groups.get(gi[i]).push(i); });
+  for (const [g, idxs] of groups) {
+    const gf = its[g].fmt || {};
+    const lvl = Math.max(0, Math.min(9, its[g].level | 0));
+    const en = LIST_ENUMS.includes(gf.enum) ? gf.enum : defaultEnumForLevel(lvl);
+    const st = Math.max(1, Math.floor(Number(gf.start)) || 1);
+    if (!idxs.some((i) => its[i].kept)) continue;
+    const agrees = idxs.every((i) => {
+      const k = its[i].kept;
+      if (!k) return true;
+      if (k === NO_MARKER) return false;
+      const n = st + pos[i];
+      return k === ((!LIST_ENUMS.includes(gf.enum) && lvl >= 4) ? `(${n})` : synthesizeOrderedMarker(n, en));
+    });
+    if (agrees) for (const i of idxs) if (its[i].kept) its[i].node.setMarker(null);
+  }
+});
 
 // ---- Document Dirty Tracking & Save State ----
 // O(1) per keystroke: an update listener flips `contentChangedSinceClean` whenever a
@@ -1152,14 +3706,66 @@ export function getEditorStateSignature() {
   }
 }
 
+// True when the document has no content at all: only empty paragraphs, no pictures, tables, equations or other items, and no title
+// typed into the Title field (feedback 30 Sep item 17: an emptied document is nothing to recover or to ask about).
+function isDocumentEmpty() {
+  if (loadedDocInfo.titleTyped) return false;
+  return editor.getEditorState().read(() => $getRoot().getChildren().every((c) => typeof c.getChildren === 'function'
+    && c.getTextContent().trim() === '' && c.getChildren().every((k) => $isTextNode(k) || $isLineBreakNode(k))));
+}
+// The document's title and details live outside the text (loadedDocInfo): a change to them since the last save (the Title field,
+// Book details) is unsaved too (feedback item 10), though the text's own state is unchanged.
+let docInfoChangedSinceClean = false;
+// A picture description being typed (feedback item 8's box) is committed when the box is left; until then it is unsaved work too,
+// so leaving the page asks first.
+let cardEditPending = false;
+// S2a #5 (audit 15 Oct 2026): what is typed in a picture's description box is not in the document until the box is left, so the
+// autosave backup, a save and the transfer to Quick Mode (all built from the document) missed it. The draft is now kept here,
+// by the picture's node key: buildModel's imageBlock() reads it in place of the stored description (so every copy of the model
+// built meanwhile has the text being typed), typing asks for an autosave, and commitPendingCardDrafts() puts the drafts into the
+// document (the braille and a download need that: they are rendered from it).
+const pendingAltDrafts = new Map();     // picture node key -> the text typed in its description box, not yet committed
+const pendingCardCommits = new Map();   // picture node key -> () => commits that draft to the document
+function commitPendingCardDrafts() {
+  for (const commit of [...pendingCardCommits.values()]) { try { commit(true); } catch (e) { console.warn('committing a picture description failed:', e); } }
+}
+// S3c (S2-Q3, Paul 15 Oct): "unsaved" must mean a real change. cardEditPending is true only while a description box holds text
+// that differs from the picture's stored description (typing a letter and deleting it, or a trailing space, is no change).
+function refreshCardEditPending() {
+  let pending = false;
+  if (pendingAltDrafts.size) {
+    editor.getEditorState().read(() => {
+      for (const [k, v] of pendingAltDrafts) {
+        const n = $getNodeByKey(k);
+        const stored = $isImageNode(n) ? (n.getAlt() || '') : '';
+        if (stored !== String(v).replace(/\s+/g, ' ').trim()) { pending = true; break; }
+      }
+    });
+  }
+  cardEditPending = pending;
+}
 export function markDocumentClean() {
+  // A description still in its box was saved with the document (S2a #5: the save reads the draft). Put it into the document now,
+  // before the saved state is taken, so that leaving the box later does not look like a change since the save (S2-Q3).
+  commitPendingCardDrafts();
   lastSavedEditorState = editor.getEditorState();
   lastSavedStateSignature = getEditorStateSignature();
   contentChangedSinceClean = false;
+  docInfoChangedSinceClean = false;
+  cardEditPending = false;
+}
+
+// A recovered autosave has never been saved to a file: it starts dirty, so the close guard
+// still asks and autosave keeps backing it up until the user saves.
+export function markDocumentUnsaved() {
+  lastSavedEditorState = null;
+  lastSavedStateSignature = 'unsaved';
+  contentChangedSinceClean = true;
 }
 
 export function isDocumentDirty() {
   if (!lastSavedStateSignature) return false;
+  if (docInfoChangedSinceClean || cardEditPending) return true;
   if (!contentChangedSinceClean) return false;
   const cur = editor.getEditorState();
   if (cur === lastSavedEditorState) { contentChangedSinceClean = false; return false; }
@@ -1192,10 +3798,10 @@ function updateTableWarningBadge(bar, headers, rows, format) {
   if (!bar) return;
   const fmt = format || 'spatial';
   let badge = bar.querySelector('.table-warn-badge');
-  if (fmt === 'listed' || fmt === 'vertical') { if (badge) badge.remove(); return; }   // an explicit listed/vertical table isn't "too wide" — that's what was asked for
+  if (fmt === 'listed' || fmt === 'vertical' || fmt === 'facing' || fmt === 'stairstep' || fmt === 'linear') { if (badge) badge.remove(); return; }   // an explicit listed/vertical table isn't "too wide" — that's what was asked for
   const o = currentFormatOpts();
   const layout = tableLayout({ headers: headers || [], rows: rows || [], format: fmt }, o);
-  if (layout === 'columnar' || layout === 'vertical') { if (badge) badge.remove(); return; }   // T4: vertical division (BANA §11.14) is a legitimate auto fallback, not the "too wide" warning
+  if (layout === 'columnar' || layout === 'vertical' || layout === 'facing' || layout === 'interchange' || layout === 'stairstep' || layout === 'linear') { if (badge) badge.remove(); return; }   // BANA 11.15: an 'interchange' table that does not fit even interchanged is laid out as auto — so it can still warn   // T4: vertical division (BANA §11.14) and K15 facing pages (§11.13) are legitimate auto layouts, not the "too wide" warning
   const bana = o.mode === 'bana';
   const msg = t(bana ? 'app.table.too_wide_listed' : 'app.table.too_wide_paragraph');
   const desc = t(bana ? 'app.table.too_wide_listed_title' : 'app.table.too_wide_paragraph_title');
@@ -1222,6 +3828,76 @@ function forEachTableNode(cb) {
     walk($getRoot().getChildren());
   });
 }
+// The maths keyboard (MathLive's virtual keyboard) takes the bottom third of the window and pads the page to make room.
+// Found 30 Sep: with the braille-rules band showing an equation's several rows of rules, the text and braille panes
+// were squeezed to a few lines (on a small window, to nothing). While the keyboard is open the band keeps to one row
+// (it scrolls) and the equation being edited is kept in view.
+let mathKeyboardWatched = false;
+// Every equation's keyboard button says whether the keyboard is open (aria-expanded), whoever opened or closed it.
+function syncMathKeyboardButtons() {
+  const open = !!(window.mathVirtualKeyboard && window.mathVirtualKeyboard.visible);
+  for (const b of document.querySelectorAll('.math-kb-btn')) b.setAttribute('aria-expanded', String(open));
+}
+function watchMathKeyboard() {
+  if (mathKeyboardWatched) return;
+  mathKeyboardWatched = true;
+  // Opening or closing the keyboard makes MathLive pad <body> (its style attribute) at once, with
+  // mathVirtualKeyboard.visible already updated; its own events proved unreliable when the field's keyboard button
+  // opens it, and its .is-visible class waits for an animation frame.
+  //
+  // F9 item M (Paul 9 Oct 2026): the keyboard stayed open, with no way to close it, once every equation had been deleted (it belongs to the
+  // page, not to a field, and MathLive's own close key lives in the field's toolbar). Now (1) a Close button sits above the keyboard
+  // whenever it is open, and (2) the keyboard closes by itself as soon as no equation is left in the document.
+  let closeBtn = null;
+  const kb = () => window.mathVirtualKeyboard;
+  const placeClose = () => {
+    if (!closeBtn) return;
+    const h = Math.round(kb()?.boundingRect?.height || 0);
+    closeBtn.style.bottom = `${h + 8}px`;
+  };
+  const ensureClose = () => {
+    if (closeBtn) return closeBtn;
+    closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.id = 'mathKbClose';
+    closeBtn.className = 'math-kb-close';
+    closeBtn.hidden = true;
+    const label = tOr('app.editor.math_keyboard_close', 'Close maths keyboard');
+    closeBtn.append(iconEl('xmark', 'icon icon-inline'), ` ${label}`);
+    closeBtn.setAttribute('aria-label', label);
+    closeBtn.addEventListener('click', () => { try { kb()?.hide(); } catch { /* not up yet */ } sync(); editor.focus(); });
+    document.body.appendChild(closeBtn);
+    window.addEventListener('i18n:localechange', () => { const l = tOr('app.editor.math_keyboard_close', 'Close maths keyboard'); closeBtn.replaceChildren(iconEl('xmark', 'icon icon-inline'), ` ${l}`); closeBtn.setAttribute('aria-label', l); });
+    return closeBtn;
+  };
+  const sync = () => {
+    let open = !!(kb() && kb().visible);
+    if (open && !document.querySelector('math-field')) { try { kb().hide(); open = !!kb().visible; } catch { /* ignore */ } }   // no equation left: nothing for it to type into
+    const shown = open && !!document.querySelector('math-field');
+    ensureClose().hidden = !shown;
+    if (shown) placeClose();
+    syncMathKeyboardButtons();
+    if (document.body.classList.contains('math-keyboard-open') === open) return;
+    document.body.classList.toggle('math-keyboard-open', open);
+    if (!open) return;
+    const active = document.activeElement;
+    const mf = active && active.tagName === 'MATH-FIELD' ? active : document.querySelector('math-field:focus-within');
+    setTimeout(() => mf?.scrollIntoView({ block: 'nearest' }), 0);
+  };
+  new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['style'], childList: true });
+  // An equation removed from the document (the text is edited, not the body): looked at only while the keyboard is open.
+  const doc = $id('editor');
+  if (doc) {
+    let queued = false;
+    new MutationObserver(() => {
+      if (queued || !(kb() && kb().visible)) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; sync(); });
+    }).observe(doc, { childList: true, subtree: true });
+  }
+  try { kb()?.addEventListener?.('geometrychange', () => { placeClose(); }); } catch { /* older MathLive */ }
+}
+
 function refreshAllTableBadges() {
   forEachTableNode((n) => {
     const el = editor.getElementByKey(n.getKey());
@@ -1253,9 +3929,9 @@ editor.registerDecoratorListener((decorators) => {
       const btnSize = document.createElement('button');
       btnSize.type = 'button';
       btnSize.className = 'graphic-context-btn';
-      const sizeLabels = { compact: '📐 Size: Compact', half: '📐 Size: Half Page', full: '📐 Size: Full Page' };
+      const sizeLabels = { compact: 'Size: Compact', half: 'Size: Half Page', full: 'Size: Full Page' };
       const currentSize = val.size || 'half';
-      btnSize.textContent = sizeLabels[currentSize] || '📐 Size: Half Page';
+      btnSize.textContent = sizeLabels[currentSize] || 'Size: Half Page';
       btnSize.title = t('app.graphic.size_title');
       btnSize.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1265,7 +3941,7 @@ editor.registerDecoratorListener((decorators) => {
             const nextMap = { compact: 'half', half: 'full', full: 'compact' };
             const nextSize = nextMap[n.getSize()] || 'half';
             n.setSize(nextSize);
-            btnSize.textContent = sizeLabels[nextSize] || '📐 Size: Half Page';
+            btnSize.textContent = sizeLabels[nextSize] || 'Size: Half Page';
             el.className = 'doc-graphic-block size-' + nextSize;
           }
         });
@@ -1275,7 +3951,7 @@ editor.registerDecoratorListener((decorators) => {
       const btnTextures = document.createElement('button');
       btnTextures.type = 'button';
       btnTextures.className = 'graphic-context-btn';
-      btnTextures.textContent = val.textures ? '🎨 Textures: ON' : '🎨 Textures: OFF';
+      btnTextures.textContent = val.textures ? 'Textures: ON' : 'Textures: OFF';
       btnTextures.title = t('app.graphic.textures_title');
       btnTextures.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1284,7 +3960,7 @@ editor.registerDecoratorListener((decorators) => {
           if ($isGraphicNode(n)) {
             const next = !n.getTextures();
             n.setTextures(next);
-            btnTextures.textContent = next ? '🎨 Textures: ON' : '🎨 Textures: OFF';
+            btnTextures.textContent = next ? 'Textures: ON' : 'Textures: OFF';
           }
         });
       });
@@ -1311,7 +3987,7 @@ editor.registerDecoratorListener((decorators) => {
       const btnLeadLine = document.createElement('button');
       btnLeadLine.type = 'button';
       btnLeadLine.className = 'graphic-context-btn';
-      btnLeadLine.textContent = `🏷 + ${t('app.graphic.add_label')}`;
+      btnLeadLine.textContent = `+ ${t('app.graphic.add_label')}`;
       btnLeadLine.title = t('app.graphic.add_label_title');
       btnLeadLine.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1338,7 +4014,7 @@ editor.registerDecoratorListener((decorators) => {
       const btnDel = document.createElement('button');
       btnDel.type = 'button';
       btnDel.className = 'graphic-context-btn danger';
-      btnDel.textContent = `🗑 ${t('common.delete')}`;
+      btnDel.replaceChildren(iconEl('trash', 'icon icon-inline'), ` ${t('common.delete')}`);
       btnDel.title = t('app.graphic.delete_title');
       btnDel.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1368,6 +4044,117 @@ editor.registerDecoratorListener((decorators) => {
       continue;
     }
 
+    // Image (print image) decorator: a control for the picture's type word (BANA 6.2.2b,
+    // F-231/Stage 2, 23 Sep 2026). figureType already round-trips through load/save/undo
+    // (F-231's fix on ImageNode/imageBlock, above) — this is its only editor UI. Blank
+    // keeps the "Illustration" default (document.mjs's traceOrFormatPrintImage). Caption,
+    // alt text and description stay static (built once in ImageNode.createDOM); only
+    // figureType is interactive, so the meta block createDOM already built is reused here
+    // rather than wiped, unlike the Graphic/Table decorators above which own their whole DOM.
+    if (typeof val === 'object' && val.type === 'image') {
+      const meta = el.querySelector('.doc-image-meta');
+      if (!meta || meta.querySelector('.doc-image-type-select')) continue;
+      const FIGURE_TYPE_OPTIONS = ['Photograph', 'Map', 'Diagram', 'Illustration', 'Picture', 'Cartoon'];
+      const OTHER = '__other__';
+      const isPreset = FIGURE_TYPE_OPTIONS.includes(val.figureType);
+      // The description for the braille reader (the alt text; feedback 30 Sep item 8, Paul 1 Oct): typed here, it becomes the
+      // picture's transcriber's note in the braille. Committed when the box is left (change), so the card is not rebuilt while
+      // typing; keys stay in the box (Lexical would otherwise take Backspace / Enter as edits to the document around the picture).
+      const altId = `img-alt-${key}`;
+      const altLabel = document.createElement('label');
+      altLabel.className = 'doc-image-alt-label';
+      altLabel.htmlFor = altId;
+      altLabel.textContent = tOr('app.editor.image_alt_label', 'Description for the braille reader');
+      const altBox = document.createElement('textarea');
+      altBox.id = altId;
+      altBox.className = 'doc-image-alt';
+      altBox.rows = 2;
+      altBox.value = val.alt || '';
+      altBox.placeholder = tOr('app.editor.image_alt_placeholder', 'What the picture shows. Leave empty for a decorative picture.');
+      for (const ev of ['pointerdown', 'mousedown', 'click', 'keydown', 'keyup', 'keypress', 'beforeinput', 'input', 'paste', 'cut', 'copy', 'focusin']) altBox.addEventListener(ev, (e) => e.stopPropagation());
+      altBox.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); altBox.blur(); } });
+      pendingAltDrafts.delete(key); pendingCardCommits.delete(key);   // a rebuilt card starts from the document's description
+      const commitAlt = (discrete = false) => {
+        const v = altBox.value;
+        pendingAltDrafts.delete(key); pendingCardCommits.delete(key);
+        if (!altBox.isConnected) { refreshCardEditPending(); return; }
+        editor.update(() => {
+          const n = $getNodeByKey(key);
+          if ($isImageNode(n) && n.getAlt() !== v.replace(/\s+/g, ' ').trim()) n.setAlt(v);   // only a real change touches the document (S2-Q3)
+        }, discrete === true ? { discrete: true } : undefined);
+        refreshCardEditPending();   // a real change is now in the document (its own dirty mark); an unchanged box leaves nothing pending
+      };
+      altBox.addEventListener('input', () => {
+        pendingAltDrafts.set(key, altBox.value);
+        pendingCardCommits.set(key, commitAlt);
+        refreshCardEditPending();   // S2-Q3: unsaved only if the text differs from the stored description
+        noteAutosaveChange();   // S2a #5: a backup follows the typing, as it does for the text itself
+      });
+      altBox.addEventListener('change', () => commitAlt());
+      const altRow = document.createElement('div');
+      altRow.className = 'doc-image-alt-row';
+      altRow.append(altLabel, altBox);
+      meta.appendChild(altRow);
+      const row = document.createElement('div');
+      // The picture type (the note's label word, BANA 6.2.2b) is a transcriber's choice: hidden while Transcriber tools is off
+      // (class fmt-transcriber), when every picture uses the default, "Illustration" (feedback item 8).
+      row.className = 'doc-image-type-row fmt-transcriber';
+      const selId = `img-type-${key}`;
+      const label = document.createElement('label');
+      label.className = 'doc-image-type-label';
+      label.htmlFor = selId;
+      label.textContent = 'Picture type:';
+      const sel = document.createElement('select');
+      sel.id = selId;
+      sel.className = 'doc-image-type-select';
+      sel.title = 'The transcriber\'s-note label word for this picture (BANA 6.2.2b) — untested on real hardware output, blank uses "Illustration".';
+      const addOption = (value, text, selected) => {
+        const o = document.createElement('option');
+        o.value = value; o.textContent = text;
+        if (selected) o.selected = true;
+        sel.appendChild(o);
+      };
+      addOption('', '(default — Illustration)', !val.figureType);
+      for (const word of FIGURE_TYPE_OPTIONS) addOption(word, word, val.figureType === word);
+      addOption(OTHER, 'Other…', Boolean(val.figureType) && !isPreset);
+      sel.addEventListener('pointerdown', (e) => e.stopPropagation());
+      sel.addEventListener('click', (e) => e.stopPropagation());
+      sel.addEventListener('change', (e) => {
+        e.stopPropagation();
+        let value = sel.value;
+        if (value === OTHER) {
+          const custom = window.prompt('Enter a custom picture type word (e.g. "Cover", "Portrait"):', !isPreset ? (val.figureType || '') : '');
+          value = custom ? custom.trim() : '';
+          if (!value) { sel.value = isPreset ? val.figureType : ''; return; }
+        }
+        editor.update(() => {
+          const n = $getNodeByKey(key);
+          if ($isImageNode(n)) n.setFigureType(value);
+        });
+      });
+      row.appendChild(label);
+      row.appendChild(sel);
+      meta.appendChild(row);
+      // Feedback 30 Sep item 9 (Paul, 1 Oct): a Delete button, as tables, tactile graphics, equations and page numbers have
+      // (a picture had none, and a mouse user could not remove one). Undo brings it back.
+      const btnDel = document.createElement('button');
+      btnDel.type = 'button';
+      btnDel.className = 'doc-image-delete table-context-btn danger';
+      btnDel.replaceChildren(iconEl('trash', 'icon icon-inline'), ` ${t('common.delete')}`);
+      btnDel.title = tOr('app.editor.image_delete_title', 'Delete this picture (Undo brings it back)');
+      btnDel.addEventListener('pointerdown', (e) => e.stopPropagation());
+      btnDel.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editor.update(() => { const n = $getNodeByKey(key); if ($isImageNode(n)) n.remove(); });
+        announce(tOr('app.editor.image_deleted', 'Picture deleted. Undo brings it back.'));
+      });
+      const delRow = document.createElement('div');
+      delRow.className = 'doc-image-delete-row';
+      delRow.appendChild(btnDel);
+      meta.appendChild(delRow);
+      continue;
+    }
+
     // MathLive math-field decorator
     if (typeof val === 'string') {
       if (el.querySelector('math-field')) continue;
@@ -1376,6 +4163,7 @@ editor.registerDecoratorListener((decorators) => {
       el.style.alignItems = 'center';
       el.style.gap = '4px';
 
+      watchMathKeyboard();
       const mf = document.createElement('math-field');
       // Virtual keyboard only on request (its toggle is visible); the MathLive menu stays
       // hidden because its options are print styling that braille ignores (G11).
@@ -1386,13 +4174,23 @@ editor.registerDecoratorListener((decorators) => {
         el.setAttribute('data-latex', val);
       }
       mf.value = val;
+      // A name for the equation's typing area (WCAG 4.1.2): MathLive's own keyboard sink, inside its shadow root, has none.
+      const mfLabel = tOr('app.editor.equation_aria', 'Equation');
+      mf.setAttribute('aria-label', mfLabel);
+      let mfLabelTries = 0;
+      const labelMathSink = () => {
+        const sink = mf.shadowRoot?.querySelector('.ML__keyboard-sink');
+        if (sink) sink.setAttribute('aria-label', mfLabel);
+        else if (++mfLabelTries < 60) requestAnimationFrame(labelMathSink);
+      };
+      requestAnimationFrame(labelMathSink);
 
       const btnPlot = document.createElement('button');
       btnPlot.type = 'button';
       btnPlot.className = 'math-plot-btn';
-      btnPlot.textContent = `📈 ${t('app.graphic.plot')}`;
+      btnPlot.replaceChildren(iconEl('graph-up', 'icon icon-inline'), ` ${t('app.graphic.plot')}`);
       btnPlot.title = t('app.graphic.plot_title');
-      btnPlot.style.cssText = 'display:none; padding:2px 6px; font-size:.75rem; font-weight:600; background:var(--accent); color:#fff; border:0; border-radius:4px; cursor:pointer; vertical-align:middle;';
+      btnPlot.style.cssText = 'display:none; padding:2px 6px; font-size:.75rem; font-weight:600; background:var(--pill-bg); color:var(--ink); border:1px solid var(--line); border-radius:4px; cursor:pointer; vertical-align:middle;';
       btnPlot.addEventListener('mousedown', (e) => e.preventDefault());
       btnPlot.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1409,6 +4207,33 @@ editor.registerDecoratorListener((decorators) => {
       mf.addEventListener('click', (e) => { e.stopPropagation(); handleMathFieldSelect(mf); });
       mf.addEventListener('focus', () => { handleMathFieldSelect(mf); updatePlotVisibility(); });
       mf.addEventListener('focusin', () => { handleMathFieldSelect(mf); updatePlotVisibility(); });
+      // The arrow keys out of an equation (A89, found by random-action testing, Chrome and WebKit): MathLive moves the caret inside
+      // the equation itself and at its edge asks the page to take over ("move-out"); Right / Down at the end put the caret just
+      // after the equation in the text, Left / Up at the start just before it.
+      // Escape leaves the equation, the caret just after it (A89, random-action testing): MathLive's own Escape switched the
+      // equation to its raw-LaTeX mode — invisible — where the arrow keys stopped moving. Caught before MathLive sees it.
+      mf.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Escape' || ev.shiftKey || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        editorEl.focus({ preventScroll: true });
+        editor.update(() => { const n = $getNodeByKey(key); if (n) n.selectNext(0, 0); }, { discrete: true });
+      }, true);
+      mf.addEventListener('move-out', (ev) => {
+        const dir = ev.detail && ev.detail.direction;
+        ev.preventDefault();
+        leaveMathHighlight(mf);   // the caret has left the equation: its highlight goes with it (item 10)
+        const after = dir === 'forward' || dir === 'downward';
+        editorEl.focus({ preventScroll: true });
+        editor.update(() => {
+          const n = $getNodeByKey(key);
+          if (!n) return;
+          if (after) n.selectNext(0, 0); else n.selectPrevious();
+        }, { discrete: true });
+        // Up / Down go on to the line above (below), as from any text: stopping just beside the equation, on the same line,
+        // took two presses for each equation-only paragraph, and looked stuck (A89, random-action testing).
+        if (dir === 'upward' || dir === 'downward') moveCaretVertically(dir === 'downward');
+      });
       el.addEventListener('pointerdown', (e) => { e.stopPropagation(); handleMathFieldSelect(mf); });
       el.addEventListener('click', (e) => { e.stopPropagation(); handleMathFieldSelect(mf); });
       el.addEventListener('mouseenter', () => { if (mf.value.trim()) updatePlotVisibility(); });
@@ -1419,6 +4244,7 @@ editor.registerDecoratorListener((decorators) => {
         updatePlotVisibility();
       });
       mf.addEventListener('focusout', () => setTimeout(() => {
+        if (document.activeElement !== mf && !mf.contains(document.activeElement)) { leaveMathHighlight(mf); if (document.activeElement === editorEl) syncCaretWithBraille(true); }
         if (!mf.value.trim() && document.activeElement !== mf) {
           editor.update(() => { const n = $getNodeByKey(key); if ($isMathNode(n)) n.remove(); });
         }
@@ -1427,7 +4253,27 @@ editor.registerDecoratorListener((decorators) => {
         }
       }, 160));
 
+      // Emboss's own button for the on-screen maths keyboard, Iconoir's keypad icon in place of MathLive's built-in toggle (hidden in
+      // style.css): the same thing MathLive's toggle does (its toggleVirtualKeyboard command), with the equation focused first so the
+      // keys type into it. mousedown is not allowed to move the focus off the equation. aria-expanded follows the keyboard (watchMathKeyboard).
+      const btnKb = document.createElement('button');
+      btnKb.type = 'button';
+      btnKb.className = 'math-kb-btn';
+      btnKb.append(iconEl('dots-grid-3x3', 'icon'));
+      const kbName = tOr('app.editor.math_keyboard_toggle', 'Maths keyboard');
+      btnKb.setAttribute('aria-label', kbName);
+      btnKb.title = kbName;
+      btnKb.setAttribute('aria-expanded', String(!!(window.mathVirtualKeyboard && window.mathVirtualKeyboard.visible)));
+      btnKb.addEventListener('mousedown', (e) => e.preventDefault());
+      btnKb.addEventListener('pointerdown', (e) => e.stopPropagation());
+      btnKb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        try { mf.focus(); mf.executeCommand('toggleVirtualKeyboard'); } catch { /* MathLive not ready */ }
+        setTimeout(() => syncMathKeyboardButtons(), 0);
+      });
+
       el.appendChild(mf);
+      el.appendChild(btnKb);
       el.appendChild(btnPlot);
     }
 
@@ -1447,8 +4293,8 @@ editor.registerDecoratorListener((decorators) => {
           const u = parseInt(cellEl.dataset.unit, 10);
           if (isNaN(u)) return;
           const html = u < headerCount
-            ? cellToEditableHtml(val.headers[u])
-            : cellToEditableHtml(val.rows[Math.floor((u - headerCount) / colCount)]?.[(u - headerCount) % colCount]);
+            ? cellToEditableHtml(val.headers[u], resolveCellImgSrc)
+            : cellToEditableHtml(val.rows[Math.floor((u - headerCount) / colCount)]?.[(u - headerCount) % colCount], resolveCellImgSrc);
           if (cellEl.innerHTML !== html) cellEl.innerHTML = html;
         });
         const bar = el.querySelector('.table-context-bar');
@@ -1462,20 +4308,26 @@ editor.registerDecoratorListener((decorators) => {
 
       const curFormat = val.format || 'spatial';
       const titleSpan = document.createElement('strong');
-      titleSpan.textContent = `📊 ${t('app.table.title', { cols: colCount, rows: rowCount })}`;
+      titleSpan.replaceChildren(iconEl('table', 'icon icon-inline'), ` ${t('app.table.title', { cols: colCount, rows: rowCount })}`);
       titleSpan.style.marginRight = 'auto';
       bar.appendChild(titleSpan);
       updateTableWarningBadge(bar, val.headers, val.rows, val.format);   // G15: too-wide warning
 
+      // Feedback 30 Sep, item 5 (Paul, 1 Oct): the table layout (BANA §11) and "Braille formatting" are transcriber tools, as the
+      // Layout dialog is (Paul, 25 Sep): hidden while Transcriber tools is off (class fmt-transcriber); a table keeps the layout it has.
       const btnFormat = document.createElement('button');
       btnFormat.type = 'button';
-      btnFormat.className = 'table-context-btn';
-      const FORMAT_LABEL = { auto: `🔀 ${t('app.table.fmt_auto')}`, spatial: `📊 ${t('app.table.fmt_spatial')}`, listed: `📋 ${t('app.table.fmt_listed')}`, vertical: `🔲 ${t('app.table.fmt_vertical')}` };
+      btnFormat.className = 'table-context-btn fmt-transcriber';
+      const FORMAT_LABEL = { auto: `${t('app.table.fmt_auto')}`, spatial: `${t('app.table.fmt_spatial')}`, listed: `${t('app.table.fmt_listed')}`, vertical: `${t('app.table.fmt_vertical')}`, facing: `${t('app.table.fmt_facing')}`, interchange: `${t('app.table.fmt_interchange')}`, stairstep: `${t('app.table.fmt_stairstep')}`, linear: `${t('app.table.fmt_linear')}` };
       const FORMAT_TITLE = {
         auto: t('app.table.fmt_auto_title'),
         spatial: t('app.table.fmt_spatial_title'),
         listed: t('app.table.fmt_listed_title'),
         vertical: t('app.table.fmt_vertical_title'),
+        stairstep: t('app.table.fmt_stairstep_title'),
+        linear: t('app.table.fmt_linear_title'),
+        facing: t('app.table.fmt_facing_title'),
+        interchange: t('app.table.fmt_interchange_title'),
       };
       btnFormat.textContent = FORMAT_LABEL[curFormat] || FORMAT_LABEL.spatial;
       btnFormat.title = t('app.table.fmt_title', { format: FORMAT_TITLE[curFormat] || FORMAT_TITLE.spatial });
@@ -1486,12 +4338,23 @@ editor.registerDecoratorListener((decorators) => {
           if ($isTableNode(n)) {
             // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): 'vertical' (BANA §11.14
             // Wide Tables: Vertical Division) added to the cycle between Listed and Auto.
-            const nextFmt = { auto: 'spatial', spatial: 'listed', listed: 'vertical', vertical: 'auto' }[n.getFormat()] || 'listed';
+            // K15: 'facing' (BANA §11.13 Wide Tables: Facing Pages) after Vertical Division.
+            // BANA §11.15: 'interchange' (Interchanged Columns and Rows) after Facing Pages.
+            const nextFmt = { auto: 'spatial', spatial: 'listed', listed: 'vertical', vertical: 'facing', facing: 'interchange', interchange: 'stairstep', stairstep: 'linear', linear: 'auto' }[n.getFormat()] || 'listed';
             n.setFormat(nextFmt);
           }
         });
       });
       bar.appendChild(btnFormat);
+
+      const btnFmtFields = document.createElement('button');
+      btnFmtFields.type = 'button';
+      btnFmtFields.className = 'table-context-btn fmt-transcriber';
+      btnFmtFields.replaceChildren(iconEl('settings', 'icon icon-inline'), ` ${t('app.braille_fmt.title')}`);
+      btnFmtFields.title = t('app.braille_fmt.button_title');
+      btnFmtFields.setAttribute('aria-haspopup', 'dialog');
+      btnFmtFields.addEventListener('click', (e) => { e.stopPropagation(); openBrailleFmtDialog(key); });
+      bar.appendChild(btnFmtFields);
 
       const btnAddRow = document.createElement('button');
       btnAddRow.type = 'button';
@@ -1557,7 +4420,7 @@ editor.registerDecoratorListener((decorators) => {
       const btnDelete = document.createElement('button');
       btnDelete.type = 'button';
       btnDelete.className = 'table-context-btn danger';
-      btnDelete.textContent = `🗑 ${t('common.delete')}`;
+      btnDelete.replaceChildren(iconEl('trash', 'icon icon-inline'), ` ${t('common.delete')}`);
       btnDelete.title = t('app.table.delete_title');
       btnDelete.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1612,7 +4475,7 @@ editor.registerDecoratorListener((decorators) => {
 
       const badge = document.createElement('span');
       badge.className = 'page-badge';
-      badge.textContent = `📄 ${t('app.printpage.badge')}`;
+      badge.replaceChildren(iconEl('page', 'icon icon-inline'), ` ${t('app.printpage.badge')}`);
 
       const input = document.createElement('input');
       input.type = 'text';
@@ -1637,7 +4500,7 @@ editor.registerDecoratorListener((decorators) => {
       const btnDel = document.createElement('button');
       btnDel.type = 'button';
       btnDel.className = 'page-del-btn';
-      btnDel.textContent = '✕';
+      btnDel.replaceChildren(iconEl('xmark'));
       btnDel.title = t('app.printpage.remove');
       btnDel.setAttribute('aria-label', t('app.printpage.remove'));
       btnDel.addEventListener('click', (e) => {
@@ -1651,8 +4514,21 @@ editor.registerDecoratorListener((decorators) => {
         announce(t('app.printpage.removed'));
       });
 
+      const btnFmt = document.createElement('button');
+      btnFmt.type = 'button';
+      btnFmt.className = 'page-fmt-btn';
+      // Every print-page-change field is a transcriber tool (field-registry.mjs): hidden with the rest while Transcriber tools is off.
+      if (bfKindIsTranscriberOnly('pagenum')) btnFmt.classList.add('fmt-transcriber');
+      btnFmt.replaceChildren(iconEl('settings'));
+      btnFmt.title = t('app.braille_fmt.pagenum_button');
+      btnFmt.setAttribute('aria-label', t('app.braille_fmt.pagenum_button'));
+      btnFmt.setAttribute('aria-haspopup', 'dialog');
+      btnFmt.addEventListener('pointerdown', (e) => e.stopPropagation());
+      btnFmt.addEventListener('click', (e) => { e.stopPropagation(); openBrailleFmtDialog(key); });
+
       el.appendChild(badge);
       el.appendChild(input);
+      el.appendChild(btnFmt);
       el.appendChild(btnDel);
     }
   }
@@ -1708,7 +4584,7 @@ function applyBlockStyle(v) {
           $setBlocksType(sel, () => $createHeadingNode(norm));
         }
       });
-    } else if (['dialogue', 'stage', 'poem', 'caption', 'attribution', 'footnote', 'note', 'quote'].includes(norm)) {
+    } else if (['dialogue', 'stage', 'poem', 'caption', 'attribution', 'footnote', 'note', 'quote', 'code'].includes(norm)) {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       editor.update(() => {
         const sel = $getSelection();
@@ -1719,6 +4595,15 @@ function applyBlockStyle(v) {
     } else if (norm === 'sidebar') {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       insertSidebar();
+    } else if (norm === 'titlepage') {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      insertTitlePage();
+    } else if (norm === 'tnpage') {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      insertTnPage();
+    } else if (norm === 'sympage') {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      insertSymPage();
     } else if (norm === 'table-spatial' || norm === 'table-listed') {
       const targetFmt = norm === 'table-listed' ? 'listed' : 'spatial';
       let switchedExisting = false;
@@ -1793,7 +4678,10 @@ function applyBlockStyle(v) {
   const label = selectEl?.selectedOptions[0]?.getAttribute('data-full') || selectEl?.selectedOptions[0]?.text || v;
   announce(label);
 }
-$id('blockStyle')?.addEventListener('change', (e) => applyBlockStyle(e.target.value));
+$id('blockStyle')?.addEventListener('change', (e) => { updateStyleMenuUI(); applyBlockStyle(e.target.value); });
+// Feedback 30 Sep item 16 (Paul, 2 Oct): opening the style list (the browser's own dropdown) closes Emboss's open menus (Insert, the
+// Braille menu, a title page's Field… menu), as they already close each other — the tester had the style list and Insert open together.
+for (const ev of ['mousedown', 'focus']) $id('blockStyle')?.addEventListener(ev, () => closeAllDropdownMenus());
 
 // F-39 — BANA Formats §1.9.3: "Blocked Paragraph" toggle, alongside (not instead of) the
 // blockStyle dropdown above — it layers a `blocked` flag onto whichever paragraph(s) the
@@ -1807,20 +4695,26 @@ function nearestParagraphNode(node) {
   }
   return null;
 }
+// 1-1 and 5-5 apply only to a Body Text paragraph: the formatter honours `blocked` / `directions` on plain paragraphs
+// alone (a quote, poem, note, caption… ignores them), so elsewhere the buttons are greyed out (Paul, 24 Sep).
+function isBodyParagraph(p) {
+  const style = p && typeof p.getBanaStyle === 'function' ? p.getBanaStyle() : null;
+  return !!p && (!style || style === 'body');
+}
+// The Body Text paragraphs the selection touches (or the one the caret was last in).
+function selectedBodyParagraphs() {
+  const paras = new Set();
+  const sel = $getSelection();
+  if ($isRangeSelection(sel)) for (const n of sel.getNodes()) { const p = nearestParagraphNode(n); if (isBodyParagraph(p)) paras.add(p); }
+  if (!paras.size && lastActiveEditorSelection?.anchorKey) {
+    const p = nearestParagraphNode($getNodeByKey(lastActiveEditorSelection.anchorKey));
+    if (isBodyParagraph(p)) paras.add(p);
+  }
+  return paras;
+}
 function toggleBlockedParagraph() {
   editor.update(() => {
-    const sel = $getSelection();
-    const paras = new Set();
-    if ($isRangeSelection(sel)) {
-      for (const n of sel.getNodes()) {
-        const p = nearestParagraphNode(n);
-        if (p) paras.add(p);
-      }
-    }
-    if (!paras.size && lastActiveEditorSelection?.anchorKey) {
-      const p = nearestParagraphNode($getNodeByKey(lastActiveEditorSelection.anchorKey));
-      if (p) paras.add(p);
-    }
+    const paras = selectedBodyParagraphs();
     if (!paras.size) return;
     const anyBlocked = [...paras].some((p) => p.getBlocked());
     for (const p of paras) p.setBlocked(!anyBlocked);
@@ -1830,10 +4724,512 @@ function toggleBlockedParagraph() {
   refreshToolbar();
 }
 $id('btnBlockedPara')?.addEventListener('click', toggleBlockedParagraph);
+// BANA Formats §10.3.2: "Use 5-5 margins for unnumbered or unlettered directions." — the same kind of
+// per-paragraph toggle as the blocked-paragraph button, stored as fmt.directions (see installFmt).
+function toggleDirectionsParagraph() {
+  editor.update(() => {
+    const paras = selectedBodyParagraphs();
+    if (!paras.size) return;
+    const anyDir = [...paras].some((p) => (fmtOf(p) || {}).directions);
+    for (const p of paras) p.setFmt({ ...(fmtOf(p) || {}), directions: !anyDir });
+  });
+  clearTranslationCache();
+  scheduleRender();
+  refreshToolbar();
+}
+$id('btnDirectionsPara')?.addEventListener('click', toggleDirectionsParagraph);
+
+// ---- "Braille formatting…" dialog: the optional formatter fields (fmt) of the focused block ----
+// One native <dialog> (#brailleFmtDialog) that shows only the fields the focused block type has.
+// Applying writes them to the node's fmt (or, for a table, its subdivision fields) in ONE
+// editor.update, so it is one undo step. Opened by #btnBrailleFmt, Ctrl/Cmd+Alt+B, the slash menu
+// ("/braille") and the "Braille formatting" button on a table's context bar.
+// The fieldsets and their controls are BUILT from format/field-registry.mjs (GROUPS + each field's `ui`): labels, help,
+// control type, grouping, which block kinds show a fieldset, and the audience tag the "Transcriber tools" setting
+// filters on. Reading and writing a control goes through the registry's CODECS; the few controls whose value does not
+// live in the node's own fmt (list numbering / bullets / level symbols / item fonts, a table's subdivision fields and
+// guide dots) are the explicit BF_SPECIAL code below.
+
+// ---- "Transcriber tools" (Paul's decision, 24 Sep 2026; docs/transcriber-tools-setting.md) ----
+// Off by default. When off, every control whose registry audience is 'transcriber' is hidden (CSS: body without
+// .transcriber-tools hides .fmt-transcriber), as are the transcriber page styles in the dropdown / slash menu and the
+// Notes… / Regenerate buttons. It only hides tools: the braille never depends on it, and a document that already carries
+// a field or a page keeps showing and saving it (hidden controls keep their values when the dialog applies).
+const audienceVisible = (audience) => audience !== 'transcriber' || transcriberTools;
+// Leave the dropdown's transcriber styles out while Transcriber tools is off — except the style of the block the caret
+// is in, which stays listed so the user can see what it is and change it (Paul, 26 Sep). They are removed from the
+// select rather than marked hidden: Safari's dropdown ignores `hidden` on an option (Paul, 30 Sep). `value` is the style
+// to show as selected (default: the current one); it is always kept in the list, so this is also the way to set it.
+function syncStyleOptionVisibility(value) {
+  const sel = $id('blockStyle');
+  if (!sel) return;
+  const wanted = value ?? sel.value;
+  const audience = new Map(BLOCK_STYLES.map((d) => [d.value, d.audience]));
+  const when = new Map(BLOCK_STYLES.map((d) => [d.value, d.when]));   // UK-8: e.g. sympage's `when` keeps it out of UKAAF mode
+  const shown = allBlockStyleOptions.filter((opt) => {
+    const w = when.get(opt.value);
+    return opt.value === wanted || (audienceVisible(audience.get(opt.value)) && !(w && !w()));
+  });
+  const current = [...sel.options];
+  if (shown.length !== current.length || shown.some((o, i) => o !== current[i])) sel.replaceChildren(...shown);
+  if (sel.value !== wanted) sel.value = wanted;
+  updateStyleMenuUI();   // the style button (F9 C1) follows the select
+}
+// The Title field above the text (Paul, 7 Oct 2026): shown with Transcriber tools on, hidden for everyone else, unless the setting
+// "Show the Title field above the text" has been ticked or unticked (settings.showTitleField true / false; null = follow Transcriber tools).
+function titleFieldShown() { return settings.showTitleField == null ? transcriberTools : settings.showTitleField === true; }
+function applyTitleFieldVisibility() {
+  const row = $id('docTitleRow');
+  if (row) row.hidden = !titleFieldShown();
+  const box = $id('set-showTitleField');
+  if (box) box.checked = titleFieldShown();
+}
+function applyTranscriberTools() {
+  document.body.classList.toggle('transcriber-tools', transcriberTools);
+  applyTitleFieldVisibility();
+  syncStyleOptionVisibility();
+  for (const id of TRANSCRIBER_BUTTONS) { const b = $id(id); if (b) b.classList.add('fmt-transcriber'); }  // CSS hides them while off
+  for (const g of FIELD_GROUPS) {                  // a fieldset whose controls are all transcriber tools goes too
+    const el = $id(g.id);
+    if (el) el.classList.toggle('fmt-transcriber', groupControlIds(g).every((id) => (controlById(id) || {}).audience === 'transcriber'));
+  }
+  try { updateTnSuggestBtn(); updateSymRegenBtn(); updateUnboxBtn(); refreshToolbar(); } catch (err) { /* before the editor is up: the buttons start hidden */ }
+}
+
+// Build one control from its registry entry (the markup the hand-written dialog used, so styles and tests still apply).
+function buildFmtControl(ctl) {
+  const mk = (tag, attrs = {}, text) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) if (v != null) el.setAttribute(k, v);
+    if (text != null) el.textContent = text;
+    return el;
+  };
+  const helpId = ctl.help != null ? (ctl.helpId || `${ctl.id}Help`) : null;
+  const describedBy = ctl.describedBy || helpId;
+  const helpEl = () => mk('span', { id: helpId, class: 'fmt-help', 'data-i18n': ctl.helpKey }, ctl.help);
+  let wrap;
+  if (ctl.control === 'check') {
+    wrap = mk('div', { class: 'fmt-check' });
+    wrap.append(mk('input', { type: 'checkbox', id: ctl.id, 'aria-describedby': describedBy }));
+    if (helpId) {
+      const label = mk('label', { for: ctl.id });
+      label.append(mk('span', { 'data-i18n': ctl.labelKey }, ctl.label), mk('br'), helpEl());
+      wrap.append(label);
+    } else wrap.append(mk('label', { for: ctl.id, 'data-i18n': ctl.labelKey }, ctl.label));
+  } else {
+    wrap = mk('div', { class: 'fmt-field' });
+    let label;
+    if (ctl.labelExtraId) {
+      label = mk('label', { for: ctl.id });
+      label.append(mk('span', { 'data-i18n': ctl.labelKey }, ctl.label), document.createTextNode(' '), mk('span', { id: ctl.labelExtraId }));
+    } else label = mk('label', { for: ctl.id, 'data-i18n': ctl.labelKey }, ctl.label);
+    let input;
+    if (ctl.control === 'select') {
+      input = mk('select', { id: ctl.id, 'aria-describedby': describedBy });
+      for (const o of ctl.options) input.append(mk('option', { value: o.value, 'data-i18n': o.key }, o.text));
+    } else if (ctl.control === 'textarea') {
+      input = mk('textarea', { id: ctl.id, ...(ctl.attrs || {}), 'aria-describedby': describedBy });
+    } else {
+      input = mk('input', { type: ctl.control === 'number' ? 'number' : 'text', id: ctl.id, ...(ctl.attrs || {}), ...(ctl.control === 'text' ? { autocomplete: 'off' } : {}), 'aria-describedby': describedBy });
+    }
+    wrap.append(label, input);
+    if (helpId) wrap.append(helpEl());
+    if (ctl.statusId) wrap.append(mk('span', { id: ctl.statusId, role: 'alert', style: 'color:var(--danger);' }));
+  }
+  wrap.dataset.field = ctl.field;
+  if (ctl.audience === 'transcriber') wrap.classList.add('fmt-transcriber');
+  return wrap;
+}
+function buildFmtGroupControls(g, host) {
+  for (const item of g.controls) {
+    if (typeof item === 'string') { const ctl = controlById(item); if (ctl) host.append(buildFmtControl(ctl)); continue; }
+    if (item.note) {
+      const p = document.createElement('p');
+      p.id = item.note; p.className = 'fmt-help'; p.hidden = true; p.dataset.i18n = item.key; p.textContent = item.text;
+      if (item.audience === 'transcriber') p.classList.add('fmt-transcriber');
+      host.append(p);
+    } else if (item.wrap) {
+      const div = document.createElement('div');
+      div.id = item.wrap; div.hidden = true;
+      for (const id of item.controls) { const ctl = controlById(id); if (ctl) div.append(buildFmtControl(ctl)); }
+      host.append(div);
+    }
+  }
+}
+// The dialog's fieldsets (into #brailleFmtGroups) and the Settings "Braille formatting options" group (into
+// #docOptionsGroup, after its legend and intro). Runs once at start-up, before initI18n translates the page.
+(function buildFieldControls() {
+  const box = $id('brailleFmtGroups');
+  for (const g of FIELD_GROUPS) {
+    if (g.settings) { const fs = $id(g.id); if (fs && !fs.querySelector('input, select, textarea')) buildFmtGroupControls(g, fs); continue; }
+    if (!box || $id(g.id)) continue;
+    const fs = document.createElement('fieldset');
+    fs.id = g.id; fs.hidden = true;
+    const lg = document.createElement('legend');
+    lg.dataset.i18n = g.legendKey; lg.textContent = g.legend;
+    fs.append(lg);
+    buildFmtGroupControls(g, fs);
+    box.append(fs);
+  }
+  applyTranscriberTools();
+})();
+
+// Which block the caret is in, its fmt, and the values that do not live in fmt (`special`, keyed by control id).
+// Runs in a read; null = nothing to set.
+function bfResolveTarget(tableKey) {
+  let out = null;
+  editor.getEditorState().read(() => {
+    const up = (n, pred) => { while (n && n !== $getRoot()) { if (pred(n)) return n; n = n.getParent ? n.getParent() : null; } return null; };
+    let tk = tableKey || null;
+    if (!tk && document.activeElement) {
+      const hit = $getRoot().getChildren().find((tn) => { if (!$isTableNode(tn)) return false; const el = editor.getElementByKey(tn.getKey()); return el && el.contains(document.activeElement); });
+      if (hit) tk = hit.getKey();
+    }
+    if (tk) {
+      const tn = $getNodeByKey(tk);
+      if ($isPrintPageNode(tn)) { out = { kind: 'pagenum', key: tk, fmt: fmtOf(tn) || {}, special: {} }; return; }
+      if (!$isTableNode(tn)) return;
+      const rows = tn.getSubdivisionRows();
+      const tblRows = tn.getRows() || [];
+      const colCount = Math.max((tn.getHeaders() || []).length, ...tblRows.map((r) => r.length), 1);
+      // K35: block.columnAlign (TableNode.getColumnAlign, K3), shown one non-follow column per line.
+      const colAlign = typeof tn.getColumnAlign === 'function' ? tn.getColumnAlign() : null;
+      const fmtColumnAlign = Array.isArray(colAlign) ? colAlign.map((v, i) => (v ? `${i + 1}: ${v}` : null)).filter(Boolean).join('\n') : '';
+      out = { kind: 'table', key: tk, fmt: fmtOf(tn) || {}, rowCount: tblRows.length, colCount, special: {
+        fmtSubRows: rows ? rows.map((i) => i + 1).join(', ') : '', fmtSubHeading: tn.getSubdivisionHeading() || '',
+        fmtGuideDots: !(typeof tn.getNoGuideDots === 'function' && tn.getNoGuideDots()), stairstep: tn.getFormat() === 'stairstep',
+        fmtColumnAlign,
+      } };
+      return;
+    }
+    const sel = $getSelection();
+    let nodes = [];
+    let anchor = null;
+    if ($isRangeSelection(sel)) { nodes = sel.getNodes(); anchor = sel.anchor.getNode(); }
+    if (!anchor && lastActiveEditorSelection?.anchorKey) { anchor = $getNodeByKey(lastActiveEditorSelection.anchorKey); if (anchor) nodes = [anchor]; }
+    if (!anchor) return;
+    const li = up(anchor, $isListItemNode);
+    if (li) {
+      let top = li;
+      while (top.getParent() && ($isListNode(top.getParent()) || $isListItemNode(top.getParent()))) top = top.getParent();
+      const items = new Map();
+      for (const n of nodes.length ? nodes : [li]) { const x = up(n, $isListItemNode); if (x && !x.getChildren().some((c) => $isListNode(c))) items.set(x.getKey(), x); }
+      if (!items.size) items.set(li.getKey(), li);
+      const names = new Set([...items.values()].map((x) => { const f = fmtOf(x) || {}; return bulletName(f.bullet || f.bulletMarker) || ''; }));
+      const lf = $isListNode(top) ? (fmtOf(top) || {}) : {};
+      // G8 stage 3: numbering of the caret's level (its sibling group) and the list's bullet glyphs by level
+      let enumVal = '', startVal = '', level = 0;
+      if ($isListNode(top)) {
+        const its = listItemsForPlan(top);
+        const idx = its.findIndex((x) => x.node.getKey() === li.getKey());
+        if (idx >= 0) {
+          const { gi } = listGroups(its);
+          const g = its[gi[idx]], gf = g.fmt || {};
+          level = its[idx].level;
+          const kind = planListMarkers(its, top.getListType() === 'bullet' ? 'bullet' : 'number', lf.symbols)[idx].kind;
+          if (kind === 'bullet') enumVal = 'bullet';
+          else if (LIST_ENUMS.includes(gf.enum)) enumVal = gf.enum;
+          else if (g.kept && g.kept !== NO_MARKER) enumVal = /^\d+\./.test(g.kept) ? '1' : /^[a-z]\./.test(g.kept) ? 'a' : /^[A-Z]\./.test(g.kept) ? 'A' : '';
+          startVal = gf.start || '';
+        }
+      }
+      const symSeq = Array.isArray(lf.symbols) && lf.symbols.length ? lf.symbols : null;
+      const sym = [0, 1, 2].map((i) => (symSeq ? symSeq[Math.min(i, symSeq.length - 1)] : ''));
+      const listKind = (typeof top.getListKind === 'function' ? top.getListKind() : null) || (typeof top.getBanaStyle === 'function' ? top.getBanaStyle() : null);
+      const itemIgnoreFontNames = new Set([...items.values()].map((x) => !!(fmtOf(x) || {}).ignoreFont));
+      out = { kind: 'list', key: top.getKey(), liKey: li.getKey(), itemKeys: [...items.keys()], fmt: lf, level, special: {
+        fmtBullet: names.size === 1 ? [...names][0] : '', fmtEnum: enumVal, fmtStart: startVal, fmtSym0: sym[0], fmtSym1: sym[1], fmtSym2: sym[2],
+        fmtItemIgnoreFont: itemIgnoreFontNames.size === 1 && [...itemIgnoreFontNames][0], isGlossary: listKind === 'glossary',
+      } };
+      return;
+    }
+    const h = up(anchor, $isHeadingNode);
+    if (h && $isSidebarNode(h.getParent())) {
+      // The box's own title heading: braille formatting here means the box itself (box lines /
+      // page break), not the heading fields (a box title is never "not connected"/"accompanies a box").
+      const box = h.getParent();
+      out = { kind: 'box', key: box.getKey(), fmt: fmtOf(box) || {}, special: {} };
+      return;
+    }
+    if (h) { out = { kind: 'heading', key: h.getKey(), fmt: fmtOf(h) || {}, special: {} }; return; }
+    const p = up(anchor, (n) => typeof n.getBlocked === 'function' && typeof n.setBlocked === 'function');
+    if (!p) return;
+    const f = fmtOf(p) || {};
+    const style = typeof p.getBanaStyle === 'function' ? p.getBanaStyle() : null;
+    let kind = null;
+    if (style === 'note' || f.xref) kind = 'note';
+    else if (style === 'footnote') kind = 'footnote';
+    else if (style === 'dialogue' || style === 'play-speaker' || style === 'speaker') kind = 'speaker';
+    else if (style === 'poem' || style === 'verse' || style === 'play-verse' || style === 'exercise') kind = 'verse';
+    else if (style === 'caption') kind = 'caption';   // F-4: identifier before the caption (BANA 11.2.8b)
+    else if (f.directions) kind = 'directions';
+    // A genuinely empty, untyped paragraph has nothing to format yet (matches the pre-existing "no extra braille
+    // formatting" message for a fresh paragraph); one with text, or one that already carries a fmt field, gets the
+    // dialog. A slash query in progress ("/braillefo…") is stripped first, so it does not itself count as "text"
+    // (this is evaluated live, including whatever the user has typed into the slash box so far).
+    else if ((!style || style === 'body') && (p.getTextContent().replace(/\/[a-zA-Z]*$/, '').trim() !== '' || fmtOf(p))) kind = 'para';
+    if (kind) out = { kind, key: p.getKey(), fmt: f, special: {} };
+  });
+  return out;
+}
+// A kind has something to offer when one of its controls is for this audience (Transcriber tools off hides the rest).
+const bfKindIsTranscriberOnly = (kind) => groupsForKind(kind).every((g) => groupControlIds(g).every((id) => (controlById(id) || {}).audience === 'transcriber'));
+const bfKindHasVisibleControls = (kind) => groupsForKind(kind).some((g) => groupControlIds(g).some((id) => audienceVisible((controlById(id) || {}).audience)));
+const bfHasTarget = () => { try { const r = bfResolveTarget(null); return !!r && bfKindHasVisibleControls(r.kind); } catch (err) { console.warn('bfHasTarget', err); return false; } };
+
+// The fmt key a control's value lives under (boxLines is kept as fmt.noBoxLines on the box node).
+const bfFmtKey = (ctl) => (fieldByKey(ctl.field) || {}).fmtKey || ctl.field;
+const bfIsComposite = (ctl) => ctl.part != null;
+// Value to show in a control for this target.
+function bfReadControl(ctl, target) {
+  if (ctl.codec === 'special') return target.special[ctl.id];
+  const codec = FIELD_CODECS[ctl.codec];
+  const v = codec.read(target.fmt[bfFmtKey(ctl)], ctl);
+  return bfIsComposite(ctl) ? v[ctl.part] : v;
+}
+// The wrap / note of a group that is shown for this target (the glossary options only for a glossary list; the
+// stairstep note only when the table is NOT stairstep).
+const bfWrapShown = (id, target) => (id === 'fmtListGlossaryWrap' ? !!target.special.isGlossary : true);
+const bfNoteShown = (id, target) => (id === 'fmtTableNote' ? !target.special.stairstep : true);
+
+function openBrailleFmtDialog(tableKey) {
+  const dlg = $id('brailleFmtDialog');
+  if (!dlg || dlg.open) return;
+  // The Layout dialog is a transcriber tool (Paul, 25 Sep; feedback item 5, 1 Oct): whichever way it is reached, it stays shut while
+  // Transcriber tools is off (its buttons are hidden then; this is the guard behind them).
+  if (!transcriberToolsOn()) { announce(tOr('app.braille_fmt.transcriber_only', 'The formatting options for this block are transcriber tools. Turn on Transcriber tools in Settings to see them.')); return; }
+  const target = bfResolveTarget(tableKey || null);
+  if (!target) { announce(t('app.braille_fmt.none')); return; }
+  if (!bfKindHasVisibleControls(target.kind)) { announce(tOr('app.braille_fmt.transcriber_only', 'The formatting options for this block are transcriber tools. Turn on Transcriber tools in Settings to see them.')); return; }
+  const set = (id, val) => { const el = $id(id); if (!el) return; if (el.type === 'checkbox') el.checked = !!val; else el.value = val == null ? '' : String(val); };
+  const shown = groupsForKind(target.kind);
+  for (const g of FIELD_GROUPS) { if (g.settings) continue; const el = $id(g.id); if (el) el.hidden = !shown.includes(g); }
+  for (const g of shown) {
+    for (const item of g.controls) {
+      if (item && item.wrap) { const w = $id(item.wrap); if (w) w.hidden = !bfWrapShown(item.wrap, target); }
+      if (item && item.note) { const n = $id(item.note); if (n) n.hidden = !bfNoteShown(item.note, target); }
+    }
+    for (const id of groupControlIds(g)) set(id, bfReadControl(controlById(id), target));
+    // A fieldset whose every control is hidden for this audience is not shown either.
+    const fsEl = $id(g.id);
+    if (fsEl && !groupControlIds(g).some((id) => audienceVisible((controlById(id) || {}).audience))) fsEl.hidden = true;
+  }
+  if (target.kind === 'list') { const lv = $id('fmtEnumLevel'); if (lv) lv.textContent = t('app.braille_fmt.enum_level', { level: target.level + 1 }); }
+  const hint = tOr(`app.braille_fmt.hint_${target.kind}`, '');
+  const hintEl = $id('brailleFmtHint'); if (hintEl) hintEl.textContent = hint;
+  const st = $id('brailleFmtStatus'); if (st) st.textContent = '';
+  bfState = { target, opener: document.activeElement };
+  dlg.showModal();
+  // Focus the group's first field (the list's numbering), or the first one this audience can see.
+  const g0 = shown[0];
+  const want = g0 && (g0.first || groupControlIds(g0)[0]);
+  const visible = (el) => el && !el.disabled && el.getClientRects().length;
+  const first = visible($id(want)) ? $id(want) : [...dlg.querySelectorAll('fieldset:not([hidden]) input, fieldset:not([hidden]) select, fieldset:not([hidden]) textarea')].find(visible);
+  if (first) first.focus();
+}
+let bfState = null;
+
+function closeBrailleFmtDialog() {
+  const dlg = $id('brailleFmtDialog');
+  if (dlg && dlg.open) dlg.close();
+}
+
+// G8 stage 3: numbering style + start for the sibling group of the item `liKey` (call inside editor.update).
+// Every item of the group loses its kept print marker so the print view, braille and save all follow enum/start.
+function applyGroupNumbering(list, liKey, en, start) {
+  if (!$isListNode(list)) return;
+  const its = listItemsForPlan(list);
+  const idx = its.findIndex((x) => x.node.getKey() === liKey);
+  if (idx < 0) return;
+  const { gi } = listGroups(its);
+  const members = its.filter((_, i) => gi[i] === gi[idx]);
+  const lvl = its[idx].level;
+  const put = (node, o) => node.setFmt({ ...(fmtOf(node) || {}), ...o });
+  if (en !== 'bullet' && list.getListType() === 'bullet') {     // a numbered group inside a bulleted list: the list becomes numbered, its other bullets keep their bullet
+    list.setListType('number');
+    for (const it of its) if (!members.includes(it) && !it.kept) it.node.setMarker('•');
+  }
+  const numbered = list.getListType() !== 'bullet';
+  members.forEach((m, i) => {
+    m.node.setMarker(en === 'bullet' && numbered ? '•' : null);
+    const first = i === 0 && en !== 'bullet';
+    const enumV = first ? (en || (start > 1 ? defaultEnumForLevel(lvl) : null)) : null;
+    put(m.node, { enum: enumV, start: first && start > 1 ? start : null });
+  });
+}
+
+// Controls whose value does not live in the focused node's own fmt: validate(ctx) -> error key or null (in control order,
+// like every other field), apply(ctx) inside the one editor.update. ctx: { target, n (node), val, chk, put, data }.
+const BF_SPECIAL = {
+  fmtStart: {
+    validate: (c) => {
+      const sraw = c.val('fmtStart');
+      c.data.startN = 0;
+      if (sraw) { c.data.startN = Number(sraw); if (!/^\d+$/.test(sraw) || c.data.startN < 1 || c.data.startN > 9999) return 'app.braille_fmt.err_start'; }
+      return null;
+    },
+  },
+  fmtSym0: {
+    apply: (c) => {
+      const sv = c.target.special;
+      const symVals = [0, 1, 2].map((i) => $id(`fmtSym${i}`).value);
+      if (symVals.some((g, i) => g !== sv[`fmtSym${i}`])) c.put(c.n, { symbols: symVals.every((g) => !g) ? null : symVals.map((g, i) => g || LIST_DEFAULT_GLYPHS[i]) });
+    },
+  },
+  fmtEnum: {
+    apply: (c) => {
+      const sv = c.target.special;
+      const enVal = $id('fmtEnum').value;
+      if (enVal !== sv.fmtEnum || String(c.data.startN || '') !== String(sv.fmtStart || '')) applyGroupNumbering(c.n, c.target.liKey, enVal, c.data.startN);
+    },
+  },
+  fmtBullet: {
+    apply: (c) => {   // Only touch the bullet when the user picked something different from what was shown.
+      const b = $id('fmtBullet').value;
+      if (b !== c.target.special.fmtBullet) for (const k of c.target.itemKeys) c.put($getNodeByKey(k), { bullet: b || null, bulletMarker: null });
+    },
+  },
+  fmtItemIgnoreFont: {
+    apply: (c) => {
+      const itemIgnore = c.chk('fmtItemIgnoreFont');
+      if (itemIgnore !== !!c.target.special.fmtItemIgnoreFont) for (const k of c.target.itemKeys) c.put($getNodeByKey(k), { ignoreFont: itemIgnore });
+    },
+  },
+  fmtSubRows: {
+    validate: (c) => {
+      const raw = c.val('fmtSubRows');
+      c.data.subRows = [];
+      if (raw) {
+        const parts = raw.split(/[,\s]+/).filter(Boolean);
+        if (!parts.every((x) => /^\d+$/.test(x) && Number(x) >= 1)) return 'app.braille_fmt.err_rows';
+        c.data.subRows = [...new Set(parts.map((x) => Number(x) - 1))].sort((a, b) => a - b);
+      }
+      return null;
+    },
+    apply: (c) => { if ($isTableNode(c.n)) c.n.setSubdivisionRows(c.data.subRows); },
+  },
+  fmtSubHeading: { apply: (c) => { if ($isTableNode(c.n)) c.n.setSubdivisionHeading(c.val('fmtSubHeading')); } },
+  fmtGuideDots: { apply: (c) => { if ($isTableNode(c.n)) c.n.setNoGuideDots(!c.chk('fmtGuideDots')); } },
+  // K35: block.columnAlign (TableNode.getColumnAlign/setColumnAlign, K3) — one line per
+  // column that is not simply following print, "N: left"/"N: right"/"N: decimal" (N counts
+  // from 1). A column left out of the text keeps following print (numericAlignApplies).
+  fmtColumnAlign: {
+    validate: (c) => {
+      const raw = c.val('fmtColumnAlign');
+      c.data.columnAlign = null;
+      if (!raw) return null;
+      const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      const out = [];
+      const seen = new Set();
+      for (const line of lines) {
+        const m = /^(\d+)\s*:\s*(left|right|decimal)\s*$/i.exec(line);
+        const n = m && Number(m[1]);
+        if (!m || n < 1 || n > c.colCount || seen.has(n)) return 'app.braille_fmt.err_column_align';
+        seen.add(n);
+        out[n - 1] = m[2].toLowerCase();
+      }
+      c.data.columnAlign = out.length ? out : null;
+      return null;
+    },
+    apply: (c) => { if ($isTableNode(c.n)) c.n.setColumnAlign(c.data.columnAlign); },
+  },
+};
+
+const BF_SPECIAL_ORDER = ['fmtSubRows', 'fmtSubHeading', 'fmtGuideDots', 'fmtColumnAlign', 'fmtSym0', 'fmtEnum', 'fmtBullet', 'fmtItemIgnoreFont'].map((id) => BF_SPECIAL[id]);
+
+function applyBrailleFmt() {
+  const st = bfState;
+  if (!st) return;
+  const { target } = st;
+  const { kind, key } = target;
+  const val = (id) => { const el = $id(id); return el ? el.value.trim() : ''; };
+  const chk = (id) => !!$id(id)?.checked;
+  const fail = (msg, id) => { const s = $id('brailleFmtStatus'); if (s) s.textContent = msg; const el = id && $id(id); if (el) el.focus(); };
+  const ctx = { target, val, chk, data: {}, rowCount: target.rowCount || 0, colCount: target.colCount || 0 };
+  // Pass 1: read and check every shown control, in dialog order; nothing is written until all are valid.
+  const patch = {};
+  const specials = [];
+  const doneComposite = new Set();
+  for (const g of groupsForKind(kind)) {
+    for (const item of g.controls) {
+      const ids = typeof item === 'string' ? [item] : (item.wrap && bfWrapShown(item.wrap, target) ? item.controls : []);
+      for (const id of ids) {
+        const ctl = controlById(id);
+        if (!ctl) continue;
+        if (ctl.codec === 'special') {
+          const sp = BF_SPECIAL[id];
+          if (sp && sp.validate) { const err = sp.validate(ctx); if (err) return fail(t(err), id); }
+          if (sp && sp.apply) specials.push(sp);
+          continue;
+        }
+        const codec = FIELD_CODECS[ctl.codec];
+        let res;
+        if (bfIsComposite(ctl)) {
+          const ck = `${g.id}:${ctl.field}`;
+          if (doneComposite.has(ck)) continue;
+          doneComposite.add(ck);
+          const partCtls = groupControlIds(g).map(controlById).filter((c) => c && c.field === ctl.field);
+          const parts = Object.fromEntries(partCtls.map((c) => [c.part, c.control === 'check' ? chk(c.id) : val(c.id)]));
+          res = codec.write(parts, ctl, ctx);
+          if (res.err) return fail(t(res.err, res.params), (partCtls.find((c) => c.part === res.part) || ctl).id);
+        } else {
+          res = codec.write(ctl.control === 'check' ? chk(id) : val(id), ctl, ctx);
+          if (res.err) return fail(t(res.err, res.params), id);
+          if (ctl.requires && !chk(ctl.requires)) res = { value: null };
+        }
+        patch[bfFmtKey(ctl)] = res.value;
+      }
+    }
+  }
+  const put = (node, o) => { if (node && typeof node.setFmt === 'function') node.setFmt({ ...(fmtOf(node) || {}), ...o }); };
+  specials.sort((a, b) => BF_SPECIAL_ORDER.indexOf(a) - BF_SPECIAL_ORDER.indexOf(b));   // the order the hand-written dialog applied them in
+  editor.update(() => {
+    const n = $getNodeByKey(key);
+    if (!n) return;
+    if (kind === 'table' && !$isTableNode(n)) return;
+    put(n, patch);
+    const c = { ...ctx, n, put };
+    for (const sp of specials) sp.apply(c);
+  });
+  clearTranslationCache();
+  scheduleRender();
+  refreshToolbar();
+  st.applied = true;
+  closeBrailleFmtDialog();
+}
+
+(function initBrailleFmtDialog() {
+  const dlg = $id('brailleFmtDialog');
+  if (!dlg) return;
+  $id('btnBrailleFmt')?.addEventListener('click', () => openBrailleFmtDialog());
+  $id('brailleFmtForm')?.addEventListener('submit', (e) => { e.preventDefault(); applyBrailleFmt(); });
+  $id('brailleFmtCancel')?.addEventListener('click', closeBrailleFmtDialog);
+  $id('brailleFmtClose')?.addEventListener('click', closeBrailleFmtDialog);
+  // Escape (the native "cancel") and every other close end here: put focus back where it was
+  // (the editor, with the caret on the block, when the dialog was opened from the keyboard).
+  // Native showModal keeps focus inside the page but lets Tab step out to the browser; wrap it.
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const f = [...dlg.querySelectorAll('button, input, select, textarea, [href], [tabindex]:not([tabindex="-1"])')].filter((el) => !el.disabled && el.getClientRects().length);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  dlg.addEventListener('close', () => {
+    if (dlg.open) return;   // reopened before this (queued) close event ran: the new opening owns bfState and focus
+    const st = bfState; bfState = null;
+    if (!st) return;
+    const op = st.opener;
+    if (op && document.contains(op) && /^(BUTTON|INPUT|SELECT|TEXTAREA|A)$/.test(op.tagName)) op.focus();
+    else editor.focus();
+    if (st.applied) announce(t('app.braille_fmt.applied'));
+  });
+})();
+window.openBrailleFmtDialog = openBrailleFmtDialog;
 
 let savedLexicalBlockKey = null;
 let lastKnownEditorBlockIndex = null;
-let lastActiveEditorSelection = null;
 
 function saveCurrentLexicalBlock() {
   try {
@@ -1975,15 +5371,15 @@ function toggleInsertMenu() {
   insertMenuBtn?.setAttribute('aria-expanded', String(willShow));
   if (willShow) {
     if (insertMenuWrap) {
+      // Open to the right of the button if it fits, else to the left, else pinned inside the window's edge.
       const rect = insertMenuWrap.getBoundingClientRect();
-      const dropWidth = 240;
+      const dropWidth = insertDropdown.offsetWidth || 240;
+      let left = 0;
       if (rect.left + dropWidth > window.innerWidth - 8) {
-        insertDropdown.style.left = 'auto';
-        insertDropdown.style.right = '0';
-      } else {
-        insertDropdown.style.left = '0';
-        insertDropdown.style.right = 'auto';
+        left = rect.right - dropWidth >= 8 ? rect.width - dropWidth : 8 - rect.left;
       }
+      insertDropdown.style.left = `${left}px`;
+      insertDropdown.style.right = 'auto';
     }
     const firstItem = insertDropdown.querySelector('.insert-item:not([style*="display: none"])');
     firstItem?.focus({ preventScroll: true });
@@ -1992,12 +5388,14 @@ function toggleInsertMenu() {
 
 function closeAllDropdownMenus() {
   closeInsertMenu();
+  closeStyleMenu(false);      // the style menu (F9 C1)
   const dlMenu = $id('downloadMenu');
   const dlBtn = $id('downloadBtn');
   if (dlMenu && !dlMenu.hidden) {
     dlMenu.hidden = true;
     dlBtn?.setAttribute('aria-expanded', 'false');
   }
+  closeTpInsertFieldMenu();   // K29 Stage 1d "Insert field" combobox
 }
 
 insertMenuBtn?.addEventListener('click', (e) => {
@@ -2011,8 +5409,12 @@ insertDropdown?.querySelectorAll('.insert-item').forEach((item) => {
   });
 });
 
+// K29 Stage 1d "Insert field": the title page card's own combobox toggle (updateTpInsertFieldBtn shows/
+// hides the button; renderTpInsertFieldMenu/insertTitlePageField do the work, both above).
+$id('btnTpInsertField')?.addEventListener('click', (e) => { e.stopPropagation(); toggleTpInsertFieldMenu(); });
+
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('#insertMenuWrap') && !e.target.closest('#downloadMenuWrap')) {
+  if (!e.target.closest('#insertMenuWrap') && !e.target.closest('#downloadMenuWrap') && !e.target.closest('#tpInsertFieldWrap') && !e.target.closest('#styleMenuWrap')) {
     closeAllDropdownMenus();
   }
 });
@@ -2129,7 +5531,7 @@ function makeTableCell(key, cell, ri, ci, unit, className, ariaLabel, placeholde
   div.dataset.unit = String(unit);
   div.dataset.row = String(ri);
   div.dataset.col = String(ci);
-  div.innerHTML = cellToEditableHtml(cell);
+  div.innerHTML = cellToEditableHtml(cell, resolveCellImgSrc);
 
   div.addEventListener('input', () => {
     // Deleting all a cell's text can leave a stray <br> behind (Chrome keeps one so the
@@ -2170,6 +5572,11 @@ function makeTableCell(key, cell, ri, ci, unit, className, ariaLabel, placeholde
       focusAdjacentTableCell(div, e.shiftKey ? -1 : 1);
       return;
     }
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !e.shiftKey && !e.metaKey && !e.ctrlKey && !e.altKey && tableCellArrow(div, key, e.key === 'ArrowDown')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (e.ctrlKey || e.metaKey) {
       const k = e.key.toLowerCase();
       if (k === 'b') { e.preventDefault(); e.stopPropagation(); applyCellFormat(div, 'bold'); }
@@ -2184,6 +5591,40 @@ function focusTableCellAt(cell, row, col) {
   const table = cell.closest('table.editor-table-widget');
   const target = table && table.querySelector(`.table-cell-input[data-row="${row}"][data-col="${col}"]`);
   if (target) { target.focus(); placeCaretAtEnd(target); }
+}
+// Up / Down in a table cell (A89, random-action testing: in Firefox the caret could not leave a cell; Chrome and WebKit went
+// through the cells in reading order and never left the table): the cell above (below) in the same column, as in a word
+// processor's table — the nearest cell at or before that column where cells are joined — and off the top (bottom) row, the
+// text before (after) the table; a paragraph is added after a table that ends the document, so there is somewhere to go. A
+// cell whose text wraps onto several lines first moves within its own lines (the browser does that). False: not handled.
+function tableCellArrow(cell, tableKey, down) {
+  const sel = window.getSelection();
+  if (sel.rangeCount && cell.contains(sel.focusNode)) {
+    const r = document.createRange(); r.setStart(sel.focusNode, sel.focusOffset); r.collapse(true);
+    const caret = caretClientRect(r);
+    if (caret && lineRects(cell).some((x) => (down ? x.top >= caret.bottom - 1 : x.bottom <= caret.top + 1))) return false;
+  }
+  const table = cell.closest('table.editor-table-widget');
+  if (!table) return false;
+  const col = Number(cell.dataset.col);
+  const rows = [...new Set([...table.querySelectorAll('.table-cell-input')].map((c) => Number(c.dataset.row)))].sort((a, b) => a - b);
+  let i = rows.indexOf(Number(cell.dataset.row)) + (down ? 1 : -1);
+  for (; i >= 0 && i < rows.length; i += down ? 1 : -1) {
+    const inRow = [...table.querySelectorAll(`.table-cell-input[data-row="${rows[i]}"]`)].filter((c) => Number(c.dataset.col) <= col);
+    const target = inRow.sort((a, b) => Number(b.dataset.col) - Number(a.dataset.col))[0];
+    if (target) { target.focus(); placeCaretAtEnd(target); return true; }
+  }
+  editorEl.focus({ preventScroll: true });
+  editor.update(() => {
+    const n = $getNodeByKey(tableKey);
+    if (!n) return;
+    let sib = down ? n.getNextSibling() : n.getPreviousSibling();
+    if (!sib && down) { sib = $createParagraphNode(); n.insertAfter(sib); }
+    if (!sib) { n.selectPrevious(); return; }
+    if (sib instanceof DecoratorNode) { const ns = $createNodeSelection(); ns.add(sib.getKey()); $setSelection(ns); return; }
+    if (down) sib.selectStart(); else sib.selectEnd();
+  }, { discrete: true });
+  return true;
 }
 // Tab / Shift+Tab: the next/previous cell in reading order. A contenteditable element is
 // not in the browser's own Tab order the way an <input> is, so this is done explicitly.
@@ -2211,6 +5652,40 @@ function applyCellFormat(cell, format) {
   cell.focus();
   document.execCommand(format, false, null);
 }
+// K5 (UEB §9 script typeform): a table cell is DOM content outside Lexical's tree (see
+// applyCellFormat above), and there is no document.execCommand for a custom CSS property, so
+// this wraps/unwraps the selection's own Range directly in a `<span class="cell-script">` —
+// format/cell-dom.mjs's cellHtmlToSegments already reads that class straight back into
+// TF_SCRIPT on save (the same convention segmentsToCellHtml writes for a script run).
+function applyCellScriptFormat(cell) {
+  cell.focus();
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  if (range.collapsed) return;
+  const container = range.commonAncestorContainer;
+  const holder = container.nodeType === 1 ? container : container.parentElement;
+  const existing = holder && holder.closest ? holder.closest('.cell-script') : null;
+  if (existing && cell.contains(existing) && existing.textContent === range.toString()) {
+    // The whole selection IS one script span already: unwrap it (toggle off).
+    const parent = existing.parentNode;
+    while (existing.firstChild) parent.insertBefore(existing.firstChild, existing);
+    parent.removeChild(existing);
+  } else {
+    const span = document.createElement('span');
+    span.className = 'cell-script';
+    try {
+      range.surroundContents(span);
+    } catch {
+      // A selection that only partly covers a node (surroundContents refuses that): extract
+      // and re-wrap instead — loses no content, just less surgical about node boundaries.
+      const frag = range.extractContents();
+      span.appendChild(frag);
+      range.insertNode(span);
+    }
+  }
+  cell.dispatchEvent(new Event('input', { bubbles: true }));
+}
 
 // ---- toolbar: emphasis ----
 function fmtBtn(id, format, label) {
@@ -2226,6 +5701,7 @@ function fmtBtn(id, format, label) {
       announce(label + ' toggled');
       return;
     }
+    let caretInWord = null;   // a plain caret inside a word: where in the word it was (the word is formatted; the caret goes back there)
     editor.update(() => {
       let sel = $getSelection();
       if (!sel && lastActiveEditorSelection?.anchorKey) {
@@ -2252,12 +5728,25 @@ function fmtBtn(id, format, label) {
           while (start > 0 && /[\w'-]/.test(text[start - 1])) start--;
           while (end < text.length && /[\w'-]/.test(text[end])) end++;
           if (end > start) {
+            caretInWord = offset - start;
             sel.setTextNodeRange(anchorNode, start, anchorNode, end);
           }
         }
       }
     });
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
+    // As a word processor does (18 Oct 2026, Paul: Backspace "deletes the wrong thing"): the whole word is formatted but the caret goes back
+    // to where it was - the word was left selected, and the next Backspace deleted all of it.
+    if (caretInWord != null) editor.update(() => {
+      const s2 = $getSelection();
+      if (!$isRangeSelection(s2) || s2.isCollapsed()) return;
+      const first = s2.isBackward() ? s2.focus : s2.anchor;
+      const node = first.getNode();
+      if (!$isTextNode(node)) return;
+      const o = Math.min(first.offset + caretInWord, node.getTextContentSize());
+      s2.anchor.set(node.getKey(), o, 'text');
+      s2.focus.set(node.getKey(), o, 'text');
+    });
     editor.focus();
     refreshToolbar();
     editor.getEditorState().read(() => {
@@ -2267,12 +5756,77 @@ function fmtBtn(id, format, label) {
   });
 }
 fmtBtn('btnBold', 'bold', 'Bold'); fmtBtn('btnItalic', 'italic', 'Italic'); fmtBtn('btnUnderline', 'underline', 'Underline');
+// UEB 9.5.1: crossed-out text, the first transcriber-defined typeform — same fmtBtn shape as
+// bold/italic/underline (Lexical's built-in 'strikethrough' format; document.execCommand
+// supports it too, so applyCellFormat's table-cell path works unchanged).
+fmtBtn('btnStrike', 'strikethrough', 'Strikethrough');
 // A table cell's DOM selection (unlike a Lexical selection) is lost the instant focus
 // moves to the button, so keep focus in the cell on mousedown — the click still fires
 // fmtBtn's handler right afterwards, with the cell's selection still intact.
-['btnBold', 'btnItalic', 'btnUnderline'].forEach((id) => {
+['btnBold', 'btnItalic', 'btnUnderline', 'btnStrike', 'btnScript'].forEach((id) => {
   $id(id)?.addEventListener('mousedown', (e) => { if (isTableCellEl(document.activeElement)) e.preventDefault(); });
 });
+
+// K5 / UEB §9 script typeform: unlike fmtBtn's bold/italic/underline/strikethrough, which all
+// dispatch Lexical's own FORMAT_TEXT_COMMAND, script has no Lexical format bit to dispatch
+// (see SCRIPT_STYLE/hasScript, defined below with the other CSS-custom-property runs). This
+// walks the selection's own text nodes, splitting any node the selection only partly covers —
+// FORMAT_TEXT_COMMAND does the equivalent split internally for Lexical's own format bits, but
+// there is nothing built in for a style property, so it is reimplemented here, once.
+function $scriptSelectionTextNodes(sel) {
+  if (sel.isCollapsed()) return [];
+  const isBackward = sel.isBackward();
+  const startPoint = isBackward ? sel.focus : sel.anchor;
+  const endPoint = isBackward ? sel.anchor : sel.focus;
+  const startNode = startPoint.getNode();
+  const endNode = endPoint.getNode();
+  if (startNode.is(endNode) && $isTextNode(startNode)) {
+    const lo = Math.min(startPoint.offset, endPoint.offset);
+    const hi = Math.max(startPoint.offset, endPoint.offset);
+    if (lo === hi) return [];
+    const size = startNode.getTextContentSize();
+    if (lo === 0 && hi === size) return [startNode];
+    const offsets = [lo, hi].filter((o) => o > 0 && o < size);
+    const parts = startNode.splitText(...offsets);
+    return [lo > 0 ? parts[1] : parts[0]];
+  }
+  const nodes = sel.getNodes().filter($isTextNode);
+  if (!nodes.length) return [];
+  if (nodes[0].is(startNode) && startPoint.offset > 0 && startPoint.offset < startNode.getTextContentSize()) {
+    nodes[0] = startNode.splitText(startPoint.offset)[1];
+  }
+  const lastIdx = nodes.length - 1;
+  if (nodes[lastIdx].is(endNode) && endPoint.offset > 0 && endPoint.offset < endNode.getTextContentSize()) {
+    nodes[lastIdx] = endNode.splitText(endPoint.offset)[0];
+  }
+  return nodes.filter((n) => n.getTextContent().length > 0);
+}
+function $setScriptStyle(node, on) {
+  const cur = (typeof node.getStyle === 'function' ? node.getStyle() || '' : '').replace(/--bana-script\s*:\s*1;?\s*/g, '').trim();
+  node.setStyle(on ? [cur, SCRIPT_STYLE].filter(Boolean).join(' ') : cur);
+}
+function toggleScriptFormat() {
+  const active = document.activeElement;
+  if (isTableCellEl(active)) {
+    applyCellScriptFormat(active);
+    announce('Script toggled');
+    return;
+  }
+  let turnedOn = null;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel)) return;
+    const nodes = $scriptSelectionTextNodes(sel);
+    if (!nodes.length) return;
+    const allOn = nodes.every((n) => hasScript(n));
+    turnedOn = !allOn;
+    nodes.forEach((n) => $setScriptStyle(n, turnedOn));
+  });
+  editor.focus();
+  refreshToolbar();
+  if (turnedOn !== null) announce('Script ' + (turnedOn ? 'on' : 'off'));
+}
+$id('btnScript')?.addEventListener('click', () => toggleScriptFormat());
 
 export function indentCurrentItem() {
   let changed = false;
@@ -2368,12 +5922,84 @@ export function outdentCurrentItem() {
   return changed;
 }
 
+// The list item the caret is currently in (or null), read without mutating the editor — used
+// by both the slash command's `when` and the keyboard shortcut so they agree on availability.
+function caretListItem() {
+  let li = null;
+  editor.getEditorState().read(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel)) return;
+    let node = sel.anchor.getNode();
+    while (node && node !== $getRoot()) {
+      if ($isListItemNode(node)) { li = node; break; }
+      node = node.getParent ? node.getParent() : null;
+    }
+  });
+  return li;
+}
+// "Empty", for Continue Item: genuinely blank, OR its whole text is still just the "/continue"
+// slash query being typed (removeSlashQueryText only erases that text once the command RUNS —
+// the `when` check that decides whether to OFFER it in the menu runs earlier, while it's
+// still there, so a line reading only "/continue" must count as empty too).
+const liIsEmpty = (li) => {
+  const t = li.getTextContent();
+  return (t.trim() === '' || /^\/[a-zA-Z0-9]*$/.test(t.trim())) && !li.getChildren().some((c) => typeof c.getType === 'function' && !['text', 'linebreak'].includes(c.getType()));
+};
+// "Continue item": turns a blank new list line into a further paragraph of the item above it —
+// saved/exported as that item's item.blocks (document.mjs formatItemBlocks), shown at the
+// runover+2 margin, no marker or number of its own (fmt.itemCont; see isItemContLi above and
+// the load-time construction in appendBlock's list branch). Pressing it again on a continuation
+// paragraph turns it back into an ordinary new item (its marker is then computed as usual).
+// Slash command "/continue" and Ctrl/⌘+Shift+Enter (see the editorEl keydown handler) both
+// call this. Chosen over Enter-on-empty-item (which already ends a list in Lexical, matching
+// Word/Docs) and over Shift+Enter (already a soft line break within the same paragraph).
+export function continueListItem() {
+  let result = null;   // 'on' | 'off' | null (not applicable here)
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel) || !sel.isCollapsed()) return;
+    let li = null;
+    let node = sel.anchor.getNode();
+    while (node && node !== $getRoot()) { if ($isListItemNode(node)) { li = node; break; } node = node.getParent ? node.getParent() : null; }
+    if (!li) return;
+    const f = fmtOf(li) || {};
+    if (f.itemCont) {
+      li.setFmt({ ...f, itemCont: null });
+      result = 'off';
+      return;
+    }
+    if (!liIsEmpty(li)) return;
+    const prev = li.getPreviousSibling();
+    if (!prev || !$isListItemNode(prev) || (prev.getLevel() || 0) !== (li.getLevel() || 0)) return;
+    if (typeof li.setMarker === 'function') li.setMarker(null);
+    li.setFmt({ ...f, itemCont: true, enum: null, start: null });
+    result = 'on';
+  });
+  if (result) {
+    editor.focus();
+    refreshToolbar();
+    announce(t(result === 'on' ? 'app.list.item_cont_on' : 'app.list.item_cont_off'));
+  }
+  return result;
+}
+// `when` for the slash command: available on a blank new list line right after another item
+// (would turn 'on'), or on an existing continuation paragraph (would turn 'off').
+function continueListItemAvailable() {
+  const li = caretListItem();
+  if (!li) return false;
+  const f = fmtOf(li) || {};
+  if (f.itemCont) return true;
+  if (!liIsEmpty(li)) return false;
+  const prev = li.getPreviousSibling();
+  return !!(prev && $isListItemNode(prev) && (prev.getLevel() || 0) === (li.getLevel() || 0));
+}
+
 $id('btnIndent')?.addEventListener('click', () => indentCurrentItem());
 $id('btnOutdent')?.addEventListener('click', () => outdentCurrentItem());
 
 // ---- toolbar: maths / break / TOC / sidebar / table / lists ----
 // Keep the editor's selection alive when a toolbar BUTTON is pressed (mousedown)
-['btnBold', 'btnItalic', 'btnUnderline', 'btnOutdent', 'btnIndent', 'btnMath', 'btnFormula', 'btnTable', 'btnGraphic', 'btnSidebar', 'btnBreak', 'btnInsertPrintPage'].forEach((id) =>
+['btnBold', 'btnItalic', 'btnUnderline', 'btnStrike', 'btnOutdent', 'btnIndent', 'btnMath', 'btnFormula', 'btnTable', 'btnGraphic', 'btnSidebar', 'btnBreak', 'btnInsertPrintPage'].forEach((id) =>
   $id(id)?.addEventListener('mousedown', (e) => e.preventDefault()));
 
 // ---- Lexical document → Emboss block model ----
@@ -2385,7 +6011,8 @@ function convertLatexCached(latex) {
   if (latexToMathMlCache.has(latex)) return latexToMathMlCache.get(latex);
   if (globalThis.MathLive?.convertLatexToMathMl) {
     try {
-      const mathml = globalThis.MathLive.convertLatexToMathMl(latex);
+      // MathLive writes some symbols as HTML named characters (&ne;, &alpha;): the characters themselves, which a saved file can hold (A89)
+      const mathml = htmlNamedCharsToText(globalThis.MathLive.convertLatexToMathMl(latex));
       latexToMathMlCache.set(latex, mathml);
       return mathml;
     } catch (e) {
@@ -2395,6 +6022,50 @@ function convertLatexCached(latex) {
   }
   return '';
 }
+
+// Ignore-font run mark (batch A, F-145 …): a text node carries it as a CSS custom property in its Lexical `style`, which
+// Lexical already copies on clone, keeps in the JSON of undo history / editor-state snapshots, and never merges across
+// (adjacent text nodes join only when format AND style match), so editing the text beside it cannot swallow or spread it.
+const IGNORE_FONT_STYLE = '--bana-ignore-font: 1;';
+const hasIgnoreFont = (n) => typeof n.getStyle === 'function' && /--bana-ignore-font\s*:\s*1/.test(n.getStyle() || '');
+// F-233 / BANA 6.12.3b(3): a hyperlinked run's braille indicator, carried the same way (its own CSS custom property,
+// independent of --bana-ignore-font so a run can carry either, both or neither without one overwriting the other).
+const HYPERLINK_STYLE = '--bana-hyperlink: 1;';
+const hasHyperlink = (n) => typeof n.getStyle === 'function' && /--bana-hyperlink\s*:\s*1/.test(n.getStyle() || '');
+// UEB 9.5.1 transcriber-defined typeform. 'strike' IS the editor's own strikethrough control
+// (Lexical's built-in 'strikethrough' text format — the btnStrike toolbar button / Ctrl+Shift+X,
+// the SECOND transcriber-defined typeform in format/document.mjs's segTf, kept off the first
+// slot on purpose: that one is the hyperlink indicator, F-233). BrailleBlaster's own
+// bai-trans1..bai-trans5 (parse.mjs A24) have no editor control (they only ever arrive already
+// on a segment from that import) but must still round-trip a save, so — like ignoreFont/
+// hyperlink above — they ride a CSS custom property in the node's own Lexical style,
+// independent of the format bitmask.
+const TRANSCRIBER_TF_STYLE_RE = /--bana-ttf\s*:\s*([a-z0-9-]+)/;
+const transcriberTfOf = (n) => { const m = typeof n.getStyle === 'function' && TRANSCRIBER_TF_STYLE_RE.exec(n.getStyle() || ''); return m ? m[1] : null; };
+const transcriberTfStyle = (ttf) => (ttf ? `--bana-ttf: ${ttf};` : '');
+// A foreign-language run (seg.lang, a BCP-47 primary subtag — input/lang.mjs) rides the same channel, its own custom
+// property, so it survives typing, undo and save. No control sets it yet; it arrives from an imported document.
+const LANG_STYLE_RE = /--bana-lang\s*:\s*([a-z]{2,3})\b/;
+const langOfNode = (n) => { const m = typeof n.getStyle === 'function' && LANG_STYLE_RE.exec(n.getStyle() || ''); return m ? m[1] : null; };
+const langStyle = (lang) => (typeof lang === 'string' && /^[a-z]{2,3}$/.test(lang) ? `--bana-lang: ${lang};` : '');
+
+// K5 / UEB §9 (rueb-2024.txt §9.1.2's "script does not need a transcriber-defined typeform"):
+// Lexical ships a fixed format bitmask (bold/italic/underline/strikethrough/code/highlight/
+// sub/superscript) with no 'script' slot to add to, so — like ignoreFont/hyperlink above — a
+// script run rides its own CSS custom property on the node's Lexical `style`, independent of
+// the format bitmask. UNLIKE ignoreFont/hyperlink (separate boolean segment fields), script
+// folds into the numeric `tf` bitmask itself (TF_SCRIPT) once read off the node, because that
+// is what format/document.mjs's segTf/groupSegments/stripEmphasis already read for italic/
+// underline/bold — treating it the same way means every rule that inspects `seg.tf` (heading
+// emphasis-drop, list emphasis-strip, the "all one typeform" checks, forceBold, …) works for
+// script with no separate code path. TF_SCRIPT is liblouis's own `emphclass script` bit (8), named
+// by TYPEFORM in Emboss/engine/louis-browser.mjs — the copy this editor loads as /engine/louis-browser.mjs
+// (the dev server and dist both serve Emboss/engine/, not the repo-root engine/) — and matching
+// format/cell-markup.mjs's TF_SCRIPT (confirmed against the compiled en-ueb-g1.ctb; see
+// Emboss/engine/louis.mjs's TYPEFORM comment).
+const TF_SCRIPT = TF.script;
+const SCRIPT_STYLE = '--bana-script: 1;';
+const hasScript = (n) => typeof n.getStyle === 'function' && /--bana-script\s*:\s*1/.test(n.getStyle() || '');
 
 // Used for BOTH paragraphs and list items so emphasis + inline maths survive in lists
 // too (previously list items were flattened to plain text, dropping both).
@@ -2436,13 +6107,73 @@ function nodeToRuns(node) {
       }
       continue;
     }
+    if ($isBrlNode(child)) {
+      runs.push({ type: 'brl', brl: child.getBrl(), text: child.getTextContent().replace(/\u200B/g, '') });
+      hasEmph = true;                                    // keep segments so the literal cells survive
+      continue;
+    }
     if ($isImgNoteNode(child)) {
       const desc = child.getTextContent().trim();
       if (desc) {
         const run = { type: 'imgnote', text: desc };
         if (child.getSrc()) run.src = child.getSrc();
+        const ex = child.getExtra();
+        if (ex) Object.assign(run, ex);
         runs.push(run);
         hasEmph = true;                                  // keep segments so the embedded note survives (F-229)
+      }
+      continue;
+    }
+    if ($isLinkNode(child)) {
+      // A19/A21 Stage 3: reconstruct the `.href`-tagged plain-text segment parse.mjs's
+      // walkInline produces (nimas-export's serializeInlineSegments re-wraps a contiguous
+      // run sharing the same href in one <a href="…">) — kept as its own run, not merged
+      // with a neighbour, so the href boundary is never blurred.
+      const linkText = child.getTextContent();
+      if (linkText) {
+        let tf = 0, unc = false, ttf = null;
+        if (typeof child.hasFormat === 'function') {
+          if (child.hasFormat('bold')) tf |= TF.bold;
+          if (child.hasFormat('italic')) tf |= TF.italic;
+          if (child.hasFormat('underline')) tf |= TF.underline;
+          unc = child.hasFormat('code');
+          ttf = child.hasFormat('strikethrough') ? 'strike' : transcriberTfOf(child);
+        }
+        if (hasScript(child)) tf |= TF_SCRIPT;   // K5
+        const run = { type: 'text', text: scriptMarked(child, linkText.replace(/\s+/g, ' ')), href: child.getHref() || undefined };
+        if (tf) run.tf = tf;
+        if (unc) run.uncontracted = true;
+        if (ttf) run.transcriberTypeform = ttf;
+        if (hasIgnoreFont(child)) run.ignoreFont = true;
+        if (hasHyperlink(child)) run.hyperlink = true;
+        if (langOfNode(child)) run.lang = langOfNode(child);
+        runs.push(run);
+        hasEmph = true;                                   // keep segments so the href survives
+      }
+      continue;
+    }
+    if ($isCiteNode(child)) {
+      // A19/A21 Stage 4: same shape as the link case above.
+      const citeText = child.getTextContent();
+      if (citeText) {
+        let tf = 0, unc = false, ttf = null;
+        if (typeof child.hasFormat === 'function') {
+          if (child.hasFormat('bold')) tf |= TF.bold;
+          if (child.hasFormat('italic')) tf |= TF.italic;
+          if (child.hasFormat('underline')) tf |= TF.underline;
+          unc = child.hasFormat('code');
+          ttf = child.hasFormat('strikethrough') ? 'strike' : transcriberTfOf(child);
+        }
+        if (hasScript(child)) tf |= TF_SCRIPT;   // K5
+        const run = { type: 'text', text: scriptMarked(child, citeText.replace(/\s+/g, ' ')), cite: true };
+        if (tf) run.tf = tf;
+        if (unc) run.uncontracted = true;
+        if (ttf) run.transcriberTypeform = ttf;
+        if (hasIgnoreFont(child)) run.ignoreFont = true;
+        if (hasHyperlink(child)) run.hyperlink = true;
+        if (langOfNode(child)) run.lang = langOfNode(child);
+        runs.push(run);
+        hasEmph = true;                                   // keep segments so the cite marking survives
       }
       continue;
     }
@@ -2455,23 +6186,35 @@ function nodeToRuns(node) {
     }
     const rawText = child.getTextContent();
     if (!rawText) continue;
-    const text = rawText.replace(/\s+/g, ' ');
+    const text = scriptMarked(child, rawText.replace(/\s+/g, ' '));
     if (!text) continue;
     let tf = 0;
     let unc = false;
+    let ttf = null;
     if (typeof child.hasFormat === 'function') {
       if (child.hasFormat('bold')) tf |= TF.bold;
       if (child.hasFormat('italic')) tf |= TF.italic;
       if (child.hasFormat('underline')) tf |= TF.underline;
       unc = child.hasFormat('code');
+      ttf = child.hasFormat('strikethrough') ? 'strike' : transcriberTfOf(child);
     }
-    if (tf || unc) hasEmph = true;
+    if (hasScript(child)) tf |= TF_SCRIPT;   // K5
+    const ign = hasIgnoreFont(child);
+    const hyp = hasHyperlink(child);
+    const lg = langOfNode(child);                        // foreign-language run (input/lang.mjs)
+    if (tf || unc || ign || hyp || ttf || lg || text !== rawText.replace(/\s+/g, ' ')) hasEmph = true;   // a sub/superscript run keeps segments too
     const last = runs[runs.length - 1];
-    if (last && last.type === 'text' && (last.tf || 0) === tf && !!last.uncontracted === unc) last.text += text;   // one run per form
-    else runs.push(unc ? { type: 'text', text, tf, uncontracted: true } : { type: 'text', text, tf });
+    // A19/A21 Stage 9: a run tagged .href (LinkNode) or .cite (CiteNode) must never absorb the
+    // plain text that follows it — that text was never part of the link/citation. Before this
+    // check, an ordinary TextNode right after a LinkNode/CiteNode run (same tf/uncontracted,
+    // the only two fields compared here) merged straight into it, silently pulling unrelated
+    // words inside the <a>/<cite> on save.
+    if (last && last.type === 'text' && !last.href && !last.cite && (last.tf || 0) === tf && !!last.uncontracted === unc && !!last.ignoreFont === ign && !!last.hyperlink === hyp && (last.transcriberTypeform || null) === ttf && (last.lang || null) === lg) last.text += text;   // one run per form
+    else runs.push({ type: 'text', text, tf, ...(unc ? { uncontracted: true } : {}), ...(ttf ? { transcriberTypeform: ttf } : {}), ...(ign ? { ignoreFont: true } : {}), ...(hyp ? { hyperlink: true } : {}), ...(lg ? { lang: lg } : {}) });
   }
   return { runs, hasEmph, hasMath };
 }
+const TYPED_BRAILLE_TEXT_RE = /^[⠀-⣿ \n]*[⠁-⣿][⠀-⣿ \n]*$/;   // as format/document.mjs's TYPED_BRAILLE_RE
 function paraBlock(node) {
   const { runs, hasEmph, hasMath } = nodeToRuns(node);
   if (!runs.length) return null;
@@ -2485,8 +6228,12 @@ function paraBlock(node) {
     if (solid[0].latex) m.latex = solid[0].latex;
     return m;
   }
+  // Feedback 30 Sep, item 3 (Paul, 1 Oct): a paragraph of typed braille (six-key entry) keeps its spaces and line breaks as typed —
+  // the formatter lays it out exactly as typed (format/document.mjs typedBrailleRuns); only trailing blanks are dropped.
+  const raw = node.getTextContent();
+  const typedBraille = !hasMath && !hasEmph && TYPED_BRAILLE_TEXT_RE.test(raw);
   const block = (hasMath || hasEmph) ? { type: 'para', segments: runs }
-    : { type: 'para', text: node.getTextContent().replace(/\s+/g, ' ').trim() };
+    : { type: 'para', text: typedBraille ? raw.replace(/\s+$/, '') : raw.replace(/\s+/g, ' ').trim() };
   const turn = typeof node.getPageTurn === 'function' ? node.getPageTurn() : null;
   if (turn === 'continued' || turn === 'both') block.continued = true;
   if (turn === 'continuation' || turn === 'both') block.continuation = true;
@@ -2495,7 +6242,17 @@ function paraBlock(node) {
   if (typeof node.getBlocked === 'function' && node.getBlocked()) block.blocked = true;
   if (banaStyle && banaStyle !== 'body') {
     block.style = banaStyle;
-    if (banaStyle === 'note') block.type = 'note';
+    if (banaStyle === 'note') {
+      block.type = 'note';
+      // A22 / A19-A21 Stage 7/9: keep an imported render="required" through the editor too.
+      const render = typeof node.getRender === 'function' ? node.getRender() : null;
+      if (render === 'required') block.render = 'required';
+      // F-5: keep it a table's transcriber's note (see ParagraphNode's getTabletn).
+      if (typeof node.getTabletn === 'function' && node.getTabletn()) block.kind = 'tabletn';
+      // F-164: paragraph of a multi-paragraph note (see ParagraphNode's getNoteGroup).
+      const ng = typeof node.getNoteGroup === 'function' ? node.getNoteGroup() : null;
+      if (ng != null) block.noteGroup = ng;
+    }
     else if (banaStyle === 'caption') block.type = 'caption';
     else if (banaStyle === 'footnote') {
       block.type = 'footnote';
@@ -2505,9 +6262,70 @@ function paraBlock(node) {
     else if (banaStyle === 'attribution') block.type = 'attribution';
     else if (banaStyle === 'stage' || banaStyle === 'play-stage') block.type = 'stage';
     else if (banaStyle === 'dialogue' || banaStyle === 'play-speaker' || banaStyle === 'speaker') { block.type = 'play'; block.subtype = 'prose'; }
-    else if (banaStyle === 'verse' || banaStyle === 'poem' || banaStyle === 'play-verse') { block.type = 'play'; block.subtype = 'verse'; }
+    else if (banaStyle === 'verse' || banaStyle === 'poem' || banaStyle === 'play-verse') {
+      block.type = 'play'; block.subtype = 'verse';
+      // A19/A21 Stage 2/9: only a line read from a genuine <poem> sweeps back into
+      // <poem>/<linegroup>/<line> on save (D5) — see nimas-export.mjs's isPoemLineBlock.
+      if (typeof node.getFromPoem === 'function' && node.getFromPoem()) block.fromPoem = true;
+      if (typeof node.getPlayVerse === 'function' && node.getPlayVerse()) block.playVerse = true;   // verse drama keeps its BANA 14.6.1a margins
+      // A42: a line read from a bare <linegroup>/<stanza> (no <poem> wrapper) must save back
+      // without inventing one — see nimas-export.mjs's renderPoemRun's wrapInPoem flag.
+      if (typeof node.getBareLinegroup === 'function' && node.getBareLinegroup()) {
+        block.bareLinegroup = true;
+        if (typeof node.getBareLinegroupId === 'function') block.bareLinegroupId = node.getBareLinegroupId();
+      }
+      // A35/A19-A21 Stage 9: a line read from a genuine source <line> element (not D5's bare
+      // verse drama) must round-trip as <line> — see nimas-export.mjs's fromLineTag check.
+      if (typeof node.getFromLineTag === 'function' && node.getFromLineTag()) block.fromLineTag = true;
+    }
     else if (banaStyle === 'quote') { block.type = 'para'; block.style = 'quote'; }
   }
+  // A19/A21 Stage 5/9: a generic <div class="…"> wrapper, independent of banaStyle — any
+  // paragraph-shaped block can have come from inside one (see parse.mjs's walk()).
+  const divClass = typeof node.getDivClass === 'function' ? node.getDivClass() : null;
+  if (divClass) {
+    block.divClass = divClass;
+    const divId = typeof node.getDivId === 'function' ? node.getDivId() : null;
+    if (divId != null) block.divId = divId;
+  }
+  // A35/A40/A19-A21 Stage 9: a run of blocks from one source <blockquote> that needed the run
+  // mechanism (see ParagraphNode's own fromBlockquoteLines/blockquoteId/blockquoteClass note) —
+  // independent of banaStyle, same shape as divClass above (a quote paragraph inside the run
+  // carries this too, so nimas-export.mjs's renderBlockquoteRun can rebuild one <blockquote>
+  // around them all instead of each paragraph self-wrapping its own). Gate on blockquoteId (any
+  // run at all), not fromBlockquoteLines (only the A35 subset that also had a <line>).
+  const bqId = typeof node.getBlockquoteId === 'function' ? node.getBlockquoteId() : null;
+  if (bqId != null) {
+    block.blockquoteId = bqId;
+    if (typeof node.getFromBlockquoteLines === 'function' && node.getFromBlockquoteLines()) block.fromBlockquoteLines = true;
+    const bqClass = typeof node.getBlockquoteClass === 'function' ? node.getBlockquoteClass() : null;
+    if (bqClass) block.blockquoteClass = bqClass;
+  }
+  // Optional formatter fields (see installFmt): directions (BANA 10.3.2), speaker gap, line-number
+  // note text / off / margin, enclosed note prefix; a cross-reference note is a paragraph with fmt.xref.
+  fmtToBlock(block, node, FMT_PARA_KEYS);
+  const pf = fmtOf(node);
+  if (pf && pf.xref) {
+    block.type = 'xref'; delete block.style;
+    if (pf.xrefHeading) block.heading = pf.xrefHeading;
+  }
+  // A code block (dotLocator / keepSpaces / spaceLetters) is a plain paragraph carrying those flags: its text keeps its
+  // spaces and line breaks (the formatter reads block.text), so it is not collapsed like body text.
+  // The "Computer code" style (#40) makes the paragraph a code block too, flags or not: the formatter's grade-1 passage and the
+  // save's <p class="bana-code">. A line break in it is a line of the code; a trailing empty line (the caret waiting there) is not.
+  const codeStyle = banaStyle === 'code';
+  if (block.type === 'para' && !hasMath && (codeStyle || (pf && FMT_CODE_KEYS.some((k) => pf[k])))) {
+    block.type = 'code';
+    block.text = codeStyle ? node.getTextContent().replace(/\n+$/, '') : node.getTextContent();
+    delete block.segments;
+    if (codeStyle) delete block.style;                  // 'code' is the block's type now
+    if (codeStyle && !block.text.trim()) return null;   // only blanks: nothing to braille (an empty paragraph)
+  } else if (codeStyle) delete block.style;   // an equation in a code paragraph: not a code block
+  // #49: which poem the line / author belongs to, and an author's or byline's role in its poem (the reader's poemId / poemRole)
+  const poemId = typeof node.getPoemId === 'function' ? node.getPoemId() : null;
+  if (poemId != null && (block.fromPoem || block.type === 'attribution')) block.poemId = poemId;
+  const poemRole = typeof node.getPoemRole === 'function' ? node.getPoemRole() : null;
+  if (poemRole && block.type === 'attribution') block.poemRole = poemRole;
   return block;
 }
 // SVG markup → `data:image/svg+xml;base64,…` (UTF-8 safe: braille cells / non-ASCII labels).
@@ -2533,7 +6351,76 @@ function svgToDataUri(svg) {
 // A NIMAS package (A3) also carries its images as model.resources; those get object URLs
 // here so ImageNode can show them (the node itself keeps the package-relative src, so saving
 // still writes that path — packaging the bytes back out is A4).
-let loadedDocInfo = { title: null, metadata: null, resources: [], resourceUrls: new Map() };
+// The document options (field-registry.mjs entries saved as a <meta>, nimas-export.mjs's BANA_DOC_OPTIONS) ride here
+// too: kept on the model buildModel returns, so the save writes them and formatDocument (doc.<name>) uses them.
+// A plain on/off option is kept as `true` when set; one whose VALUE matters (text, or an explicit false that turns a
+// default-on rule off) is kept as loaded.
+const DOC_OPTION_KEYS = docOptionFields().filter((f) => f.type === 'bool' && !f.save.some((sv) => sv.off)).map((f) => f.key);
+const DOC_OPTION_VALUE_KEYS = docOptionFields().filter((f) => !DOC_OPTION_KEYS.includes(f.key)).map((f) => f.key);
+let loadedDocInfo = { title: null, metadata: null, resources: [], resourceUrls: new Map(), options: {} };
+// A loaded file's title (and its document information) is kept apart from the text: it is page 1, line 1 of the braille, and is not
+// in the text pane. A user's report (1 Oct 2026, "the uneditable braille lingers from previous stuff"): after Clear, or after deleting
+// all the text, the old document's title stayed on line 1 of the new text's braille. Emptying the document starts a new one: the old
+// title and document information go (Clear does this too — see btnClear).
+function forgetLoadedTitle() {
+  if (loadedDocInfo.title == null && loadedDocInfo.metadata == null) return;
+  loadedDocInfo = { ...loadedDocInfo, title: null, metadata: null, titleTyped: false };
+}
+editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves }) => {
+  // A title the user typed into the Title field (feedback item 10) is theirs, and in sight: emptying the text keeps it.
+  if (importing || loadedDocInfo.titleTyped || (loadedDocInfo.title == null && loadedDocInfo.metadata == null)) return;
+  if (!dirtyElements.size && !dirtyLeaves.size) return;
+  const empty = editorState.read(() => $getRoot().getChildren().every((c) => typeof c.getChildren === 'function'
+    && c.getTextContent().trim() === '' && c.getChildren().every((k) => $isTextNode(k) || $isLineBreakNode(k))));
+  if (empty) forgetLoadedTitle();
+});
+// Feedback 30 Sep item 10 (Paul, 1 Oct): the document's title in a field above the text. It is page 1's braille title and the
+// running heads, and lives outside the text (loadedDocInfo.title, as Book details sets it). The field follows every render while
+// it is not being typed in; with no title of its own it says the first heading is used (buildModel's fallback).
+const docTitleField = $id('docTitleInput');
+// What the Title field does differs by standard (Paul, 2 Oct): in BANA the title is brailled at the top of the first page; in
+// UKAAF it is the running head, which starts on braille page 2 — so the label says so, and after a title is typed into a document
+// of one page the status explains why the braille has not changed.
+let titleHintPending = false;
+function syncDocTitleLabel() {
+  const label = docTitleField && document.querySelector(`label[for="${docTitleField.id}"]`);
+  if (!label) return;
+  const key = settings?.mode === 'ukaaf' ? 'app.editor.doc_title_label_ukaaf' : 'app.editor.doc_title_label';
+  const text = settings?.mode === 'ukaaf' ? tOr(key, 'Title (the running head at the top of each braille page, from page 2)') : tOr(key, 'Title (shown at the top of the braille)');
+  if (label.getAttribute('data-i18n') !== key) label.setAttribute('data-i18n', key);
+  if (label.textContent !== text) label.textContent = text;
+}
+function syncDocTitleField(model) {
+  if (!docTitleField) return;
+  syncDocTitleLabel();
+  if (document.activeElement !== docTitleField) docTitleField.value = loadedDocInfo.title || '';
+  docTitleField.placeholder = loadedDocInfo.title ? '' : (model && model.title
+    ? tOr('app.editor.doc_title_placeholder_heading', 'No title of its own: the first heading is used, “{title}”').replace('{title}', model.title)
+    : tOr('app.editor.doc_title_placeholder_none', 'Untitled document'));
+}
+function applyDocTitleField() {
+  const v = docTitleField.value.replace(/\s+/g, ' ').trim();
+  if (v === (loadedDocInfo.title || '')) return;
+  loadedDocInfo = { ...loadedDocInfo, title: v || null, titleTyped: !!v };
+  titleHintPending = !!v;
+  contentChangedSinceClean = true;
+  docInfoChangedSinceClean = true;
+  noteAutosaveChange();   // the title and book details are part of the backup too (A89 step 3)
+  clearTranslationCache();
+  scheduleRender();
+}
+if (docTitleField) {
+  let titleTimer = null;
+  docTitleField.addEventListener('input', () => { clearTimeout(titleTimer); titleTimer = setTimeout(applyDocTitleField, 500); });
+  docTitleField.addEventListener('change', () => { clearTimeout(titleTimer); applyDocTitleField(); });
+  docTitleField.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); docTitleField.blur(); } });
+}
+// K35: a table cell's own picture (an imgnote segment, format/cell-dom.mjs) shows a thumbnail
+// the same way ImageNode.createDOM resolves a graphic block's src above: the package's own
+// object URL when it is one of this document's resources, else the src itself when it is
+// already displayable (a data:/http(s):/blob: URL) — null (no thumbnail, chip + text only)
+// for a package-relative path this document has no resource for.
+const resolveCellImgSrc = (src) => loadedDocInfo.resourceUrls.get(src) || (/^(data:image\/|https?:|blob:)/i.test(src || '') ? src : null);
 function setLoadedDocInfo(model) {
   const title = model && model.title != null ? String(model.title).trim() : '';
   for (const url of loadedDocInfo.resourceUrls.values()) URL.revokeObjectURL(url);
@@ -2547,6 +6434,10 @@ function setLoadedDocInfo(model) {
     title: title || null,
     metadata: model && model.metadata && typeof model.metadata === 'object' ? model.metadata : null,
     resources, resourceUrls,
+    options: {
+      ...Object.fromEntries(DOC_OPTION_KEYS.filter((k) => model && model[k]).map((k) => [k, true])),
+      ...Object.fromEntries(DOC_OPTION_VALUE_KEYS.filter((k) => model && model[k] !== undefined && model[k] !== null).map((k) => [k, model[k]])),
+    },
   };
 }
 
@@ -2575,32 +6466,133 @@ function glossaryItem(runs) {
 
 function imageBlock(node) {
   const img = node.getImage();
-  const g = { type: 'graphic', src: img.src, alt: img.alt };
+  const draft = pendingAltDrafts.get(node.getKey());   // S2a #5: a description still being typed counts
+  const g = { type: 'graphic', src: img.src, alt: draft !== undefined ? String(draft).replace(/\s+/g, ' ').trim() : img.alt };
   if (img.caption) { g.caption = img.caption; if (img.captionSegments) g.captionSegments = img.captionSegments; }
-  if (img.description) g.description = img.description;
+  if (img.description) {
+    g.description = img.description;
+    if (img.descriptionRender === 'required') g.descriptionRender = 'required';
+    // A34: several source <prodnote>s, kept separately — see ImageNode's own descriptions note.
+    if (Array.isArray(img.descriptions) && img.descriptions.length) g.descriptions = img.descriptions;
+  }
+  if (img.figureType) g.figureType = img.figureType;   // F-231
+  if (img.citation) g.citation = img.citation;         // 6.2.2c
+  if (img.decorative && !g.alt) g.decorative = true;   // decoration, while it has no description (the reader's mark, kept through the editor)
   return g;
 }
 
 // One editor node → model block(s) appended to `blocks` (the document or a sidebar's blocks).
 function nodeToBlocks(node, blocks) {
   const nodeKey = node.getKey();
+  if (typeof node.getChildren !== 'function' && !(node instanceof DecoratorNode && !node.isInline())) {
+    // Loose text where a block belongs ($wrapLooseInlines normally gathers it into a paragraph first): braille it as a
+    // paragraph of its text rather than fail (A89).
+    const text = node.getTextContent();
+    if (text.trim()) blocks.push({ type: 'para', text: text.replace(/\s+/g, ' ').trim(), _key: nodeKey });
+    return;
+  }
   if ($isBreakNode(node)) {
-    blocks.push({ type: 'indicator', kind: typeof node.getKind === 'function' ? node.getKind() : 'asterisks', _key: nodeKey });
+    // A19/A21 Stage 2/5/9: fromPoem (stanza break inside a <poem>) and divClass/divId (a
+    // generic classed <div> wrapper) — see BreakNode's own fields, above.
+    const fromPoem = typeof node.getFromPoem === 'function' && node.getFromPoem();
+    const divClass = typeof node.getDivClass === 'function' ? node.getDivClass() : null;
+    // A42: same shape as divClass/divId, for a stanza-break indicator inside a bare linegroup.
+    const bareLinegroup = typeof node.getBareLinegroup === 'function' && node.getBareLinegroup();
+    // A40: gate on blockquoteId (any run at all), not fromBlockquoteLines (only the A35 subset).
+    const bqId = typeof node.getBlockquoteId === 'function' ? node.getBlockquoteId() : null;
+    const fromBlockquoteLines = bqId != null && typeof node.getFromBlockquoteLines === 'function' && node.getFromBlockquoteLines();
+    const bqClass = bqId != null && typeof node.getBlockquoteClass === 'function' ? node.getBlockquoteClass() : null;
+    blocks.push({
+      type: 'indicator', kind: typeof node.getKind === 'function' ? node.getKind() : 'asterisks',
+      ...(fromPoem ? { fromPoem: true } : {}),
+      ...(fromPoem && node.getLatest().__poemId != null ? { poemId: node.getLatest().__poemId } : {}),   // #49
+      ...(divClass ? { divClass, divId: node.getDivId() } : {}),
+      ...(bareLinegroup ? { bareLinegroup: true, bareLinegroupId: node.getBareLinegroupId() } : {}),
+      ...(bqId != null ? { blockquoteId: bqId, ...(fromBlockquoteLines ? { fromBlockquoteLines: true } : {}), ...(bqClass ? { blockquoteClass: bqClass } : {}) } : {}),
+      _key: nodeKey
+    });
   } else if ($isPrintPageNode(node)) {
     const src = node.getSource();
-    blocks.push({ type: 'pagenum', page: node.getPage(), ...(src.id ? { id: src.id } : {}), ...(src.pageType ? { pageType: src.pageType } : {}), _key: nodeKey });
+    const fromPoem = typeof node.getFromPoem === 'function' && node.getFromPoem();
+    const divClass = typeof node.getDivClass === 'function' ? node.getDivClass() : null;
+    // A42: same shape as divClass/divId, for a print-page turn inside a bare linegroup.
+    const bareLinegroup = typeof node.getBareLinegroup === 'function' && node.getBareLinegroup();
+    // A40: gate on blockquoteId (any run at all), not fromBlockquoteLines (only the A35 subset).
+    const bqId = typeof node.getBlockquoteId === 'function' ? node.getBlockquoteId() : null;
+    const fromBlockquoteLines = bqId != null && typeof node.getFromBlockquoteLines === 'function' && node.getFromBlockquoteLines();
+    const bqClass = bqId != null && typeof node.getBlockquoteClass === 'function' ? node.getBlockquoteClass() : null;
+    blocks.push({
+      type: 'pagenum', ...(node.getPage() !== '' ? { page: node.getPage() } : {}), ...(src.id ? { id: src.id } : {}), ...(src.pageType ? { pageType: src.pageType } : {}),
+      ...(fromPoem ? { fromPoem: true } : {}),
+      ...(fromPoem && node.getLatest().__poemId != null ? { poemId: node.getLatest().__poemId } : {}),   // #49
+      ...(divClass ? { divClass, divId: node.getDivId() } : {}),
+      ...(bareLinegroup ? { bareLinegroup: true, bareLinegroupId: node.getBareLinegroupId() } : {}),
+      ...(bqId != null ? { blockquoteId: bqId, ...(fromBlockquoteLines ? { fromBlockquoteLines: true } : {}), ...(bqClass ? { blockquoteClass: bqClass } : {}) } : {}),
+      _key: nodeKey
+    });
+    fmtToBlock(blocks[blocks.length - 1], node, FMT_PAGENUM_KEYS);
+  } else if ($isTnPageNode(node)) {
+    // One entry per paragraph; paragraphs sharing a noteGroup are one entry's further paragraphs.
+    const entries = [];
+    let lastGroup = null;
+    for (const child of node.getChildren()) {
+      if (!(child instanceof ParagraphNode)) continue;
+      const pb = paraBlock(child);
+      if (!pb) continue;
+      const one = pb.type === 'math' ? { segments: [{ type: 'math', ...(pb.mathml ? { mathml: pb.mathml } : {}), ...(pb.latex ? { latex: pb.latex } : {}) }] }
+        : (pb.segments ? { segments: pb.segments } : { text: pb.text });
+      if (!one.segments && !String(one.text || '').trim()) continue;
+      const ng = typeof child.getNoteGroup === 'function' ? child.getNoteGroup() : null;
+      if (ng != null && ng === lastGroup && entries.length) (entries[entries.length - 1].paragraphs ||= []).push(one);
+      else entries.push(one);
+      lastGroup = ng;
+    }
+    const heading = node.getHeading();
+    // Belt-and-braces (Paul's 26 Sep "empty sidebar" bug report, checked across all three page/box
+    // containers): the editor now removes one of these the instant it is emptied by keyboard
+    // (see the auto-remove update listener above), but buildModel must never itself save one that
+    // is empty either way it got that way — a heading-less page with no entries has nothing for a
+    // reader, and would otherwise round-trip into an empty <level1 class="bana-transcriber-notes">.
+    if (!heading && !entries.length) return;
+    blocks.push({ type: 'tnpage', matter: 'transcriber', ...(heading ? { heading } : {}), entries, _key: nodeKey });
+  } else if ($isSymPageNode(node)) {
+    const heading = node.getHeading();
+    const shown = $symNodeEntries(node);
+    // An automatic page saves as the marker only (the formatter derives the entries); an edited one saves them.
+    // A non-automatic (explicitly edited) page with no heading and no entries left is empty — drop it (see the
+    // tnpage comment just above); an automatic page is kept even with no entries yet (nothing found to list is
+    // still a legitimate, non-empty-looking page once syncSymPages runs).
+    if (!node.getAuto() && !heading && !shown.length) return;
+    blocks.push({ type: 'sympage', matter: 'transcriber', ...(heading ? { heading } : {}), ...(node.getAuto() ? { auto: true } : { entries: shown }),
+      _shown: shown.map((e) => e.description || e.print || ''), _key: nodeKey });
+  } else if ($isTitlePageNode(node)) {
+    // K29 Stage 1c: same auto/edited shape as sympage just above — an untouched page saves as the
+    // marker only (design §3.2: the formatter/exporter derive fresh content from the document's own
+    // fields, never from this block); an edited page saves its own segments/lines/chips exactly.
+    blocks.push(node.getAuto() ? { type: 'titlepage', matter: 'transcriber', auto: true, _key: nodeKey }
+      : { type: 'titlepage', matter: 'transcriber', segments: $titlePageSegments(node), _key: nodeKey });
   } else if ($isSidebarNode(node)) {
     const innerBlocks = [];
     for (const child of node.getChildren()) nodeToBlocks(child, innerBlocks);   // same rules inside a sidebar, nested sidebars too (A26)
+    // A box's title IS its first heading, when it has one — the heading the user sees and edits; the title the box was loaded
+    // with is kept only for a box without one. The braille showed the old title beside an edited (or split) one, while a save
+    // writes the first heading as the title (A89, random-action testing; tests/test-box-title.mjs).
+    const head = $isHeadingNode(node.getFirstChild()) && innerBlocks[0] && innerBlocks[0].type === 'heading' ? innerBlocks[0] : null;
+    const boxTitle = head ? String(head.text ?? '').trim() : node.getTitle();
+    // See the tnpage comment above: never save a box with no title and nothing inside it.
+    if (!boxTitle && !innerBlocks.length) return;
     const boxSrc = node.getSource();
     blocks.push({
       type: 'box',
       ...(boxSrc && boxSrc.id ? { id: boxSrc.id } : {}),
       ...(boxSrc && boxSrc.render ? { render: boxSrc.render } : {}),
-      title: node.getTitle() || undefined,
+      title: boxTitle || undefined,
       blocks: innerBlocks.length ? innerBlocks : undefined,
+      ...((fmtOf(node) || {}).noBoxLines ? { boxLines: false } : {}),   // F-230
+      ...((fmtOf(node) || {}).boxColor ? { boxColor: (fmtOf(node) || {}).boxColor } : {}),   // K7
       _key: nodeKey
     });
+    fmtToBlock(blocks[blocks.length - 1], node, FMT_PBB_KEYS);
   } else if ($isTableNode(node)) {
     const format = typeof node.getFormat === 'function' ? node.getFormat() : 'spatial';
     const tblBlock = {
@@ -2620,9 +6612,32 @@ function nodeToBlocks(node, blocks) {
     }
     const headerGroups = typeof node.getHeaderGroups === 'function' ? node.getHeaderGroups() : null;
     if (headerGroups) tblBlock.headerGroups = headerGroups;
+    // K3: printAlign (read from the source file) and columnAlign (the transcriber's own
+    // override) both carried straight through — see document.mjs's numericAlignApplies.
+    const printAlign = typeof node.getPrintAlign === 'function' ? node.getPrintAlign() : null;
+    if (printAlign) tblBlock.printAlign = printAlign;
+    const columnAlign = typeof node.getColumnAlign === 'function' ? node.getColumnAlign() : null;
+    if (columnAlign) tblBlock.columnAlign = columnAlign;
+    const subRows = typeof node.getSubdivisionRows === 'function' ? node.getSubdivisionRows() : null;
+    if (subRows) tblBlock.subdivisionRows = subRows;
+    const subHeading = typeof node.getSubdivisionHeading === 'function' ? node.getSubdivisionHeading() : null;
+    if (subHeading != null) tblBlock.subdivisionHeading = subHeading;
+    // F-5: a caption / transcriber's note carried on the table itself.
+    const nodeCaption = typeof node.getCaption === 'function' ? node.getCaption() : null;
+    // The formatter no longer renders table.caption (F-4: a caption is a separate `caption` block, BANA 11.2.8a, as the
+    // parser emits it), so the node's caption becomes a caption block right before the table; TableNode's own JSON is unchanged.
+    if (nodeCaption != null && String(nodeCaption).trim() !== '') blocks.push({ type: 'caption', text: String(nodeCaption), _key: nodeKey });
+    const nodeTabletn = typeof node.getTabletn === 'function' ? node.getTabletn() : null;
+    if (nodeTabletn != null) {
+      tblBlock.tabletn = nodeTabletn;
+      const tnRender = typeof node.getTabletnRender === 'function' ? node.getTabletnRender() : null;
+      if (tnRender) tblBlock.tabletnRender = tnRender;
+    }
+    if (typeof node.getNoGuideDots === 'function' && node.getNoGuideDots()) tblBlock.guideDots = false;
+    fmtToBlock(tblBlock, node, FMT_TABLE_KEYS);   // citation, total rows, subheadings
     blocks.push(tblBlock);
   } else if ($isImageNode(node)) {
-    blocks.push({ ...imageBlock(node), _key: nodeKey });
+    blocks.push(fmtToBlock({ ...imageBlock(node), _key: nodeKey }, node, FMT_PBB_KEYS));
   } else if ($isGraphicNode(node)) {
     const sz = node.getSize();
     const hLines = sz === 'compact' ? 8 : (sz === 'full' ? Math.min(24, (settings.lines || 25) - 1) : 15);
@@ -2642,13 +6657,25 @@ function nodeToBlocks(node, blocks) {
       heightLines: hLines,
       _key: nodeKey
     });
+    fmtToBlock(blocks[blocks.length - 1], node, FMT_PBB_KEYS);
   } else if ($isHeadingNode(node)) {
     const { runs, hasEmph, hasMath } = nodeToRuns(node);
     const text = node.getTextContent().replace(/\s+/g, ' ').trim();
-    if (runs.length && (hasEmph || hasMath)) {
-      blocks.push({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, segments: runs, text, _key: nodeKey });
+    // #49: a poem's own title keeps its role and its poem
+    const poemHead = node.getPoemRole && node.getPoemRole() === 'title' ? { poemRole: 'title', ...(node.getPoemId() != null ? { poemId: node.getPoemId() } : {}) } : {};
+    if (node.getIsTitle() && node.getTag() === 'h1' && !poemHead.poemRole) {
+      // #57b: the document title stays a `title` block. Its lines (Title, Subtitle) are joined by '\n', as the readers give them;
+      // segments ride along only when something other than plain text (emphasis, maths, a link …) must survive the save.
+      const tText = node.getTextContent().split('\n').map((l) => l.replace(/\s+/g, ' ').trim()).join('\n').replace(/^\n+|\n+$/g, '');
+      if (tText.trim()) {
+        const plainRun = (r) => r.type === 'text' && Object.keys(r).every((k) => k === 'type' || k === 'text' || (k === 'tf' && !r.tf));
+        const keepSegs = runs.length && (hasMath || !runs.every(plainRun));
+        blocks.push(fmtToBlock({ type: 'title', ...(keepSegs ? { segments: runs } : {}), text: tText, _key: nodeKey }, node, FMT_HEADING_KEYS));
+      }
+    } else if (runs.length && (hasEmph || hasMath)) {
+      blocks.push(fmtToBlock({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, segments: runs, text, ...poemHead, _key: nodeKey }, node, FMT_HEADING_KEYS));
     } else if (text) {
-      blocks.push({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, text, _key: nodeKey });
+      blocks.push(fmtToBlock({ type: 'heading', level: Number(node.getTag().slice(1)) || 1, text, ...poemHead, _key: nodeKey }, node, FMT_HEADING_KEYS));
     }
   } else if ($isListNode(node)) {
     const listType = typeof node.getListType === 'function' ? node.getListType() : null;
@@ -2658,24 +6685,45 @@ function nodeToBlocks(node, blocks) {
     const isExercise = listKind === 'exercise' || (typeof node.getBanaStyle === 'function' && node.getBanaStyle() === 'exercise');
     const ordered = listType === 'number' || (isExercise && !isPlain);
     const items = [];
-    const counters = Array(10).fill(0);
+    const symbolsOn = Array.isArray((fmtOf(node) || {}).symbols) && (fmtOf(node) || {}).symbols.length > 0;
+    // G8 stage 3: the marker of an item typed in the editor comes from its sibling group's enum/start (planListMarkers);
+    // a loaded item keeps its own marker (below), so an unedited document saves byte for byte as before.
+    const runsOf = new Map();
+    for (const li of node.getChildren()) runsOf.set(li.getKey(), nodeToRuns(li));   // keep list-item emphasis + inline maths
+    const allPlan = listItemsForPlan(node, (li) => !(runsOf.get(li.getKey())?.runs.length));
+    // An empty item (dropped on save) that opens a sibling group hands the group's enum/start to the next kept item of that group.
+    { const gg = listGroups(allPlan);
+      allPlan.forEach((x, i) => {
+        if (!x.empty || gg.gi[i] !== i || !x.fmt || (x.fmt.enum == null && x.fmt.start == null)) return;
+        for (let j = i + 1; j < allPlan.length; j++) {
+          if (allPlan[j].level < x.level) break;
+          if (allPlan[j].level !== x.level || allPlan[j].empty) continue;
+          const nf = allPlan[j].fmt || {};
+          if (nf.enum == null && nf.start == null) allPlan[j].fmt = { ...nf, enum: x.fmt.enum, start: x.fmt.start };
+          break;
+        }
+      });
+    }
+    const planItems = allPlan.filter((x) => !x.empty);
+    const fmtCarry = new Map(planItems.map((x) => [x.node.getKey(), x.fmt]));
+    const plan = ordered && !isPlain ? planListMarkers(planItems, 'number', null) : null;
+    const planOf = new Map(planItems.map((x, i) => [x.node.getKey(), plan ? plan[i] : null]));
     for (const li of node.getChildren()) {
-      const { runs, hasEmph, hasMath } = nodeToRuns(li);        // keep list-item emphasis + inline maths
+      const { runs, hasEmph, hasMath } = runsOf.get(li.getKey());
       if (!runs.length) continue;
-      const lvl = Math.max(0, Math.min(9, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));   // sources nest deeper than 4 (A28)
-      counters[lvl]++;
-      for (let l = lvl + 1; l < counters.length; l++) counters[l] = 0;
-      const count = counters[lvl];
-      let marker = null;
-      if (ordered && !isPlain) {
-        if (lvl === 0) marker = `${count}.`;
-        else if (lvl === 1) marker = `${String.fromCharCode(96 + ((count - 1) % 26 + 1))}.`;
-        else if (lvl === 2) {
-          const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'];
-          marker = `${romans[count - 1] || count}.`;
-        } else if (lvl === 3) marker = `${String.fromCharCode(64 + ((count - 1) % 26 + 1))}.`;
-        else marker = `(${count})`;
+      if (isItemContLi(li)) {                          // an item's further paragraph: back into that item's blocks
+        const para = (hasEmph || hasMath) ? { type: 'para', segments: runs } : { type: 'para', text: li.getTextContent().replace(/\s+/g, ' ').trim() };
+        if (items.length) { (items[items.length - 1].blocks ||= []).push(para); continue; }
+        // First line of a list that goes on after a table inside an item (fmt.listResume): the save joins it to the
+        // item before the table (mergeListItemBlocks). Until then it is an unmarked line of this list.
+        const lead = para.segments ? { segments: para.segments } : { text: para.text };
+        Object.defineProperty(lead, '_itemCont', { value: true });
+        items.push(lead);
+        continue;
       }
+      const lvl = Math.max(0, Math.min(9, typeof li.getLevel === 'function' ? (li.getLevel() || 0) : 0));   // sources nest deeper than 4 (A28)
+      const pl = planOf.get(li.getKey());
+      const marker = pl ? pl.marker : null;
       let item = (hasEmph || hasMath) ? { segments: runs } : { text: li.getTextContent().replace(/\s+/g, ' ').trim() };
       const bullet = typeof li.getBulletPrefix === 'function' ? li.getBulletPrefix() : null;
       if (bullet) {                                    // put the print bullet back, in its own form
@@ -2686,16 +6734,33 @@ function nodeToBlocks(node, blocks) {
         else item.segments = [{ type: 'text', text: bullet.text, tf: bullet.tf }, ...item.segments];
       }
       if (listKind === 'glossary') item = glossaryItem(runs) || item;
-      const kept = ordered && !isPlain && typeof li.getMarker === 'function' ? li.getMarker() : null;
+      const kept = !isPlain && typeof li.getMarker === 'function' && (ordered || li.getMarker() === NO_MARKER) ? li.getMarker() : null;   // (a bullet list keeps only "no marker")
       if (kept !== NO_MARKER && (kept || marker)) item.marker = kept || marker;
+      // Bullets (BANA §8.6.2a): item.bullet beside an ordinal, and the glyph of a bullet-only item.
+      fmtToBlock(item, li, FMT_ITEM_KEYS);
+      { const cf = fmtCarry.get(li.getKey()); if (cf) { if (cf.enum != null && item.enum == null) item.enum = cf.enum; if (cf.start != null && item.start == null) item.start = cf.start; } }
+      const lf = fmtOf(li);
+      if (lf && lf.bulletMarker && item.marker == null) item.marker = lf.bulletMarker;
+      // A bulleted list item always carries the dot marker: braille keeps the print bullet (BANA 8.6.2, primary bullet `_4`),
+      // and with per-level `symbols` (G8 stage 3) the formatter uses the level glyphs. Without a marker an item has no bullet in braille.
+      if (!ordered && !isPlain && listKind !== 'glossary' && item.marker == null && item.bullet == null && kept !== NO_MARKER) item.marker = '•';
       const page = typeof li.getPage === 'function' ? li.getPage() : null;
       if (page) item.page = page;
+      // A36: the page number's own link, if it had one (see ListItemNode's getPageHref).
+      const pageHref = typeof li.getPageHref === 'function' ? li.getPageHref() : null;
+      if (page && pageHref) item.pageHref = pageHref;
       if (lvl > 0) item.level = lvl;
       items.push(item);
     }
     if (items.length) {
       const blk = { type: 'list', items, _key: nodeKey };
-      if (ordered && !isPlain) blk.ordered = true;
+      fmtToBlock(blk, node, FMT_LIST_KEYS);
+      if ((fmtOf(node) || {}).listResume) Object.defineProperty(blk, '_listResume', { value: true });   // goes on after a table inside an item (mergeListItemBlocks)
+      // A bullet top item over a numbered sub-list: the list is a bullet list whose top items keep their print bullet as
+      // `marker` (the exporter then writes <list type="ul"> and the sub-list's own enum/start), not a numbered list with a literal "• ".
+      const rootItems = items.filter((it) => !it.level);
+      const bulletOverNumbers = ordered && !isPlain && rootItems.length > 0 && rootItems.every((it) => it.marker != null && isBulletMarker(it.marker)) && items.some((it) => it.level && it.marker && !isBulletMarker(it.marker));
+      if (ordered && !isPlain && !bulletOverNumbers) blk.ordered = true;
       if (listKind && listKind !== 'number') { blk.kind = listKind; blk.style = listKind; }   // 'number' is the list type, not a style
       else if (isPlain) { blk.kind = 'toc'; blk.style = 'toc'; }
       blocks.push(blk);
@@ -2709,6 +6774,73 @@ function nodeToBlocks(node, blocks) {
   }
 }
 
+// F-164: tell the formatter where a multi-paragraph note (a run of note blocks sharing a
+// noteGroup) begins and ends, so @.< opens only the first and @.> closes only the last
+// (formatTranscriberNote reads block.tnPart). Blocks/keys stay one-per-editor-paragraph.
+function markNoteParts(blocks) {
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (!b) continue;
+    if (Array.isArray(b.blocks)) markNoteParts(b.blocks);
+    // #57c: a footnote (or endnote) of several paragraphs is one footnote paragraph per paragraph, all with the note's id; a footnote
+    // paragraph straight after one of the same id and kind is a further paragraph of that note (formatFootnote lays it out at 5-3,
+    // noteLayout keeps it with the note, nimas-export's mergeNoteGroups folds it back into the note's <p> list).
+    if (b.type === 'footnote' && b.id != null && b.id !== '') {
+      const p = blocks[i - 1];
+      if (p && p.type === 'footnote' && p.id === b.id && (p.kind || null) === (b.kind || null)) b.noteCont = true;
+      continue;
+    }
+    if (b.type !== 'note' || b.noteGroup == null) continue;
+    const same = (x) => x && x.type === 'note' && x.noteGroup === b.noteGroup;
+    const prev = same(blocks[i - 1]), next = same(blocks[i + 1]);
+    if (prev && next) b.tnPart = 'mid'; else if (next) b.tnPart = 'first'; else if (prev) b.tnPart = 'last';
+  }
+}
+
+// Save: a table (or other block) inside a list item is shown in the editor as the list, the block (fmt.inItem) and the
+// list going on (fmt.listResume) -- a Lexical list item cannot hold a table. The saved model has them as they were: one
+// list whose item carries the block in item.blocks (document.mjs formatItemBlocks / nimas-export itemBlocksXml). The live
+// braille keeps the three blocks, which format the same way (the table at cell 1 between blank lines, BANA 11.2.5).
+function mergeListItemBlocks(model) {
+  if (!model || !Array.isArray(model.blocks) || !model.blocks.some((b) => b && (b._inItem || b._listResume))) return model;
+  const out = [];
+  let open = null;
+  let afterInItem = false;   // a list goes on only straight after a block inside an item: a stale mark (the block above it since
+                             // deleted or changed) would join two lists the braille shows apart (A89, random-action testing)
+  const lastItem = () => open.items[open.items.length - 1];
+  for (const b of model.blocks) {
+    if (b && b._inItem && open && open.items.length) { const { _key, ...rest } = b; (lastItem().blocks ||= []).push(rest); afterInItem = true; continue; }
+    const resumes = afterInItem;
+    afterInItem = false;
+    if (b && b.type === 'list' && b._listResume && resumes && open && open.items.length) {
+      for (const it of b.items || []) {
+        if (it && it._itemCont) (lastItem().blocks ||= []).push(it.segments ? { type: 'para', segments: it.segments } : { type: 'para', text: it.text });
+        else open.items.push(it);
+      }
+      continue;
+    }
+    open = b && b.type === 'list' ? { ...b, items: (b.items || []).map((it) => (it && typeof it === 'object' ? { ...it } : it)) } : null;
+    out.push(open || b);
+  }
+  return { ...model, blocks: out, keys: undefined };
+}
+
+// Invisible control characters (codes 0-8, 11, 12, 14-31, from a paste) are left out of the document the editor brailles, as a
+// save leaves them out (a file cannot hold them; nimas-export.mjs stripXmlIllegalChars): in a table cell they made the column
+// wider until the document was saved and reopened (A89, random-action testing). Copy on write: a block or a table's rows can be
+// the editor's own data, which is never changed here — only what holds such a character is copied (with its hidden fields).
+const CONTROL_CHARS_RE = /[\x00-\x08\x0B\x0C\x0E-\x1F]/;
+function withoutControlChars(x, depth = 0) {
+  if (typeof x === 'string') return CONTROL_CHARS_RE.test(x) ? x.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '') : x;
+  if (!x || typeof x !== 'object' || depth > 60) return x;
+  let copy = null;
+  for (const k of Object.keys(x)) {
+    const v = withoutControlChars(x[k], depth + 1);
+    if (v !== x[k]) { copy ||= Object.defineProperties(Array.isArray(x) ? [] : {}, Object.fromEntries(Object.entries(Object.getOwnPropertyDescriptors(x)).map(([n, d]) => [n, 'value' in d && n !== 'length' ? { ...d, writable: true, configurable: true } : d]))); copy[k] = v; }
+  }
+  return copy || x;
+}
+function dropControlChars(blocks) { for (let i = 0; i < blocks.length; i++) blocks[i] = withoutControlChars(blocks[i]); }
 function buildModel() {
   const blocks = [];
   const keys = [];                                     // parallel: the Lexical node key that produced blocks[i]
@@ -2716,10 +6848,28 @@ function buildModel() {
     const before = blocks.length;
     nodeToBlocks(node, blocks);
     if (blocks.length > before) keys.push(node.getKey());
+    if ((fmtOf(node) || {}).inItem) for (let i = before; i < blocks.length; i++) Object.defineProperty(blocks[i], '_inItem', { value: true });   // inside the list item before it (mergeListItemBlocks)
   }
-  const firstHeading = blocks.find((b) => b.type === 'heading');   // fallback title for a new document
+  // A list shown in parts around a table inside one of its items: every part takes the whole list's deepest level (its
+  // shared runover, BANA 8.1.5), so the live braille is the saved list's braille.
+  for (let i = 0; i < blocks.length; i++) {
+    if (!blocks[i] || blocks[i].type !== 'list' || blocks[i]._listResume) continue;
+    const chain = [blocks[i]];
+    let j = i + 1;
+    for (; j < blocks.length && blocks[j] && (blocks[j]._inItem || (blocks[j].type === 'list' && blocks[j]._listResume)); j++) if (blocks[j].type === 'list' && blocks[j]._listResume) chain.push(blocks[j]);
+    const deepest = Math.max(0, ...chain.flatMap((l) => (l.items || []).map((it) => (it && it.level) || 0)));
+    if (chain.length > 1 && deepest > 0) for (const l of chain) l.maxLevel = Math.max(Number(l.maxLevel) || 0, deepest);
+    // a block inside an item is nested as the list nests it when the list is saved and exported (format/document.mjs withListNestLevel, BANA 9.2.2,
+    // Q-28): the live braille takes it from the list's deepest level (APH feedback 17 Oct 2026: a quotation in a list item was 2 cells left of the export's)
+    for (let k = i + 1; k < j; k++) if (blocks[k] && blocks[k]._inItem) Object.defineProperty(blocks[k], '_itemListLevel', { value: deepest, configurable: true });
+    i = j - 1;
+  }
+  markNoteParts(blocks);
+  dropControlChars(blocks);
+  const firstHeading = blocks.find((b) => b.type === 'heading');   // fallback title for a new document (a `title` block's reader already set loadedDocInfo.title)
   const model = { title: loadedDocInfo.title || (firstHeading ? firstHeading.text : null), blocks, keys };
   if (loadedDocInfo.metadata) model.metadata = loadedDocInfo.metadata;
+  Object.assign(model, loadedDocInfo.options || {});
   // A NIMAS package's own images/PDF (A3), so a save can package them back out (A4).
   if (loadedDocInfo.resources.length) model.resources = loadedDocInfo.resources;
   return model;
@@ -2732,23 +6882,40 @@ function saveFormat() {
   return (loadedDocInfo.resources.length || loadedDocInfo.metadata?.package) ? 'package' : 'xml';
 }
 
+// S5d (S2-Q1, Paul 15 Oct 2026): every save reads the LIVE document, as the NIMAS save does - the document as it is in the editor this
+// instant, after the picture descriptions still being typed are put into it - never lastModel, which is the model of the last render
+// and can be one edit behind. (The txt, md, html, docx and json writers used lastModel.)
+function liveDocumentModel() {
+  commitPendingCardDrafts();
+  let doc = null;
+  editor.getEditorState().read(() => { doc = mergeListItemBlocks(buildModel()); });
+  return doc || lastModel || { title: null, blocks: [] };
+}
+
 // ---- toolbar state ----
 function refreshToolbar(explicitTarget) {
   editor.getEditorState().read(() => {
     const sel = $getSelection();
-    let block = 'p', b = false, i = false, u = false;
+    let block = 'p', b = false, i = false, u = false, strike = false, script = false;
 
-    // 1. Unconditionally sync bold / italic / underline from Lexical selection
+    // 1. Unconditionally sync bold / italic / underline / strikethrough / script from Lexical selection
     if ($isRangeSelection(sel)) {
       b = sel.hasFormat('bold');
       i = sel.hasFormat('italic');
       u = sel.hasFormat('underline');
+      strike = sel.hasFormat('strikethrough');
+      // K5: no Lexical format bit for script, so — like the DOM fallback below — this checks
+      // every selected text node's own style (sel.getNodes() covers a collapsed selection's
+      // one node too, matching hasFormat's own all-or-nothing semantics for the other three).
+      { const tns = sel.getNodes().filter($isTextNode); script = tns.length > 0 && tns.every((n) => hasScript(n)); }
       if (sel.isCollapsed()) {
         const anchorNode = sel.anchor.getNode();
         if (anchorNode && $isTextNode(anchorNode)) {
           b = anchorNode.hasFormat('bold');
           i = anchorNode.hasFormat('italic');
           u = anchorNode.hasFormat('underline');
+          strike = anchorNode.hasFormat('strikethrough');
+          script = hasScript(anchorNode);
         }
       }
     } else if (lastActiveEditorSelection?.anchorKey) {
@@ -2757,6 +6924,8 @@ function refreshToolbar(explicitTarget) {
         b = node.hasFormat('bold');
         i = node.hasFormat('italic');
         u = node.hasFormat('underline');
+        strike = node.hasFormat('strikethrough');
+        script = hasScript(node);
       }
     } else {
       const domSel = window.getSelection();
@@ -2768,11 +6937,13 @@ function refreshToolbar(explicitTarget) {
             ? document.activeElement
             : null));
 
-      // DOM fallback for bold/italic/underline ONLY when no Lexical selection available
+      // DOM fallback for bold/italic/underline/strikethrough/script ONLY when no Lexical selection available
       if (activeDomNode) {
         if (activeDomNode.closest('b, strong, .ed-b') || activeDomNode.style?.fontWeight === 'bold') b = true;
         if (activeDomNode.closest('i, em, .ed-i') || activeDomNode.style?.fontStyle === 'italic') i = true;
         if (activeDomNode.closest('u, ins, .ed-u') || activeDomNode.style?.textDecoration?.includes('underline')) u = true;
+        if (activeDomNode.closest('s, strike, del, .ed-s') || activeDomNode.style?.textDecoration?.includes('line-through')) strike = true;
+        if (activeDomNode.closest('[style*="--bana-script"]')) script = true;
       }
     }
 
@@ -2923,15 +7094,7 @@ function refreshToolbar(explicitTarget) {
 
     block = detectedBlock || 'p';
 
-    const bs = $id('blockStyle');
-    if (bs) {
-      const validOptions = Array.from(bs.options).map((o) => o.value);
-      if (validOptions.includes(block)) {
-        bs.value = block;
-      } else {
-        bs.value = 'p';
-      }
-    }
+    if ($id('blockStyle')) syncStyleOptionVisibility(allBlockStyleOptions.some((o) => o.value === block) ? block : 'p');
     const si = $id('styleInspector');
     if (si) {
       si.textContent = formatStyleInspectorBadge(block, settings.profile || settings.mode || 'bana', uiText);
@@ -2939,6 +7102,8 @@ function refreshToolbar(explicitTarget) {
     $id('btnBold')?.setAttribute('aria-pressed', String(b));
     $id('btnItalic')?.setAttribute('aria-pressed', String(i));
     $id('btnUnderline')?.setAttribute('aria-pressed', String(u));
+    $id('btnStrike')?.setAttribute('aria-pressed', String(strike));
+    $id('btnScript')?.setAttribute('aria-pressed', String(script));
 
     // F-39 — sync the "Blocked Paragraph" toggle to the current selection's own paragraph.
     let blockedPara = false;
@@ -2950,6 +7115,19 @@ function refreshToolbar(explicitTarget) {
       if (p) blockedPara = p.getBlocked();
     }
     $id('btnBlockedPara')?.setAttribute('aria-pressed', String(blockedPara));
+    let dirPara = false;
+    {
+      const p = $isRangeSelection(sel) ? nearestParagraphNode(sel.anchor.getNode())
+        : (lastActiveEditorSelection?.anchorKey ? nearestParagraphNode($getNodeByKey(lastActiveEditorSelection.anchorKey)) : null);
+      if (p) dirPara = !!(fmtOf(p) || {}).directions;
+    }
+    $id('btnDirectionsPara')?.setAttribute('aria-pressed', String(dirPara));
+    // Greyed out unless the selection touches a Body Text paragraph (not re-judged while focus is in the toolbar,
+    // so pressing a button never disables it under the pointer).
+    if (!(document.activeElement && document.activeElement.closest && document.activeElement.closest('.toolbar'))) {
+      const noBody = selectedBodyParagraphs().size === 0;
+      for (const id of ['btnBlockedPara', 'btnDirectionsPara']) { const bt = $id(id); if (bt) bt.disabled = noBody; }
+    }
 
     // Check if caret/selection is inside a list item to update Indent/Outdent buttons
     let activeLi = null;
@@ -2978,6 +7156,16 @@ function refreshToolbar(explicitTarget) {
     if (btnIndent) btnIndent.disabled = !activeLi || (curLevel >= 4);
     if (btnOutdent) btnOutdent.disabled = !activeLi || (curLevel <= 0);
   });
+  // Layout is greyed out where the dialog has nothing to offer this user (Paul, 24 Sep). Not re-judged while focus is
+  // in the toolbar itself (the table check reads the focused cell, and pressing the button must not disable it).
+  const btnFmt = $id('btnBrailleFmt');
+  if (btnFmt && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('.toolbar'))) btnFmt.disabled = !bfHasTarget();
+}
+
+// Feedback 30 Sep, item 6 (Paul, 1 Oct): the Settings dialog's "Page size preset" list shows the size in use (or "Custom size"),
+// the current standard's sizes first (settings.mjs fillPageSizeSelect).
+function syncPageSizeSelect() {
+  fillPageSizeSelect($id('set-pageSize'), $id('set-mode')?.value || settings.mode, $id('set-cells')?.value ?? settings.cells, $id('set-lines')?.value ?? settings.lines, t);
 }
 
 // ---- live braille render (honours the shared settings) ----
@@ -2985,6 +7173,7 @@ let lastBrf = '';
 let lastModel = null;      // for the volume-aware download
 let lastFormatOpts = null;
 let lastTrace = null;
+let lastWarnings = [];      // set by render(): opts.warnings from the most recent format (Fable review #5)
 let lastPageLineStarts = null;                     // set by render(): first trace row of each braille page
 let timer = null;
 let isManualZoom = false;
@@ -2997,6 +7186,7 @@ function clearTranslationCache() {
   blockTranslationCache.clear();
   proofreadCache.clear();
 }
+window.clearTranslationCache = clearTranslationCache;   // test hook: random-action testing compares a cached render with a fresh one
 
 function getEffectiveCellW() {
   const numCells = Math.max(10, (settings.cells | 0) || 38);
@@ -3029,13 +7219,16 @@ async function activateTable() {
 function currentFormatOpts() {
   const table = activeTable;
   const tr = makeTranslators(louis, table);
-  const translate = styledTranslate((s, tf) => tr.translate(s, tf), settings.quoteStyle);
-  // Mirrors `translate` for the cell trace: quote exchange is length-preserving, so
-  // inputPos still indexes the source text. (Script markers are docx-only; N/A here.)
-  const translatePos = (s, tf) => tr.translatePos(settings.quoteStyle === 'exchange' ? exchangeQuotes(s) : s, tf || null);
   // Grade-1 translator for segments marked `uncontracted` (UEB only — the formatter
   // falls back to bracketing the contracted text when this is absent).
-  const translateG1 = /en-ueb/.test(table) ? (s) => makeTranslators(louis, UEB_TABLES.g1).translate(s) : undefined;
+  const translateG1 = /en-ueb/.test(table) ? (s, tf) => makeTranslators(louis, UEB_TABLES.g1).translate(s, tf) : undefined;
+  // In contracted UEB a sub/superscript run longer than one item puts its word in grade 1 (text-style.mjs).
+  const translate = styledTranslate((s, tf) => tr.translate(s, tf), settings.quoteStyle, /en-ueb-g2/.test(table) ? translateG1 : null);
+  // Mirrors `translate` for the cell trace: the same quote exchange and whitespace/invisible-character
+  // clean-up, with inputPos mapped back to the source text (A71).
+  // ... and with the grade-1 translator, as `translate` has it, so a sub/superscript run of more than one item is traced too
+  // (feedback 30 Sep item 7: those blocks fell back and showed "Editor link degraded" as a transcription warning).
+  const translatePos = styledTranslatePos((s, tf) => tr.translatePos(s, tf || null), settings.quoteStyle, /en-ueb-g2/.test(table) ? translateG1 : null);
     const preset = EMBOSSER_PRESETS[settings.embosser];
     const defaultWidth = preset ? preset.cells : 38;
     const defaultDepth = preset ? preset.lines : 25;
@@ -3048,8 +7241,13 @@ function currentFormatOpts() {
       suppressHeader: settings.pageHeaders === false,
       paragraphStyle: settings.paragraphStyle || 'indented',
       tableFormat: settings.tableFormat || 'auto',
+      interpoint: settings.embosserDuplex !== 'single',   // K15: a facing-pages table starts on an even (left-hand) page in interpoint
       listStyle: settings.listStyle, toc: settings.toc, translate, translatePos,
+      titleInBraille: titleFieldShown(),   // F9 E2a (Paul, 9 Oct 2026): with the Title field hidden, no title is added to the braille (page 1, running heads); the field shown = as before
+      quoteStyle: settings.quoteStyle,   // UK-3: so suggestTranscriberNotes(buildModel().blocks, currentFormatOpts()) can offer the RUEB 7.6.4 note
       mathToBrf: maths.isMathsReady() ? (seg) => maths.mathToBrf(seg, effectiveMathCode(settings)) : null,
+      // What the eBraille export declares (S3b #17, #18): the braille system and language of the table this braille is made with, and the maths code.
+      brailleSystem: registryName(settingsForTable(table)), brailleCode: settingsForTable(table).brailleCode, codeLanguage: codeLanguage(settingsForTable(table)), mathCode: effectiveMathCode(settings),
       blockCache: blockTranslationCache,
     };
 }
@@ -3057,29 +7255,161 @@ function currentFormatOpts() {
 // formatting). Each call takes a generation number; after every await a call that is no
 // longer the newest bails out, so lastModel/lastBrf/lastKeys and the braille pane always
 // reflect the most recent editor state and never a stale, slower render that finished last.
+// Optional timing marks (feedback item 11, measuring Chrome against Safari's engine): recorded only while a test has set
+// window.__embossPerf to an array; each mark is [label, performance.now()].
+const perfMark = (label) => { if (Array.isArray(window.__embossPerf)) window.__embossPerf.push([label, performance.now()]); };
+// One paragraph Emboss cannot braille must not take the whole braille pane with it (A89 step 3; Paul, 2 Oct: "it is vital that
+// Emboss is robust"). If brailling the document throws, each block is brailled on its own to find the ones that fail; those are
+// replaced in the braille by a marker ("[Emboss could not braille this paragraph]"), the rest is brailled as usual, the status
+// says so, and the error goes into Report a problem's log. If no single block fails on its own, the error stands as before.
+// window.__embossTestBreakBlock (tests only: a function of a block) makes chosen blocks fail.
+async function formatForRender(model, fo) {
+  const attempt = async (m, opts) => {
+    const slow = Number(window.__embossTestFormatDelay) || 0;   // tests only (S2a #2): makes the formatting take this many ms
+    if (slow > 0) await new Promise((r) => setTimeout(r, slow));
+    const breaker = window.__embossTestBreakBlock;
+    if (typeof breaker === 'function' && (m.blocks || []).some((b) => breaker(b))) throw new Error('test: a block that cannot be brailled');
+    // a block inside a list item, shown here as a block of its own: nested as the list nests it in the saved and exported document
+    if ((m.blocks || []).some((b) => b && b._itemListLevel != null)) m = { ...m, blocks: m.blocks.map((b) => (b && b._itemListLevel != null ? withListNestLevel(b, b._itemListLevel, opts) : b)) };
+    return formatDocumentAsync(m, opts);
+  };
+  try {
+    return { brf: await attempt(model, fo), failed: [] };
+  } catch (e) {
+    recordProblem('render', `Brailling the document failed: ${e?.message || e}`, { stack: e?.stack || '' });
+    const blocks = model.blocks || [];
+    const failed = [];
+    for (let i = 0; i < blocks.length; i++) {
+      try { await attempt({ ...model, blocks: [blocks[i]], keys: [model.keys?.[i]] }, { ...fo, trace: {}, warnings: undefined }); }
+      catch (e2) { failed.push(i); recordProblem('render', `Block ${i} (${blocks[i]?.type || 'para'}) could not be brailled: ${e2?.message || e2}`, { stack: e2?.stack || '' }); }
+    }
+    if (!failed.length || failed.length === blocks.length) throw e;
+    const marker = `[${tOr('app.render.block_failed', 'Emboss could not braille this paragraph')}]`;
+    model.blocks = blocks.map((b, i) => (failed.includes(i) ? { type: 'para', text: marker } : b));
+    for (const k of Object.keys(fo.trace || {})) delete fo.trace[k];
+    delete fo.warnings;
+    return { brf: await attempt(model, fo), failed };
+  }
+}
+let engineLoading = false;   // true from start-up until the braille engine is up: the loading message in the braille pane stays until the first real render (F9 item I)
+// F9 item A: a render is waiting for its 200 ms timer or running (several seconds on a 1,200-page book). Anything that jumps to a
+// place in the braille (the "words to check" badge) waits for it: the render's own clean-up clears word highlights, and its
+// proofreading pass replaces the list of words.
+let renderActive = 0;
+const renderPending = () => renderActive > 0 || !!timer;
+window.renderIsIdle = () => !renderPending();   // tests (timing checks)
+async function renderSettled(maxMs = 120000) {
+  const t0 = performance.now();
+  while (renderPending() && performance.now() - t0 < maxMs) await new Promise((r) => setTimeout(r, 40));
+}
+// S2a #2/#3: the current document's braille, or null (see the comment at outputGen). Synchronous, so a download or an emboss
+// of braille that is already current stays inside the click that asked for it (browsers allow a download, and a serial-port
+// request, only soon after a click).
+function currentOutput() {
+  if (engineLoading || timer || renderFailure || outputGen === 0 || outputGen !== renderGen || renderedSettingsState !== settingsState()) return null;
+  return { brf: lastBrf, model: lastModel, opts: lastFormatOpts };
+}
+// Waits (at most two minutes) for the braille of the current document: puts any picture description being typed into the
+// document, runs the render now instead of after the 200 ms wait, and waits for it. A render that fails, or a failure left by an
+// earlier one that a fresh try does not mend, gives { failed: message }. Shows "Preparing braille…" if the wait is noticeable.
+async function waitForCurrentOutput() {
+  const prepMsg = tOr('app.export.preparing', 'Preparing braille…');
+  const prepTimer = setTimeout(() => { setStatus(prepMsg); announce(prepMsg); }, 400);
+  const t0 = performance.now();
+  let kicked = false, retried = false, kicks = 0;
+  try {
+    while (performance.now() - t0 < 120000) {
+      commitPendingCardDrafts();
+      const out = currentOutput();
+      if (out) return { out };
+      const idle = renderActive === 0 && !timer;
+      if (renderFailure && renderFailure.gen === renderGen && idle && renderedSettingsState === settingsState()) {
+        if (kicked || retried) return { failed: renderFailure.message };   // our own render failed, or the retry did
+        retried = true; render();                                           // a failure left from before: try once more, the cause may have gone
+      } else if (!engineLoading && (timer || renderedSettingsState !== settingsState() || (renderActive === 0 && outputGen !== renderGen))) {
+        if (++kicks > 12) break;
+        kicked = true; render();
+      }
+      await new Promise((r) => setTimeout(r, 25));
+    }
+    return { timedOut: true };
+  } finally {
+    clearTimeout(prepTimer);
+    if (currentStatusText === prepMsg) setStatus('');
+  }
+}
+function refuseOutput(action, res) {
+  const what = action === 'emboss' ? tOr('app.export.nothing_sent', 'Nothing was sent to the embosser') : tOr('app.export.nothing_downloaded', 'Nothing was downloaded');
+  const msg = res && res.failed != null
+    ? `${what}: ${tOr('app.export.failed_reason', 'the braille for the current text could not be made (see the braille pane). Change the text or settings and try again.')}`
+    : `${what}: ${tOr('app.export.timeout_reason', 'the braille is still being prepared. Try again in a moment.')}`;
+  setStatus(msg); announce(msg);
+}
+// The settings a render depends on, as one string: what the last render used, and what Settings holds now (F9 item D2, see the Settings dialog's close handler).
+const settingsState = () => JSON.stringify([settings, transcriberTools, titleFieldShown()]);
+// S2a #2/#3 (audit 15 Oct 2026): the braille in lastBrf / lastModel / lastFormatOpts belongs to ONE render. A download or an
+// emboss must use the braille of the document and settings as they are NOW, so it may use that output only if
+//   - the render that made it is the newest one asked for (outputGen === renderGen: nothing has asked for another since),
+//   - no render is waiting for its 200 ms timer, and the settings are the ones that render used, and
+//   - the newest render did not fail (renderFailure: a render that failed as a whole leaves the previous document's braille
+//     in lastBrf - the pane shows the error, but nothing may be downloaded or embossed from that old output).
+// Otherwise waitForCurrentOutput() flushes the timer / starts the render and waits for it, and refuses if it fails.
+// (A paragraph that fails ALONE is marked in the braille and the render succeeds, A89 - that output stays usable.)
+let outputGen = 0;          // the render (renderGen) whose output lastBrf / lastModel / lastFormatOpts hold; 0 = none yet
+let renderFailure = null;   // { gen, message } while the newest render failed as a whole
+let renderedSettingsState = null;
 let renderGen = 0;
 async function render() {
+  if (engineLoading) return;   // not yet: the engine is still loading (F9 item I)
+  perfMark('render:start');
   if (timer) {
     clearTimeout(timer);
     timer = null;
   }
   const gen = ++renderGen;
+  renderedSettingsState = settingsState();
+  renderActive++;
+  let committed = false;   // lastBrf / lastModel / lastFormatOpts now hold THIS render's output
   try {
     const model = editor.getEditorState().read(buildModel);
+    perfMark('render:buildModel');
+    syncDocTitleField(model);
+    syncSymPages(model);
+    syncTitlePages(model);   // K29 Stage 1c: TP-6 "fields stay live" — see that function's own comment
     const table = activeTable;
     const o = currentFormatOpts();
     const trace = {};
-    const brf = await formatDocumentAsync(model, { ...o, trace });
+    const fo = { ...o, trace };
+    perfMark('render:before-format');
+    const { brf, failed: failedBlocks } = await formatForRender(model, fo);
+    perfMark('render:formatDocument');
     if (gen !== renderGen) return;                  // superseded by a newer render
+    if (titleHintPending) {
+      titleHintPending = false;
+      if (settings?.mode === 'ukaaf' && brf.split('\f').length < 2) {
+        const hint = tOr('app.editor.doc_title_hint_ukaaf', 'The title will appear in the running head from braille page 2.');
+        setStatus(hint); announce(hint);
+      }
+    }
+    if (failedBlocks.length) {
+      const msg = failedBlocks.length === 1 ? tOr('app.render.blocks_failed_one', 'Emboss could not braille 1 paragraph; it is marked in the braille.')
+        : tOr('app.render.blocks_failed', 'Emboss could not braille {count} paragraphs; each is marked in the braille.').replace('{count}', failedBlocks.length);
+      setStatus(msg); announce(msg);
+    }
     refreshAllTableBadges();          // G15: covers a settings change (width/mode) too, not just a table edit
     lastModel = model; lastFormatOpts = o;
     lastTrace = trace;
     lastBrf = brf;
+    outputGen = gen; renderFailure = null; committed = true;   // S2a #2/#3: the output is this render's, and it did not fail
     lastKeys = model.keys;
+    lastWarnings = Array.isArray(fo.warnings) ? fo.warnings : [];   // Fable review #5: transcription-warnings channel
+    updateWarningsUI();
+    updateSymbolNotice(model, fo);
     window.lastModel = lastModel;
     window.lastFormatOpts = lastFormatOpts;
     window.lastTrace = lastTrace;
     window.lastBrf = lastBrf;
+    window.lastWarnings = lastWarnings;
     window.cellText = cellText;
     const getPrintTextForBlock = (b) => {
       if (!b) return '';
@@ -3117,10 +7447,14 @@ async function render() {
         if (!rawLine.trim()) continue;
         const rCells = trace.rowCells ? trace.rowCells[i] : null;
         let itemIndex = listItemIdx;
-        if (rCells && rCells[0] && typeof rCells[0].u === 'number' && rCells[0].u < b.items.length) {
+        // Units count an item's further paragraphs (item.blocks) as list lines of their own (document.mjs traceItemBlocks).
+        const unitLines = b.items.some((it) => it && Array.isArray(it.blocks))
+          ? b.items.flatMap((it) => [it, ...(it && Array.isArray(it.blocks) ? it.blocks.filter((x) => x && (x.type === 'para' || x.type == null) && !x.style) : [])])
+          : b.items;
+        if (rCells && rCells[0] && typeof rCells[0].u === 'number' && rCells[0].u < unitLines.length) {
           itemIndex = rCells[0].u;
         }
-        const item = b.items[itemIndex];
+        const item = unitLines[itemIndex];
         if (item) {
           let text = '';
           if (typeof item === 'string') text = item;
@@ -3142,6 +7476,7 @@ async function render() {
       }
     }
     const prevBrailleScroll = brailleEl.scrollTop;
+    perfMark('render:rowPrintText');
     renderBraille(brailleEl, brf, {
       rows: trace.rows, rowCells: trace.rowCells, cells: (settings.cells | 0) || (EMBOSSER_PRESETS[settings.embosser]?.cells || 38),
       cellW: isManualZoom ? brailleCellW : undefined,   // Ctrl/⌘+Shift+= / − zoom; auto-fit otherwise
@@ -3150,6 +7485,7 @@ async function render() {
       rowPrintText, blocks: model.blocks,
       embosser: settings.embosser,
       tactileGraphics: settings.tactileGraphics,
+      hardwarePreview: settings.expertHardware === true,   // the tactile-graphic hardware preview: expert hardware features only (feedback item 8)
     });
     if (!reader || !reader.speaking) {
       brailleEl.scrollTop = prevBrailleScroll;
@@ -3164,14 +7500,19 @@ async function render() {
         brailleEl.querySelectorAll(`.brl-row[data-block="${readingBlock}"]`).forEach((r) => r.classList.add('brl-reading'));
       }
     }
+    perfMark('render:renderBraille');
     tagPrintBlocks(model.keys);                     // label print blocks so click-to-link can find them
+    perfMark('render:tagPrintBlocks');
     linkCursor();                                   // re-apply the print↔braille highlight after the re-render
     annotateRows(model);                            // hover a braille line → see its source text
+    perfMark('render:annotateRows');
     buildCellText(model);                           // per (block,unit) flat text for word lookup + rule info
+    perfMark('render:buildCellText');
     syncCaretWithBraille();                         // re-apply word/math highlights on freshly rendered DOM
     runProofread(model, table);                     // round-trip check → badge + flag lines to review
     const pages = brf ? brf.split('\f').length : 0;
     updateCaretLocation();
+    perfMark('render:caret+proofread-start');
     const graphicMap = new Map();
     if (model.blocks && trace.rows) {
       for (let bi = 0; bi < model.blocks.length; bi++) {
@@ -3191,6 +7532,7 @@ async function render() {
     }
     if (gen !== renderGen) return;                  // superseded before the device push
     await tactileDisplay.updateBraille(allBrfLines, null, graphicMap);
+    perfMark('render:tactileDisplay');
     if (gen !== renderGen) return;
     if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
       drawMonarchEmulator(tactileDisplay.getMonarchActiveFrame());
@@ -3201,8 +7543,11 @@ async function render() {
     console.error(e);
     if (gen !== renderGen) return;                  // a newer render owns the pane now
     const msg = String((e && e.message) || e);       // tolerate a non-Error throw (no .message)
+    if (!committed) renderFailure = { gen, message: msg };   // S2a #3: lastBrf is still the previous document's: not downloadable or embossable
     brailleEl.textContent = `${t('app.render.failed')}\n\n${msg}\n\n${t('app.render.failed_hint')}`;
     setStatus(t('app.render.error_status', { message: msg }));
+  } finally {
+    renderActive--;
   }
 }
 const scheduleRender = () => { clearTimeout(timer); timer = setTimeout(render, 200); };
@@ -3236,6 +7581,25 @@ editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves }) => {
 // let a click in the braille pane highlight the matching print block. Linking is
 // by *block key* (not index) so it survives blocks being added/removed above.
 let lastKeys = [];
+// A Transcriber's Notes page's entry paragraphs are the formatter's units 0,1,2... (traceBlock's
+// tnpageParas skips empty ones, so an empty paragraph gets no unit). The heading has none.
+function tagTnPageUnits(el, blockIdx) {
+  let u = 0;
+  for (const childEl of Array.from(el.children)) {
+    if (!(childEl.textContent || '').trim()) continue;
+    childEl.dataset.unitIdx = String(u++);
+    childEl.dataset.parentBlockIdx = String(blockIdx);
+  }
+}
+// A Special Symbols page's entry paragraphs are the formatter's units 0,1,2... (every entry, in order).
+function tagSymPageUnits(el, blockIdx) {
+  let u = 0;
+  for (const childEl of Array.from(el.children)) {
+    if (!(childEl.textContent || '').trim()) continue;
+    childEl.dataset.unitIdx = String(u++);
+    childEl.dataset.parentBlockIdx = String(blockIdx);
+  }
+}
 function tagPrintBlocks(keys) {
   lastKeys = keys || [];
   editorEl.querySelectorAll('[data-block-idx]').forEach((el) => el.removeAttribute('data-block-idx'));
@@ -3260,6 +7624,8 @@ function tagPrintBlocks(keys) {
             }
           });
         }
+        else if (b && b.type === 'tnpage') tagTnPageUnits(el, i);
+        else if (b && b.type === 'sympage') tagSymPageUnits(el, i);
       }
     }
   } else {
@@ -3279,6 +7645,8 @@ function tagPrintBlocks(keys) {
             }
           });
         }
+        else if (b && b.type === 'tnpage') tagTnPageUnits(el, i);
+        else if (b && b.type === 'sympage') tagSymPageUnits(el, i);
       }
     }
   }
@@ -3311,17 +7679,25 @@ function linkByBlock(idx, autoScroll = false) {
     clearWordLink();
     lastLinkedBlock = idx;
   }
+  // A table block can be dozens of braille rows (or span several pages); painting the
+  // whole-block 'brl-linked'/'print-linked' tint over all of it reads as "the whole table
+  // lit up" for one cell click. A table's own click handling always also paints the exact
+  // cell/entry (cell-hl / table-cell-hl below), so the block-wide wash is skipped here and
+  // that per-cell highlight is left to do the (correct, narrower) job on its own.
+  const isTableBlock = lastModel?.blocks?.[idx]?.type === 'table';
   if (brailleEl._virtualBraille?.isVirtualized()) {
-    brailleEl._virtualBraille.setLinkedBlock(idx);
+    brailleEl._virtualBraille.setLinkedBlock(isTableBlock ? null : idx);
     if (autoScroll) {
       brailleEl._virtualBraille.scrollToBlock(idx, 0);
     }
   } else {
     const brailleRows = Array.from(brailleEl.querySelectorAll(`.brl-row[data-block="${idx}"]`));
-    brailleRows.forEach((r) => {
-      expandRowCells(r);
-      r.classList.add('brl-linked');
-    });
+    if (!isTableBlock) {
+      brailleRows.forEach((r) => {
+        expandRowCells(r);
+        r.classList.add('brl-linked');
+      });
+    }
     if (autoScroll) {
       const firstRow = brailleRows[0];
       if (firstRow && !isElementVisibleIn(firstRow, brailleEl)) {
@@ -3331,7 +7707,7 @@ function linkByBlock(idx, autoScroll = false) {
   }
   const pe = editorEl.querySelector(`[data-block-idx="${idx}"]`);
   if (pe) {
-    pe.classList.add('print-linked');
+    if (!isTableBlock) pe.classList.add('print-linked');
     if (autoScroll && !isElementVisibleIn(pe, editorEl)) {
       pe.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
@@ -3560,6 +7936,49 @@ function ding() {
 
 // ---- word / cell-level linking (down to the cell) ----
 const HL_API = !!(globalThis.Highlight && globalThis.CSS && CSS.highlights);
+// F9 item D1 (APH feedback, 9 Oct 2026): in Safari the Settings dialog's title was painted with the word-link highlight (yellow) and the
+// words-to-check underline, though both Highlight ranges are over the document's text. WebKit paints a CSS Custom Highlight into the
+// top-layer dialog opened over it (shown with the dialog's text whether or not its text was translated). So no document highlight is
+// registered while a modal dialog is open: a dialog's opening sets them aside, anything set meanwhile (a word-check pass that finishes,
+// a read-aloud word) waits, and when the last dialog closes they go back. Highlights thus only ever cover document text.
+const hlHeld = new Map();
+let hlDialogs = 0;
+const HL_NAMES = ['link-word', 'proof-warn-word', 'tts-word'];
+// Feedback 17 Oct 2026, item 10 (Safari: stale highlights lingering as the arrow keys move through the text): WebKit has repainted the text a
+// Highlight covered only when that Highlight object itself changed, not when it was dropped from the registry or replaced under its name — and a
+// highlight Range kept over text that has since been re-rendered goes on being painted. So the Highlight being dropped or replaced is emptied first
+// (its ranges released, and its text repainted), then removed. Harmless in Chrome. (The held-over objects of the dialog guard below are moved, not dropped.)
+function releaseHl(old) { try { if (old && typeof old.clear === 'function') old.clear(); } catch { /* already empty */ } }
+function setHl(name, h) {
+  if (!HL_API) return;
+  if (hlDialogs > 0) { hlHeld.set(name, h); return; }
+  const old = CSS.highlights.get(name);
+  if (old && old !== h) releaseHl(old);
+  CSS.highlights.set(name, h);
+}
+function delHl(name) {
+  hlHeld.delete(name);
+  if (!HL_API) return;
+  releaseHl(CSS.highlights.get(name));
+  CSS.highlights.delete(name);
+}
+window.__highlightsHeld = () => ({ dialogs: hlDialogs, held: [...hlHeld.keys()], shown: HL_API ? [...CSS.highlights.keys()] : [] });   // tests
+if (HL_API && typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.__hlGuard) {
+  const showModal = HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype.showModal = function guardedShowModal(...args) {
+    const wasOpen = this.open;
+    if (!wasOpen) {
+      hlDialogs++;
+      for (const n of HL_NAMES) { const h = CSS.highlights.get(n); if (h) { hlHeld.set(n, h); CSS.highlights.delete(n); } }
+      this.addEventListener('close', () => {
+        hlDialogs = Math.max(0, hlDialogs - 1);
+        if (hlDialogs === 0) { for (const [n, h] of hlHeld) CSS.highlights.set(n, h); hlHeld.clear(); }
+      }, { once: true });
+    }
+    try { return showModal.apply(this, args); } catch (e) { if (!wasOpen) { hlDialogs = Math.max(0, hlDialogs - 1); } throw e; }
+  };
+  HTMLDialogElement.prototype.__hlGuard = true;
+}
 let cellText = {};                                 // `${blockIdx}:${unit}` → flat source text
 let lastRuleSpoken = '';                            // plain-English rule info for the screen reader
 function flatSegText(segments) {
@@ -3590,6 +8009,12 @@ function buildCellText(model) {
       if (headerCount === 0 && rawRows.length === 0 && (b.title || b.caption)) {
         cellText[`${i}:0`] = String(b.title || b.caption);
       }
+    } else if (b.type === 'tnpage') {
+      let u = 0;   // same order as the formatter's tnpageParas: each entry, then its further paragraphs
+      const add = (o) => { const tx = o.segments ? flatSegText(o.segments) : (o.text || ''); if (String(tx).trim()) cellText[`${i}:${u++}`] = tx; };
+      for (const e of (Array.isArray(b.entries) ? b.entries : [])) { if (!e) continue; add(e); (Array.isArray(e.paragraphs) ? e.paragraphs : []).forEach((pp) => pp && add(pp)); }
+    } else if (b.type === 'sympage') {
+      (Array.isArray(b._shown) ? b._shown : []).forEach((tx, u) => { if (String(tx).trim()) cellText[`${i}:${u}`] = tx; });
     } else if (b.type === 'box' || b.type === 'sidebar') {
       if (Array.isArray(b.blocks) && b.blocks.length) {
         b.blocks.forEach((cb, u) => {
@@ -3619,8 +8044,11 @@ function printUnitEl(block, unit) {
   const lis = be.querySelectorAll('li');
   if (be.tagName !== 'ASIDE' && !be.classList.contains('emboss-sidebar-card') && lis.length) return lis[unit] || be;
   const tableInputs = be.querySelectorAll('.table-cell-input');
-  if (tableInputs.length) return tableInputs[unit] || be;
-  if (be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card')) {
+  // (F9 item K) not for a box: its units are its own paragraphs and lists; a table inside it has no units of its own, and its cells
+  // (0, 1, 2...) were taken for the box's units, so a click in the box's heading lit the table's first cell's word.
+  const isBox = be.tagName === 'ASIDE' || be.classList.contains('emboss-sidebar-card');
+  if (tableInputs.length && !isBox) return tableInputs[unit] || be;
+  if (isBox) {
     if (unit >= 1000) {
       const childIdx = Math.floor(unit / 1000);
       const liIdx = unit % 1000;
@@ -3698,8 +8126,14 @@ function tableCellCaretOffset(cellEl) {
   if (!cellEl.contains(range.startContainer)) return 0;
   return domOffsetOfNode(cellEl, range.startContainer, range.startOffset);
 }
+// Set around a programmatic pe.focus() (highlightWord's braille -> print table-cell path)
+// so the div's own 'focus' listener below does not re-enter handleTableCellEvent: at that
+// point the browser has not placed a caret yet (no click happened), so it would read
+// caretPos 0 and recompute a different word range, clobbering the correct highlight that
+// was just painted for the entry actually clicked in the braille pane.
+let suppressTableCellFocusSync = false;
 function handleTableCellEvent(input, unit) {
-  if (!input) return;
+  if (!input || suppressTableCellFocusSync) return;
   const be = input.closest('[data-block-idx]');
   if (!be) return;
   const block = Number(be.dataset.blockIdx);
@@ -3752,8 +8186,70 @@ function wordRangeAt(text, pos) {                   // [start,end) of the whites
   return [s, e];
 }
 
-function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s,e) of the element's text
+// F9 item K (APH feedback, 9 Oct 2026: "the highlight is a few letters out on some paragraphs of the large NIMAS book"): the model's flat text
+// for a unit (cellText: what the braille's cell positions count) and the text the print pane shows are not always the same string:
+//  - a literal bullet the print text starts with ("• ") is hidden in the editor's list (a ListItemNode's bullet prefix) but counted in the model;
+//  - the model joins what the print shows on separate lines (a <br>, a box's paragraphs) with a space the DOM has no character for.
+// Offsets were used as if the two were one string, so a highlight (and a click) was out by the width of every such difference before it
+// (472 list items and 105 boxes in "Collections, Grade 7"). alignPrint pairs the two texts character by character, so that print offsets
+// and model offsets convert both ways. Nothing is changed when the strings agree.
+function printTextOf(el) {
+  let out = '';
+  (function walk(node) {
+    if (node.nodeType === Node.TEXT_NODE) { out += node.nodeValue; return; }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    if (node.classList?.contains('math-embed') || node.tagName === 'MATH-FIELD' || node.classList?.contains('cell-math-chip')) {
+      const mf = node.querySelector?.('math-field') || (node.tagName === 'MATH-FIELD' ? node : null);
+      const latex = node.getAttribute?.('data-latex') || mf?.getAttribute?.('data-latex') || mf?.value || '';
+      out += (latex ? `$${latex}$` : '⟨equation⟩');
+      return;
+    }
+    for (const child of node.childNodes) walk(child);
+  })(el);
+  return out;
+}
+const printAlignCache = new WeakMap();
+// -> null (the two texts agree: offsets are the same), or { m2d, d2m, D }: m2d[i] the print index of model char i (-1: not shown in print),
+// d2m[j] the model index of print char j (and d2m[D.length] the model end).
+function alignPrint(el, modelText) {
+  if (!el || modelText == null) return null;
+  const M = String(modelText), D = printTextOf(el);
+  if (D === M) return null;
+  const cached = printAlignCache.get(el);
+  if (cached && cached.M === M && cached.D === D) return cached.al;
+  const ws = (ch) => /\s/.test(ch);
+  const m2d = new Int32Array(M.length).fill(-1), d2m = new Int32Array(D.length + 1).fill(-1);
+  let j = 0, hidden = 0, solid = 0;
+  for (let i = 0; i < M.length; i++) {
+    const mc = M[i];
+    if (ws(mc)) {                                  // a space of the model: the print's own space, or nothing there (a line break)
+      if (j < D.length && ws(D[j])) { m2d[i] = j; d2m[j] = i; j++; }
+      continue;
+    }
+    solid++;
+    while (j < D.length && ws(D[j])) { d2m[j] = i; j++; }   // spaces the model does not have: they belong to the next character
+    if (j < D.length && D[j] === mc) { m2d[i] = j; d2m[j] = i; j++; continue; }
+    let n = i + 1; while (n < M.length && ws(M[n])) n++;   // the next character of the model that is not a space
+    if (j >= D.length || (n < M.length && M[n] === D[j])) { hidden++; continue; }   // the model's character, absent from print (a bullet)
+    m2d[i] = j; d2m[j] = i; j++;                   // a different character in the same place (a quote mark, a ligature)
+  }
+  let last = M.length;
+  for (let k = D.length; k >= 0; k--) { if (d2m[k] >= 0) last = d2m[k]; else d2m[k] = last; }
+  d2m[D.length] = Math.max(d2m[D.length], 0);
+  const al = hidden > Math.max(2, solid / 2) ? null : { m2d, d2m, D };   // not the same text at all: the old, direct offsets
+  printAlignCache.set(el, { M, D, al });
+  return al;
+}
+const domToModel = (el, domOffset, modelText) => { const al = alignPrint(el, modelText); return al ? al.d2m[Math.max(0, Math.min(domOffset, al.D.length))] : domOffset; };
+function charRangeInEl(el, s, e, modelText = null) {   // a DOM Range over chars [s,e) of the element's text (of the model's flat text, with modelText)
   if (!el || s >= e) return null;
+  const al = alignPrint(el, modelText);
+  if (al) {                                         // model offsets -> print offsets
+    let ds = -1, de = -1;
+    for (let k = Math.max(0, s); k < Math.min(e, al.m2d.length); k++) { const d = al.m2d[k]; if (d >= 0) { if (ds < 0) ds = d; de = d + 1; } }
+    if (ds < 0) return null;
+    s = ds; e = de;
+  }
   let acc = 0, range = null;
   let lastTextNode = null;
   function walk(node) {
@@ -3795,7 +8291,39 @@ function charRangeInEl(el, s, e) {                  // a DOM Range over chars [s
   return range;
 }
 const SVGNS = 'http://www.w3.org/2000/svg';
+// Settings > User Interface > "Show the explanation bar" (off hides the bar and its drag handle: body.no-explanation-bar, index.html). Speech goes out through the live region, not the bar.
+function applyExplanationBarVisibility() { document.body.classList.toggle('no-explanation-bar', settings.showExplanationBar === false); }
+applyExplanationBarVisibility();
+// While the user is typing (ordinary keys or six-key braille) the explanation bar keeps showing the last explanation and only moves on to the
+// word under the caret after a pause of about 700 ms (feedback 17 Oct 2026, item 14b: it flickered through every word as each key was pressed, and
+// blanked to its hint each time the braille was redrawn). It never goes blank in between. A key that only MOVES the caret, or a click, shows the
+// new word at once. Announcements through the live region wait for the pause too (they are made by the same call).
+const TYPING_PAUSE_MS = 700;
+function typingHold() { return typingAt > 0 && performance.now() - typingAt < TYPING_PAUSE_MS; }
+function scheduleRuleFlush() {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(() => {
+    typingTimer = null;
+    if (typingHold()) { scheduleRuleFlush(); return; }
+    const p = pendingRuleWord; pendingRuleWord = null;
+    if (p) showRuleInfoNow(p.word);
+  }, Math.max(20, TYPING_PAUSE_MS - (performance.now() - typingAt)) + 10);
+}
+function noteTyping() { typingAt = performance.now(); }
+function noteNavigation() { typingAt = 0; if (pendingRuleWord) { clearTimeout(typingTimer); typingTimer = null; pendingRuleWord = null; } }
+window.__typingHold = typingHold;   // tests
+const TYPING_NAV_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']);
+editorEl.addEventListener('keydown', (e) => {
+  if (e.isComposing) return;
+  if (TYPING_NAV_KEYS.has(e.key)) { noteNavigation(); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete' || e.key === 'Enter' || e.key === 'Spacebar') noteTyping();
+}, true);   // capture, and before the six-key handler (it stops the key), which also calls noteTyping itself
+editorEl.addEventListener('beforeinput', (e) => { if (/^(insert|delete)/.test(e.inputType || '')) noteTyping(); }, true);
+document.addEventListener('pointerdown', () => noteNavigation(), true);
 function showIdleStatus() {
+  // While typing the bar keeps its last explanation; the idle hint waits for the pause too (unless a word's explanation is already waiting).
+  if (typingHold()) { if (!pendingRuleWord) pendingRuleWord = { word: '' }; scheduleRuleFlush(); return; }
   const body = $id('ruleInfoBody');
   if (body) {
     body.innerHTML = `<span class="sb-hint">${escapeHtml(t('app.status.rule_hint'))}</span>`;
@@ -3822,9 +8350,12 @@ function clearWordLink() {
   brailleEl.querySelectorAll('.bcell.cell-hl').forEach((c) => c.classList.remove('cell-hl'));
   brailleEl.querySelectorAll('rect.cell-box').forEach((r) => r.remove());
   editorEl.querySelectorAll('.math-hl').forEach((m) => m.classList.remove('math-hl'));
-  editorEl.querySelectorAll('input.table-cell-hl').forEach((inp) => inp.classList.remove('table-cell-hl'));
-  if (HL_API) CSS.highlights.delete('link-word');
-  showIdleStatus();
+  // A table cell is a contenteditable <div class="table-cell-input">, not an <input> (G15
+  // moved it off the old <input> element) — 'input.table-cell-hl' never matched anything, so
+  // a cell's highlight was never cleared and stale marks piled up across clicks.
+  editorEl.querySelectorAll('.table-cell-input.table-cell-hl').forEach((inp) => inp.classList.remove('table-cell-hl'));
+  if (HL_API) delHl('link-word');
+  showIdleStatus();                               // (held while the user types: item 14b)
   activeCaretLine = -1;
   activeCaretCol = -1;
   if (currentBrailleTab === 'monarch' && typeof drawMonarchEmulator === 'function') {
@@ -3903,7 +8434,7 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
 
     const targetBraille = highlightedRow || (wordRowIdx >= 0 ? brailleEl.querySelector(`.brl-row[data-row="${wordRowIdx}"]`) : null) || rows[0] || null;
     if (targetBraille && !isElementVisibleIn(targetBraille, brailleEl, 40)) {
-      targetBraille.scrollIntoView({ behavior: 'auto', block: 'center' });
+      scrollWithin(brailleEl, targetBraille, { block: 'center' });
     }
   }
 
@@ -3944,26 +8475,29 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
         // A contenteditable cell has no .setSelectionRange; place a real DOM Range/
         // Selection instead (charRangeInEl already treats a maths chip as one unit).
         try {
+          suppressTableCellFocusSync = true;
           pe.focus();
-          const r = charRangeInEl(pe, s, e);
+          const r = charRangeInEl(pe, s, e, cellText[`${block}:${unit}`]);
           if (r) {
             const domSel = window.getSelection();
             domSel.removeAllRanges();
             domSel.addRange(r);
           }
-        } catch {}
+        } catch {} finally {
+          suppressTableCellFocusSync = false;
+        }
       }
       if (!isElementVisibleIn(pe, editorEl, 40)) {
-        pe.scrollIntoView({ behavior: 'auto', block: 'center' });
+        scrollWithin(editorEl, pe, { block: 'center' });
       }
     } else {
       let wordRange = null;
       try {
-        wordRange = charRangeInEl(pe, s, e);
+        wordRange = charRangeInEl(pe, s, e, cellText[`${block}:${unit}`]);
       } catch { wordRange = null; }
 
       if (wordRange && HL_API) {
-        CSS.highlights.set('link-word', new Highlight(wordRange));
+        setHl('link-word', new Highlight(wordRange));
       }
 
       if (wordRange) {
@@ -3976,7 +8510,7 @@ function highlightWord(block, unit, s, e, caretOffset = null, source = 'external
           editorEl.scrollTop = targetScrollTop;
         }
       } else if (pe && !isElementVisibleIn(pe, editorEl, 40)) {
-        pe.scrollIntoView({ behavior: 'auto', block: 'center' });
+        scrollWithin(editorEl, pe, { block: 'center' });
       }
     }
 
@@ -4019,7 +8553,8 @@ function alignWord(brl, text, table) {
     if (!t) continue;
     try {
       const tr = makeTranslators(louis, t);
-      const r = tr.translatePos ? tr.translatePos(text) : louis.translatePos(text, t);
+      const pos = (s2, tf) => (tr.translatePos ? tr.translatePos(s2, tf) : louis.translatePos(s2, t, tf));
+      const r = styledTranslatePos(pos, settings.quoteStyle)(text);   // the same house style as the rendered braille it is matched against (A71)
       if (r && (r.braille === brl || !brl)) { res = r; break; }
     } catch { /* ignore */ }
   }
@@ -4070,16 +8605,17 @@ function alignWord(brl, text, table) {
   return null;
 }
 
+// gg, character and ought were wrong (⠛ = the letter g, ⠐⠉, ⠐⠪); tests/common_contractions_table.test.mjs checks every entry against liblouis.
 const COMMON_CONTRACTIONS = {
   '⠮': 'the', '⠯': 'and', '⠿': 'for', '⠷': 'of', '⠾': 'with',
   '⠡': 'ch', '⠩': 'sh', '⠹': 'th', '⠱': 'wh', '⠳': 'ou',
   '⠌': 'st', '⠜': 'ar', '⠫': 'ed', '⠻': 'er', '⠔': 'in', '⠢': 'en',
   '⠬': 'ing', '⠪': 'ow', '⠒': 'con', '⠲': 'dis', '⠂': 'ea', '⠆': 'bb',
-  '⠖': 'ff', '⠛': 'gg', '⠐⠙': 'day', '⠐⠑': 'ever', '⠐⠋': 'father',
+  '⠖': 'ff', '⠶': 'gg', '⠐⠙': 'day', '⠐⠑': 'ever', '⠐⠋': 'father',
   '⠐⠓': 'here', '⠐⠅': 'know', '⠐⠇': 'lord', '⠐⠍': 'mother', '⠐⠝': 'name',
   '⠐⠕': 'one', '⠐⠏': 'part', '⠐⠟': 'question', '⠐⠗': 'right', '⠐⠎': 'some',
-  '⠐⠞': 'time', '⠐⠥': 'under', '⠐⠺': 'work', '⠐⠽': 'young', '⠐⠉': 'character',
-  '⠐⠹': 'through', '⠐⠱': 'where', '⠐⠪': 'ought', '⠰⠝': 'tion'
+  '⠐⠞': 'time', '⠐⠥': 'under', '⠐⠺': 'work', '⠐⠽': 'young', '⠐⠡': 'character',
+  '⠐⠹': 'through', '⠐⠱': 'where', '⠐⠳': 'ought', '⠰⠝': 'tion'
 };
 
 function getPartSpeech(p) {
@@ -4123,6 +8659,11 @@ function getPartSpeech(p) {
 // Show what braille rule/contraction produced a word: its grade-2 braille with colored
 // aligned segment chips, rule badges, and comparison against uncontracted form.
 function showRuleInfo(word) {
+  if (typingHold()) { pendingRuleWord = { word }; scheduleRuleFlush(); return; }   // typing: the bar keeps its last explanation until a pause (item 14b)
+  pendingRuleWord = null;
+  showRuleInfoNow(word);
+}
+function showRuleInfoNow(word) {
   const body = $id('ruleInfoBody');
   const el = body || $id('statusBar') || $id('ruleInfo'); if (!el) return;
   const w = (word || '').trim();
@@ -4258,6 +8799,14 @@ function applyStatusScale(next) {
   document.documentElement.style.setProperty('--sb-scale', statusScale.toFixed(3));
   const targetH = Math.min(220, Math.round(44 * statusScale));
   document.documentElement.style.setProperty('--sb-h', targetH + 'px');
+  // A focusable role=separator must say where it is (WCAG 4.1.2): the bar's size as a percentage of normal.
+  const grab = $id('sbGrab');
+  if (grab) {
+    grab.setAttribute('aria-valuemin', String(Math.round(SB_MIN_SCALE * 100)));
+    grab.setAttribute('aria-valuemax', String(Math.round(SB_MAX_SCALE * 100)));
+    grab.setAttribute('aria-valuenow', String(Math.round(statusScale * 100)));
+    grab.setAttribute('aria-valuetext', statusScale === 1 ? 'normal size' : `${Math.round(statusScale * 100)} per cent`);
+  }
   updateDocStatsVisibility();
   return statusScale;
 }
@@ -4437,7 +8986,40 @@ brailleEl.addEventListener('click', (e) => {
     }
     return;
   }
+  // A line Emboss adds (no print of its own: the title, a running head, a page number …) says what it is and where to change it
+  // (feedback 30 Sep item 10, Paul 1 Oct).
+  const genRow = e.target.closest('.brl-row[data-row]');
+  if (genRow) {
+    const msg = describeGeneratedRow(Number(genRow.dataset.row));
+    if (msg) {
+      clearWordLink();
+      const body = $id('ruleInfoBody');
+      if (body) body.innerHTML = `<span class="ri-note generated-line-note" style="color:var(--ink)">${iconSvg('info-circle', 'icon icon-inline')} ${escapeHtml(msg)}</span>`;
+      announce(msg);
+    }
+  }
 });
+// What a braille line with no print of its own is, from where it sits: on page 1 before the first block, the document title (BANA);
+// a page's first line, its running head / print page number (BANA) or page information line (UKAAF); a BANA page's last line, its
+// braille page number. Anything else Emboss added gets a general note. Null for a blank line.
+function describeGeneratedRow(r) {
+  const rows = (lastTrace && lastTrace.rows) || [];
+  const lines = String(lastBrf || '').split(/\r?\n/);
+  const line = String(lines[r] ?? '').replace(/\f/g, '');
+  if (!line.trim() || (rows[r] != null && rows[r] >= 0)) return null;
+  const starts = Array.isArray(lastPageLineStarts) && lastPageLineStarts.length ? lastPageLineStarts : [0];
+  let p = 0;
+  while (p + 1 < starts.length && starts[p + 1] <= r) p++;
+  const pageStart = starts[p], pageEnd = (p + 1 < starts.length ? starts[p + 1] : lines.length) - 1;
+  const bana = ((lastFormatOpts && lastFormatOpts.mode) || settings.mode) === 'bana';
+  const firstContent = rows.findIndex((x) => x != null && x >= 0);
+  if (bana) {
+    if (p === 0 && firstContent >= 0 && r < firstContent && lastModel && lastModel.title) return tOr('app.editor.generated_title', 'Document title. BANA puts the book\'s title at the top of the first braille page. Change it in the Title field above the text.');
+    if (r === pageStart) return tOr('app.editor.generated_head', 'Running head and print page number.');
+    if (r === pageEnd) return tOr('app.editor.generated_foot', 'Braille page number. Emboss numbers the braille pages itself.');
+  } else if (r === pageStart) return tOr('app.editor.generated_ukaaf_head', 'Page information line.');
+  return tOr('app.editor.generated_other', 'Emboss added this line as part of the braille layout. It has no print of its own.');
+}
 function handleMathFieldSelect(mf) {
   if (!mf) return false;
   try { if (typeof mf.focus === 'function' && document.activeElement !== mf) mf.focus(); } catch {}
@@ -4494,6 +9076,17 @@ editorEl.addEventListener('click', (e) => {
     refreshToolbar(e.target);
     return;
   }
+  // A table cell has its own mousedown/focus/pointerup/keyup handlers (handleTableCellEvent,
+  // via makeTableCell) that already resolve the exact cell and word range. resolveBlockUnit
+  // has no notion of a table cell — for any click inside one it falls through to its default
+  // (unit 0, unitEl = the whole table's container), which then clobbers the correct highlight
+  // that pointerup/focus just set, always landing on the table's first cell/word and letting
+  // the caret jump there too. Skip this generic handler for table cells; syncCaretWithBraille
+  // and describeCaretWord already carry the equivalent isTableCellEl guard.
+  if (e.target.closest && e.target.closest('.table-cell-input')) {
+    refreshToolbar(e.target);
+    return;
+  }
 
   const resolved = resolveBlockUnit(e.target);
   if (!resolved) {
@@ -4509,7 +9102,7 @@ editorEl.addEventListener('click', (e) => {
     return;
   }
 
-  const offset = caretOffsetInEl(unitEl, e);
+  const offset = domToModel(unitEl, caretOffsetInEl(unitEl, e), text);
   const [s, en] = wordRangeAt(text, offset);
   highlightWord(block, unit, s, en, offset, 'editor');
   showRuleInfo(text.slice(s, en));
@@ -4534,7 +9127,7 @@ function updatePrintToc() {
   if (!container) return;
   const headings = [];
   (lastModel?.blocks || []).forEach((b, idx) => {
-    if (b.type === 'heading' && b.text) headings.push({ text: b.text, level: b.level || 1, blockIdx: idx });
+    if ((b.type === 'heading' || b.type === 'title') && b.text) headings.push({ text: b.text.replace(/\n/g, ' '), level: b.type === 'title' ? 1 : (b.level || 1), blockIdx: idx });   // #57b: a title still shows in the contents, as the level-1 heading it was
   });
   if (!headings.length) {
     container.innerHTML = '';
@@ -4542,18 +9135,19 @@ function updatePrintToc() {
   }
 
   const countText = headings.length === 1 ? t('app.toc.section_one') : t('app.toc.sections', { count: headings.length });
-  const toggleLabel = isTocBoxCollapsed ? `${t('app.toc.expand')} ▾` : `${t('app.toc.shrink')} ▴`;
+  // Iconoir nav-arrows, not the ▾ ▴ characters (Paul, 17 Oct 2026, feedback item 3); the label is HTML here, built from escaped text and the icon.
+  const toggleLabel = `${escapeHtml(isTocBoxCollapsed ? t('app.toc.expand') : t('app.toc.shrink'))} ${iconSvg(isTocBoxCollapsed ? 'nav-arrow-down' : 'nav-arrow-up', 'icon icon-inline')}`;
   const toggleAria = escapeHtml(isTocBoxCollapsed ? t('app.toc.expand_aria') : t('app.toc.shrink_aria'));
   const ariaExpanded = !isTocBoxCollapsed;
 
   container.innerHTML = `
     <div class="print-toc-box ${isTocBoxCollapsed ? 'collapsed' : ''}" id="printTocBox">
-      <div class="print-toc-head" id="printTocHead" role="button" tabindex="0" aria-expanded="${ariaExpanded}" aria-controls="printTocList" title="${toggleAria}">
-        <h3>📑 ${escapeHtml(t('app.toc.title'))} <span class="print-toc-count">(${escapeHtml(countText)})</span></h3>
-        <button type="button" class="print-toc-toggle-btn" id="printTocToggleBtn" aria-label="${toggleAria}">${escapeHtml(toggleLabel)}</button>
+      <div class="print-toc-head" id="printTocHead" title="${toggleAria}">
+        <h3>${iconSvg('list', 'icon icon-inline')} ${escapeHtml(t('app.toc.title'))} <span class="print-toc-count">(${escapeHtml(countText)})</span></h3>
+        <button type="button" class="print-toc-toggle-btn" id="printTocToggleBtn" aria-label="${toggleAria}" aria-expanded="${ariaExpanded}" aria-controls="printTocList">${toggleLabel}</button>
       </div>
       <ul class="print-toc-list" id="printTocList">
-        ${headings.map(h => `<li style="margin-left:${(h.level - 1) * 1.2}em"><a data-jump-block="${h.blockIdx}">${escapeHtml(h.text)}</a></li>`).join('')}
+        ${headings.map(h => `<li style="margin-left:${(h.level - 1) * 1.2}em"><a href="#" data-jump-block="${h.blockIdx}">${escapeHtml(h.text)}</a></li>`).join('')}
       </ul>
     </div>
   `;
@@ -4569,12 +9163,7 @@ function updatePrintToc() {
     if (e.target.closest('a')) return;
     toggleAction();
   });
-  headEl?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleAction();
-    }
-  });
+  // The keyboard reaches the toggle through its own button (whose click bubbles here); the heading is not a second, nested button.
 
   container.querySelectorAll('a[data-jump-block]').forEach(a => {
     a.addEventListener('click', (e) => {
@@ -4583,7 +9172,11 @@ function updatePrintToc() {
       const bIdx = Number(a.dataset.jumpBlock);
       const target = editorEl.querySelector(`[data-block-idx="${bIdx}"]`);
       if (target) {
-        target.scrollIntoView({ block: 'center' });
+        scrollWithin(editorEl, target, { block: 'center' });
+        // the caret goes to the heading too (18 Oct 2026): it stayed where it was, so the next key - Backspace - acted off-screen
+        const key = lastKeys[bIdx];
+        if (key) editor.update(() => { const n = $getNodeByKey(key); if (n && typeof n.selectStart === 'function') n.selectStart(); });
+        editorEl.focus({ preventScroll: true });
         linkByBlock(bIdx, true);
       }
     });
@@ -4598,6 +9191,22 @@ function domOffsetInEl(el, node, offset) {
 
 let lastCaretWordKey = '';
 let caretSyncTimer = null;
+// Is the word the caret is on still the one the page has lit? (The Highlight's Range is attached to the text and reads as that word.)
+function caretHighlightIsLive(word) {
+  if (!HL_API) return true;
+  const h = CSS.highlights.get('link-word');
+  if (!h) return false;
+  const rs = [...h];
+  if (rs.length !== 1) return false;
+  const r = rs[0];
+  if (!r.startContainer || !r.startContainer.isConnected || r.collapsed) return false;
+  return r.toString().replace(/\s+/g, ' ').trim() === String(word).replace(/\s+/g, ' ').trim() || /\$/.test(String(word));
+}
+// The caret has left an equation: drop its highlight and forget it was the last thing picked out, so the next caret move links the word it lands on.
+function leaveMathHighlight(mf) {
+  try { mf.classList.remove('math-hl'); mf.closest('.math-embed')?.classList.remove('math-hl'); } catch { /* detached */ }
+  if (lastCaretWordKey && lastCaretWordKey.endsWith(':math')) lastCaretWordKey = '';
+}
 
 function syncCaretWithBraille(immediate = false) {
   const doSync = () => {
@@ -4612,9 +9221,31 @@ function syncCaretWithBraille(immediate = false) {
       handleTableCellEvent(active, unit);
       return;
     }
-    if (lastCaretWordKey && lastCaretWordKey.endsWith(':math')) {
+    // An equation was picked out (by a click, or the caret was in it) and the page still shows it. Leave it alone while the keyboard is somewhere
+    // else (a button, a dialog) — but once the keyboard is back in the text (the arrow keys left the equation), the caret's word takes over:
+    // returning here then left the equation lit, with the word after it lit as well, while the arrow keys went on through the text (item 10).
+    if (lastCaretWordKey && lastCaretWordKey.endsWith(':math') && document.activeElement !== editorEl) {
       const currentMathHl = editorEl.querySelector('.math-hl');
       if (currentMathHl) return;
+    }
+    // A selected picture, table or graphic (a node selection, feedback item 9): link its own braille lines. The page's text cursor
+    // is then at the start of the document, and reading it highlighted the first word there, as if Delete would act on it.
+    let nodeSelBlock = null, nodeSelected = false;
+    editor.getEditorState().read(() => {
+      const ls = $getSelection();
+      if (!$isNodeSelection(ls)) return;
+      nodeSelected = true;
+      const n = ls.getNodes()[0];
+      const top = n && typeof n.getTopLevelElement === 'function' ? (n.getTopLevelElement() || n) : n;
+      const i = top ? lastKeys.indexOf(top.getKey()) : -1;
+      if (i >= 0) nodeSelBlock = i;
+    });
+    if (nodeSelected) {
+      clearWordLink();
+      if (nodeSelBlock != null) linkByBlock(nodeSelBlock, false);
+      lastCaretWordKey = null;
+      showIdleStatus();
+      return;
     }
     const sel = window.getSelection();
     if (!sel || !sel.anchorNode || !editorEl.contains(sel.anchorNode)) return;
@@ -4630,7 +9261,11 @@ function syncCaretWithBraille(immediate = false) {
       return;
     }
     const resolved = resolveBlockUnit(target);
-    if (!resolved) return;
+    if (!resolved) {
+      // The caret is somewhere that has no word (a card, the page's own edge): the last word's highlight must not stay behind (item 10).
+      if (lastCaretWordKey && (activeWordHighlight || (HL_API && CSS.highlights.has('link-word')))) { clearWordLink(); lastCaretWordKey = ''; }
+      return;
+    }
     const { block, unit, unitEl } = resolved;
     const text = cellText[`${block}:${unit}`];
     if (text == null || !text.trim()) {
@@ -4639,10 +9274,10 @@ function syncCaretWithBraille(immediate = false) {
       lastCaretWordKey = `${block}:${unit}:empty`;
       return;
     }
-    const offset = domOffsetInEl(unitEl, node, sel.anchorOffset);
+    const offset = domToModel(unitEl, domOffsetInEl(unitEl, node, sel.anchorOffset), text);
     const [s, en] = wordRangeAt(text, offset);
     const wordKey = `${block}:${unit}:${s}:${en}:${offset}`;
-    if (wordKey === lastCaretWordKey) return;
+    if (wordKey === lastCaretWordKey && caretHighlightIsLive(text.slice(s, en))) return;   // the same word, and still lit: nothing to do (a stale or dropped highlight is made again)
     lastCaretWordKey = wordKey;
     highlightWord(block, unit, s, en, offset, 'caret');
     showRuleInfo(text.slice(s, en));
@@ -4682,16 +9317,61 @@ function describeCaretWord() {
   const { block, unit, unitEl } = resolved;
   const text = cellText[`${block}:${unit}`];
   if (text == null) { announce(t('app.editor.no_mapping')); return; }
-  const [s, en] = wordRangeAt(text, domOffsetInEl(unitEl, node, sel.anchorOffset));
+  const [s, en] = wordRangeAt(text, domToModel(unitEl, domOffsetInEl(unitEl, node, sel.anchorOffset), text));
   highlightWord(block, unit, s, en, null, 'caret');
   showRuleInfo(text.slice(s, en));
   announce(lastRuleSpoken || text.slice(s, en));
 }
 
+// F9 item K (tests): for every (block, unit) with a flat text, do the print offsets and the model's agree? Direction A: for every word of the
+// flat text (wordRangeAt), the print Range charRangeInEl gives covers exactly that word. Direction B: for characters of the print text
+// (every `stride`-th), the offset domOffsetOfNode gives is the same character in the flat text. `limit` units at most, every
+// `unitStride`-th unit. Returns counts and the first mismatches.
+window.__printLinkCheck = ({ unitStride = 1, stride = 7, limit = Infinity, maxReport = 40 } = {}) => {
+  const norm = (x) => String(x).replace(/\s+/g, ' ');
+  const res = { units: 0, skipped: 0, words: 0, charsChecked: 0, badWords: 0, badChars: 0, mismatches: [] };
+  const keys = Object.keys(cellText);
+  for (let k = 0; k < keys.length && res.units < limit; k += unitStride) {
+    const key = keys[k]; const text = cellText[key];
+    if (text == null || !String(text).trim()) continue;
+    const [bi, ui] = key.split(':').map(Number);
+    const el = printUnitEl(bi, ui);
+    if (!el || (el.getAttribute && el.getAttribute('data-block-idx') != null && lastModel?.blocks?.[bi]?.type && !['para', 'paragraph', 'heading', 'list', 'quote', 'title'].includes(lastModel.blocks[bi].type))) { res.skipped++; continue; }
+    res.units++;
+    // direction A
+    let pos = 0;
+    while (pos < text.length) {
+      if (/\s/.test(text[pos])) { pos++; continue; }
+      const [ws, we] = wordRangeAt(text, pos);
+      if (we <= pos) { pos++; continue; }
+      res.words++;
+      const r = charRangeInEl(el, ws, we, text);
+      const got = r ? norm(r.toString()) : null, want = norm(text.slice(ws, we));
+      if (got === null) { const al = alignPrint(el, text); let allHidden = !!al; for (let q = ws; al && q < we; q++) if (al.m2d[q] >= 0) allHidden = false; if (allHidden) { res.hiddenWords = (res.hiddenWords || 0) + 1; pos = we; continue; } }   // a word print does not show (a hidden bullet): nothing to highlight, not an error
+      if (got !== want) { res.badWords++; if (res.mismatches.length < maxReport) res.mismatches.push({ key, kind: 'word', want, got, ws, we, type: lastModel?.blocks?.[bi]?.type, dom: norm(el.textContent).slice(0, 70), model: String(text).slice(0, 70) }); }
+      pos = we;
+    }
+    // direction B
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walker.nextNode())) {
+      if (n.parentElement?.closest('.math-embed, math-field, .cell-math-chip')) continue;
+      const v = n.nodeValue;
+      for (let i = 0; i < v.length; i += stride) {
+        if (/\s/.test(v[i])) continue;
+        res.charsChecked++;
+        const m = domToModel(el, domOffsetOfNode(el, n, i), text);
+        if (text[m] !== v[i]) { res.badChars++; if (res.mismatches.length < maxReport) res.mismatches.push({ key, kind: 'char', dom: v[i], model: text[m], off: m, ctx: v.slice(Math.max(0, i - 8), i + 8) }); }
+      }
+    }
+  }
+  return res;
+};
+
 // ---- transparency: hovering a braille line shows the text it came from ----
 function blockDisplayText(b) {
   if (!b) return '';
-  if (b.type === 'heading') return b.text || '';
+  if (b.type === 'heading' || b.type === 'title') return (b.text || '').replace(/\n/g, ' ');
   if (b.type === 'indicator') return b.kind === 'asterism' ? '⁂ ⁂ ⁂' : '* * *';
   if (b.type === 'list') return (b.items || []).map((it) => it.text).join(' • ');
   if (b.type === 'para') {
@@ -4716,24 +9396,47 @@ function setProofBadge(kind, label, tip) {
 }
 let proofreadTimer = null;
 let lastProofIssues = [];
+let proofBusy = false;                  // a pass over the document is running (tests read it: window.proofreadBusy)
+window.proofreadBusy = () => proofBusy;
+// F9 item A: while a pass runs (seconds, on a big book, after every edit) the badge still shows the last count. Its words are the
+// ones this pass has found so far plus the earlier pass's words in blocks this pass has not reached, and only those still in the text.
+let proofPass = null;                   // {issues, at()} while a pass runs
+function proofIssueStillThere(i) {
+  try {
+    const pe = printUnitEl(i.idx, i.itemIdx) || editorEl.querySelector(`[data-block-idx="${i.idx}"]`);
+    const r = pe && charRangeInEl(pe, i.start, i.end, i.src);
+    return !!r && r.toString().replace(/\s+/g, ' ') === String(i.word || '').replace(/\s+/g, ' ');
+  } catch { return false; }
+}
+function proofIssuesNow() {
+  if (!proofPass) return lastProofIssues;
+  const at = proofPass.at();
+  return proofPass.issues.concat(lastProofIssues.filter((i) => i.idx >= at && proofIssueStillThere(i)));   // already in document order: this pass's blocks come first
+}
 
 function clearProofHighlights() {
-  if (HL_API) CSS.highlights.delete('proof-warn-word');
+  if (HL_API) delHl('proof-warn-word');
   editorEl.querySelectorAll('.proof-warn').forEach((e) => { e.classList.remove('proof-warn'); e.removeAttribute('title'); });
 }
 
 function runProofread(model, table) {
   if (proofreadTimer) clearTimeout(proofreadTimer);
   clearProofHighlights();
-  lastProofIssues = [];
+  proofBusy = false;
+  lastProofIssues = proofIssuesNow();     // what the pass that is being replaced knew: the badge's list until this pass has found its own
+  proofPass = null;
   
-  if (!model || !model.blocks || !model.blocks.length) return;
+  // Feedback 30 Sep item 7 (Paul, 1 Oct): an emptied document has nothing to check — hide the badge, which used to stay showing
+  // the last document's count after Clear or select-all-and-delete.
+  if (!model || !model.blocks || !model.blocks.length) { lastProofIssues = []; const badge = $id('proofBadge'); if (badge) badge.hidden = true; return; }
   
+  proofBusy = true;
   const blocks = model.blocks;
   const total = blocks.length;
   const issues = [];
   let checked = 0;
   let currentIdx = 0;
+  proofPass = { issues, at: () => currentIdx };
   const chunkSize = 60;
   const warnRanges = [];
   
@@ -4772,15 +9475,42 @@ function runProofread(model, table) {
               }
               return tr.translate(s);
             };
-            res = roundTrip(entry.text, translateEntry, (s) => tr.backTranslate(s));
+            // The text as the real translator sees it (feedback 30 Sep item 7): invisible characters such as a soft hyphen
+            // removed, no-break spaces as spaces — the check brailled them raw and flagged "soft­hyphen" though its braille was
+            // right. Word positions are mapped back to the original text for highlighting.
+            const norm = hasSeg ? null : normalizeTextAndTypeform(entry.text, null);
+            // Emboss's script markers (U+E000-U+E002) are seen as spaces, one for one (positions unchanged): passed to liblouis raw
+            // they garbled the read-back of the whole line ("script" in "…with script: Figure 1ᵃ" came back different).
+            const checkText = (norm && norm.map ? norm.text : entry.text).replace(/[\uE000-\uE002]/g, ' ');
+            res = roundTrip(checkText, translateEntry, (s) => tr.backTranslate(s));
+            if (norm && norm.map && res.wordIssues) {
+              const mp = norm.map;
+              res = { ...res, wordIssues: res.wordIssues.map((w) => ({ ...w, word: entry.text.slice(mp[w.start] ?? w.start, (mp[w.end - 1] ?? w.end - 1) + 1), start: mp[w.start] ?? w.start, end: (mp[w.end - 1] ?? w.end - 1) + 1 })) };
+            }
             proofreadCache.set(cacheKey, res);
           }
           if (!res.ok && res.wordIssues && res.wordIssues.length > 0) {
             for (const w of res.wordIssues) {
+              // A word next to or inside a sub/superscript (Emboss's script markers U+E000-U+E002) is not one this check can judge:
+              // it brailles the raw text, and reading back cannot turn script indicators into markers, so every such word came back
+              // "different" while its braille was right (feedback 30 Sep item 7: Paul's test document showed "4 to review", all
+              // the words of its subscript and superscript line).
+              if (/[\uE000-\uE002]/.test(entry.text.slice(Math.max(0, w.start - 1), w.end + 1))) continue;
+              // Nor is a word of a web or email address: UEB brailles those by its computer-material rules, which reading back
+              // cannot reverse ("https" was flagged in every document with a link).
+              // Nor a word touching a note reference: its number is brailled as the reference mark, which reading back cannot
+              // reverse ("script:" + reference 3 came back as two words to check).
+              if (Array.isArray(entry.segments)) {
+                let c = 0, touches = false;
+                for (const g of entry.segments) { const len = String((g && g.text) || '').length; if (g && g.type === 'noteref' && w.start <= c + len + 1 && w.end >= c - 1) touches = true; /* next to it, or one punctuation mark away ("script:³") */ c += len; }
+                if (touches) continue;
+              }
+              const tokA = entry.text.lastIndexOf(' ', w.start) + 1, tokB = entry.text.indexOf(' ', w.end);
+              if (/:\/\/|^www\.|\S@\S/i.test(entry.text.slice(tokA, tokB < 0 ? entry.text.length : tokB))) continue;
               issues.push({ idx: i, itemIdx: entry.itemIdx, word: w.word, start: w.start, end: w.end, src: entry.text, back: res.back });
               const pe = printUnitEl(i, entry.itemIdx) || editorEl.querySelector(`[data-block-idx="${i}"]`);
               if (pe) {
-                const r = charRangeInEl(pe, w.start, w.end);
+                const r = charRangeInEl(pe, w.start, w.end, entry.text);
                 if (r) warnRanges.push(r);
               }
             }
@@ -4793,11 +9523,13 @@ function runProofread(model, table) {
       proofreadTimer = setTimeout(processChunk, 16);
     } else {
       lastProofIssues = issues;
+      proofPass = null;
+      proofBusy = false;
       if (HL_API) {
         if (warnRanges.length > 0) {
-          CSS.highlights.set('proof-warn-word', new Highlight(...warnRanges));
+          setHl('proof-warn-word', new Highlight(...warnRanges));
         } else {
-          CSS.highlights.delete('proof-warn-word');
+          delHl('proof-warn-word');
         }
       }
       const badge = $id('proofBadge');
@@ -4805,13 +9537,173 @@ function runProofread(model, table) {
         if (badge) badge.hidden = true;
       } else {
         if (badge) badge.hidden = false;
-        setProofBadge('warn', t('proofread.badge_warn', { count: issues.length }) || `⚠ ${issues.length} to review`, t('proofread.badge_title', { count: issues.length }) || `${issues.length} word discrepancy(s) found during round-trip back-translation. Click to jump to the first.`);
+        // Plain words (feedback 30 Sep item 7, Paul, 1 Oct): what the badge is for, said where it is seen.
+        const one = issues.length === 1;
+        setProofBadge('warn', (one ? tOr('proofread.badge_warn_one', '1 word to check') : tOr('proofread.badge_warn', `${issues.length} words to check`).replace('{count}', issues.length)),
+          tOr('proofread.badge_title', `Emboss checks its braille by reading it back into print. ${issues.length} word(s) did not come back the same. The braille is often still right (names and unusual words), but it is worth checking. Select to go to each one in turn.`).replace('{count}', issues.length));
       }
     }
   }
 
   proofreadTimer = setTimeout(processChunk, 50);
 }
+
+// The warnings shown to the user (badge, list, export notice). 'trace-fallback' is left out (feedback 30 Sep item 7, Paul, 1 Oct):
+// it says only that the editor could not link a block's cells to the print, the braille itself unchanged — a diagnostic, not
+// something a reader or transcriber can act on. It stays in lastWarnings (window.lastWarnings) for tests and debugging.
+const shownWarnings = () => lastWarnings.filter((w) => w && w.kind !== 'trace-fallback');
+// ---- transcription warnings (Fable review #5): a small badge near the braille pane, like
+// the proofreading one above, opening a list where each warning jumps to its block. Built from
+// `lastWarnings` (render()'s copy of opts.warnings — see format/document.mjs's pushWarning),
+// which never affects the braille itself; this is purely a "what changed" report on top of it.
+const WARN_KIND_LABEL_KEY = {
+  'block-skipped': 'app.warnings.kind_block_skipped',
+  'trace-fallback': 'app.warnings.kind_trace_fallback',
+  'lou-undefined-char': 'app.warnings.kind_lou_undefined_char',
+  'blanked-char': 'app.warnings.kind_blanked_char',
+  'table-fallback': 'app.warnings.kind_table_fallback',
+  'titlepage-overflow': 'app.warnings.kind_titlepage_overflow',   // K29 Stage 1b's pushWarning (format/document.mjs traceTitlePage); en.json strings already exist
+};
+// Kinds with no locale string yet (English only; a locale key can replace an entry here later).
+const WARN_KIND_PLAIN_LABEL = {
+  'picture-no-description': 'Picture without a description',   // IMP-W12 (Paul, 30 Sep 2026)
+  'math-unreadable': 'Equation Emboss could not read',   // A89 (Paul, 2 Oct 2026): TeX Temml could not convert
+};
+function warningKindLabel(kind) {
+  const key = WARN_KIND_LABEL_KEY[kind];
+  return (key && t(key)) || WARN_KIND_PLAIN_LABEL[kind] || kind || '';
+}
+function warningMessageFor(w) {
+  if (!w) return '';
+  const chars = Array.isArray(w.chars) ? w.chars.join(' ') : '';
+  switch (w.kind) {
+    case 'block-skipped': return t('app.warnings.message_block_skipped', { message: w.message || '' }) || w.message || '';
+    case 'trace-fallback': return t('app.warnings.message_trace_fallback', { message: w.message || '' }) || w.message || '';
+    case 'lou-undefined-char': return t('app.warnings.message_lou_undefined_char', { count: w.count || 0, chars }) || w.message || '';
+    case 'blanked-char': return t('app.warnings.message_blanked_char', { count: w.count || 0, chars }) || w.message || '';
+    case 'table-fallback': {
+      const resolvedLayoutLabel = w.resolvedLayout === 'listed' ? 'a Listed table' : 'paragraph form';
+      return t('app.warnings.message_table_fallback', { requestedMode: w.requestedMode || 'auto', resolvedLayoutLabel }) || w.message || '';
+    }
+    case 'titlepage-overflow': return t('app.warnings.message_titlepage_overflow') || w.message || '';
+    default: return w.message || '';
+  }
+}
+function jumpToWarningBlock(w) {
+  if (!w || w.blockIndex == null || w.blockIndex < 0) return;
+  const el = editorEl.querySelector(`[data-block-idx="${w.blockIndex}"]`);
+  if (!el) return;
+  scrollWithin(editorEl, el, { block: 'center', behavior: 'smooth' });
+  // The print-pane block elements are plain <div>/<li>/etc. with no native tabindex, so a bare
+  // .focus() is a silent no-op; give it one just long enough to take focus (the standard
+  // "temporary tabindex" pattern for moving focus to non-interactive content), so a screen
+  // reader / keyboard user actually lands there, not just sees it scroll.
+  const hadTabIndex = el.hasAttribute('tabindex');
+  if (!hadTabIndex) el.setAttribute('tabindex', '-1');
+  try { el.focus({ preventScroll: true }); } catch { /* not focusable even with tabindex */ }
+  if (!hadTabIndex) {
+    const cleanup = () => { el.removeAttribute('tabindex'); el.removeEventListener('blur', cleanup); };
+    el.addEventListener('blur', cleanup, { once: true });
+  }
+}
+function renderWarningsPanel() {
+  const list = $id('warnPanelList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!shownWarnings().length) {
+    const li = document.createElement('li');
+    li.className = 'warn-panel-empty';
+    li.textContent = t('app.warnings.panel_empty') || 'No transcription warnings.';
+    list.appendChild(li);
+    return;
+  }
+  shownWarnings().forEach((w, i) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'warn-item';
+    const kindEl = document.createElement('span');
+    kindEl.className = 'warn-item-kind';
+    kindEl.textContent = warningKindLabel(w.kind);
+    const msgEl = document.createElement('span');
+    msgEl.className = 'warn-item-msg';
+    msgEl.textContent = warningMessageFor(w);
+    btn.appendChild(kindEl);
+    btn.appendChild(msgEl);
+    if (w.snippet) {
+      const snEl = document.createElement('span');
+      snEl.className = 'warn-item-snippet';
+      snEl.textContent = w.snippet;
+      btn.appendChild(snEl);
+    }
+    btn.setAttribute('aria-label', t('app.warnings.list_item_aria', { n: i + 1, total: shownWarnings().length, kind: warningKindLabel(w.kind), message: warningMessageFor(w) }) || `${warningKindLabel(w.kind)}: ${warningMessageFor(w)}`);
+    btn.addEventListener('click', () => {
+      jumpToWarningBlock(w);
+      closeWarningsPanel();
+      announce(t('app.warnings.jump_announce', { n: i + 1, total: shownWarnings().length, message: warningMessageFor(w) }));
+    });
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+function openWarningsPanel() {
+  const panel = $id('warnPanel'), badge = $id('warnBadge');
+  if (!panel) return;
+  renderWarningsPanel();
+  panel.hidden = false;
+  badge?.setAttribute('aria-expanded', 'true');
+  panel.querySelector('.warn-item, #warnPanelClose')?.focus({ preventScroll: true });
+  document.addEventListener('keydown', warnPanelKeydown, true);
+  document.addEventListener('click', warnPanelOutsideClick, true);
+}
+function closeWarningsPanel() {
+  const panel = $id('warnPanel'), badge = $id('warnBadge');
+  if (!panel || panel.hidden) return;
+  panel.hidden = true;
+  badge?.setAttribute('aria-expanded', 'false');
+  document.removeEventListener('keydown', warnPanelKeydown, true);
+  document.removeEventListener('click', warnPanelOutsideClick, true);
+}
+function warnPanelKeydown(e) {
+  if (e.key === 'Escape') { e.stopPropagation(); closeWarningsPanel(); $id('warnBadge')?.focus({ preventScroll: true }); }
+}
+function warnPanelOutsideClick(e) {
+  const panel = $id('warnPanel'), badge = $id('warnBadge');
+  if (panel && !panel.contains(e.target) && e.target !== badge) closeWarningsPanel();
+}
+function updateWarningsUI() {
+  const badge = $id('warnBadge');
+  if (!badge) return;
+  const n = shownWarnings().length;
+  if (!n) {
+    badge.hidden = true;
+    closeWarningsPanel();
+    return;
+  }
+  badge.hidden = false;
+  const label = n === 1 ? (t('app.warnings.badge_one') || '1 transcription warning') : (t('app.warnings.badge_other', { count: n }) || `${n} transcription warnings`);
+  badge.textContent = label;
+  const title = t('app.warnings.badge_title', { count: n }) || `Emboss had to skip or change ${n} thing(s) while brailling this document.`;
+  badge.title = title;
+  badge.setAttribute('aria-label', title);
+  if (!$id('warnPanel')?.hidden) renderWarningsPanel();   // keep an open panel in sync with a fresh render
+}
+// Shown once before a BRF/PEF/eBraille/NIMAS export whenever the last render produced any
+// transcription warnings — the download still proceeds; this only makes sure the transcriber
+// sees it, per Fable review #5 ("a short notice ... before download").
+let exportWarnDismissTimer = null;
+function maybeShowExportWarningNotice() {
+  if (!shownWarnings().length) return;
+  const notice = $id('exportWarnNotice'), textEl = $id('exportWarnNoticeText');
+  if (!notice || !textEl) return;
+  const msg = t('app.warnings.export_notice', { count: shownWarnings().length }) || `Emboss had to skip or change ${shownWarnings().length} thing(s) — see details`;
+  textEl.textContent = msg;
+  notice.hidden = false;
+  announce(msg);
+  if (exportWarnDismissTimer) clearTimeout(exportWarnDismissTimer);
+  exportWarnDismissTimer = setTimeout(() => { notice.hidden = true; }, 12000);
+}
+if (typeof window !== 'undefined') { window.updateWarningsUI = updateWarningsUI; window.lastWarnings = lastWarnings; }
 
 // ---- six-key (Perkins) braille input ----
 // S D F = dots 3 2 1 (left hand), J K L = dots 4 5 6 (right hand), chorded like a
@@ -4834,46 +9726,127 @@ function isOrderedList(b) {
 // vector for script: <script>, <foreignObject> (arbitrary HTML), on* handlers, and any
 // href that is not a same-document fragment (javascript:, data:, remote). Returns the
 // serialised <svg> or '' when the markup is not an SVG at all.
+//
+// S1 audit #23 (15 Oct 2026, Paul's decision F2): the SVG is put inline, so a <style> in it was a stylesheet for the WHOLE page
+// (`body{--x:1}`, `*{display:none}`), and a url() in a rule, a style attribute or a presentation attribute was a request the
+// graphic could make. Now:
+//  - every rule of an embedded <style> is scoped to this graphic (its root carries a unique data-gscope), so it can colour the
+//    drawing and nothing else; at-rules (@import, @font-face, @media, @keyframes …) are dropped, a rule whose selector holds a backslash
+//    or a brace is dropped, and only SVG painting/text properties (and --custom ones) survive, in <style> and in style="…";
+//  - a url() anywhere (rule, style attribute, presentation attribute such as fill/filter/mask) may name only a fragment of the
+//    same document (url(#g)); a declaration or attribute with any other url(), or an image-set(), expression() or image(),
+//    is removed;
+//  - an animation that sets an href is removed.
+const SVG_CSS_PROPS = new Set(['alignment-baseline', 'baseline-shift', 'clip', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-rendering', 'direction', 'display', 'dominant-baseline', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'flood-color', 'flood-opacity', 'font', 'font-family', 'font-kerning', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'image-rendering', 'isolation', 'letter-spacing', 'lighting-color', 'marker', 'marker-end', 'marker-mid', 'marker-start', 'mask', 'mix-blend-mode', 'opacity', 'paint-order', 'shape-rendering', 'stop-color', 'stop-opacity', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'text-anchor', 'text-decoration', 'text-rendering', 'transform', 'transform-box', 'transform-origin', 'unicode-bidi', 'vector-effect', 'visibility', 'white-space', 'word-spacing', 'writing-mode']);
+let svgScopeSeq = 0;
+// One CSS declaration is kept when its property is allowed and every url() in its value is a bare same-document fragment.
+function svgDeclOk(prop, value) {
+  prop = prop.trim().toLowerCase();
+  if (!(SVG_CSS_PROPS.has(prop) || /^--[\w-]+$/.test(prop))) return false;
+  return svgValueOk(value);
+}
+function svgValueOk(value) {
+  const v = String(value);
+  if (/[\\]|expression\s*\(|image-set\s*\(|image\s*\(|-moz-binding|behavior\s*:|javascript:|@import|<|>/i.test(v)) return false;
+  const re = /url\s*\(\s*(?:"([^"]*)"|'([^']*)'|([^)]*?))\s*\)/gi;
+  let m; let count = 0;
+  while ((m = re.exec(v))) { count++; const arg = (m[1] ?? m[2] ?? m[3] ?? '').trim(); if (!/^#[\w.:-]+$/.test(arg)) return false; }
+  if ((v.match(/url\s*\(/gi) || []).length !== count) return false;   // a url( the pattern could not read
+  return true;
+}
+function svgCleanStyleAttr(text) {
+  return String(text).split(';').map((d) => {
+    const i = d.indexOf(':'); if (i < 0) return '';
+    const prop = d.slice(0, i); const val = d.slice(i + 1);
+    return svgDeclOk(prop, val) ? `${prop.trim()}:${val.trim()}` : '';
+  }).filter(Boolean).join(';');
+}
+// The selectors of one rule, each turned into "descendant of this graphic"; `svg`/`:root` mean the graphic's own root.
+function svgScopeSelectors(sel, scope) {
+  const root = `svg[data-gscope="${scope}"]`;
+  const out = [];
+  for (let one of sel.split(',')) {
+    one = one.trim();
+    if (!one || /[\\{};@]|\/\*/.test(one)) return [];                    // an escape, brace or at-sign: not a selector we trust
+    if (/^(?:html|body)\b/i.test(one)) continue;                        // cannot match inside the graphic
+    if (/^:root\b/i.test(one)) { out.push(root + one.slice(5)); continue; }
+    if (/^svg(?![\w-])/i.test(one)) { out.push(root + one.slice(3)); out.push(`${root} ${one}`); continue; }
+    out.push(`${root} ${one}`);
+  }
+  return out;
+}
+function svgScopeCss(css, scope) {
+  css = String(css).replace(/\/\*[\s\S]*?\*\//g, ' ');
+  const out = [];
+  let i = 0;
+  while (i < css.length) {
+    while (i < css.length && /\s/.test(css[i])) i++;
+    if (i >= css.length) break;
+    if (css[i] === '@') {                                               // an at-rule: skip it whole (to its ; or its balanced block)
+      let depth = 0; let j = i;
+      for (; j < css.length; j++) { const c = css[j]; if (c === '{') depth++; else if (c === '}') { depth--; if (depth <= 0) { j++; break; } } else if (c === ';' && depth === 0) { j++; break; } }
+      i = j; continue;
+    }
+    const open = css.indexOf('{', i);
+    if (open < 0) break;
+    const close = css.indexOf('}', open);
+    const selector = css.slice(i, open);
+    const body = close < 0 ? css.slice(open + 1) : css.slice(open + 1, close);
+    i = close < 0 ? css.length : close + 1;
+    if (body.includes('{')) { continue; }                               // nested block (not valid here): drop it
+    const sels = svgScopeSelectors(selector, scope);
+    if (!sels.length) continue;
+    const decls = svgCleanStyleAttr(body);
+    if (decls) out.push(`${sels.join(', ')} { ${decls} }`);
+  }
+  return out.join('\n');
+}
 function sanitizeSvgMarkup(svg) {
   if (!svg || typeof svg !== 'string') return '';
   let doc;
   try { doc = new DOMParser().parseFromString(svg, 'image/svg+xml'); } catch { return ''; }
   const root = doc.documentElement;
   if (!root || root.nodeName === 'parsererror' || root.localName !== 'svg') return '';
-  for (const el of Array.from(root.querySelectorAll('script, foreignObject, iframe, object, embed'))) el.remove();
+  for (const el of Array.from(root.querySelectorAll('script, foreignObject, iframe, object, embed, link, meta'))) el.remove();
+  for (const el of Array.from(root.querySelectorAll('set, animate'))) {
+    if (/href/i.test(el.getAttribute('attributeName') || '')) el.remove();
+  }
+  const scope = `g${++svgScopeSeq}x${Math.random().toString(36).slice(2, 8)}`;
+  root.setAttribute('data-gscope', scope);
   const walk = (el) => {
     for (const a of Array.from(el.attributes)) {
       const name = a.name.toLowerCase();
       const val = a.value.trim();
       if (name.startsWith('on')) { el.removeAttribute(a.name); continue; }
-      if ((name === 'href' || name === 'xlink:href' || name.endsWith(':href')) && !val.startsWith('#')) el.removeAttribute(a.name);
-      else if (/javascript:|data:text\/html/i.test(val)) el.removeAttribute(a.name);
+      if (name === 'data-gscope' && el !== root) { el.removeAttribute(a.name); continue; }
+      if ((name === 'href' || name === 'xlink:href' || name.endsWith(':href')) && !val.startsWith('#')) { el.removeAttribute(a.name); continue; }
+      if (/javascript:|data:text\/html/i.test(val)) { el.removeAttribute(a.name); continue; }
+      if (name === 'style') { const c = svgCleanStyleAttr(val); if (c) el.setAttribute(a.name, c); else el.removeAttribute(a.name); continue; }
+      if (/url\s*\(|image-set\s*\(|expression\s*\(/i.test(val) && !svgValueOk(val)) el.removeAttribute(a.name);
     }
     for (const c of Array.from(el.children)) walk(c);
   };
   walk(root);
+  for (const st of Array.from(root.querySelectorAll('style'))) {
+    const css = svgScopeCss(st.textContent || '', scope);
+    if (css) { st.textContent = css; st.removeAttribute('media'); st.removeAttribute('type'); st.removeAttribute('src'); } else st.remove();
+  }
   return new XMLSerializer().serializeToString(root);
 }
 
 function skInsert(text) { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.insertText(text); }); }
 function skParagraph() { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.insertParagraph(); }); }
 function skDeleteBack() { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.deleteCharacter(true); }); }
-function skUpdatePending() {
-  const el = $id('skPending'); if (!el) return;       // the indicator's id in index.html
-  if (!skChord) { el.textContent = ''; return; }
-  const cell = String.fromCodePoint(0x2800 + (skChord & 0x3f));
-  el.innerHTML = `<span class="sk-cells">${escapeHtml(cell)}</span>`;
-}
 function inMathField(e) { return !!(e.target && e.target.closest && e.target.closest('math-field')); }
 function skKeydown(e) {
   if (!sixKeyOn || e.ctrlKey || e.metaKey || e.altKey || inMathField(e)) return;
   const code = e.code;
   // stop() also halts propagation so Lexical's OWN key handlers don't ALSO fire
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
-  if (code in SK_DOT) { stop(); if (e.repeat) return; skHeld.add(code); skChord |= SK_DOT[code]; skUpdatePending(); return; }
-  if (code === 'Space')     { stop(); if (!e.repeat) { skInsert(' '); skUpdatePending(); } return; }
-  if (code === 'Enter')     { stop(); if (!e.repeat) { skParagraph(); skUpdatePending(); } return; }
-  if (code === 'Backspace') { stop(); skDeleteBack(); return; }
+  if (code in SK_DOT) { stop(); noteTyping(); if (e.repeat) return; skHeld.add(code); skChord |= SK_DOT[code]; return; }
+  if (code === 'Space')     { stop(); noteTyping(); if (!e.repeat) skInsert(' '); return; }
+  if (code === 'Enter')     { stop(); noteTyping(); if (!e.repeat) skParagraph(); return; }
+  if (code === 'Backspace') { stop(); noteTyping(); skDeleteBack(); return; }
   if (code === 'Escape')    { stop(); toggleSixKey(false); return; }
   if (e.key && e.key.length === 1) stop();   // block stray letters/digits while brailling
 }
@@ -4883,19 +9856,22 @@ function skKeyup(e) {
   e.preventDefault(); skHeld.delete(code);
   if (skHeld.size === 0 && skChord) {
     const cell = String.fromCodePoint(0x2800 + (skChord & 0x3f));
+    noteTyping();
     skInsert(cell);
     skChord = 0;
-    skUpdatePending();
   }
 }
-function toggleSixKey(on) {
+// F9-Q1b (Paul, 9 Oct 2026): the button remembers its last state between visits (the saved setting `sixKeyOn`, off for a new user).
+// `restoring` is the start-up call: it only sets the state — no announcement, and the keyboard is not moved.
+function toggleSixKey(on, restoring = false) {
   const want = on == null ? !sixKeyOn : on;
-  if (want && settings.sixKeyInput === false) { announce(t('app.sixkey.disabled_in_settings')); return; }
   sixKeyOn = want;
   $id('btnSixKey')?.setAttribute('aria-pressed', String(sixKeyOn));
   skHeld.clear(); skChord = 0;
-  if (sixKeyOn) { skUpdatePending(); editorEl.focus(); announce(t('app.sixkey.on')); }
-  else { skUpdatePending(); announce(t('app.sixkey.off')); }
+  if (!restoring) { try { settings = saveSettings({ sixKeyOn }); } catch { /* not remembered */ } }
+  if (restoring) return;
+  if (sixKeyOn) { editorEl.focus(); announce(t('app.sixkey.on')); }
+  else announce(t('app.sixkey.off'));
 }
 // Screen reader mode: braille pane is real cells for a display (see renderBraille),
 // and six-key input is hidden + disabled (it fights a display user's own braille input).
@@ -4915,7 +9891,6 @@ editorEl.addEventListener('focusout', (e) => {
   if (!sixKeyOn) return;
   if (e.relatedTarget && editorEl.contains(e.relatedTarget)) return;   // focus stayed inside the editor → normal
   skHeld.clear(); skChord = 0;
-  skUpdatePending();
 });
 $id('btnSixKey')?.addEventListener('click', () => toggleSixKey());
 
@@ -4948,8 +9923,8 @@ function ensureEqSheets(mf) {
       hlSheet = new CSSStyleSheet();
       hlSheet.replaceSync(
         ':host{display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%}' +
-        '.eq-atom.speaking-atom{color:#b3140f;text-decoration:underline;text-decoration-color:#d81b1b;text-decoration-thickness:2.5px;text-underline-offset:3px}' +
-        '.eq-grp.speaking-group{color:#b3140f;background:rgba(216,27,27,.12);border-radius:3px;box-shadow:0 0 0 1.5px rgba(216,27,27,.45)}',
+        '.eq-atom.speaking-atom{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2.5px;text-underline-offset:3px}' +
+        '.eq-grp.speaking-group{background:var(--sel);border-radius:3px;box-shadow:0 0 0 1.5px var(--accent)}',
       );
     } catch { hlSheet = null; }
   }
@@ -5024,12 +9999,12 @@ function clearReading() {
   brailleEl.querySelectorAll('.cell-speaking').forEach((c) => c.classList.remove('cell-speaking'));
   editorEl.querySelectorAll('.math-speaking').forEach((e) => e.classList.remove('math-speaking'));
   clearEqOverlay();
-  if (ttsHi) CSS.highlights.delete('tts-word');
+  if (ttsHi) delHl('tts-word');
 }
 function clearSpokenWord() {
   brailleEl.querySelectorAll('.bcell.cell-speaking').forEach((c) => c.classList.remove('cell-speaking'));
   editorEl.querySelectorAll('.math-speaking').forEach((e) => e.classList.remove('math-speaking'));
-  if (ttsHi) CSS.highlights.delete('tts-word');
+  if (ttsHi) delHl('tts-word');
 }
 let readingBlock = 0, readingKey = null;              // the block currently being read (for stop→caret); key survives re-index
 const reader = new Reader({
@@ -5061,7 +10036,7 @@ const reader = new Reader({
     }
     if (fe > fs) {                                     // a text word: underline print + red braille (unit-aware)
       const pe = printUnitEl(item.blockIdx, unit);
-      if (pe && ttsHi) { const r = charRangeInEl(pe, fs, fe); if (r) CSS.highlights.set('tts-word', new Highlight(r)); }
+      if (pe && ttsHi) { const r = charRangeInEl(pe, fs, fe, cellText[`${item.blockIdx}:${unit}`]); if (r) setHl('tts-word', new Highlight(r)); }
       const rows = brailleEl.querySelectorAll(`.brl-row[data-block="${item.blockIdx}"]`);
       rows.forEach(expandRowCells);
       rows.forEach((r) => {
@@ -5078,14 +10053,14 @@ const reader = new Reader({
   onStuck: () => { announce(t('app.tts.stuck')); setStatus(t('app.tts.stuck_status')); },
 });
 // play / pause / resume + stop, with the play arrow, pause bars, and a stop square
-function updateReadButtons() {                       // one button: ▶ play (from caret) ⇄ ⏹ stop
+function updateReadButtons() {                       // one button: play (from caret) ⇄ stop
   const r = $id('btnRead'); if (!r) return;
   if (reader.speaking) {
-    r.innerHTML = `⏹ <span class="btn-lbl" data-i18n="toolbar.stop_reading">${t('toolbar.stop_reading') || 'Stop'}</span>`;
+    r.innerHTML = `${iconSvg('square', 'icon icon-inline')} <span class="btn-lbl" data-i18n="toolbar.stop_reading">${t('toolbar.stop_reading') || 'Stop'}</span>`;
     r.setAttribute('aria-pressed', 'true');
     r.title = t('toolbar.stop_reading') || 'Stop reading';
   } else {
-    r.innerHTML = `▶ <span class="btn-lbl" data-i18n="toolbar.read_aloud">${t('toolbar.read_aloud') || 'Read'}</span>`;
+    r.innerHTML = `${iconSvg('play', 'icon icon-inline')} <span class="btn-lbl" data-i18n="toolbar.read_aloud">${t('toolbar.read_aloud') || 'Read'}</span>`;
     r.setAttribute('aria-pressed', 'false');
     r.title = t('toolbar.read_aloud') || 'Read aloud, starting at the caret';
   }
@@ -5331,78 +10306,65 @@ function initResponsiveTextToolbar() {
   const selectEl = $id('blockStyle');
   if (!header || !selectEl) return;
 
-  function getStyleLabels() {
-    return {
-      p:        { full: `¶ ${t('styles.body') || 'Body Text'}`,            short: `¶ ${t('app.styles.short_text')}`, mini: '¶' },
-      h1:       { full: `${t('styles.h1') || 'H1 Heading'}`,               short: 'H1',          mini: 'H1' },
-      h2:       { full: `${t('styles.h2') || 'H2 Subheading'}`,            short: 'H2',          mini: 'H2' },
-      h3:       { full: `${t('styles.h3') || 'H3 Sub-subheading'}`,        short: 'H3',          mini: 'H3' },
-      bullet:   { full: `• ${t('styles.bullet_list') || 'Bullet List'}`,    short: `• ${t('app.styles.short_list')}`, mini: '•' },
-      number:   { full: `1. ${t('styles.number_list') || 'Numbered List'}`, short: `1. ${t('app.styles.short_list')}`, mini: '1.' },
-      toc:      { full: `📑 ${t('styles.toc_entry') || 'TOC Entry'}`,      short: t('app.styles.short_toc'), mini: t('app.styles.short_toc') },
-      dialogue: { full: `🎭 ${t('styles.dialogue') || 'Play Dialogue'}`,    short: t('app.styles.short_play'), mini: t('app.styles.short_play') },
-      stage:    { full: `🎬 ${t('styles.stage') || 'Stage Direction'}`,    short: t('app.styles.short_stage'), mini: t('app.styles.short_stage') },
-      poem:     { full: `📜 ${t('styles.poem') || 'Poetry / Verse'}`,      short: t('app.styles.short_poem'), mini: t('app.styles.short_poem') },
-      exercise: { full: `❓ ${t('styles.exercise') || 'Exercise Question'}`, short: t('app.styles.short_exercise'), mini: t('app.styles.mini_exercise') },
-      caption:  { full: `💬 ${t('styles.caption') || 'Caption'}`,          short: t('app.styles.short_caption'), mini: t('app.styles.mini_caption') },
-      footnote: { full: `📝 ${t('styles.footnote') || 'Footnote'}`,        short: t('app.styles.short_footnote'), mini: t('app.styles.mini_footnote') },
-      note:     { full: `📋 ${t('styles.note') || "Transcriber's Note"}`,   short: t('app.styles.short_note'), mini: t('app.styles.mini_note') },
-      quote:    { full: `“ ${t('styles.quote') || 'Blockquote'}`,          short: t('app.styles.short_quote'), mini: t('app.styles.mini_quote') },
-      index:    { full: `📇 ${t('app.styles.index')}`,                     short: t('app.styles.short_index'), mini: t('app.styles.mini_index') },
-      attribution: { full: `✍️ ${t('app.styles.attribution')}`,           short: t('app.styles.short_attribution'), mini: t('app.styles.mini_attribution') },
-      sidebar:  { full: `📦 ${t('app.styles.sidebar')}`,                   short: t('app.styles.short_sidebar'), mini: t('app.styles.mini_sidebar') },
-      'table-spatial': { full: `📊 ${t('app.styles.table_spatial')}`,      short: t('app.styles.short_table'), mini: t('app.styles.mini_table') },
-      'table-listed':  { full: `📋 ${t('app.styles.table_listed')}`,       short: t('app.styles.short_table_listed'), mini: t('app.styles.mini_table_listed') }
-    };
-  }
-
   let currentMode = 'full';
 
   function updateSelectLabels(mode, force = false) {
     if (mode === currentMode && !force) return;
     currentMode = mode;
-    const styleLabels = getStyleLabels();
-    for (const opt of selectEl.options) {
-      const def = styleLabels[opt.value];
-      if (def) {
-        opt.textContent = def[mode] || def.full;
-      }
-    }
+    refreshBlockStyleLabels(mode);      // labels come from BLOCK_STYLES, the registry shared with the slash menu
   }
 
   window.addEventListener('i18n:localechange', () => {
     updateSelectLabels(currentMode, true);
   });
 
-  function checkDimensions(width) {
-    const w = width ?? header.getBoundingClientRect().width;
-    if (w < 390) {
-      pane?.classList.add('pane-ultra-compact');
-      pane?.classList.remove('pane-compact');
-      updateSelectLabels('mini');
-    } else if (w < 540) {
-      pane?.classList.add('pane-compact');
-      pane?.classList.remove('pane-ultra-compact');
-      updateSelectLabels('short');
-    } else {
-      pane?.classList.remove('pane-compact', 'pane-ultra-compact');
-      updateSelectLabels('full');
-    }
+  // Largest layout whose controls fit on one row: full size, then smaller buttons ('tight', keeps the TEXT label and the
+  // full style names), then compact, then ultra-compact. Only if even that does not fit does the toolbar wrap (Paul,
+  // 24 Sep). Measured with transitions off, so the result depends on the width alone and cannot flip back and forth.
+  const MODES = [['full', null, 'full'], ['tight', 'pane-tight', 'full'], ['short', 'pane-compact', 'short'], ['mini', 'pane-ultra-compact', 'mini']];
+  const toolbarEl = header?.querySelector('.toolbar');
+  function applyMode([, cls, labels]) {
+    for (const [, c] of MODES) if (c) pane?.classList.toggle(c, c === cls);
+    updateSelectLabels(labels);
+  }
+  function wraps() {
+    const kids = [...(toolbarEl?.children || [])].filter((el) => el.offsetParent !== null && getComputedStyle(el).position !== 'absolute' && el.getBoundingClientRect().width > 0);
+    if (kids.length < 2) return false;
+    const top = kids[0].getBoundingClientRect().top;
+    return kids.some((el) => el.getBoundingClientRect().top > top + 4);
+  }
+  function checkDimensions() {
+    header.classList.add('tb-measure');
+    // Below 540 / 390 px the pane's container queries already apply the compact sizes, so start there.
+    const pw = (pane || header).getBoundingClientRect().width;
+    let i = pw < 390 ? 3 : pw < 540 ? 2 : 0;
+    applyMode(MODES[i]);
+    while (i < MODES.length - 1 && wraps()) applyMode(MODES[++i]);
+    header.classList.remove('tb-measure');
   }
 
   let rafId = null;
   if (typeof ResizeObserver !== 'undefined') {
+    let lastW = -1;
     const ro = new ResizeObserver((entries) => {
+      const w = Math.round(entries[entries.length - 1].contentRect.width);
+      if (w === lastW) return;                     // a height change (the toolbar wrapping) is not a reason to re-measure
+      lastW = w;
       if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        for (const entry of entries) {
-          checkDimensions(entry.contentRect.width);
-        }
-      });
+      rafId = requestAnimationFrame(() => checkDimensions());
     });
     ro.observe(header);
   } else {
     window.addEventListener('resize', () => checkDimensions());
+  }
+  // Buttons shown or hidden later (Transcriber tools, the notes / symbols buttons) and the interface language change
+  // the toolbar's width too.
+  if (typeof MutationObserver !== 'undefined' && toolbarEl) {
+    let queued = false;
+    const recheck = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; checkDimensions(); }); };
+    new MutationObserver(recheck).observe(toolbarEl, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+    new MutationObserver(recheck).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('i18n:localechange', recheck);
   }
   checkDimensions();
 }
@@ -5410,10 +10372,7 @@ function initResponsiveTextToolbar() {
 // ---- Slash command popover menu for keyboard & screen reader accessibility ----
 function setBlockStyle(val) {
   const norm = (val === 'ul') ? 'bullet' : (val === 'ol') ? 'number' : (val || 'p');
-  const sel = $id('blockStyle');
-  if (sel) {
-    sel.value = norm;
-  }
+  if ($id('blockStyle')) syncStyleOptionVisibility(norm);
   applyBlockStyle(norm);
 }
 
@@ -5535,7 +10494,7 @@ const FORMULA_TEMPLATES = [
     isText: true,
     text: '\n| Item | Quantity | Price |\n| --- | --- | --- |\n| Widget A | 10 | $5.00 |\n| Widget B | 25 | $12.50 |\n',
     keywords: ['table', 'data table', 'grid', 'ukaaf table', 'bana table'],
-    icon: '▦'
+    icon: 'i:table'
   },
   {
     id: 'integral',
@@ -6201,6 +11160,240 @@ function insertSidebar(title = 'Sidebar Title') {
 }
 window.insertSidebar = insertSidebar;
 
+// ---- K9: "Remove box" — dissolves the sidebar/box the caret is in, leaving its contents as ordinary
+// blocks in place (a title heading stays a heading). This is NOT the "Draw the box lines" field (boxLines,
+// field-registry.mjs): that keeps the box itself but switches its border lines on or off in braille; Remove
+// box gets rid of the box entirely, so the braille has no box lines because there is no box. Everyone can
+// use it (not a transcriber tool): the box and its border lines are ordinary, reader-visible content, like
+// any other style choice — unlike the Braille formatting dialog's production-only fields.
+// The nearest SidebarNode enclosing the caret (or null). Only the innermost box is returned, so removing a
+// nested box (A26) leaves the outer one alone.
+function $sidebarBoxAtCaret() {
+  const sel = $getSelection();
+  let anchor = null;
+  if ($isRangeSelection(sel)) anchor = sel.anchor.getNode();
+  else if (lastActiveEditorSelection?.anchorKey) anchor = $getNodeByKey(lastActiveEditorSelection.anchorKey);
+  if (!anchor) return null;
+  for (let n = anchor; n && n !== $getRoot(); n = n.getParent ? n.getParent() : null) {
+    if ($isSidebarNode(n)) return n;
+  }
+  return null;
+}
+function unboxAvailable() {
+  try { return editor.getEditorState().read(() => !!$sidebarBoxAtCaret()); } catch (err) { console.warn('unboxAvailable', err); return false; }
+}
+// Replace the box with its own children, in place, as ordinary top-level blocks; then remove the (now
+// empty) box. One editor.update() call = one undo step. The caret moves to the start of the first block
+// that was inside the box (its title heading, if it had one).
+function unboxAtCaret() {
+  let removed = false;
+  let focusKey = null;
+  editor.update(() => {
+    const box = $sidebarBoxAtCaret();
+    if (!box) return;
+    removed = true;
+    const children = box.getChildren();
+    if (!children.length) { box.remove(); return; }
+    let cursor = box;
+    for (const child of children) { cursor.insertAfter(child); cursor = child; }
+    box.remove();
+    const first = children[0];
+    focusKey = first ? first.getKey() : null;
+    if (first) {
+      if (typeof first.selectStart === 'function') first.selectStart();
+      else if (typeof first.select === 'function') first.select(0, 0);
+    }
+  });
+  if (!removed) { announce(t('app.editor.unbox_none')); return; }
+  announce(t('app.editor.unbox_removed'));
+  const domEl = focusKey ? editor.getElementByKey(focusKey) : null;
+  refreshToolbar(domEl);
+}
+window.unboxAtCaret = unboxAtCaret;
+function updateUnboxBtn() {
+  const btn = $id('btnUnbox');
+  if (!btn) return;
+  btn.hidden = !unboxAvailable();
+}
+editor.registerUpdateListener(() => updateUnboxBtn());
+$id('btnUnbox')?.addEventListener('click', () => unboxAtCaret());
+
+// Insert the Title Page (design §4: the style menu / slash command insert it at the START of the
+// book, unlike tnpage/sympage which insert near the cursor — BANA 2.2.1's page order puts it first,
+// and design §3.4 allows at most one). The Book details dialog opens by itself right after (design §4).
+function insertTitlePage() {
+  let key = null;
+  editor.update(() => {
+    const existing = $getRoot().getChildren().find($isTitlePageNode);
+    if (existing) { key = existing.getKey(); return; }
+    const segments = titlePageTemplateSegments(titlePageFieldsFrom(tpCurrentModel()), undefined, tpMode());
+    const node = $createTitlePageNode(true, titlePageStructureSig(segments));
+    $fillTitlePage(node, segments);
+    const root = $getRoot();
+    const first = root.getFirstChild();
+    if (first) first.insertBefore(node); else root.append(node);
+    key = node.getKey();
+  }, { onUpdate: () => { openTitlepageDetailsDialog(); } });
+  if (key) announce(t('app.editor.titlepage_inserted'));
+}
+window.insertTitlePage = insertTitlePage;
+
+// Insert an empty Transcriber's Notes page (one empty entry to type in) and put the caret in it.
+function insertTnPage() {
+  let key = null;
+  editor.update(() => {
+    const node = $createTnPageNode('');
+    const p = $createParagraphNode();
+    node.append(p);
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) $insertNodeToNearestRoot(node);
+    else $getRoot().append(node);
+    p.select();
+    key = node.getKey();
+  }, { onUpdate: () => { if (key) openTnSuggestDialog(key, true, true); } });   // offer the detected notes, only when there are some (nothing is added without an explicit Add)
+  announce(t('app.editor.tnpage_inserted'));
+}
+window.insertTnPage = insertTnPage;
+
+// ---- "Suggested notes…" dialog for the Transcriber's Notes page (plan §9 row 5, Paul 23 Sep 2026) ----
+// Emboss OFFERS the notes suggestTranscriberNotes (format/document.mjs) detected; the transcriber edits the text in place and
+// presses Add or Dismiss on each (or Add all). NOTHING reaches the page without an explicit Add. Added and dismissed ids are
+// kept on the page node (dismissed[]), so they are not offered again in this session and survive undo/redo; they are not
+// written to the saved file, so a reloaded document offers the still-detected notes again.
+let tnsState = null;   // { pageKey, opener, list: [{...suggestion, done}] }
+function tnPageTarget(state) {
+  return state.read(() => {
+    const pages = $getRoot().getChildren().filter($isTnPageNode);
+    if (!pages.length) return null;
+    let page = null;
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) { for (let n = sel.anchor.getNode(); n; n = n.getParent()) if ($isTnPageNode(n)) { page = n; break; } }
+    return (page || pages[0]).getKey();
+  });
+}
+function updateTnSuggestBtn() {
+  const btn = $id('btnTnSuggest');
+  // UK-8: suggestTranscriberNotes() itself already returns nothing in UKAAF (BANA's Appendix-A-style
+  // heuristics are BANA-only) EXCEPT UK-3's already-shipped quote-exchange note, which stays available
+  // in UKAAF too (see that function's own UK-8/UK-3 comment) — so the button is NOT hidden by mode here:
+  // doing that would also hide the one legitimate UKAAF suggestion. In the ordinary case the dialog just
+  // opens empty (tnsRender's own "nothing to add" state), same as a BANA page with nothing detected.
+  if (btn) btn.hidden = !transcriberToolsOn() || !tnPageTarget(editor.getEditorState());   // a transcriber tool (see transcriberTools)
+}
+function tnSuggestions(pageKey) {
+  return editor.getEditorState().read(() => {
+    const page = $getNodeByKey(pageKey);
+    if (!page) return [];
+    const done = new Set(page.getDismissed());
+    return suggestTranscriberNotes(buildModel().blocks, currentFormatOpts()).filter((sg) => !done.has(sg.id));
+  });
+}
+function tnsRender() {
+  const ul = $id('tnsList'); if (!ul) return;
+  ul.textContent = '';
+  const open = tnsState.list.filter((sg) => !sg.done);
+  $id('tnsEmpty').hidden = open.length > 0;
+  $id('tnsAddAll').hidden = open.length < 2;
+  ul.hidden = !open.length;
+  open.forEach((sg, i) => {
+    const li = document.createElement('li'); li.className = 'tns-row'; li.dataset.id = sg.id;
+    const lab = document.createElement('label'); lab.htmlFor = `tnsText${i}`; lab.textContent = t('app.tns.note_label', { n: i + 1 });
+    const inp = document.createElement('input'); inp.type = 'text'; inp.id = `tnsText${i}`; inp.value = sg.text; inp.setAttribute('aria-describedby', `tnsReason${i}`);
+    inp.addEventListener('input', () => { sg.edited = inp.value; });
+    const why = document.createElement('p'); why.id = `tnsReason${i}`; why.className = 'fmt-help'; why.textContent = t('app.tns.why', { reason: sg.reason }) + (sg.provisional ? ' ' + t('app.tns.provisional') : '');
+    const acts = document.createElement('div'); acts.className = 'tns-actions';
+    const add = document.createElement('button'); add.type = 'button'; add.className = 'tns-add'; add.textContent = t('app.tns.add'); add.setAttribute('aria-label', t('app.tns.add_n', { n: i + 1 }));
+    const dis = document.createElement('button'); dis.type = 'button'; dis.className = 'tns-dismiss'; dis.textContent = t('app.tns.dismiss'); dis.setAttribute('aria-label', t('app.tns.dismiss_n', { n: i + 1 }));
+    add.addEventListener('click', () => tnsAct([sg], true, i));
+    dis.addEventListener('click', () => tnsAct([sg], false, i));
+    acts.append(add, dis);
+    li.append(lab, inp, why, acts); ul.append(li);
+  });
+}
+// Add (or only dismiss) the given suggestions in ONE undo step; then re-list and put focus on the row that took its place.
+function tnsAct(list, add, rowIndex) {
+  const st = tnsState; if (!st || !list.length) return;
+  editor.update(() => {
+    const page = $getNodeByKey(st.pageKey);
+    if (!page) return;
+    if (add) {
+      for (const sg of list) {
+        const text = String(sg.edited != null ? sg.edited : sg.text).trim();
+        if (!text) continue;
+        const kids = page.getChildren();
+        const last = kids[kids.length - 1];
+        if (last instanceof ParagraphNode && !last.getTextContent().trim()) last.append($createTextNode(text));
+        else { const p = $createParagraphNode(); p.append($createTextNode(text)); page.append(p); }
+      }
+    }
+    page.setDismissed([...page.getDismissed(), ...list.map((sg) => sg.id)]);
+  }, { tag: 'history-push', discrete: true });
+  list.forEach((sg) => { sg.done = true; });
+  scheduleRender();
+  const left = st.list.filter((sg) => !sg.done).length;
+  const msg = add ? t('app.tns.added', { count: list.length }) : t('app.tns.dismissed');
+  $id('tnsStatus').textContent = '';
+  setTimeout(() => { const el = $id('tnsStatus'); if (el) el.textContent = msg + (left ? '' : ' ' + t('app.tns.none_left')); }, 30);
+  announce(msg);
+  tnsRender();
+  const inputs = [...document.querySelectorAll('#tnsList .tns-row input')];
+  (inputs[Math.min(rowIndex ?? 0, inputs.length - 1)] || $id('tnsClose')).focus();
+}
+function openTnSuggestDialog(pageKey, toEditor, onlyIfAny) {
+  const dlg = $id('tnsDialog'); if (!dlg || dlg.open) return;
+  pageKey = pageKey || tnPageTarget(editor.getEditorState());
+  if (!pageKey) { announce(t('app.tns.no_page')); return; }
+  const list = tnSuggestions(pageKey);
+  if (onlyIfAny && !list.length) return;   // a page just created with nothing detected: no dialog (the Notes… button still opens it, empty)
+  tnsState = { pageKey, opener: toEditor === true ? null : document.activeElement,   // a just-inserted page: focus goes back to the new entry
+     list };
+  $id('tnsStatus').textContent = '';
+  tnsRender();
+  dlg.showModal();
+  const first = document.querySelector('#tnsList .tns-row input');
+  (first || $id('tnsClose')).focus();
+  announce(tnsState.list.length ? t('app.tns.opened', { count: tnsState.list.length }) : t('app.tns.empty'));
+}
+(function initTnSuggestDialog() {
+  const dlg = $id('tnsDialog'); if (!dlg) return;
+  $id('btnTnSuggest')?.addEventListener('click', () => openTnSuggestDialog());
+  $id('tnsClose')?.addEventListener('click', () => dlg.close());
+  $id('tnsDone')?.addEventListener('click', () => dlg.close());
+  $id('tnsAddAll')?.addEventListener('click', () => { if (tnsState) tnsAct(tnsState.list.filter((sg) => !sg.done), true, 0); });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const f = [...dlg.querySelectorAll('button, input, select, textarea, [href], [tabindex]:not([tabindex="-1"])')].filter((el) => !el.disabled && el.getClientRects().length);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  dlg.addEventListener('close', () => {
+    if (dlg.open) return;   // reopened before this (queued) close event ran: the new opening owns tnsState and focus
+    const st = tnsState; tnsState = null;
+    if (!st) return;
+    const op = st.opener;
+    if (op && document.contains(op) && /^(BUTTON|INPUT|SELECT|TEXTAREA|A)$/.test(op.tagName)) op.focus(); else editor.focus();
+  });
+  editor.registerUpdateListener(() => updateTnSuggestBtn());
+})();
+window.openTnSuggestDialog = openTnSuggestDialog;
+
+// Insert an automatic Special Symbols page (its entries fill in from the document's symbols).
+function insertSymPage() {
+  editor.update(() => {
+    const node = $createSymPageNode('', true);
+    const p = $createParagraphNode();
+    node.append(p);
+    const sel = $getSelection();
+    if ($isRangeSelection(sel)) $insertNodeToNearestRoot(node);
+    else $getRoot().append(node);
+    p.select();
+  });
+  announce(t('app.editor.sympage_inserted'));
+}
+window.insertSymPage = insertSymPage;
+
 function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
   let createdKey = null;
   editor.update(() => {
@@ -6216,8 +11409,7 @@ function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
   });
   announce(t('app.table.inserted', { format: t(`app.table.fmt_${format}`) === `app.table.fmt_${format}` ? format : t(`app.table.fmt_${format}`), cols: numCols, rows: numRows }));
   const styleVal = (format === 'listed' || format === 'table-listed') ? 'table-listed' : 'table-spatial';
-  const bs = $id('blockStyle');
-  if (bs) bs.value = styleVal;
+  if ($id('blockStyle')) syncStyleOptionVisibility(styleVal);
   const si = $id('styleInspector');
   if (si) si.textContent = formatStyleInspectorBadge(styleVal, settings.profile || settings.mode || 'bana', uiText);
   setTimeout(() => {
@@ -6232,45 +11424,46 @@ function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
 }
 window.insertTable = insertTable;
 
-const SLASH_COMMANDS = [
+// The slash menu: the text-format commands, then every style in BLOCK_STYLES (the same
+// registry the style dropdown is built from), then the other inserts. `expertOnly` commands
+// (tactile graphics, graph plotting) are hidden unless the Ctrl/Cmd+Shift+\ toggle is on
+// (body.expert-hardware) — see slashCommandVisible. Maths inserts stay visible (G1).
+const SLASH_FORMAT_COMMANDS = [
   { id: 'slash', title: 'Insert "/"', desc: 'Type a literal slash character', icon: '/', keywords: ['slash', '/', 'text', 'symbol'], action: () => insertTextAtCaret('/') },
   { id: 'bold', title: 'Bold Text', desc: 'Apply bold formatting', icon: 'B', keywords: ['bold', 'b', 'strong'], action: () => $id('btnBold')?.click() },
   { id: 'italic', title: 'Italic Text', desc: 'Apply italic formatting', icon: 'I', keywords: ['italic', 'i', 'emphasis'], action: () => $id('btnItalic')?.click() },
   { id: 'underline', title: 'Underline Text', desc: 'Apply underline formatting', icon: 'U', keywords: ['underline', 'u'], action: () => $id('btnUnderline')?.click() },
-  { id: 'h1', title: 'Heading 1', desc: 'Major centered heading (1-1)', icon: 'H1', keywords: ['h1', 'heading 1', 'title', 'centered', 'major'], action: () => setBlockStyle('h1') },
-  { id: 'h2', title: 'Heading 2', desc: 'Section heading (Cell 5)', icon: 'H2', keywords: ['h2', 'heading 2', 'section', 'subheading'], action: () => setBlockStyle('h2') },
-  { id: 'h3', title: 'Heading 3', desc: 'Subsection heading (Cell 7)', icon: 'H3', keywords: ['h3', 'heading 3', 'sub', 'subsection', 'minor'], action: () => setBlockStyle('h3') },
-  { id: 'p', title: 'Paragraph (Body)', desc: 'Standard body paragraph (3-1)', icon: '¶', keywords: ['p', 'para', 'paragraph', 'body', 'text', 'standard'], action: () => setBlockStyle('p') },
-  { id: 'ul', title: 'Bulleted List', desc: 'Create bulleted list items (1-3)', icon: '•', keywords: ['ul', 'bullet', 'bullets', 'list', 'unordered'], action: () => setBlockStyle('bullet') },
-  { id: 'ol', title: 'Numbered List', desc: 'Create numbered list items (1-3)', icon: '1.', keywords: ['ol', 'number', 'numbered', 'list', 'ordered'], action: () => setBlockStyle('number') },
-  { id: 'indent', title: 'Indent / Nest Sub-item', desc: 'Nest list item or exercise deeper (Tab)', icon: '⇥', keywords: ['indent', 'nest', 'subitem', 'subquestion', 'sub', 'tab', 'level'], action: () => indentCurrentItem() },
-  { id: 'outdent', title: 'Outdent / Promote Item', desc: 'Promote list item or exercise higher (Shift+Tab)', icon: '⇤', keywords: ['outdent', 'promote', 'unindent', 'unnest', 'shift-tab', 'back'], action: () => outdentCurrentItem() },
-  { id: 'plain', title: 'Plain List', desc: 'Unmarked list, DTBook <list type="pl"> (1-3; nested 1-5, 3-5)', icon: '≡', keywords: ['plain', 'pl', 'list', 'unmarked', 'simple', 'no bullets'], action: () => setBlockStyle('plain') },
-  { id: 'index', title: 'Index Entry', desc: 'BANA §21 index entry (1-3; nested 1-5, 3-5; new braille page)', icon: '📇', keywords: ['index', 'entry', 'subentry', 'alphabetic', 'reference', 'skill', 'skills'], action: () => setBlockStyle('index') },
-  { id: 'toc', title: 'TOC Entry', desc: 'Table of Contents entry with dot leaders (1-3)', icon: '📑', keywords: ['toc', 'table of contents', 'contents', 'dot leaders', 'leader'], action: () => setBlockStyle('toc') },
-  { id: 'dialogue', title: 'Play Dialogue', desc: 'Prose drama dialogue speaker line (1-3)', icon: '🎭', keywords: ['dialogue', 'play', 'drama', 'speaker', 'character', 'line', 'script', 'speech'], action: () => setBlockStyle('dialogue') },
-  { id: 'stage', title: 'Stage Direction', desc: 'Drama stage direction indented (7-7)', icon: '🎬', keywords: ['stage', 'direction', 'play', 'drama', 'setting', 'action', 'parenthetical'], action: () => setBlockStyle('stage') },
-  { id: 'poem', title: 'Poetry / Verse', desc: 'Poetic stanza verse line (1-3)', icon: '📜', keywords: ['poem', 'poetry', 'verse', 'stanza', 'rhyme', 'lines', 'lyric'], action: () => setBlockStyle('poem') },
-  { id: 'exercise', title: 'Exercise Question', desc: 'Numbered exercise question (1-5 / 3-5)', icon: '❓', keywords: ['exercise', 'question', 'problem', 'homework', 'task', 'exam', 'quiz', 'subquestion'], action: () => setBlockStyle('exercise') },
-  { id: 'caption', title: 'Caption / Attribution', desc: 'Figure caption or attribution (7-5)', icon: '💬', keywords: ['caption', 'attribution', 'photo', 'figure', 'image', 'label', 'credit'], action: () => setBlockStyle('caption') },
-  { id: 'footnote', title: 'Footnote', desc: 'Footnote note text (1-3)', icon: '📝', keywords: ['footnote', 'note', 'reference', 'citation', 'annotation', 'fn'], action: () => setBlockStyle('footnote') },
-  { id: 'note', title: "Transcriber's Note", desc: "Transcriber's note with BANA indicators (7-5)", icon: '📋', keywords: ['note', 'transcriber', 'transcriber note', 'tn', 'prodnote', 'comment', 'remark'], action: () => setBlockStyle('note') },
-  { id: 'quote', title: 'Blockquote', desc: 'Indented quotation block (3-1)', icon: '“', keywords: ['quote', 'blockquote', 'quotation', 'citation', 'excerpt', 'indent'], action: () => setBlockStyle('quote') },
-  { id: 'sidebar', title: 'Sidebar Box', desc: 'Insert callout box with BANA boxlines', icon: '📦', keywords: ['sidebar', 'box', 'callout', 'panel', 'aside'], action: () => insertSidebar() },
-  { id: 'table', title: 'Spatial Braille Table', desc: 'Insert 3×3 columnar data table', icon: '📊', keywords: ['table', 'grid', 'column', 'row', 'spatial', 'data'], action: () => insertTable(3, 3, 'spatial') },
-  { id: 'listedtable', title: 'Listed Table', desc: 'Insert BANA listed linear table format', icon: '📋', keywords: ['listedtable', 'table', 'listed', 'linear'], action: () => insertTable(3, 3, 'listed') },
-  { id: 'matrix', title: 'Math Matrix (2×2 / 3×3)', desc: 'Insert 2×2 or 3×3 visual MathLive matrix', icon: '🔢', keywords: ['matrix', 'pmatrix', 'bmatrix', 'linalg', 'array', 'grid', 'vector'], action: () => insertMathEquation('\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', 'Matrix equation inserted') },
-  { id: 'math', title: 'Insert Equation', desc: 'MathLive visual equation (UEB/Nemeth)', icon: '∑', keywords: ['math', 'maths', 'equation', 'latex', 'formula'], action: () => $id('btnMath')?.click() },
-  { id: 'formula', title: 'Formula Templates...', desc: 'Browse 340+ math formulas, matrices & equations', icon: '🧮', keywords: ['formula', 'template', 'math', 'equation', 'matrix', 'table', 'algebra', 'calculus', 'frac', 'sqrt'], action: () => openFormulaDialog() },
-  { id: 'plot', title: 'Plot Tactile Math Graph...', desc: 'Generate tactile coordinate graph (single or multi-curve)', icon: '📈', keywords: ['plot', 'graph', 'function', 'curve', 'math', 'equation', 'parabola', 'sine', 'line', 'coordinate', 'axes', 'multi'], action: () => {
+];
+const SLASH_INSERT_COMMANDS = [
+  { id: 'indent', title: 'Indent / Nest Sub-item', desc: 'Nest list item or exercise deeper (Tab)', icon: 'i:arrow-right', keywords: ['indent', 'nest', 'subitem', 'subquestion', 'sub', 'tab', 'level'], action: () => indentCurrentItem() },
+  { id: 'outdent', title: 'Outdent / Promote Item', desc: 'Promote list item or exercise higher (Shift+Tab)', icon: 'i:arrow-left', keywords: ['outdent', 'promote', 'unindent', 'unnest', 'shift-tab', 'back'], action: () => outdentCurrentItem() },
+  { id: 'continue', when: () => continueListItemAvailable(), title: 'Continue Item', desc: 'Turn this blank line into a further paragraph of the item above, or back (Ctrl/⌘+Shift+Enter)', icon: 'i:arrow-down-left', keywords: ['continue', 'paragraph', 'item', 'list', 'runover', 'blocks'], action: () => continueListItem() },
+  { id: 'matrix', title: 'Math Matrix (2×2 / 3×3)', desc: 'Insert 2×2 or 3×3 visual MathLive matrix', icon: 'i:calculator', keywords: ['matrix', 'pmatrix', 'bmatrix', 'linalg', 'array', 'grid', 'vector'], action: () => insertMathEquation('\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', 'Matrix equation inserted') },
+  { id: 'math', title: 'Insert Equation', desc: 'MathLive visual equation (UEB/Nemeth)', icon: 'i:sigma-function', keywords: ['math', 'maths', 'equation', 'latex', 'formula'], action: () => $id('btnMath')?.click() },
+  { id: 'formula', title: 'Equation Templates...', desc: 'Browse 340+ math formulas, matrices & equations', icon: 'i:sigma-function', keywords: ['formula', 'template', 'math', 'equation', 'matrix', 'table', 'algebra', 'calculus', 'frac', 'sqrt'], action: () => openFormulaDialog() },
+  { id: 'plot', expertOnly: true, title: 'Plot Tactile Math Graph...', desc: 'Generate tactile coordinate graph (single or multi-curve)', icon: 'i:graph-up', keywords: ['plot', 'graph', 'function', 'curve', 'math', 'equation', 'parabola', 'sine', 'line', 'coordinate', 'axes', 'multi'], action: () => {
     const promptEquation = window.prompt('Enter function(s) or comma-separated curves to plot (e.g. x^2 - 4, 2x + 1):', 'x^2 - 4, 2x + 1');
     if (promptEquation) plotAndInsertGraph(promptEquation);
   }},
-  { id: 'graphic', title: 'Tactile Graphic Diagram...', desc: 'Browse curated tactile diagrams or upload SVG', icon: '🖼', keywords: ['graphic', 'svg', 'image', 'diagram', 'chart', 'tactile', 'picture', 'drawing', 'map'], action: () => openGraphicDialog() },
-  { id: 'break', title: 'Document Break', desc: 'Divider line ( ∗ ∗ ∗ )', icon: '⁂', keywords: ['break', 'divider', 'asterisks', 'line', 'hr', 'separator'], action: () => $id('btnBreak')?.click() },
-  { id: 'page', title: 'Print Page Number', desc: 'Insert source print page break indicator', icon: '📄', keywords: ['page', 'printpage', 'pagenum', 'break', 'number', 'pagination'], action: () => insertPrintPage() },
-  { id: 'code', title: 'Computer Code', desc: 'Insert Code block with UEB indicators', icon: '💻', keywords: ['code', 'python', 'html', 'js', 'programming', 'script'], action: () => insertTextAtCaret('```\n\n```') },
+  { id: 'graphic', expertOnly: true, title: 'Tactile Graphic Diagram...', desc: 'Browse curated tactile diagrams or upload SVG', icon: 'i:media-image', keywords: ['graphic', 'svg', 'image', 'diagram', 'chart', 'tactile', 'picture', 'drawing', 'map'], action: () => openGraphicDialog() },
+  { id: 'brailleformat', when: () => transcriberToolsOn() && bfHasTarget(), title: 'Braille formatting…', desc: 'Optional braille formatting fields for this block (Ctrl/⌘+Alt+B)', icon: 'i:settings', keywords: ['braille', 'formatting', 'format', 'fields', 'bullet', 'columns', 'directions', 'speaker', 'stairstep', 'subdivision', 'note', 'xref', 'prefix'], action: () => openBrailleFmtDialog() },
+  // K29 Stage 1d "Insert field": only offered with the caret inside a Title Page line, Transcriber tools on.
+  { id: 'titlepageinsertfield', when: () => transcriberToolsOn() && titlePageInsertFieldTarget(editor.getEditorState()).available, title: 'Insert field…', desc: 'Put a Title Page field (title, author, ISBN…) at the cursor (Ctrl/⌘+Shift+F)', icon: 'i:label', keywords: ['field', 'chip', 'title page', 'insert field', 'author', 'isbn', 'publisher'], action: () => openTpInsertFieldMenu() },
+  // K9: everyone's command (not a transcriber tool) — the caret must be inside a sidebar/box.
+  { id: 'unbox', when: () => unboxAvailable(), title: 'Remove box', desc: 'Replace this box with its contents as ordinary blocks — the braille then has no box lines (Ctrl/⌘+Alt+U)', icon: 'i:box', keywords: ['unbox', 'remove box', 'delete box', 'sidebar', 'box lines', 'callout', 'dissolve', 'border'], action: () => unboxAtCaret() },
+  { id: 'break', title: 'Document Break', desc: 'Divider line ( ∗ ∗ ∗ )', icon: 'i:asterisk', keywords: ['break', 'divider', 'asterisks', 'line', 'hr', 'separator'], action: () => $id('btnBreak')?.click() },
+  { id: 'page', title: 'Print Page Number', desc: 'Insert source print page break indicator', icon: 'i:page', keywords: ['page', 'printpage', 'pagenum', 'break', 'number', 'pagination'], action: () => insertPrintPage() },
 ];
+const SLASH_COMMANDS = [
+  ...SLASH_FORMAT_COMMANDS,
+  ...BLOCK_STYLES.map((d) => ({
+    id: d.slash, i18nId: d.slashKey || d.slash, style: d.value, audience: d.audience, title: d.title, desc: d.desc, icon: d.icon, keywords: d.keywords,
+    action: d.slashAction || (() => setBlockStyle(d.value)), when: d.when,   // UK-8: carries e.g. sympage's mode gate into the slash menu too
+  })),
+  ...SLASH_INSERT_COMMANDS,
+];
+// Expert-only commands show only while the Ctrl/Cmd+Shift+\ toggle is on (body.expert-hardware).
+const slashCommandVisible = (cmd) => (!cmd.expertOnly || document.body.classList.contains('expert-hardware')) && audienceVisible(cmd.audience) && (!cmd.when || cmd.when());   // audience: a transcriber page style needs Transcriber tools   // `when`: only offered where it applies (the Braille formatting command needs a block that has fields)
 
 function initSlashMenu() {
   const menuEl = $id('slashMenu');
@@ -6308,7 +11501,8 @@ function initSlashMenu() {
 
       const ico = document.createElement('span');
       ico.className = 'slash-ico';
-      ico.textContent = cmd.icon;
+      if (String(cmd.icon || '').startsWith('i:')) ico.append(iconEl(cmd.icon.slice(2)));
+      else ico.textContent = cmd.icon;
 
       const info = document.createElement('div');
       info.className = 'slash-info';
@@ -6344,6 +11538,7 @@ function initSlashMenu() {
   function updateSlashQuery(query) {
     activeQuery = (query || '').toLowerCase().trim();
     filteredCommands = SLASH_COMMANDS.filter((cmd) => {
+      if (!slashCommandVisible(cmd)) return false;
       if (!activeQuery) return true;
       return cmd.id.includes(activeQuery) ||
              cmd.title.toLowerCase().includes(activeQuery) ||
@@ -6406,7 +11601,7 @@ function initSlashMenu() {
 
   // A slash command's title / description in the interface language (slash.<id>_title / _desc).
 function slashText(cmd, part) {
-  const key = `slash.${cmd.id}_${part}`;
+  const key = `slash.${cmd.i18nId || cmd.id}_${part}`;
   const v = t(key);
   return v && v !== key ? v : cmd[part];
 }
@@ -6473,6 +11668,7 @@ function executeCommand(cmd) {
 
     if (e.key === 'Enter' || e.key === 'Tab') {
       e.preventDefault();
+      e.stopImmediatePropagation();   // Lexical's own Enter/Tab handler must not also split the block or indent
       const cmd = filteredCommands[selectedIndex];
       if (cmd) executeCommand(cmd);
       return;
@@ -6486,6 +11682,45 @@ function executeCommand(cmd) {
     }
   }, true);
 }
+
+// Continue item: turn a blank new list line into a further paragraph of the item above (and
+// back). Shift+Enter is already a line break within a paragraph and Enter on a blank item
+// already ends the list (matching Word/Docs), so this needs its own combination: Ctrl/⌘+Shift+
+// Enter is free (no other shortcut here uses Enter) and reads as "Enter, but keep it in the
+// item". Lexical's own rich-text plugin claims EVERY Enter+Shift combination for "insert line
+// break" regardless of Ctrl/⌘ (it checks ctrlKey/metaKey as "any"), via its own keydown listener
+// on editorEl itself — a capture-phase listener on that SAME element would not reliably run
+// first (per the DOM spec, listeners on the event's own target fire in registration order, not
+// capture-before-bubble), so this is registered on `document`, an ANCESTOR of editorEl: a
+// capture-phase listener there is guaranteed to see the event before it ever reaches editorEl,
+// and stopPropagation() here stops it from reaching editorEl (and Lexical) at all.
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter' && editorEl.contains(document.activeElement)) {
+    e.preventDefault();
+    e.stopPropagation();
+    continueListItem();
+  }
+}, true);
+
+// #57c: a way out of a note, as Enter on a blank list item ends the list. Enter at the end of a note paragraph starts a further
+// paragraph of the SAME note (ParagraphNode.insertNewAfter above); Enter again on that still-empty paragraph turns it into an
+// ordinary body paragraph instead, so the text after the note can be typed at once.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || !editorEl.contains(document.activeElement)) return;
+  let ended = false;
+  editor.update(() => {
+    const sel = $getSelection();
+    if (!$isRangeSelection(sel) || !sel.isCollapsed()) return;
+    const p = sel.anchor.getNode();
+    if (!(p instanceof ParagraphNode) || p.getChildrenSize() !== 0 || p.getBanaStyle() !== 'footnote') return;
+    const note = p.getNote();
+    const prev = p.getPreviousSibling();
+    if (!note || !(prev instanceof ParagraphNode) || prev.getBanaStyle() !== 'footnote' || !prev.getNote() || prev.getNote().id !== note.id) return;
+    p.setBanaStyle(null).setNote(null);
+    ended = true;
+  });
+  if (ended) { e.preventDefault(); e.stopPropagation(); }
+}, true);
 
 // ---- Keyboard Tab / Shift+Tab & Bracket Shortcut Handler for List Item Indent / Outdent ----
 editorEl.addEventListener('keydown', (e) => {
@@ -6562,17 +11797,58 @@ function seed() {
 // Reuses the converter's parsers (parseFile → the same block model the formatter
 // eats) and rebuilds it as Lexical nodes. Structure + inline maths from LaTeX
 // sources import fully; docx/OMML equations (MathML, no LaTeX) come in as a marker.
-function applyEmphasis(node, tf, uncontracted = false) {
+// Subscript/superscript: the readers bracket a sub/superscript run with private-use markers inside the text
+// (format/text-style.mjs SCRIPT_MARKS). The editor shows such a run as Lexical's own subscript/superscript format
+// (and nodeToRuns turns the format back into markers), instead of showing the markers as boxes (Paul, 30 Sep).
+// `make(text)` builds one text node (with its emphasis); this appends one node per run between markers.
+function $appendScriptAware(parent, text, make) {
+  const { subOpen, supOpen, end } = SCRIPT_MARKS;
+  if (!/[\ue000-\ue002]/.test(text)) { parent.append(make(text)); return; }
+  let level = null, buf = '';
+  const flush = () => {
+    if (!buf) return;
+    const node = make(buf);
+    if (level) node.toggleFormat(level);
+    parent.append(node);
+    buf = '';
+  };
+  for (const c of text) {
+    if (c === subOpen || c === supOpen) { flush(); level = c === subOpen ? 'subscript' : 'superscript'; }
+    else if (c === end) { flush(); level = null; }
+    else buf += c;
+  }
+  flush();
+}
+// The reverse, for nodeToRuns: a subscript/superscript text node's text bracketed by the markers again.
+function scriptMarked(node, text) {
+  if (typeof node.hasFormat !== 'function' || !text) return text;
+  if (node.hasFormat('subscript')) return SCRIPT_MARKS.subOpen + text + SCRIPT_MARKS.end;
+  if (node.hasFormat('superscript')) return SCRIPT_MARKS.supOpen + text + SCRIPT_MARKS.end;
+  return text;
+}
+function applyEmphasis(node, tf, uncontracted = false, ignoreFont = false, hyperlink = false, transcriberTypeform = null, lang = null) {
+  if (ignoreFont || hyperlink) node.setStyle([ignoreFont ? IGNORE_FONT_STYLE : '', hyperlink ? HYPERLINK_STYLE : ''].filter(Boolean).join(' '));
   if (tf & TF.bold) node.toggleFormat('bold');
   if (tf & TF.italic) node.toggleFormat('italic');
   if (tf & TF.underline) node.toggleFormat('underline');
+  // K5: script has no Lexical format bit (see SCRIPT_STYLE/hasScript above) — its own CSS
+  // custom property, appended onto whatever ignoreFont/hyperlink already set.
+  if (tf & TF_SCRIPT) node.setStyle([node.getStyle ? node.getStyle() || '' : '', SCRIPT_STYLE].filter(Boolean).join(' '));
   if (uncontracted) node.toggleFormat('code');           // uncontracted (grade 1) run, e.g. a pronunciation (A26)
+  // UEB 9.5.1: 'strike' is the editor's own strikethrough control (Lexical format bit); any
+  // other transcriber-defined typeform slot (BrailleBlaster's own bai-transN, parse.mjs A24)
+  // has no editor control, so it rides the CSS-custom-property style channel instead — same
+  // mechanism as ignoreFont/hyperlink above, so it round-trips a save.
+  if (transcriberTypeform === 'strike') node.toggleFormat('strikethrough');
+  else if (transcriberTypeform) node.setStyle([node.getStyle ? node.getStyle() || '' : '', transcriberTfStyle(transcriberTypeform)].filter(Boolean).join(' '));
+  if (langStyle(lang)) node.setStyle([node.getStyle ? node.getStyle() || '' : '', langStyle(lang)].filter(Boolean).join(' '));   // foreign-language run (input/lang.mjs)
   return node;
 }
 function safeMathmlToLatex(mathml) {
   try { return mathmlToLatex(mathml) || ''; }
   catch (e) { console.warn('[maths] MathML could not be converted to LaTeX for editing; original kept:', (e && e.message) || e); return ''; }
 }
+let noteGroupSeq = 0;
 function fillFromBlock(parent, b) {
   if (!b) return;
   if (b.type === 'math' && !b.segments) {
@@ -6602,20 +11878,31 @@ function fillFromBlock(parent, b) {
       }
       else if (s.type === 'noteref') { if (s.text) parent.append($createNoteRefNode(s.text, s.idref || null, !!s.annoref)); }
       else if (s.type === 'linenum') { if (s.text) parent.append($createLineNumberNode(s.text)); }
-      else if (s.type === 'imgnote') { if (s.text) parent.append($createImgNoteNode(s.text, s.src || null)); }
+      else if (s.type === 'imgnote') { if (s.text) parent.append($createImgNoteNode(s.text, s.src || null, s)); }
+      else if (s.type === 'brl') { if (s.brl || s.text) parent.append($createBrlNode(s.text || '', s.brl || '')); }
+      else if (s.href) {
+        // A19/A21 Stage 3: keep the href through the editor, not just a direct parse->export
+        // round trip (parse.mjs's walkInline stamps `.href` on an ordinary text segment —
+        // see there — so this must be checked before the plain-text branch below).
+        if (s.text) $appendScriptAware(parent, s.text, (x) => applyEmphasis($createLinkNode(x, s.href), s.tf || 0, !!s.uncontracted, !!s.ignoreFont, !!s.hyperlink, s.transcriberTypeform, s.lang));
+      }
+      else if (s.cite) {
+        // A19/A21 Stage 4: same shape as the link case above.
+        if (s.text) $appendScriptAware(parent, s.text, (x) => applyEmphasis($createCiteNode(x), s.tf || 0, !!s.uncontracted, !!s.ignoreFont, !!s.hyperlink, s.transcriberTypeform, s.lang));
+      }
       else if (s.text) {
         // A forced line break (<br/>, '\n') stays a line break (A26); other space runs collapse.
         String(s.text).split('\n').forEach((part, k) => {
           if (k > 0) parent.append($createLineBreakNode());
           const t = part.replace(/\s+/g, ' ');
-          if (t) parent.append(applyEmphasis($createTextNode(t), s.tf || 0, !!s.uncontracted));
+          if (t) $appendScriptAware(parent, t, (x) => applyEmphasis($createTextNode(x), s.tf || 0, !!s.uncontracted, !!s.ignoreFont, !!s.hyperlink, s.transcriberTypeform, s.lang));
         });
       }
     }
   } else if (Array.isArray(b.lines) && b.lines.length > 0) {
     b.lines.forEach((l, idx) => {
       if (idx > 0) parent.append($createLineBreakNode());
-      parent.append($createTextNode(String(l)));
+      $appendScriptAware(parent, String(l), (x) => $createTextNode(x));
     });
   } else if (b.speaker || b.speech) {
     const speakerText = b.speaker ? `${b.speaker}: ` : '';
@@ -6628,13 +11915,21 @@ function fillFromBlock(parent, b) {
       parent.append($createTextNode(speechText));
     }
   } else if ((b.text ?? '').trim()) {
-    parent.append($createTextNode(b.text.replace(/\s+/g, ' ').trim()));
+    // A forced line break ('\n': Shift+Enter, <br/>, an RTF \line) stays a line break, as in the segments path above (A26); other
+    // space runs collapse. (1 Oct 2026: a plain-text paragraph's line break was collapsed to a space, so the editor's braille ran the
+    // two lines together where the reader's broke them — tests/test-editor-reader-parity.mjs, r01-inline.rtf.)
+    const typedBraille = TYPED_BRAILLE_TEXT_RE.test(String(b.text));   // feedback item 3: typed braille keeps its spaces as typed
+    (typedBraille ? String(b.text).replace(/\s+$/, '') : String(b.text).trim()).split('\n').forEach((part, k) => {
+      if (k > 0) parent.append($createLineBreakNode());
+      const t = typedBraille ? part : part.replace(/\s+/g, ' ').trim();
+      if (t) $appendScriptAware(parent, t, (x) => $createTextNode(x));
+    });
   }
 }
 
 // Mirrors input/parse.mjs LEADING_BULLET_RE: the glyph must be FOLLOWED BY WHITESPACE,
 // so "-3 is negative" and "*Note* this" keep their first character.
-const LEADING_BULLET_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7]+\s+/;
+const LEADING_BULLET_RE = /^\s*[•\-\*\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25CB\uF0B7\uF0A7\u00B7\u25A1\u25A0\u25B2\u2713\u2714\u221A]+\s+/;
 function stripLeadingListBullet(it) {
   if (!it) return it;
   if (typeof it === 'string') return it.replace(LEADING_BULLET_RE, '');
@@ -6656,6 +11951,7 @@ export function getBlockBanaStyle(b) {
     return b.style;
   }
   if (b.type === 'note' || b.kind === 'tabletn' || b.kind === 'image') return 'note';
+  if (b.type === 'code') return 'code';   // import fix list #40: a code block (a Markdown fence, <pre>, Word Source Code) is the "Computer code" paragraph style
   if (b.type === 'caption') return 'caption';
   if (b.type === 'footnote') return 'footnote';
   if (b.type === 'attribution') return 'attribution';
@@ -6676,19 +11972,36 @@ function appendBlock(parent, b) {
   if (b.type === 'heading' || b.type === 'title') {
     const lvl = b.type === 'title' ? 1 : Math.min(6, b.level || 1);
     const h = $createHeadingNode('h' + lvl);
+    if (b.type === 'title') h.setIsTitle(true);   // #57b: kept as its own type (see HeadingNode.setIsTitle)
     fillFromBlock(h, b);
+    fmtFromBlock(h, b, FMT_HEADING_KEYS);
+    if (b.poemRole === 'title') { h.setPoemRole('title'); if (b.poemId != null) h.setPoemId(b.poemId); }   // #49: a poem's own title
     parent.append(h);
   } else if (b.type === 'list') {
     const listKind = b.kind || b.style || (b.ordered ? 'number' : null);
     const isPlain = listKind === 'toc' || listKind === 'index' || listKind === 'plain' || b.kind === 'plain';
-    const isOrdered = b.ordered || listKind === 'number' || (b.items && b.items.some((it) => it.marker));
+    // A bullet glyph as an item's marker ('•', '▲' …) is a bulleted list, not a numbered one.
+    const isOrdered = b.ordered || listKind === 'number' || (b.items && b.items.some((it) => it.marker && !isBulletMarker(it.marker)));
     const listType = isPlain ? 'plain' : (isOrdered ? 'number' : 'bullet');
-    const list = $createListNode(listType);
     const effectiveKind = listKind || (isPlain ? 'plain' : null);   // plain stays plain (its own style)
-    if (effectiveKind) {
-      list.setListKind(effectiveKind);
-      list.setBanaStyle(effectiveKind);
-    }
+    const makeList = () => {
+      const l = $createListNode(listType);
+      fmtFromBlock(l, b, FMT_LIST_KEYS);
+      if (effectiveKind) {
+        l.setListKind(effectiveKind);
+        l.setBanaStyle(effectiveKind);
+      }
+      return l;
+    };
+    // Lexical joins neighbouring lists of the same type: keep separate source lists apart
+    // with an empty paragraph (buildModel skips it), or numbering would run on (A26).
+    const attachList = (l) => {
+      if (!l.getChildrenSize()) return;
+      const prev = parent.getLastChild();
+      if (prev && $isListNode(prev)) parent.append($createParagraphNode());
+      parent.append(l);
+    };
+    let list = makeList();
     for (const it of (b.items || [])) {
       const li = $createListItemNode();
       const cleanItem = stripLeadingListBullet(it);
@@ -6696,34 +12009,117 @@ function appendBlock(parent, b) {
       const rawFirst = typeof it === 'string' ? it : (it.segments ? ((firstSeg && firstSeg.text) || '') : (it.text || ''));
       const bullet = String(rawFirst).match(LEADING_BULLET_RE);
       if (bullet) li.setBulletPrefix({ text: bullet[0], tf: (firstSeg && firstSeg.tf) || 0 });
-      fillFromBlock(li, cleanItem);
+      fillFromBlock(li, cleanItem && typeof cleanItem === 'object' && cleanItem.blocks ? { ...cleanItem, blocks: undefined } : cleanItem);   // the item's own paragraph (its blocks follow below)
       if (it.page) li.setPage(it.page);
+      if (it.page && it.pageHref) li.setPageHref(it.pageHref);   // A36
       if (isOrdered && !isPlain) li.setMarker(it.marker || NO_MARKER);
+      else if (it.marker && isBulletMarker(it.marker)) li.setFmt({ ...(li.getFmt() || {}), bulletMarker: it.marker });   // kept for save (the list itself is a bullet list)
+      // An item with no print marker in a bulleted list (text straight inside an HTML <ul>, an ODT legal label written into the text):
+      // no bullet on screen, in the braille or in the saved file, as the reader has it (it was given "•" on the way back to the model).
+      // Every reader gives a bulleted item its marker ("•", or the print glyph); an item without one has no bullet in print (a Word list
+      // paragraph numbered "none", an ODT legal label written into the text), and the formatter gives it none (no marker, no bullet).
+      else if (!isPlain && !it.marker && !it.bullet && typeof it === 'object') li.setMarker(NO_MARKER);
+      if (it.bullet && bulletName(it.bullet)) li.setFmt({ ...(li.getFmt() || {}), bullet: bulletName(it.bullet) });
+      fmtFromBlock(li, it, FMT_ITEM_KEYS.filter((k) => k !== 'bullet'));   // enum / start / example / label / labelSegments / lead / termSup / ignoreFont (bullet: above)
       if (it.level != null) li.setLevel(it.level);
       if (effectiveKind) li.setBanaStyle(effectiveKind);
+      // A89: an empty item saved on purpose (<li class="bana-empty"/>, read with keptEmpty; Paul 2 Oct 2026) comes back as one, holding only a space as when typed, so buildModel keeps it. Not any empty item: an emptied box must still go.
+      if (!li.getChildrenSize() && it && typeof it === 'object' && it.keptEmpty && !it.blocks && !it.page) li.append($createTextNode(' '));
+      // An item whose only content is a picture or another block (an HTML <li><img alt="…"></li>, 17 Oct 2026) is kept as an item of its own,
+      // as the reader and Quick Mode have it (a bullet, then the picture's note), not dropped so that its picture joined the item before.
+      else if (!li.getChildrenSize() && it && typeof it === 'object' && Array.isArray(it.blocks) && it.blocks.length && !it.page) li.append($createTextNode(' '));
       if (li.getChildrenSize()) list.append(li);
+      // The item's further content (item.blocks, document.mjs formatItemBlocks). A further paragraph is a list line of
+      // its own, flagged fmt.itemCont (no marker, no number; saved back into the item's blocks). A table or any other
+      // block cannot sit inside a Lexical list item: the list stops, the block follows it (fmt.inItem) and the list goes
+      // on after it (fmt.listResume); the save joins them back into one list (mergeListItemBlocks).
+      for (const cb of (typeof it === 'object' && Array.isArray(it.blocks) ? it.blocks : [])) {
+        if (!cb || typeof cb !== 'object') continue;
+        if ((cb.type === 'para' || cb.type == null) && !cb.style && (cb.text != null || Array.isArray(cb.segments))) {
+          const cli = $createListItemNode();
+          fillFromBlock(cli, cb);
+          cli.setFmt({ ...(cli.getFmt() || {}), itemCont: true });
+          if (it.level != null) cli.setLevel(it.level);
+          if (effectiveKind) cli.setBanaStyle(effectiveKind);
+          if (cli.getChildrenSize()) list.append(cli);
+          continue;
+        }
+        attachList(list);
+        const before = parent.getChildrenSize();
+        appendBlock(parent, cb);
+        for (const n of parent.getChildren().slice(before)) if (typeof n.setFmt === 'function') n.setFmt({ ...(n.getFmt() || {}), inItem: true });
+        list = makeList();
+        list.setFmt({ ...(list.getFmt() || {}), listResume: true });
+      }
     }
-    // Lexical joins neighbouring lists of the same type: keep separate source lists apart
-    // with an empty paragraph (buildModel skips it), or numbering would run on (A26).
-    if (list.getChildrenSize()) {
-      const prev = parent.getLastChild();
-      if (prev && $isListNode(prev)) parent.append($createParagraphNode());
-      parent.append(list);
-    }
+    attachList(list);
   } else if (b.type === 'indicator' || b.type === 'break') {
-    parent.append($createBreakNode(b.kind || 'asterisks'));
+    const brk = $createBreakNode(b.kind || 'asterisks');
+    // A19/A21 Stage 2/9: a stanza-break indicator inside a poem (parse.mjs's parsePoem tags it
+    // fromPoem, same as its verse lines) keeps that tag through the editor too.
+    if (b.fromPoem) brk.setFromPoem(true);
+    if (b.fromPoem && b.poemId != null) brk.setPoemId(b.poemId);   // #49
+    if (b.divClass) { brk.setDivClass(b.divClass); brk.setDivId(b.divId != null ? b.divId : null); }
+    // A42: a stanza-break indicator inside a bare <linegroup>/<stanza> (no <poem> wrapper).
+    if (b.bareLinegroup) brk.setBareLinegroup(true).setBareLinegroupId(b.bareLinegroupId != null ? b.bareLinegroupId : null);
+    // A35/A40: a break indicator that fell inside a <blockquote> run (see parse.mjs's
+    // tag==='blockquote' branch). Gate on blockquoteId (any run), not fromBlockquoteLines
+    // (only the A35 subset that also had a <line>).
+    if (b.blockquoteId != null) {
+      brk.setBlockquoteId(b.blockquoteId);
+      if (b.fromBlockquoteLines) brk.setFromBlockquoteLines(true);
+      if (b.blockquoteClass) brk.setBlockquoteClass(b.blockquoteClass);
+    }
+    parent.append(brk);
   } else if (b.type === 'pagenum') {
-    parent.append($createPrintPageNode(b.page || b.text || '1', b));
+    const pn = $createPrintPageNode(b.page || b.text || (b.implied ? '' : '1'), b);   // an implied page turn may have no number
+    fmtFromBlock(pn, b, FMT_PAGENUM_KEYS);
+    parent.append(pn);
   } else if (b.type === 'graphic') {
     if (b.svg) {
       const transpiled = transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });
-      parent.append($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true));
+      parent.append(fmtFromBlock($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true), b, FMT_PBB_KEYS));
     } else {
-      parent.append($createImageNode(b));
+      parent.append(fmtFromBlock($createImageNode(b), b, FMT_PBB_KEYS));
     }
+  } else if (b.type === 'titlepage') {
+    // K29 Stage 1c: an auto page is left EMPTY here (no fields to compute yet in this generic
+    // loader — Book details live on the document, not passed into appendBlock); syncTitlePages
+    // (render(), called right after every modelToLexical caller) fills it from the live document
+    // on the very next render pass, same as how an auto SymPageNode starts life via $createSymPageNode
+    // with no entries and is filled by syncSymPages moments later.
+    const auto = b.auto === true || !Array.isArray(b.segments);
+    const tpNode = $createTitlePageNode(auto, '[]');
+    if (!auto) { $fillTitlePage(tpNode, b.segments); tpNode.setSig(titlePageStructureSig($titlePageSegments(tpNode))); }
+    parent.append(tpNode);
+  } else if (b.type === 'tnpage') {
+    const page = $createTnPageNode(b.heading || '');
+    for (const e of (Array.isArray(b.entries) ? b.entries : [])) {
+      if (!e || typeof e !== 'object') continue;
+      const extra = (Array.isArray(e.paragraphs) ? e.paragraphs : []).filter((x) => x && typeof x === 'object');
+      const gid = extra.length ? ++noteGroupSeq : null;
+      for (const one of [e, ...extra]) {
+        const p = $createParagraphNode();
+        fillFromBlock(p, one.segments ? { type: 'para', segments: one.segments } : { type: 'para', text: one.text });
+        if (gid != null) p.setNoteGroup(gid);
+        if (p.getChildrenSize()) page.append(p);
+      }
+    }
+    if (!page.getChildrenSize()) page.append($createParagraphNode());   // an entry-less page keeps one empty entry to type in
+    parent.append(page);
+  } else if (b.type === 'sympage') {
+    const auto = b.auto === true && !(Array.isArray(b.entries) && b.entries.length);
+    const page = $createSymPageNode(b.heading || '', auto);
+    const entries = (Array.isArray(b.entries) ? b.entries : []).filter((e) => e && typeof e === 'object');
+    $fillSymPage(page, auto ? [] : entries);
+    page.setSig(JSON.stringify(auto ? [] : $symNodeEntries(page)));
+    parent.append(page);
   } else if (b.type === 'box' || b.type === 'sidebar') {
     const sidebar = $createSidebarNode(b.title || '');
     if (b.id || b.render) sidebar.setSource(b);
+    if (b.boxLines === false) sidebar.setFmt({ ...(fmtOf(sidebar) || {}), noBoxLines: true });
+    if (b.boxColor) sidebar.setFmt({ ...(fmtOf(sidebar) || {}), boxColor: b.boxColor });   // K7
+    fmtFromBlock(sidebar, b, FMT_PBB_KEYS);
     if (Array.isArray(b.blocks) && b.blocks.length) {
       for (const cb of b.blocks) appendBlock(sidebar, cb);         // same rules inside a sidebar, nested sidebars too (A26)
     } else if (b.text) {
@@ -6735,7 +12131,22 @@ function appendBlock(parent, b) {
   } else if (b.type === 'table') {
     // A table the source did not mark keeps 'auto' (columns when they fit, else the
     // listed / paragraph fallback) — it was forced to spatial on load (A26).
-    parent.append($createTableNode(b.headers || [], b.rows || [], b.format || 'auto', b.title ?? null, b.titlePosition || 'in-box', b.headerGroups || null));
+    const tableNode = $createTableNode(b.headers || [], b.rows || [], b.format || 'auto', b.title ?? null, b.titlePosition || 'in-box', b.headerGroups || null);
+    // K3: printAlign (read from the source file) and columnAlign (the transcriber's own
+    // override) both carried straight through — see document.mjs's numericAlignApplies.
+    if (Array.isArray(b.printAlign) && b.printAlign.some(Boolean)) tableNode.setPrintAlign(b.printAlign);
+    if (Array.isArray(b.columnAlign) && b.columnAlign.some(Boolean)) tableNode.setColumnAlign(b.columnAlign);
+    // F-5: a caption / transcriber's note the model carries on the table itself.
+    if (Array.isArray(b.subdivisionRows) && b.subdivisionRows.length) tableNode.setSubdivisionRows(b.subdivisionRows);
+    if (b.subdivisionHeading != null && b.subdivisionHeading !== '') tableNode.setSubdivisionHeading(b.subdivisionHeading);
+    if (b.caption != null && b.caption !== '') tableNode.setCaption(b.caption);
+    if (b.guideDots === false) tableNode.setNoGuideDots(true);
+    fmtFromBlock(tableNode, b, FMT_TABLE_KEYS);
+    if (b.tabletn != null && b.tabletn !== '') {
+      tableNode.setTabletn(b.tabletn);
+      tableNode.setTabletnRender(b.tabletnRender);
+    }
+    parent.append(tableNode);
   } else if (b.type === 'math') {
     const latex = b.latex || (b.mathml ? safeMathmlToLatex(b.mathml) : '');
     const p = $createParagraphNode();
@@ -6748,13 +12159,71 @@ function appendBlock(parent, b) {
       p.append($createTextNode(String(line)));
       parent.append(p);
     }
+  } else if (b.type === 'footnote' && Array.isArray(b.blocks) && b.blocks.length > 1 && !b.segments && !(Array.isArray(b.lines) && b.lines.length)) {
+    // #57c: a footnote of several paragraphs -> one footnote paragraph per paragraph, each carrying the note's id and kind (the
+    // F-113 line-break join below, in fillFromBlock, gave the second paragraph no indent of its own and saved one <p> with <br/>).
+    // buildModel marks the second and later ones `noteCont`, so the formatter lays the run out as ONE note and the save writes
+    // one <note> with several <p> again (nimas-export.mjs's mergeNoteGroups).
+    const paras = b.blocks.filter((cb) => cb && typeof cb === 'object');
+    paras.forEach((cb, i) => {
+      const one = { ...b, text: cb.text, segments: cb.segments };
+      delete one.blocks;
+      if (one.segments === undefined) delete one.segments;
+      if (i > 0) delete one.continuation;
+      if (i < paras.length - 1) delete one.continued;
+      appendBlock(parent, one);
+    });
+  } else if (b.type === 'note' && Array.isArray(b.blocks) && b.blocks.length > 1) {
+    // F-164: a multi-paragraph transcriber's note -> one note paragraph per source <p>, all
+    // sharing a noteGroup so save/format treat them as one note again.
+    const gid = ++noteGroupSeq;
+    for (const cb of b.blocks) {
+      const p = $createBanaParagraphNode('note');
+      p.setNoteGroup(gid);
+      fillFromBlock(p, cb);
+      fmtFromBlock(p, b, FMT_NOTE_KEYS);   // note-level fields ride on every paragraph of the group
+      if (b.render === 'required') p.setRender('required');
+      if (b.kind === 'tabletn') p.setTabletn(true);
+      if (p.getChildrenSize()) parent.append(p);
+    }
   } else {
     const style = getBlockBanaStyle(b);
     const p = $createBanaParagraphNode(style);
     if (b.type === 'footnote' && b.id) p.setNote({ id: b.id, kind: b.kind });
-    fillFromBlock(p, b);
+    if (b.type === 'code' && !b.segments && b.text != null) {
+      // keep the spaces and line breaks of a code block (fillFromBlock would collapse them)
+      String(b.text).split('\n').forEach((part, k) => { if (k > 0) p.append($createLineBreakNode()); if (part) p.append($createTextNode(part)); });
+    } else fillFromBlock(p, b);
+    // A89: an empty paragraph saved on purpose (<p class="bana-empty"/>, read with keptEmpty; Paul 2 Oct 2026) comes back as one, holding only a space as when typed, so buildModel keeps it. Not any empty paragraph: a new box's empty paragraph must stay empty, or emptying the box no longer removes it (test-empty-containers).
+    if (b.type === 'para' && b.keptEmpty && !b.style && !p.getChildrenSize()) p.append($createTextNode(' '));
+    fmtFromBlock(p, b, FMT_PARA_KEYS);
+    if (b.type === 'xref') p.setFmt({ ...(p.getFmt() || {}), xref: true, xrefHeading: b.heading || null });   // F-104 cross-reference note
     if (b.continued || b.continuation) p.setPageTurn(b.continued && b.continuation ? 'both' : (b.continued ? 'continued' : 'continuation'));
     if (b.blocked) p.setBlocked(true);   // F-39 — BANA §1.9.3
+    // A22 / A19-A21 Stage 7/9: an imported <prodnote render="required"> note block.
+    if (b.type === 'note' && b.render === 'required') p.setRender('required');
+    // F-5: a table's transcriber's note keeps its kind through the editor.
+    if (b.type === 'note' && b.kind === 'tabletn') p.setTabletn(true);
+    // A19/A21 Stage 2/9: a verse line read from a genuine <poem> (D5).
+    if (b.fromPoem) p.setFromPoem(true);
+    if (b.playVerse) p.setPlayVerse(true);   // verse drama (D5)
+    if (b.poemId != null && (b.fromPoem || b.type === 'attribution')) p.setPoemId(b.poemId);   // #49: its poem
+    if (b.poemRole && b.type === 'attribution') p.setPoemRole(b.poemRole);   // #49: a poem's author / byline
+    // A42: a verse line read from a bare <linegroup>/<stanza> (no <poem> wrapper) must save
+    // back without inventing one — see nimas-export.mjs's renderPoemRun's wrapInPoem flag.
+    if (b.bareLinegroup) p.setBareLinegroup(true).setBareLinegroupId(b.bareLinegroupId != null ? b.bareLinegroupId : null);
+    // A35: a verse line read from a genuine source <line> element (not D5's bare verse drama).
+    if (b.fromLineTag) p.setFromLineTag(true);
+    // A19/A21 Stage 5/9: a generic <div class="…"> wrapper (see parse.mjs's walk()).
+    if (b.divClass) { p.setDivClass(b.divClass); p.setDivId(b.divId != null ? b.divId : null); }
+    // A35/A40: a run of blocks from one source <blockquote> that needed the run mechanism (see
+    // parse.mjs's tag==='blockquote' branch). Gate on blockquoteId (any run), not
+    // fromBlockquoteLines (only the A35 subset that also had a <line>).
+    if (b.blockquoteId != null) {
+      p.setBlockquoteId(b.blockquoteId);
+      if (b.fromBlockquoteLines) p.setFromBlockquoteLines(true);
+      if (b.blockquoteClass) p.setBlockquoteClass(b.blockquoteClass);
+    }
     parent.append(p);
   }
 }
@@ -6805,6 +12274,8 @@ async function importFile(file) {
     const ok = window.confirm(t('messages.unsaved_load', 'You have unsaved changes. Loading a new file will replace your current document. Continue?'));
     if (!ok) return;
   }
+  const big = ext !== 'svg' ? largeFileWarning(file.name, file.size) : null;   // a very large book asks first (A89 / A90)
+  if (big && !window.confirm(largeFileQuestion(t, big))) return;
   importing = true;
   
   // Calculate equal step duration based on file size:
@@ -6855,7 +12326,10 @@ async function importFile(file) {
     
     // Parse file
     const model = await parseFile(file.name, payload);
-    if (!model || !(model.blocks || []).length) throw new Error('No readable content found in this file');
+    // A document Emboss saved empty (after Clear, say) opens as an empty document; any other file with nothing readable is an
+    // error, as before (A89, the nightly random-action run: the reopened tab had kept its starting document instead).
+    const embossSavedEmpty = model && !(model.blocks || []).length && typeof payload === 'string' && /<meta name="dc:Publisher" content="Emboss Braille Editor"/.test(payload);
+    if (!model || (!(model.blocks || []).length && !embossSavedEmpty)) throw new Error('No readable content found in this file');
     await new Promise((r) => setTimeout(r, 10));
     
     // Build Lexical editor model
@@ -6871,6 +12345,7 @@ async function importFile(file) {
     active = false;
     clearInterval(timerId);
     setLoadingProgress(100, t('loading.complete') || 'Formatting complete!');
+    clearAutosaveSnapshot();   // loading a new document replaces whatever the old one's autosave backup held
     markDocumentClean();
     resetUndoHistory();
     announce(t('app.import.done', { name: file.name }));
@@ -6884,9 +12359,20 @@ async function importFile(file) {
     clearInterval(timerId);
     console.error(err);
     const msg = String((err && err.message) || err);
-    setStatus(t('app.import.notice_status', { message: msg }));
-    showParseWarning(t('app.import.partial', { name: file.name, message: msg.replace(/\.\s*$/, '') }));
-    announce(t('app.import.notice_status', { message: msg }));
+    if (err && err.userFacing) {
+      // A hard failure (password-protected, damaged, Word 6/95, not a Word file — see
+      // parseDocxSniffed/doc.mjs's userError): the file could not be read at all, so nothing
+      // was parsed and the current document is untouched. Show the reader's own plain message
+      // as an error, not the "partial parse, continue editing" wording — that would wrongly
+      // suggest the file was partly loaded.
+      setStatus(t('app.import.failed_status', { message: msg }));
+      showParseWarning(msg, true);
+      announce(t('app.import.failed', { name: file.name, message: msg }));
+    } else {
+      setStatus(t('app.import.notice_status', { message: msg }));
+      showParseWarning(t('app.import.partial', { name: file.name, message: msg.replace(/\.\s*$/, '') }));
+      announce(t('app.import.notice_status', { message: msg }));
+    }
   } finally {
     active = false;
     clearInterval(timerId);
@@ -6928,16 +12414,102 @@ function uiText(key, params = {}, fallback = '') {
 }
 window.embossT = uiText;
 
-function showParseWarning(msg) {
+// `isError` (a hard failure — the file could not be read at all) swaps the banner's amber
+// "Notice" styling and label for a red "Error" one and makes it an assertive live region, so a
+// screen reader announces it immediately rather than waiting to be discovered like a notice.
+function showParseWarning(msg, isError = false) {
   if (parseWarningBanner && parseWarningText) {
     parseWarningText.textContent = msg;
     parseWarningBanner.hidden = false;
+    // .is-error swaps the amber "Notice" label/styling for a red "Error" one (CSS: .notice-label
+    // / .error-label) and switches the live region from polite (status) to assertive (alert) so
+    // a hard load failure interrupts and is announced immediately, unlike an ordinary notice.
+    parseWarningBanner.classList.toggle('is-error', !!isError);
+    parseWarningBanner.setAttribute('role', isError ? 'alert' : 'status');
   }
 }
 function hideParseWarning() {
   if (parseWarningBanner) parseWarningBanner.hidden = true;
 }
 if (parseWarningClose) parseWarningClose.addEventListener('click', hideParseWarning);
+
+// ---- Plain notice about symbols a reader may not know (Transcriber tools off) ----
+// Paul's decision (docs/transcriber-tools-setting.md): ordinary users are still told about odd symbols. When the
+// document uses a special symbol (collectSpecialSymbols: a sub-level or non-dot bullet, a literal braille symbol) or a
+// print character with no braille equivalent (the formatter's o.untranslatable, F-213) and Transcriber tools is off,
+// a dismissible notice offers to add ONE ordinary paragraph explaining them -- no formal Special Symbols page. A document
+// with its own Special Symbols page explains them already. Dismissing (or adding the line) hides the notice until the
+// set of symbols changes. It never changes the braille of anything else.
+const seenUntranslatable = new Map();   // char -> code point; a render that reuses cached blocks does not report them again
+let symbolNoticeDismissed = null;       // signature of the symbol set the user dismissed or explained
+let symbolNoticeItems = [];
+function symbolNoticeList(model, fo) {
+  const blocks = model && Array.isArray(model.blocks) ? model.blocks : [];
+  if (blocks.some((b) => b && b.type === 'sympage')) return [];
+  const out = [];
+  let found = [];
+  try { found = collectSpecialSymbols(blocks, fo || {}); } catch (err) { console.warn('symbol notice', err); }
+  // `description` must be forwarded: a 'typeform' entry (hyperlink, F-233, or strikethrough,
+  // UEB 9.5.1) has no `print`/`name` of its own — symbolMeaning falls through to '' without it,
+  // silently dropping the notice's wording for both (task requirement: this notice must name
+  // them, same as the Special Symbols page does).
+  for (const e of found) out.push({ print: String(e.print ?? '').trim(), meaning: symbolMeaning({ print: e.print, name: e.name, description: e.description }) });
+  for (const u of (fo && fo.untranslatable) || []) if (u && u.char) seenUntranslatable.set(u.char, u.codePoint);
+  if (seenUntranslatable.size) {
+    const json = JSON.stringify(blocks);
+    // PROVISIONAL wording (Emboss's own; no transcriber-approved text yet).
+    for (const [ch] of seenUntranslatable) if (json.includes(ch)) out.push({ print: ch, meaning: 'a print symbol with no braille equivalent, shown as a full cell' });
+  }
+  return out;
+}
+// The explaining line, e.g. "Symbols used: □ hollow square bullet; ▲ triangle bullet." PROVISIONAL wording, built from
+// the formatter's own symbolMeaning (the Special Symbols page's wording) until transcribers give theirs.
+function symbolNoticeLine(items) {
+  const lower = (x) => (x ? x.charAt(0).toLowerCase() + x.slice(1) : '');
+  const parts = items.map((i) => (i.print && i.meaning && i.meaning.toLowerCase() !== i.print.toLowerCase() ? `${i.print} ${lower(i.meaning)}` : (i.print || lower(i.meaning))));
+  return `Symbols used: ${parts.join('; ')}.`;
+}
+const symbolNoticeSig = (items) => items.map((i) => `${i.print}\u0001${i.meaning}`).join('\u0002');
+function updateSymbolNotice(model, fo) {
+  const banner = $id('symbolNoticeBanner');
+  if (!banner) return;
+  const items = transcriberToolsOn() ? [] : symbolNoticeList(model, fo);
+  symbolNoticeItems = items;
+  const show = items.length > 0 && symbolNoticeSig(items) !== symbolNoticeDismissed;
+  if (show) {
+    const txt = $id('symbolNoticeText');
+    // Each symbol with its name (feedback 30 Sep item 7, Paul, 1 Oct: "■ - ○" alone did not say what they were).
+    const lower = (x) => (x ? x.charAt(0).toLowerCase() + x.slice(1) : '');
+    const named = items.map((i) => (i.print && i.meaning && i.meaning.toLowerCase() !== i.print.toLowerCase() ? `${i.print} ${lower(i.meaning)}` : (i.print || lower(i.meaning)))).join(', ');
+    if (txt) txt.textContent = t('app.symbol_notice.text', { symbols: named });
+  }
+  banner.hidden = !show;
+}
+function addSymbolExplanation() {
+  const items = symbolNoticeItems;
+  if (!items.length) return;
+  const line = symbolNoticeLine(items);
+  editor.update(() => {
+    const root = $getRoot();
+    const p = $createParagraphNode();
+    p.append($createTextNode(line));
+    const first = root.getFirstChild();
+    // After a leading title heading (so the document still opens with its title); otherwise at the very start.
+    if (first && $isHeadingNode(first)) first.insertAfter(p);
+    else if (first) first.insertBefore(p);
+    else root.append(p);
+  });
+  symbolNoticeDismissed = symbolNoticeSig(items);
+  const banner = $id('symbolNoticeBanner'); if (banner) banner.hidden = true;
+  clearTranslationCache();
+  scheduleRender();
+  announce(t('app.symbol_notice.added'));
+}
+$id('symbolNoticeAdd')?.addEventListener('click', addSymbolExplanation);
+$id('symbolNoticeClose')?.addEventListener('click', () => {
+  symbolNoticeDismissed = symbolNoticeSig(symbolNoticeItems);
+  const banner = $id('symbolNoticeBanner'); if (banner) banner.hidden = true;
+});
 
 let codesExpanded = false;
 const displayNames = typeof Intl !== 'undefined' && Intl.DisplayNames ? new Intl.DisplayNames([navigator.language || 'en'], { type: 'language' }) : null;
@@ -7028,7 +12600,7 @@ function drawMonarchCanvas(canvas, activeFrame) {
   const ctx = canvas.getContext('2d');
   const width = canvas.width || 680;
   const height = canvas.height || 260;
-  ctx.fillStyle = '#020617';
+  ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, width, height);
 
   const isGraphic = Boolean(activeFrame.isGraphic && activeFrame.graphicMatrix);
@@ -7074,15 +12646,15 @@ function drawMonarchCanvas(canvas, activeFrame) {
           raisedCount++;
           ctx.beginPath();
           ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#38bdf8';
-          ctx.shadowColor = '#0284c7';
+          ctx.fillStyle = '#e9f2fc';
+          ctx.shadowColor = '#2a7de1';
           ctx.shadowBlur = 4;
           ctx.fill();
           ctx.shadowBlur = 0;
         } else {
           ctx.beginPath();
           ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = '#1e293b';
+          ctx.fillStyle = '#30363d';
           ctx.fill();
         }
       }
@@ -7126,8 +12698,8 @@ function drawMonarchCanvas(canvas, activeFrame) {
           const bw = cellStepX - 2;
           const py0 = marginY + (lr * lineStepY) + 1;
           const bh = lineStepY - 2;
-          ctx.fillStyle = 'rgba(245, 158, 11, 0.24)';
-          ctx.strokeStyle = '#f59e0b';
+          ctx.fillStyle = 'rgba(252, 237, 191, 0.24)';
+          ctx.strokeStyle = '#f5b800';
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           if (ctx.roundRect) ctx.roundRect(px0, py0, bw, bh, 3);
@@ -7178,8 +12750,8 @@ function drawMonarchCanvas(canvas, activeFrame) {
               raisedCount++;
               ctx.beginPath();
               ctx.arc(px, py, 2.2, 0, Math.PI * 2);
-              const pinColor = isCellHighlighted ? '#fbbf24' : '#38bdf8';
-              const shadowColor = isCellHighlighted ? '#f59e0b' : '#38bdf8';
+              const pinColor = isCellHighlighted ? '#fcedbf' : '#e9f2fc';
+              const shadowColor = isCellHighlighted ? '#f5b800' : '#e9f2fc';
               ctx.fillStyle = pinColor;
               ctx.shadowColor = shadowColor;
               ctx.shadowBlur = 3;
@@ -7188,7 +12760,7 @@ function drawMonarchCanvas(canvas, activeFrame) {
             } else {
               ctx.beginPath();
               ctx.arc(px, py, 1.1, 0, Math.PI * 2);
-              ctx.fillStyle = isCellHighlighted ? '#78350f' : '#1e293b';
+              ctx.fillStyle = isCellHighlighted ? '#5c4415' : '#30363d';
               ctx.fill();
             }
           }
@@ -7218,7 +12790,7 @@ function drawDotPadUpperCanvas(canvas, activeFrame) {
   const ctx = canvas.getContext('2d');
   const width = canvas.width || 520;
   const height = canvas.height || 340;
-  ctx.fillStyle = '#020617';
+  ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, width, height);
 
   const isGraphic = activeFrame.isGraphic && activeFrame.graphicMatrix;
@@ -7261,8 +12833,8 @@ function drawDotPadUpperCanvas(canvas, activeFrame) {
           const bw = (1 * stepX) + 8;
           const py0 = marginY + ((lr * 4) * stepY) - 4;
           const bh = (3 * stepY) + 8;
-          ctx.fillStyle = 'rgba(245, 158, 11, 0.24)';
-          ctx.strokeStyle = '#f59e0b';
+          ctx.fillStyle = 'rgba(252, 237, 191, 0.24)';
+          ctx.strokeStyle = '#f5b800';
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           if (ctx.roundRect) ctx.roundRect(px0, py0, bw, bh, 4);
@@ -7329,8 +12901,8 @@ function drawDotPadUpperCanvas(canvas, activeFrame) {
         raisedCount++;
         ctx.beginPath();
         ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-        const pinColor = isCellHighlighted ? '#fbbf24' : '#38bdf8';
-        const shadowColor = isCellHighlighted ? '#f59e0b' : '#38bdf8';
+        const pinColor = isCellHighlighted ? '#fcedbf' : '#e9f2fc';
+        const shadowColor = isCellHighlighted ? '#f5b800' : '#e9f2fc';
         ctx.fillStyle = pinColor;
         ctx.shadowColor = shadowColor;
         ctx.shadowBlur = 4;
@@ -7339,7 +12911,7 @@ function drawDotPadUpperCanvas(canvas, activeFrame) {
       } else {
         ctx.beginPath();
         ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = isCellHighlighted ? '#78350f' : '#1e293b';
+        ctx.fillStyle = isCellHighlighted ? '#5c4415' : '#30363d';
         ctx.fill();
       }
     }
@@ -7353,7 +12925,7 @@ function drawDotPadTextCanvas(canvas, activeFrame) {
   const ctx = canvas.getContext('2d');
   const width = canvas.width || 520;
   const height = canvas.height || 70;
-  ctx.fillStyle = '#020617';
+  ctx.fillStyle = '#0d1117';
   ctx.fillRect(0, 0, width, height);
 
   const brailleLine = activeFrame.brailleLine || '';
@@ -7388,8 +12960,8 @@ function drawDotPadTextCanvas(canvas, activeFrame) {
         const bw = (1 * stepX) + 8;
         const py0 = marginY - 4;
         const bh = cellHeight + 8;
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.24)';
-        ctx.strokeStyle = '#f59e0b';
+        ctx.fillStyle = 'rgba(252, 237, 191, 0.24)';
+        ctx.strokeStyle = '#f5b800';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(px0, py0, bw, bh, 4);
@@ -7428,8 +13000,8 @@ function drawDotPadTextCanvas(canvas, activeFrame) {
           raisedCount++;
           ctx.beginPath();
           ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-          const pinColor = isCellHighlighted ? '#fbbf24' : '#38bdf8';
-          const shadowColor = isCellHighlighted ? '#f59e0b' : '#38bdf8';
+          const pinColor = isCellHighlighted ? '#fcedbf' : '#e9f2fc';
+          const shadowColor = isCellHighlighted ? '#f5b800' : '#e9f2fc';
           ctx.fillStyle = pinColor;
           ctx.shadowColor = shadowColor;
           ctx.shadowBlur = 4;
@@ -7438,7 +13010,7 @@ function drawDotPadTextCanvas(canvas, activeFrame) {
         } else {
           ctx.beginPath();
           ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-          ctx.fillStyle = isCellHighlighted ? '#78350f' : '#1e293b';
+          ctx.fillStyle = isCellHighlighted ? '#5c4415' : '#30363d';
           ctx.fill();
         }
       }
@@ -7551,6 +13123,11 @@ export function updateBrailleTabsVisibility(autoSwitch = false) {
   if (tabViewMonarch) {
     tabViewMonarch.style.display = isMonarch ? 'inline-flex' : 'none';
   }
+  // Tabs only when there is more than one view; otherwise a plain label (Paul, 25 Sep).
+  const tabs = document.querySelector('.braille-view-tabs');
+  const solo = $id('brailleSoloLabel');
+  if (tabs) tabs.hidden = !(isDotPad || isMonarch);
+  if (solo) solo.hidden = isDotPad || isMonarch;
 
   if (autoSwitch) {
     if (isMonarch) {
@@ -7567,6 +13144,37 @@ export function updateBrailleTabsVisibility(autoSwitch = false) {
   }
 }
 
+// ---- Settings > Embosser: the four connection choices (S3c, audit 15 Oct #22) ----
+// A choice the browser cannot use (Safari and Firefox have no WebSerial, WebHID or Web Bluetooth) is shown but disabled, with the
+// reason beside it; if the saved choice is one of those, a line under the list says so. Nothing is lost: the saved value stays.
+function syncConnectionControls(type) {
+  type = ['serial', 'hid', 'ble', 'network'].includes(type) ? type : 'serial';
+  const sel = $id('set-connectionType');
+  if (sel) {
+    for (const opt of sel.options) {
+      const prev = opt.dataset.unavailSuffix;
+      if (prev && opt.textContent.endsWith(prev)) opt.textContent = opt.textContent.slice(0, -prev.length);
+      delete opt.dataset.unavailSuffix;
+      const sup = connectionSupport(opt.value, { text: uiText });
+      opt.disabled = !sup.ok;
+      if (!sup.ok) { const suffix = ` (${sup.short})`; opt.textContent += suffix; opt.dataset.unavailSuffix = suffix; }
+    }
+    if (sel.value !== type) sel.value = type;
+  }
+  const show = (id, on) => { if ($id(id)) $id(id).style.display = on ? 'block' : 'none'; };
+  show('networkSettingsGroup', type === 'network');
+  show('serialBaudGroup', type === 'serial');
+  show('hidSettingsGroup', type === 'hid');
+  show('bleSettingsGroup', type === 'ble');
+  const hint = $id('connectionUnavailableHint');
+  if (hint) {
+    const sup = connectionSupport(type, { text: uiText });
+    hint.textContent = sup.ok ? '' : tOr('app.settings.connection_unavailable', 'This connection is not available in this browser, so Emboss cannot send to the embosser. Use Chrome or Edge, or choose another connection.');
+    hint.style.display = sup.ok ? 'none' : 'block';
+  }
+}
+window.addEventListener('i18n:localechange', () => syncConnectionControls(settings.connectionType));
+
 // ---- settings dialog, Simple-mode switch, BRF download (shared settings) ----
 function applySettingsToUI(autoSwitch = false) {
   if ($id('tocToggle')) $id('tocToggle').checked = !!settings.toc;
@@ -7581,19 +13189,175 @@ function applySettingsToUI(autoSwitch = false) {
   if ($id('set-networkPort')) $id('set-networkPort').value = settings.networkPort || 9100;
   if ($id('set-cells')) $id('set-cells').value = settings.cells;
   if ($id('set-lines')) $id('set-lines').value = settings.lines;
+  syncPageSizeSelect();   // feedback item 6: the preset list shows the size in use
   if ($id('set-volumePages')) $id('set-volumePages').value = settings.volumePages || 0;
-  if ($id('set-sixkey')) $id('set-sixkey').checked = settings.sixKeyInput !== false;
   if ($id('set-includeCovers')) $id('set-includeCovers').checked = !!settings.includeCovers;
+  if ($id('set-transcriberTools')) $id('set-transcriberTools').checked = transcriberTools;
   if ($id('set-asciiBraille')) $id('set-asciiBraille').checked = !!settings.asciiBraille;
+  if ($id('set-simpleMode')) $id('set-simpleMode').checked = settings.simpleMode !== false;
+  if ($id('set-showExplanationBar')) $id('set-showExplanationBar').checked = settings.showExplanationBar !== false;
+  applyExplanationBarVisibility();
+  applyTitleFieldVisibility();
   if ($id('set-tactileGraphics')) $id('set-tactileGraphics').checked = settings.tactileGraphics !== false;
-  applySixKeyInput(settings.sixKeyInput !== false);
+  if ($id('set-tactileRip')) $id('set-tactileRip').checked = settings.tactileRip === true;
+  applySixKeyInput(true);   // the Settings checkbox is gone (F9 E1, Paul 9 Oct): the toolbar's six-key button is the one control, so an old saved "sixKeyInput: false" no longer hides it
 
-  const isNet = settings.connectionType === 'network';
-  if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = isNet ? 'block' : 'none';
-  if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = isNet ? 'none' : 'block';
+  syncConnectionControls(settings.connectionType);
   updateGraphicsSupportUI();
   updateBrailleTabsVisibility(autoSwitch);
+  applyDocOptionsToUI();
 }
+
+// ---- Settings dialog: "Braille formatting options" (document-level BANA_DOC_OPTIONS, nimas-export.mjs) ----
+// Unlike the rest of the Settings dialog (persisted to localStorage as `settings`), these ride on
+// loadedDocInfo.options — the current DOCUMENT's own options, read by getLexicalModel's
+// `Object.assign(model, loadedDocInfo.options)` and so carried through save/reload like any other field.
+// The controls are built from format/field-registry.mjs (buildFieldControls) and read / written through its CODECS:
+// docBool (on = true), docOff (a default-on rule: only an explicit false is kept), docText (trimmed text, optional pattern).
+const DOC_OPT_CONTROLS = groupControlIds(FIELD_GROUPS.find((g) => g.id === 'docOptionsGroup')).map(controlById).filter(Boolean);
+function applyDocOptionsToUI() {
+  const o = loadedDocInfo.options || {};
+  for (const ctl of DOC_OPT_CONTROLS) {
+    const el = $id(ctl.id);
+    if (!el) continue;
+    const v = FIELD_CODECS[ctl.codec].read(o[ctl.field], ctl);
+    if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+  }
+}
+// Called live on every control's change: mutates loadedDocInfo.options in place (so a document loaded moments ago,
+// or one about to be saved, always reflects what is on screen) and marks the document dirty, same as any other edit.
+// A value that fails its pattern (the line indicator) is reported under the control and not saved.
+function saveDocOptionFromUI(ctl) {
+  const el = $id(ctl.id);
+  if (!el) return;
+  const res = FIELD_CODECS[ctl.codec].write(el.type === 'checkbox' ? el.checked : el.value.trim(), ctl);
+  const statusEl = ctl.statusId ? $id(ctl.statusId) : null;
+  if (res.err) { if (statusEl) statusEl.textContent = t(res.err); el.focus(); return; }
+  if (statusEl) statusEl.textContent = '';
+  const opts = { ...(loadedDocInfo.options || {}) };
+  if (res.value === undefined) delete opts[ctl.field]; else opts[ctl.field] = res.value;
+  loadedDocInfo = { ...loadedDocInfo, options: opts };
+  contentChangedSinceClean = true;
+  clearTranslationCache();
+  scheduleRender();
+}
+(function initDocOptionsGroup() {
+  for (const ctl of DOC_OPT_CONTROLS) $id(ctl.id)?.addEventListener('change', () => saveDocOptionFromUI(ctl));
+})();
+
+// ---- Book details… dialog (K29 Stage 1a): document-level Title Page facts ----------------------------------
+// design docs/transcriber-pages-customisation-design.md §4; fields described once in format/field-registry.mjs
+// (audience 'transcriber', save: bana-tp-* meta). A Transcriber tool: reached from the "Book details…" button in
+// Settings (class fmt-transcriber, hidden the same CSS way as the rest of the transcriber UI). Unlike the generic
+// "Braille formatting options" group, these fields have no registry `ui` (they are not the per-block dialog GROUPS
+// drive) so this markup and its wiring are hand-written, the same way the dialog looked before that generator
+// existed. Most fields ride on loadedDocInfo.options, like the doc-options group above; `title`, `authors` and
+// `publisher` are the document's own existing top-level fields (loadedDocInfo.title / .metadata.docauthors /
+// .metadata.publisher) — this is the first UI Emboss has had to edit them (design §3.1: they are NOT new bana-tp-*
+// fields, just read from / written to the fields that already exist).
+const TP_TEXT_KEYS = ['tpSeries', 'tpGradeLevel', 'tpSubtitle', 'tpEdition', 'tpTranslator', 'tpPublisherCity', 'tpPublisherUrl',
+  'tpCopyright', 'tpReproductionNotice', 'tpPrintingHistory', 'tpYear', 'tpTranscriber', 'tpProofreader', 'tpTactileSpecialist',
+  'tpAgency', 'tpAgencyLocation'];
+const TP_ENUM_KEYS = ['tpPublishedBy', 'tpCountry'];
+const TP_LIST_KEYS = ['tpEditors', 'tpIsbn'];
+const tpLines = (s) => String(s || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+function tpCurrentModel() {
+  return { title: loadedDocInfo.title, metadata: loadedDocInfo.metadata, publisher: loadedDocInfo.options?.tpPublisher, ...(loadedDocInfo.options || {}) };
+}
+// UK-9: which titlePageTemplateSegments() variant the card should render — the SAME mode
+// format/document.mjs's traceTitlePage picks by (isBanaOpts: o.standard/o.mode === 'bana').
+function tpMode() { return settings.mode === 'bana' ? 'bana' : 'ukaaf'; }
+function tpUpdateReproductionWarning(country) {
+  const w = $id('tpReproductionNoticeWarning');
+  if (!w) return;
+  w.textContent = country === 'US' ? t('app.titlepage_details.reproductionNotice_warning_us')
+    : country === 'UK' ? t('app.titlepage_details.reproductionNotice_warning_uk') : '';
+}
+function applyTitlepageDetailsToUI() {
+  const d = titlepageBookDetails(tpCurrentModel());
+  const opts = loadedDocInfo.options || {};
+  const set = (id, val) => { const el = $id(id); if (el) el.value = val == null ? '' : String(val); };
+  set('tpTitle', d.title.value);
+  for (const key of TP_TEXT_KEYS) set(key, opts[key] || '');
+  set('tpAuthors', (d.authors.value || []).join('\n'));
+  set('tpEditors', (opts.tpEditors || []).join('\n'));
+  set('tpPublishedBy', opts.tpPublishedBy || '');
+  set('tpPublisher', d.publisher.value);
+  set('tpCopyright', d.copyright.value);
+  const copyrightNote = $id('tpCopyrightComputed');
+  if (copyrightNote) { copyrightNote.hidden = !d.copyright.computed; copyrightNote.textContent = d.copyright.computed ? t('app.titlepage_details.from_document') : ''; }
+  const country = opts.tpCountry || '';
+  set('tpCountry', country);
+  let notice = opts.tpReproductionNotice || '';
+  if (!notice && country === 'US') notice = REPRODUCTION_NOTICES.US;
+  else if (!notice && country === 'UK') notice = ukAccessibleCopyStatement({ title: d.title.value, authors: d.authors.value });
+  set('tpReproductionNotice', notice);
+  tpUpdateReproductionWarning(country);
+  set('tpIsbn', (d.isbn.value || []).join('\n'));
+  const isbnNote = $id('tpIsbnComputed');
+  if (isbnNote) { isbnNote.hidden = !d.isbn.computed; isbnNote.textContent = d.isbn.computed ? t('app.titlepage_details.isbn_from_source', { isbn: (d.isbn.value || [])[0] || '' }) : ''; }
+  set('tpYear', opts.tpYear || String(new Date().getFullYear()));
+  set('tpBrailleCode', d.brailleCode.value);
+  const st = $id('titlepageDetailsStatus'); if (st) st.textContent = '';
+}
+function saveTitlepageDetailsFromUI() {
+  const val = (id) => ($id(id)?.value || '').trim();
+  const st = $id('titlepageDetailsStatus');
+  const yr = val('tpYear');
+  if (yr && !/^\d{4}$/.test(yr)) {
+    if (st) st.textContent = t('app.titlepage_details.err_year');
+    $id('tpYear')?.focus();
+    return false;
+  }
+  const meta = { ...(loadedDocInfo.metadata || {}) };
+  const authors = tpLines(val('tpAuthors'));
+  if (authors.length) { meta.docauthors = authors; meta.docauthor = authors[0]; } else { delete meta.docauthors; delete meta.docauthor; }
+  const publisher = val('tpPublisher');
+  if (publisher) meta.publisher = publisher; else delete meta.publisher;
+  const opts = { ...(loadedDocInfo.options || {}) };
+  const setOpt = (key, v) => { if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.length)) delete opts[key]; else opts[key] = v; };
+  for (const key of TP_TEXT_KEYS) setOpt(key, val(key));
+  for (const key of TP_ENUM_KEYS) setOpt(key, val(key) || null);
+  for (const key of TP_LIST_KEYS) setOpt(key, tpLines(val(key)));
+  loadedDocInfo = { ...loadedDocInfo, title: val('tpTitle') || null, metadata: meta, options: opts };
+  contentChangedSinceClean = true;
+  docInfoChangedSinceClean = true;
+  noteAutosaveChange();   // the title and book details are part of the backup too (A89 step 3)
+  clearTranslationCache();
+  scheduleRender();
+  if (st) st.textContent = '';
+  return true;
+}
+function openTitlepageDetailsDialog() {
+  if (!transcriberToolsOn()) { announce(tOr('app.braille_fmt.transcriber_only', 'The formatting options for this block are transcriber tools. Turn on Transcriber tools in Settings to see them.')); return; }
+  const dlg = $id('titlepageDetailsDialog');
+  if (!dlg || dlg.open) return;
+  applyTitlepageDetailsToUI();
+  dlg.showModal();
+  announce(t('app.titlepage_details.opened'));
+  $id('tpTitle')?.focus();
+}
+function closeTitlepageDetailsDialog() { $id('titlepageDetailsDialog')?.close(); }
+(function initTitlepageDetailsDialog() {
+  $id('btnTitlepageDetails')?.addEventListener('click', () => { $id('settingsDialog')?.close(); openTitlepageDetailsDialog(); });
+  $id('titlepageDetailsClose')?.addEventListener('click', closeTitlepageDetailsDialog);
+  $id('titlepageDetailsCancel')?.addEventListener('click', closeTitlepageDetailsDialog);
+  $id('titlepageDetailsForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (saveTitlepageDetailsFromUI()) { announce(t('app.titlepage_details.saved')); closeTitlepageDetailsDialog(); }
+  });
+  $id('tpCountry')?.addEventListener('change', () => {
+    const country = $id('tpCountry').value;
+    tpUpdateReproductionWarning(country);
+    const noticeEl = $id('tpReproductionNotice');
+    if (noticeEl && !noticeEl.value.trim()) {
+      if (country === 'US') noticeEl.value = REPRODUCTION_NOTICES.US;
+      else if (country === 'UK') noticeEl.value = ukAccessibleCopyStatement({ title: $id('tpTitle')?.value || '', authors: tpLines($id('tpAuthors')?.value) });
+    }
+  });
+  const dlg = $id('titlepageDetailsDialog');
+  dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+})();
 
 export function updateGraphicsSupportUI() {
   const btn = $id('btnGraphic');
@@ -7606,24 +13370,88 @@ export function updateGraphicsSupportUI() {
 }
 
 function wireControls() {
+  // Set just before leaving for Quick Mode: the document went with the handoff, or the user already
+  // agreed to leave without it, so the close guard must not ask (again).
+  let leavingForQuickMode = false;
   window.addEventListener('beforeunload', (e) => {
-    if (isDocumentDirty()) {
+    if (!leavingForQuickMode && isDocumentDirty()) {
       e.preventDefault();
       e.returnValue = '';
       return '';
     }
   });
 
-  $id('backToSimple')?.addEventListener('click', (e) => {
-    if (isDocumentDirty()) {
-      const ok = window.confirm(t('messages.unsaved_changes', 'You have unsaved changes. Are you sure you want to exit without saving?'));
-      if (!ok) {
-        e.preventDefault();
-        return;
+  // Autosave & crash recovery (Fable review #7): the beforeunload guard above only catches a
+  // close/reload it gets to run for — never a crash or a killed tab. autosave.mjs snapshots the
+  // document to IndexedDB every ~30s and on hide/pagehide while it is dirty, off the keystroke
+  // path; the matching recovery check (checkForRecovery) runs once at start-up, below.
+  initAutosave({
+    isDirty: () => isDocumentDirty(),
+    isLoading: () => importing,
+    isEmpty: () => isDocumentEmpty(),
+    buildSnapshot: buildAutosaveSnapshot,
+    onWarn: (msg) => { setStatus(msg); announce(msg); },
+  });
+  // A backup soon after every change, not only every 30 s (A89 step 3): a crashed or frozen tab runs no closing code.
+  editor.registerUpdateListener(({ dirtyElements, dirtyLeaves }) => { if (dirtyElements.size || dirtyLeaves.size) noteAutosaveChange(); });
+
+  // Going back to Quick Mode takes the document with it, through the same handoff Quick Mode uses
+  // to open a file here, so nothing is lost and there is nothing to ask (Paul, 26 Sep). Unsaved
+  // edits stay marked unsaved: Quick Mode warns before its page closes, and brings the flag back
+  // if the document returns here. Only if the document can't be handed over does it still ask.
+  $id('backToSimple')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const unsaved = isDocumentDirty();
+    let handedOver = false;
+    let handoffId = null;   // S2a #4: this transfer's own id, carried to Quick Mode in the address
+    try {
+      let model = null, merged = false;
+      editor.getEditorState().read(() => { const raw = buildModel(); model = mergeListItemBlocks(raw); merged = model !== raw; });
+      if (model && (model.blocks || []).length) {
+        // the crash-recovery backup is made current as well - but the switch never waits on it more than a few seconds (18 Oct 2026: it could wait for ever)
+        if (unsaved) await Promise.race([forceAutosaveTick().catch(() => {}), new Promise((r) => setTimeout(r, 4000))]);
+        handoffId = newHandoffId();
+        const handoffDoc = {
+          ...loadedDocInfo.options, ...model,
+          title: model.title || loadedDocInfo.title,
+          metadata: loadedDocInfo.metadata,
+          resources: loadedDocInfo.resources,
+          _unsavedEdits: unsaved,
+        };
+        // The braille already made goes with the document (feedback 17 Oct 2026, item 13), but only braille that is THIS document's and these settings':
+        // no render pending or running, the settings the render used, no failure (currentOutput), made with the maths engine up. Its key names the document
+        // and every setting and flag the formatter read; Quick Mode uses it only if its own key for the document it reads is the same.
+        let carried = null;
+        window.__handoffBraille = 'none';   // tests: why braille was or was not carried
+        try {
+          const out = currentOutput();
+          if (!out) window.__handoffBraille = 'not current (a render is waiting or running, or failed)'; else if (!(out.opts && out.opts.mathToBrf)) window.__handoffBraille = 'maths engine was not up'; else if (merged) window.__handoffBraille = 'document put back together (list items with blocks)';
+          // Not for a document that had to be put back together for the hand-over (a table or other block inside a list item: mergeListItemBlocks): the live
+          // braille formats those parts as they stand in the editor and the document as Quick Mode has it formats one list — close, but not always the same
+          // braille (a quotation inside a list item was indented two cells less in the editor's), so Quick Mode brailles that document itself.
+          if (out && out.brf && out.opts && out.opts.mathToBrf && !renderFailure && !merged) {
+            const key = await brailleKey(handoffDoc, brailleFlags(settings, { titleInBraille: out.opts.titleInBraille, toc: out.opts.toc, suppressHeader: out.opts.suppressHeader, mathsReady: true }));
+            const still = currentOutput();   // nothing has changed while the key was worked out
+            if (!key) window.__handoffBraille = 'no key'; else if (!still || still.brf !== out.brf) window.__handoffBraille = 'changed while the key was worked out';
+            if (key && still && still.brf === out.brf) { window.__handoffBraille = 'carried'; carried = { key, brf: out.brf, warnings: JSON.parse(JSON.stringify(Array.isArray(lastWarnings) ? lastWarnings : [])) }; }
+          }
+        } catch (err) { carried = null; }
+        handedOver = await setHandoffDoc(handoffDoc, handoffId, carried);
       }
+    } catch (err) {
+      console.warn('handoff to Quick Mode failed:', err);
     }
-    saveSettings({ simpleMode: true });
-    location.href = '/web/index.html';
+    // Feedback 30 Sep item 17 (Paul, 2 Oct): an empty document has nothing to lose — no question, and no backup of deleted text is
+    // left to be offered on coming back. With text that could not be handed over (rare), the question says what happened.
+    if (isDocumentEmpty()) clearAutosaveSnapshot();
+    else if (!handedOver && unsaved && !window.confirm(tOr('messages.unsaved_handoff_failed', "Emboss couldn't take your document to Quick Mode. Leave anyway? Your changes since the last save will be lost."))) return;
+    // Not markDocumentClean(): only a save or a load makes the document clean. The document is
+    // still unsaved; it just travels with the handoff (marked unsaved there too).
+    leavingForQuickMode = true;
+    // Switching pages does not touch "Start in Quick Mode" (feedback 17 Oct 2026, item 12): that setting is where Emboss opens, not where this tab is.
+    // The mark tells Quick Mode it was CHOSEN, so it stays even with that setting off.
+    markStayInQuick();
+    location.href = '/web/index.html' + (handoffId ? handoffHash(handoffId) : '');
   });
   $id('settingsBtn')?.addEventListener('click', () => {
     cancelScrollSync();
@@ -7631,9 +13459,13 @@ function wireControls() {
     translateDOM($id('settingsDialog'));
     $id('settingsDialog')?.showModal();
   });
+  // F9 item D2 (APH feedback, 9 Oct 2026: Settings slow in Safari on a big book): closing Settings used to braille the whole document
+  // again every time, changed or not (2.2 s of frozen page on the 1,275-page "Collections, Grade 7", in Chrome and in WebKit alike).
+  // Now it renders only if the settings are not the ones the last render used (and no render is already scheduled for them).
   $id('settingsDialog')?.addEventListener('close', () => {
     cancelScrollSync();
     updateGraphicsSupportUI();
+    if (timer || settingsState() === renderedSettingsState) return;
     render();
   });
   $id('helpBtn')?.addEventListener('click', () => {
@@ -7644,6 +13476,29 @@ function wireControls() {
   $id('helpClose')?.addEventListener('click', () => {
     cancelScrollSync();
     $id('helpDialog')?.close();
+  });
+  // Report a problem (A89 step 2): one file for the tester to email — the document as NIMAS and as the editor's own state, its
+  // braille, the settings and every error since the page opened.
+  $id('reportProblemBtn')?.addEventListener('click', () => {
+    cancelScrollSync();
+    $id('helpDialog')?.close();
+    openProblemDialog({
+      page: 'editor', t, settings: () => settings, buildInfo: getBuildInfo, makeZip,
+      collect: async (includeDocument) => {
+        let model = null;
+        try { editor.getEditorState().read(() => { model = mergeListItemBlocks(buildModel()); }); } catch (e) { recordProblem('report', `Reading the document failed: ${e?.message || e}`, { stack: e?.stack || '' }); }
+        const doc = model || lastModel || { title: '', blocks: [] };
+        const extra = { title: doc.title || '', blocks: (doc.blocks || []).length, unsaved: isDocumentDirty(), transcriberTools: document.body.classList.contains('transcriber-tools') };
+        if (!includeDocument) return { documentFiles: [], extra };
+        const files = [];
+        try { files.push({ name: 'document.xml', text: exportToNimasXml(doc, { title: doc.title || 'document', mode: settings.mode }) }); }
+        catch (e) { recordProblem('report', `Saving the document as NIMAS failed: ${e?.message || e}`, { stack: e?.stack || '' }); }
+        try { files.push({ name: 'editor-state.json', text: JSON.stringify(editor.getEditorState().toJSON()) }); } catch { /* the NIMAS file is enough */ }
+        if (lastBrf) files.push({ name: 'braille.brf', text: lastBrf });
+        return { documentFiles: files, extra };
+      },
+      onSaved: (name, msg) => { setStatus(msg); announce(msg); },
+    });
   });
   for (const d of [$id('settingsDialog'), $id('helpDialog')]) {
     d?.addEventListener('click', (e) => { if (e.target === d) d.close(); });
@@ -7670,9 +13525,7 @@ function wireControls() {
   });
 
   $id('set-connectionType')?.addEventListener('change', () => {
-    const isNet = $id('set-connectionType').value === 'network';
-    if ($id('networkSettingsGroup')) $id('networkSettingsGroup').style.display = isNet ? 'block' : 'none';
-    if ($id('serialBaudGroup')) $id('serialBaudGroup').style.display = 'none';
+    syncConnectionControls($id('set-connectionType').value);
     onSet();
   });
 
@@ -7685,6 +13538,15 @@ function wireControls() {
         $id('set-baudRate').value = String(p.baudRate);
       }
     }
+    onSet();
+  });
+  // UK-7 (28 Sep, James / decisions.md "UKAAF"): the UK page-size presets (settings.mjs
+  // UK_PAGE_SIZE_PRESETS) — picking one just fills Cells/Lines, same as an embosser preset;
+  // "Always let the user choose" (James), so both fields stay free-standing number inputs and
+  // this never overrides them on its own (a preset is applied only on an explicit change here).
+  $id('set-pageSize')?.addEventListener('change', () => {
+    const preset = PAGE_SIZE_PRESETS.find((p) => p.id === $id('set-pageSize').value);
+    if (preset) { $id('set-cells').value = preset.cells; $id('set-lines').value = preset.lines; }
     onSet();
   });
   // settings fields → persist + re-render
@@ -7715,6 +13577,7 @@ function wireControls() {
       embosserDuplex: $id('set-embosserDuplex')?.value || 'double',
       baudRate: Number($id('set-baudRate')?.value) || 9600,
       tactileGraphics: $id('set-tactileGraphics')?.checked !== false,
+      tactileRip: $id('set-tactileRip')?.checked === true,
       tableFormat: $id('set-tableFormat')?.value || 'auto',
       cells: $id('set-cells')?.value,
       lines: $id('set-lines')?.value,
@@ -7727,6 +13590,7 @@ function wireControls() {
     if ($id('set-cells')) $id('set-cells').value = settings.cells;
     if ($id('set-lines')) $id('set-lines').value = settings.lines;
     if ($id('set-volumePages')) $id('set-volumePages').value = settings.volumePages;
+    syncPageSizeSelect();
 
     updateGraphicsSupportUI();
     updateBrailleTabsVisibility();
@@ -7734,15 +13598,35 @@ function wireControls() {
     // Swap the braille code in only once its tables are present (see activateTable).
     activateTable().then(() => scheduleRender());
   };
+  // Feedback item 6 (Paul, 1 Oct): changing the standard takes its page size (MODE_GEOMETRY: BANA 38x25, UKAAF 38x27), as Quick
+  // Mode already does, unless a hardware preset fixes the page — the editor kept the old size, so BANA stayed on the UK page.
+  // Registered before onSet (below), so the new size is what onSet saves.
+  $id('set-mode')?.addEventListener('change', () => {
+    const g = MODE_GEOMETRY[$id('set-mode').value];
+    if (g && ($id('set-embosser')?.value || 'generic') === 'generic') { if ($id('set-cells')) $id('set-cells').value = g.cells; if ($id('set-lines')) $id('set-lines').value = g.lines; }
+  });
+  ['set-cells', 'set-lines'].forEach((id) => $id(id)?.addEventListener('input', syncPageSizeSelect));   // typing a size shows its preset, or "Custom size"
   // set-embosser and set-connectionType have their own change handlers above (they call
   // onSet themselves); listing them here too ran every save and render twice.
   ['set-networkHost', 'set-networkPort', 'set-baudRate', 'set-embosserDuplex', 'set-language', 'set-mathCode', 'set-mode', 'set-tableFormat', 'set-cells', 'set-lines', 'set-quoteStyle', 'set-listStyle', 'set-paragraphStyle', 'set-volumePages'].forEach((id) => {
     $id(id)?.addEventListener('change', onSet);
     if (['set-cells', 'set-lines', 'set-volumePages', 'set-networkHost', 'set-networkPort'].includes(id)) {
-      $id(id)?.addEventListener('input', onSet);
+      // Live update while typing, but only once the number is complete and in range: onSet clamps and writes the value
+      // back, so applying a half-typed "3" (on the way to 32) made it jump to 10, then 102 → 60. 'change' (Enter / leaving
+      // the field) still applies and corrects whatever is there.
+      $id(id)?.addEventListener('input', (e) => {
+        const el = e.target;
+        if (el.type === 'number') {
+          const v = Number(el.value);
+          const min = el.min === '' ? -Infinity : Number(el.min), max = el.max === '' ? Infinity : Number(el.max);
+          if (el.value === '' || !Number.isInteger(v) || v < min || v > max) return;
+        }
+        onSet();
+      });
     }
   });
   $id('set-tactileGraphics')?.addEventListener('change', onSet);
+  $id('set-tactileRip')?.addEventListener('change', onSet);
   $id('set-uiLanguage')?.addEventListener('change', async (e) => {
     const newLang = e.target.value;
     settings = saveSettings({ uiLanguage: newLang });
@@ -7751,17 +13635,31 @@ function wireControls() {
     populateLanguageDropdown();
     announce(t('aria.language_changed', { language: newLang }));
   });
-  $id('set-sixkey')?.addEventListener('change', () => {
-    settings = saveSettings({ sixKeyInput: $id('set-sixkey').checked });
-    applySixKeyInput(settings.sixKeyInput);           // input-only: the braille output is unaffected
-  });
   $id('set-includeCovers')?.addEventListener('change', () => {
     settings = saveSettings({ includeCovers: $id('set-includeCovers').checked });
     render();
   });
+  // Transcriber tools: shows or hides tools only, so there is nothing to re-render (the braille never depends on it).
+  $id('set-transcriberTools')?.addEventListener('change', () => {
+    transcriberTools = $id('set-transcriberTools').checked;
+    settings = saveSettings({ transcriberTools });
+    applyTranscriberTools();
+    if (lastModel) updateSymbolNotice(lastModel, lastFormatOpts);
+    announce(t(transcriberTools ? 'app.settings.transcriber_tools_on' : 'app.settings.transcriber_tools_off'));
+  });
   $id('set-asciiBraille')?.addEventListener('change', () => {
     settings = saveSettings({ asciiBraille: $id('set-asciiBraille').checked });
     render();
+  });
+  // "Start in Quick Mode": where Emboss opens, nothing more. Being in the editor does not change it, and ticking it does not move you (item 12).
+  $id('set-simpleMode')?.addEventListener('change', () => { settings = saveSettings({ simpleMode: $id('set-simpleMode').checked }); });
+  $id('set-showExplanationBar')?.addEventListener('change', () => {
+    settings = saveSettings({ showExplanationBar: $id('set-showExplanationBar').checked });
+    applyExplanationBarVisibility();
+  });
+  $id('set-showTitleField')?.addEventListener('change', () => {
+    settings = saveSettings({ showTitleField: $id('set-showTitleField').checked });
+    applyTitleFieldVisibility();
   });
 
   // Automatic hardware embosser USB hotplug detection
@@ -7778,13 +13676,36 @@ function wireControls() {
   });
 
   const handleEmbossPrint = async () => {
-    if (!lastBrf) return;
+    const tell = (msg) => { setStatus(msg); announce(msg); };
+    const connType = ['serial', 'hid', 'ble', 'network'].includes(settings.connectionType) ? settings.connectionType : 'serial';
+    // S3c (audit 15 Oct #22, S2-Q2): the browser lets a page show its device chooser (serial port, HID, Bluetooth) only soon after
+    // a click, and a long wait for the braille of a big book makes it forget the click. So the device is asked for FIRST, here,
+    // before anything is awaited; the braille is waited for afterwards; then it is sent to the device chosen.
+    let choice = null;
+    if (connType !== 'network') {
+      choice = await chooseEmbosserTarget(connType, { onStatus: tell, text: uiText });
+      if (!choice.ok) {
+        // unsupported: why; cancelled: nothing was sent; anything else: the plain reason chooseEmbosserTarget gives
+        tell(choice.method === 'cancelled' ? `${choice.message} ${tOr('app.export.nothing_sent_short', 'Nothing was sent.')}` : choice.message);
+        return;
+      }
+    }
+    // S2a #2/#3: only the braille of the document and settings as they are now (see currentOutput / waitForCurrentOutput)
+    commitPendingCardDrafts();
+    let out = currentOutput();
+    if (!out) {
+      const res = await waitForCurrentOutput();
+      if (!res.out) { refuseOutput('emboss', res); return; }
+      out = res.out;
+    }
+    const brfNow = out.brf;   // the braille checked above, not whatever a later render leaves in lastBrf
+    if (!brfNow) return;
 
-    if (settings.connectionType === 'network') {
+    if (connType === 'network') {
       try {
         announce(t('app.embosser.sending_network', { host: settings.networkHost || '192.168.1.150' }));
         setStatus(t('app.embosser.sending_network', { host: settings.networkHost || '192.168.1.150' }));
-        const res = await spoolToNetworkEmbosser(lastBrf, {
+        const res = await spoolToNetworkEmbosser(brfNow, {
           host: settings.networkHost || '192.168.1.150',
           port: settings.networkPort || 9100,
           embosser: settings.embosser || 'generic',
@@ -7806,36 +13727,21 @@ function wireControls() {
       return;
     }
 
-    if (!isWebSerialSupported()) {
-      const msg = t('app.spool.needs_webserial');
-      setStatus(msg);
-      announce(msg);
-      return;
-    }
-    try {
-      announce(t('spooler.status_connecting'));
-      setStatus(t('spooler.status_connecting'));
-      const res = await spoolToEmbosser(lastBrf, {
-        embosser: settings.embosser || 'generic',
-        duplex: settings.embosserDuplex || 'double',
-        width: settings.cells || 38,
-        depth: settings.lines || 25,
-        baudRate: settings.baudRate || 9600,
-        onStatus: (msg) => { setStatus(msg); announce(msg); },
-        text: uiText,
-      });
-      if (res.success) {
-        setStatus(res.message);
-        announce(res.message);
-      } else if (res.method === 'cancelled') {
-        setStatus(t('app.embosser.cancelled'));
-        announce(t('app.embosser.cancelled'));
-      }
-    } catch (err) {
-      console.warn('Embosser hardware communication error:', err);
-      setStatus(t('spooler.status_error', { message: err.message }));
-      announce(t('spooler.status_error', { message: err.message }));
-    }
+    announce(t('spooler.status_connecting'));
+    setStatus(t('spooler.status_connecting'));
+    const res = await sendToEmbosserTarget(brfNow, choice, {
+      embosser: settings.embosser || 'generic',
+      duplex: settings.embosserDuplex || 'double',
+      width: settings.cells || 38,
+      depth: settings.lines || 25,
+      baudRate: settings.baudRate || 9600,
+      onStatus: (msg) => { setStatus(msg); announce(msg); },
+      text: uiText,
+    });
+    if (!res.success) console.warn('Embosser hardware communication error:', res.message);
+    if (res.success) tell(res.message);
+    else if (res.method === 'cancelled') tell(`${res.message || t('app.embosser.cancelled')} ${tOr('app.export.nothing_sent_short', 'Nothing was sent.')}`);
+    else tell(res.message || t('spooler.status_error', { message: '' }));
   };
   $id('embossBtn')?.addEventListener('click', handleEmbossPrint);
   $id('spoolBtn')?.addEventListener('click', handleEmbossPrint);
@@ -7848,12 +13754,14 @@ function wireControls() {
   const btnSimulateDotPad = $id('btnSimulateDotPad');
   const tactileConnStatus = $id('tactileConnStatus');
 
-  function updateTactileDisplayUI() {
+  // `resetBar` false for the display's 'viewport' events: they fire on every caret move (the display follows the caret), and each used to put the
+  // explanation bar back to its hint a moment after the word's explanation was shown (feedback 17 Oct 2026, item 14b: the bar went blank/hint while typing).
+  function updateTactileDisplayUI({ resetBar = true } = {}) {
     const isConn = tactileDisplay.isConnected();
     const info = tactileDisplay.getConnectionInfo();
     if (tactileConnStatus) {
       tactileConnStatus.textContent = isConn ? `Connected: ${info.name}` : 'No display connected';
-      tactileConnStatus.style.color = isConn ? '#10b981' : 'var(--muted)';
+      tactileConnStatus.style.color = isConn ? 'var(--accent-text)' : 'var(--muted)';
     }
     const badge = $id('tactileDisplayBadge');
     if (badge) badge.style.display = isConn ? 'inline-flex' : 'none';
@@ -7861,7 +13769,7 @@ function wireControls() {
     if (btnConnectTactile) btnConnectTactile.style.display = isConn ? 'none' : 'inline-block';
     if (btnConnectHid) btnConnectHid.style.display = isConn ? 'none' : 'inline-block';
     if (btnDisconnectTactile) btnDisconnectTactile.style.display = isConn ? 'inline-block' : 'none';
-    showIdleStatus();
+    if (resetBar) showIdleStatus();
   }
 
   $id('tactilePrevBtn')?.addEventListener('click', () => {
@@ -7993,7 +13901,7 @@ function wireControls() {
     const root = editorEl.querySelector('[data-block-idx="0"]');
     if (root) {
       linkByBlock(0, true);
-      root.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollWithin(editorEl, root, { block: 'center', behavior: 'smooth' });
     }
   });
   $id('dotpadBtnF3')?.addEventListener('click', () => {
@@ -8178,7 +14086,7 @@ function wireControls() {
 
   tactileDisplay.subscribe((event, data) => {
     if (event === 'connect' || event === 'disconnect' || event === 'viewport') {
-      updateTactileDisplayUI();
+      updateTactileDisplayUI({ resetBar: event !== 'viewport' });
       if (currentBrailleTab === 'monarch') {
         const frame = data?.activeFrame || tactileDisplay.getMonarchActiveFrame();
         drawMonarchEmulator(frame);
@@ -8360,9 +14268,40 @@ function wireControls() {
     }
   }
 
+  // F9 item B (APH feedback, 9 Oct 2026): Undo and Redo put a whole saved state back, which rebuilds the print pane; in Safari the
+  // pane's scroll position fell to 0 (the top of a 1,200-page book) and in Chrome it drifted, so the writer lost their place.
+  // The first top-level block that differs between the two states is where the change was: the view is put back, then the block
+  // is brought into view if it is not and the caret placed in it.
+  function firstChangedBlock(fromJson, toJson) {
+    try {
+      const a = JSON.parse(fromJson).root.children, b = JSON.parse(toJson).root.children;
+      const n = Math.min(a.length, b.length);
+      for (let i = 0; i < n; i++) if (JSON.stringify(a[i]) !== JSON.stringify(b[i])) return i;
+      return a.length === b.length ? -1 : n;
+    } catch { return -1; }
+  }
+  function keepViewAfterHistory(fromJson, toJson, scrollTop) {
+    const idx = firstChangedBlock(fromJson, toJson);
+    editorEl.scrollTop = scrollTop;
+    let node = null;
+    try {
+      editor.update(() => {
+        const kids = $getRoot().getChildren();
+        node = kids[Math.min(Math.max(idx, 0), kids.length - 1)] || null;
+        if (idx >= 0 && node && typeof node.selectEnd === 'function' && !$isListNode(node)) { try { node.selectEnd(); } catch { /* an atomic block: no caret */ } }
+      }, { discrete: true });
+    } catch { /* leave the view as restored */ }
+    const el = node && editor.getElementByKey(node.getKey());
+    if (idx >= 0 && el && !isElementVisibleIn(el, editorEl, 0)) {
+      editorEl.scrollTop = Math.max(0, el.offsetTop - editorEl.offsetTop - Math.round(editorEl.clientHeight / 3));
+      if (!isElementVisibleIn(el, editorEl, 0)) scrollWithin(editorEl, el, { block: 'center' });
+    }
+  }
+
   function performUndo() {
     flushHistorySnapshot();                 // anything typed in the last burst is undone first
     if (historyIndex > 0) {
+      const scrollTop = editorEl.scrollTop, fromJson = historyStack[historyIndex]?.state;
       historyIndex--;
       const item = historyStack[historyIndex];
       if (item && item.state) {
@@ -8371,6 +14310,7 @@ function wireControls() {
           const state = editor.parseEditorState(item.state);
           editor.setEditorState(state);
           item.ref = editor.getEditorState();    // identity fast-path for the next snapshot attempt
+          keepViewAfterHistory(fromJson, item.state, scrollTop);
           announce(t('app.history.undo'));
           setStatus(t('app.history.undo_status', { what: item.desc || t('app.history.change') }));
           ding();
@@ -8387,6 +14327,7 @@ function wireControls() {
   function performRedo() {
     flushHistorySnapshot();
     if (historyIndex < historyStack.length - 1) {
+      const scrollTop = editorEl.scrollTop, fromJson = historyStack[historyIndex]?.state;
       historyIndex++;
       const item = historyStack[historyIndex];
       if (item && item.state) {
@@ -8395,6 +14336,7 @@ function wireControls() {
           const state = editor.parseEditorState(item.state);
           editor.setEditorState(state);
           item.ref = editor.getEditorState();
+          keepViewAfterHistory(fromJson, item.state, scrollTop);
           announce(t('app.history.redo'));
           setStatus(t('app.history.redo_status', { what: item.desc || t('app.history.change') }));
           ding();
@@ -8424,6 +14366,8 @@ function wireControls() {
       root.append(p);
     });
     recordHistoryState('clear');
+    forgetLoadedTitle();       // a new document: the old file's title must not stay on line 1 of the braille (1 Oct 2026)
+    clearAutosaveSnapshot();   // an explicit Clear discards the autosave backup too (Undo still brings the text back)
     announce(t('app.history.cleared'));
     setStatus(t('app.history.cleared'));
     ding();
@@ -8431,13 +14375,19 @@ function wireControls() {
   });
 
   // ---- Expert Hardware & Serial mode toggle (Ctrl+Shift+\) ----
-  // Always starts HIDDEN by default on every app startup/reload (not remembered across sessions).
-  try { localStorage.removeItem('emboss_expert_hardware'); } catch {}
-  let expertHardwareMode = false;
+  // The state is remembered across reloads (G1, 16 Sep): it lives in the shared settings
+  // (settings.expertHardware). It also shows/hides the Tactile Graphic and Plot Tactile
+  // Graph slash commands (BLOCK_STYLES / SLASH_COMMANDS — see slashCommandVisible).
+  try { localStorage.removeItem('emboss_expert_hardware'); } catch {}   // the old, never-persisted key
+  let expertHardwareMode = settings.expertHardware === true && !BETA_LOCKED;   // a beta build: off unless unlocked (item 15)
+  document.body.classList.toggle('expert-hardware', expertHardwareMode);
 
   function toggleHardwareExpertMode() {
+    if (BETA_LOCKED) return;   // a beta build: the hardware controls are not offered (feedback item 15)
     expertHardwareMode = !expertHardwareMode;
     document.body.classList.toggle('expert-hardware', expertHardwareMode);
+    settings = saveSettings({ expertHardware: expertHardwareMode });
+    scheduleRender();   // the braille pane's tactile-graphic preview follows this toggle (feedback item 8)
     if (!expertHardwareMode) {
       const tabBtn = document.querySelector('.tab-btn[data-tab="tab-hardware"]');
       if (tabBtn && tabBtn.classList.contains('active')) {
@@ -8457,6 +14407,22 @@ function wireControls() {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\' || e.code === 'Backslash' || e.key === '|')) {
       e.preventDefault();
       toggleHardwareExpertMode();
+      return;
+    }
+
+    // Braille formatting… dialog: Ctrl/Cmd+Alt+B (works from the editor, not while a dialog is open)
+    if (e.altKey && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.code === 'KeyB') {
+      e.preventDefault();
+      if (!transcriberToolsOn()) { announce(tOr('app.braille_fmt.transcriber_only', 'The formatting options for this block are transcriber tools. Turn on Transcriber tools in Settings to see them.')); return; }
+      if (!document.querySelector('dialog[open]')) openBrailleFmtDialog();
+      return;
+    }
+
+    // K9 Remove box: Ctrl/Cmd+Alt+U (works from the editor, not while a dialog is open; everyone's shortcut,
+    // not gated on Transcriber tools — see unboxAtCaret).
+    if (e.altKey && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.code === 'KeyU') {
+      e.preventDefault();
+      if (!document.querySelector('dialog[open]')) unboxAtCaret();
       return;
     }
 
@@ -8481,6 +14447,33 @@ function wireControls() {
     const inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.tagName === 'MATH-FIELD' || (t.closest && t.closest('math-field, dialog[open], .table-cell-input')));
     if (inField) return;
     if (mod && !e.altKey) {
+      // UEB 9.5.1 strikethrough: Ctrl/⌘+Shift+X. Always live (task: "the shortcut still
+      // works") even while Settings › Transcriber tools is off and btnStrike is hidden —
+      // .click() on a display:none button still runs its handler.
+      if (e.shiftKey && (e.key.toLowerCase() === 'x' || e.code === 'KeyX')) {
+        e.preventDefault();
+        $id('btnStrike')?.click();
+        return;
+      }
+      // K5 / UEB §9 script typeform: Ctrl/⌘+Shift+S — same "always live" reasoning as
+      // strikethrough above. Checked BEFORE the plain Ctrl/⌘+S save shortcut just below,
+      // whose own check does not test e.shiftKey.
+      if (e.shiftKey && (e.key.toLowerCase() === 's' || e.code === 'KeyS')) {
+        e.preventDefault();
+        $id('btnScript')?.click();
+        return;
+      }
+      // K29 Stage 1d "Insert field": Ctrl/⌘+Shift+F — opens the Title Page's Insert-field combobox
+      // (design §4). Free (checked against every other Ctrl/⌘(+Shift) shortcut in this handler).
+      // The button's own click handler checks availability (caret in a Title Page line, Transcriber
+      // tools on), so this is safe to fire unconditionally, same "always live" pattern as above.
+      if (e.shiftKey && (e.key.toLowerCase() === 'f' || e.code === 'KeyF')) {
+        e.preventDefault();
+        // after Lexical has finished with this key press (its update restores the caret and would take the focus back from
+        // the menu just opened — A89)
+        setTimeout(() => $id('btnTpInsertField')?.click(), 0);
+        return;
+      }
       if (e.key.toLowerCase() === "s") {
         e.preventDefault();
         exportTextDocument(saveFormat());
@@ -8504,21 +14497,53 @@ function wireControls() {
     scheduleHistorySnapshot('typing');
   });
 
+  // ---- Autosave & crash recovery (Fable review #7): the one Lexical read pass autosave.mjs's
+  // periodic timer / visibilitychange / pagehide hooks need — the same NIMAS XML
+  // window.exportCurrentDocumentXml() produces, plus the title/metadata/resources a save would
+  // otherwise carry. All the storage, size-capping, warning and recovery-dialog logic lives in
+  // autosave.mjs; this function is the only bit of it that has to reach into editor state.
+  function buildAutosaveSnapshot() {
+    let currentDocModel = null;
+    editor.getEditorState().read(() => { currentDocModel = mergeListItemBlocks(buildModel()); });
+    const doc = currentDocModel || lastModel || { title: null, blocks: [] };
+    return {
+      xml: exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode }),   // UK-9: same as window.exportCurrentDocumentXml
+      title: doc.title || null,
+      metadata: loadedDocInfo.metadata || null,
+      resources: loadedDocInfo.resources || [],
+    };
+  }
+
   // ---- Save / Export Text Document ----
   function exportTextDocument(format) {
     flushHistorySnapshot();                 // the saved state is always an undo point
+    if (format === 'package' || format === 'xml' || format === 'nimas') maybeShowExportWarningNotice();   // Fable review #5
     const title = (lastModel?.title || "document").trim();
     const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
     if (format === 'package') {
       let currentDocModel = null;
       editor.getEditorState().read(() => {
-        currentDocModel = buildModel();
+        currentDocModel = mergeListItemBlocks(buildModel());
       });
       const doc = currentDocModel || lastModel || { title, blocks: [] };
-      const pkg = buildNimasPackage(doc);
-      saveBlob(makeZip(pkg.files), pkg.zipName);
+      // S2B-Q2 (Paul 15 Oct): the package builder refuses a package it cannot make correctly (a duplicate file name, an unsafe path).
+      // Its message goes to the status line and is announced; nothing is written, and the document stays unsaved.
+      let pkg;
+      try {
+        pkg = buildNimasPackage(doc, { mode: settings.mode });   // UK-9: same as the .xml export below
+        // tests only: window.__embossTestPackageFiles(files) may return other files, to reach the builder's own refusal (a duplicate name)
+        // - a real document cannot, since the builder gives every file a name of its own
+        if (typeof window.__embossTestPackageFiles === 'function') { pkg.files = window.__embossTestPackageFiles(pkg.files); checkPackagePaths(pkg.files); }
+        saveBlob(makeZip(pkg.files), pkg.zipName);
+      } catch (err) {
+        console.warn('NIMAS package refused:', err);
+        const msg = err && err.userFacing ? err.message : tOr('app.save.package_failed', 'The package could not be saved: {message}. The file was not written.').replace('{message}', String((err && err.message) || err));
+        setStatus(msg); announce(msg);
+        return;
+      }
       // Like the .xml project save, this download IS the saved document.
       markDocumentClean();
+      clearAutosaveSnapshot();   // this download is the save — the autosave backup is now redundant
       announce(t('app.save.saved', { file: pkg.zipName }));
       setStatus(t('app.save.package', { file: pkg.zipName, count: pkg.imageCount }));
       return;
@@ -8526,160 +14551,63 @@ function wireControls() {
     if (format === "xml" || format === "nimas") {
       let currentDocModel = null;
       editor.getEditorState().read(() => {
-        currentDocModel = buildModel();
+        currentDocModel = mergeListItemBlocks(buildModel());
       });
       const doc = currentDocModel || lastModel || { title, blocks: [] };
-      const xmlString = exportToNimasXml(doc, { title: doc.title || title });
+      const xmlString = exportToNimasXml(doc, { title: doc.title || title, mode: settings.mode });   // UK-9: same as window.exportCurrentDocumentXml
       saveBlob(new Blob([xmlString], { type: "application/xml;charset=utf-8" }), `${baseName}.xml`);
       // The project file is the one download that *is* the saved document: baseline the
       // dirty tracking on it once the download has been triggered.
       markDocumentClean();
+      clearAutosaveSnapshot();   // this download is the save — the autosave backup is now redundant
       announce(t('app.save.saved', { file: `${baseName}.xml` }));
       setStatus(t('app.save.nimas', { file: `${baseName}.xml` }));
       return;
     }
-    if (format === 'json') {
-      const docObj = {
-        title,
-        date: new Date().toISOString(),
-        settings: { ...settings },
-        model: lastModel,
-        lexical: editor.getEditorState().toJSON()
+    // The alternative saves (S5d). None is in a menu yet (Paul decides whether to offer them); each is a derived output, so none marks the
+    // document clean. Each reads the live document (liveDocumentModel) and a failure is told in the status line, not thrown.
+    if (format === 'json' || format === 'md' || format === 'txt' || format === 'docx' || format === 'html') {
+      const doc = liveDocumentModel();
+      const docTitle = String((doc && doc.title) || 'document').trim();
+      const base = docTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'document';
+      const finish = (blob, ext, statusKey) => {
+        saveBlob(blob, `${base}.${ext}`);
+        announce(t('app.save.saved', { file: `${base}.${ext}` }));
+        setStatus(t(statusKey, { file: `${base}.${ext}` }));
       };
-      saveBlob(new Blob([JSON.stringify(docObj, null, 2)], { type: 'application/json;charset=utf-8' }), `${baseName}.json`);
-      announce(t('app.save.saved', { file: `${baseName}.json` }));
-      setStatus(t('app.save.native', { file: `${baseName}.json` }));
-      return;
-    }
-    if (format === 'md') {
-      const lines = [];
-      const segToMd = (segments) => (segments || []).map(s => {
-        if (!s) return '';
-        if (s.type === 'math') return s.latex ? `$${s.latex}$` : '';
-        let t = s.text || '';
-        if (s.tf & TF.bold) t = `**${t}**`;          // tf is the liblouis bitmask, not an object
-        if (s.tf & TF.italic) t = `*${t}*`;
-        if (s.tf & TF.underline) t = `<u>${t}</u>`;
-        return t;
-      }).join('');
-
-      (lastModel?.blocks || []).forEach((b) => {
-        if (b.type === 'heading') lines.push(`${'#'.repeat(b.level || 1)} ${b.text || ''}\n`);
-        else if (b.type === 'para') {
-          const t = b.segments ? segToMd(b.segments) : (b.text || '');
-          lines.push(`${t}\n`);
-        } else if (b.type === 'list') {
-          (b.items || []).forEach((it, idx) => {
-            const marker = isOrderedList(b) ? (it.marker || `${idx + 1}.`) : '*';
-            const t = it.segments ? segToMd(it.segments) : (it.text || '');
-            lines.push(`${marker} ${t}`);
-          });
-          lines.push('');
-        } else if (b.type === 'table') {
-          const headers = b.headers || [];
-          const rows = b.rows || [];
-          if (headers.length) {
-            lines.push(`| ${headers.map(cellToMarkup).join(' | ')} |`);
-            lines.push(`| ${headers.map(() => '---').join(' | ')} |`);
-          }
-          for (const row of rows) {
-            lines.push(`| ${(row || []).map(cellToMarkup).join(' | ')} |`);
-          }
-          lines.push('');
-        } else if (b.type === 'indicator') {           // buildModel emits 'indicator' for a section break
-          lines.push('* * *\n');
-        } else if (b.type === 'note') {
-          lines.push(`> ${b.text || ''}\n`);
-        } else if (b.type === 'math') {
-          lines.push(`$$\n${b.latex || ''}\n$$\n`);
-        } else if (b.type === 'graphic') {
-          lines.push(`![${b.alt || 'Tactile graphic'}](${b.src || 'graphic'})\n`);
+      try {
+        if (format === 'json') {
+          const docObj = {
+            title: docTitle,
+            date: new Date().toISOString(),
+            settings: { ...settings },
+            model: doc,
+            lexical: editor.getEditorState().toJSON()
+          };
+          // package pictures are bytes: written as base64, not as an object of numbers
+          const json = JSON.stringify(docObj, (k, v) => (v instanceof Uint8Array ? { base64: bytesToBase64(v) } : v), 2);
+          finish(new Blob([json], { type: 'application/json;charset=utf-8' }), 'json', 'app.save.native');
+        } else if (format === 'md') {
+          finish(new Blob([exportToMarkdown(doc, { title: docTitle })], { type: 'text/markdown;charset=utf-8' }), 'md', 'app.save.markdown');
+        } else if (format === 'txt') {
+          finish(new Blob([exportToText(doc, { title: docTitle })], { type: 'text/plain;charset=utf-8' }), 'txt', 'app.save.text');
+        } else if (format === 'docx') {
+          finish(exportToDocxBlob(doc, docTitle, { latexToMathml: convertLatexCached }), 'docx', 'app.save.word');
+        } else {
+          finish(new Blob([exportToHtml(doc, { title: docTitle, latexToMathml: convertLatexCached })], { type: 'text/html;charset=utf-8' }), 'html', 'app.save.html');
         }
-      });
-      saveBlob(new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' }), `${baseName}.md`);
-      announce(t('app.save.saved', { file: `${baseName}.md` }));
-      setStatus(t('app.save.markdown', { file: `${baseName}.md` }));
-      return;
-    }
-    if (format === 'txt') {
-      const lines = [];
-      (lastModel?.blocks || []).forEach((b) => {
-        if (b.type === 'heading') lines.push(`\n${(b.text || '').toUpperCase()}\n`);
-        else if (b.type === 'para') lines.push(`${b.text || (b.segments ? b.segments.map(s => s.text || (s.latex ? `$${s.latex}$` : '')).join('') : '')}\n`);
-        else if (b.type === 'list') {
-          (b.items || []).forEach((it, idx) => {
-            const t = it.text || (it.segments ? it.segments.map(s => s.text || (s.latex ? `$${s.latex}$` : '')).join('') : '');
-            lines.push(`${isOrderedList(b) ? (it.marker || (idx + 1) + '.') : '•'} ${t}`);
-          });
-          lines.push('');
-        } else if (b.type === 'table') {
-          const headers = b.headers || [];
-          const rows = b.rows || [];
-          if (headers.length) lines.push(headers.map(cellPlainText).join('\t'));
-          for (const r of rows) lines.push((r || []).map(cellPlainText).join('\t'));
-          lines.push('');
-        } else if (b.type === 'indicator') lines.push('\n* * *\n');
-        else if (b.type === 'note') lines.push(`\n[Note: ${b.text || ''}]\n`);
-      });
-      saveBlob(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }), `${baseName}.txt`);
-      announce(t('app.save.saved', { file: `${baseName}.txt` }));
-      setStatus(t('app.save.text', { file: `${baseName}.txt` }));
-      return;
-    }
-    if (format === 'docx') {
-      const blob = exportToDocxBlob(lastModel, title);
-      saveBlob(blob, `${baseName}.docx`);
-      announce(t('app.save.saved', { file: `${baseName}.docx` }));
-      setStatus(t('app.save.word', { file: `${baseName}.docx` }));
-      return;
-    }
-    if (format === 'html') {
-      const htmlBody = [];
-      const segToHtml = (segments) => (segments || []).map(s => {
-        if (!s) return '';
-        if (s.type === 'math') return s.mathml || `<math display="inline"><mrow><mtext>${escapeHtml(s.latex || '')}</mtext></mrow></math>`;
-        let t = escapeHtml(s.text || '');
-        if (s.tf & TF.bold) t = `<strong>${t}</strong>`;
-        if (s.tf & TF.italic) t = `<em>${t}</em>`;
-        if (s.tf & TF.underline) t = `<u>${t}</u>`;
-        return t;
-      }).join('');
-
-      (lastModel?.blocks || []).forEach((b) => {
-        if (b.type === 'heading') htmlBody.push(`<h${b.level || 1}>${escapeHtml(b.text || '')}</h${b.level || 1}>`);
-        else if (b.type === 'para') {
-          const inner = b.segments ? segToHtml(b.segments) : escapeHtml(b.text || '');
-          htmlBody.push(`<p>${inner}</p>`);
-        } else if (b.type === 'list') {
-          const tag = isOrderedList(b) ? 'ol' : 'ul';
-          const itemsHtml = (b.items || []).map(it => {
-            const inner = it.segments ? segToHtml(it.segments) : escapeHtml(it.text || '');
-            return `<li>${inner}</li>`;
-          }).join('');
-          htmlBody.push(`<${tag}>${itemsHtml}</${tag}>`);
-        } else if (b.type === 'table') {
-          const headers = b.headers || [];
-          const rows = b.rows || [];
-          const headHtml = headers.length ? `<thead><tr>${headers.map(h => `<th>${segToHtml(cellSegments(h))}</th>`).join('')}</tr></thead>` : '';
-          const bodyHtml = `<tbody>${rows.map(r => `<tr>${(r || []).map(c => `<td>${segToHtml(cellSegments(c))}</td>`).join('')}</tr>`).join('')}</tbody>`;
-          htmlBody.push(`<table>${headHtml}${bodyHtml}</table>`);
-        } else if (b.type === 'indicator') {
-          htmlBody.push('<hr />');
-        } else if (b.type === 'note') {
-          htmlBody.push(`<aside class="transcriber-note"><p>${escapeHtml(b.text || '')}</p></aside>`);
-        } else if (b.type === 'math') {
-          htmlBody.push(`<div class="math-block">${b.mathml || `<math display="block"><mrow><mtext>${escapeHtml(b.latex || '')}</mtext></mrow></math>`}</div>`);
-        } else if (b.type === 'graphic') {
-          htmlBody.push(`<figure role="doc-graphic">${b.svg ? sanitizeSvgMarkup(b.svg) : `<svg viewBox="0 0 100 100"><text x="10" y="50">${escapeHtml(b.alt || 'Graphic')}</text></svg>`}<figcaption>${escapeHtml(b.caption || b.alt || '')}</figcaption></figure>`);
-        }
-      });
-      const docHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font-family:system-ui,-apple-system,sans-serif;max-width:800px;margin:2rem auto;line-height:1.6;padding:0 1rem;}table{border-collapse:collapse;width:100%;margin:1rem 0;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f5f8;}.transcriber-note{background:#f8f9fa;border-left:4px solid #0284c7;padding:8px 16px;margin:1rem 0;}</style></head><body>${htmlBody.join('\n')}</body></html>`;
-      saveBlob(new Blob([docHtml], { type: 'text/html;charset=utf-8' }), `${baseName}.html`);
-      announce(t('app.save.saved', { file: `${baseName}.html` }));
-      setStatus(t('app.save.html', { file: `${baseName}.html` }));
+      } catch (err) {
+        console.warn(`Save as ${format} failed:`, err);
+        const msg = tOr('app.save.export_failed', 'The document could not be saved as {format}: {message}. The file was not written.').replace('{format}', format).replace('{message}', String((err && err.message) || err));
+        setStatus(msg); announce(msg);
+      }
       return;
     }
   }
+
+  // Test hook (Emboss/tests/test-s5d-live-save.mjs): the alternative saves (txt, md, html, docx, json) are in no menu yet, so the test
+  // reaches them here - the same exportTextDocument the Save button and Ctrl/Cmd+S call with the project format.
+  window.__embossTestSaveAs = (format) => exportTextDocument(format);
 
   // Triggers a browser download. Deliberately does NOT touch the dirty flag: a BRF/PEF/
   // eBraille/HTML/Markdown export is a *derived* output, so downloading one must not
@@ -8722,40 +14650,86 @@ function wireControls() {
     }
   });
 
-  function triggerDownloadFormat(format = 'brf') {
+  async function triggerDownloadFormat(format = 'brf') {
     closeAllDropdownMenus();
-    if (!lastBrf) return;
-    const title = (lastModel?.title || document.querySelector('#editor h1, #editor h2, #editor [data-block-type="heading"]')?.textContent || 'document').trim();
+    // S2a #2/#3: only the braille of the document and settings as they are now (see currentOutput / waitForCurrentOutput)
+    commitPendingCardDrafts();
+    let out = currentOutput();
+    if (!out) {
+      const res = await waitForCurrentOutput();
+      if (!res.out) { refuseOutput('download', res); return; }
+      out = res.out;
+    }
+    const { brf: curBrf, model: liveModel, opts: curOpts } = out;
+    if (!curBrf) return;
+    // The files are made from the document as it is saved and as Quick Mode and eBraille have it - a list whole, with a table or quotation inside
+    // one of its items (mergeListItemBlocks) - never from the editor's own pieces of it: a quotation in a list item was 2 cells left of Quick
+    // Mode's, and a page could end in a different place (APH feedback 17 Oct 2026).
+    const curModel = liveModel ? mergeListItemBlocks(liveModel) : liveModel;
+    maybeShowExportWarningNotice();   // Fable review #5: BRF / PEF / eBraille all derive from the same last-rendered braille
+    const title = (curModel?.title || document.querySelector('#editor h1, #editor h2, #editor [data-block-type="heading"]')?.textContent || 'document').trim();
     const baseName = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'document';
     const opts = {
-      ...(lastFormatOpts || currentFormatOpts()),
+      ...(curOpts || currentFormatOpts()),
       suppressHeader: false,
       mode: settings.mode, width: settings.cells, depth: settings.lines,
       volumePages: settings.volumePages, includeCovers: settings.includeCovers,
       duplex: settings.embosserDuplex,
     };
     if (format === 'pef') {
-      const pefXml = exportToPef(lastModel || { title: 'Document', blocks: [] }, opts);
+      const pefXml = exportToPef(curModel || { title: 'Document', blocks: [] }, opts);
       saveBlob(new Blob([pefXml], { type: 'application/x-pef+xml' }), `${baseName}.pef`);
       announce(t('app.save.pef_downloaded'));
       setStatus(t('app.save.pef', { file: `${baseName}.pef` }));
+      maybeOfferTitlePagePrintCopy(baseName);   // K29 Stage 1d: BRF/PEF export offer
       return;
     }
     if (format === 'ebrl' || format === 'ebrf') {
-      const bytes = exportToEbraille(lastModel || { title: 'Document', blocks: [] },
+      // The document's own language, author, identifier and publisher come first; the braille code's language next; the browser's is the last
+      // fallback (S3b #18, Paul B1). The system declared is that of the braille exported (opts carries it from the render, S3b #17).
+      const bytes = exportToEbraille(curModel || { title: 'Document', blocks: [] },
         { ...opts, language: (navigator.language || 'en') });
       saveBlob(new Blob([bytes], { type: 'application/epub+zip' }), `${baseName}.ebrl`);
       announce(t('app.save.saved', { file: `${baseName}.ebrl` }));
-      setStatus(t('app.save.ebraille', { file: `${baseName}.ebrl` }));
+      if (bytes.warnings && bytes.warnings.length) {   // S3b #20 (Paul C1): cells or labels replaced by a note - the file says so, and so does this
+        const msg = ebrailleWarningText(bytes.warnings, `${baseName}.ebrl`);
+        setStatus(msg, 'warn'); announce(msg);
+      } else setStatus(t('app.save.ebraille', { file: `${baseName}.ebrl` }));
       return;
     }
     const maxV = Math.max(0, Number(settings.volumePages) || 0);
-    const vols = (lastModel && lastFormatOpts) ? formatVolumes(lastModel, { ...lastFormatOpts, suppressHeader: false, volumePages: maxV }) : [{ volume: 1, of: 1, brf: lastBrf || '' }];
-    if (vols.length <= 1) { saveBlob(new Blob([vols[0].brf || ''], { type: 'application/octet-stream' }), `${baseName}.brf`); return; }
+    const vols = (curModel && curOpts) ? formatVolumes(curModel, { ...curOpts, suppressHeader: false, volumePages: maxV }) : [{ volume: 1, of: 1, brf: curBrf || '' }];
+    if (vols.length <= 1) {
+      saveBlob(new Blob([vols[0].brf || ''], { type: 'application/octet-stream' }), `${baseName}.brf`);
+      maybeOfferTitlePagePrintCopy(baseName);   // K29 Stage 1d: BRF/PEF export offer
+      return;
+    }
     const files = vols.map((v) => ({ name: `${baseName}-v${v.volume}-of-${v.of}.brf`, text: v.brf }));
     saveBlob(makeZip(files), `${baseName}-braille-volumes.zip`);
     announce(t('app.save.volumes', { count: vols.length }));
+    maybeOfferTitlePagePrintCopy(baseName);   // K29 Stage 1d: BRF/PEF export offer
   }
+
+  // K29 Stage 1d: "…offer to also save the print copy as …-title-page.html" (design §4/§5 row "1d Print
+  // copy") — the print copy is paper, never inside the BRF/PEF itself, so it is offered as a separate
+  // save each time a document with a Title Page is exported to BRF or PEF (not eBraille/NIMAS package,
+  // which are not "BRF/PEF export").
+  function maybeOfferTitlePagePrintCopy(baseName) {
+    const doc = tpFullDocForPrint();
+    const el = $id('titlepagePrintOffer');
+    if (!el) return;
+    if (!(doc.blocks || []).some((b) => b && b.type === 'titlepage')) { el.hidden = true; return; }
+    el.hidden = false;
+    const saveBtn = $id('titlepagePrintOfferSave');
+    if (saveBtn) saveBtn.onclick = () => {
+      const html = titlePagePrintHtml(doc, { mode: settings.mode, exhaustiveSymbols: doc.exhaustiveSymbols });
+      saveBlob(new Blob([html], { type: 'text/html;charset=utf-8' }), `${baseName}-title-page.html`);
+      el.hidden = true;
+      announce(t('app.titlepage_print.export_offer_saved') || 'Print copy saved.');
+    };
+  }
+  $id('titlepagePrintOfferDismiss')?.addEventListener('click', () => { const el = $id('titlepagePrintOffer'); if (el) el.hidden = true; });
+  $id('printTitlepageItem')?.addEventListener('click', () => { closeAllDropdownMenus(); openPrintTitlePage(); });
 
   $id('downloadBrfItem')?.addEventListener('click', () => triggerDownloadFormat('brf'));
   $id('downloadPefItem')?.addEventListener('click', () => triggerDownloadFormat('pef'));
@@ -8770,17 +14744,45 @@ function wireControls() {
   $id('brlLarger')?.addEventListener('click', () => resize(3));
   $id('brlSmaller')?.addEventListener('click', () => resize(-3));
   let proofIssueIdx = 0;
-  $id('proofBadge')?.addEventListener('click', () => {
-    if (lastProofIssues && lastProofIssues.length > 0) {
-      proofIssueIdx = proofIssueIdx % lastProofIssues.length;
-      const issue = lastProofIssues[proofIssueIdx++];
+  $id('proofBadge')?.addEventListener('click', async (ev) => {
+    // Feedback 17 Oct 2026, item 5: Safari does not give a button the focus when it is clicked, so with the caret in the text the focus sat on
+    // the page, and rescueEditorFocus (above) put it back on the text a moment later — and WebKit then scrolled the text back to the old caret,
+    // undoing the jump to the word ("nothing happened"). The badge takes the focus itself, as it does in Chrome; the keyboard stays on it (Enter
+    // or Space goes to the next word) and nothing is left to rescue.
+    try { (ev.currentTarget || $id('proofBadge')).focus({ preventScroll: true }); } catch { /* not focusable */ }
+    // F9 item A: after an edit (or leaving the picture card's description box, which commits it) the page renders again; the jump
+    // waits for that, or the render's clean-up wiped the highlight a moment after it was made and "nothing happened".
+    if (renderPending()) { announce(tOr('app.proof.waiting', 'Finishing your last change, then going to the next word to check.')); await renderSettled(); }
+    const issues = proofIssuesNow();
+    if (issues && issues.length > 0) {
+      proofIssueIdx = proofIssueIdx % issues.length;
+      const issue = issues[proofIssueIdx++];
       const pe = printUnitEl(issue.idx, issue.itemIdx) || editorEl.querySelector(`[data-block-idx="${issue.idx}"]`);
       if (pe) {
-        pe.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollWithin(editorEl, pe, { block: 'center', behavior: 'smooth' });
         highlightWord(issue.idx, issue.itemIdx || 0, issue.start, issue.end);
-        announce(t('app.proof.issue', { n: proofIssueIdx, total: lastProofIssues.length, word: issue.word || issue.src || '' }));
+        const msg = tOr('app.proof.issue', `Word ${proofIssueIdx} of ${issues.length} to check: “${issue.word || ''}”. Its braille does not read back as the same word. That is often fine for a name or an unusual word; otherwise check the braille.`)
+          .replace('{n}', proofIssueIdx).replace('{total}', issues.length).replace('{word}', issue.word || issue.src || '');
+        announce(msg);
+        // Shown in the explanation bar too (feedback item 7): the badge alone did not say why the word was picked out.
+        const body = $id('ruleInfoBody');
+        if (body) setTimeout(() => { body.innerHTML = `<span class="ri-note proof-explain" style="color:var(--ink)">${iconSvg('warning-triangle', 'icon icon-inline')} ${escapeHtml(msg)}</span>`; }, 60);
       }
     }
+  });
+  $id('warnBadge')?.addEventListener('click', () => {
+    const panel = $id('warnPanel');
+    if (panel && !panel.hidden) closeWarningsPanel(); else openWarningsPanel();
+  });
+  $id('warnPanelClose')?.addEventListener('click', () => closeWarningsPanel());
+  $id('exportWarnNoticeView')?.addEventListener('click', () => {
+    $id('exportWarnNotice').hidden = true;
+    if (exportWarnDismissTimer) clearTimeout(exportWarnDismissTimer);
+    openWarningsPanel();
+  });
+  $id('exportWarnNoticeDismiss')?.addEventListener('click', () => {
+    $id('exportWarnNotice').hidden = true;
+    if (exportWarnDismissTimer) clearTimeout(exportWarnDismissTimer);
   });
   window.addEventListener('resize', () => {
     if (timer) clearTimeout(timer);
@@ -8788,13 +14790,20 @@ function wireControls() {
   });
 }
 
+getBuildInfo().then((info) => {
+  const bi = $id('buildInfo'); if (bi) bi.textContent = info ? `${info.hash}, built ${info.date}` : 'development';
+});
+
 (async () => {
-  if (settings.simpleMode) { location.href = '/web/index.html'; return; }   // Simple mode → the converter
+  // (The editor no longer sends anyone to Quick Mode because "Start in Quick Mode" is on: that setting decides where the SITE ADDRESS opens, which is
+  // Quick Mode's own check; the editor's address, and the switch from Quick Mode, always open the editor — feedback 17 Oct 2026, item 12.)
+  // (On a phone the page's first script has already sent the editor's address to Quick Mode: Paul, 18 Oct 2026, Quick Mode only.)
   try {
     await initI18n(settings.uiLanguage || 'en');
   } catch (err) {
     console.warn('initI18n error:', err);
   }
+  watchOfflineReady({ text: tOr, say: (m) => { setStatus(m); announce(m); } });   // S4-Q2
   if (typeof window !== 'undefined') {
     window.initI18n = initI18n;
     window.t = t;
@@ -8805,11 +14814,28 @@ function wireControls() {
     window.translateDOM = translateDOM;
   }
   applySettingsToUI();
+  if (settings.sixKeyOn === true) toggleSixKey(true, true);   // F9-Q1b: the six-key button is back as the writer left it
   wireControls();
   wireReadingControls();
   updateReadButtons();
-  setStatus(t('app.engine.loading'));
-  brailleEl.textContent = t('app.engine.loading');
+  // F9 item I (Paul 9 Oct 2026): a calm loading state — a small spinner and words in the page's own font — instead of bare monospace text.
+  // The spinner is hidden from screen readers and the words are announced once, politely, through the page's live region; the
+  // renders that run before the engine is up are skipped (render() checks engineLoading) so the message stays until braille shows.
+  engineLoading = true;
+  const loadingText = t('app.engine.loading');
+  setStatus(loadingText);
+  announce(loadingText);
+  {
+    const wrap = document.createElement('div');
+    wrap.className = 'engine-loading';
+    const spin = document.createElement('span');
+    spin.className = 'engine-spinner';
+    spin.setAttribute('aria-hidden', 'true');
+    const words = document.createElement('span');
+    words.textContent = loadingText;
+    wrap.append(spin, words);
+    brailleEl.replaceChildren(wrap);
+  }
   try {
     const [ver] = await Promise.all([
       louis.init({ tablesBaseUrl: '/liblouis/tables' }),
@@ -8817,6 +14843,7 @@ function wireControls() {
     ]);
     const ev = $id('engineVer'); if (ev) ev.textContent = (ver || '').split(' ')[0] || '3.38.0';
     await activateTable();                 // the persisted braille code, before the first render
+    engineLoading = false;
   }
   catch (e) {
     console.error(e);
@@ -8828,27 +14855,62 @@ function wireControls() {
   initSlashMenu();
   initFormulaDialog();
   initGraphicDialog();
+  // Autosave & crash recovery (Fable review #7; one backup per tab since A80): a backup only
+  // survives to here when a session ended dirty (every explicit save/Clear/new-load removes this
+  // tab's own — see clearAutosaveSnapshot() above). checkForRecovery() prompts "Recover unsaved
+  // work from <time>?" for this tab's own backup, or one whose tab is gone — never for another
+  // open tab's — and resolves the recovered model, or null if there was nothing to recover or the
+  // user chose Discard. A Quick Mode handoff, when there is one, is opened instead (below).
   // A document uploaded in Quick Mode is handed over via IndexedDB / sessionStorage — load it here
   // instead of the demo (text/headings/lists/emphasis/latex-maths transfer; a docx
   // equation with only MathML becomes an ⟨equation⟩ placeholder).
-  let handoff = null;
+  let handoff = null, handoffRec = null;
   try {
-    handoff = await getAndClearHandoffDoc();
+    handoffRec = await readHandoff();   // S2a #4: this page's own transfer (its id is in the address); the stored copy stays until confirmHandoff below
+    handoff = handoffRec && handoffRec.doc;
   } catch (e) {
     console.warn('handoff retrieval error:', e);
   }
-  if (handoff && (handoff.blocks || []).length) { setLoadedDocInfo(handoff); modelToLexical(handoff); } else seed();
+  const hasHandoff = !!(handoff && (handoff.blocks || []).length);
+  // A handoff is the document the user just chose to open, so it wins; the recovery prompt is
+  // only for an ordinary start. The backup is kept either way (it is replaced on the next
+  // autosave, or offered on a later ordinary start if it is still there).
+  let recovered = null;
+  let recoveryAnswered = false;
+  if (!hasHandoff) {
+    try {
+      // announce(), not setStatus(): the status line is about to be overwritten by
+      // t('app.engine.ready') a few lines below, but the screen-reader announcement still lands.
+      recovered = await checkForRecovery({ onStatus: (msg) => announce(msg), onAnswered: () => { recoveryAnswered = true; } });
+    } catch (e) {
+      console.warn('autosave recovery check error:', e);
+    }
+  }
+  if (recovered) { setLoadedDocInfo(recovered); modelToLexical(recovered); }
+  else if (hasHandoff) { setLoadedDocInfo(handoff); modelToLexical(handoff); } else seed();
   clearTranslationCache();
   render();
   refreshToolbar();
   markDocumentClean();
   resetUndoHistory();
-  // once MathCAT and MathLive are ready, re-render so the seeded equation transcribes
+  if (recovered || (hasHandoff && handoff._unsavedEdits)) markDocumentUnsaved();   // a recovered backup, or edits that went to Quick Mode and back, were never saved to a file
+  await confirmHandoff(handoffRec);   // the document is loaded here: the stored copy of this transfer can go (S2a #4)
+  // Recover / Discard answered: the dialog has gone, so the keyboard goes back to the document, at its start — it was left on the
+  // page itself, where Tab reached the toolbar and a space pressed Quick Mode (A89, the nightly random-action run).
+  if (recoveryAnswered) { editorEl.focus({ preventScroll: true }); editor.update(() => { $getRoot().selectStart(); }, { discrete: true }); }
+  // once MathCAT and MathLive are ready, re-render so the seeded equation transcribes — but only if there IS an equation (feedback 17 Oct 2026,
+  // item 13): each of these two re-renders restarted the formatting of the whole document, and on a 5,000-block book with no maths (the testers'
+  // Large NIMAS test) they pushed the braille from about 4 s to about 10 s, the three renders contending for the processor.
+  const documentHasMaths = () => {
+    try { return /"type":"(?:math|equation)"|"(?:mathml|latex)":/.test(JSON.stringify(editor.getEditorState().read(buildModel))); } catch { return true; }   // inline or display maths; unsure: render
+  };
   Promise.resolve(maths.initMaths()).then(() => {
+    if (!documentHasMaths()) return;
     clearTranslationCache();
     render();
   }).catch(() => {});
   if (globalThis.customElements) customElements.whenDefined('math-field').then(() => {
+    if (!documentHasMaths()) return;
     clearTranslationCache();
     render();
   }).catch(() => {});

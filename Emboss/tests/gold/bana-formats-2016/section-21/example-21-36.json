@@ -27,22 +27,50 @@
   "braille": {
     "width": 40,
     "lines": [
-      "las botas3 boots1 #h",
-      " el bote3 boat1 #i2",
-      "      el bote de vela3 sailboat1 #aj2",
-      "      pasear en bote de vela3 to g \\ 9 a",
+      "las botas  boots1 #h",
+      " el bote  boat1 #i2",
+      "      el bote de vela  sailboat1 #aj2",
+      "      pasear en bote de vela  to g \\ 9 a",
       "        sailboat1 #aj",
-      " el brazo3 >m1 #g",
-      "    brillar3 to %9e1 #g",
-      "    brindar3 to (f]1 #e"
+      " el brazo  >m1 #g",
+      "    brillar  to %9e1 #g",
+      "    brindar  to (f]1 #e"
     ],
     "pageBreaks": [],
-    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-36: ...' title and 4 leading blank lines — removed; the remaining 8 real lines already had their margin correctly stripped."
+    "notes": "Re-extracted from source: the given run's braille.lines wrongly included the 'Example 21-36: ...' title and 4 leading blank lines — removed; the remaining 8 real lines already had their margin correctly stripped. Corrected per BANA foreign-language changes June 2024 (below); margins (per-entry left margin, subentry +2, runover margin+2) are unchanged by that correction."
   },
   "uncertain": [],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.9.2e (the actual multi-part rule the source quotes right before this example; A/B's own id '21.8.6e' was wrong — that is Example 21-34/35's own rule)."
+  "resolution": "braille.lines corrected: removed 5 bogus leading lines (title + 4 blanks); illustrates.rule set to 21.9.2e (the actual multi-part rule the source quotes right before this example; A/B's own id '21.8.6e' was wrong — that is Example 21-34/35's own rule).",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA foreign-language changes June 2024",
+      "field": "braille.lines",
+      "before": [
+        "las botas3 boots1 #h",
+        " el bote3 boat1 #i2",
+        "      el bote de vela3 sailboat1 #aj2",
+        "      pasear en bote de vela3 to g \\ 9 a",
+        "        sailboat1 #aj",
+        " el brazo3 >m1 #g",
+        "    brillar3 to %9e1 #g",
+        "    brindar3 to (f]1 #e"
+      ],
+      "after": [
+        "las botas  boots1 #h",
+        " el bote  boat1 #i2",
+        "      el bote de vela  sailboat1 #aj2",
+        "      pasear en bote de vela  to g \\ 9 a",
+        "        sailboat1 #aj",
+        " el brazo  >m1 #g",
+        "    brillar  to %9e1 #g",
+        "    brindar  to (f]1 #e"
+      ],
+      "note": "New rule 21.9.2c: follow print for punctuation after an entry word; where print has none, leave two blank cells instead of a braille colon. The old d(3)-(4) per-page/per-entry margins are unchanged and unaffected by this correction. Line 4 (\"      pasear en bote de vela  to g \\\\ 9 a\") is exactly 40 cells."
+    }
+  ]
 }

@@ -45,7 +45,12 @@ test('save: the image group is written back and re-reads identically', () => {
 test('braille: caption, label, description; decorative image omitted', () => {
   const o = opts('bana');
   const cases = [
-    [{ type: 'graphic', src: 'a', alt: 'A', caption: 'Figure 2. Balloon', description: 'A red balloon.' }, ['      FIGURE 2. BALLOON', '      @.<A RED BALLOON.@.>']],
+    // Real-book-validation-24sep.md bug 5: alt is kept alongside a production-note description
+    // (see printImageParts, format/document.mjs) — 'A' here is placeholder alt text this case
+    // never meant to exercise (its own point is the caption/label/description margins), so it
+    // is empty, same as the no-alt-at-all cases below; bug 5's alt+description combination has
+    // its own dedicated coverage in tests/real_book_parser_fixes.test.mjs.
+    [{ type: 'graphic', src: 'a', alt: '', caption: 'Figure 2. Balloon', description: 'A red balloon.' }, ['      FIGURE 2. BALLOON', '      @.<A RED BALLOON.@.>']],
     [{ type: 'graphic', src: 'a', alt: 'Portrait', caption: 'Lincoln in 1860' }, ['      @.<ILLUSTRATION@.> LINCOLN IN 1860', '      @.<PORTRAIT@.>']],
     [{ type: 'graphic', src: 'a', alt: 'A portrait' }, ['      @.<ILLUSTRATION@.>', '      @.<A PORTRAIT@.>']],
     [{ type: 'graphic', src: 'cover.png', alt: '' }, []],
@@ -60,7 +65,7 @@ test('braille: caption, label, description; decorative image omitted', () => {
 test('editor: ImageNode registered; equation-only paragraph saved as a math block (source check)', () => {
   const ed = fs.readFileSync(path.join(here, '..', 'web', 'editor', 'editor.mjs'), 'utf8');
   assert.match(ed, /nodes: \[[^\]]*ImageNode/);
-  assert.match(ed, /parent\.append\(\$createImageNode\(b\)\)/);
+  assert.match(ed, /parent\.append\((fmtFromBlock\()?\$createImageNode\(b\)/);   // fmtFromBlock carries pageBreakBefore etc. (24 Sep)
   assert.match(ed, /solid\.length === 1 && solid\[0\]\.type === 'math'/);
   assert.doesNotMatch(ed, /\[Tactile graphic: \$\{b\.alt \|\| 'Diagram'\}\]/, 'no text placeholder for print images');
 });
@@ -76,13 +81,13 @@ test('editor keeps what it loads (source checks; verified in Chrome with scripts
   // list markers from print, markerless items, adjacent lists kept apart, print bullets restored
   assert.match(ed, /li\.setMarker\(it\.marker \|\| NO_MARKER\)/);
   assert.match(ed, /if \(prev && \$isListNode\(prev\)\) parent\.append\(\$createParagraphNode\(\)\);/);
-  assert.match(ed, /if \(ordered && !isPlain\) blk\.ordered = true;/);
+  assert.match(ed, /if \(ordered && !isPlain( && !bulletOverNumbers)?\) blk\.ordered = true;/);   // bulletOverNumbers: a bullet top item over a numbered sub-list is saved as a `ul` (G8-6)
   assert.match(ed, /put the print bullet back, in its own form/);
   // glossary term/definition, uncontracted runs, table 'auto', pagenum and sidebar source ids
   assert.match(ed, /if \(listKind === 'glossary'\) item = glossaryItem\(runs\) \|\| item;/);
   assert.match(ed, /unc = child\.hasFormat\('code'\);/);
   assert.match(ed, /b\.format \|\| 'auto'/);
-  assert.match(ed, /\$createPrintPageNode\(b\.page \|\| b\.text \|\| '1', b\)/);
+  assert.match(ed, /\$createPrintPageNode\(b\.page \|\| b\.text \|\| (\(b\.implied \? '' : '1'\)|'1'), b\)/);   // an implied page turn may have no number (23 Sep)
   assert.match(ed, /if \(b\.id \|\| b\.render\) sidebar\.setSource\(b\);/);
 });
 

@@ -20,7 +20,7 @@
         "items": [
           {
             "level": 1,
-            "text": "dessus, là-∞"
+            "text": "dessus, là-∝"
           },
           {
             "level": 1,
@@ -36,7 +36,7 @@
           },
           {
             "level": 1,
-            "text": "tu —ses, il -̂t"
+            "text": "tu —ses, il-̂t"
           }
         ]
       }
@@ -48,23 +48,58 @@
   "braille": {
     "width": 40,
     "lines": [
-      "dessus1 l(--",
-      "der ,tisch1 -e",
+      "dessus1 l(-_\"7",
+      "der ,tisch1 ,-e",
       "der ,spass1 ^3-e or ^3-sse",
       "exacto1 -a",
-      "tu -ses1 il^%-t"
+      "tu ,-ses1 il^%-t"
     ],
     "pageBreaks": [],
-    "notes": "Left margin is 9 cells (stripped). The braille lines correspond exactly to the 5 printed items."
+    "notes": "Left margin is 9 cells (stripped). The braille lines correspond exactly to the 5 printed items. Corrected per BANA errata/foreign-language changes (below): line 1's repetition symbol and the German unspaced-omission-plus-addition entries."
   },
   "uncertain": [
-    "The special print sign in 'là-∞' looks like an infinity symbol, though slightly clipped. Recorded as ∞.",
     "The print symbol in 'der Spass, -̈e' is a hyphen with a diaeresis above it, transcribed as -̈ based on the braille modifier ⠸⠒ (diaeresis).",
-    "The print symbol in 'il -̂t' is a hyphen with a circumflex above it, transcribed as -̂ based on the braille modifier ⠸⠩ (circumflex)."
+    "The print symbol in 'il-̂t' is a hyphen with a circumflex above it, transcribed as -̂ based on the braille modifier ⠸⠩ (circumflex)."
   ],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": null
+  "resolution": null,
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[0].text",
+      "was": "dessus, là-∞",
+      "now": "dessus, là-∝",
+      "evidence": "references/_text/addendum_tobraille_formats__01232020_final_v3.txt / references/bana BRF for the new Example 21-38, and PDF page 579: the special print sign is ∝ (proportional-to), not ∞ (infinity); the two glyphs were confused in the original transcription."
+    },
+    {
+      "field": "print.blocks[0].items[4].text",
+      "was": "tu —ses, il -̂t",
+      "now": "tu —ses, il-̂t",
+      "evidence": "PDF page 579: 'il' and the circumflex-marked hyphen are unspaced ('il-̂t'), not separated by a space as originally transcribed."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA Errata March 2024 / Addendum January 2020 (21.9.3a/b)",
+      "field": "braille.lines",
+      "before": [
+        "dessus1 l(--",
+        "der ,tisch1 -e",
+        "der ,spass1 ^3-e or ^3-sse",
+        "exacto1 -a",
+        "tu -ses1 il^%-t"
+      ],
+      "after": [
+        "dessus1 l(-_\"7",
+        "der ,tisch1 ,-e",
+        "der ,spass1 ^3-e or ^3-sse",
+        "exacto1 -a",
+        "tu ,-ses1 il^%-t"
+      ],
+      "note": "Line 1 is taken from the new Example 21-38 BRF: the repetition symbol ∝ is _\"7, not a second plain hyphen. Lines 2 and 5 (der Tisch, —e / tu —ses) take the unspaced-omission-plus-addition form per 21.9.3a/b, following the BRF; because the German is uncontracted foreign material, no grade 1 indicator goes before 'e' (RUEB 13.2.2). Line 3 (der Spass, already writing its diaeresis modifier ^3 before the hyphen) and line 4 (exacto, -a) are unaffected — Emboss's own prepareMarks writes a combining-mark modifier AFTER a non-letter symbol today (wrong order, tracked separately as code fix K21); this gold correction only updates the expected braille, not the code."
+    }
+  ]
 }

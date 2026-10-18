@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-6"/>
+<meta name="dc:Title" content="Illustrative material"/>
+<meta name="dc:Identifier" content="test-section-6"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Illustrative material</doctitle></frontmatter>
+<bodymatter>
+<level1><h1>Figures</h1>
+<p>See the picture below.</p>
+<imggroup><img src="bridge.png" alt="A stone arch bridge over a river"/><caption>Figure 6.1 The old bridge</caption><prodnote render="optional">A stone arch of three spans crosses a narrow river.</prodnote></imggroup>
+<prodnote render="required">Figure 6.4 Diagram is omitted.</prodnote>
+<table><caption>Table 1 Bridge lengths</caption>
+<thead><tr><th>Bridge</th><th>Length</th></tr></thead>
+<tbody><tr><td>Old</td><td>40 m</td></tr><tr><td>New</td><td>120 m</td></tr></tbody></table>
+<pagenum id="p44" page="normal">44</pagenum>
+<p>Timeline is across the bottom of pages 44-47.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

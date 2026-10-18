@@ -1,0 +1,6 @@
+check-layout-parity: 19 documents/gold samples, 10267 flattened blocks, 19 page-level checks, 2 worker(s).
+
+=== check-layout-parity: 19 documents, 10267 blocks (flattened), 24208 block-level checks, 76 page-level checks, 312744 ms ===
+
+No parity differences found.
+exit 0

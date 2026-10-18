@@ -1,0 +1,52 @@
+{
+  "id": "example-22-2",
+  "title": "Example 22-2: Bibliography with Long Dash",
+  "pdfPages": [
+    2
+  ],
+  "textLines": [
+    17265,
+    17274
+  ],
+  "illustrates": {
+    "rule": "22.2.3",
+    "quote": "If two or more works by the same author are listed, a long print dash frequently is substituted for the author’s name. Use the long dash, spaced as shown in print, to reflect this type of print dash accurately. Follow print if other symbols are used."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "Johns, Evan. 1965. An Industrial History of Ontario. Toronto: Fieldhouse Press.",
+        "features": "Hanging indent."
+      },
+      {
+        "kind": "entry",
+        "level": null,
+        "text": "——. 1971. Canada's Railroads. Toronto: Fieldhouse Press.",
+        "features": "Hanging indent. Begins with a long print dash in place of the author's name (spaced as in print)."
+      }
+    ],
+    "notes": "Print original is the picture in the example box (gold-22-A/page-598.png).",
+    "surroundingText": null,
+    "printFeatures": "Bibliography entries with hanging indents and long print dashes."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",johns1 ,evan4 #aife4 ,an ,9du/rial",
+      "  ,hi/ory ( ,ont>io4 ,toronto3",
+      "  ,fieldh\\se ,press4",
+      "\",-4 #aiga4 ,canada's ,railroads4",
+      "  ,toronto3 ,fieldh\\se ,press4"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. Runover indent kept as spaces (U+2800 cells converted). 4 blank picture-area source lines after the caption are excluded."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree with the source and with each other. Neither run listed the print-picture blank lines here, so no gap handling was needed in the runs; the 4 blank source lines after the caption are print-original area and are excluded, as in section 20. illustrates: A and B rule text agrees with the source (verified). print: A and B agree in text; italic extents checked against the braille passage indicators and the page image (the italic run includes the full stop where the braille terminator follows the period). pdfPages: A gave the PNG number ([598]), B the section page; B's is used."
+}

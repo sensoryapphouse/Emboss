@@ -12,6 +12,7 @@ const TABLE_FILES = [
 export const TABLES = {
   uebG2: '/tables/en-us-brf.dis,/tables/en-ueb-g2.ctb',   // contracted (Grade 2)
   uebG1: '/tables/en-us-brf.dis,/tables/en-ueb-g1.ctb',   // uncontracted (Grade 1)
+  uebMath: '/tables/en-us-brf.dis,/tables/en-ueb-g2.ctb,/tables/en-ueb-math.ctb', // Technical math
 };
 
 let M = null;
@@ -82,10 +83,12 @@ export async function ensureTables(tableList) {
 
 export function version() { return M.ccall('lou_version', 'string', [], []); }
 
-// liblouis typeform (emphasis) bit values for the `formtype` buffer. Legacy
-// liblouis convention (still the values the UEB emphasis classes map to):
-// italic=1, underline=2, bold=4. Verify with a live emphasis test before relying on it.
-export const TYPEFORM = { plain: 0, italic: 1, underline: 2, bold: 4 };
+// liblouis typeform (emphasis) bit values for the `formtype` buffer: the UEB tables'
+// emphasis classes in declaration order (en-ueb-g1.ctb: italic, underline, bold, script,
+// transnote, trans1-trans5). Same values as Emboss/engine/louis.mjs, where they were confirmed
+// against the compiled tables (UEB §9: script is its own indicator; trans1-trans5 are the
+// transcriber-defined typeforms).
+export const TYPEFORM = { plain: 0, italic: 1, underline: 2, bold: 4, script: 8, transnote: 16, trans1: 32, trans2: 64, trans3: 128, trans4: 256, trans5: 512 };
 // Persistent reusable translation buffers in WASM memory to eliminate heap churn
 let bufInCap = 0;
 let bufInPtr = 0;

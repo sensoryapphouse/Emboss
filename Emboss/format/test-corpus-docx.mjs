@@ -55,6 +55,12 @@ const toAB = (buf) => buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byte
       const ok = formatDocument(stripped, opts) === brfDocx;
       if (ok) { pass++; console.log(`✅ ${s.padEnd(9)} docx path == model (equation/indicator omitted from docx, as expected)`); }
       else { console.log(`❌ ${s.padEnd(9)} differs beyond the non-round-trippable blocks`); }
+    } else if (brfModel === formatDocument({ ...docxDoc, blocks: docxDoc.blocks.map((blk) => (blk && Array.isArray(blk.items) ? { ...blk, items: blk.items.map((it) => (it && it.marker === '•' ? { ...it, marker: undefined } : it)) } : blk)) }, opts)) {
+      // A real Word file whose list paragraphs carry Word bullets (sample2's ingredient lists): the print HAS bullets
+      // and Emboss keeps print bullets as _4 (BANA 8.6.2; B004 10 N.B. 'generally good practice to reproduce them'),
+      // whereas the gold-validated model chose the B004 10 alternative 'print bullets may be ignored'. Same structure.
+      pass++;
+      console.log(`✅ ${s.padEnd(9)} docx path == model apart from the print bullets Emboss keeps (B004 10 allows either)`);
     } else {
       console.log(`❌ ${s.padEnd(9)} docx path != model — parser did not recover the structure`);
       const a = brfModel.split('\r\n'), b = brfDocx.split('\r\n');

@@ -47,20 +47,44 @@
   "braille": {
     "width": 40,
     "lines": [
-      " la medicina3 m$ic9e",
-      "las pastillas1 las pilodoras3 pills1",
-      "      tablets",
-      " el sintoma3 symptom",
-      " la tos3 c\\<",
-      "    toser3 to c\\<"
+      "la medicina  m$ic9e",
+      "las pastillas1 las pilodoras  pills1",
+      "  tablets",
+      "el sintoma  symptom",
+      "la tos  c\\<",
+      "toser  to c\\<"
     ],
     "pageBreaks": [],
-    "notes": "Byte-identical between A and B; matches independent re-extraction exactly."
+    "notes": "Byte-identical between A and B; matches independent re-extraction exactly, except where corrections (below) apply."
   },
   "uncertain": [],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source exactly (including the 1-space/0-space/4-space per-entry left-margin variation driven by article length). illustrates.rule: '17.7.3' (unchanged, both agreed) — the example sits directly after clause f, before §17.8 begins. Modeled as a 'glossary' block; expect a MISMATCH on the per-entry left margin, since glossarySegments/formatGlossary give every entry the SAME fixed margin from `level` alone, never from the block's own longest-article content length (17.7.3a-f) — F-212."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A and B agree, matches source exactly (including the 1-space/0-space/4-space per-entry left-margin variation driven by article length) prior to the June 2024 correction below. illustrates.rule: '17.7.3' (unchanged, both agreed) — the example sits directly after clause f, before §17.8 begins; note that BANA's June 2024 foreign-language changes REMOVE rule 17.7.3 (A16), so this citation is now historical. Modeled as a 'glossary' block; expect a MISMATCH on the per-entry left margin, since glossarySegments/formatGlossary give every entry the SAME fixed margin from `level` alone, never from the block's own longest-article content length (17.7.3a-f, now removed) — F-212.",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA foreign-language changes June 2024",
+      "field": "braille.lines",
+      "before": [
+        " la medicina3 m$ic9e",
+        "las pastillas1 las pilodoras3 pills1",
+        "      tablets",
+        " el sintoma3 symptom",
+        " la tos3 c\\<",
+        "    toser3 to c\\<"
+      ],
+      "after": [
+        "la medicina  m$ic9e",
+        "las pastillas1 las pilodoras  pills1",
+        "  tablets",
+        "el sintoma  symptom",
+        "la tos  c\\<",
+        "toser  to c\\<"
+      ],
+      "note": "Rule 17.7.3 (longest-article-driven per-entry margin) is removed; the new 17.7.1c/d uses plain 1-3 list margins (entry at cell 1, runover at cell 3) for every entry regardless of article length, and 17.7.1c replaces the inserted colon with two blank cells where print has no punctuation."
+    }
+  ]
 }

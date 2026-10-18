@@ -56,7 +56,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "7777777777777777777777777777777777    #,-",
+      "7777777777777777777777777777777777   #,-",
       "      ,,presid5tial ,,adm9i/ra;ns",
       "",
       "      @.<,pr9t =mat is *ang$4 ,r[ h1d+s",
@@ -92,5 +92,19 @@
     "A",
     "B"
   ],
-  "resolution": "print.rows: multiple office-holders within one cell are joined with a newline to preserve print's (and braille's) one-name-per-line layout, rather than inventing a print punctuation mark ('/' in run A, ';' in run B) that is not actually there (confirmed against both the PDF image, pp. 332-333, and the source .txt's own indented one-name-per-braille-line layout for Sec of State/Treasury). See 'Unresolved' in the README for the Secretary-of-War/-Navy braille anomaly that both runs flagged."
+  "resolution": "print.rows: multiple office-holders within one cell are joined with a newline to preserve print's (and braille's) one-name-per-line layout, rather than inventing a print punctuation mark ('/' in run A, ';' in run B) that is not actually there (confirmed against both the PDF image, pp. 332-333, and the source .txt's own indented one-name-per-braille-line layout for Sec of State/Treasury). See 'Unresolved' in the README for the Secretary-of-War/-Navy braille anomaly that both runs flagged.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "7777777777777777777777777777777777    #,-"
+      ],
+      "after": [
+        "7777777777777777777777777777777777   #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 333 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

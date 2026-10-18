@@ -20,12 +20,12 @@
       },
       {
         "kind": "paragraph",
-        "text": "`The beeping was continue(ous).` (continu-(ous))",
+        "text": "The beeping was `continue`(ous). (continu-(ous))",
         "continuation": true
       },
       {
         "kind": "paragraph",
-        "text": "`I try(ied) to run a marathon.` (tr-(ied))",
+        "text": "I `try`(ied) to run a marathon. (tr-(ied))",
         "continuation": true
       }
     ],
@@ -53,5 +53,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version kept (B had a 1-cell-too-deep TN margin on its first 3 lines). illustrates.rule unchanged ('17.12.2', both agreed, matches source). Modeled the same way as Example 17-9 (standalone TN + sentences with the repeated word in ordinary parentheses) — same F-211 inline-TN gap expected."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version kept (B had a 1-cell-too-deep TN margin on its first 3 lines). illustrates.rule unchanged ('17.12.2', both agreed, matches source). Modeled the same way as Example 17-9 (standalone TN + sentences with the repeated word in ordinary parentheses) — same F-211 inline-TN gap expected. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1..2].text",
+      "was": "the whole sentence in backticks",
+      "now": "backticks only round the crossed-out word: continue, try",
+      "evidence": "references/_gemini/_done/gold-17-A/page-475.png (Example 17-12): the print reads \"The beeping was continue(ous).\" (crossed-out e) and \"I try(ied) to run a marathon.\" (crossed-out y). Braille (source lines 13783-13787): \",! beep+ 0 continue\"<ous\">4 / I try\"<ied\"> ... to run a m>a?on4\" - only the crossed-out word is uncontracted. The trailing \"(continu-(ous))\" / \"(tr-(ied))\" is the transcriber-supplied hyphen repeat, not in the print image; left as it was."
+    }
+  ]
 }

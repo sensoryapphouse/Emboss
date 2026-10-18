@@ -1,0 +1,36 @@
+{
+ "id": "05-headings:5000-md",
+ "budget": {
+  "timeSec": 30,
+  "heapMB": 1024,
+  "rssMB": 800
+ },
+ "status": "FAIL",
+ "timeSec": 30.223,
+ "peakMB": 0,
+ "failures": [
+  {
+   "item": "5000-md",
+   "reason": "timeout: the whole unit passed its 30 s budget during \"nimas-reread\" (item running: 5000-md)",
+   "file": "/scratch/ex-pass/inputs/05-headings_5000-md/001-5000-md.md"
+  },
+  {
+   "item": "(unit)",
+   "reason": "took 30 s, budget 30 s"
+  }
+ ],
+ "warns": [],
+ "notes": [],
+ "items": [
+  {
+   "id": "5000-md",
+   "file": "/scratch/ex-pass/inputs/05-headings_5000-md/001-5000-md.md",
+   "status": "FAIL",
+   "reasons": [
+    "timeout: the whole unit passed its 30 s budget during \"nimas-reread\" (item running: 5000-md)"
+   ],
+   "warns": [],
+   "notes": []
+  }
+ ]
+}

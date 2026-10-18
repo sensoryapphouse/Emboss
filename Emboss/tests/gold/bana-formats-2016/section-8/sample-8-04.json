@@ -21,14 +21,14 @@
         "features": "Placeholder standing in for running text on the print page that precedes the box, not shown in this excerpt (this book’s own convention; the braille ellipsis \"444\" that follows it has no print-side input to model from)."
       },
       {
+        "kind": "heading",
+        "level": 2,
+        "text": "Interrogative Pronouns",
+        "features": "Bold heading sitting above the ruled box (inside the grey panel, outside the ruled border), no blank line between it and the box."
+      },
+      {
         "kind": "box",
         "blocks": [
-          {
-            "kind": "heading",
-            "level": 2,
-            "text": "Interrogative Pronouns",
-            "features": "Bold heading directly above the boxed list, no blank line beneath it in print."
-          },
           {
             "kind": "list",
             "level": null,
@@ -78,7 +78,7 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "Ruled box inside a light-grey shaded panel; bold heading above the box (outside the ruled border); each item's interrogative word underlined."
+    "printFeatures": "Light-grey shaded panel; bold heading above the ruled box (outside the ruled border); each item's interrogative word underlined."
   },
   "braille": {
     "width": 40,
@@ -100,9 +100,17 @@
     "notes": "Line 1 'text 444' is the placeholder for preceding running text; line 2 blank; line 3 the heading ',9t]rogative ,pron\\ns' (Interrogative Pronouns); line 4 the top box rule (40 '7's); lines 5-9 the five list items, each opening with the underline-word indicator '_1' before the interrogative word and ending in '8' (question mark); line 10 the bottom box rule (40 'g's); line 11 blank; line 12 ',text 444' resumes the placeholder running text after the box. The list is NOT preceded by a blank line because it follows the top box rule directly (line 4 to line 5), per 8.3.3.b."
   },
   "uncertain": [],
-  "resolution": "braille.lines byte-identical between A and B. Heading level: both runs stored the raw cell-position \"5\"; re-derived directly from source .txt (line 6179, \",9t]rogative ,pron\\ns\") = 4 leading U+2800 blank cells = cell-5 = level 2. Structure: reshaped into an explicit nested `{kind:\"box\", blocks:[heading, list]}` print block (mirroring Emboss’s own `{type:\"box\", blocks:[...]}` document-model shape) so buildModel8 can build the top/bottom box-rule pair faithfully — unlike sample-8-13, this box has no un-modelable content inside it, so a full match is plausible here. A’s \"text 444\" placeholder paragraphs (on both sides of the box, matching this book’s own convention for eliding surrounding running text) are kept; B silently dropped them from print.blocks even though its own braille.notes describes them — A’s more complete structure is used. The \"444\" braille ellipsis marker itself has no print-side input to build from and is expected to be a documented mismatch on those two lines only.",
+  "resolution": "braille.lines byte-identical between A and B. Heading level: both runs stored the raw cell-position \"5\"; re-derived directly from source .txt (line 6179, \",9t]rogative ,pron\\ns\") = 4 leading U+2800 blank cells = cell-5 = level 2. Structure: reshaped into an explicit nested `{kind:\"box\", blocks:[heading, list]}` print block (mirroring Emboss’s own `{type:\"box\", blocks:[...]}` document-model shape) so buildModel8 can build the top/bottom box-rule pair faithfully — unlike sample-8-13, this box has no un-modelable content inside it, so a full match is plausible here. A’s \"text 444\" placeholder paragraphs (on both sides of the box, matching this book’s own convention for eliding surrounding running text) are kept; B silently dropped them from print.blocks even though its own braille.notes describes them — A’s more complete structure is used. The \"444\" braille ellipsis marker itself has no print-side input to build from and is expected to be a documented mismatch on those two lines only. Print description corrected 23 Sep 2026 (see printCorrections).",
   "sources": [
     "A",
     "B"
+  ],
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].blocks[0] (heading)",
+      "was": "heading nested inside the box block",
+      "now": "heading moved out to be a sibling block immediately before the box",
+      "evidence": "Page image p.212: \"Interrogative Pronouns\" is in the shaded panel ABOVE the ruled border; the five questions alone are inside the rule box."
+    }
   ]
 }

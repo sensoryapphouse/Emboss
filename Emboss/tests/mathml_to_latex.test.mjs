@@ -162,5 +162,31 @@ check(
   '\\begin{matrix} 1 & 0 \\\\ 0 & 1 \\end{matrix}'
 );
 
+// 12. DOCX-equation-import fix 2 (AGENTS.md, 25 Sep 2026): a single upright letter
+// (omml.mjs's plainTextToMathML emits <mi mathvariant="normal"> for e.g. the "d" in "dx")
+// must render upright in the print pane too, not italic like an ordinary variable.
+check(
+  'Upright single letter (mathvariant="normal") renders as \\mathrm, not italic',
+  mathmlToLatex('<math><mi mathvariant="normal">d</mi><mi>x</mi></math>'),
+  '\\mathrm{d}x'
+);
+check(
+  'An ordinary (italic) single-letter <mi> is unaffected by the mathvariant fix',
+  mathmlToLatex('<math><mi>d</mi><mi>x</mi></math>'),
+  'dx'
+);
+
+// 13. postProcessLatex must not eat \text{}'s own word-boundary spaces (found while
+// verifying fix 2 live in the editor: the print pane showed "xifx > 0andxis even" even
+// though omml.mjs was correctly emitting \text{ if }/\text{ and }/\text{ is even} —
+// postProcessLatex's generic "\s+\}" / "{\s+" brace-whitespace cleanup, meant for
+// incidental formatting noise around \frac{}/\left(/sup-sub groups, was also stripping
+// \text{}'s OWN semantic leading/trailing space).
+check(
+  '\\text{} keeps its own leading/trailing space (word boundaries survive postProcessLatex)',
+  mathmlToLatex('<math><mi>x</mi><mtext> if </mtext><mi>x</mi><mo>&gt;</mo><mn>0</mn><mtext> and </mtext><mi>x</mi><mtext> is even</mtext></math>'),
+  'x\\text{ if }x > 0\\text{ and }x\\text{ is even}'
+);
+
 console.log(`\nResults: ${pass} passed, ${fail} failed.`);
 if (fail > 0) process.exit(1);

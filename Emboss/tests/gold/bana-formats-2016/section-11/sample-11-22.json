@@ -65,7 +65,16 @@
     ],
     "notes": "Same underlying print table as Sample 11-21, here used to illustrate the alternative (single-braille-page) vertical-division format instead of facing pages.",
     "surroundingText": null,
-    "printFeatures": "Bordered box, single header row (years) bold, ruled line beneath; row headings (country names) bold."
+    "printFeatures": "Bordered box; the title \"Unionized Manual Workers\" is INSIDE the box as a full-width centred row at the top, ruled off from the years row; single header row (years) bold; row headings (country names) bold.",
+    "columnAlign": [
+      "left",
+      "decimal",
+      "decimal",
+      "decimal",
+      "decimal",
+      "decimal",
+      "decimal"
+    ]
   },
   "braille": {
     "width": 40,
@@ -78,19 +87,19 @@
       "      @.<,table is divid$ v]tically 9to",
       "    #b sec;ns4@.>",
       "",
-      "         #aijj #aiaj #aibj #aicj",
-      "         \"3333 \"3333 \"3333 \"3333",
-      ",d5m>k   #ac4i #af4b #cg4j #cc4h",
-      ",sw$5     #h4g #ab4b #cb4d #da4g",
-      ",norway #aj4c #ad4f #ce4i #dc4b",
-      ",f9l&     #f4i #aj4c #be4f #cd4g",
+      "         #aijj  #aiaj  #aibj  #aicj",
+      "         \"3333  \"3333  \"3333  \"3333",
+      ",d5m>k   #ac4i  #af4b  #cg4j  #cc4h",
+      ",sw$5     #h4g  #ab4b  #cb4d  #da4g",
+      ",norway  #aj4c  #ad4f  #ce4i  #dc4b",
+      ",f9l&     #f4i  #aj4c  #be4f  #cd4g",
       "",
-      "         #aidj #aiej",
-      "         \"3333 \"3333",
-      ",d5m>k   #dd4c #ed4d",
-      ",sw$5    #fd4c #ge4b",
-      ",norway #fg4i #gg4c",
-      ",f9l&    #dd4b #eb4a",
+      "         #aidj  #aiej",
+      "         \"3333  \"3333",
+      ",d5m>k   #dd4c  #ed4d",
+      ",sw$5    #fd4c  #ge4b",
+      ",norway  #fg4i  #gg4c",
+      ",f9l&    #dd4b  #eb4a",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -102,5 +111,63 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers' first cell resolved to '' (blank), same pattern and same source table as Sample 11-21, confirmed against the PDF image (p. 330)."
+  "resolution": "print.headers' first cell resolved to '' (blank), same pattern and same source table as Sample 11-21, confirmed against the PDF image (p. 330). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box, single header row (years) bold, ruled line beneath; row headings (country names) bold.",
+      "now": "Bordered box; the title \"Unionized Manual Workers\" is INSIDE the box as a full-width centred row at the top, ruled off from the years row; single header row (years) bold; row headings (country names) bold.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.330 (90 dpi): same as Sample 11-21, the box encloses the title row. The old text said nothing about the title."
+    },
+    {
+      "field": "print.columnAlign",
+      "was": null,
+      "now": [
+        "left",
+        "decimal",
+        "decimal",
+        "decimal",
+        "decimal",
+        "decimal",
+        "decimal"
+      ],
+      "evidence": "PDF p330 (printed 11-48) page image rendered from references/bana/braille-formats-2016.pdf (25 Sep 2026): Page image (PDF p.330, Sample 11-22): the decimal points of every number column line up in print (8.7 and 6.9 are indented). Added for K3 (alignment follows print, BANA 11.6.1d); the print description never recorded alignment."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "         #aijj #aiaj #aibj #aicj",
+        "         \"3333 \"3333 \"3333 \"3333",
+        ",d5m>k   #ac4i #af4b #cg4j #cc4h",
+        ",sw$5     #h4g #ab4b #cb4d #da4g",
+        ",norway #aj4c #ad4f #ce4i #dc4b",
+        ",f9l&     #f4i #aj4c #be4f #cd4g",
+        "         #aidj #aiej",
+        "         \"3333 \"3333",
+        ",d5m>k   #dd4c #ed4d",
+        ",sw$5    #fd4c #ge4b",
+        ",norway #fg4i #gg4c",
+        ",f9l&    #dd4b #eb4a"
+      ],
+      "after": [
+        "         #aijj  #aiaj  #aibj  #aicj",
+        "         \"3333  \"3333  \"3333  \"3333",
+        ",d5m>k   #ac4i  #af4b  #cg4j  #cc4h",
+        ",sw$5     #h4g  #ab4b  #cb4d  #da4g",
+        ",norway  #aj4c  #ad4f  #ce4i  #dc4b",
+        ",f9l&     #f4i  #aj4c  #be4f  #cd4g",
+        "         #aidj  #aiej",
+        "         \"3333  \"3333",
+        ",d5m>k   #dd4c  #ed4d",
+        ",sw$5    #fd4c  #ge4b",
+        ",norway  #fg4i  #gg4c",
+        ",f9l&    #dd4b  #eb4a"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 330 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (12). Where: column gap (table / related columns / columned list) (10); table separation line (2)."
+    }
+  ]
 }

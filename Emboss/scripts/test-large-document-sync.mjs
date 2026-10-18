@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import { launchBrowser, ENGINE_LABEL } from '../tests/lib/launch-browser.mjs';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
@@ -65,7 +65,7 @@ async function run() {
   const server = await startServer();
   console.log(`Server running on port ${PORT}`);
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
 
@@ -237,7 +237,7 @@ async function run() {
       console.error('Console errors:', consoleErrors);
     }
 
-    console.log('\n✅ ALL LARGE DOCUMENT SYNCHRONIZATION AND VISUAL TESTS COMPLETE!');
+    console.log(`\n✅ ALL LARGE DOCUMENT SYNCHRONIZATION AND VISUAL TESTS COMPLETE [${ENGINE_LABEL}]!`);
   } finally {
     await browser.close();
     server.close();

@@ -18,7 +18,7 @@
         "kind": "other",
         "level": null,
         "text": "In print, labels appear in the margin of the following letter. In braille, the labels are keyed. The keyed label is inserted before the beginning of the text to which it applies. Labeled phrases or sentences are enclosed in braille grouping indicators.\nSymbols used below:\n.=< Opening braille grouping indicator\n.=> Closing braille grouping indicator\nKey to labels:\nti Title\nau Author (last name first)\nyb Year of birth\ndp Date of publication\npu Publishers",
-        "features": "Italic explanatory paragraph and 'Symbols used below:'/'Key to labels:' lead-ins are the guide's own print apparatus (plain italic print type, per the PDF page image); the two grouping-indicator codes ('.=<', '.=>') and the five two-letter key codes ('ti', 'au', 'yb', 'dp', 'pu') are themselves literal print citations of the braille symbols being defined, not running prose.",
+        "features": "Plain (roman) explanatory paragraph and 'Symbols used below:'/'Key to labels:' lead-ins are the guide's own print apparatus (plain roman print type, per the PDF page image); the two grouping-indicator codes ('.=<', '.=>') and the five two-letter key codes ('ti', 'au', 'yb', 'dp', 'pu') are themselves literal print citations of the braille symbols being defined, not running prose.",
         "items": null
       }
     ],
@@ -37,5 +37,13 @@
     "A",
     "B"
   ],
-  "resolution": "Run A recorded no braille for this item; Run B built a 7-line braille.lines array from the '.=<'/'.=>' and two-letter key codes, treating them as a worked braille excerpt. Resolved against standards-map.md's own BANA §16 worked-examples table, which already classifies \"BANA 16.11.1g Sample\" as \"Has braille: No\" -- confirmed directly against references/_text/braille-formats-2016.txt lines 12844-12860, which shows this whole passage as ordinary running print prose (the symbol/key codes are print's own citation of the braille signs being defined, exactly like rule 16.2.2's own reference-mark table), with no separate braille-page excerpt given anywhere nearby. Run A is correct; Run B's braille.lines has been dropped."
+  "resolution": "Run A recorded no braille for this item; Run B built a 7-line braille.lines array from the '.=<'/'.=>' and two-letter key codes, treating them as a worked braille excerpt. Resolved against standards-map.md's own BANA §16 worked-examples table, which already classifies \"BANA 16.11.1g Sample\" as \"Has braille: No\" -- confirmed directly against references/_text/braille-formats-2016.txt lines 12844-12860, which shows this whole passage as ordinary running print prose (the symbol/key codes are print's own citation of the braille signs being defined, exactly like rule 16.2.2's own reference-mark table), with no separate braille-page excerpt given anywhere nearby. Run A is correct; Run B's braille.lines has been dropped. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.features",
+      "was": "Italic explanatory paragraph and 'Symbols used below:'/'Key to labels:' lead-ins are the guide's own print apparatus (plain italic print type, per the PDF page image); the two grouping-indicator codes ('.=<', '.=>') and the five two-letter key codes ('ti', 'au', 'yb', 'dp', 'pu') are themselves literal print citations of the braille symbols being defined, not running prose.",
+      "now": "Plain (roman) explanatory paragraph and 'Symbols used below:'/'Key to labels:' lead-ins are the guide's own print apparatus (plain roman print type, per the PDF page image); the two grouping-indicator codes ('.=<', '.=>') and the five two-letter key codes ('ti', 'au', 'yb', 'dp', 'pu') are themselves literal print citations of the braille symbols being defined, not running prose.",
+      "evidence": "Page image PDF p.443: the sample wording is set in upright (roman) serif type, not italic."
+    }
+  ]
 }

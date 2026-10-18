@@ -44,12 +44,12 @@
     ],
     "notes": null,
     "surroundingText": null,
-    "printFeatures": "Bordered box; centered bold title spanning the full box width above the header row; header row bold; row headings wrap to two lines for the longer category names."
+    "printFeatures": "Bordered box; the title \"SAT Scores by Race and Ethnicity\" is INSIDE the box as a full-width centred row (plain type, not bold) above the header row; header row (\"Racial/Ethnic Category\", \"SAT Verbal Mean Scores\", \"SAT Math Mean Scores\", \"Totals\") with a ruled line beneath; row headings wrap to two lines for the longer category names."
   },
   "braille": {
     "width": 40,
     "lines": [
-      "7777777777777777777777777777777777    #,-",
+      "7777777777777777777777777777777777   #,-",
       "   ,,sat ,scores by ,race & ,e?nic;y",
       "",
       "      @.<,key to column & r[ h1d+s3",
@@ -64,11 +64,11 @@
       "nan ,native ,am]ican or ,alaskan ,native",
       "wht ,:ite \"<exclud+ ,lat9o orig9\">@.>",
       "",
-      "rec vms    mms   totals",
-      "\"33 \"333 \"333 \"33333",
-      "nan #dhb #dha #ifc",
-      "aam #dcd #dbf #hfj",
-      "wht #ebh #ecj #ajeh",
+      "rec  vms   mms   totals",
+      "\"33  \"333  \"333  \"33333",
+      "nan  #dhb  #dha  #ifc",
+      "aam  #dcd  #dbf  #hfj",
+      "wht  #ebh  #ecj  #ajeh",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -80,5 +80,37 @@
     "A",
     "B"
   ],
-  "resolution": "width/box-rule note: line 1's top box rule is intentionally shorter (34 cells) to leave room for a trailing 3-character reference code ending at cell 41, one cell beyond the section's usual 40-cell body width; both runs already transcribed this line correctly verbatim, and braille.width is still recorded as the section's declared 40 (not measured per-line) to stay consistent with every other item."
+  "resolution": "width/box-rule note: line 1's top box rule is intentionally shorter (34 cells) to leave room for a trailing 3-character reference code ending at cell 41, one cell beyond the section's usual 40-cell body width; both runs already transcribed this line correctly verbatim, and braille.width is still recorded as the section's declared 40 (not measured per-line) to stay consistent with every other item. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box; centered bold title spanning the full box width above the header row; header row bold; row headings wrap to two lines for the longer category names.",
+      "now": "Bordered box; the title \"SAT Scores by Race and Ethnicity\" is INSIDE the box as a full-width centred row (plain type, not bold) above the header row; header row (\"Racial/Ethnic Category\", \"SAT Verbal Mean Scores\", \"SAT Math Mean Scores\", \"Totals\") with a ruled line beneath; row headings wrap to two lines for the longer category names.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.323 (90 dpi): the box encloses a first row holding only the centred title, ruled off from the header row. The title is not bold. The old text said \"centered bold title spanning the full box width above the header row\" and \"header row bold\" (the header text is plain at 90 dpi; not settled, so the bold claim was dropped)."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "7777777777777777777777777777777777    #,-",
+        "rec vms    mms   totals",
+        "\"33 \"333 \"333 \"33333",
+        "nan #dhb #dha #ifc",
+        "aam #dcd #dbf #hfj",
+        "wht #ebh #ecj #ajeh"
+      ],
+      "after": [
+        "7777777777777777777777777777777777   #,-",
+        "rec  vms   mms   totals",
+        "\"33  \"333  \"333  \"33333",
+        "nan  #dhb  #dha  #ifc",
+        "aam  #dcd  #dbf  #hfj",
+        "wht  #ebh  #ecj  #ajeh"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 15, 16, 17, 18, 19 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 323 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (4); spurious extra blanks (gold line wider than 40 cells) (1); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap (table / related columns / columned list) (4); before right-margin page number (1); table separation line (1)."
+    }
+  ]
 }

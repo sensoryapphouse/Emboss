@@ -1,0 +1,18 @@
+--- Quick Mode, built app at http://localhost:64648/index.html (Chrome) ---
+  ✓ ok    Quick Mode: the service worker controls the page and has filled its cache
+  ✓ ok    Quick Mode, offline: a document is read and brailled
+  ✓ ok    Quick Mode, offline: Download BRF works
+  ✓ ok    Quick Mode, offline: Download eBraille works
+  ✓ ok    Quick Mode, offline: no request failed
+  ✓ ok    Quick Mode, offline: no page errors
+--- the editor, built app at http://localhost:64648/editor/index.html (Chrome) ---
+  ✓ ok    editor: the service worker controls the page and has filled its cache
+  ✓ ok    editor, offline: it opens and brailles its first document
+  ✓ ok    editor, offline: a document is opened and brailled
+  ✓ ok    editor, offline: Download BRF works
+  ✓ ok    editor, offline: Download eBraille works
+  ✓ ok    editor, offline: the maths editor is there and its fonts load (an equation is drawn in its own font)
+  ✓ ok    editor, offline: no request failed
+  ✓ ok    editor, offline: no page errors
+
+=== Offline (built app) [Chrome]: 14 passed, 0 failed ===

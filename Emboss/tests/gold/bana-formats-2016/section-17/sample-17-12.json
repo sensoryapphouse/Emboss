@@ -29,12 +29,7 @@
           {
             "kind": "heading",
             "level": 1,
-            "text": "MARIA LOPEZ STARS IN"
-          },
-          {
-            "kind": "heading",
-            "level": 1,
-            "text": "NEW MUSICOL PLAY"
+            "text": "MARIA LOPEZ STARS IN NEW MUSICOL PLAY"
           },
           {
             "kind": "paragraph",
@@ -76,5 +71,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. Rule id unchanged ('17.10.2', matches the source's own cross-reference). Modeled with a 'box' block containing two centred heading lines (the print title wraps across two print lines; both are level-1/centred, matching the given braille's own two independently-centred rows, not a single wrapped line) and the review paragraph, wholly uncontracted; the omitted middle sentences are recorded via `features`, not modeled, exactly like buildModel8's own '444' precedent for elided surrounding prose."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille: A's version (trailing blank, source-verified) kept over B's. Rule id unchanged ('17.10.2', matches the source's own cross-reference). Modeled with a 'box' block containing two centred heading lines (the print title wraps across two print lines; both are level-1/centred, matching the given braille's own two independently-centred rows, not a single wrapped line) and the review paragraph, wholly uncontracted; the omitted middle sentences are recorded via `features`, not modeled, exactly like buildModel8's own '444' precedent for elided surrounding prose. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[2].blocks[0..1] (two level-1 headings)",
+      "was": "\"MARIA LOPEZ STARS IN\" / \"NEW MUSICOL PLAY\"",
+      "now": "one level-1 heading \"MARIA LOPEZ STARS IN NEW MUSICOL PLAY\"",
+      "evidence": "references/_gemini/_done/gold-17-A/page-489.png: the print headline is ONE centred heading that wraps inside the box (\"MARIA LOPEZ STARS\" / \"IN NEW MUSICOL PLAY\" - the wrap falls after STARS, not after IN, so it is not two authored lines). Braille lines 7-8 carry one passage indicator ,,, ... ,' across both lines."
+    }
+  ]
 }

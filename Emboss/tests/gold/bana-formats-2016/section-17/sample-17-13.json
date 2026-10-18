@@ -19,12 +19,17 @@
         "text": "Read this narrative and rewrite the underlined words that have been spelled incorrectly."
       },
       {
-        "kind": "paragraph",
-        "text": "Student 1: You know that new person in our `sceince` class? My `nieghbor` says he's the `hier` to a huge fortune!"
-      },
-      {
-        "kind": "paragraph",
-        "text": "Student 2: The `hier` to a huge fortune going to public school? That's hard to `beleive`. In fact, it's pretty `inconcievable`."
+        "kind": "list",
+        "items": [
+          {
+            "marker": "Student 1:",
+            "text": "You know that new person in our <u>sceince</u> class? My <u>nieghbor</u> says he's the <u>hier</u> to a huge fortune!"
+          },
+          {
+            "marker": "Student 2:",
+            "text": "The <u>hier</u> to a huge fortune going to public school? That's hard to <u>beleive</u>. In fact, it's pretty <u>inconcievable</u>."
+          }
+        ]
       }
     ],
     "notes": "Directions, then two 'Student' passages, each with several underlined misspelled words mixed into otherwise-contracted text — 17.10.3's own mixed uncontracted/contracted convention.",
@@ -52,5 +57,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.10.3', matches source). Modeled as three paragraphs; each marked-error word individually backtick-uncontracted inside otherwise-contracted running prose — the same mixed-passage mechanism standards-map.md (BANA 17.10.3) confirms 'done' via probe."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (both agreed '17.10.3', matches source). Modeled as three paragraphs; each marked-error word individually backtick-uncontracted inside otherwise-contracted running prose — the same mixed-passage mechanism standards-map.md (BANA 17.10.3) confirms 'done' via probe. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1..2] (two paragraphs)",
+      "was": "two paragraphs \"Student 1: ...\" / \"Student 2: ...\"",
+      "now": "one list, items with marker \"Student 1:\" / \"Student 2:\" and the text after the label",
+      "evidence": "references/_gemini/_done/gold-17-A/page-490.png: the print is a two-item hanging layout - the labels \"Student 1:\" and \"Student 2:\" stand at the left margin and the speech text hangs to their right; braille lines 11-18 accordingly start at cell 1 with runover at cell 3 (1-3), not a paragraph indent."
+    },
+    {
+      "field": "print.blocks[1].items[*].text (underlined words)",
+      "was": "`sceince` `nieghbor` `hier` `hier` `beleive` `inconcievable` (backticks = uncontracted flag)",
+      "now": "<u>sceince</u> <u>nieghbor</u> <u>hier</u> <u>hier</u> <u>beleive</u> <u>inconcievable</u>",
+      "evidence": "references/_gemini/_done/gold-17-A/page-490.png: the print shows the six misspelled words underlined (\"Read this narrative and rewrite the underlined words\"); nothing in the print marks them as uncontracted. Braille lines 11-18 show _1 (underline word indicator) on each. The markup cannot combine underline with the uncontracted flag, so the builder must learn that underlined misspellings are written uncontracted (17.10.3); until then the runner contracts them (sceince -> SCE9CE) and the example stays a mismatch."
+    }
+  ]
 }

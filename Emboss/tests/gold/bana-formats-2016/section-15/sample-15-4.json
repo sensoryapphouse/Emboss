@@ -30,8 +30,6 @@
   "braille": {
     "width": 40,
     "lines": [
-      "",
-      "",
       "                                     #,-",
       "& dang]\\s dive1 z if try+ to        #bab",
       "escape ,graves ,regi/ra;n1 \":       #bac",
@@ -44,7 +42,7 @@
       "  ,lat] !y wad$ 9 af hm1            #bbj",
       "prob+ = ,billy ,boy ) _!            #bba",
       "rifle butts1 elegantly &            #bbb",
-      "delicately   prob+ = ,billy ,boy 9 #bbc",
+      "delicately   prob+ = ,billy ,boy 9  #bbc",
       "! /9k+   paddy1 s++,-\"s ( !m,-      #bbd"
     ],
     "pageBreaks": [],
@@ -52,5 +50,31 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the single print-visible anchor (220); this reconciliation adds the twelve intervening sequential numbers. Modeled by buildModel15 the same way as Sample 15-2/15-3 (one flowing numbered paragraph per print paragraph); per the standards-findings.md 'done' rows for 15.4.1e (wrapNumbered already flushes the line before accepting a second number, keeping two numbered lines off one braille row), this file is expected to be a MATCH or very close to one."
+  "resolution": "Braille unchanged (A and B agree, already verified verbatim). Print side: both runs agreed on wording and the single print-visible anchor (220); this reconciliation adds the twelve intervening sequential numbers. Modeled by buildModel15 the same way as Sample 15-2/15-3 (one flowing numbered paragraph per print paragraph); per the standards-findings.md 'done' rows for 15.4.1e (wrapNumbered already flushes the line before accepting a second number, keeping two numbered lines off one braille row), this file is expected to be a MATCH or very close to one.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "delicately   prob+ = ,billy ,boy 9 #bbc"
+      ],
+      "after": [
+        "delicately   prob+ = ,billy ,boy 9  #bbc"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 14 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 421 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (1). Where: before line number (15.3.1c: at least two blank cells) (1)."
+    },
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.421: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 2"
+    }
+  ]
 }

@@ -1,0 +1,44 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 4,
+ "engine": "chrome",
+ "kind": "quick",
+ "doc": "tests/fixtures/libreoffice/lo-math-inline.doc",
+ "docSource": "libreoffice",
+ "docFeatures": null,
+ "docs": {
+  "tests/fixtures/libreoffice/lo-math-inline.doc": "docs/00-lo-math-inline.doc"
+ },
+ "settings": {
+  "simpleMode": true,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1000,
+  "height": 700
+ },
+ "invariant": "console-error",
+ "key": "console-error: Cannot resolve table 'digits#DotsPlusDot#.uti' [http://localhost:#/web/problem-report.mjs:",
+ "message": "Cannot resolve table 'digits6DotsPlusDot6.uti'  [http://localhost:8297/web/problem-report.mjs:45]",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 21,
+ "originalActions": 43,
+ "actions": [
+  {
+   "t": "settings",
+   "tab": 0.2667,
+   "f": 0.0194,
+   "v": 0.7861,
+   "close": "button"
+  },
+  {
+   "t": "roundTrip"
+  }
+ ]
+}

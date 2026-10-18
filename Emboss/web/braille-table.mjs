@@ -25,6 +25,36 @@ export function resolveTable(settings) {
   return settings && settings.grade === 'g1' ? UEB_TABLES.g1 : UEB_TABLES.g2;
 }
 
+// S3b #17 (ChatGPT audit 15 Oct 2026): the eBraille export declares the braille system of the braille it holds. Quick Mode had this mapping
+// (web/app.mjs registryName); the editor passed nothing, so every editor eBraille said "ueb grade2". It lives here, beside resolveTable, so both
+// modes ask the same question of the same settings. The Braille Codes Registry names UEB by grade; every other code has no registered name yet, so
+// its own id is written (the spec says values SHOULD come from the registry, not MUST). A code this build does not know is brailled with the UEB
+// table of the selected grade (resolveTable), so that is what is declared.
+export function registryName(settings) {
+  const known = settings && settings.brailleCode ? CODES.find((c) => c.id === settings.brailleCode) : null;
+  const code = known ? known.id : (settings && settings.grade === 'g1' ? 'en-ueb-g1' : 'en-ueb-g2');
+  if (/ueb/i.test(code) && /g1|grade ?1|uncontracted/i.test(code)) return 'ueb grade1';
+  if (/ueb/i.test(code)) return 'ueb grade2';
+  return code;
+}
+
+// The settings that name the braille actually made: the code whose table list is `tableList` (the table the translator ran with, which is not
+// always the one the settings ask for - the previous table stays active when a code cannot be loaded). The eBraille export derives its
+// declared system and language from this, in Quick Mode and in the editor alike.
+export function settingsForTable(tableList) {
+  if (tableList === UEB_TABLES.g1) return { brailleCode: 'en-ueb-g1', grade: 'g1' };
+  if (tableList === UEB_TABLES.g2) return { brailleCode: 'en-ueb-g2', grade: 'g2' };
+  const code = CODES.find((c) => c.table === tableList);
+  return code ? { brailleCode: code.id } : {};
+}
+
+// The language the selected braille code is written for (the code's own `lang`; English for UEB and for a code this build does not know).
+// eBraille's language (S3b #18, Paul B1): the document's own, then this, then the browser's.
+export function codeLanguage(settings) {
+  const known = settings && settings.brailleCode ? CODES.find((c) => c.id === settings.brailleCode) : null;
+  return (known && known.lang) || 'en';
+}
+
 export function isUnicodeTable(tableList) { return /unicode\.dis/.test(String(tableList)); }
 
 // Wrap the raw engine so every caller gets BRF ASCII out and can hand BRF ASCII back

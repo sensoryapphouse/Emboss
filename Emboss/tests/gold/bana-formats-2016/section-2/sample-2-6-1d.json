@@ -1,0 +1,34 @@
+{
+  "id": "sample-2-6-1d",
+  "title": "BANA 2.6.1d sample (Sample altered-print-format notices (four))",
+  "pdfPages": [
+    14
+  ],
+  "textLines": [
+    1918,
+    1924
+  ],
+  "illustrates": {
+    "rule": "2.6.1d",
+    "quote": "d. Identify altered print format throughout the book."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "An anonymous \"Sample:\"/\"Samples:\" wording embedded in this rule's own running text (not a numbered Example/Sample), given as plain print text with no braille rendering anywhere near this citing location -- matching the tests/gold/bana-formats-2016/section-3 precedent's own convention for this exact situation.",
+    "surroundingText": null,
+    "printFeatures": null,
+    "transcriberNote": "Double quotation marks are substituted for single quotation marks.\nIllustrations without captions are omitted.\nThe atlas is omitted.\nTest questions are moved from the back of the book to the end of the chapter to which they apply."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "No braille rendering. Run A fabricated a two-line braille.lines fragment (\"marks.\" / \"end of the chapter to which they apply.\") by mis-reading wrapped PRINT prose (source lines 1919-1924, the rule's own anonymous \"Samples:\" wordings) as braille; run B correctly recorded no braille here. Corrected to B's empty array -- confirmed against source-lines-1390-2934.txt lines 1917-1924: this passage is ordinary English print text (rule 2.6.1d's four suggested transcriber's-note wordings), not braille ASCII."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: see braille.notes for the specific correction made against source-lines-1390-2934.txt. illustrates.quote: verified verbatim against source-lines-1390-2934.txt (A and B agreed on the rule id; B's own quote field echoed this file's title rather than quoting the rule, so is not used)."
+}

@@ -48,12 +48,12 @@
       "      ,figure #bd-#g ,! ,,apy is !   #,-",
       "    be/ 9dicator ( h[ m* 9t]e/ y w e>n4",
       "7777777777777777777777777777777777777777",
-      "#e4be.01 comp.d$ ,,apy",
-      "\"333333333333333 \"333333",
-      ",daily \"\"\"\"\"\"\"\"\" #e4ci.0",
-      ",qu>t]ly \"\"\"\"\"\"\" #e4ce.0",
-      ",semiannually \"\" #e4cb.0",
-      ",annually \"\"\"\"\"\" #e4be.0",
+      "#e4be.01 comp.d$  ,,apy",
+      "\"333333333333333  \"333333",
+      ",daily \"\"\"\"\"\"\"\"\"  #e4ci.0",
+      ",qu>t]ly \"\"\"\"\"\"\"  #e4ce.0",
+      ",semiannually \"\"  #e4cb.0",
+      ",annually \"\"\"\"\"\"  #e4be.0",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -67,5 +67,29 @@
     "A",
     "B"
   ],
-  "resolution": "No content differences; both runs match the source .txt exactly."
+  "resolution": "No content differences; both runs match the source .txt exactly.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "#e4be.01 comp.d$ ,,apy",
+        "\"333333333333333 \"333333",
+        ",daily \"\"\"\"\"\"\"\"\" #e4ci.0",
+        ",qu>t]ly \"\"\"\"\"\"\" #e4ce.0",
+        ",semiannually \"\" #e4cb.0",
+        ",annually \"\"\"\"\"\" #e4be.0"
+      ],
+      "after": [
+        "#e4be.01 comp.d$  ,,apy",
+        "\"333333333333333  \"333333",
+        ",daily \"\"\"\"\"\"\"\"\"  #e4ci.0",
+        ",qu>t]ly \"\"\"\"\"\"\"  #e4ce.0",
+        ",semiannually \"\"  #e4cb.0",
+        ",annually \"\"\"\"\"\"  #e4be.0"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4, 5, 6, 7, 8 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 307 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (6). Where: column gap after guide dots (4); column gap (table / related columns / columned list) (1); table separation line (1)."
+    }
+  ]
 }

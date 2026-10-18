@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import * as louis from '../engine/louis.mjs';
 import { formatDocument } from './document.mjs';
 import { makeMathToBrf } from './node-maths-helper.mjs';
+import { editorTranslators } from './node-translate-helper.mjs';
 
 // Repeatable Node harness: for each of the 8 UKAAF gold corpus samples, build
 // a document model from the print source, run it through formatDocument in
@@ -122,14 +123,41 @@ function defaultCategorize(i, o, g) {
   return 'MISMATCH';
 }
 
+// A73 (28 Sep 2026): lines are matched by an order-preserving alignment (longest common
+// subsequence), not position by position. Position-by-position, one inserted or missing line —
+// a blank padding line at the foot of a full agency page, or one end-marker line — shifted
+// every later line and counted the rest of the sample as mismatches, though the content was
+// the same (Sample 5 went 28 -> 4 after UK-5 without a single content change). Unmatched lines
+// are paired up within each differing stretch, so the categorisers still see (ours, gold) pairs.
+function alignLines(ours, gold) {
+  const a = ours.length, b = gold.length;
+  const L = Array.from({ length: a + 1 }, () => new Int32Array(b + 1));
+  for (let i = a - 1; i >= 0; i--) for (let j = b - 1; j >= 0; j--) {
+    L[i][j] = ours[i] === gold[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  }
+  const pairs = [];                  // { o, g } with o/g an index or -1; matched pairs have both
+  let i = 0, j = 0;
+  while (i < a || j < b) {
+    if (i < a && j < b && ours[i] === gold[j]) { pairs.push({ o: i++, g: j++ }); continue; }
+    const os = [], gs = [];
+    while (i < a || j < b) {
+      if (i < a && j < b && ours[i] === gold[j]) break;
+      if (j >= b || (i < a && L[i + 1][j] >= L[i][j + 1])) os.push(i++); else gs.push(j++);
+    }
+    for (let k = 0; k < Math.max(os.length, gs.length); k++) pairs.push({ o: os[k] ?? -1, g: gs[k] ?? -1, diff: true });
+  }
+  return pairs;
+}
+
 function diffSample(name, ours, gold, categorize) {
   const n = Math.max(ours.length, gold.length);
   let matches = 0;
   const diffs = [];
-  for (let i = 0; i < n; i++) {
-    const o = ours[i] ?? '<none>';
-    const g = gold[i] ?? '<none>';
-    if (o === g) { matches++; continue; }
+  for (const p of alignLines(ours, gold)) {
+    if (!p.diff) { matches++; continue; }
+    const o = p.o >= 0 ? ours[p.o] : '<none>';
+    const g = p.g >= 0 ? gold[p.g] : '<none>';
+    const i = p.g >= 0 ? p.g : p.o;
     const cat = (categorize && categorize(i, o, g)) || defaultCategorize(i, o, g);
     diffs.push({ line: i + 1, ours: o, gold: g, cat });
   }
@@ -326,7 +354,9 @@ const SAMPLES = [
 
 (async () => {
   await louis.init(path.join(projectRoot, 'liblouis', 'tables'));
-  const translate = (t) => louis.translate(t, louis.TABLES.uebG2);
+  // Translated the way the editor and Quick Mode do (liblouis inside styledTranslate, with the grade 1 translator the app
+  // passes) - import fix list #55. Not a bare liblouis call, which never exercised sub/superscripts or quote exchange.
+  const { translate, translateG1 } = editorTranslators(louis);
   const mathToBrf = makeMathToBrf('ukaaf');
 
   const argv = process.argv.slice(2);
@@ -346,7 +376,7 @@ const SAMPLES = [
     const doc = s.build();
     const opts = {
       mode: 'ukaaf', width: s.geometry.width, depth: s.geometry.depth,
-      translate, mathToBrf: s.hasMaths ? mathToBrf : undefined,
+      translate, translateG1, mathToBrf: s.hasMaths ? mathToBrf : undefined,
     };
     let brf;
     try {

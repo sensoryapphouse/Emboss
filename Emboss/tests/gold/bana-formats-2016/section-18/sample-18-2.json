@@ -16,12 +16,12 @@
   "print": {
     "blocks": [
       {
-        "kind": "note",
-        "text": "Each sentence is followed by a list of the parts of speech appearing above the sentence and its corresponding words."
+        "kind": "paragraph",
+        "text": "A *complex sentence* consists of one independent clause and one or more subordinate clauses."
       },
       {
-        "kind": "paragraph",
-        "text": "A *complex* *sentence* consists of one independent clause and one or more subordinate clauses."
+        "kind": "note",
+        "text": "Each sentence is followed by a list of the parts of speech appearing above the sentence and its corresponding words."
       },
       {
         "kind": "paragraph",
@@ -107,5 +107,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille.lines and the Option 2 content already agreed byte-for-byte between both runs; re-extraction from source confirms both exactly. Only the braille.variants SHAPE differed (run A: a bare array of line-arrays; run B: [{description, lines}]) — normalized to this gold corpus's own established {label, lines} shape (section-13's own precedent). illustrates.rule broadened from run A's own '18.5.2, 18.5.3' (already right, kept) / run B's own bare '18.5' (too coarse) to explicit 18.5.2+18.5.3 text."
+  "resolution": "Braille.lines and the Option 2 content already agreed byte-for-byte between both runs; re-extraction from source confirms both exactly. Only the braille.variants SHAPE differed (run A: a bare array of line-arrays; run B: [{description, lines}]) — normalized to this gold corpus's own established {label, lines} shape (section-13's own precedent). illustrates.rule broadened from run A's own '18.5.2, 18.5.3' (already right, kept) / run B's own bare '18.5' (too coarse) to explicit 18.5.2+18.5.3 text. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "note first, then the intro sentence \"A *complex* *sentence* ...\"",
+      "now": "intro sentence \"A *complex sentence* ...\" first, then the transcriber's note",
+      "evidence": "Page image references/_gemini/_done/gold-18-B/page-512.png (Sample 18-2): the print opens with the sentence 'A complex sentence consists of one independent clause and one or more subordinate clauses.' ('complex sentence' is one continuous italic run); the braille (lines 1-3) gives it before the transcriber's note (lines 4-6). The note is braille-only, so it comes after the sentence."
+    }
+  ]
 }

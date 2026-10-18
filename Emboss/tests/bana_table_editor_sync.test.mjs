@@ -36,6 +36,11 @@ function check(name, cond, detail = '') {
 }
 
 // Setup custom TableNode matching editor.mjs implementation
+// WARNING (F-5): this is a private reimplementation, NOT the shipped TableNode (editor.mjs
+// cannot be imported under plain Node), and it differs from it (default format 'auto',
+// getCaption/setCaption/getTabletn/setTabletn). Its caption/tabletn assertions therefore
+// prove nothing about the real editor. The real node's caption/table-note round trip is
+// proven in a browser by test-editor-save-fidelity.mjs (the "F-5" cases).
 class TableNode extends DecoratorNode {
   __headers = [];
   __rows = [];
@@ -507,7 +512,11 @@ const brailleOptions = {
   cells: 40,
   lines: 25,
   brailleTable: 'en-ueb-g2.ctb',
-  translate: (text) => text.toLowerCase()
+  translate: (text) => text.toLowerCase(),
+  // Task 2, 26 Sep 2026: this section's own checks cite BANA-specific rules (Formats §11.4.2b's
+  // column-separator line, §11.16's listed-table transcriber note), which now (isBanaOpts gate,
+  // document.mjs) actually depend on an explicit BANA mode rather than being unconditional.
+  mode: 'bana'
 };
 
 // 1. Format as Spatial

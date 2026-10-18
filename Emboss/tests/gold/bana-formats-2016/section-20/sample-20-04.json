@@ -1,0 +1,105 @@
+{
+  "id": "sample-20-04",
+  "title": "Sample 20-4: Pronunciation Key without Heading",
+  "pdfPages": [
+    16,
+    17
+  ],
+  "textLines": [
+    16016,
+    16053
+  ],
+  "illustrates": {
+    "rule": "20.7.5",
+    "quote": "(See Sample 20-4: Pronunciation Key without Heading on page 20-16.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "table",
+        "level": null,
+        "text": "a\tadd\to͝o\ttook\tə =\nā\tace\to͞o\tpool\ta in above\nâ\tcare\tu\tup\te in sicken\nä\tpalm\tû\tburn\ti in possible\ne\tend\tyo͞o\tfuse\to in melon\nē\tequal\toi\toil\tu in circus\ni\tit\tou\tpout\nī\tice\tng\tring\no\todd\tth\tthin\nō\topen\tth (crossed)\tthis\nô\torder\tzh\tvision",
+        "features": "Three-column pronunciation key with no heading; symbols in a sans-serif face, example words in a serif face; the schwa column is separated by rules and its example letters are in italics (above, sicken, possible, melon, circus); 'took' carries a breve-type mark and 'pool' a macron over the oo (the braille has @+ and @-)"
+      }
+    ],
+    "notes": "Print original is the picture on page 20-16 (gold-20-A/page-554.png); it is a key of 11 + 12 + 6 rows. The braille is on page 20-17 (page-555.png).",
+    "surroundingText": null,
+    "printFeatures": "Pronunciation key arranged in three columns without a heading."
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "7777777777777777777777777777777777   #,-",
+      "a add",
+      "@-a ace",
+      "^%a c>e",
+      "^3a palm",
+      ";e 5d",
+      "@-e equal",
+      "i x",
+      "@-i ice",
+      "o odd",
+      "@-o op5",
+      "^%o ord]",
+      "@+<oo> took",
+      "@-<oo> pool",
+      ";u up",
+      "^%u burn",
+      "y@-<oo> fuse",
+      "oi oil",
+      "ou p\\t",
+      "ng r+",
+      "th ?9",
+      "@*<th> ?",
+      "zh vi.n",
+      ".=_5 \"7                             a#,-",
+      "  a 9 .1abv",
+      "  ;e 9 .1sick5",
+      "  i 9 .1possible",
+      "  o 9 .1melon",
+      "  ;u 9 .1circus",
+      "gggggggggggggggggggggggggggggggggggggggg"
+    ],
+    "pageBreaks": [
+      23
+    ],
+    "notes": "Two braille pages: lines 1-23 then, after the source's '-New Braille Page-' marker, page 2 lines 1-7 (pageBreaks index 23 = first line of page 2). Line-number field of 5 columns stripped (digit count of the largest number, 2, plus 3); the two footer lines and the marker are not braille; the 5 blank lines after the caption are the print picture area and are excluded. U+2800 cells converted to spaces."
+  },
+  "uncertain": [
+    "Line 1 is 43 characters in the source text (34 sevens, 6 spaces, '#,-') but the page image shows 34 solid cells, about 3 blank cells and 3 cells, i.e. 40 wide. Kept verbatim from the source; the gap in the source may be 3 cells too wide (a text-extraction fault).",
+    "The 'th (crossed)' and 'took'/'pool' print marks are read from a small image; the braille (@*<th>, @+<oo>, @-<oo>) is the authority."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: both runs had faults. A left a form-feed character on line 1, listed the source's '-New Braille Page-' marker as a braille line (line 24) and recorded pageBreaks []; B kept the 4 blank picture-area lines (its pageBreaks [27] is consistent with that) and left a stray leading space on line 1. All other lines agree with the source in both runs. Re-derived from the source lines 16023-16053 by script: 30 lines, one page break at index 23. illustrates: A recorded rule '20.x' and the caption; B '20.8' with the contents line; the example is cited by the cross-reference sentence after 20.7.5, which is used. print: B empty ('TODO'); A listed the rows in one column and gave no italics/mark detail; rebuilt in the three-column layout from the image, same words. pdfPages: A empty; B [16, 17] agrees with the footers. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text (row \"took\")",
+      "was": "ōō took (two macrons)",
+      "now": "o͝o took (one breve over both o's, U+035D)",
+      "evidence": "references/bana/braille-formats-2016.pdf p.554, rendered at 400 dpi and cropped to the \"took\" row: a single curved breve arc spans both o's. The gold features field already says \"took carries a breve-type mark\"; the text contradicted it. The braille uses @+<oo> (breve modifier) for took and @-<oo> (macron) for pool."
+    },
+    {
+      "field": "print.blocks[0].text (rows \"pool\", \"fuse\")",
+      "was": "ōō pool / yōō fuse (two separate macrons)",
+      "now": "o͞o pool / yo͞o fuse (one continuous double macron, U+035E)",
+      "evidence": "same page: the macron is one unbroken line across both o's in \"pool\" and in \"y-oo fuse\"; braille groups them: @-<oo>, y@-<oo>. Not built by the runner (pronunciation key, not-representable), so no status effect."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "7777777777777777777777777777777777      #,-"
+      ],
+      "after": [
+        "7777777777777777777777777777777777   #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 555 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
+}

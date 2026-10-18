@@ -74,13 +74,13 @@
       "",
       "7777777777777777777777777777777777777777",
       ",item                   #aihj   #aiha",
-      "\"333333333333333333333 \"33333 \"33333",
+      "\"333333333333333333333  \"33333  \"33333",
       ",ma*9+ ,c5t]s",
-      "  ,produc;n \"\"\"\"\"\"\"\"\"\" #dac4j #dhb4f",
+      "  ,produc;n \"\"\"\"\"\"\"\"\"\"  #dac4j  #dhb4f",
       "  ,exports \"\"\"\"\"\"\"\"\"\"\"   #ef4g   #ec4d",
-      "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #ic4d #aie4g",
+      "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #ic4d  #aie4g",
       ",pun*+ & ,%e>+ ,ma*9es",
-      "  ,produc;n \"\"\"\"\"\"\"\"\"\" #aaj4f    #ig4a",
+      "  ,produc;n \"\"\"\"\"\"\"\"\"\"  #aaj4f   #ig4a",
       "  ,exports \"\"\"\"\"\"\"\"\"\"\"   #ac4b   #bh4c",
       "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #af4e   #cb4e",
       "gggggggggggggggggggggggggggggggggggggggg",
@@ -94,5 +94,25 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines: run A dropped 2 characters (either 2 leading indent spaces, or 2 guide-dot quote characters) on 6 lines; run B matches the source .txt exactly and is used. print.rows: the 'Production'/'Exports'/'Imports' row labels are indented 2 spaces under each category heading in print (confirmed against the PDF image, p. 309) and in the braille (which uses the same 2-cell indent) -- run B's indented version is kept; run A had dropped the indent."
+  "resolution": "braille.lines: run A dropped 2 characters (either 2 leading indent spaces, or 2 guide-dot quote characters) on 6 lines; run B matches the source .txt exactly and is used. print.rows: the 'Production'/'Exports'/'Imports' row labels are indented 2 spaces under each category heading in print (confirmed against the PDF image, p. 309) and in the braille (which uses the same 2-cell indent) -- run B's indented version is kept; run A had dropped the indent.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"333333333333333333333 \"33333 \"33333",
+        "  ,produc;n \"\"\"\"\"\"\"\"\"\" #dac4j #dhb4f",
+        "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #ic4d #aie4g",
+        "  ,produc;n \"\"\"\"\"\"\"\"\"\" #aaj4f    #ig4a"
+      ],
+      "after": [
+        "\"333333333333333333333  \"33333  \"33333",
+        "  ,produc;n \"\"\"\"\"\"\"\"\"\"  #dac4j  #dhb4f",
+        "  ,imports \"\"\"\"\"\"\"\"\"\"\"   #ic4d  #aie4g",
+        "  ,produc;n \"\"\"\"\"\"\"\"\"\"  #aaj4f   #ig4a"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 4, 6, 8, 10 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 309 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (3); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap (table / related columns / columned list) (3); column gap after guide dots (2); table separation line (1)."
+    }
+  ]
 }

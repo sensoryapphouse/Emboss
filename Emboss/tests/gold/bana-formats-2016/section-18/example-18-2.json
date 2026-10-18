@@ -16,7 +16,8 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "Capitalize titles used before a proper name and titles used in direct address."
+        "text": "Capitalize titles used before a proper name and titles used in direct address.",
+        "directions": true
       },
       {
         "kind": "other",
@@ -60,5 +61,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs already agreed on braille.lines byte-for-byte; independent re-extraction from source confirms it exactly, so kept as-is. print.blocks rebuilt around buildModel18's own vocabulary: the intro sentence is an ordinary paragraph (representable); the TN sentence defining the @#2 symbol, and the symbol itself before each name, are F-188 (no second transcriber-defined symbol can be minted) — the note is recorded as 'other' since its wording is meaningless without the symbol it defines, while the three titles are still built as a plain list (wording testable, the missing @#2 prefix an expected, documented mismatch)."
+  "resolution": "Both runs already agreed on braille.lines byte-for-byte; independent re-extraction from source confirms it exactly, so kept as-is. print.blocks rebuilt around buildModel18's own vocabulary: the intro sentence is an ordinary paragraph (representable); the TN sentence defining the @#2 symbol, and the symbol itself before each name, are F-188 (no second transcriber-defined symbol can be minted) — the note is recorded as 'other' since its wording is meaningless without the symbol it defines, while the three titles are still built as a plain list (wording testable, the missing @#2 prefix an expected, documented mismatch). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-498.png: the opening sentence is an instruction to the student (imperative exercise directions) set as an indented first paragraph; the gold braille sets it 5-5."
+    }
+  ]
 }

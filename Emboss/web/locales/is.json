@@ -60,10 +60,13 @@
     "toc": "Efnisyfirlit",
     "print": "Prentvængur (vinstri)",
     "braille": "Braille",
+    "export": "Flytja út",
+    "export_title": "Flytja út braille (BRF, eBraille) eða senda á braillepressu",
+    "emboss_menu": "Senda á braillepressu",
     "braille_view": "Braillevængur",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Braillepress",
     "emboss_tooltip": "Senda skjal til braillepressa eða prentara",
     "clear_doc": "Hreinsa skjal",
@@ -133,8 +136,6 @@
     "poem_desc": "Skáldaleg verskafti (1-3)",
     "exercise_title": "Æfingaspurning",
     "exercise_desc": "Númerað æfingarspurning (1-5 / 3-5)",
-    "caption_title": "Myndarskrift / Tilheyrandi",
-    "caption_desc": "Myndarskrift eða tilheyrandi (7-5)",
     "footnote_title": "Neðanmálsgrein",
     "footnote_desc": "Neðanmálstexti (1-3)",
     "note_title": "Þýðandanota",
@@ -163,8 +164,6 @@
     "page_desc": "Settu inn heimildar prentvængis flot vísbendingu",
     "printpage_title": "Prentvængissíðu númer",
     "printpage_desc": "Settu inn heimildar prentvængis flot vísbendingu",
-    "code_title": "Tölvukóðinn",
-    "code_desc": "Settu inn kóðablokkum með UEB vísitölum",
     "indent_title": "Draga inn / Hreiðra undirlið",
     "indent_desc": "Hreiðra listalið eða æfingu dýpra (Tab)",
     "outdent_title": "Draga út / Hækka lið",
@@ -185,8 +184,8 @@
     "language_label": "Viðmótstungumál",
     "language_help": "Veldu tungumálið sem notað er fyrir hnappa, valmyndir, svarglugga og skjálesarbirting.",
     "standard_label": "Braille staðall",
-    "standard_bana": "BANA (USA og Kanada — 40×25 stafir)",
-    "standard_ukaaf": "UKAAF (Bretland og alþjóðlegt — 38×25 stafir)",
+    "standard_bana": "BANA (USA og Kanada — 38×25 stafir)",
+    "standard_ukaaf": "UKAAF (Bretland og alþjóðlegt — 38×27 stafir)",
     "grade_label": "Stuttun stig",
     "grade_1": "Stig 1 (Óstutt / Stafur fyrir staf)",
     "grade_2": "Stig 2 (Stutt)",
@@ -261,7 +260,7 @@
     "size_full": "Full blað (1. lína Anti-sliced)",
     "lead_lines": "Tilfinnslegar leiðarlínur",
     "braille_labels": "Braille merki",
-    "footer_tip": "💡 Svartar útlínur verða að föstum tilfinnslega rúmum; litir kortleggja sjálfkrafa hin ýmsu tilfinnslega áferð.",
+    "footer_tip": "Svartar útlínur verða að föstum tilfinnslega rúmum; litir kortleggja sjálfkrafa hin ýmsu tilfinnslega áferð.",
     "open_repositories": "Opnað tilfinnslegt geymslur:",
     "no_diagrams": "Engar samþæfandi töflur fundust."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Endalaust ítrekunar staða",
     "precedence_status": "Braille framboð reglna staða",
     "perfect_match": "100% ítrekunar samsetning (0 ótakmarkaði)",
-    "badge_warn": "⚠ {count} endurskoðun",
+    "badge_warn": "{count} endurskoðun",
     "badge_title": "{count} orða ósamningur (ur) fundinn við ítrekun endurþýðingu. Smelltu til að hoppa á fyrstu.",
     "badge_clean": "Ítrekun athugað: engin orðaósamningur fundinn."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Þú ert með ósvistuð breytingar. Ertu viss um að þú vilt hætta án þess að vista?",
     "unsaved_load": "Þú ert með ósvistuð breytingar. Hleðsla á nýrri skrá kemur í stað núverandi skjals. Haltu áfram?",
     "unsaved_clear": "Þú ert með ósvistuð breytingar. Ertu viss um að þú vilt hreinsa skjalið?",
-    "drop_hint": "⬇ Dregðu skjal til að flytja inn í ritstjóra",
+    "drop_hint": "Dregðu skjal til að flytja inn í ritstjóra",
     "notice": "Tilkynning",
     "close_notice": "Loka tilkynning"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Skjalatexti",
+      "math_keyboard_toggle": "Stærðfræðilyklaborð",
       "label": "Texti",
       "toolbar_aria": "Snið",
       "style_label": "Efnisgreinarstíll",
@@ -443,8 +443,8 @@
       "graphic_cats": "Flokkar mynda",
       "graphic_list": "Tilfinnslegar grafiktöflur",
       "formula_search_label": "Leita að formúlum",
-      "btactile_link": "BTactile (ókeypis) ↗",
-      "tgil_link": "APH TGIL (1.800+ sniðmát) ↗"
+      "btactile_link": "BTactile (ókeypis)",
+      "tgil_link": "APH TGIL (1.800+ sniðmát)"
     },
     "settings": {
       "list_spaced": "Listi með auðri línu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Tengstu beint við sérsniðnar örstýringabraillepressur (ESP32-S3, RP2040/RP2350, STM32, Arduino) framhjá lokunum stýrikerfisprentarareklara.",
       "graphics_hint": "Þegar þetta er ekki hakað við eru töflur fluttar út sem aðgengilegar Þýðandanótu-lýsingar fyrir textabraillepressur og braille skjái.",
       "tactile_heading": "Beint streymi tilfinnslegs skjás (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Tengja Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Tengja USB / HID (Monarch)",
+      "tactile_connect_ble": "Tengja Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Tengja USB / HID (Monarch)",
       "tactile_disconnect": "Aftengja skjá",
       "tactile_sim_monarch": "Prófa hermdan Monarch (32×10)",
       "tactile_sim_dotpad": "Prófa hermdan DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Streymir lifandi braillesýn og tilfinnslegar myndir beint um WebBluetooth (DotPad BLE UART) eða WebHID (Monarch/USB) án ytri reklara.",
       "perkins_hint": "— skrifaðu braille með SDF og JKL takkunum",
       "ascii_hint": "— sýna hrein ASCII braille tákn",
+      "show_explanation_bar": "Sýna skýringarstikuna",
+      "show_explanation_bar_hint": "— ræman undir textanum og brailleletrinu sem útskýrir braille fyrir orðið sem þú ert á",
+      "simple_mode_hint": "— opna Emboss í einfalda umbreytinum. Að skipta á milli Hraðhams og ritilsins breytir þessu ekki.",
       "covers_hint": "— braille-prentaðar titilsíður þegar bókum er skipt"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Fyrirsögn {n}",
       "cell_aria_named": "{header}, röð {row}",
       "cell_aria": "Dálkur {col}, röð {row}",
-      "too_wide_listed": "⚠ Of breið fyrir dálka — verður sett fram í Braille sem listuð tafla",
+      "too_wide_listed": "Of breið fyrir dálka — verður sett fram í Braille sem listuð tafla",
       "too_wide_listed_title": "Þessi tafla passar ekki í dálka miðað við núverandi fjölda stafa á línu og Braille-ham, svo hún verður sett fram í Braille sem listuð tafla (BANA Formats §11.9) í stað hlið við hlið dálka.",
-      "too_wide_paragraph": "⚠ Of breið fyrir dálka — verður sett fram í Braille á efnisgreinaformi",
+      "too_wide_paragraph": "Of breið fyrir dálka — verður sett fram í Braille á efnisgreinaformi",
       "too_wide_paragraph_title": "Þessi tafla passar ekki í dálka miðað við núverandi fjölda stafa á línu og Braille-ham, svo hún verður sett fram í Braille á efnisgreinaformi (UKAAF B004 §12) í stað hlið við hlið dálka."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Ekki tókst að hlaða töflum fyrir „{code}“ — notar enn fyrri braillekóða.",
-      "failed": "⚠ Ekki tókst að útbúa braille.",
+      "failed": "Ekki tókst að útbúa braille.",
       "failed_hint": "(Ef þetta segir að vélin sé ekki frumstillt hlóðst braillevélin ekki — endurlestu harkalega með Cmd/Ctrl+Shift+R.)",
       "error_status": "Villa við gerð: {message}"
     },
     "engine": {
       "loading": "Hleð braillevél…",
-      "failed": "⚠ Ekki tókst að hlaða braillevél.",
+      "failed": "Ekki tókst að hlaða braillevél.",
       "failed_hint": "Endurlestu harkalega með Cmd/Ctrl+Shift+R. Ef vandinn heldur áfram, opnaðu vafrakonsólu (View ▸ Developer) og sendu villurnar.",
       "failed_status": "Ekki tókst að hlaða vél: {message}",
       "ready": "Tilbúið — skrifaðu eða sníðu til vinstri; braille uppfærist samstundis."
@@ -715,7 +718,7 @@
       "network_unreachable": "Ekki tókst að ná sambandi við {url}: {message}. Vafrar geta ekki opnað hreinar TCP (gátt 9100) tengingar; braillepressan verður að taka við HTTP POST, eða sæktu .brf skrána og sendu hana með prentstjóranum þínum.",
       "usb_bridge_done": "Prentverk afhent USB prentaranum!",
       "needs_webserial": "Bein raðtengt prentun þarfnast vafra með WebSerial (Chrome, Edge, Opera). Þú getur sótt .brf skrána til að prenta með prentstjóranum þínum, eða notað Net (gátt 9100) ham í stillingum.",
-      "detected": "🔌 Fann {name} — stillt á {cells}×{lines} á {baud} bás."
+      "detected": "Fann {name} — stillt á {cells}×{lines} á {baud} bás."
     },
     "symbols": {
       "title": "Safn tilfinnslegra tákna",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Kvikt fylki",
       "badge_text_only": "Aðeins texti",
       "badge_index": "Punktafylki"
+    },
+    "offline": {
+      "ready": "Emboss er tilbúið til að vinna án internets.",
+      "ready_short": "Tilbúið til að vinna án internets",
+      "not_yet": "Enn verið að undirbúa vinnu án internets…"
     }
   }
 }

@@ -60,10 +60,13 @@
     "toc": "Sumário",
     "print": "Visualização de texto (Esq)",
     "braille": "Visualização Braille (Dir)",
+    "export": "Exportar",
+    "export_title": "Exportar o braille (BRF, eBraille) ou enviá-lo para a impressora braille",
+    "emboss_menu": "Enviar para a impressora braille",
     "braille_view": "Visualização Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Imprimir em braille",
     "emboss_tooltip": "Enviar documento para a impressora braille",
     "clear_doc": "Limpar documento",
@@ -133,8 +136,6 @@
     "poem_desc": "Verso de estrofe poética (1-3)",
     "exercise_title": "Questão de Exercício",
     "exercise_desc": "Questão numerada de exercício (1-5 / 3-5)",
-    "caption_title": "Legenda / Atribuição",
-    "caption_desc": "Legenda de figura ou atribuição (7-5)",
     "footnote_title": "Nota de Rodapé",
     "footnote_desc": "Texto de nota de rodapé (1-3)",
     "note_title": "Nota do Transcritor",
@@ -163,8 +164,6 @@
     "page_desc": "Inserir indicador de quebra de página em tinta da fonte",
     "printpage_title": "Número de Página em Tinta",
     "printpage_desc": "Inserir indicador de quebra de página em tinta da fonte",
-    "code_title": "Código de Computador",
-    "code_desc": "Inserir bloco de código com indicadores UEB",
     "indent_title": "Indentar / Aninhar sub-item",
     "indent_desc": "Aninhar item de lista ou exercício mais profundo (Tab)",
     "outdent_title": "Deslocar / Promover item",
@@ -185,8 +184,8 @@
     "language_label": "Idioma da interface",
     "language_help": "Selecione o idioma dos botões, menus, caixas de diálogo e anúncios de voz.",
     "standard_label": "Padrão Braille",
-    "standard_bana": "BANA (EUA & Canadá — 40×25 células)",
-    "standard_ukaaf": "UKAAF (Reino Unido & Internacional — 38×25 células)",
+    "standard_bana": "BANA (EUA & Canadá — 38×25 células)",
+    "standard_ukaaf": "UKAAF (Reino Unido & Internacional — 38×27 células)",
     "grade_label": "Grau de contração",
     "grade_1": "Grau 1 (Integral / Letra por letra)",
     "grade_2": "Grau 2 (Abreviado)",
@@ -261,7 +260,7 @@
     "size_full": "Página inteira (Linha 1 protegida)",
     "lead_lines": "Linhas guia táteis",
     "braille_labels": "Etiquetas em braille",
-    "footer_tip": "💡 Contornos pretos se tornam bordas táteis sólidas; cores são mapeadas automaticamente para texturas táteis distintas.",
+    "footer_tip": "Contornos pretos se tornam bordas táteis sólidas; cores são mapeadas automaticamente para texturas táteis distintas.",
     "open_repositories": "Abrir Repositórios Táteis:",
     "no_diagrams": "Nenhum diagrama correspondente encontrado."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Status de conversão reversível sem perdas",
     "precedence_status": "Status das regras de precedência braille",
     "perfect_match": "Correspondência exata de 100% (0 discrepâncias)",
-    "badge_warn": "⚠ {count} para revisar",
+    "badge_warn": "{count} para revisar",
     "badge_title": "{count} discrepância(s) de palavra encontrada(s) durante tradução inversa. Clique para ir para a primeira.",
     "badge_clean": "Verificação de ida e volta: nenhuma discrepância de palavra encontrada."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Você tem alterações não salvas. Tem certeza de que deseja sair sem salvar?",
     "unsaved_load": "Você tem alterações não salvas. Carregar um novo arquivo substituirá seu documento atual. Continuar?",
     "unsaved_clear": "Você tem alterações não salvas. Tem certeza de que deseja limpar o documento?",
-    "drop_hint": "⬇ Solte um documento para importá-lo para o editor",
+    "drop_hint": "Solte um documento para importá-lo para o editor",
     "notice": "Notificação",
     "close_notice": "Fechar Notificação"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Texto do documento",
+      "math_keyboard_toggle": "Teclado de matemática",
       "label": "Texto",
       "toolbar_aria": "Formatação",
       "style_label": "Estilo de parágrafo",
@@ -443,8 +443,8 @@
       "graphic_cats": "Categorias de gráficos",
       "graphic_list": "Diagramas de gráficos táteis",
       "formula_search_label": "Pesquisar fórmulas",
-      "btactile_link": "BTactile (Gratuito) ↗",
-      "tgil_link": "APH TGIL (1.800+ modelos) ↗"
+      "btactile_link": "BTactile (Gratuito)",
+      "tgil_link": "APH TGIL (1.800+ modelos)"
     },
     "settings": {
       "list_spaced": "Lista com linha em branco (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Conectar diretamente a embossadoras de microcontrolador personalizado (ESP32-S3, RP2040/RP2350, STM32, Arduino) contornando locks de driver de impressora do SO.",
       "graphics_hint": "Quando desmarcado, diagramas são exportados como descrições acessíveis de notas do transcritor para impressoras e displays braille somente de texto.",
       "tactile_heading": "Stream ao vivo de display tátil (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Conectar Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Conectar USB / HID (Monarch)",
+      "tactile_connect_ble": "Conectar Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Conectar USB / HID (Monarch)",
       "tactile_disconnect": "Desconectar display",
       "tactile_sim_monarch": "Testar Monarch simulado (32×10)",
       "tactile_sim_dotpad": "Testar DotPad simulado (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Fluxo da viewport braille ao vivo e gráficos táteis diretamente sobre WebBluetooth (DotPad BLE UART) ou WebHID (Monarch/USB) sem drivers externos.",
       "perkins_hint": "— digite braille com as teclas SDF e JKL",
       "ascii_hint": "— mostrar caracteres braille ASCII brutos",
+      "show_explanation_bar": "Mostrar a barra de explicação",
+      "show_explanation_bar_hint": "— a faixa abaixo do texto e do braille que explica o braille da palavra em que você está",
+      "simple_mode_hint": "— abrir o Emboss no conversor simples. Alternar entre o Modo Conversor Rápido e o editor não altera isso.",
       "covers_hint": "— capas de título embossadas ao dividir livros"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Cabeçalho {n}",
       "cell_aria_named": "{header}, linha {row}",
       "cell_aria": "Coluna {col}, linha {row}",
-      "too_wide_listed": "⚠ Muito larga para colunas — será convertida em braille como tabela listada",
+      "too_wide_listed": "Muito larga para colunas — será convertida em braille como tabela listada",
       "too_wide_listed_title": "Esta tabela não cabe em colunas com o número atual de células por linha e o modo braille, por isso será convertida em braille como tabela listada (BANA Formats §11.9) em vez de colunas lado a lado.",
-      "too_wide_paragraph": "⚠ Muito larga para colunas — será convertida em braille em forma de parágrafo",
+      "too_wide_paragraph": "Muito larga para colunas — será convertida em braille em forma de parágrafo",
       "too_wide_paragraph_title": "Esta tabela não cabe em colunas com o número atual de células por linha e o modo braille, por isso será convertida em braille em forma de parágrafo (UKAAF B004 §12) em vez de colunas lado a lado."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Não foi possível carregar as tabelas para \"{code}\" — ainda usando o código braille anterior.",
-      "failed": "⚠ Braille não pôde ser gerado.",
+      "failed": "Braille não pôde ser gerado.",
       "failed_hint": "(Se disser que o mecanismo não foi inicializado, o mecanismo braille não carregou — atualização forçada com Cmd/Ctrl+Shift+R.)",
       "error_status": "Erro de renderização: {message}"
     },
     "engine": {
       "loading": "Carregando mecanismo braille…",
-      "failed": "⚠ Falha ao carregar mecanismo braille.",
+      "failed": "Falha ao carregar mecanismo braille.",
       "failed_hint": "Atualização forçada com Cmd/Ctrl+Shift+R. Se persistir, abra o console do navegador (View ▸ Developer) e envie os erros.",
       "failed_status": "Mecanismo falhou ao carregar: {message}",
       "ready": "Pronto — digite ou formate à esquerda; braille atualiza em tempo real."
@@ -715,7 +718,7 @@
       "network_unreachable": "Não foi possível alcançar {url}: {message}. Os navegadores não podem abrir conexões TCP brutes (porta 9100); a impressora deve aceitar POST HTTP ou baixar o .brf e enviá-lo com seu gerenciador de impressão.",
       "usb_bridge_done": "Trabalho de impressão entregue à impressora USB!",
       "needs_webserial": "A impressão serial direta precisa de um navegador com WebSerial (Chrome, Edge, Opera). Você pode baixar o arquivo .brf para imprimir com seu gerenciador de impressão ou usar modo de rede (porta 9100) nas configurações.",
-      "detected": "🔌 Detectado {name} — configurado para {cells}×{lines} em {baud} baud."
+      "detected": "Detectado {name} — configurado para {cells}×{lines} em {baud} baud."
     },
     "symbols": {
       "title": "Biblioteca de símbolos táteis",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matriz dinâmica",
       "badge_text_only": "Somente texto",
       "badge_index": "Matriz de pontos"
+    },
+    "offline": {
+      "ready": "O Emboss está pronto para funcionar offline.",
+      "ready_short": "Pronto para funcionar offline",
+      "not_yet": "Ainda se preparando para funcionar offline…"
     }
   }
 }

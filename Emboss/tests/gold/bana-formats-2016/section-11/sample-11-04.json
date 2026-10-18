@@ -45,7 +45,7 @@
     ],
     "notes": "Several row headings and column entries are long enough to require runovers in braille (\"Williamson's Sapsucker\" as a two-line row heading; \"500 ac/nest site\", \"20 ac/territory\", \"1 ac/territory\" wrapping to a second line; \"23,350 pairs\"/\"53,000 pairs\" also wrapping).",
     "surroundingText": null,
-    "printFeatures": "Bordered box; two-line bold centered title above the box; header row (\"Species\"/\"Habitat Unit\"/\"Potential Population\") bold with ruled line beneath."
+    "printFeatures": "Bordered box. The two-line title (\"Table 4. Minimum Viable Population Levels for Management / Indicator Species for the Targhee National Forest\") is INSIDE the box at its top, left-aligned, plain type, with a ruled line beneath it; header row (\"Species\"/\"Habitat Unit\"/\"Potential Population\") bold, centred, with a ruled line beneath; ruled lines between columns and rows."
   },
   "braille": {
     "width": 40,
@@ -60,14 +60,14 @@
       "",
       "               ,habitat       ,pot5tial",
       ",species       ,unit          ,popula;n",
-      "\"333333333333 \"333333333333 \"333333333",
-      ",grizzly ,be> ,v>iable \"\"\"\" ,undet]m9$",
+      "\"333333333333  \"333333333333  \"333333333",
+      ",grizzly ,be>  ,v>iable \"\"\"\"  ,undet]m9$",
       ",bald ,eagle   #ejj ac_/ne/   #ej pairs",
       "                 site",
       ",williamson's",
       "  ,sapsuck]    #bj ac_/       #bc1cej",
       "                 t]ritory       pairs",
-      ",pika \"\"\"\"\"\"\" #a ac_/         #ec1jjj",
+      ",pika \"\"\"\"\"\"\"  #a ac_/        #ec1jjj",
       "                 t]ritory       pairs",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
@@ -80,5 +80,31 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines: run A dropped 2 leading indent spaces on 4 lines (14, 17, 18, 19); run B matches the source .txt exactly and is used."
+  "resolution": "braille.lines: run A dropped 2 leading indent spaces on 4 lines (14, 17, 18, 19); run B matches the source .txt exactly and is used. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box; two-line bold centered title above the box; header row (\"Species\"/\"Habitat Unit\"/\"Potential Population\") bold with ruled line beneath.",
+      "now": "Bordered box. The two-line title (\"Table 4. Minimum Viable Population Levels for Management / Indicator Species for the Targhee National Forest\") is INSIDE the box at its top, left-aligned, plain type, with a ruled line beneath it; header row (\"Species\"/\"Habitat Unit\"/\"Potential Population\") bold, centred, with a ruled line beneath; ruled lines between columns and rows.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.310 (rendered at 90 dpi): the outer box encloses the title lines; the first inner rule falls below the title, above the header row. The title is plain, left-aligned type, not bold and not centred. The old text said \"two-line bold centered title above the box\"."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "\"333333333333 \"333333333333 \"333333333",
+        ",grizzly ,be> ,v>iable \"\"\"\" ,undet]m9$",
+        ",pika \"\"\"\"\"\"\" #a ac_/         #ec1jjj"
+      ],
+      "after": [
+        "\"333333333333  \"333333333333  \"333333333",
+        ",grizzly ,be>  ,v>iable \"\"\"\"  ,undet]m9$",
+        ",pika \"\"\"\"\"\"\"  #a ac_/        #ec1jjj"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 10, 11, 17 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 310 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap (table / related columns / columned list) (2); column gap after guide dots (2); table separation line (1)."
+    }
+  ]
 }

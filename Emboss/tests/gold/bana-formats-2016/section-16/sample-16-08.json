@@ -17,7 +17,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "143 resolv'd: convinced.\n148 thorough: through. untrod state: new government.\n155 presently: immediately.\n158 still: always.\n159 falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”",
+        "text": "143 **resolv’d** convinced.\n148 **thorough** through. **untrod state** new government.\n155 **presently** immediately.\n158 **still** always.\n159 **falls shrewdly** happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”",
         "features": "A facing glossary page (left, unnumbered as running text) keyed entirely by print line numbers rather than symbols, facing the play-script text itself on the right-hand page.",
         "items": null
       },
@@ -33,32 +33,32 @@
       {
         "ref": "143",
         "placement": "margin",
-        "text": "resolv'd: convinced."
+        "text": "**resolv’d** convinced."
       },
       {
         "ref": "148",
         "placement": "margin",
-        "text": "thorough: through."
+        "text": "**thorough** through."
       },
       {
         "ref": "148",
         "placement": "margin",
-        "text": "untrod state: new government."
+        "text": "**untrod state** new government."
       },
       {
         "ref": "155",
         "placement": "margin",
-        "text": "presently: immediately."
+        "text": "**presently** immediately."
       },
       {
         "ref": "158",
         "placement": "margin",
-        "text": "still: always."
+        "text": "**still** always."
       },
       {
         "ref": "159",
         "placement": "margin",
-        "text": "falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”"
+        "text": "**falls shrewdly** happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”"
       }
     ],
     "surroundingText": "Cross-referenced from rule 16.7.7, illustrating notes and text printed on facing pages, requiring combined print page numbers in braille. This is a genuine excerpt: its braille line numbering begins at 20, not 1, matching the source page image.",
@@ -72,8 +72,8 @@
       "#adc ^1resolv'd 3v9c$4",
       "444",
       "#aei ^1falls ^1%rewdly happ5s to an",
-      "  extreme degree4 ,\"!=e1 8,my                          #,-",
-      "  suspicions un=tunately >e                     b#ajj-#aja",
+      "  extreme degree4 ,\"!=e1 8,my        #,-",
+      "  suspicions un=tunately >e   b#ajj-#aja",
       "  alw a3urate40"
     ],
     "pageBreaks": [
@@ -90,5 +90,65 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.7 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A asserted 40; direct verification (lines 13117/13119, field width 5, digits(25)+3) finds 58-character lines -- the same tabbed-reference anomaly as example-16-10, explicitly named in the task brief for this file -- with no line reaching 40. Left null (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.7 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: Run A asserted 40; direct verification (lines 13117/13119, field width 5, digits(25)+3) finds 58-character lines -- the same tabbed-reference anomaly as example-16-10, explicitly named in the task brief for this file -- with no line reaching 40. Left null (overturning Run A, matching Run B). braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "143 resolv'd: convinced.\n148 thorough: through. untrod state: new government.\n155 presently: immediately.\n158 still: always.\n159 falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”",
+      "now": "143 **resolv’d** convinced.\n148 **thorough** through. **untrod state** new government.\n155 **presently** immediately.\n158 **still** always.\n159 **falls shrewdly** happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "resolv'd: convinced.",
+      "now": "**resolv’d** convinced.",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.1.text",
+      "was": "thorough: through.",
+      "now": "**thorough** through.",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.2.text",
+      "was": "untrod state: new government.",
+      "now": "**untrod state** new government.",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.3.text",
+      "was": "presently: immediately.",
+      "now": "**presently** immediately.",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.4.text",
+      "was": "still: always.",
+      "now": "**still** always.",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    },
+    {
+      "field": "print.print.notes.5.text",
+      "was": "falls shrewdly: happens to an extreme degree. “My suspicions unfortunately are always accurate.”",
+      "now": "**falls shrewdly** happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”",
+      "evidence": "Page image PDF p.454 (Sample 16-8), left-hand glossary page: entries read '143 resolv’d convinced.', '148 thorough through.' / 'untrod state new government.', '155 presently immediately.', '158 still always.', '159 falls shrewdly happens to an extreme degree. Therefore, “My suspicions unfortunately are always accurate.”' -- headwords are bold, there are NO colons after them, and the last entry contains the word 'Therefore,' (present in the gold braille as ,\"!=E1) which the gold print omitted."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "  extreme degree4 ,\"!=e1 8,my                          #,-",
+        "  suspicions un=tunately >e                     b#ajj-#aja"
+      ],
+      "after": [
+        "  extreme degree4 ,\"!=e1 8,my        #,-",
+        "  suspicions un=tunately >e   b#ajj-#aja"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 5, 6 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 454 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (2). Where: before right-margin page number (2)."
+    }
+  ]
 }

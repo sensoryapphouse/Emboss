@@ -43,13 +43,13 @@
       "",
       "    ,irregul> ,adv]bs",
       "",
-      ",positive ,comp>ative ,sup]lative",
-      "\"33333333 \"3333333333 \"3333333333",
-      "well \"\"\"\" bett] \"\"\"\"\" be/",
-      "badly \"\"\" worse \"\"\"\"\" wor/",
-      "ll \"\"\"\"\"\" less \"\"\"\"\"\" l1/",
-      "m* \"\"\"\"\"\" m \"\"\"\"\"\"\"\"\" mo/",
-      "f> \"\"\"\"\"\" f>!r \"\"\"\"\"\" f>!/",
+      ",positive  ,comp>ative  ,sup]lative",
+      "\"33333333  \"3333333333  \"3333333333",
+      "well \"\"\"\"  bett] \"\"\"\"\"  be/",
+      "badly \"\"\"  worse \"\"\"\"\"  wor/",
+      "ll \"\"\"\"\"\"  less \"\"\"\"\"\"  l1/",
+      "m* \"\"\"\"\"\"  m \"\"\"\"\"\"\"\"\"  mo/",
+      "f> \"\"\"\"\"\"  f>!r \"\"\"\"\"\"  f>!/",
       ""
     ],
     "pageBreaks": [],
@@ -62,5 +62,31 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree. `kind` for the table rows resolved to `other` rather than run B's per-row `list-item`: this section's print.blocks-to-model mapping (task brief: heading/paragraph/list-item/other) has no representation for guide-dot-joined related columns, so tagging the rows `list-item` would build them as a plain unrelated single-column list and produce a *silently wrong* model rather than a documented limitation; `other` is the honest choice, matching gold-run.mjs's own \"never invent, always record\" precedent from §11."
+  "resolution": "braille.lines agree. `kind` for the table rows resolved to `other` rather than run B's per-row `list-item`: this section's print.blocks-to-model mapping (task brief: heading/paragraph/list-item/other) has no representation for guide-dot-joined related columns, so tagging the rows `list-item` would build them as a plain unrelated single-column list and produce a *silently wrong* model rather than a documented limitation; `other` is the honest choice, matching gold-run.mjs's own \"never invent, always record\" precedent from §11.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",positive ,comp>ative ,sup]lative",
+        "\"33333333 \"3333333333 \"3333333333",
+        "well \"\"\"\" bett] \"\"\"\"\" be/",
+        "badly \"\"\" worse \"\"\"\"\" wor/",
+        "ll \"\"\"\"\"\" less \"\"\"\"\"\" l1/",
+        "m* \"\"\"\"\"\" m \"\"\"\"\"\"\"\"\" mo/",
+        "f> \"\"\"\"\"\" f>!r \"\"\"\"\"\" f>!/"
+      ],
+      "after": [
+        ",positive  ,comp>ative  ,sup]lative",
+        "\"33333333  \"3333333333  \"3333333333",
+        "well \"\"\"\"  bett] \"\"\"\"\"  be/",
+        "badly \"\"\"  worse \"\"\"\"\"  wor/",
+        "ll \"\"\"\"\"\"  less \"\"\"\"\"\"  l1/",
+        "m* \"\"\"\"\"\"  m \"\"\"\"\"\"\"\"\"  mo/",
+        "f> \"\"\"\"\"\"  f>!r \"\"\"\"\"\"  f>!/"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4, 5, 6, 7, 8, 9 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 112 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (7). Where: column gap after guide dots (5); column gap (table / related columns / columned list) (1); table separation line (1)."
+    }
+  ]
 }

@@ -88,17 +88,17 @@ ok('Index stream terminates with SUB (0x1A)', indexStream.endsWith('\x1a'));
 
 // B. Enabling Technologies / Romeo (ESC \x00, ESC \x0c rows, ESC \x0e cols, ESC \x12 duplex)
 const romeoStream = prepareEmbosserStream(',hello ,world', { embosser: 'romeo', rows: 25, cols: 40, duplex: 'double' });
-ok('Romeo stream contains reset and geometry escape headers', romeoStream.startsWith('\x1b\x00\x1b\x0c25\x1b\x0e40\x1b\x122'));
-ok('Romeo stream terminates with EOF \\x1a', romeoStream.endsWith('\x1a'));
+ok('Romeo stream opens with the Enabling Technologies reset commands', romeoStream.startsWith('\x1bA@@\x1bK@\x1bW@'));
+ok('Romeo stream ends with a page break and no trailing EOF byte', romeoStream.endsWith('\r\n\f') && !romeoStream.endsWith('\x1a'));   // A12, 23 Sep: these models take no trailer
 
 // C. ViewPlus / Columbia (ESC * t)
 const viewplusStream = prepareEmbosserStream(',hello ,world', { embosser: 'viewplus' });
-ok('ViewPlus stream contains ESC * t text mode prefix', viewplusStream.startsWith('\x1b*t'));
+ok('ViewPlus stream is plain BRF, with no escape header', !viewplusStream.startsWith('\x1b'));
 ok('ViewPlus stream ends with Form Feed \\x0c', viewplusStream.endsWith('\x0c'));
 
 // D. Braillo (ESC M0 ESC L rows)
 const brailloStream = prepareEmbosserStream(',hello ,world', { embosser: 'braillo', rows: 25 });
-ok('Braillo stream contains ESC M0 ESC L25 headers', brailloStream.startsWith('\x1bM0\x1bL25'));
+ok('Braillo stream opens ESC S1 ESC J0 ESC N0 ESC R0 ESC A25', brailloStream.startsWith('\x1bS1\x1bJ0\x1bN0\x1bR0\x1bA25'));
 ok('Braillo stream ends with Form Feed \\x0c', brailloStream.endsWith('\x0c'));
 
 // E. Generic

@@ -17,7 +17,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Juliet. Not proud you have, but thankful that you have. Proud can I never be of what I hate, But thankful even for hate that is meant love.",
+        "text": "**Juliet.** Not proud you have, but thankful that you have. Proud can I never be of what I hate, But thankful even for hate that is meant love.",
         "features": "Play-script dialogue; the speaker's own print line number \"165\" is set in the left margin beside the middle line.",
         "items": null
       },
@@ -59,5 +59,13 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12550, stripped of its 7-space left padding, is exactly 40 characters, right-justified to the braille page-number token '#afe'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12550, stripped of its 7-space left padding, is exactly 40 characters, right-justified to the braille page-number token '#afe'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Juliet. Not proud you have, but thankful that you have. Proud can I never be of what I hate, But thankful even for hate that is meant love.",
+      "now": "**Juliet.** Not proud you have, but thankful that you have. Proud can I never be of what I hate, But thankful even for hate that is meant love.",
+      "evidence": "Page image PDF p.435 (Example 16-8): the speaker name 'Juliet.' is set in bold; gold text had it plain. Gold braille also carries a bold indicator (^1) before ,JULIET."
+    }
+  ]
 }

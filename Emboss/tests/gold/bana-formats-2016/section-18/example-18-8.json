@@ -33,12 +33,11 @@
       "      @.<,! 9s];n 9 ! foll[+ s5t;e is",
       "    prec$$ by a c>et .=@5 & 5clos$ 9 brl",
       "    gr\\p+ 9dicators4@.>",
-      "",
       "  ,! ,w> ( ! ,:isk]s @5;<betwe5 ,fr.e &",
       ",5gl&;> rag$ f #aaeb to #adec4"
     ],
     "pageBreaks": [],
-    "notes": "Re-extracted from source (lines 14605-14610, margin 9); matches both runs byte-for-byte."
+    "notes": "Re-extracted from source (lines 14605-14610, margin 9); matches both runs byte-for-byte, except line 4 (a blank line between the TN and the paragraph) which BANA Errata March 2024 (C10) removes: no blank line is required between the TN and a 3-1 paragraph."
   },
   "uncertain": [
     "Unresolved: the given braille's own note reads a REFERENCE form of the caret sign (\".=@5\") where forward-translating a plain mention of \"^\" in running prose produces bare \"@5\" (no \".=\" prefix) — a UEB \"symbol used as a reference, not a use\" convention with no Emboss code path to invoke; not chased further since the file's own mismatch is already fully explained by F-187 (see differences.md §4)."
@@ -47,5 +46,28 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording of both the note and the sentence confirmed by back-translation (the note’s own \".=@5\" is the ordinary UEB caret sign, not a transcriber-defined symbol — F-188 does not apply to this note; only the \";<\"/\";>\"  braille grouping indicator pair, F-187, is unrepresentable). illustrates rule narrowed to 18.6.5a (the caret-placement clause this example’s own braille directly exercises) with a-d quoted in full since b/c/d also apply."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; wording of both the note and the sentence confirmed by back-translation (the note’s own \".=@5\" is the ordinary UEB caret sign, not a transcriber-defined symbol — F-188 does not apply to this note; only the \";<\"/\";>\"  braille grouping indicator pair, F-187, is unrepresentable). illustrates rule narrowed to 18.6.5a (the caret-placement clause this example’s own braille directly exercises) with a-d quoted in full since b/c/d also apply.",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA Errata March 2024",
+      "field": "braille.lines",
+      "before": [
+        "      @.<,! 9s];n 9 ! foll[+ s5t;e is",
+        "    prec$$ by a c>et .=@5 & 5clos$ 9 brl",
+        "    gr\\p+ 9dicators4@.>",
+        "",
+        "  ,! ,w> ( ! ,:isk]s @5;<betwe5 ,fr.e &",
+        ",5gl&;> rag$ f #aaeb to #adec4"
+      ],
+      "after": [
+        "      @.<,! 9s];n 9 ! foll[+ s5t;e is",
+        "    prec$$ by a c>et .=@5 & 5clos$ 9 brl",
+        "    gr\\p+ 9dicators4@.>",
+        "  ,! ,w> ( ! ,:isk]s @5;<betwe5 ,fr.e &",
+        ",5gl&;> rag$ f #aaeb to #adec4"
+      ],
+      "note": "Errata (C10): no blank line between the TN and the 3-1 paragraph. The BRF correction also shows \".=@E\" in place of \".=@5\" on the TN line, but that is a typo in the BRF — the PDF keeps \"@5\" (the ordinary UEB caret reference form), so only the blank line is removed."
+    }
+  ]
 }

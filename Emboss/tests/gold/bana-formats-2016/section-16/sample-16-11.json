@@ -32,7 +32,14 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Among the books I consulted in writing this chapter, the following were particularly helpful: Winston S. Churchill, Painting as a Pastime; Ferguson, The Pity of War; Lukacs, Five Days in London, May 1940. In general I have based British casualty numbers on generally accepted figures. Ferguson's The Pity of War analyzes these very accurately and in great detail. Casualty numbers for the First Battle of the Somme are based on those in Prior and Wilson, The Somme, 300–302.",
+        "text": "Among the books I consulted in writing this chapter, the following were particularly helpful: Winston S. Churchill, *Painting as a Pastime*; Ferguson, *The Pity of War*; Lukacs, *Five Days in London, May 1940*.",
+        "features": "Introductory prose paragraph before the numbered endnote list, citing several italicized book titles.",
+        "items": null
+      },
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "In general I have based British casualty numbers on generally accepted figures. Ferguson’s *The Pity of War* analyzes these very accurately and in great detail. Casualty numbers for the First Battle of the Somme are based on those in Prior and Wilson, *The Somme*, 300–302.",
         "features": "Introductory prose paragraph before the numbered endnote list, citing several italicized book titles.",
         "items": null
       },
@@ -42,12 +49,36 @@
         "text": null,
         "features": "Six numbered endnotes in list format (cell 1, reference number; runovers cell 3), each citing a source with page numbers.",
         "items": [
-          "1. Alanbrooke, War Diaries, 355-505. This is a constant theme in Alanbrooke's diary entries, though he does vary it from time to time with even more exasperated remarks about Ike, such as, “He is a hopeless commander” (638).",
-          "2. Winston S. Churchill, Into Battle: Winston Churchill's War Speeches, speech in the House of Commons, May 19, 1940, 212.",
-          "3. Larrabee, Commander in Chief, 347.",
-          "4. Winston S. Churchill, Into Battle, speech in the House of Commons, June 4, 1940, 219.",
-          "5. Calder, The People's War, 113.",
-          "6. Winston S. Churchill, Never Give In! speech of November 10, 1942, 342."
+          {
+            "marker": "1.",
+            "level": 1,
+            "text": "Alanbrooke, *War Diaries*, 355-505. This is a constant theme in Alanbrooke’s diary entries, though he does vary it from time to time with even more exasperated remarks about Ike, such as, “He is a hopeless commander” (638)."
+          },
+          {
+            "marker": "2.",
+            "level": 1,
+            "text": "Winston S. Churchill, *Into Battle: Winston Churchill’s War Speeches*, speech in the House of Commons, May 19, 1940, 212."
+          },
+          {
+            "marker": "3.",
+            "level": 1,
+            "text": "Larrabee, *Commander in Chief*, 347."
+          },
+          {
+            "marker": "4.",
+            "level": 1,
+            "text": "Winston S. Churchill, *Into Battle*, speech in the House of Commons, June 4, 1940, 219."
+          },
+          {
+            "marker": "5.",
+            "level": 1,
+            "text": "Calder, *The People’s War*, 113."
+          },
+          {
+            "marker": "6.",
+            "level": 1,
+            "text": "Winston S. Churchill, *Never Give In!* speech of November 10, 1942, 342."
+          }
         ]
       }
     ],
@@ -58,7 +89,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "                 ,notes              #gbg",
+      "                 ,notes             #gbg",
       "",
       "    ,*apt] #a3 8,ike0",
       ",am;g ! books ,i 3sult$ 9 writ+ ? *apt]1",
@@ -91,5 +122,27 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.9.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13225/13228/13231/13233/13239/13241 (field width 5, digits(24)+3) are each exactly 40 characters; the title line (13222, 41 characters, right-justified to '#gbg') is a one-cell anomaly on that line alone. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.9.3 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 13225/13228/13231/13233/13239/13241 (field width 5, digits(24)+3) are each exactly 40 characters; the title line (13222, 41 characters, right-justified to '#gbg') is a one-cell anomaly on that line alone. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "1 plain introductory paragraph and a list of plain strings \"1. ...\", no italics",
+      "now": "2 introductory paragraphs and a list of {marker,text,level} items, all book titles in *italics*",
+      "evidence": "Page image PDF p.458 (Sample 16-11): book titles in the introductory text and in every endnote are italic (Painting as a Pastime, The Pity of War, Five Days in London, May 1940, The Somme, War Diaries, Into Battle: Winston Churchill's War Speeches, Commander in Chief, Into Battle, The People's War, Never Give In!). The introduction is TWO paragraphs (the second, 'In general I have based ...', starts with a first-line indent on a new line), not one. The builder reads list items as objects {marker,text,level}; plain strings are escaped literally."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "                 ,notes              #gbg"
+      ],
+      "after": [
+        "                 ,notes             #gbg"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 459 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

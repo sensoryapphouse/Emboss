@@ -12,20 +12,22 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "In the third person, the correct form is doesn’t, whether the subject is singular or plural.",
-        "features": "'doesn't' italicized."
+        "blocked": true,
+        "text": "In the third person, the correct form is *doesn’t,* whether the subject is singular or plural.",
+        "features": "'doesn't,' italicized (comma included)."
       },
       {
         "kind": "quote",
         "level": null,
         "text": "Cathy (doesn’t, don’t) like movies with sad endings.",
-        "features": "Displayed single sentence, indented, set off by blank lines above and below; both 'doesn't' and 'don't' italicized within the parenthetical choice."
+        "features": "Displayed single sentence, indented, set off by blank lines above and below; plain type in print, no italics anywhere in this line."
       },
       {
         "kind": "paragraph",
         "level": null,
-        "text": "The correct form is doesn’t: Cathy doesn’t like movies with sad endings.",
-        "features": "'doesn't' italicized in both occurrences."
+        "blocked": true,
+        "text": "The correct form is *doesn’t:* Cathy *doesn’t* like movies with sad endings.",
+        "features": "'doesn't:' (colon included) and 'doesn't' italicized."
       }
     ],
     "notes": "The section's own running rule text (9.2.2e, on the page immediately before) discusses *multiple* displayed sentences; this example itself shows a single displayed sentence blocked at the adjusted left margin (cell 3) -- both its own line and its runover at the same indent (first==runover), the defining feature of clause d's 'blocked' variant rather than 'indented'.",
@@ -50,5 +52,25 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified independently byte-for-byte against references/_text/braille-formats-2016.txt lines 6607-6615 (margin 0, confirmed by direct byte inspection: no leading ASCII-space run on any line). The two runs disagreed only on `illustrates.rule`: A cited 9.2.2e ('multiple displayed sentences...as a list'), B quoted the whole of 9.2.2. Neither fits exactly -- this example shows a SINGLE sentence (not 'multiple', ruling out 9.2.2e, which Example 9-4 illustrates instead with its own two-item list) with first-line and runover at the identical cell-3 indent, i.e. genuinely 'blocked' rather than 'indented' -- the specific distinction drawn by clause 9.2.2d. Resolved to 9.2.2d on that direct evidence from the agreed `braille.lines` (lines 5-6 above), not by picking either run's stated id."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocked and blocks[2].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p229 (Example 9-3, zoomed 300 dpi): both the first and third paragraphs start flush at the box's left margin; only the displayed sentence is indented."
+    },
+    {
+      "field": "print.blocks[0].text and blocks[2].text (italics)",
+      "was": "doesn’t, / doesn’t: Cathy doesn’t",
+      "now": "*doesn’t,* / *doesn’t:* Cathy *doesn’t*",
+      "evidence": "Same zoomed image: \"doesn't,\" in paragraph 1, \"doesn't:\" and \"doesn't\" in paragraph 3 are set in italics, the trailing comma and colon appearing italic too. Italics marked with *...* as parseCellMarkup reads it."
+    },
+    {
+      "field": "print.blocks[1].features",
+      "was": "both 'doesn't' and 'don't' italicized",
+      "now": "plain type, no italics",
+      "evidence": "Same zoomed image: the displayed sentence \"Cathy (doesn’t, don’t) like movies with sad endings.\" is upright roman; the braille line 2 (`\"<doesn't1 don't\">`) likewise has no italic indicator. text unchanged."
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines`, verified independently byte-for-byte against references/_text/braille-formats-2016.txt lines 6607-6615 (margin 0, confirmed by direct byte inspection: no leading ASCII-space run on any line). The two runs disagreed only on `illustrates.rule`: A cited 9.2.2e ('multiple displayed sentences...as a list'), B quoted the whole of 9.2.2. Neither fits exactly -- this example shows a SINGLE sentence (not 'multiple', ruling out 9.2.2e, which Example 9-4 illustrates instead with its own two-item list) with first-line and runover at the identical cell-3 indent, i.e. genuinely 'blocked' rather than 'indented' -- the specific distinction drawn by clause 9.2.2d. Resolved to 9.2.2d on that direct evidence from the agreed `braille.lines` (lines 5-6 above), not by picking either run's stated id. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

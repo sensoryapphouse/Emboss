@@ -1,4 +1,4 @@
-import { chromium, webkit } from 'playwright';
+import { launchBrowser, ENGINE, ENGINE_SET, ENGINES, LABELS } from '../tests/lib/launch-browser.mjs';
 import { createServer } from 'http';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -60,13 +60,15 @@ function startServer() {
   });
 }
 
-async function runBrowserTests(browserType, browserName) {
+async function runBrowserTests(engine, browserName) {
   console.log(`\n======================================================================`);
   console.log(`🚀 RUNNING RIGOROUS E2E BROWSER TESTS WITH: ${browserName.toUpperCase()}`);
   console.log(`======================================================================\n`);
 
-  const browser = await browserType.launch({ headless: true });
-  const context = await browser.newContext();
+  const browser = await launchBrowser({}, engine);
+  // US English, set explicitly (1 Oct 2026): the first run's standard follows the browser's language (feedback item 6), and a
+  // headless browser otherwise takes the machine's — a UK Mac gave UKAAF and the cold-start BANA check failed.
+  const context = await browser.newContext({ locale: 'en-US', timezoneId: 'America/New_York' });
   const page = await context.newPage();
 
   const consoleErrors = [];
@@ -109,7 +111,7 @@ async function runBrowserTests(browserType, browserName) {
     recordTest('Advanced Production tab renamed properly', advTabText.includes('Advanced Production'), advTabText);
 
     // Close Settings
-    await page.click('#settingsDialog button.icon-btn');
+    await page.click('#settingsDialog .dialog-head button');   // 17 Oct 2026: the Settings dialog is one shared markup (web/settings-panes.mjs); its close button is the dialog head's, with no icon-btn class
     await page.waitForFunction(() => !document.getElementById('settingsDialog')?.open);
     recordTest('Settings dialog closed in Quick Mode', true);
 
@@ -177,18 +179,22 @@ async function runBrowserTests(browserType, browserName) {
     // TEST 4: Cold-Start Zero-Interaction Math Transcription
     // -------------------------------------------------------------------------
     console.log(`\n--- [4] Testing Cold-Start Math Transcription (pi r^2) ---`);
+    // Changed 1 Oct 2026 (feedback 30 Sep item 6, Paul: the very first run takes BANA or UKAAF from the browser and machine): this
+    // browser is US English, so a cold start is now BANA, whose maths code follows the standard (Nemeth; effectiveMathCode). The
+    // check reads the standard the first run chose and expects that standard's maths: UEB technical ⠰⠰⠨⠏⠗⠔⠼⠃ (UKAAF) or Nemeth
+    // ⠸⠩ ⠨⠏⠗⠘⠆ ⠸⠱ inside the Nemeth indicators (BANA). Was: UEB only.
     const mathTranscription = await page.evaluate(() => {
+      const mode = (JSON.parse(localStorage.getItem('emboss-settings') || '{}').mode) || 'ukaaf';
       const rows = Array.from(document.querySelectorAll('#braille .brl-row'));
+      const ueb = '⠰⠰⠨⠏⠗⠔⠼⠃', nemeth = '⠸⠩⠀⠨⠏⠗⠘⠆⠀⠸⠱';
       // Find row corresponding to the circle area sentence
-      const circleRow = rows.find(r => r.innerText.includes('⠰⠰⠨⠏⠗⠔⠼⠃') || r.innerText.includes('CIRCLE IS'));
-      return {
-        found: !!circleRow,
-        rowText: circleRow ? circleRow.innerText : '',
-        hasUebMath: circleRow ? circleRow.innerText.includes('⠰⠰⠨⠏⠗⠔⠼⠃') : false
-      };
+      const circleRow = rows.find(r => r.innerText.includes(ueb) || r.innerText.includes(nemeth) || r.innerText.includes('CIRCLE IS'));
+      const text = circleRow ? circleRow.innerText : '';
+      return { mode, found: !!circleRow, rowText: text, ok: mode === 'bana' ? text.includes(nemeth) : text.includes(ueb) };
     });
 
-    recordTest('Cold-start default text transcribes pi r^2 to UEB Technical braille', mathTranscription.hasUebMath, mathTranscription.rowText.split('\n')[0]);
+    recordTest(`Cold-start default text transcribes pi r^2 in the maths code of the standard the first run chose (${mathTranscription.mode === 'bana' ? 'BANA: Nemeth' : 'UKAAF: UEB technical'})`, mathTranscription.ok, mathTranscription.rowText.split('\n')[0]);
+    recordTest('Cold start in a US English browser is BANA (feedback item 6)', mathTranscription.mode === 'bana', mathTranscription.mode);
 
     // Verify no initial console errors
     recordTest('Initial page load generated zero console errors', consoleErrors.length === 0, consoleErrors.join('; '));
@@ -526,17 +532,21 @@ async function main() {
   console.log(`Local test server listening on port ${PORT}`);
 
   try {
-    // Run on Chromium
-    await runBrowserTests(chromium, 'Chromium');
-    // Run on WebKit (Safari engine) if installed
-    try {
-      await runBrowserTests(webkit, 'WebKit (Safari engine)');
-    } catch (e) {
-      console.log(`\n(Skipping WebKit Safari engine: ${e.message.split('\n')[0]})\n`);
+    // Run on Chrome, WebKit (Safari engine) and Firefox (A89: Firefox added, 2 Oct 2026), or only the one named by EMBOSS_ENGINE
+    // (run-browser-suites.mjs sets it). Only an engine that cannot start is skipped (1 Oct 2026: this catch used to swallow every
+    // error, so a check that failed in WebKit printed ❌ and the suite still reported success).
+    for (const key of ENGINE_SET ? [ENGINE] : ENGINES) {
+      if (key !== 'chrome') {
+        let ready = true;
+        try { const probe = await launchBrowser({}, key); await probe.close(); }
+        catch (e) { ready = false; console.log(`\n(Skipping ${LABELS[key]} — not installed: ${e.message.split('\n')[0]})\n`); }
+        if (!ready) continue;
+      }
+      await runBrowserTests(key, key === 'webkit' ? 'WebKit (Safari engine)' : LABELS[key]);
     }
 
     console.log(`\n======================================================================`);
-    console.log(`🏆 ALL BROWSER E2E TESTS FULLY VALIDATED!`);
+    console.log(`🏆 ALL BROWSER E2E TESTS FULLY VALIDATED! [${(ENGINE_SET ? [ENGINE] : ENGINES).map((k) => LABELS[k]).join(' + ')}]`);
     console.log(`======================================================================\n`);
   } catch (err) {
     console.error(`\n❌ TEST SUITE FAILED:`, err);

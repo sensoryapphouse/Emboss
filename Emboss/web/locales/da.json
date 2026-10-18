@@ -60,10 +60,13 @@
     "toc": "INDHOLDSFORTEGNELSE",
     "print": "Udskriftsvisning (LHS)",
     "braille": "Braille",
+    "export": "Eksportér",
+    "export_title": "Eksportér braillen (BRF, eBraille) eller send den til braille-skriver",
+    "emboss_menu": "Send til braille-skriver",
     "braille_view": "Braillevisning",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Præg",
     "emboss_tooltip": "Send dokument til braille-skriver eller printer",
     "clear_doc": "Ryd dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Poetisk strofaverslinje (1-3)",
     "exercise_title": "Øvelsesspørgsmål",
     "exercise_desc": "Nummereret øvelsesspørgsmål (1-5 / 3-5)",
-    "caption_title": "Billedtekst/tilskrivning",
-    "caption_desc": "Figurabilledtekst eller tilskrivning (7-5)",
     "footnote_title": "Fodnote",
     "footnote_desc": "Fodnote tekst (1-3)",
     "note_title": "Oversætters bemærkning",
@@ -163,8 +164,6 @@
     "page_desc": "Indsæt indikator for trykt sideskift",
     "printpage_title": "Trykt sidenummer",
     "printpage_desc": "Indsæt indikator for trykt sideskift",
-    "code_title": "Computerkode",
-    "code_desc": "Indsæt kodeblok med UEB-indikatorer",
     "indent_title": "Indryk / Indlejr underpunkt",
     "indent_desc": "Indlejr listepunkt eller øvelse dybere (Tab)",
     "outdent_title": "Formindsk indrykning / Forfrem punkt",
@@ -185,8 +184,8 @@
     "language_label": "Grænsefladesprog",
     "language_help": "Vælg sproget til brug for knapper, menuer, dialoger og skærmleseravisninger.",
     "standard_label": "Braille-standard",
-    "standard_bana": "BANA (USA og Canada — 40×25 celler)",
-    "standard_ukaaf": "UKAAF (Storbritannien og internationale — 38×25 celler)",
+    "standard_bana": "BANA (USA og Canada — 38×25 celler)",
+    "standard_ukaaf": "UKAAF (Storbritannien og internationale — 38×27 celler)",
     "grade_label": "Kontraktionsniveau",
     "grade_1": "Grad 1 (Ukontraheret / Bogstav for bogstav)",
     "grade_2": "Grad 2 (Kontraheret)",
@@ -261,7 +260,7 @@
     "size_full": "Fuld ark (linje 1 anti-skåret)",
     "lead_lines": "Taktile ledningslinjer",
     "braille_labels": "Braille-etiketter",
-    "footer_tip": "💡 Sorte omrids bliver solide taktile grænser; farver kortlægges automatisk til forskellige taktile teksturer.",
+    "footer_tip": "Sorte omrids bliver solide taktile grænser; farver kortlægges automatisk til forskellige taktile teksturer.",
     "open_repositories": "Åbn taktile lagre:",
     "no_diagrams": "Ingen diagrammer fundet."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Rundtursstatus uden tab",
     "precedence_status": "Braille-prioritetsreglerstatus",
     "perfect_match": "100% rundturs match (0 uoverensstemmelser)",
-    "badge_warn": "⚠ {count} til gennemgang",
+    "badge_warn": "{count} til gennemgang",
     "badge_title": "{count} orduoverensstemmelse fundet under rundturs-backtranslation. Klik for at gå til den første.",
     "badge_clean": "Rundturscheck: ingen orduoverensstemmelse fundet."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Du har ugemte ændringer. Er du sikker på, at du vil afslutte uden at gemme?",
     "unsaved_load": "Du har ugemte ændringer. Indlæsning af en ny fil erstatter dit aktuelle dokument. Fortsæt?",
     "unsaved_clear": "Du har ugemte ændringer. Er du sikker på, at du vil rydde dokumentet?",
-    "drop_hint": "⬇ Slip et dokument for at importere det i editoren",
+    "drop_hint": "Slip et dokument for at importere det i editoren",
     "notice": "Besked",
     "close_notice": "Luk besked"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumenttekst",
+      "math_keyboard_toggle": "Matematiktastatur",
       "label": "Tekst",
       "toolbar_aria": "Formatering",
       "style_label": "Afsnitsstil",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafikkategorier",
       "graphic_list": "Taktile grafikdiagrammer",
       "formula_search_label": "Søg i formler",
-      "btactile_link": "BTactile (Gratis) ↗",
-      "tgil_link": "APH TGIL (1.800+ skabeloner) ↗"
+      "btactile_link": "BTactile (Gratis)",
+      "tgil_link": "APH TGIL (1.800+ skabeloner)"
     },
     "settings": {
       "list_spaced": "Liste med tomt linjeskift (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Opret direkte forbindelse til brugerdefinerede mikrocontroller-braille-skrivere (ESP32-S3, RP2040/RP2350, STM32, Arduino) uden om OS-printerdriverspærringer.",
       "graphics_hint": "Når afkrydsningsfeltet ikke er markeret, eksporteres diagrammer som tilgængelige beskrivelser af typen „Oversætters bemærkning“ til tekst-kun braille-skrivere og braille-displays.",
       "tactile_heading": "Live-stream til taktilt display (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Forbind Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Forbind USB / HID (Monarch)",
+      "tactile_connect_ble": "Forbind Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Forbind USB / HID (Monarch)",
       "tactile_disconnect": "Afbryd display",
       "tactile_sim_monarch": "Test simuleret Monarch (32×10)",
       "tactile_sim_dotpad": "Test simuleret DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Streamer den levende braille-visning og taktile grafikker direkte via WebBluetooth (DotPad BLE UART) eller WebHID (Monarch/USB) uden eksterne drivere.",
       "perkins_hint": "— skriv braille med tasterne SDF og JKL",
       "ascii_hint": "— vis rå ASCII-braille-tegn",
+      "show_explanation_bar": "Vis forklaringslinjen",
+      "show_explanation_bar_hint": "— striben under teksten og braillen, som forklarer braillen for det ord, du står på",
+      "simple_mode_hint": "— åbn Emboss i den enkle konverter. Skift mellem Hurtig tilstand og editoren ændrer ikke dette.",
       "covers_hint": "— prægede titelomslag ved opdeling af bøger"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Overskrift {n}",
       "cell_aria_named": "{header}, række {row}",
       "cell_aria": "Kolonne {col}, række {row}",
-      "too_wide_listed": "⚠ For bred til kolonner — brailleres som listet tabel",
+      "too_wide_listed": "For bred til kolonner — brailleres som listet tabel",
       "too_wide_listed_title": "Denne tabel passer ikke i kolonner ved det aktuelle antal celler pr. linje og braille-tilstand, så den vil blive brailleret som listet tabel (BANA Formats §11.9) i stedet for kolonner side om side.",
-      "too_wide_paragraph": "⚠ For bred til kolonner — brailleres i afsnitsform",
+      "too_wide_paragraph": "For bred til kolonner — brailleres i afsnitsform",
       "too_wide_paragraph_title": "Denne tabel passer ikke i kolonner ved det aktuelle antal celler pr. linje og braille-tilstand, så den vil blive brailleret i afsnitsform (UKAAF B004 §12) i stedet for kolonner side om side."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Kunne ikke indlæse tabellerne for \"{code}\" — bruger stadig den forrige braille-kode.",
-      "failed": "⚠ Braille kunne ikke genereres.",
+      "failed": "Braille kunne ikke genereres.",
       "failed_hint": "(Hvis dette siger, at motoren ikke er initialiseret, blev braille-motoren ikke indlæst — genindlæs hårdt med Cmd/Ctrl+Shift+R.)",
       "error_status": "Renderingsfejl: {message}"
     },
     "engine": {
       "loading": "Indlæser braille-motor…",
-      "failed": "⚠ Braille-motoren kunne ikke indlæses.",
+      "failed": "Braille-motoren kunne ikke indlæses.",
       "failed_hint": "Genindlæs hårdt med Cmd/Ctrl+Shift+R. Hvis det fortsætter, åbn browserkonsollen (View ▸ Developer) og send fejlene.",
       "failed_status": "Motoren kunne ikke indlæses: {message}",
       "ready": "Klar — skriv eller formatér til venstre; braillen opdateres live."
@@ -715,7 +718,7 @@
       "network_unreachable": "Kunne ikke nå {url}: {message}. Browsere kan ikke åbne rå TCP-forbindelser (port 9100); braille-skriveren skal acceptere HTTP POST, eller download .brf-filen og send den med din printerstyring.",
       "usb_bridge_done": "Prægejob leveret til USB-printeren!",
       "needs_webserial": "Direkte seriel prægning kræver en browser med WebSerial (Chrome, Edge, Opera). Du kan downloade .brf-filen for at præge med din printerstyring, eller bruge Netværk (Port 9100)-tilstand i Indstillinger.",
-      "detected": "🔌 Fandt {name} — indstillet til {cells}×{lines} ved {baud} baud."
+      "detected": "Fandt {name} — indstillet til {cells}×{lines} ved {baud} baud."
     },
     "symbols": {
       "title": "Taktilt symbolbibliotek",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamisk matrix",
       "badge_text_only": "Kun tekst",
       "badge_index": "Punktmatrix"
+    },
+    "offline": {
+      "ready": "Emboss er klar til at arbejde offline.",
+      "ready_short": "Klar til at arbejde offline",
+      "not_yet": "Gør stadig klar til at arbejde offline…"
     }
   }
 }

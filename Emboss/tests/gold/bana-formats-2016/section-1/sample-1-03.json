@@ -22,14 +22,14 @@
       {
         "kind": "heading",
         "level": 1,
-        "text": "Unit Two",
+        "text": "Unit One",
         "features": "Print page 4: unit-number heading, centred."
       },
       {
         "kind": "heading",
-        "level": 2,
-        "text": "Statistics of Living Things",
-        "features": "Print page 4: unit-title heading beneath, centred, wraps to two lines in braille."
+        "level": 1,
+        "text": "Characteristics of Living Things",
+        "features": "Print page 4: unit-title heading beneath, centred, wraps to two lines in print ('Characteristics of / Living Things')."
       },
       {
         "kind": "other",
@@ -70,5 +70,25 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on wording; A additionally attempted to reconstruct print page 5's obscured middle text as a single merged paragraph (with bracketed guesses for the hidden portion) — not adopted, since the illustration genuinely hides that wording in the source image and inventing it would contradict the 'never guess' precedent; B's two-fragment split (matching the braille's own '444' truncation) is used instead. Not representable: the combined/lettered-continuation page-number transform has no code path in Emboss (F-46, F-48), and the source's own excerpt has a genuine content gap (lines 6-24 never shown) that a single formatDocument pass cannot reproduce as two separate slices of one continuous flow. status: not-representable."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "Unit Two",
+      "now": "Unit One",
+      "evidence": "PDF p39 page image rendered from references/bana/braille-formats-2016.pdf (Sample 1-3, printed 1-23): print page 4 shows the centred heading \"Unit One\"."
+    },
+    {
+      "field": "print.blocks[1].text",
+      "was": "Statistics of Living Things",
+      "now": "Characteristics of Living Things",
+      "evidence": "Same page image: the second centred heading, on two print lines, reads \"Characteristics of / Living Things\"."
+    },
+    {
+      "field": "print.blocks[1].level",
+      "was": "2",
+      "now": "1",
+      "evidence": "Same page image: both headings are centred in print (same axis); the braille lines 1-2 likewise are both centred, not cell-5. The features note \"wraps to two lines in braille\" was wrong: it wraps in print, braille line 2 is one line."
+    }
+  ],
+  "resolution": "Both runs agree on wording; A additionally attempted to reconstruct print page 5's obscured middle text as a single merged paragraph (with bracketed guesses for the hidden portion) — not adopted, since the illustration genuinely hides that wording in the source image and inventing it would contradict the 'never guess' precedent; B's two-fragment split (matching the braille's own '444' truncation) is used instead. Not representable: the combined/lettered-continuation page-number transform has no code path in Emboss (F-46, F-48), and the source's own excerpt has a genuine content gap (lines 6-24 never shown) that a single formatDocument pass cannot reproduce as two separate slices of one continuous flow. status: not-representable. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

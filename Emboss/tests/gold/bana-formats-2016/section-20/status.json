@@ -1,0 +1,146 @@
+{
+  "example-20-1": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-10": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-11": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-12": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"@<_5_4M@-AZ^.B@>\" vs actual \"@<_5_4^1M@-AZ^'7@>\"."
+  },
+  "example-20-13": {
+    "status": "not-representable",
+    "note": "first differing line 2: expected \".1T^6H.'UMB\" vs actual \".1?.'UMB\". Input-model limitation: a ligature tie is printed (BANA 20.4.3-20.4.5) — a tie/ligature diacritic has no representation in Emboss (F-160); the print text carries no tie, so it is dropped."
+  },
+  "example-20-14": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"F@-<OO>L\" vs actual \"FO=OL\". Input-model limitation: a ligature tie is printed (BANA 20.4.3-20.4.5) — a tie/ligature diacritic has no representation in Emboss (F-160); the print text carries no tie, so it is dropped."
+  },
+  "example-20-15": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"VIRT^6@-UE\" vs actual \"VIRT@-UE\". Input-model limitation: a ligature tie is printed (BANA 20.4.3-20.4.5) — a tie/ligature diacritic has no representation in Emboss (F-160); the print text carries no tie, so it is dropped."
+  },
+  "example-20-16": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"B@-<O^6O>K\" vs actual \"BO=OK\"."
+  },
+  "example-20-17": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-18": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-19": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"  ,! PRIM>Y /RESS M>K IS ^.B & !\" vs actual \"  ,! PRIM>Y /RESS M>K IS 7 & ! SECOND>Y\"."
+  },
+  "example-20-2": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-20": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",! @- %[S ! L;G V[EL S.D4\" vs actual \"  ,! @- %[S ! L;G V[EL S.D4\"."
+  },
+  "example-20-21": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-22": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-23": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"A3US$ AC-CUS$^.B  ADJ4 BLAM$\" vs actual \";AC-CUS$7 ADJ4 BLAM$\"."
+  },
+  "example-20-24": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"A3US$ AC-CUS$ \\\"<_5-KY@-UZD^.B\\\"> ADJ4\" vs actual \";AC-CUS$ \\\"<_5-KY@-UZD7\\\"> ADJ4 BLAM$\". line count differs by -1 (expected 2, actual 1)."
+  },
+  "example-20-25": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"H1DPIECE ,,H1D-PIECE ,A HELMET OR CAP\" vs actual \",,H1D-PIECE ,A HELMET OR CAP WORN TO\"."
+  },
+  "example-20-26": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \",A*ILLES HEEL \\\"<_5-K@+IL^.B@-EZ H@-EL\\\">\" vs actual \",A*ILLES HEEL \\\"<_5-K@+IL7@-EZ H@-EL\\\"> ,A\"."
+  },
+  "example-20-27": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"A ^2AT1 B^2AD\" vs actual null. line count differs by -6 (expected 6, actual 0). Input-model limitation: print block kind 'table' not modeled (a pronunciation key needs a pronunciation-key node — 1-3 list, dot locators, columns linearised, BANA 20.7 — Emboss has none, F-162): \"Symbol\tExample Words"
+  },
+  "example-20-28": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"           ,PRONUNCIA;N ,KEY\" vs actual null. line count differs by -8 (expected 8, actual 0). Input-model limitation: print block kind 'heading' not modeled: \"Pronunciation Key\""
+  },
+  "example-20-29": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \".=_5 \\\"7 A 9 ABV\" vs actual \"_5 \\\"7 A 9 ABV\"."
+  },
+  "example-20-3": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-30": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \".=@+\" vs actual \"@+\"."
+  },
+  "example-20-31": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"^2ADD1 ^2@-ACE1 C^2^%ARE1 P^2^3ALM2\" vs actual \"^7ADD1 @-ACE1 C^%ARE1 P^3ALM2 5D1\". line count differs by -1 (expected 5, actual 4)."
+  },
+  "example-20-4": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-5": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-6": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-7": {
+    "status": "match",
+    "note": "match"
+  },
+  "example-20-8": {
+    "status": "mismatch",
+    "note": "first differing line 1: expected \"\\\"<>^.B _5 MAT^.2 IK\\\">\" vs actual \"\\\"<>7_5 MAT7 IK\\\">\"."
+  },
+  "example-20-9": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<.=? REPRES5TS T]TI>Y /RESS@.>\" vs actual \"_/P57-MAN.*-%IP7_/\". line count differs by -1 (expected 2, actual 1). Input-model limitation: tertiary stress (grave accent) needs a transcriber-defined indicator with its own explanatory transcriber's note (BANA 20.4.1d, 20.4.1b); Emboss has no transcriber-defined modifier mechanism (F-158). Built without it."
+  },
+  "sample-20-01": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-20-02": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-20-03": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  },
+  "sample-20-04": {
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"7777777777777777777777777777777777      #,-\" vs actual null. line count differs by -30 (expected 30, actual 0). Input-model limitation: print block kind 'table' not modeled (a pronunciation key needs a pronunciation-key node — 1-3 list, dot locators, columns linearised, BANA 20.7 — Emboss has none, F-162): \"a\tadd\to͝o\ttook\tə ="
+  },
+  "sample-20-7-3c": {
+    "status": "no-braille",
+    "note": "Standard gives no braille for this sample (print-only worked example)."
+  }
+}

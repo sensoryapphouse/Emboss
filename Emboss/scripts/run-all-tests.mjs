@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Runs every headless Emboss test file and prints one pass/fail table.
 //
-//   node Emboss/scripts/run-all-tests.mjs [--jobs N] [--timeout MS] [--filter SUBSTR] [--list] [--logs DIR]
+//   node Emboss/scripts/run-all-tests.mjs [--perf] [--jobs N] [--timeout MS] [--filter SUBSTR] [--list] [--logs DIR]
 //
 // What is run (all paths relative to Emboss/, which is also the cwd for every child):
-//   tests/*.test.mjs, tests/test-printpage.mjs, tests/test_nimas_production.mjs
+//   tests/*.test.mjs, tests/books/*.test.mjs, tests/test-printpage.mjs, tests/test_nimas_production.mjs
 //   format/test-*.mjs
 //   input/*.test.mjs
 //   scripts/test-nimas-suite.mjs, scripts/test-all-file-formats.mjs, scripts/detailed-verification-suite.mjs
@@ -13,9 +13,14 @@
 // 'node:test' is run with `node --test <file>`; anything else is run with plain
 // `node <file>` and judged by its exit code.
 //
-// Browser (Playwright) suites — files that import 'playwright' or reference
+// Browser (Playwright) suites — files that import 'playwright' or tests/lib/launch-browser.mjs, or reference
 // localhost:8137 — are listed as "browser (not run)" and never executed here;
 // run them individually (they need a served build).
+//
+// Perf/timing suites — a fixed allow-list (PERF_SET below) of tests that assert
+// wall-clock budgets and fail under load or in parallel while passing alone —
+// are listed as "perf (not run)" and skipped unless --perf is given, in which
+// case they run alongside everything else.
 //
 // Every file gets a 120 s timeout (override with --timeout). The process exits
 // 1 if any file fails or times out. Full stdout/stderr of every file is written
@@ -43,6 +48,7 @@ const JOBS = Math.max(1, parseInt(flag('--jobs', String(Math.max(1, Math.min(4, 
 const TIMEOUT_MS = parseInt(flag('--timeout', '120000'), 10) || 120000;
 const FILTER = flag('--filter', null);
 const LIST_ONLY = argv.includes('--list');
+const PERF = argv.includes('--perf');
 const LOG_DIR = flag('--logs', path.join(os.tmpdir(), `emboss-test-logs-${new Date().toISOString().replace(/[:.]/g, '-')}`));
 
 // ---------------------------------------------------------------------------
@@ -56,6 +62,7 @@ function listDir(rel, pred) {
 
 const HEADLESS_SET = [
   ...listDir('tests', (f) => f.endsWith('.test.mjs')),
+  ...listDir('tests/books', (f) => f.endsWith('.test.mjs')),   // stage-4 test books and round trips
   'tests/test-printpage.mjs',
   'tests/test_nimas_production.mjs',
   ...listDir('format', (f) => /^test-.*\.mjs$/.test(f)),
@@ -79,13 +86,25 @@ const SLOW_SEPARATE = new Set([
   'scripts/test-emboss-g2-broad-corpus.mjs',
 ]);
 
+// Fixed allow-list (not a name pattern) of tests that assert wall-clock
+// budgets (e.g. "within 500ms") and are known to fail under load or when run
+// in parallel with everything else, while passing on their own. Skipped by
+// default; run with --perf (alone or combined with --filter to target one).
+const PERF_SET = new Set([
+  'format/test-extreme-fuzzing-zalgo.mjs',
+  'tests/high_frequency_mutation_stress.test.mjs',
+  'tests/comprehensive_stress_sync.test.mjs',
+]);
+
 function classify(rel) {
   const abs = path.join(EMBOSS, rel);
   if (!fs.existsSync(abs)) return { kind: 'missing' };
   const src = fs.readFileSync(abs, 'utf8');
-  const isBrowser = /from\s+['"]playwright['"]|require\(['"]playwright['"]\)|localhost:8137|from\s+['"]puppeteer['"]/.test(src);
+  // A89: the suites now reach Playwright through tests/lib/launch-browser.mjs (EMBOSS_ENGINE picks Chrome, WebKit or Firefox).
+  const isBrowser = /from\s+['"]playwright['"]|require\(['"]playwright['"]\)|lib\/launch-browser\.mjs|lib\/suite\.mjs|localhost:8137|from\s+['"]puppeteer['"]/.test(src);
   if (isBrowser) return { kind: 'browser' };
   if (SLOW_SEPARATE.has(rel)) return { kind: 'slow' };
+  if (PERF_SET.has(rel) && !PERF) return { kind: 'perf' };
   const usesNodeTest = /from\s+['"]node:test['"]|require\(['"]node:test['"]\)/.test(src);
   return { kind: 'headless', runner: usesNodeTest ? 'node --test' : 'node' };
 }
@@ -189,12 +208,12 @@ for (const r of results) {
   console.log(`${r.file.padEnd(w)}  ${r.runner.padEnd(11)}  ${r.status.padEnd(7)}  ${((r.ms / 1000).toFixed(1) + 's').padStart(7)}  ${r.note}`);
 }
 for (const e of notRun) {
-  const label = e.kind === 'browser' ? 'browser (not run)' : e.kind === 'slow' ? 'slow (run separately)' : e.kind === 'missing' ? 'MISSING' : e.kind;
+  const label = e.kind === 'browser' ? 'browser (not run)' : e.kind === 'perf' ? 'perf (not run)' : e.kind === 'slow' ? 'slow (run separately)' : e.kind === 'missing' ? 'MISSING' : e.kind;
   console.log(`${e.file.padEnd(w)}  ${'-'.padEnd(11)}  ${label}`);
 }
 console.log('-'.repeat(100));
 console.log(`headless: ${passed.length} passed, ${failed.length} failed/timed out, of ${results.length}  (${(totalMs / 1000).toFixed(0)} s wall, jobs=${JOBS})`);
-console.log(`not run:  ${notRun.filter((e) => e.kind === 'browser').length} browser suite(s), ${notRun.filter((e) => e.kind === 'slow').length} slow gate(s)`);
+console.log(`not run:  ${notRun.filter((e) => e.kind === 'browser').length} browser suite(s), ${notRun.filter((e) => e.kind === 'perf').length} perf suite(s), ${notRun.filter((e) => e.kind === 'slow').length} slow gate(s)`);
 
 if (failed.length) {
   console.log('\n' + '='.repeat(100));

@@ -18,7 +18,8 @@
         "kind": "paragraph",
         "blocked": true,
         "text": "Decode the words from your spelling list using the secret code. Write your answer in the space provided.",
-        "features": "Given braille (lines 1-3) shows a uniform indent on every line — built blocked:true."
+        "features": "Given braille (lines 1-3) shows a uniform indent on every line — built blocked:true.",
+        "directions": true
       },
       {
         "kind": "other",
@@ -54,16 +55,16 @@
   "braille": {
     "width": 40,
     "lines": [
-      "    ,decode ! ^ws f yr spell+ li/     #,-",
+      "    ,decode ! ^ws f yr spell+ li/    #,-",
       "    us+ ! secret code4 ,write yr answ] 9",
       "    ! space provid$4",
       "",
       "7777777777777777777777777777777777777777",
       "\"\"=;;;",
-      ",,code    q w e r t y u i o p a s d f g h",
+      ",,code   q w e r t y u i o p a s d f g h",
       ",,letter a b c d e f g h i j k l m n o p",
       "",
-      ",,code    j k l z x c v b n m",
+      ",,code   j k l z x c v b n m",
       ",,letter q r s t u v w x y z",
       "gggggggggggggggggggggggggggggggggggggggg",
       "",
@@ -82,5 +83,31 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived). Print side reconciled: the introductory paragraph is back-translation-verified; the key table is documented as not-buildable (F-219); the five scrambled words are modeled as an uncontracted numbered list (F-218's positive finding — the one part of this sample Emboss's generic mechanism actually gets right)."
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived). Print side reconciled: the introductory paragraph is back-translation-verified; the key table is documented as not-buildable (F-219); the five scrambled words are modeled as an uncontracted numbered list (F-218's positive finding — the one part of this sample Emboss's generic mechanism actually gets right). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.directions",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-19-B/page-529.png (Sample 19-3): 'Decode the words from your spelling list using the secret code. Write your answer in the space provided.' is an instruction to the student (directions); gold braille sets it 5-5."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "    ,decode ! ^ws f yr spell+ li/     #,-",
+        ",,code    q w e r t y u i o p a s d f g h",
+        ",,code    j k l z x c v b n m"
+      ],
+      "after": [
+        "    ,decode ! ^ws f yr spell+ li/    #,-",
+        ",,code   q w e r t y u i o p a s d f g h",
+        ",,code   j k l z x c v b n m"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 6, 9 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 529 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (2); run misplaced (1). Where: code/puzzle spacing (2); before right-margin page number (1)."
+    }
+  ]
 }

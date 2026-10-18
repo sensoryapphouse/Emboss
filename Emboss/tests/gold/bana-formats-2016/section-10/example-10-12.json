@@ -23,30 +23,30 @@
           },
           {
             "level": 1,
-            "text": "a."
+            "text": "a. \\_"
           },
           {
             "level": 1,
-            "text": "b."
+            "text": "b. \\_"
           },
           {
             "level": 1,
-            "text": "c."
+            "text": "c. \\_"
           },
           {
             "level": 1,
-            "text": "d."
+            "text": "d. \\_"
           },
           {
             "level": 1,
-            "text": "e."
+            "text": "e. \\_"
           }
         ]
       }
     ],
     "notes": "PDF page image (p.259) inspected directly: print reads \"1. List the Great Lakes\" with NO terminal period at all (a heading-style item), while the given braille ends \"...,lakes4\" (with a period).",
     "surroundingText": "",
-    "printFeatures": ""
+    "printFeatures": "Each lettered item a.-e. is followed by a short printed write-on line (underscore); \"1. List the Great Lakes\" has no terminal period in print."
   },
   "braille": {
     "width": 40,
@@ -68,5 +68,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille matches both A and B exactly. Print: confirmed against the PDF page image that print has no period; the five lettered choices are blank write-on-lines (\".-\", no answer text) in both print and braille — Emboss has no dot-5/write-on-line blank-fill mechanism for an exercise item, so these are built as empty text."
+  "resolution": "Braille matches both A and B exactly. Print: confirmed against the PDF page image that print has no period; the five lettered choices are blank write-on-lines (\".-\", no answer text) in both print and braille — Emboss has no dot-5/write-on-line blank-fill mechanism for an exercise item, so these are built as empty text. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].items[1..5].text",
+      "was": "a. / b. / c. / d. / e. (label only)",
+      "now": "a. \\_ ... e. \\_ (label plus write-on line)",
+      "evidence": "references/_gemini/_done/gold-10-A/page-259.png, Example 10-12 print box: each of a. to e. is followed by an underlined blank line; the gold braille carries \".-\" after each letter."
+    }
+  ]
 }

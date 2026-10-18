@@ -1,0 +1,49 @@
+{
+  "id": "example-20-23",
+  "title": "Example 20-23: Syllabified/Stress, No Pronunciation",
+  "pdfPages": [
+    8
+  ],
+  "textLines": [
+    15823,
+    15828
+  ],
+  "illustrates": {
+    "rule": "20.6.1",
+    "quote": "Entry words may or may not be syllabified and/or include pronunciation or stress."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "ac-cused′  adj. blamed",
+        "features": "'ac-cused′' in bold with syllable break and stress prime; 'adj. blamed' in roman",
+        "entry": {
+          "term": "ac-cused′",
+          "termBold": "ac-cused′",
+          "def": "adj. blamed"
+        }
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-546.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "a3us$ ac-cus$^.b  adj4 blam$"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Cited rule: as Example 20-21."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (as Example 20-21). print: B left blocks empty; A's blocks checked against the page image; text accepted, features expanded from the image. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

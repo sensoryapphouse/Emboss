@@ -17,14 +17,14 @@
       {
         "kind": "list-item",
         "level": null,
-        "text": "5. Amongst the museum's other treasures are steel suits of armor.",
-        "features": "Tail end of a numbered exercise item on the preceding print page, shown only to establish the page-break context; print page number \"134\" printed to the right of it."
+        "text": "5. Among the museum's other treasures (is, are) several suits of armor.",
+        "features": "Numbered exercise item on the print page before the page turn, shown only to establish the page-break context; no print page number is printed beside it."
       },
       {
         "kind": "other",
         "level": null,
         "text": "—New Print Page—",
-        "features": "Print's own explicit new-page marker, printed centered in italic between the two print pages; print page number \"148\" printed to its right."
+        "features": "Print's own explicit new-page marker, printed centred in roman between the two print pages; no number on this line (the page number 148 is at the right of the heading line below)."
       },
       {
         "kind": "heading",
@@ -41,12 +41,12 @@
     ],
     "notes": "Illustrates the blank line inserted before a heading that follows a page-change indicator (here, a \"—New Print Page—\" marker between print pages), per rule 4.3.4.",
     "surroundingText": "Numbered exercise item on the print page before the page turn.",
-    "printFeatures": "Plain numbered-item text, then an italic centered print-page-change marker, then a bold blue centered heading with its print page number to the right, then plain body text."
+    "printFeatures": "Plain numbered-item text, then a centred print-page-change marker, then a bold blue centred heading with the print page number 148 at the right on the heading line, then plain body text."
   },
   "braille": {
     "width": 40,
     "lines": [
-      "#e4 ,am;g ! museum's o!r            c#adg",
+      "#e4 ,am;g ! museum's o!r           c#adg",
       "  tr1sures \"<is1 >e\"> s\"eal suits (",
       "  >mor4",
       "------------------------------------#adh",
@@ -73,5 +73,39 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree between runs. The exercise item that precedes the page-change indicator is a numbered list item in print (kind=list-item, not paragraph -- run B's \"paragraph\" kind for blocks[0] is less precise but not wrong; run A's \"list-item\" is kept as the more specific/faithful kind). `pageBreaks` (only run B recorded one) is adopted: rule 4.3.4 explicitly concerns page-change indicators, and the source line 3248 (\"Example 4-5: Heading Following a Page Change Indicator\") together with the dashed rule at braille line 4 is exactly what a pageBreak entry documents; confirmed against .txt lines 3245-3261 and the \"134\"/\"148\" page-number codes at the right margins of lines 1 and 4."
+  "resolution": "braille.lines agree between runs. The exercise item that precedes the page-change indicator is a numbered list item in print (kind=list-item, not paragraph -- run B's \"paragraph\" kind for blocks[0] is less precise but not wrong; run A's \"list-item\" is kept as the more specific/faithful kind). `pageBreaks` (only run B recorded one) is adopted: rule 4.3.4 explicitly concerns page-change indicators, and the source line 3248 (\"Example 4-5: Heading Following a Page Change Indicator\") together with the dashed rule at braille line 4 is exactly what a pageBreak entry documents; confirmed against .txt lines 3245-3261 and the \"134\"/\"148\" page-number codes at the right margins of lines 1 and 4. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "5. Amongst the museum's other treasures are steel suits of armor.",
+      "now": "5. Among the museum's other treasures (is, are) several suits of armor.",
+      "evidence": "Page image p.109 (PDF page 109): the item reads \"5. Among the museum’s other treasures (is, are) several suits of armor.\""
+    },
+    {
+      "field": "print.blocks[0].features",
+      "was": "print page number \"134\" printed to the right of it",
+      "now": "no print page number beside the item",
+      "evidence": "Page image p.109: the item line carries no number at its right; the only number, 148, sits at the right of the \"Interrupted Order\" heading line."
+    },
+    {
+      "field": "print.blocks[1].features / print.printFeatures",
+      "was": "print page number \"148\" printed to the right of the new-page marker; italic marker",
+      "now": "148 is on the heading line, not the marker line; marker is roman",
+      "evidence": "Page image p.109: \"—New Print Page—\" is roman type on its own centred line; \"148\" is level with the heading \"Interrupted Order\"."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "#e4 ,am;g ! museum's o!r            c#adg"
+      ],
+      "after": [
+        "#e4 ,am;g ! museum's o!r           c#adg"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 109 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

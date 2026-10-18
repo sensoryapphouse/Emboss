@@ -60,10 +60,13 @@
     "toc": "Enhava tabelo",
     "print": "Printview (Maldekstra panelo)",
     "braille": "Brajlo",
+    "export": "Eksporti",
+    "export_title": "Eksporti la brajlon (BRF, eBraille) aŭ sendi ĝin al embosilo",
+    "emboss_menu": "Sendi al embosilo",
     "braille_view": "Braja vido",
     "download_brf": "Brajlo (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBrajlo (.ebraille)",
+    "download_ebrl": "eBrajlo (.ebrl)",
     "emboss": "Embosi",
     "emboss_tooltip": "Sendi dokumenton al brajlo-presilo",
     "clear_doc": "Vakigi dokumenton",
@@ -133,8 +136,6 @@
     "poem_desc": "Pova stanco verso linio (1-3)",
     "exercise_title": "Ekzerco demando",
     "exercise_desc": "Numerita ekzerco demando (1-5 / 3-5)",
-    "caption_title": "Peo / Atribuo",
-    "caption_desc": "Figuro peo aŭ atribuo (7-5)",
     "footnote_title": "Paĝonota",
     "footnote_desc": "Paĝonota noto teksto (1-3)",
     "note_title": "Retranskriba noto",
@@ -163,8 +164,6 @@
     "page_desc": "Enmeti fonta printopaĝo paŭzo indikilo",
     "printpage_title": "Printopaĝo numero",
     "printpage_desc": "Enmeti fonta printopaĝo paŭzo indikilo",
-    "code_title": "Komputila kodo",
-    "code_desc": "Enmeti kodbloko kun UEB indikatoroj",
     "indent_title": "Profundigi / Eni Suberon",
     "indent_desc": "Eni listan eron aŭ ekzercon pli profunde (Tab)",
     "outdent_title": "Malprofundigi / Antaŭenigi Eron",
@@ -185,8 +184,8 @@
     "language_label": "Interfaca lingvo",
     "language_help": "Elektu la lingvon uzita por butonoj, menoj, dialog-ĉambroj kaj senlima leganto sciigoj.",
     "standard_label": "Brajla normo",
-    "standard_bana": "BANA (USA kaj Kanado — 40×25 ĉeloj)",
-    "standard_ukaaf": "UKAAF (Unuigita regno kaj internacia — 38×25 ĉeloj)",
+    "standard_bana": "BANA (USA kaj Kanado — 38×25 ĉeloj)",
+    "standard_ukaaf": "UKAAF (Unuigita regno kaj internacia — 38×27 ĉeloj)",
     "grade_label": "Kontrakcio nivelo",
     "grade_1": "Grado 1 (Nekontrakcita / Litero-po-litero)",
     "grade_2": "Grado 2 (Kontrakcita)",
@@ -261,7 +260,7 @@
     "size_full": "Plena ĉeto (linio 1 kontraŭ-tranĉita)",
     "lead_lines": "Tuŝebla gvida linioj",
     "braille_labels": "Brajla etikedoj",
-    "footer_tip": "💡 nigra eĝoj fariĝas solida tuŝebla bordoj; koloroj aŭtomata-mapo al diversa tuŝebla teksturoj.",
+    "footer_tip": "nigra eĝoj fariĝas solida tuŝebla bordoj; koloroj aŭtomata-mapo al diversa tuŝebla teksturoj.",
     "open_repositories": "Malfermi tuŝebla deponejoj:",
     "no_diagrams": "Nulaj kongruaj diagramoj trovitaj."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Perdema ronda-turno stato",
     "precedence_status": "Brajla prioritaco reguloj stato",
     "perfect_match": "100% ronda-turno kongruo (0 diferencoj)",
-    "badge_warn": "⚠ {count} por rigardi",
+    "badge_warn": "{count} por rigardi",
     "badge_title": "{count} vorto diferencoj trovita dum ronda-turno reen-traduko. Klaku al ĵeto al la unua.",
     "badge_clean": "Ronda-turno ĉeko: nulaj vorto diferencoj trovita."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Vi havas nekonservita ŝanco. Ĉu vi certas ke vi volas elvojo sen konservanta?",
     "unsaved_load": "Vi havas nekonservita ŝanco. Ŝargado nova dosiero ŝanco via aktuala dokumento. Daŭri?",
     "unsaved_clear": "Vi havas nekonservita ŝanco. Ĉu vi certas ke vi volas vakigi la dokumenton?",
-    "drop_hint": "⬇ Ĵetu dokumenton por importi ĝin en la redaktilon",
+    "drop_hint": "Ĵetu dokumenton por importi ĝin en la redaktilon",
     "notice": "Sciigo",
     "close_notice": "Fermi sciigo"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Redaktilon panelo",
+      "math_keyboard_toggle": "Matematika klavaro",
       "label": "Dokumenta redaktilo",
       "toolbar_aria": "Formata ilo",
       "style_label": "Stilo",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafika Kategorioj",
       "graphic_list": "Tuŝebla grafika diagramoj",
       "formula_search_label": "Serĉi formulojn",
-      "btactile_link": "BTactile (Libera) ↗",
-      "tgil_link": "APH TGIL (1,800+ Ŝablonojn) ↗"
+      "btactile_link": "BTactile (Libera)",
+      "tgil_link": "APH TGIL (1,800+ Ŝablonojn)"
     },
     "settings": {
       "list_spaced": "Malplena-linio listo (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Konektu rekta al propra mikrokontrolo embositoj (ESP32-S3, RP2040/RP2350, STM32, Arduino) preterlasante OS-presilon-ŝoforo ĉapelojn.",
       "graphics_hint": "Kiam nemarkata, diagramoj estas eksportitaj kiel alirebla Retranskriba Noto priskribioj por nur-teksta embositoj kaj brajla vidiĝoj.",
       "tactile_heading": "Tuŝebla Vidiĝo Viva Fluo (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Konekti Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Konekti USB / HID (Monarch)",
+      "tactile_connect_ble": "Konekti Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Konekti USB / HID (Monarch)",
       "tactile_disconnect": "Malkonekti Vidiĝon",
       "tactile_sim_monarch": "Testi Simulitan Monarch (32×10)",
       "tactile_sim_dotpad": "Testi Simulitan DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Fluas la viva brajla vidpunkto kaj tuŝeblan grafikojn rekta trans WebBluetooth (DotPad BLE UART) aŭ WebHID (Monarch/USB) sen eksteraj ŝoforoj.",
       "perkins_hint": "— tajpu brajlon kun SDF kaj JKL ŝlosiloj",
       "ascii_hint": "— montru krudan ASCII brajlajn signojn",
+      "show_explanation_bar": "Montri la klarigan strion",
+      "show_explanation_bar_hint": "— la strio sub la teksto kaj brajlo, kiu klarigas la brajlon por la vorto, ĉe kiu vi estas",
+      "simple_mode_hint": "— malfermi Emboss ĉe la simpla konvertilo. Ŝanĝo inter Rapida reĝimo kaj la redaktilo ne ŝanĝas tion.",
       "covers_hint": "— embositaj titolaj ĉapeloj dividante librojn"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Ĉapelo {n}",
       "cell_aria_named": "{header}, linio {row}",
       "cell_aria": "Kolumno {col}, linio {row}",
-      "too_wide_listed": "⚠ Tro larĝa por kolumnoj — brajligota kiel listo tabelo",
+      "too_wide_listed": "Tro larĝa por kolumnoj — brajligota kiel listo tabelo",
       "too_wide_listed_title": "Ĉi tiu tabelo ne enkadriĝas en kolumnojn ĉe la nuna nombro da ĉeloj po linio kaj brajla reĝimo, do ĝi estos brajligita kiel listo tabelo (BANA Formats §11.9) anstataŭ flank-al-flankaj kolumnoj.",
-      "too_wide_paragraph": "⚠ Tro larĝa por kolumnoj — brajligota en paragrafo formo",
+      "too_wide_paragraph": "Tro larĝa por kolumnoj — brajligota en paragrafo formo",
       "too_wide_paragraph_title": "Ĉi tiu tabelo ne enkadriĝas en kolumnojn ĉe la nuna nombro da ĉeloj po linio kaj brajla reĝimo, do ĝi estos brajligita en paragrafo formo (UKAAF B004 §12) anstataŭ flank-al-flankaj kolumnoj."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Ne povis ŝargi la tabelojn por \"{code}\" — ankoraŭ uzante la antaŭan brajlan kodon.",
-      "failed": "⚠ Brajlo ne povis esti generita.",
+      "failed": "Brajlo ne povis esti generita.",
       "failed_hint": "(Se ĉi tio diras la motoro ne estas inicijita, la brajla motoro ne ŝarĝis — malmola-refresigi kun Cmd/Ctrl+Shift+R.)",
       "error_status": "Render eraro: {message}"
     },
     "engine": {
       "loading": "Ŝargado brajla motoro…",
-      "failed": "⚠ Brajla motoro malsukcese ŝarĝis.",
+      "failed": "Brajla motoro malsukcese ŝarĝis.",
       "failed_hint": "Malmola-refresigi kun Cmd/Ctrl+Shift+R. Se ĝi persistas, malfermi la retumilan konzolon (Vido ▸ Evoluigo) kaj sendi la erarojn.",
       "failed_status": "Motoro malsukcese ŝarĝis: {message}",
       "ready": "Preta — tajpu aŭ format maldekstre; brajlo ĝisdatiĝas vive."
@@ -715,7 +718,7 @@
       "network_unreachable": "Ne povis atingi {url}: {message}. Retumiloj ne povas malfermi krudan TCP (pordo 9100) konektojn; la embosilo devas akcepti HTTP POST, aŭ elŝuti la .brf kaj sendi ĝin kun via presilo direktisto.",
       "usb_bridge_done": "Emboso laboro liverta al la USB presilo!",
       "needs_webserial": "Rekta seria embosado bezonas retumilan kun WebSerial (Chrome, Edge, Opera). Vi povas elŝuti la .brf dosieron por embosi kun via presilo direktisto, aŭ uzi Reto (Pordo 9100) reĝimon en Agordoj.",
-      "detected": "🔌 Detektita {name} — agordi al {cells}×{lines} ĉe {baud} baud."
+      "detected": "Detektita {name} — agordi al {cells}×{lines} ĉe {baud} baud."
     },
     "symbols": {
       "title": "Tuŝebla Signo Biblioteko",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamika Matrico",
       "badge_text_only": "Nur Teksto",
       "badge_index": "Punkta Matrico"
+    },
+    "offline": {
+      "ready": "Emboss pretas labori sen interreto.",
+      "ready_short": "Preta labori sen interreto",
+      "not_yet": "Ankoraŭ pretiĝas labori sen interreto…"
     }
   }
 }

@@ -37,8 +37,8 @@
       "      @.<,model numb]s >e spac$ 9 pr9t4",
       "    ,a dot #e replaces ! space4@.>",
       "",
-      ",/ove \"\"\"\" ,model #cd\"dcb\"efg",
-      ",microwave ,model #hg\"ijh\"eca",
+      ",/ove \"\"\"\"  ,model #cd\"dcb\"efg",
+      ",microwave  ,model #hg\"ijh\"eca",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -50,5 +50,21 @@
     "A",
     "B"
   ],
-  "resolution": "pdfPages corrected to [294] (run B's 295 was wrong -- the heading falls within the page-boundary map's page 294, confirmed by the form-feed/footer page map and by the printed-page-footer text itself)."
+  "resolution": "pdfPages corrected to [294] (run B's 295 was wrong -- the heading falls within the page-boundary map's page 294, confirmed by the form-feed/footer page map and by the printed-page-footer text itself).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",/ove \"\"\"\" ,model #cd\"dcb\"efg",
+        ",microwave ,model #hg\"ijh\"eca"
+      ],
+      "after": [
+        ",/ove \"\"\"\"  ,model #cd\"dcb\"efg",
+        ",microwave  ,model #hg\"ijh\"eca"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 5, 6 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 294 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2). Where: column gap after guide dots (1); column gap (table / related columns / columned list) (1)."
+    }
+  ]
 }

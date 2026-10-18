@@ -60,7 +60,7 @@
     ],
     "notes": "Print uses the typographic ditto mark (”) to repeat \"Surplus\"/\"Fall\" for 0.90/0.80 and \"Shortage\"/\"Rise\" for 0.50/0.40.",
     "surroundingText": null,
-    "printFeatures": "Bordered box (title outside/above); no visible ruled separation lines between data rows in this excerpt; header row bold."
+    "printFeatures": "No box border (unboxed table). \"Table 4-3\" (bold) and \"PRICE AND QUANTITY OF MILK\" (small capitals) stand at the top left with a ruled line beneath them; header row (\"Price\", \"Surplus/ Shortage\", \"Price Will\") with a ruled line beneath it; no vertical rules and no rules between data rows; dittos (\") in the Surplus/Shortage and Price Will columns."
   },
   "braille": {
     "width": 40,
@@ -68,15 +68,15 @@
       "              ,table #d-#c          #bac",
       "      ,,,price & quant;y ( milk,'",
       "",
-      ",price ,surplus_/,%ortage ,price ,w",
-      "\"33333 \"33333333333333333 \"33333333",
-      "#a4jj   ,surplus \"\"\"\"\"\"\"\"\" ,fall",
-      "#j4ij   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
-      "#j4hj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
-      "#j4gj   ,nei \"\"\"\"\"\"\"\"\"\"\"\"\" ,nei",
-      "#j4fj   ,%ortage \"\"\"\"\"\"\"\"\" ,rise",
-      "#j4ej   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
-      "#j4dj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+      ",price  ,surplus_/,%ortage  ,price ,w",
+      "\"33333  \"33333333333333333  \"33333333",
+      "#a4jj   ,surplus \"\"\"\"\"\"\"\"\"  ,fall",
+      "#j4ij   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+      "#j4hj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+      "#j4gj   ,nei \"\"\"\"\"\"\"\"\"\"\"\"\"  ,nei",
+      "#j4fj   ,%ortage \"\"\"\"\"\"\"\"\"  ,rise",
+      "#j4ej   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+      "#j4dj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
       ""
     ],
     "pageBreaks": [],
@@ -90,5 +90,43 @@
     "A",
     "B"
   ],
-  "resolution": "print.rows: the print ditto mark is recorded as a plain ASCII double quote to match the braille's own guide-dot-style rendering, not a typeset right-double-quotation-mark glyph (see uncertain notes)."
+  "resolution": "print.rows: the print ditto mark is recorded as a plain ASCII double quote to match the braille's own guide-dot-style rendering, not a typeset right-double-quotation-mark glyph (see uncertain notes). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.printFeatures",
+      "was": "Bordered box (title outside/above); no visible ruled separation lines between data rows in this excerpt; header row bold.",
+      "now": "No box border (unboxed table). \"Table 4-3\" (bold) and \"PRICE AND QUANTITY OF MILK\" (small capitals) stand at the top left with a ruled line beneath them; header row (\"Price\", \"Surplus/ Shortage\", \"Price Will\") with a ruled line beneath it; no vertical rules and no rules between data rows; dittos (\") in the Surplus/Shortage and Price Will columns.",
+      "evidence": "references/bana/braille-formats-2016.pdf p.319 (rendered at 200 dpi, cropped): there is no outer border and no vertical rules; the only rules are one under the title and one under the header row. The old text said \"Bordered box (title outside/above)\". The builder reads \"no box\"/\"unboxed\" in printFeatures (gold-run.mjs noBox), so the table is now built unboxed as the braille shows."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",price ,surplus_/,%ortage ,price ,w",
+        "\"33333 \"33333333333333333 \"33333333",
+        "#a4jj   ,surplus \"\"\"\"\"\"\"\"\" ,fall",
+        "#j4ij   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+        "#j4hj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+        "#j4gj   ,nei \"\"\"\"\"\"\"\"\"\"\"\"\" ,nei",
+        "#j4fj   ,%ortage \"\"\"\"\"\"\"\"\" ,rise",
+        "#j4ej   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1",
+        "#j4dj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\" \"1"
+      ],
+      "after": [
+        ",price  ,surplus_/,%ortage  ,price ,w",
+        "\"33333  \"33333333333333333  \"33333333",
+        "#a4jj   ,surplus \"\"\"\"\"\"\"\"\"  ,fall",
+        "#j4ij   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+        "#j4hj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+        "#j4gj   ,nei \"\"\"\"\"\"\"\"\"\"\"\"\"  ,nei",
+        "#j4fj   ,%ortage \"\"\"\"\"\"\"\"\"  ,rise",
+        "#j4ej   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1",
+        "#j4dj   \"1 \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"  \"1"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4, 5, 6, 7, 8, 9, 10, 11 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 319 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (9). Where: column gap after guide dots (7); column gap (table / related columns / columned list) (1); table separation line (1)."
+    }
+  ]
 }

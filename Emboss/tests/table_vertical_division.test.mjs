@@ -147,15 +147,15 @@ test('T4: vertical division renders 2 sections with headers repeated and no data
     '      @.<TABLE IS DIVIDED VERTICALLY',
     '    INTO 2 SECTIONS.@.>',
     '',
-    'STUDENT NAME QUIZ ONE QUIZ TWO',
-    '"33333333333 "3333333 "3333333',
-    'ALEXANDER "" 88 """"" 92',
-    'BERNADETTE    76 """"" 81',
+    'STUDENT NAME  QUIZ ONE  QUIZ TWO',   // two blank cells between columns on every line (11.2.5b, K33)
+    '"33333333333  "3333333  "3333333',
+    'ALEXANDER ""  88 """""  92',
+    'BERNADETTE    76 """""  81',
     '',
-    'STUDENT NAME QUIZ THREE QUIZ FOUR',
-    '"33333333333 "333333333 "33333333',
-    'ALEXANDER "" 79 """"""" 95',
-    'BERNADETTE    90 """"""" 85',
+    'STUDENT NAME  QUIZ THREE  QUIZ FOUR',
+    '"33333333333  "333333333  "33333333',
+    'ALEXANDER ""  79 """""""  95',
+    'BERNADETTE    90 """""""  85',
     '',
   ], JSON.stringify(lines));
 });

@@ -4,7 +4,8 @@
 // For every gold file in tests/gold/bana-formats-2016/<section>/*.json, builds a
 // document model from its `print` field ONLY (never from `braille` — that is the
 // expected result, not an input), formats it with formatDocument in BANA mode at
-// 40 cells / 25 lines using the real liblouis translator (uebG2), and compares the
+// 40 cells / 25 lines with the translator the editor and Quick Mode use (liblouis uebG2 inside
+// styledTranslate: format/node-translate-helper.mjs, import fix list #55), and compares the
 // result line-by-line against `braille.lines`. Reports MATCH/MISMATCH per sample
 // with a unified diff, the first differing line, and a one-line diagnosis.
 //
@@ -97,15 +98,16 @@ const SECTIONS_ROOT = path.join(EMBOSS, 'tests', 'gold', 'bana-formats-2016');
 
 const { formatDocument } = await import(path.join(EMBOSS, 'format', 'document.mjs'));
 const { parseCellMarkup } = await import(path.join(EMBOSS, 'format', 'cell-markup.mjs'));
+const { editorTranslators } = await import(path.join(EMBOSS, 'format', 'node-translate-helper.mjs'));
 const louis = await import(path.join(EMBOSS, 'engine', 'louis.mjs'));
 await louis.init(path.join(EMBOSS, 'liblouis', 'tables'));
-const TABLES = louis.TABLES.uebG2;
-const translate = (t, tf) => louis.translate(t, TABLES, tf || null);
-// Grade 1, for segments the model marks `uncontracted` (spelling lists §17, foreign words
-// §21.9, uncontracted passages §5). The real app wires this too (Emboss/web/app.mjs);
-// without it a gold comparison silently judged uncontracted content against grade-2 output.
-const G1_TABLES = louis.TABLES.uebG1;
-const translateG1 = (t, tf) => louis.translate(t, G1_TABLES, tf || null);
+// Translators built exactly the way the editor and Quick Mode build theirs (format/node-translate-helper.mjs; import
+// fix list #55, 1 Oct 2026): liblouis wrapped in styledTranslate, so sub/superscript level signs (RUEB's grade-1 rules,
+// A86), quote exchange (UK-3, off by default as in the app) and the invisible-character clean-up are measured against
+// the gold too, not just bare liblouis. `translateG1` is the grade 1 translator for segments the model marks
+// `uncontracted` (spelling lists §17, foreign words §21.9, uncontracted passages §5), which the app passes as well.
+// No translatePos: this is the classic path (check-layout-parity.mjs proves it agrees with the editor's).
+const { translate, translateG1 } = editorTranslators(louis);
 
 // ---------------------------------------------------------------------------
 // CLI
@@ -120,7 +122,7 @@ const SECTION = argVal('--section') || process.env.GOLD_RUN_SECTION || 'section-
 // b004-appendix-g (UKAAF B004 Appendix G, Quoted material) live under
 // tests/gold/ukaaf-b004/, not tests/gold/bana-formats-2016/ — every other section id
 // here is a BANA one.
-const UKAAF_GOLD_DIRS = { 'b004-6-9': 'sections-6-9', 'b004-11': 'section-11', 'b004-appendix-g': 'appendix-g', 'b004-appendix-j': 'appendix-j' };
+const UKAAF_GOLD_DIRS = { 'b004-6-9': 'sections-6-9', 'b004-11': 'section-11', 'b004-appendix-g': 'appendix-g', 'b004-appendix-j': 'appendix-j', 'b004-appendix-e': 'appendix-e' };
 const GOLD_DIR = UKAAF_GOLD_DIRS[SECTION]
   ? path.join(EMBOSS, 'tests', 'gold', 'ukaaf-b004', UKAAF_GOLD_DIRS[SECTION])
   : path.join(SECTIONS_ROOT, SECTION);
@@ -180,6 +182,17 @@ function cellToModel(v, limitations, where) {
 // (every other captioned sample: "Table 4. Minimum...", "Unionized Manual Workers", "SAT
 // Scores by Race and Ethnicity", ...) is a bare name/label with no terminal punctuation at
 // all — checked against every one of this section's 19 captioned samples/examples.
+// Table-heading placement (BANA 11.3.1b, "follow print") is read from the PRINT description only: print.printFeatures
+// says the title/heading/label is "above [a|the] [bordered] box" or "outside" the box (and does not say it is INSIDE the
+// box). Descriptions that were checked against the page image and found to have the title inside the box now say
+// "INSIDE the box" (11-04, 11-09, 11-11, 11-14, 11-16, 11-21, 11-22), so an old "above the box" is never mistaken for them.
+// No sample id is consulted and the gold braille is never read.
+const titleOutsideBoxByPrint = (printFeatures) => {
+  const t = String(printFeatures || '');
+  if (/\binside the box\b|\bwithin the box\b/i.test(t)) return false;
+  return /\b(?:title|heading|label|caption)\b[^.;]*\b(?:above (?:a |the )?(?:bordered |ruled )?(?:box|table)|outside (?:it|the box|the (?:ruled )?table))/i.test(t)
+    || /\bABOVE the box\b|\boutside the box\b|,? outside it\b/.test(t);
+};
 function buildModel11(sample) {
   const print = sample.print || {};
   const printFeatures = String(print.printFeatures || '');
@@ -226,6 +239,12 @@ function buildModel11(sample) {
         const text = String(a).trim();
         let end = ci;
         while (end + 1 < colCount && has(row1[end + 1]) && String(row1[end + 1]).trim() === text && has(row2[end + 1])) end++;
+        // A primary heading printed ONCE over its sub-columns (Samples 11-2, 11-13, 11-15: the
+        // print spans the heading across the columns, leaving the row-1 cells above the other
+        // sub-columns empty). Only when the heading was not written out again for each column
+        // (the repeat convention handled just above), so Sample 11-9's own single-tier "Annual
+        // avg" (empty above it, but after a repeated "Semiannual averages") stays single-tier.
+        if (end === ci) while (end + 1 < colCount && !has(row1[end + 1]) && has(row2[end + 1])) end++;
         groups.push({ text: esc(text), from: ci, to: end });
         for (let k = ci; k <= end; k++) flat[k] = cellToModel(row2[k], limitations, `headers[1][${k}]`);
         ci = end + 1;
@@ -244,15 +263,59 @@ function buildModel11(sample) {
     }
   }
 
+  // BANA 11.5.5 (Diagonal Table Lines): "Treat the text separated by diagonal lines as column
+  // and row headings ... the text to the left and below the diagonal line is treated as a column
+  // heading to the row headings. ... Text to the right and above the diagonal line is treated
+  // as an inclusive heading to two or more of the following columns." The print here writes a
+  // diagonal as a backslash between the two texts in the corner header cell (Sample 11-7:
+  // "Animals Grooming \\ Animals Groomed"): the part before it heads the row-heading column,
+  // the part after it becomes the primary heading over the remaining columns.
+  const diag = rawHeaders && rawHeaders.length === 1 && typeof rawHeaders[0][0] === 'string' && /\s\\\s/.test(rawHeaders[0][0]) && rawHeaders[0].length > 2;
+  if (diag) {
+    const [below, above] = rawHeaders[0][0].split(/\s\\\s/).map((t) => t.trim());
+    headerRow = [esc(below), ...rawHeaders[0].slice(1).map((v, i) => cellToModel(v, limitations, `headers[0][${i + 1}]`))];
+    headerGroups = [{ text: esc(above), from: 1, to: headerRow.length - 1 }];
+  }
+
   const rawRows = Array.isArray(print.rows) ? print.rows : [];
-  const rows = rawRows.map((r, ri) => (Array.isArray(r) ? r : [r]).map((v, ci) => cellToModel(v, limitations, `rows[${ri}][${ci}]`)));
+  // BANA 11.6.6 (Dittos): a body cell that is nothing but a quotation/ditto mark IS a ditto
+  // (Sample 11-12's notes: "Print uses the typographic ditto mark ... to repeat"). It is passed
+  // as the ditto sign U+3003, which liblouis's UEB table renders as the ditto (dots 5,2);
+  // a bare straight or curly quote would be translated as an ordinary quotation mark.
+  const DITTO = '\u3003';
+  // BANA 11.6.5 (Segmented Numbers, Example 11-8): "Insert the numeric space indicator (dot 5) to
+  // represent the spaces in segmented numbers" — a print space BETWEEN digit groups becomes a
+  // no-break space, which liblouis's UEB table renders as the numeric space (34 432 -> #CD"DCB).
+  // Only for the sample that illustrates that rule, since elsewhere a space between numbers is
+  // just a space.
+  const segmentedNumbers = /^11\.6\.5(\.|$)/.test(String((sample.illustrates && sample.illustrates.rule) || ''));
+  const bodyCell = (v, where) => {
+    if (typeof v === 'string' && /^\s*["\u201c\u201d\u2033\u3003]\s*$/.test(v)) return DITTO;
+    if (segmentedNumbers && typeof v === 'string') return esc(v.replace(/(?<=\d) (?=\d)/g, '\u00a0'));
+    return cellToModel(v, limitations, where);
+  };
+  const rows = rawRows.map((r, ri) => (Array.isArray(r) ? r : [r]).map((v, ci) => bodyCell(v, `rows[${ri}][${ci}]`)));
 
   const hasTable = headerRow.length > 0 || rows.length > 0;
   let table = null;
   if (hasTable) {
-    table = { type: 'table', format: 'auto', headers: headerRow, rows };
+    // The wide-table format the illustrated rule names, where Emboss has one (T4): 11.14 vertical
+    // division, 11.15 Interchanged Columns and Rows (and B004 App E's transposed table), 11.16 Listed,
+    // 11.17 Linear, 11.18 Stairstep. Every other sample stays 'auto'. (App E lists several rules per example.)
+    const ruleIds = [].concat(sample.illustrates || []).map((x) => String((x && x.rule) || ''));
+    const RULE_FORMAT = [[/^11\.13(\.|$)/, 'facing'], [/^11\.14(\.|$)/, 'vertical'], [/^11\.15(\.|$)/, 'interchange'], [/^B004 E ex\d+-transpose$/, 'interchange'], [/^11\.16(\.|$)/, 'listed'], [/^11\.17(\.|$)/, 'linear'], [/^11\.18(\.|$)/, 'stairstep']];
+    const ruleFormat = (RULE_FORMAT.find(([re]) => ruleIds.some((id) => re.test(id))) || [])[1] || 'auto';
+    table = { type: 'table', format: ruleFormat, headers: headerRow, rows };
     if (headerGroups) table.headerGroups = headerGroups;
-    const noBox = /\bno box\b|\bnot enclosed\b|\bunboxed\b|\bno border\b|without.*\bbox\b/i.test(printFeatures);
+    // TBL-NUM-1 (BANA 11.7.1j-l): the numeric passage indicator is a transcriber's per-table choice, made the
+    // same way as the formats above — only for the sample that illustrates the rule.
+    if (ruleIds.some((id) => /^11\.7\.1\.?[jl](\.|$)/.test(id))) table.numericPassage = true;
+    // K3 (BANA 11.6.1d, transcriber KD): place-value alignment follows PRINT. A gold print description
+    // records it as `print.columnAlign` (per column: 'left' | 'right' | 'decimal'), read from the page image.
+    if (Array.isArray(print.columnAlign)) table.printAlign = print.columnAlign.map((a) => (a === 'right' || a === 'decimal' ? a : null));
+    // UKAAF B004 has no boxed-table construct (a ruled print table is not boxed in braille, App E's own
+    // worked braille) — the BANA box (11.2.5) is built only for the BANA sections.
+    const noBox = SECTION === 'b004-appendix-e' || /\bno box\b|\bnot enclosed\b|\bunboxed\b|\bno border\b|without.*\bbox\b/i.test(printFeatures);
     if (tableTitle) {
       table.title = tableTitle;
       // BANA 11.3.1b: "Follow print for the placement of table headings ... which may be
@@ -265,16 +328,35 @@ function buildModel11(sample) {
       // 11-24 place the heading after the top box line; only Samples 11-2, 11-5, 11-6, 11-26
       // place it before). A sample in the minority is recorded as a titlePosition
       // limitation below, not special-cased from its own expected braille.
-      if (!noBox) {
+      if (!noBox && titleOutsideBoxByPrint(printFeatures)) {
+        // BANA 11.3.1b: "Follow print for the placement of table headings." Here the PRINT description says the
+        // heading is drawn outside (above) the ruled box.
+        table.titlePosition = 'before-box';
+      } else if (!noBox && ruleFormat !== 'facing') {   // K15: facing pages place the heading above the box (11.13.1e)
         table.titlePosition = 'in-box';
         limitations.push(`print gives no field for whether the table heading sits before or after the box's top line (BANA 11.3.1b "follow print"); defaulted to titlePosition:'in-box' (the majority pattern found across this section's own worked samples) — see standards-findings.md F-4.`);
       }
     }
-    if (noBox) {
+    if (noBox || ruleFormat === 'facing') {
+      // K15: a facing-pages table draws its own box lines across both pages, with the heading above the top box line
+      // (BANA 11.13.1e), so it is never nested in a box block (which could not be set across a page pair).
+      if (ruleFormat === 'facing') delete table.titlePosition;
       blocks.push(table);
     } else {
       blocks.push({ type: 'box', blocks: [table] });
     }
+  }
+  // UKAAF B004 App E's own print.attribution (Example 2's source line under the table,
+  // "(Weather or Not Forecasts Ltd.)") is real print content below the table: an ordinary paragraph.
+  if (hasTable && typeof print.attribution === 'string' && print.attribution.trim()) {
+    blocks.push({ type: 'para', ...textOrSegments(esc(print.attribution.trim())) });
+  }
+
+  // A sample that prints only a table HEADING (Example 11-4: "Table 9.5" and its title, no rows or
+  // column headings): BANA 11.3.2a, "Center sequentially numbered table headings". With no table
+  // body there is no table block to carry it, so each print line is a centred heading (level 1).
+  if (!hasTable && tableTitle) {
+    for (const t of (Array.isArray(tableTitle) ? tableTitle : [tableTitle])) blocks.push({ type: 'heading', level: 1, text: t });
   }
 
   // printFeatures itself (bold/shading/rules/fonts/diagonal lines/bar charts/etc.)
@@ -381,6 +463,7 @@ function buildModel4(sample) {
   let prevKind = null;         // raw previous print.blocks[].kind, for the F-39 (a) adjacency test
   let prevHeadingLevel = null; // level of the immediately preceding heading (if prevKind === 'heading')
   let headingRunLen = 0;       // length of the current run of consecutive SAME-level headings (§4.3.3)
+  let pendingHeader4 = null;   // a table header bar read from an `other` block, waiting for its data rows
   for (const b of printBlocks) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
@@ -405,7 +488,42 @@ function buildModel4(sample) {
       headingRunLen = (prevKind === 'heading' && b.level === prevHeadingLevel) ? headingRunLen + 1 : 1;
       prevHeadingLevel = b.level;
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'heading', level: b.level, ...tos });
+      const h4 = { type: 'heading', level: b.level, ...tos };
+      // K2 / BANA 4.3.3, Example 4-2 (EMBOSS-TASKS G1/13b): a title and its author's name are
+      // two separate items, not one heading connected across two lines the way a chapter
+      // number + title (Example 4-3) or unit number + title (Example 4-4) is — even though all
+      // three print the same way, same-level centred headings running straight on. The gold
+      // file's own `features` prose is the only signal available here (print.blocks carries no
+      // structural flag for this): a same-tier heading immediately following another whose
+      // features name it a byline/author gets `notConnected: true`, keeping the ordinary blank
+      // line between the two (document.mjs's HEADING_JOIN_TIERS would otherwise drop it).
+      // Only a centred (level-1) byline that is its own item: a line described as part of the SAME heading (Sample 4-3's
+      // two-line cell-5 "Restif de la Bretonne, / Nocturnal Spectator", whose description merely mentions "the author's
+      // name") stays connected.
+      const f4 = String(b.features ?? '');
+      if (prevKind === 'heading' && b.level === prevHeadingLevel && b.level === 1 && /\bbyline\b|\bauthor\b/i.test(f4) && !/\bsame\b[^.]*\bheading\b|\btwo-line heading\b/i.test(f4)) h4.notConnected = true;
+      // F-41 / BANA 4.3.7: "Ignore font attributes ... except when required for distinction." Kept (block.keepEmphasis) where
+      // an emphasised line is joined to a plain line of the same connected heading (Sample 4-3): Emboss judges each heading
+      // block on its own, and this print is two heading blocks. A heading that is part-emphasised, part plain within one
+      // block (Example 4-7) is no longer marked here: the formatter keeps that emphasis itself (K1, 25 Sep).
+      if (tos.segments && tos.segments.some((g) => g && g.tf)) {
+        const bi4 = printBlocks.indexOf(b);
+        const sib = [printBlocks[bi4 - 1], printBlocks[bi4 + 1]].filter((x) => x && x.kind === 'heading' && x.level === b.level);
+        const sibPlain = sib.some((x) => !textOrSegments(x.text).segments?.some((g) => g && g.tf));
+        if (sibPlain) h4.keepEmphasis = true;
+      }
+      blocks.push(h4);
+    } else if (kind === 'paragraph' && /^\d+\.\s+\S/.test(String(b.text ?? '')) && /numbered/i.test(String(b.features ?? ''))) {
+      // A print paragraph the gold describes as a numbered step ("1. Read and ...") is a one-item numbered list in Emboss's model
+      // (BANA §8 list margins), not an ordinary indented paragraph — the numeral is the item's marker (Sample 4-7).
+      const mk = /^(\d+\.)\s+([\s\S]*)$/.exec(String(b.text));
+      const tos = textOrSegments(mk[2]);
+      const item = tos.segments ? { segments: tos.segments } : { text: tos.text };
+      item.marker = mk[1];
+      blocks.push({ type: 'list', kind: 'list', items: [item] });
+    } else if (kind === 'paragraph' && /^play dialogue line/i.test(String(b.features ?? ''))) {
+      // A play dialogue line (speaker, colon, speech) is BANA §14 dialogue (1-3 margins), not an indented paragraph (Example 4-7).
+      blocks.push({ type: 'dialogue', ...textOrSegments(b.text) });
     } else if (kind === 'paragraph') {
       const tos = textOrSegments(b.text);
       const para = { type: 'para', ...tos };
@@ -413,7 +531,36 @@ function buildModel4(sample) {
       if (standaloneHeading || RUN_IN_HEADING_RE.test(b.features || '')) para.blocked = true;
       blocks.push(para);
     } else if (kind === 'other') {
-      limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
+      // Section-4 `other` blocks are print content the gold's `kind` vocabulary has no slot for. Three of them ARE print
+      // content this builder can now read from the block's own `features` (its print description, never the braille):
+      //  - a table's header bar ("table header bar", text "A / B / C") followed by its data rows (text "a/b/c; d/e/f", features
+      //    "...column..."), or a headerless columnar word list — built as a `table` block (Emboss's spatial/related-columns
+      //    format, BANA 4.5.4/4.6.5; Examples 4-10, 4-11);
+      //  - a displayed quotation ("Displayed/indented block quotation") — a `quote`-style para (BANA §9.2), and its right-aligned
+      //    citation line ("citation line") — an `attribution` block (§9.4; Sample 4-4);
+      //  - a print block the gold itself says is never transcribed (front-of-book icon key, its captions — Sample 4-7):
+      //    context only, skipped without a limitation (it is not part of the passage being transcribed).
+      const otext = String(b.text ?? ''), ofeat = String(b.features ?? '');
+      if (/table header bar/i.test(ofeat) && otext.includes(' / ')) {
+        pendingHeader4 = otext.split(/\s*\/\s*/).map((c) => esc(c.trim()));
+      } else if (/column/i.test(ofeat) && /data rows|word list/i.test(ofeat) && otext.includes(';') && otext.includes('/')) {
+        const rows4 = otext.split(/;\s*/).map((r) => r.split('/').map((c) => esc(c.trim())));
+        const ncol = rows4[0].length;
+        if (ncol >= 2 && rows4.every((r) => r.length === ncol) && (!pendingHeader4 || pendingHeader4.length === ncol)) {
+          blocks.push({ type: 'table', format: 'auto', headers: pendingHeader4 || [], rows: rows4 });
+        } else {
+          limitations.push(`print block kind 'other' (columnar rows did not parse into a rectangular table — not modeled): "${otext.slice(0, 160)}"`);
+        }
+        pendingHeader4 = null;
+      } else if (/displayed[^.]*quotation/i.test(ofeat)) {
+        blocks.push({ type: 'para', style: 'quote', ...textOrSegments(otext) });
+      } else if (/citation line/i.test(ofeat)) {
+        blocks.push({ type: 'attribution', ...textOrSegments(otext) });
+      } else if (/never (?:itself )?transcribed|excluded from the model/i.test(ofeat) && !/NOT built/.test(ofeat)) {
+        // context only — see above
+      } else {
+        limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${otext.slice(0, 160)}"`);
+      }
     } else {
       limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
     }
@@ -502,16 +649,13 @@ function buildListItem(it, limitations, where) {
   const marker = it && it.marker;
   const bullet = it && it.bullet;
   if (bullet) {
-    // Compound marker (an ordinal, e.g. "2.") PLUS a separate print bullet — only
-    // example-8-5a/-5b use this. Emboss's list formatter (formatList, document.mjs)
-    // has no way to combine an ordinal marker with a bullet indicator on one item; the
-    // ordinal alone is built, and the missing bullet is recorded as a limitation.
-    limitations.push(`${where}: has both an ordinal marker (${JSON.stringify(marker)}) and a print bullet ("${bullet}") — Emboss's list formatter cannot combine an ordinal marker with a bullet indicator on one item; built with the ordinal marker only, the bullet is dropped (not representable).`);
+    // Compound marker (an ordinal, e.g. "2.") PLUS a separate print bullet — only example-8-5a/-5b use this.
+    // The formatter takes the bullet in the optional `item.bullet` field beside the ordinal `marker`
+    // (BANA 8.7.1a, F-42): "_4 #b4 ...".
     if (marker) item.marker = esc(marker);
-  } else if (marker === '•') {
-    item.marker = '•'; // Emboss's one supported bullet correspondence (BANA 8.6.2a "Dot")
+    item.bullet = bullet;
   } else if (marker && BULLET_GLYPHS.has(marker)) {
-    limitations.push(`${where}: print bullet "${marker}" has no braille correspondence built in Emboss besides the primary dot bullet • (F-33) — dropped, not guessed.`);
+    item.marker = marker; // a print bullet glyph: the formatter maps it to its own braille correspondence (BANA 8.6.2a table, F-33)
   } else if (marker) {
     item.marker = esc(marker); // an ordinary ordinal/lettered/roman-numeral marker — passed through literally, exactly as buildModel11/4 pass through any other literal marker text
   }
@@ -529,7 +673,10 @@ function buildBlocks8(printBlocks, limitations) {
         continue;
       }
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'heading', level: b.level, ...tos });
+      const hd = { type: 'heading', level: b.level, ...tos };
+      // BANA 7.2.1e: print says the heading sits directly above the box with no blank line (Sample 8-4).
+      if (/no blank line (?:beneath|between it and)/i.test(String(b.features ?? '')) && /^(?:box)$/.test(String((printBlocks[printBlocks.indexOf(b) + 1] || {}).kind))) hd.accompaniesBox = true;
+      blocks.push(hd);
     } else if (kind === 'paragraph') {
       // This book's own convention for eliding surrounding running text not shown in
       // an excerpt is the literal placeholder word "text", followed in the braille by
@@ -540,20 +687,40 @@ function buildBlocks8(printBlocks, limitations) {
         limitations.push(`paragraph is this book's own "text" placeholder for elided surrounding running text — the braille "444" ellipsis marker that follows it has no print-side input to build from; built as plain text only, the ellipsis is not representable.`);
       }
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'para', ...tos });
+      const para = { type: 'para', ...tos };
+      // Print-block flags, as the other builders honour them; plus a paragraph the print description says is the end of a
+      // paragraph carried over from the previous print page resumes in cell 1 (BANA 1.11.3 / F-67; Sample 8-1).
+      if (b.blocked) para.blocked = true;
+      if (b.directions) para.directions = true;
+      if (b.continuation || /carried over from the previous print page/i.test(String(b.features ?? ''))) para.continuation = true;
+      blocks.push(para);
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
-      if (b.columns && Number(b.columns) > 1) {
+      // F-34 (§8.4.1): the transcriber's choice to KEEP the print columns is read from the gold braille (a list line with a
+      // blank gap inside it, same column count as print); the formatter takes it as the optional `columns` field. Otherwise
+      // (changed to vertical or to another column count) the list is built without it.
+      // Independence rule: `columns` comes from the PRINT description (b.columns = the print's own column count) only; whether
+      // the arrangement fits and is kept is the formatter's decision (columnedListPlan), never read off the gold braille.
+      const keepCols = Number(b.columns) > 1;
+      if (b.columns && Number(b.columns) > 1 && !keepCols) {
         limitations.push(`list has print.blocks columns:${b.columns} (print laid this list out in ${b.columns} side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column.`);
       }
       const built = items.map((it, i) => buildListItem(it, limitations, `list item ${i}`));
       if (built.some((it) => it.blank)) {
         limitations.push(`list has one or more skeleton-outline blank-fill items (print gives a division number with no text, e.g. a ruled blank line to write on) — Emboss has no dot-5 blank-fill mechanism (F-36); built with empty text, the blank-fill symbol is not representable.`);
       }
-      blocks.push({ type: 'list', kind: 'list', items: built });
+      // BANA 8.1.4b: "Retain emphasis for items in the list such as titles" — an all-italic list of titles keeps its
+      // italics even though the whole list shares the font attribute (8.1.4a). A print fact: the description says the
+      // items are titles (transcriber override `keepEmphasis`, K1).
+      const titleList = /\btitles?\b/i.test(String(b.features || ''));
+      blocks.push({ type: 'list', kind: 'list', items: built, ...(keepCols ? { columns: Number(b.columns) } : {}), ...(titleList ? { keepEmphasis: true } : {}) });
     } else if (kind === 'box') {
       const inner = buildBlocks8(b.blocks, limitations);
       blocks.push({ type: 'box', blocks: inner });
+    } else if (kind === 'other' && /new print page/i.test(String(b.text ?? '')) && /-\s*(\d+)\s*-/.test(String(b.text ?? ''))) {
+      // A print page-change marker with its new print page number ("—New Print Page— / -41-"): BANA 1.11.3's page-change
+      // indicator, built as the same {type:'pagenum', page} block the §1/§3/§12 builders use (Samples 8-1..8-3).
+      blocks.push({ type: 'pagenum', page: /-\s*(\d+)\s*-/.exec(String(b.text))[1] });
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
@@ -605,10 +772,10 @@ function buildModel8(sample) {
 //                        it — Example 7-2's title is gold-verified CENTRED (see that
 //                        file's own resolution note) — so that sample is expected to
 //                        mismatch on the title line; see standards-findings.md F-75.
-//                        `colorNote` (BANA 7.5.2 — Sample 7-2's "yellow"/"orange")
-//                        has no field anywhere in Emboss's box model (F-72, no
-//                        colour/screened-box support at all); recorded as a
-//                        limitation only, never built into the box's own line.
+//                        `colorNote` (BANA 7.5.2 — Sample 7-2's "yellow"/"orange") maps onto
+//                        `box.boxColor` (K7, 26 Sep; F-72 closed) — named at the start of the
+//                        opening box line only when the document's boxes are not all one colour
+//                        (document.mjs's computeBoxColorsUniform).
 //   kind 'other'      -> never modeled; recorded as a limitation, exactly like
 //                        buildModel4/8's 'other' (used in this section for a
 //                        print-invisible braille running-head/reference code with no
@@ -651,10 +818,25 @@ function buildBlocks7(printBlocks, limitations) {
       const boxBlock = { type: 'box', blocks: inner };
       if (b.title != null && String(b.title).trim()) {
         boxBlock.title = esc(String(b.title).trim());
+        // F-75 / BANA 7.2.1e: follow print for the title's placement and type. The box's own `features` (its print description)
+        // says whether the title is centred and which word of it is set in italic ("...'be' set in italic type") — Example 7-2.
+        const bfeat = String(b.features ?? '');
+        if (/title[^.]*\bcent(?:er|re)d\b|\bcent(?:er|re)d\b[^.]*title/i.test(bfeat)) boxBlock.titleAlign = 'centred';
+        const itm = /'([^']+)' set in italic/i.exec(bfeat);
+        const ttl = String(b.title).trim();
+        const at = itm ? ttl.lastIndexOf(itm[1]) : -1;
+        if (at >= 0) {
+          boxBlock.titleSegments = [
+            ...(at > 0 ? [{ type: 'text', text: ttl.slice(0, at) }] : []),
+            { type: 'text', text: itm[1], tf: 1 },
+            ...(at + itm[1].length < ttl.length ? [{ type: 'text', text: ttl.slice(at + itm[1].length) }] : []),
+          ];
+        }
       }
-      if (b.colorNote) {
-        limitations.push(`box has print.blocks colorNote:${JSON.stringify(b.colorNote)} (BANA 7.5.2 — the box's own opening line should embed this colour name in transcriber's-note indicators, one blank cell before the border resumes) — Emboss has no colour/screened-box support at all (F-72); built with an ordinary, unmarked box line.`);
-      }
+      // K7 / F-72, 26 Sep: `colorNote` now maps straight onto `box.boxColor` (BANA 7.5.2). Whether it is actually
+      // NAMED on the opening box line depends on the document-wide uniform-colour check (o._boxColorsUniform,
+      // document.mjs's computeBoxColorsUniform) — Sample 7-2's own two boxes differ (yellow/orange), so both show.
+      if (b.colorNote) boxBlock.boxColor = String(b.colorNote).trim();
       blocks.push(boxBlock);
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
@@ -791,6 +973,53 @@ function buildModel7(sample) {
 // no inline note text between them) would otherwise be mis-read as one inline
 // note whose "bracket content" is literally "ref:‡" — hence the negative lookahead.
 const REF_TOKEN_RE = /\[ref:([^\]]*)\](?:\[(?!ref:)([^\]]*)\])?/g;
+// §16 note text: `**bold**`/`*italic*` markup becomes typeform segments (it went through esc() and showed literally before).
+// A `[ref:MARK]` inside the note text is the printed mark's own position in the note (16.2.2a, "before or after the word,
+// as in print"): the note is then built with that noteref segment in its body and `noteMarkPlacement: 'inline'`, so the
+// formatter does not prefix a mark of its own. An entry whose `ref` is empty has no printed mark (16.5.1d, "do not add a
+// reference mark if one is not used in print", e.g. a note keyed to a highlighted word): `noteMarkPlacement: 'none'`.
+// Neither applies to any note without those two signals: the mark is prefixed as before.
+const NOTE_INLINE_REF_RE = /\[ref:([^\]]*)\]/g;
+function noteBodyFields(entryText, mark, isSymbolMark, emptyRef) {
+  const t = String(entryText ?? '');
+  if (/\[ref:[^\]]+\]/.test(t)) {
+    const segs = []; let last = 0; let m;
+    NOTE_INLINE_REF_RE.lastIndex = 0;
+    while ((m = NOTE_INLINE_REF_RE.exec(t))) {
+      if (m.index > last) segs.push(...parseCellMarkup(t.slice(last, m.index)));
+      segs.push({ type: 'noteref', text: m[1] });
+      last = m.index + m[0].length;
+    }
+    if (last < t.length) segs.push(...parseCellMarkup(t.slice(last)));
+    return { segments: segs, noteMarkPlacement: 'inline' };
+  }
+  const body = textOrSegments(t);
+  if (emptyRef) return { ...body, noteMarkPlacement: 'none' };
+  if (isSymbolMark) return { segments: [{ type: 'noteref', text: mark }, ...(body.segments || [{ type: 'text', text: body.text }])] };
+  return body;
+}
+// BANA 16.4b/c: for a note with no reference mark in print, the word "note" in TN indicators goes after the point of
+// reference, on the same line as the word it applies to. The point of reference is read from the note's own text (its
+// headword: the text before a colon, else the first word, after any print line number such as "14 "). Returns the paragraph
+// text with `{{tn:note}}` inserted after the headword (and the punctuation that follows it), or null when a headword is
+// not found in the paragraph (the caller then keeps the separate note block).
+function embedNoteMarkers(rawPara, entries) {
+  let out = String(rawPara ?? '');
+  let from = 0;
+  for (const entry of entries) {
+    let head = String((entry && entry.text) || '').replace(/^\s*\d+(?:-\d+)?\s+/, '').replace(/\*+/g, '');
+    const colon = head.indexOf(':');
+    head = (colon > 0 && colon <= 40 ? head.slice(0, colon) : head.split(/\s+/)[0]).trim();
+    if (!head) return null;
+    const re = new RegExp('(?<![\\p{L}\\p{N}])' + head.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\p{L}\\p{N}])[,.;:!?)"\'”’]*', 'iu');
+    const m = re.exec(out.slice(from));
+    if (!m) return null;
+    const at = from + m.index + m[0].length;
+    out = out.slice(0, at) + ' {{tn:note}}' + out.slice(at);
+    from = at + ' {{tn:note}}'.length;
+  }
+  return out;
+}
 function splitParagraphRefs(text, notesQueue, limitations, where) {
   // Returns { kind: 'plain', splitBlocks } when one or more 'inline'-placement
   // notes force the paragraph to be split into several top-level blocks
@@ -814,6 +1043,15 @@ function splitParagraphRefs(text, notesQueue, limitations, where) {
     const bracket = m[2];
     last = REF_TOKEN_RE.lastIndex;
     const entry = notesQueue.length ? notesQueue.shift() : null;
+    if (bracket != null && SECTION === 'b004-11') {
+      // UKAAF B004 §11 Example 1: the print itself shows the note in literal square brackets
+      // directly in the running text, with no reference mark (the PDF's print shows none, though
+      // the gold print text carries a "[ref:*]" token) — so the brackets are ordinary print text
+      // and the whole sentence stays ONE paragraph; liblouis renders [ ] as the UEB square
+      // brackets (.< .>), not a transcriber's note (F-N2 is a BANA §16 embedded-TN question).
+      curText += before + '[' + ((entry && entry.text) || bracket) + ']';
+      continue;
+    }
     if (bracket != null) {
       // Inline placement (B004 Example 1 style): split into text/note/text —
       // F-N2 (no inline-note segment type exists in document.mjs).
@@ -846,15 +1084,13 @@ function splitParagraphRefs(text, notesQueue, limitations, where) {
       const isSymbolMark = /^[*∗†‡°]+$|^[A-Za-z0-9]+$/.test(mark) && !/^\d+-\d+$/.test(mark);
       const noteBlock = { type: 'footnote', id };
       if (kind) noteBlock.kind = kind;
-      if (isSymbolMark) {
-        noteBlock.segments = [{ type: 'noteref', text: mark }, { type: 'text', text: esc(entry.text || '') }];
-      } else {
-        noteBlock.text = esc(entry.text || '');
-      }
+      Object.assign(noteBlock, noteBodyFields(entry.text, mark, isSymbolMark, entry.ref === ''));
       noteBlocks.push(noteBlock);
-    } else {
+    } else if (!notesQueue.sampleHasNoNotes) {
       limitations.push(`${where}: noteref mark "${mark}" has no matching print.notes[] entry — built with no note text.`);
     }
+    // (a sample whose print.notes[] is empty on purpose — BANA 16.2.2's reference-mark illustrations, which show a
+    //  mark and no note at all — is not a limitation: the mark alone is what print shows)
   }
   curText += raw.slice(last);
   if (sawInline) {
@@ -894,8 +1130,41 @@ function buildBlocks16(printBlocks, limitations, notesQueue) {
       // like an ordinary paragraph.
       const raw = String(b.text ?? '');
       const hasRef = /\[ref:/.test(raw);
+      // BANA 16.3a: a note keyed to a highlighted/underlined/emphasised word (a `{{tdN: word}}` span in the print text) whose
+      // print.notes[] entry has no mark (`ref: ""`) is NOT a note "without a reference mark" (16.4): the emphasis is the reference,
+      // so no embedded "note" is added and the note carries no mark of its own (16.5.1d). The transcriber-defined typeform itself
+      // is still not assignable to an arbitrary print feature (F-T1); the span is unwrapped and that is recorded.
+      const nextB = list[bi + 1];
+      if (!hasRef && TRANSCRIBER_DEFINED_RE.test(raw) && nextB && nextB.kind === 'note' && notesQueue.length && notesQueue[0].ref === '') {
+        TRANSCRIBER_DEFINED_RE.lastIndex = 0;
+        const para = { type: 'para', ...textOrSegments5(raw, limitations, `para${bi}`) };
+        if (b.blocked) para.blocked = true;
+        blocks.push(para);
+        const entry = notesQueue.shift();
+        blocks.push({ type: 'footnote', id: `para${bi}-n1`, ...noteBodyFields(entry.text, '', false, true) });
+        continue;
+      }
+      TRANSCRIBER_DEFINED_RE.lastIndex = 0;
       if (!hasRef) {
-        blocks.push({ type: 'para', ...textOrSegments(raw) });
+        // BANA 16.4b/c: put the embedded "note" on the text line, after the word the note is about, when the note's own
+        // headword can be found in this paragraph; otherwise it stays a separate block below.
+        const nextN = list[bi + 1];
+        if (nextN && nextN.kind === 'note' && notesQueue.length) {
+          const cnt = Math.max(1, String(nextN.text ?? '').split('\n').filter((x) => x.trim()).length);
+          const ents = notesQueue.slice(0, Math.min(cnt, notesQueue.length));
+          const embedded = embedNoteMarkers(raw, ents);
+          if (embedded != null) {
+            notesQueue.splice(0, ents.length);
+            const ep = { type: 'para', ...textOrSegmentsEmb(embedded) };
+            if (b.blocked) ep.blocked = true;
+            blocks.push(ep);
+            for (const entry of ents) limitations.push(`paragraph has no [ref:MARK] token for its note (BANA 16.4b/c, "notes without a reference mark") — the embedded word "note" is on the text line after the note's headword; the note's own real wording ("${String(entry.text || '').slice(0, 80)}") has no field to carry it (not representable).`);
+            continue;
+          }
+        }
+        const plainPara = { type: 'para', ...textOrSegments(raw) };
+        if (b.blocked) plainPara.blocked = true;
+        blocks.push(plainPara);
         // BANA 16.4b/c: a note with no reference mark at all in its own
         // paragraph — the next print.blocks entry is this note's own
         // (unbuildable) real wording; insert the literal word "note" per
@@ -929,7 +1198,11 @@ function buildBlocks16(printBlocks, limitations, notesQueue) {
         // prose of its own to render as a paragraph line; build only the
         // footnotes/endnotes it produced, not an empty referencing paragraph.
         const hasRealText = result.segments.some((s) => s.type === 'text' && s.text.trim());
-        if (hasRealText) blocks.push({ type: 'para', segments: result.segments });
+        if (hasRealText) {
+          const refPara = { type: 'para', segments: result.segments };
+          if (b.blocked) refPara.blocked = true;   // a print block may state it is flush (1-1); none of the current gold files do
+          blocks.push(refPara);
+        }
         blocks.push(...result.noteBlocks);
       }
     } else if (kind === 'note') {
@@ -997,6 +1270,7 @@ function buildBlocks16(printBlocks, limitations, notesQueue) {
 function buildModel16(sample) {
   const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const notesQueue = Array.isArray(sample.print && sample.print.notes) ? sample.print.notes.slice() : [];
+  notesQueue.sampleHasNoNotes = notesQueue.length === 0;
   const limitations = [];
   const blocks = buildBlocks16(printBlocks, limitations, notesQueue);
   if (notesQueue.length) {
@@ -1076,7 +1350,13 @@ function buildBlocks1(printBlocks, limitations) {
       // `formatPara`'s own `continuation` field forces `first:0` (a runover's own
       // margin, for ANY paragraph style) without touching blank-line placement.
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'para', continuation: !!b.continuation, ...tos });
+      const para1 = { type: 'para', continuation: !!b.continuation, ...tos };
+      // A print paragraph whose own description calls it an instruction/directions line to the
+      // student (Example 1-10's "Choose the letter of the answer...") is BANA 10.3.2 directions
+      // (5-5 margins, F-235): the formatter honours `block.directions`. Taken from the print
+      // description ("features"), not from the expected braille.
+      if (/\b(instruction|directions?)\b/i.test(String(b.features || ''))) para1.directions = true;
+      blocks.push(para1);
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
       const built = items.map((it, i) => buildListItem(it, limitations, `list item ${i}`));
@@ -1093,11 +1373,15 @@ function buildBlocks1(printBlocks, limitations) {
       blocks.push(boxBlock);
     } else if (kind === 'pagenum') {
       const page = b.text != null ? String(b.text).trim() : '';
-      if (!page) {
+      if (!page && !b.implied) {
         limitations.push(`pagenum block has no text — not built.`);
         continue;
       }
-      blocks.push({ type: 'pagenum', page: esc(page) });
+      // Optional print-side observations (F-45/F-46/F-49): page implied but not printed, combined with a later page,
+      // or spelled out in words by print. Absent from every current gold file, so nothing changes for them.
+      const pnExtra = {};
+      for (const k of ['implied', 'through', 'spelled', 'combineWithNext']) if (b[k] != null && b[k] !== false) pnExtra[k] = typeof b[k] === 'string' ? esc(b[k]) : b[k];
+      blocks.push({ type: 'pagenum', page: esc(page), ...pnExtra });
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
@@ -1119,6 +1403,7 @@ function buildModel1(sample) {
     limitations.push(`print.page.printPageNumber ("${page.printPageNumber}") places a print page number at the top of a braille page (BANA 1.11.2) with no page-change indicator — the same running-head/page-1-title path as print.page.runningHead above; not built here, not a defect.`);
   }
   const hasContent = blocks.length > 0;
+  // typeformWordPunct (Example 1-18, UEB 9.3.2 / 9.7.2) was read off the braille; no longer set (round 3, independence rule).
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
 
@@ -1166,42 +1451,77 @@ function buildModel1(sample) {
 //                         buildModel4/7/8's 'other'.
 function buildBlocks9(printBlocks, limitations) {
   const blocks = [];
+  let prevKind = null, prevHeadingLevel = null, headingRunLen = 0;   // F-39 / BANA 1.9.3 adjacency test, as buildModel4/5
   for (const b of (printBlocks || [])) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
     if (kind === 'heading') {
       if (b.level == null) {
         limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`);
+        prevKind = kind; headingRunLen = 0;
         continue;
       }
+      headingRunLen = (prevKind === 'heading' && b.level === prevHeadingLevel) ? headingRunLen + 1 : 1;
+      prevHeadingLevel = b.level;
       const tos = textOrSegments(b.text);
       blocks.push({ type: 'heading', level: b.level, ...tos });
     } else if (kind === 'paragraph') {
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'para', ...tos });
+      const para = { type: 'para', ...tos };
+      // Print-block flags, as the other builders honour them (none of the current section-9 gold files sets any: e.g. example-9-3's
+      // and sample-9-02's print shows FLUSH paragraphs (checked on the PDF page) but their gold JSON has no `blocked` flag).
+      if (b.blocked) para.blocked = true;
+      if (b.continuation) para.continuation = true;
+      if (b.directions) para.directions = true;
+      // BANA 1.9.3 / F-39: a paragraph directly under a cell-5/cell-7 heading is blocked (1-1), as buildModel4/5 do. Unlike
+      // those, a CENTRED (level-1) heading is NOT taken to block its paragraph here: sample-9-06's own braille has its lead-in
+      // paragraph indented (cell 3) directly under a centred heading (examples 9-4/9-7/9-8 have level-2 headings, blocked).
+      if (prevKind === 'heading' && prevHeadingLevel >= 2) para.blocked = true;
+      blocks.push(para);
     } else if (kind === 'quote') {
       const tos = textOrSegments(b.text);
       blocks.push({ type: 'para', style: 'quote', ...tos });
     } else if (kind === 'epigraph') {
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'para', style: 'epigraph', ...tos });
+      const ep = { type: 'para', style: 'epigraph', ...tos };
+      if (b.blocked) ep.blocked = true;   // 9.3.1b: an epigraph keeps its OWN print format (sample-9-05's is flush, like the paragraph flag above)
+      blocks.push(ep);
     } else if (kind === 'attribution' || kind === 'source') {
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'attribution', ...tos });
+      // F-80 / BANA 9.4.1d, 9.5.1c/d: the blank line after an attribution/citation belongs to the END of a run; print's own
+      // consecutive fragments (a closing phrase, "(Signed)", the signature; a run of image credits) sit with none between them,
+      // so every attribution/source directly followed by another one is `continued` (formatAttribution suppresses its blank).
+      const prev = blocks[blocks.length - 1];
+      if ((prevKind === 'attribution' || prevKind === 'source') && prev && prev.type === 'attribution') prev.continued = true;
+      blocks.push(kind === 'source' ? { type: 'attribution', kind: 'source', ...tos } : { type: 'attribution', ...tos });   // 9.5.2: a source under a heading takes the previous line + 4
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
-      const built = items.map((it, i) => buildListItem({ text: it }, limitations, `list item ${i}`));
-      blocks.push({ type: 'list', kind: 'list', items: built });
+      const horizontal = /\bhorizontal/i.test(String(b.features ?? '')) && items.length && items.every((it) => typeof it === 'string');
+      if (horizontal) {
+        // BANA 9.2.4: a horizontal word list across the print page is ONE displayed line, the words separated by a blank cell
+        // (print's own `features` says "displayed horizontally ... on one print line") — displayed material, not a vertical list.
+        blocks.push({ type: 'para', style: 'quote', ...textOrSegments(items.join(' ')) });
+      } else {
+        // items are plain strings, or {marker, level, text} objects like section 8's (buildListItem takes either)
+        const built = items.map((it, i) => buildListItem(it && typeof it === 'object' ? it : { text: it }, limitations, `list item ${i}`));
+        const lst = { type: 'list', kind: 'list', items: built };
+        if (b.displayed === true) lst.displayed = true;   // 9.2.2e / F-79: the print description says the items are displayed text (indented, own lines) — a print flag, not braille wording
+        blocks.push(lst);
+      }
     } else if (kind === 'box') {
       const inner = buildBlocks9(b.blocks, limitations);
       const boxBlock = { type: 'box', blocks: inner };
       if (b.title != null && String(b.title).trim()) boxBlock.title = esc(String(b.title).trim());
       blocks.push(boxBlock);
+    } else if (kind === 'other' && /incidental note/i.test(String(b.features ?? '')) && /no heading/i.test(String(b.features ?? '')) && b.text) {
+      blocks.push({ type: 'xref', ...textOrSegments(b.text) });   // 9.6.1e: a note without a heading, 7-5 (F-104)
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
       limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
     }
+    prevKind = kind;
+    if (kind !== 'heading') headingRunLen = 0;
   }
   return blocks;
 }
@@ -1239,9 +1559,12 @@ function buildModel9(sample) {
 //
 // A block's/item's `text` carries this gold corpus's own `{{tdN: X}}` placeholder for a
 // transcriber-defined typeform span (colour, double underline, a shape outline, etc.).
-// There is no markup token for this in Emboss's own cell-markup DSL, and no `tf` bit for
-// it either — TYPEFORM (cell-markup.mjs) only has italic/underline/bold, never script or
-// any of UEB's five transcriber-defined indicators (standards-findings.md F-T1). Every
+// There is no markup token for this in Emboss's own cell-markup DSL. Script has its own `tf`
+// bit since 26 Sep 2026 (TF_SCRIPT = 8, EMBOSS-TASKS K5), and the braille can carry the five
+// UEB transcriber-defined indicators via `segment.transcriberTypeform` (hyperlinks = first,
+// strikethrough = second, BrailleBlaster trans1–trans5), but nothing assigns an arbitrary print
+// feature (colour, double underline, a shape outline) to one, so `{{tdN}}` is not mapped
+// (standards-findings.md F-86 / F-T1). Every
 // `{{tdN: X}}` span is unwrapped to its own inner text X (recorded as a limitation, once
 // per distinct tdN symbol actually used in a given block/item) BEFORE the string reaches
 // textOrSegments/parseCellMarkup, so a genuine *italic*/<u>underline</u> run nested inside
@@ -1256,7 +1579,7 @@ function stripTranscriberDefinedSpans5(raw, limitations, where) {
   return String(raw ?? '').replace(TRANSCRIBER_DEFINED_RE, (_, n, inner) => {
     if (!seen.has(n)) {
       seen.add(n);
-      limitations.push(`${where} uses transcriber-defined typeform symbol #${n} (BANA 5.5.1/5.9.1 — colour, double underline, a shape outline, etc.) on "${inner}" — Emboss's TYPEFORM bitmask has no bit for any of the five UEB transcriber-defined indicators or for script (F-T1); built as plain unstyled text, the attribute is not representable.`);
+      limitations.push(`${where} uses transcriber-defined typeform symbol #${n} (BANA 5.5.1/5.9.1 — colour, double underline, a shape outline, etc.) on "${inner}" — Emboss cannot yet assign an arbitrary print feature to one of the five UEB transcriber-defined indicators (F-T1; script itself is supported since 26 Sep); built as plain unstyled text, the attribute is not representable.`);
     }
     return inner;
   });
@@ -1268,24 +1591,46 @@ function buildModel5(sample) {
   const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
   const blocks = [];
+  let prevKind = null;   // raw previous print block kind (for the blocked-paragraph test, as buildModel4 / F-39)
+  let prevHeadingLevel = null, headingRunLen = 0;
   for (const b of printBlocks) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
     if (kind === 'heading') {
       if (b.level == null) {
         limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`);
+        prevKind = kind; headingRunLen = 0;
         continue;
       }
+      headingRunLen = (prevKind === 'heading' && b.level === prevHeadingLevel) ? headingRunLen + 1 : 1;
+      prevHeadingLevel = b.level;
       const tos = textOrSegments5(b.text, limitations, 'heading');
-      blocks.push({ type: 'heading', level: b.level, ...tos });
+      const h = { type: 'heading', level: b.level, ...tos };
+      // BANA 5.3.1: a heading that is only PARTLY emphasised in print (some text emphasised, some
+      // plain, e.g. "From *Book Title*") keeps that emphasis — decided by the formatter itself since
+      // K1 (25 Sep), so no keepEmphasis is set here any more.
+      blocks.push(h);
     } else if (kind === 'paragraph') {
       const tos = textOrSegments5(b.text, limitations, 'paragraph');
-      blocks.push({ type: 'para', ...tos });
+      const para = { type: 'para', ...tos };
+      // BANA 1.9.3 / F-39, same rule as buildModel4: a paragraph directly under a standalone heading is blocked.
+      if (prevKind === 'heading' && !(prevHeadingLevel === 1 && headingRunLen > 1)) para.blocked = true;
+      blocks.push(para);
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
       const built = items.map((it, i) => {
-        const tos = textOrSegments5(it, limitations, `list item ${i}`);
-        return tos.segments ? { segments: tos.segments } : { text: tos.text };
+        // Gold-fixture syntax only (independent of old BANA 5.3.9, withdrawn by TF-1, Paul 28 Sep 2026): a
+        // "**1.**"/"<b>1.</b>"-style leading run in the markdown source is the item's ordered-list MARKER — a
+        // structural field (`item.marker`, always plain, like a bullet), never part of the item's own emphasised
+        // text — regardless of whether the rule that once said to drop a bold identifier's font attribute still
+        // applies to text actually kept as segments (it does not; see decorativeEmphasisOf in format/document.mjs).
+        let raw = it, marker;
+        const mm = typeof raw === 'string' ? /^(?:\*\*([^*\s]{1,6})\*\*|<b>([^<\s]{1,6})<\/b>)\s+(?=\S)/.exec(raw) : null;
+        if (mm) { marker = mm[1] || mm[2]; raw = raw.slice(mm[0].length); }
+        const tos = textOrSegments5(raw, limitations, `list item ${i}`);
+        const item = tos.segments ? { segments: tos.segments } : { text: tos.text };
+        if (marker) item.marker = marker;
+        return item;
       });
       blocks.push({ type: 'list', kind: 'list', items: built });
     } else if (kind === 'other') {
@@ -1293,6 +1638,8 @@ function buildModel5(sample) {
     } else {
       limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
     }
+    prevKind = kind;
+    if (kind !== 'heading') headingRunLen = 0;
   }
   const hasContent = blocks.length > 0;
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
@@ -1352,8 +1699,30 @@ function buildModel5(sample) {
 //     the cell-5 heading 13.4.1b/13.11.4a require.
 // Every other §13/App J finding (F-P2, F-P4..F-P10) is examples/samples-specific and is cited
 // per-file in this runner's own --update-status notes instead.
+// Diagnosis-run (23 Sep 2026) additions to this builder, each read straight off the print
+// description (see Emboss/docs/wip/gold-diagnosis-section-13.md):
+//  - a paragraph whose print text OPENS with an ellipsis is a mid-sentence fragment of a longer
+//    paragraph (Example 13-1's "… suggesting that ..."), so it is a `continuation` (no first-line
+//    indent), exactly the flag buildModel3 uses for a run-on paragraph fragment;
+//  - a poem line that is nothing but a verse/stanza number ("2.", "II.", Sample 13-14's verse
+//    numbers) is a cell-5 heading (BANA 13.4.1b / 13.11.4a), like Sample 13-2's "I."/"II."
+//    that print.blocks already gives as `kind:'heading'` — not a verse line at indent level 2;
+//  - a superscript digit in a poem line whose matching "¹note text" print block follows
+//    (Sample 13-8's "clarion¹" / "¹clarion (klar'-ē-ən): loud and clear.") is a reference mark
+//    plus its footnote, built as the same noteref segment + footnote block section-16 builds.
+const SUPERSCRIPT13 = { '\u00b9': '1', '\u00b2': '2', '\u00b3': '3', '\u2074': '4', '\u2075': '5', '\u2076': '6', '\u2077': '7', '\u2078': '8', '\u2079': '9', '\u2070': '0' };
+const SUPERSCRIPT13_RE = /[\u00b9\u00b2\u00b3\u2074-\u2079\u2070]/;
+const VERSE_NUMBER13_RE = /^(?:\d{1,3}|[IVXLC]{1,6})\.$/;
 function buildBlocks13(printBlocks, limitations) {
   const blocks = [];
+  // Footnote text keyed by superscript mark, from `kind:'other'` blocks written "¹note text".
+  const footnotes13 = new Map();
+  for (const fb of (printBlocks || [])) {
+    if (!fb || fb.kind !== 'other' || typeof fb.text !== 'string') continue;
+    const fm = /^([\u00b9\u00b2\u00b3\u2074-\u2079\u2070])\s*(\S[\s\S]*)$/.exec(fb.text.trim());
+    if (fm) footnotes13.set(SUPERSCRIPT13[fm[1]], { text: fm[2], used: false });
+  }
+  let noteSeq13 = 0;
   for (const b of (printBlocks || [])) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
@@ -1366,7 +1735,21 @@ function buildBlocks13(printBlocks, limitations) {
       blocks.push({ type: 'heading', level: b.level, ...tos });
     } else if (kind === 'paragraph') {
       const tos = textOrSegments(b.text);
-      blocks.push({ type: 'para', ...tos });
+      const para = { type: 'para', ...tos };
+      if (/^\s*(?:\u2026|\.\.\.)/.test(String(b.text ?? ''))) para.continuation = true;
+      if (b.blocked) para.blocked = true;   // print.blocks[].blocked: flush-left paragraph (1.9.3)
+      // 13.11.2b: information printed below a song title (centred / left / right of the page): 7-5 margins, in the order centred, left, right.
+      const pos = /(cent(?:er|re)(?:ed|d)|left side|right side)[^.]*below the title/i.exec(String(b.features ?? ''));
+      if (pos && blocks.length && (blocks[blocks.length - 1].type === 'heading' || blocks[blocks.length - 1].songInfo)) {
+        para.songInfo = true;
+        const rank = /cent/i.test(pos[1]) ? 0 : /left/i.test(pos[1]) ? 1 : 2;
+        let at = blocks.length;
+        while (at > 0 && blocks[at - 1].songInfo && blocks[at - 1]._infoRank > rank) at--;
+        para._infoRank = rank;
+        blocks.splice(at, 0, para);
+        continue;
+      }
+      blocks.push(para);
     } else if (kind === 'attribution') {
       // A poem's own trailing signature/credit line (e.g. Sample 13-4's "e.e. cummings" after
       // the poem) — BANA §9.4's attribution margin (cell 5, blocked), formatAttribution,
@@ -1376,22 +1759,58 @@ function buildBlocks13(printBlocks, limitations) {
       blocks.push({ type: 'attribution', ...tos });
     } else if (kind === 'poem') {
       const stanzas = Array.isArray(b.stanzas) ? b.stanzas : [];
+      const pendingNotes = [];
       stanzas.forEach((st, si) => {
-        if (si > 0) blocks.push({ type: 'indicator', kind: 'line' });
         const lines = (st && Array.isArray(st.lines)) ? st.lines : [];
+        const firstLine = lines.find((l) => l && String(l.text ?? '').trim());
+        const startsWithNumber = !!firstLine && VERSE_NUMBER13_RE.test(String(firstLine.text).trim());
+        if (si > 0 && !startsWithNumber) blocks.push({ type: 'indicator', kind: 'line' });
         for (const ln of lines) {
           if (!ln) continue;
-          let raw = String(ln.text ?? '');
+          const raw = String(ln.text ?? '');
           if (!raw.trim()) continue;
-          if (ln.number != null && String(ln.number).trim()) raw = String(ln.number).trim() + ' ' + raw;
-          const tos = textOrSegments(raw);
-          const blk = { type: 'play', subtype: 'verse', style: 'verse', ...tos };
+          if (VERSE_NUMBER13_RE.test(raw.trim())) {
+            blocks.push({ type: 'heading', level: 2, text: esc(raw.trim()) });
+            continue;
+          }
+          const num = (ln.number != null && String(ln.number).trim()) ? String(ln.number).trim() : null;
+          const blk = { type: 'play', subtype: 'verse', style: 'verse' };
+          const sup = SUPERSCRIPT13_RE.exec(raw);
+          const supMark = sup ? SUPERSCRIPT13[sup[0]] : null;
+          const fn = supMark ? footnotes13.get(supMark) : null;
+          if (num) {
+            // F-182 (fixed): parsePoem now builds a genuine right-margin `linenum` segment,
+            // not a left-margin text prefix — mirrored here so this builder matches the real,
+            // fixed parser. `.text` keeps the old "N " prefix (parity with parse.mjs's own
+            // `.text` field, a plain-text convenience never used for rendering once
+            // `.segments` is present).
+            blk.text = num + ' ' + raw;
+            blk.segments = [{ type: 'linenum', text: num }, ...parseCellMarkup(raw)];
+          } else if (fn && !fn.used) {
+            fn.used = true;
+            noteSeq13 += 1;
+            const id = `s13-n${noteSeq13}`;
+            const before = raw.slice(0, sup.index);
+            const after = raw.slice(sup.index + 1);
+            blk.text = before + after;
+            blk.segments = [...parseCellMarkup(before), { type: 'noteref', text: supMark, idref: id }, ...parseCellMarkup(after)];
+            pendingNotes.push({ type: 'footnote', id, segments: [{ type: 'noteref', text: supMark }, { type: 'text', text: esc(fn.text) }] });
+          } else {
+            Object.assign(blk, textOrSegments(raw));
+          }
           const lvl = Number(ln.indent) || 0;
           if (lvl > 0) blk.level = lvl;
+          if (/centered as a block|centred as a block/i.test(String(b.features ?? ''))) blk.displayedPoem = true;   // 13.3.1c second option: a poem centred on the print page shown as displayed material (Sample 13-1)
+          if (/unusual (?:embedded )?punctuation/i.test(String(b.features ?? ''))) blk.uncontractedPoem = true;   // 13.6.4a: unusual letter/punctuation combinations, whole poem uncontracted (F-125)
+          if (/\S {2,}\S/.test(raw) && /wide[^.;]*spacing/i.test(String(b.features ?? ''))) blk.wideSpaces = true;   // 13.6.3: wide spacing in print is three blank cells (F-124); needs the print description to say the spacing is wide (a run of spaces alone is not enough)
           blocks.push(blk);
         }
       });
+      for (const nb of pendingNotes) blocks.push(nb);
     } else if (kind === 'other') {
+      const fm = typeof b.text === 'string' ? /^([\u00b9\u00b2\u00b3\u2074-\u2079\u2070])/.exec(b.text.trim()) : null;
+      const fn = fm ? footnotes13.get(SUPERSCRIPT13[fm[1]]) : null;
+      if (fn && fn.used) continue;   // built as a footnote with its poem-line reference mark above
       limitations.push(`print block kind 'other' (not modeled — print-only content with no braille-buildable counterpart in this schema, e.g. a musical-notation graphic, a symbol-only diagram, or an editorial annotation): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
       limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
@@ -1404,7 +1823,7 @@ function buildModel13(sample) {
   const limitations = [];
   const blocks = buildBlocks13(printBlocks, limitations);
   const hasContent = blocks.length > 0;
-  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+  return { doc: { title: null, blocks, elisionApostrophe: true }, limitations, hasTable: hasContent };   // Sample 13-14: courtin\u2019 is an elision apostrophe
 }
 
 // ---------------------------------------------------------------------------
@@ -1465,7 +1884,9 @@ function buildModel13(sample) {
 // account of each, and differences.md for the file-by-file evidence.
 function buildBlocks3(printBlocks, limitations) {
   const blocks = [];
-  for (const b of (printBlocks || [])) {
+  const pbs = printBlocks || [];
+  for (let bi = 0; bi < pbs.length; bi++) {
+    const b = pbs[bi];
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
     if (kind === 'heading') {
@@ -1476,12 +1897,34 @@ function buildBlocks3(printBlocks, limitations) {
       const tos = textOrSegments(b.text);
       blocks.push({ type: 'heading', level: b.level, ...tos });
     } else if (kind === 'paragraph') {
+      const nx = pbs[bi + 1], nn = pbs[bi + 2];
+      // F-107 / BANA 3.2.3: a note of seven words or fewer standing between a paragraph and its own continuation is
+      // embedded on the text line ("shown within the text"): one paragraph, the note an `imgnote` segment.
+      // Independence: the seven-word rule is NOT applied to the note's text here (that read the transcriber's wording);
+      // the print description must say the note is embedded (`embedded:true` on the note block).
+      if (nx && nx.kind === 'note' && nn && nn.kind === 'paragraph' && nn.continuation && nx.embedded === true && !String(nx.text ?? '').includes('\n')) {
+        blocks.push({ type: 'para', hangingMargins: true, segments: [
+          { type: 'text', text: `${String(b.text).trimEnd()} ` },
+          { type: 'imgnote', text: String(nx.text).trim() },
+          { type: 'text', text: ` ${String(nn.text).trimStart()}` }] });
+        bi += 2;
+        continue;
+      }
       const tos = textOrSegments(b.text);
       const para = { type: 'para', ...tos };
       if (b.continuation) para.continuation = true;
       blocks.push(para);
     } else if (kind === 'note') {
-      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+      const nb = { type: 'note', ...textOrSegments(b.text) };
+      // F-138: a symbol (Unicode category S, e.g. ×) named in the note is being mentioned; dot locator before its first use.
+      const syms = [...new Set(String(b.text ?? '').match(/\p{S}/gu) || [])];
+      if (syms.length) nb.mentionSymbols = syms;
+      // F-163 / BANA 3.2.3 + 10.9.2b: a note of seven words or fewer standing alone as the heading of the list that follows is a cell-5 heading.
+      // Independence: driven by an explicit print-side flag (`headingOfList:true` on the note block), not by a word count of the note's text.
+      if (!nb.segments && pbs[bi + 1] && pbs[bi + 1].kind === 'list' && b.headingOfList === true && !String(nb.text).includes('\n')) nb.cell5 = true;
+      // F-15 / BANA 3.3.2: a note whose own text carries an identification list (intro line + two or more item lines).
+      if (!nb.segments && String(nb.text).split('\n').filter((l) => l.trim()).length >= 3) { nb.keyList = true; if (/symbol/i.test(String(b.features ?? ''))) nb.keyLocator = true; }
+      blocks.push(nb);
     } else if (kind === 'attribution') {
       // A fixed cell-5 block (BANA §9.4, formatAttribution — first line AND runover both
       // indented 4 cells, no blank line before, one blank line after), reused here exactly as
@@ -1516,9 +1959,17 @@ function buildModel3(sample) {
   if (printBlocks.length) {
     blocks = buildBlocks3(printBlocks, limitations);
   } else if (print.transcriberNote != null && String(print.transcriberNote).trim()) {
-    blocks = [{ type: 'note', ...textOrSegments(print.transcriberNote) }];
+    // Independence rule: print.transcriberNote is transcriber-written (braille content); with no print blocks nothing is built.
+    blocks = [];
+    limitations.push(`print.blocks is empty and the only note text is the transcriber-written print.transcriberNote ("${String(print.transcriberNote).replace(/\n/g, ' / ').slice(0, 80)}"); building it would read the note back from the braille — not representable from the print alone.`);
   } else {
     blocks = [];
+  }
+  // Independence rule: a transcriber's note the transcriber wrote (print.transcriberNote) is braille content, not print.
+  // When the print blocks carry no note block, the expected braille contains a note the print does not show, so the input
+  // cannot be built from the print alone (Examples 3-1..3-3).
+  if (printBlocks.length && !printBlocks.some((b) => b && b.kind === 'note') && print.transcriberNote != null && String(print.transcriberNote).trim()) {
+    limitations.push(`the expected braille includes a transcriber's note ("${String(print.transcriberNote).replace(/\n/g, ' / ').slice(0, 80)}") that the print original does not show (transcriber-written, BANA 3.2); building it would read the note back from the braille — not representable from the print alone.`);
   }
   const hasContent = blocks.length > 0;
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
@@ -1603,9 +2054,8 @@ function buildBlocks12(printBlocks, limitations) {
       if (b.title != null && String(b.title).trim()) {
         boxBlock.title = esc(String(b.title).trim());
       }
-      if (b.colorNote) {
-        limitations.push(`sidebar has print.blocks colorNote:${JSON.stringify(b.colorNote)} — Emboss has no colour/screened-box support at all (F-72); built with an ordinary, unmarked box line.`);
-      }
+      if (b.colorNote) boxBlock.boxColor = String(b.colorNote).trim();   // K7 / F-72, 26 Sep
+      if (b.boxLines === false) boxBlock.boxLines = false;   // format selected by the illustrated rule (12.3.1g, Sample 12-7: weak, not shown by the print). F-230 / 12.3.1g: a gold sidebar may state it is set without box lines (optional; default box lines)
       blocks.push(boxBlock);
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — not itself transcribed into this sample's braille, or needs a block type this schema has no room for): "${String(b.text ?? '').slice(0, 160)}"`);
@@ -1619,6 +2069,11 @@ function buildModel12(sample) {
   const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
   const blocks = buildBlocks12(printBlocks, limitations);
+  // 12.3.1g (Sample 12-7): the sidebar the rule illustrates is the one "necessary for the understanding of a particular text", inserted
+  // before that text, with no box lines. The rule the sample illustrates names that choice (a known weak match, like the other builders
+  // that read illustrates.rule); the print alone does not say whether a sidebar is necessary for understanding.
+  // format selected by the illustrated rule (12.3.1g)
+  if (/12\.3\.1g/.test(String(sample.illustrates?.rule ?? ''))) for (const bl of blocks) if (bl.type === 'box' && !bl.title) bl.boxLines = false;
   const hasContent = blocks.length > 0;
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
@@ -1686,6 +2141,21 @@ function buildModel12(sample) {
 //                  `caption` reached any other way is recorded as a limitation.
 //   'other'     -> never modeled; recorded as a limitation exactly like every other
 //                  section's own 'other'.
+//
+// F-231: document.mjs's traceOrFormatPrintImage now reads a `graphic` block's own
+// `figureType` string as the transcriber's-note label word for an unidentified illustration
+// (BANA 6.2.2b), instead of always hard-coding "Illustration". This gold schema's own
+// `figure.type` field (a broad category: "photo", "drawing", "diagram", ...) was, until this
+// fix, pure documentation with nothing consuming it (see F-231's own write-up); FIGURE_TYPE_WORD
+// maps it to the same vocabulary IDENTIFIED_RE (document.mjs) already recognises, so a
+// `graphic` block built here now carries the word a real transcriber would most likely use for
+// that category. This mapping is NOT always the exact word the book itself used — e.g.
+// sample-6-12's own "photo" figure is captioned "Picture" in the book, not "Photograph", a
+// genuine per-picture editorial judgement this schema has no field to record — but every
+// sample where the mapping doesn't match the book's own word was already blocked from a full
+// gold match by another, independently documented finding (section-6/README.md's own F-231
+// list), so nothing regresses.
+const FIGURE_TYPE_WORD = { photo: 'Photograph', drawing: 'Drawing', diagram: 'Diagram', chart: 'Chart', graph: 'Graph', map: 'Map', painting: 'Painting', plate: 'Plate', image: 'Image', picture: 'Picture', figure: 'Figure', exhibit: 'Exhibit', table: 'Table' };
 function buildBlocks6(printBlocks, limitations) {
   const blocks = [];
   const list = Array.isArray(printBlocks) ? printBlocks : [];
@@ -1725,7 +2195,10 @@ function buildBlocks6(printBlocks, limitations) {
     } else if (kind === 'box') {
       const inner = buildBlocks6(b.blocks, limitations);
       const boxBlock = { type: 'box', blocks: inner };
-      if (b.title != null && String(b.title).trim()) boxBlock.title = esc(String(b.title).trim());
+      // A section-6 box `title` (sample-6-15's "Screenshot for Information Only") is the
+      // book's own sample caption printed ABOVE the screenshot, outside the box and outside
+      // the braille (page 6-36: the braille starts at the top box line) — not print content
+      // of the screenshot, so it is not built as a box-title heading.
       blocks.push(boxBlock);
     } else if (kind === 'figure') {
       const next = list[i + 1];
@@ -1735,6 +2208,8 @@ function buildBlocks6(printBlocks, limitations) {
         const graphic = { type: 'graphic', caption: tos.text != null ? tos.text : String(next.text ?? '') };
         if (tos.segments) graphic.captionSegments = tos.segments;
         if (hasDescription) graphic.description = esc(String(b.description).trim());
+        const figType = b.figure && b.figure.type ? FIGURE_TYPE_WORD[String(b.figure.type).toLowerCase()] : null;
+        if (figType) graphic.figureType = figType;
         blocks.push(graphic);
         i++; // consume the paired caption
         // A further immediate 'caption' (photo credit/source citation, BANA 6.2.2c) is
@@ -1841,7 +2316,15 @@ function buildModel6(sample) {
 //           missing sequential number of its own.
 //   F-208 — counted-words text (§15.8.1a) needs a 3-cell gap before its numbers; wrapNumbered
 //           hardcodes a 2-cell minimum for every caller, with no parameter for the wider gap.
-function buildBlocks15(printBlocks, limitations) {
+// §15 print shows typographic single quotes (a quotation opens with ‘ and closes with ’); the gold
+// JSON text keeps them straight. Restore what print shows: an opening ' before a word and a
+// closing ' after punctuation. A possessive/contraction apostrophe (Antonius' way, perform'd) stays.
+function curlySingleQuotes15(t) {
+  return String(t ?? '')
+    .replace(/(^|[\s(\u201c"])'(?=[A-Za-z0-9])/g, '$1\u2018')
+    .replace(/([,.;:!?])'(?=\s|$|[)\u201d"])/g, '$1\u2019');
+}
+function buildBlocks15(printBlocks, limitations, rule = '') {
   const blocks = [];
   let pending = null;   // the 'numbered' run currently being merged into one flowing para block
   const flushPending = () => { if (pending) { blocks.push(pending); pending = null; } };
@@ -1861,28 +2344,58 @@ function buildBlocks15(printBlocks, limitations) {
       blocks.push({ type: 'indicator', kind: 'line' });
     } else if (kind === 'numbered') {
       const segs = [];
-      if (b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
-      segs.push(...parseCellMarkup(String(b.text ?? '')));
-      if (!pending) pending = { type: 'para', segments: [] };
+      // format selected by the illustrated rule (15.8 / 15.2)
+      const counted15 = /^15\.8\b/.test(String(rule));   // 15.8.1a: counted words, the count follows the print line it counts (F-208)
+      if (!counted15 && b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
+      // print.features may record a word the print underlines ("The word 'fun' is underlined"):
+      // Sample 15-9. Build it as underlined text (<u>), the markup the other sections use.
+      let ntext = String(b.text ?? '');
+      const ul = /word '([^']+)' is underlined/i.exec(String(b.features ?? ''));
+      if (ul && ntext.includes(ul[1])) ntext = ntext.replace(ul[1], `<u>${ul[1]}</u>`);
+      segs.push(...parseCellMarkup(ntext));
+      if (counted15 && b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
+      if (!pending) {
+        pending = { type: 'para', segments: [] };
+        if (counted15) { pending.countedWords = true; if (blocks.length && blocks[blocks.length - 1].type === 'heading') pending.lnNoteBeforeHeading = true; }   // Sample 15-9 shows the note before the title (F-234)
+        // The print itself shows this excerpt opening mid-paragraph (no paragraph indent on its
+        // first line, Sample 15-4's `features`), or the block says so explicitly.
+        if (b.continuation || /mid-paragraph|no paragraph indent/i.test(String(b.features ?? ''))) pending.continuation = true;
+        if (b.blocked) pending.blocked = true;
+        if (/^15\.2\b/.test(String(rule))) pending.paraNumber = true;   // 15.2.1b: margin paragraph number inline (F-205)
+      }
       pending.segments.push(...segs);
     } else if (kind === 'verse' || kind === 'dialogue') {
-      let raw = String(b.text ?? '');
+      let raw = curlySingleQuotes15(String(b.text ?? ''));
       if (!raw.trim()) { limitations.push(`empty '${kind}' block skipped.`); continue; }
       const blk = { type: 'play', subtype: 'verse', style: 'verse' };
       const lvl = Number(b.level) || 0;
       if (lvl > 0) blk.level = lvl;
       if (kind === 'verse') {
-        // Poem line (F-182): fold the rhyme letter into the text as a literal prefix, exactly
-        // like buildModel13's own `ln.number` handling — a `number` alongside a `letter`
-        // (Sample 15-8) is deliberately dropped, matching findLinenum's own first-child-only bug.
-        const prefix = (b.letter != null && String(b.letter).trim()) ? String(b.letter).trim() : null;
-        Object.assign(blk, textOrSegments(prefix ? `${prefix} ${raw}` : raw));
+        // Poem line (F-182, fixed): the rhyme letter is a genuine right-margin `linenum`
+        // segment, exactly like buildBlocks13's own `ln.number` handling — a `number`
+        // alongside a `letter` (Sample 15-8) is still deliberately dropped, matching
+        // findLinenum's own separate, un-fixed first-child-only bug (only the letter is
+        // ever built here, same as before this fix).
+        const letter = (b.letter != null && String(b.letter).trim()) ? String(b.letter).trim() : null;
+        const vnum = (b.number != null && String(b.number).trim()) ? String(b.number).trim() : null;
+        if (letter || vnum) {
+          // A rhyme letter and/or a periodic line number the print shows on this line: each is a
+          // genuine right-margin `linenum` segment (parsePoem, F-182 fixed).
+          blk.text = `${letter || vnum} ${raw}`;
+          blk.segments = [...(letter ? [{ type: 'linenum', text: letter }] : []), ...(vnum ? [{ type: 'linenum', text: vnum }] : []), ...parseCellMarkup(raw)];
+          if (letter) blk.rhymeLetters = true;   // 15.7.3d: rhyme letters end one cell before the widest line number (F-182 follow-up)
+        } else {
+          Object.assign(blk, textOrSegments(raw));
+        }
       } else {
         // Dialogue line (F-181): keep a genuine, unfolded linenum segment — formatPlay drops it.
         const segs = [];
         if (b.number != null && String(b.number).trim()) segs.push({ type: 'linenum', text: esc(String(b.number).trim()) });
         segs.push(...parseCellMarkup(raw));
         blk.segments = segs;
+        // F-180: this is play DIALOGUE (§15.5.2a), not a standalone poem — see buildBlocks14's
+        // matching 'speech' comment.
+        blk.playVerse = true;
       }
       blocks.push(blk);
     } else if (kind === 'other') {
@@ -1895,11 +2408,15 @@ function buildBlocks15(printBlocks, limitations) {
   return blocks;
 }
 function buildModel15(sample) {
-  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  let printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
-  const blocks = buildBlocks15(printBlocks, limitations);
+  if (noPrintOriginal(sample)) {
+    limitations.push('the book shows no print original for this example; print.blocks was rebuilt from the braille, so it is not used as input and nothing is built.');
+    printBlocks = [];
+  }
+  const blocks = buildBlocks15(printBlocks, limitations, sample.illustrates && sample.illustrates.rule);
   const hasContent = blocks.length > 0;
-  return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
+  return { doc: { title: null, blocks, spacedEllipsis: true }, limitations, hasTable: hasContent };   // Sample 15-4: print ' . . . ' is the ellipsis (444)
 }
 
 // ---------------------------------------------------------------------------
@@ -1992,6 +2509,33 @@ function buildModel15(sample) {
 // itself newly documented — see tests/gold/bana-formats-2016/section-10/README.md and
 // differences.md (kept in this session's own scratch folder) for the complete, file-by-file
 // breakdown.
+// §10-only text helper. (1) parseCellMarkup switches to its HTML-tag branch as soon as the
+// string contains a real tag such as <u>, and that branch ignores `*italic*` — so a print
+// sentence mixing underline (<u>) and italic (*..*) kept literal asterisks (Example 10-28).
+// Convert the `*..*` runs to <i>..</i> first. (2) print's own "[picture of a X]" marker for an
+// inline illustration (Example 10-31) becomes the embedded-TN image segment the parser makes
+// for an <img alt="X"> in an exercise item (BANA 10.11.1, F-229).
+function textOrSegments10(raw) {
+  let t = String(raw ?? '');
+  if (/<[a-z][\s\S]*>/i.test(t)) t = t.replace(/(?<![\\*])\*([^*\n]+?)\*(?!\*)/g, '<i>$1</i>');
+  // BANA 10.6.1 (F-237): a run of em spaces in print stands for a blank left in the text -> a `blank` segment (three dot 5s).
+  if (/\u2003{2,}/.test(t) && !/\[picture of /i.test(t)) {
+    const parts = t.split(/\u2003{2,}/), segs = [];
+    parts.forEach((part, i) => { if (part) segs.push(...parseCellMarkup(part)); if (i < parts.length - 1) segs.push({ type: 'text', text: '', blank: true }); });
+    return { segments: segs };
+  }
+  const PIC = /\[picture of (?:an? )?([^\]]+)\]/i;
+  if (!PIC.test(t)) return textOrSegments(t);
+  const segs = [];
+  let rest = t, m;
+  while ((m = PIC.exec(rest))) {
+    if (m.index > 0) segs.push(...parseCellMarkup(rest.slice(0, m.index)));
+    segs.push({ type: 'imgnote', text: m[1].trim() });
+    rest = rest.slice(m.index + m[0].length);
+  }
+  if (rest) segs.push(...parseCellMarkup(rest));
+  return { segments: segs };
+}
 function buildBlocks10(printBlocks, limitations) {
   const blocks = [];
   for (const b of (printBlocks || [])) {
@@ -2001,10 +2545,11 @@ function buildBlocks10(printBlocks, limitations) {
       if (b.level == null) { limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`); continue; }
       blocks.push({ type: 'heading', level: b.level, ...textOrSegments(b.text) });
     } else if (kind === 'directions' || kind === 'paragraph') {
-      if (kind === 'directions') {
-        limitations.push(`'directions' block built as an ordinary paragraph — document.mjs has no dedicated exercise-directions style at all (F-174), so BANA 10.3.2's own 5-5 (or 7-5 for an additional paragraph) margin falls back to an ordinary 1-1/3-1 paragraph margin instead.`);
-      }
-      const para = { type: 'para', ...textOrSegments(b.text) };
+      const para = { type: 'para', ...textOrSegments10(b.text) };
+      // BANA 10.3.2 directions (F-235): the formatter now honours `block.directions` (5-5 margins, BANA mode).
+      if (kind === 'directions') para.directions = true;
+      // BANA 10.3.2: an additional directions paragraph right after another one takes 7-5.
+      if (kind === 'directions' && blocks.length && blocks[blocks.length - 1].directions) para.directionsContinued = true;
       if (b.blocked) para.blocked = true;
       blocks.push(para);
     } else if (kind === 'note') {
@@ -2012,11 +2557,22 @@ function buildBlocks10(printBlocks, limitations) {
     } else if (kind === 'exercise') {
       const items = Array.isArray(b.items) ? b.items : [];
       const built = items.map((it) => {
-        const tos = textOrSegments(it && it.text);
+        const tos = textOrSegments10(it && it.text);
         const item = tos.segments ? { segments: tos.segments } : { text: tos.text };
         item.level = Number(it && it.level) || 0;
         return item;
       });
+      // BANA 10.6.10: print shows a question mark over/inside an underscore. The rule has the transcriber omit the mark and
+      // add a transcriber's note; both are transcriber decisions/text the print does not carry (independence rule), so the
+      // print-only input cannot reproduce them.
+      if (items.some((it) => /\\_\?\\_/.test(String((it && it.text) || '')))) {
+        limitations.push(`print shows a question mark on a write-on-line (BANA 10.6.10): the expected braille omits the question mark and adds a transcriber's note explaining it — both are transcriber decisions and transcriber-written text that the print does not show; not built from the print alone.`);
+      }
+      // K31 / BANA 10.8.5, 10.8.6: recognising the Example/Model/Sample label (and the "Answer" item that follows
+      // it, 10.8.3) used to be done right here, splitting the label off the print text before the formatter ever
+      // saw the item — real documents never get that step. It is now the formatter's own job (document.mjs's
+      // deriveExerciseLabels, called from formatList/traceBlock): the item's raw, unsplit text/segments are passed
+      // through unchanged and the formatter recognises the label itself from the same conservative text pattern.
       blocks.push({ type: 'list', kind: 'exercise', items: built });
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
@@ -2024,9 +2580,15 @@ function buildBlocks10(printBlocks, limitations) {
         limitations.push(`list has print.blocks columns:${b.columns} (print laid this list out in ${b.columns} side-by-side columns) — Emboss has no side-by-side list-column layout (F-34); built, and will render, as a single column.`);
       }
       const built = items.map((it, i) => buildListItem(it, limitations, `list item ${i}`));
-      blocks.push({ type: 'list', kind: 'list', items: built });
+      // A print `list` (as opposed to `exercise`) in this section is a word list for multiple questions (BANA 10.7.2).
+      blocks.push({ type: 'list', kind: 'list', wordList: true, items: built });
     } else if (kind === 'table') {
-      blocks.push(buildTable7(b, limitations, 'table'));
+      const tbl = buildTable7(b, limitations, 'table');
+      // BANA 10.9.1d: the columns of a matching exercise ("Match ...") take no guide dots.
+      const prevB = blocks[blocks.length - 1];
+      // keyed to the print directions text "Match ..." (10.9.1d), not to the braille
+      if (prevB && prevB.directions && /^\s*match\b/i.test(String(prevB.text ?? (prevB.segments || []).map((g) => g.text || '').join('')))) tbl.guideDots = false;
+      blocks.push(tbl);
     } else if (kind === 'box') {
       const inner = buildBlocks10(b.blocks, limitations);
       blocks.push({ type: 'box', blocks: inner });
@@ -2046,6 +2608,11 @@ function buildBlocks10(printBlocks, limitations) {
           blocks.push(blk);
         }
       });
+    } else if (kind === 'other' && /^\s*[—–-]\s*New Print Page\s*[—–-]\s*\n\s*[—–-]?\s*(\S+?)\s*[—–-]?\s*$/i.test(String(b.text ?? ''))) {
+      // A print-page-change marker ("—New Print Page—" then the new page number, "-63-"): BANA 1.11.3's
+      // print page indicator, built exactly as the other sections' `pagenum` blocks are.
+      const pm = /\n\s*[—–-]?\s*(\S+?)\s*[—–-]?\s*$/.exec(String(b.text));
+      blocks.push({ type: 'pagenum', page: esc(pm[1]) });
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — illegible/torn/struck-through print content, or a page device with no braille-buildable counterpart in this schema): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
@@ -2108,6 +2675,58 @@ function buildModel10(sample) {
 //                       block type for at all (a puzzle picture, a crossword/word-search/
 //                       shaped-letter grid, a Sudoku's own line-mode divider rows, a print
 //                       page-number cell).
+// Sections 18/19 optional markup (used only when a gold text carries it; F-186/F-187/F-188/F-221/F-222):
+//   {{tn:the note text}}       -> an embedded transcriber's note segment (imgnote), 18.3.3c / 19.5.2g
+//   {{brl:CELLS|print}}        -> literal braille cells standing for `print` (grouping indicator ;< ;>, a transcriber-defined
+//                                 symbol, a dot locator, a devised cell)
+// Text without `{{` goes through textOrSegments unchanged.
+function textOrSegmentsEmb(raw) {
+  const t = String(raw ?? '');
+  if (!t.includes('{{')) return textOrSegments(t);
+  // The markup is parsed over the WHOLE text (each {{...}} held by a placeholder) so a print emphasis that runs across an embedded note
+  // is one run; a note with the same typeform on both sides is marked spanTypeform (18.3.3c, Example 18-5).
+  const items = [];
+  const re = /\{\{(tn|brl):([^}]*)\}\}/g;
+  const masked = t.replace(re, (m0, kind, body) => {
+    if (kind === 'tn') items.push({ type: 'imgnote', text: body.trim() });
+    else { const bar = body.indexOf('|'); items.push({ type: 'brl', brl: bar < 0 ? body : body.slice(0, bar), text: bar < 0 ? '' : body.slice(bar + 1) }); }
+    return `\u27E6${items.length - 1}\u27E7`;
+  });
+  const segs = [];
+  for (const sg of parseCellMarkup(masked)) {
+    if (sg.type !== 'text' || !/\u27E6\d+\u27E7/.test(sg.text)) { segs.push(sg); continue; }
+    let last = 0, m;
+    const ph = /\u27E6(\d+)\u27E7/g;
+    while ((m = ph.exec(sg.text))) {
+      if (m.index > last) segs.push({ ...sg, text: sg.text.slice(last, m.index) });
+      segs.push({ ...items[Number(m[1])], __tf: sg.tf || 0 });
+      last = m.index + m[0].length;
+    }
+    if (last < sg.text.length) segs.push({ ...sg, text: sg.text.slice(last) });
+  }
+  // A note inside a run of one typeform keeps that run whole: the note segment carried the typeform of the text it sat in (__tf);
+  // it spans when the segment before it and the one after both have that same non-zero typeform.
+  segs.forEach((sg, i) => {
+    if ('__tf' in sg) {
+      const tf = sg.__tf; delete sg.__tf;
+      if (sg.type === 'imgnote' && tf && segs[i - 1] && segs[i - 1].type === 'text' && segs[i - 1].tf === tf && segs[i + 1] && segs[i + 1].type === 'text' && segs[i + 1].tf === tf) sg.spanTypeform = true;
+    }
+  });
+  return { segments: segs };
+}
+// A list item built by buildListItem, re-built through textOrSegmentsEmb when its text carries that markup.
+function buildListItemEmb(it, limitations, where) {
+  const item = buildListItem(it, limitations, where);
+  if (it && typeof it.text === 'string' && it.text.includes('{{')) { const t = textOrSegmentsEmb(it.text); delete item.text; item.segments = t.segments; }
+  return item;
+}
+// Optional layout fields a gold paragraph may carry (F-189 / 18.7.1, 18.8.1; F-219 / 19.4.1c).
+function applyPara1819(para, b) {
+  if (b.diagram) para.diagram = true;
+  if (Array.isArray(b.arrowLines)) para.arrowLines = b.arrowLines;
+  if (b.wordGaps) para.wordGaps = true;
+  return para;
+}
 function buildBlocks19(printBlocks, limitations) {
   const blocks = [];
   for (const b of (printBlocks || [])) {
@@ -2117,19 +2736,28 @@ function buildBlocks19(printBlocks, limitations) {
       if (b.level == null) { limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`); continue; }
       blocks.push({ type: 'heading', level: b.level, ...textOrSegments(b.text) });
     } else if (kind === 'paragraph') {
-      const para = { type: 'para', ...textOrSegments(b.text) };
+      const para = applyPara1819({ type: 'para', ...textOrSegmentsEmb(b.text) }, b);
       if (b.blocked) para.blocked = true;
+      if (b.continuation) para.continuation = true;
+      // BANA 10.3.2 directions (5-5 margins, F-235): honoured only when the gold file marks the
+      // print paragraph as directions (`directions:true`) or its `features` text calls it an
+      // instruction/directions line — never inferred from the wording.
+      if (b.directions || /\b(instruction|directions?)\b/i.test(String(b.features || ''))) para.directions = true;
       blocks.push(para);
     } else if (kind === 'note') {
-      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+      blocks.push({ type: 'note', ...textOrSegmentsEmb(b.text) });
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
-      const built = items.map((it, i) => (typeof it === 'string' ? { text: esc(it) } : buildListItem(it, limitations, `list item ${i}`)));
+      const built = items.map((it, i) => (typeof it === 'string' ? { text: esc(it) } : buildListItemEmb(it, limitations, `list item ${i}`)));
       blocks.push({ type: 'list', kind: 'list', items: built });
     } else if (kind === 'code') {
       const text = String(b.text ?? '');
       if (!text.trim()) { limitations.push(`empty 'code' block skipped.`); continue; }
-      blocks.push({ type: 'code', text });
+      // 19.2.2a/g and 19.6.1b: the dot locator for "use" precedes the grade 1 passage indicator and terminator;
+      // 19.2.2d / 19.5.3g keep a line's own blanks; 19.6.1c (letters spaced) only when the gold marks it (`spaceLetters:true`).
+      const code = { type: 'code', text, dotLocator: true, keepSpaces: true };
+      if (b.spaceLetters) code.spaceLetters = true;
+      blocks.push(code);
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — a puzzle/grid/key/picture with no braille-buildable counterpart in this schema, per F-217/F-219/F-220/F-222): "${String(b.text ?? '').slice(0, 160)}"`);
     } else {
@@ -2198,15 +2826,19 @@ function buildBlocks18(printBlocks, limitations) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
     if (kind === 'note') {
-      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+      blocks.push({ type: 'note', ...textOrSegmentsEmb(b.text) });
     } else if (kind === 'paragraph') {
-      const para = { type: 'para', ...textOrSegments(b.text) };
+      const para = applyPara1819({ type: 'para', ...textOrSegmentsEmb(b.text) }, b);
       if (b.blocked) para.blocked = true;
       if (b.continuation) para.continuation = true;
+      // BANA 10.3.2 exercise directions (5-5 margins, F-235): honoured when the gold file marks
+      // the print paragraph as directions (`directions:true`, or a `features` text calling it an
+      // instruction/directions line — the same signal buildModel1 reads). Never inferred from text.
+      if (b.directions || /\b(instruction|directions?)\b/i.test(String(b.features || ''))) para.directions = true;
       blocks.push(para);
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
-      const built = items.map((it, i) => (typeof it === 'string' ? { text: esc(it) } : buildListItem(it, limitations, `list item ${i}`)));
+      const built = items.map((it, i) => (typeof it === 'string' ? { text: esc(it) } : buildListItemEmb(it, limitations, `list item ${i}`)));
       blocks.push({ type: 'list', kind: 'list', items: built });
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — an embedded/mid-sentence transcriber's note, a braille-grouping-indicator enclosure, a devised transcriber-defined symbol/typeform, or a linear/spatial diagram, per F-186/F-187/F-188/F-189): "${String(b.text ?? '').slice(0, 200)}"`);
@@ -2303,13 +2935,13 @@ function buildModel18(sample) {
 // standards-findings.md — see tests/gold/bana-formats-2016/section-14/README.md and
 // differences.md for the full, evidence-based account of every file each one affects):
 //   F-206 (reused, already documented for §15.5.2b's own identical "significant blank space"
-//     rule) — `wrapCells` (layout.mjs:27, the ONE word-wrap primitive every block type in this
-//     corpus goes through) re-tokenises translated braille on every space and rejoins with a
-//     SINGLE space (`braille.split(' ').filter(...)`), so the "three blank cells" BANA
-//     14.1.7/14.6.2a require between a speaker's name and dialogue with an extended print gap
-//     collapses to one cell — no caller can preserve extra spacing, however many literal spaces
-//     the source `text` carries (confirmed directly: `louis.translate()` itself keeps a 3-space
-//     run intact; only the wrap step loses it).
+//     rule) — FIXED by K33: `speakerGapSegments` (document.mjs) now inserts an explicit
+//     `{type:'gap', cells:N}` segment ahead of word-wrap, so the gap between a speaker's name and
+//     dialogue no longer depends on literal spaces surviving `wrapCells`'s single-space collapse.
+//     Two cells is the K33 DEFAULT whenever the gold `text` itself marks the name off by 2+
+//     literal spaces and print shows no other distinction (14.5.1d/14.6.1e/14.10.5a/c); three
+//     cells only when this builder sets `blk.speakerGap = true` below, for print's own genuinely
+//     wider gap (14.1.7/14.6.2a, e.g. Example 14-7).
 //   F-240 — a `stage` block between two `play`/subtype:'verse' blocks breaks
 //     `document.mjs`'s own `poemRunBoundaries` run (a stage direction is neither a verse block
 //     nor a recognised stanza separator), so each side of the interruption becomes its own
@@ -2319,6 +2951,23 @@ function buildModel18(sample) {
 //     outside or between the lines of dialogue" for the VERSE case specifically (the PROSE case,
 //     a non-verse 'play' block neighbouring a 'stage' block, is unaffected — `isVerseLineBlock`
 //     is false for a prose speech, so no run/boundary logic runs on it at all).
+// BANA 14.4.1c: "Ignore font attributes used for stage directions, unless needed for distinction ... If text within stage directions
+// requires emphasis for distinction, use the typeform indicator that best represents print emphasis of surrounding text." A
+// parenthesised stage direction inside a speech that is set in italic with some words in roman (character names): its italic is
+// ignored and the roman words take the italic (Sample 14-10). Only a parenthesis holding a single-star italic run is touched.
+// General transcription rule applied to any parenthesised italic stage direction (not keyed to the illustrated rule or the braille).
+function stageDirectionEmphasis(text) {
+  return text.replace(/\(([^()]*\*[^()]*)\)/g, (m0, inner) => {
+    if (inner.includes('**')) return m0;
+    const parts = inner.split(/(\*[^*]+\*)/);
+    const out = parts.map((pt) => {
+      if (/^\*[^*]+\*$/.test(pt)) return pt.slice(1, -1);
+      const mm = /^(\s*)(.*?)(\s*)$/s.exec(pt);
+      return /\p{L}/u.test(mm[2]) ? `${mm[1]}*${mm[2]}*${mm[3]}` : pt;
+    });
+    return `(${out.join('')})`;
+  });
+}
 function buildBlocks14(printBlocks, limitations) {
   const blocks = [];
   for (const b of (printBlocks || [])) {
@@ -2341,8 +2990,30 @@ function buildBlocks14(printBlocks, limitations) {
     } else if (kind === 'speech') {
       const text = String(b.text ?? '');
       if (!text.trim()) { limitations.push(`empty 'speech' block skipped.`); continue; }
-      const blk = { type: 'play', subtype: b.verse ? 'verse' : 'prose', ...textOrSegments(text) };
+      let tos = textOrSegments(stageDirectionEmphasis(text));
+      // BANA 14.10.3f / 14.11.1: in a framed cartoon or graphic novel (the sample has "Frame N"
+      // notes) a parenthesised action description inside a speech is the transcriber's own note
+      // (the print is a picture; only the dialogue is print) — an embedded transcriber's note
+      // (the same `imgnote` segment §10 uses for an inline note), not printed brackets.
+      if (false && !tos.segments && /\([^)]+\)/.test(text)) {   // disabled round 3: keyed to transcriber-written 'Frame N' notes (braille content), not print
+        const segs = [];
+        let rest = text, m;
+        while ((m = /\(([^)]+)\)/.exec(rest))) {
+          if (m.index > 0) segs.push(...parseCellMarkup(rest.slice(0, m.index).replace(/\s+$/, ' ')));
+          segs.push({ type: 'imgnote', text: m[1].trim() });
+          rest = rest.slice(m.index + m[0].length);
+        }
+        if (rest.trim()) segs.push(...parseCellMarkup(rest));
+        tos = { segments: segs };
+      }
+      const blk = { type: 'play', subtype: b.verse ? 'verse' : 'prose', ...tos };
       if (Number(b.level) > 0) blk.level = Number(b.level);
+      // F-180: a verse speech is play DIALOGUE, not a poem — the real parser's own signal
+      // (parse.mjs's playVerse, set for a <p class="bai-verse"/"play-verse"> line, never for a
+      // genuine <poem> line) needed here so formatPlay's §14.6.1a cell-5 floor applies.
+      if (b.verse) blk.playVerse = true;
+      // print shows the wide gap (Example 14-7, page-391.png)
+      if (/^[^\s:.][^:.]*[:.] {3,}\S/.test(text)) blk.speakerGap = true;   // F-206 / 14.6.2a: the SPECIAL 3-cell gap, only for print's own wider gap (3+ literal spaces in the gold text); an ordinary 2-space gap needs no flag — formatPlay's own speakerGapSegments (K33 default) detects that directly from the block's text
       blocks.push(blk);
     } else if (kind === 'stage-direction') {
       const text = String(b.text ?? '');
@@ -2351,7 +3022,12 @@ function buildBlocks14(printBlocks, limitations) {
       if (Number(b.level) > 0) blk.level = Number(b.level);
       blocks.push(blk);
     } else if (kind === 'note') {
-      blocks.push({ type: 'note', ...textOrSegments(b.text) });
+      const nb = { type: 'note', ...textOrSegments(b.text) };
+      // BANA 14.10.2 / 14.10.3a / 14.10.4b: only the label word "Cartoon" / "Caption" is enclosed; the rest of the line is ordinary text.
+      // format selected by the illustrated rule (14.10.x): only keyed when the sample illustrates a 14.10 rule
+      const lm = /^14\.10\./.test(CUR14_RULE) ? /^(Cartoon|Caption)\s+\S/.exec(String(b.text ?? '')) : null;
+      if (lm && !nb.segments) nb.enclosePrefix = lm[1];
+      blocks.push(nb);
     } else if (kind === 'blankline') {
       // BANA 14.10.1's own required blank line "before and after a cartoon" — the cartoon's
       // own frames/dialogue, not its title/speaker-note header — reuses the SAME forced-
@@ -2367,11 +3043,26 @@ function buildBlocks14(printBlocks, limitations) {
   }
   return blocks;
 }
+// Independence rule (README of the BANA gold corpus): print.blocks must come from the book's PRINT. A gold file whose own
+// print description says the book shows no print original (so the blocks were rebuilt from the braille) is not an input.
+function noPrintOriginal(sample) {
+  const pr = sample.print || {};
+  return /\bno print (?:image|original)\b|genuinely no print original|no print image exists/i.test(`${pr.printFeatures ?? ''} ${pr.notes ?? ''}`);
+}
+let CUR14_RULE = '';
 function buildModel14(sample) {
-  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  CUR14_RULE = String((sample.illustrates && sample.illustrates.rule) || '');
+  let printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
+  // A worked example whose book shows NO print original (a braille-only template): whatever print.blocks holds was
+  // written from the braille, so it is not an input. Nothing is built; the sample cannot match.
+  if (noPrintOriginal(sample)) {
+    limitations.push('the book shows no print original for this example (braille-only template); print.blocks was written from the braille, so it is not used as input and nothing is built.');
+    printBlocks = [];
+  }
   const blocks = buildBlocks14(printBlocks, limitations);
   const hasContent = blocks.length > 0;
+  // typeformWordPunct (Sample 14-10, UEB 9.3.1) was read off the braille; no longer set (round 3, independence rule).
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
 
@@ -2417,15 +3108,86 @@ function buildModel14(sample) {
 //                       character to build from, F-213; a print table linearised by the
 //                       transcriber into running text with nothing left to model as a table;
 //                       a multiple-choice answer grid abridged by the transcriber).
+// §17 emphasis with uncontracted text (BANA 17.4.1b-c, 17.10.3, 17.13.1). The gold markup cannot combine bold/underline with the
+// backtick (uncontracted) flag, so the builder applies the rule: (a) an emphasised piece touching an uncontracted piece with no space
+// between is part of the SAME uncontracted word (17.4.1b: uncontracted with partial emphasis); (b) 17.10.3, marked spelling errors
+// (print emphasis on the wrong word) are uncontracted; (c) 17.13.1a, all text of a word-formation "equation" is uncontracted and 17.13.1b
+// the contracted result follows in transcriber's note indicators (a trailing "(word)" becomes an embedded note).
+// format selected by the illustrated rule: CUR17_RULE keys the uncontracted-spelling / segmented-number formats (17.9.2, 17.10.x, 17.11-17.13) to the rule the sample illustrates
+let CUR17_RULE = '';
+// Format selected by the illustrated rule (independence rule): whether a spelling-list word is written uncontracted (17.9.2,
+// 17.10.3, 17.11.2, 17.12.2, 17.13.x) is the transcriber's choice of format, made by the rule the example illustrates
+// (`illustrates.rule`, CUR17_RULE). It is therefore an INPUT (a markup flag on the print words), not something read from the
+// braille. Transcriber-supplied repeats and notes are never built (see print.transcriberSupplied in buildModel17).
+function fix17(tos) {
+  if (tos && !tos.segments && typeof tos.text === 'string' && /^17\.9\.2/.test(CUR17_RULE) && /\w_|_\w/.test(tos.text)) tos = { segments: [{ type: 'text', text: tos.text }] };
+  if (!tos || !tos.segments) return tos;
+  let segs = tos.segments.map((g) => ({ ...g }));
+  // 17.9.2: "Do not contract words showing omitted letters in spelling lists."
+  if (/^17\.9\.2/.test(CUR17_RULE)) for (const g of segs) if (g.type === 'text' && !g.uncontracted && /\w_|_\w/.test(g.text)) g.uncontracted = true;
+  if (/^17\.10\.3/.test(CUR17_RULE)) for (const g of segs) if (g.type === 'text' && (g.tf & 2)) g.uncontracted = true;
+  if (/^17\.13\./.test(CUR17_RULE)) {
+    for (const g of segs) if (g.type === 'text' && g.tf) g.uncontracted = true;
+    const last = segs[segs.length - 1];
+    const m = last && last.type === 'text' && !last.uncontracted && !last.tf ? /^(\s*)\((\w[\w' -]*)\)\s*$/.exec(last.text) : null;
+    if (m) segs.splice(segs.length - 1, 1, { type: 'text', text: m[1] }, { type: 'imgnote', text: m[2] });
+  }
+  if (/^17\.(11\.2|12\.2|13\.1)/.test(CUR17_RULE)) {
+    // 17.11.2b / 17.12.2b: the repeated word (hyphens for crossed-out letters) is an embedded transcriber's note, written uncontracted
+    // like the word it repeats; substitutions in enclosure symbols "(ous)" touching an uncontracted word are uncontracted (follow print).
+    const out = [];
+    for (const g of segs) {
+      const prev = out[out.length - 1];
+      let cur = g;
+      if (g.type === 'text' && !g.tf && !g.uncontracted) {
+        const enc = prev && prev.uncontracted ? /^\([A-Za-z]+\)/.exec(g.text) : null;
+        if (enc) { out.push({ type: 'text', text: enc[0], uncontracted: true }); cur = { ...g, text: g.text.slice(enc[0].length) }; }
+        const re = /(\s*)\(((?:[A-Za-z -]|\([^()]*\))*-(?:[A-Za-z -]|\([^()]*\))*)\)/g;
+        let last = 0, m; const parts = [];
+        while ((m = re.exec(cur.text))) {
+          if (m.index > last) parts.push({ type: 'text', text: cur.text.slice(last, m.index) });
+          parts.push({ type: 'text', text: m[1] }, { type: 'imgnote', text: m[2], uncontracted: true });
+          last = m.index + m[0].length;
+        }
+        if (parts.length) { if (last < cur.text.length) parts.push({ type: 'text', text: cur.text.slice(last) }); out.push(...parts); continue; }
+      }
+      out.push(cur);
+    }
+    segs = out.filter((g) => g.type !== 'text' || g.text);
+  }
+  const isText = (g) => g && g.type === 'text';
+  for (let pass = 0; pass < 2; pass++) {
+    for (let i = 1; i < segs.length; i++) {
+      const a = segs[i - 1], b = segs[i];
+      if (!isText(a) || !isText(b) || /\s$/.test(a.text) || /^\s/.test(b.text)) continue;
+      if (a.uncontracted && b.tf && !b.uncontracted) b.uncontracted = true;
+      else if (b.uncontracted && a.tf && !a.uncontracted) a.uncontracted = true;
+    }
+  }
+  return { segments: segs };
+}
 function buildListItem17(it, limitations, where) {
   if (typeof it === 'string') return { text: esc(it) };
-  const tos = textOrSegments(it && it.text);
+  const tos = fix17(textOrSegments(it && it.text));
   const item = tos.segments ? { segments: tos.segments } : { text: tos.text };
   if (it && it.marker) item.marker = esc(it.marker);
   return item;
 }
-function buildBlocks17(printBlocks, limitations) {
+// Independence rule: whether the opening paragraph is an activity's instruction line ("Write these words in alphabetical
+// order.", "Directions: ...") is read from the PRINT text (an imperative opening, or the print description saying it is
+// directions/an instruction) — not merely from being the first ordinary paragraph.
+const DIRECTIONS17_RE = /^\s*(?:Directions?\b|Instructions?\b|(?:Write|Unscramble|Circle|Complete|Make|Rewrite|Fill|Match|Put|Underline|Choose|Cross|Find|Sort|Use|Look|Copy|Add|Alphabetize|Change|Correct|Draw|Spell|Study|Try|Read|Learn|List|Number|Mark|Check|Decide|Tell|Say|Combine|Divide|Insert|Replace|Select|Sound|Cover)\b)/i;
+function looksLikeDirections17(b) {
+  return DIRECTIONS17_RE.test(String(b.text ?? '')) || /\b(?:directions|instruction line|activity instruction)\b/i.test(String(b.features ?? ''));
+}
+function buildBlocks17(printBlocks, limitations, inBox = false) {
   const blocks = [];
+  // BANA 10.3.2 / F-235: the activity's opening instruction line ("Write these words in
+  // alphabetical order.", "Unscramble...", "Directions: ...") takes 5-5 margins. The gold gives no
+  // flag for it, so the builder reads it as: the FIRST paragraph of the excerpt, if it is ordinary (not
+  // `blocked`, not `continuation`, not inside a box). Later ordinary paragraphs (the "Student 1:"
+  // narrative lines of Sample 17-13, "Then generally:" of 17-18) are running text, not directions.
+  let sawPara = false;
   for (const b of (printBlocks || [])) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
@@ -2433,16 +3195,24 @@ function buildBlocks17(printBlocks, limitations) {
       if (b.level == null) { limitations.push(`heading block "${b.text}" has no level in print.blocks — not built.`); continue; }
       blocks.push({ type: 'heading', level: b.level, ...textOrSegments(b.text) });
     } else if (kind === 'paragraph') {
-      const para = { type: 'para', ...textOrSegments(b.text) };
+      const para = { type: 'para', ...fix17(textOrSegments(b.text)) };
       if (b.blocked) para.blocked = true;
       if (b.continuation) para.continuation = true;
+      if (/^17\.1[12]\.2/.test(CUR17_RULE)) para.g1Quiet = true;   // UEB 5.1: an uncontracted word in a sentence takes an indicator only where letters could be misread
+      // (An example that is only a run of uncontracted words, or a line prefixed by a devised icon
+      // (F-213), is not an instruction line.)
+      if (!inBox && !sawPara && !b.blocked && !b.continuation && !/^\s*`/.test(String(b.text ?? '')) && !/\bicon\b/i.test(String(b.features ?? '')) && looksLikeDirections17(b)) para.directions = true;
+      sawPara = true;
       blocks.push(para);
     } else if (kind === 'note') {
       blocks.push({ type: 'note', ...textOrSegments(b.text) });
     } else if (kind === 'list') {
       const items = Array.isArray(b.items) ? b.items : [];
       const built = items.map((it, i) => buildListItem17(it, limitations, `list item ${i}`));
-      blocks.push({ type: 'list', kind: 'list', items: built });
+      const list = { type: 'list', kind: 'list', items: built };
+      // 17.9.2a (Sample 17-11): the note that explains the omission symbol sits directly above the list it explains (as 10.6.8).
+      if (/^17\.9\.2/.test(CUR17_RULE) && blocks.length && blocks[blocks.length - 1].type === 'note') list.afterNote = true;
+      blocks.push(list);
     } else if (kind === 'glossary') {
       const items = Array.isArray(b.items) ? b.items : [];
       // Term/def go through the same textOrSegments() markup helper every other section's
@@ -2465,9 +3235,16 @@ function buildBlocks17(printBlocks, limitations) {
         if (defTos.segments) out.defSegments = defTos.segments;
         return out;
       });
-      blocks.push({ type: 'glossary', kind: 'glossary', items: built });
+      // K25: every section-17 glossary is a 17.6 definition list or a 17.7 word list; both now follow print punctuation
+      // only (June 2024 17.6.1b-c, 17.7.1c) - the formatter's optional block flag `definitionList`.
+      blocks.push({ type: 'glossary', kind: 'glossary', definitionList: true, items: built });
     } else if (kind === 'box') {
-      const inner = buildBlocks17(b.blocks, limitations);
+      const inner = buildBlocks17(b.blocks, limitations, true);
+      // 17.10.2: a passage with unmarked intentional errors is uncontracted throughout, its headline included.
+      if (/^17\.10\.2/.test(CUR17_RULE)) for (const ib of inner) {
+        if (ib.segments) ib.segments = ib.segments.map((g) => (g.type === 'text' ? { ...g, uncontracted: true } : g));
+        else if (typeof ib.text === 'string') { ib.segments = [{ type: 'text', text: ib.text, uncontracted: true }]; }
+      }
       blocks.push({ type: 'box', blocks: inner });
     } else if (kind === 'other') {
       limitations.push(`print block kind 'other' (not modeled — a devised picture-icon marker with no print character, a transcriber-linearised table, or an abridged answer grid, per F-213/F-212/F-211): "${String(b.text ?? '').slice(0, 160)}"`);
@@ -2475,12 +3252,30 @@ function buildBlocks17(printBlocks, limitations) {
       limitations.push(`unrecognised print.blocks kind "${kind}" — not modeled: "${String(b.text ?? '').slice(0, 160)}"`);
     }
   }
+  // 17.11.2 / 17.12.2: sentences that display crossed-out-letter words are separate lines at the list margins (1-3) beneath the
+  // explaining note; the gold marks each as a flush `continuation` paragraph, so a run of them is built as one list.
+  if (!inBox && /^17\.1[12]\.2/.test(CUR17_RULE)) {
+    const out = [];
+    for (const blk of blocks) {
+      const prev = out[out.length - 1];
+      const item = blk.type === 'para' && blk.continuation ? (blk.segments ? { segments: blk.segments } : { text: blk.text }) : null;
+      if (item && prev && prev.type === 'list' && prev._fromPara) prev.items.push(item);
+      else if (item) out.push({ type: 'list', kind: 'list', items: [item], _fromPara: true });
+      else out.push(blk);
+    }
+    return out;
+  }
   return blocks;
 }
 function buildModel17(sample) {
   const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
+  CUR17_RULE = String((sample.illustrates && sample.illustrates.rule) || '');
   const blocks = buildBlocks17(printBlocks, limitations);
+  // Independence rule: repeats and notes the transcriber added (17.4.1b, 17.9.2a, 17.11.2, 17.13.1b) are braille content.
+  // The gold lists them in print.transcriberSupplied; they are never built, so the example cannot match.
+  const supplied = sample.print && Array.isArray(sample.print.transcriberSupplied) ? sample.print.transcriberSupplied : [];
+  if (supplied.length) limitations.push(`the expected braille contains transcriber-supplied content that the print original does not show: ${supplied.join('; ')} — not built (it would have to be read back from the braille).`);
   const hasContent = blocks.length > 0;
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
@@ -2544,8 +3339,17 @@ function buildIndexItem21(it, limitations, where) {
 // glossarySegments (document.mjs) itself keys its "is the term already punctuated"
 // separator decision (F-194) off the plain `term` string's own trailing character, and its
 // `if (term && def)` truthiness check off both plain strings.
-function buildGlossaryItem21(it, limitations, where) {
+// BANA 21.8.6a: an entry word printed with a superscript number ("live¹") - split off the number so the
+// formatter's optional item field `termSup` places it (always after the entry word).
+const SUP21 = { '\u00b9': '1', '\u00b2': '2', '\u00b3': '3', '\u2074': '4', '\u2075': '5', '\u2076': '6', '\u2077': '7', '\u2078': '8', '\u2079': '9', '\u2070': '0' };
+function buildGlossaryItem21(it0, limitations, where) {
+  let it = it0, termSup = '';
+  if (it0 && typeof it0.term === 'string') {
+    const m = /^([\s\S]*?)([\u00b9\u00b2\u00b3\u2074-\u2079\u2070]+)$/.exec(it0.term);
+    if (m) { it = { ...it0, term: m[1] }; termSup = [...m[2]].map((c) => SUP21[c]).join(''); }
+  }
   const item = { level: (Number(it && it.level) || 1) - 1 };
+  if (termSup) item.termSup = termSup;
   if (Array.isArray(it && it.termSegments) && it.termSegments.length) item.termSegments = it.termSegments;
   if (it && it.term != null) {
     const tos = textOrSegments(it.term);
@@ -2564,8 +3368,42 @@ function buildGlossaryItem21(it, limitations, where) {
   }
   return item;
 }
-function buildBlocks21(printBlocks, limitations) {
+// The print description's own `printFeatures` can state that the entry word is followed by a
+// printed colon ("Bold entry word followed by a colon." — Example 21-15); the item `term` fields
+// omit that colon, so it is restored here from that statement (F-194: a print-punctuated term
+// takes one blank cell, not the two of an unpunctuated one).
+// BANA 21.7 thesaurus: the print description gives each entry as one run of text, "agree *v.* coincide, ...";
+// the entry word is its first word, the rest is the definition segment (label, synonyms, antonyms). The
+// example words the printFeatures name as bold inside definitions (Sample 21-10) are made bold in the
+// italic example sentences.
+const thesaurusBoldWords21 = (pf) => {
+  const m = /words?\s+((?:'[^']+'[,\s]*(?:and\s+)?)+)within definitions are bold/i.exec(String(pf || ''));
+  return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1].toLowerCase()) : [];
+};
+function buildThesaurusItem21(it, limitations, where, boldWords) {
+  const raw = String((it && it.text) ?? '');
+  const m = /^(\S+)\s+([\s\S]+)$/.exec(raw);
+  if (!m) return buildGlossaryItem21({ term: raw, level: it && it.level }, limitations, where);
+  const item = buildGlossaryItem21({ term: m[1], def: m[2], level: it && it.level }, limitations, where);
+  if (boldWords.length && Array.isArray(item.defSegments)) {
+    const re = new RegExp('\\b(' + boldWords.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')\\b', 'i');
+    const out = [];
+    for (const g of item.defSegments) {
+      if (!g || g.type !== 'text' || g.tf !== 1 || !re.test(g.text)) { out.push(g); continue; }
+      for (const part of g.text.split(new RegExp(re.source, 'gi'))) {
+        if (!part) continue;
+        out.push(re.test(part) && part.toLowerCase() && boldWords.includes(part.toLowerCase()) ? { ...g, text: part, tf: 5 } : { ...g, text: part });
+      }
+    }
+    item.defSegments = out;
+  }
+  return item;
+}
+const printColonAfterEntryWord21 = (printFeatures) => /entry word[^.]*followed by (?:a |the )?colon/i.test(String(printFeatures || ''));
+function buildBlocks21(printBlocks, limitations, printFeatures, rule = '') {
   const blocks = [];
+  const isThesaurus = /^21\.7\./.test(String(rule)), isDictionary = /^21\.8\./.test(String(rule));
+  const colonAfterTerm = printColonAfterEntryWord21(printFeatures);
   for (const b of (printBlocks || [])) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
@@ -2582,7 +3420,21 @@ function buildBlocks21(printBlocks, limitations) {
       const items = Array.isArray(b.items) ? b.items : [];
       if (b.style === 'glossary') {
         const built = items.map((it, i) => buildGlossaryItem21(it, limitations, `glossary item ${i}`));
-        blocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items: built });
+        if (colonAfterTerm) for (const g of built) {
+          if (typeof g.term === 'string' && g.term && !/[:;.,!?]$/.test(g.term)) {
+            g.term += ':';
+            if (Array.isArray(g.termSegments) && g.termSegments.length) g.termSegments = [...g.termSegments, { type: 'text', text: ':' }];
+          }
+        }
+        // format selected by the illustrated rule (21.7 thesaurus / 21.8 dictionary)
+        // 21.8 (dictionary): optional block field `dictionary` (one blank after the entry word, 21.2.1b margins).
+        // K25 / 21.9.2c (June 2024): a bilingual reference (the sample illustrates 21.9.2) follows print punctuation only
+        // (optional block flag `bilingual`); a 21.5 glossary keeps its capital and enclosure tests.
+        blocks.push({ type: 'list', kind: 'glossary', style: 'glossary', ...(isDictionary ? { dictionary: true } : {}), ...(/^21\.9\.2/.test(String(rule)) ? { bilingual: true } : {}), items: built });
+      } else if (isThesaurus) {
+        // 21.7.2 / 21.7.3: entry word + definition, 21.2.1b margins (optional block field `thesaurus`).
+        const bold = thesaurusBoldWords21(printFeatures);
+        blocks.push({ type: 'list', kind: 'glossary', style: 'glossary', thesaurus: true, items: items.map((it, i) => buildThesaurusItem21(it, limitations, `thesaurus item ${i}`, bold)) });
       } else {
         const built = items.map((it, i) => buildIndexItem21(it, limitations, `list item ${i}`));
         blocks.push({ type: 'list', kind: 'index', items: built });
@@ -2598,16 +3450,248 @@ function buildBlocks21(printBlocks, limitations) {
 function buildModel21(sample) {
   const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
   const limitations = [];
-  const blocks = buildBlocks21(printBlocks, limitations);
+  const blocks = buildBlocks21(printBlocks, limitations, sample.print && sample.print.printFeatures, sample.illustrates && sample.illustrates.rule);
   const hasContent = blocks.length > 0;
   return { doc: { title: null, blocks }, limitations, hasTable: hasContent };
 }
 
-const MODEL_BUILDERS = { 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13, 'section-3': buildModel3, 'section-12': buildModel12, 'section-6': buildModel6, 'section-15': buildModel15, 'section-19': buildModel19, 'section-14': buildModel14, 'section-17': buildModel17, 'section-10': buildModel10, 'section-21': buildModel21, 'section-18': buildModel18 };
+// ---------------------------------------------------------------------------
+// Model building for section-2 (Transcriber-Generated Pages and Front Matter)
+// ---------------------------------------------------------------------------
+// Every §2 gold file has print.blocks === [] (the print original is a photograph of a
+// real book page, or there is none — see tests/gold/bana-formats-2016/section-2/README.md),
+// so there is no print content to build a docModel from, and this builder does NOT derive
+// one from the braille (that would be hard-coding the expected answer). It builds the
+// (empty) document, and records as a limitation the specific Emboss capability that is
+// missing for that page type, per Emboss/docs/transcriber-pages-plan.md (stages 1-8).
+// If print.blocks ever gets content, it is built with the shared §17 block builder
+// (heading/paragraph/note/list), so the runner then scores a real mismatch/match.
+// The four anonymous 'Sample:' wording files have no braille at all and are classified
+// "no-braille" by runOne before the model is run.
+function limitation2(sample) {
+  const rule = String((sample.illustrates && sample.illustrates.rule) || '');
+  const id = sample.id;
+  const T = 'Emboss/docs/transcriber-pages-plan.md';
+  if (id === 'sample-2-21-special-symbols') return `Special Symbols page (BANA 2.5): Emboss has no Special Symbols page or transcriber-defined symbol list yet (${T} stage 8, needs feature group 7), and no t-prefixed page number (stage 1).`;
+  if (id === 'sample-2-21-transcribers-notes') return `Transcriber's Notes page (BANA 2.6): Emboss has no plain 3-1 Transcriber's Notes page renderer with a centred heading and t-prefixed number (${T} stages 1-3).`;
+  if (id === 'sample-2-21-pronunciation-key-in-front-matter-pages') return `Pronunciation key among the front matter pages (BANA 2.11.1): no print model for it, and Emboss has no p-prefixed front-matter page numbering or forced front-matter page-per-item breaks for it (${T} stages 1-2).`;
+  if (id === 'sample-2-21-title-page-volume-1') return `Title page for volume 1 (BANA 2.3, 2.11.1): Emboss has no data-driven Title Page with publisher, copyright, transcriber and volume segments, and volumeTitlePage renders no t-prefixed page number (F-57; ${T} stages 1, 5, 6).`;
+  if (id.startsWith('sample-2-21-table-of-contents')) return `Table of contents front matter page (BANA 2.10, 2.11.1): gold has no print model to build headings from, and Emboss's buildToc numbers pages with a P prefix and its own layout, not the p-prefixed front-matter series and multi-volume/brief-contents rules of 2.10 (${T} stage 1).`;
+  if (rule.startsWith('2.4')) return `Second Title Page (BANA 2.4): Emboss has no Second Title Page overflow renderer (${T} stage 7); gold has no print model for the original title page.`;
+  if (/^2\.3\.(4|5)/.test(rule)) return `Title Page ${rule} (title/series/grade/subtitle/author segments): Emboss has no data-driven Title Page renderer and gold has no print model (photograph of a real title page) (${T} stages 5-6).`;
+  if (/^2\.3\.(6|7)/.test(rule)) return `Title Page publisher/copyright/transcriber segment ${rule}: Emboss has no metadata fields or Title Page renderer for publisher, copyright year, ISBN, printing history or transcriber wording (F-134/F-135/F-136; ${T} stages 5-6).`;
+  if (/^2\.3\.8/.test(rule)) return `Title Page volume, braille-page and print-page information ${rule}: Emboss has no Title Page renderer and no t-prefixed/print page range statement for volumes (${T} stages 1, 5, 6).`;
+  if (rule.startsWith('2.3')) return `Title Page ${rule}: Emboss has no Title Page renderer and gold has no print model (${T} stages 5-6).`;
+  if (rule.startsWith('2.9')) return `Dedication page (BANA 2.9): Emboss has no dedication front-matter block with its own page and p-prefixed number (${T} stages 1-2); gold has no print model.`;
+  if (rule.startsWith('2.10')) return `Table of contents ${rule}: gold has no print model to build contents entries from, and Emboss's buildToc has no brief/multi-volume/categorized/transposed-note contents layouts or p-prefixed page series (${T} stage 1).`;
+  return `Front-matter page ${rule}: Emboss has no model for this transcriber-generated page and gold has no print model.`;
+}
+
+function buildModel2(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  CUR17_RULE = '';
+  const blocks = buildBlocks17(printBlocks, limitations);
+  // K30 / BANA 2.9: when a §2.9 dedication sample ever gets real print.blocks to build from
+  // (none do today — see limitation2's own '2.9' case, above), mark the body paragraphs
+  // `dedication: true` from the print description, the same way other §2 fields are read
+  // from `printFeatures`/the rule id rather than hard-coded per sample.
+  if (blocks.length && /^2\.9|dedication/i.test(`${(sample.illustrates && sample.illustrates.rule) || ''} ${sample.title || ''}`)) {
+    for (const b of blocks) if (b && b.type === 'para') b.dedication = true;
+  }
+  const hasBrl = sample.braille && Array.isArray(sample.braille.lines) && sample.braille.lines.length;
+  // Sample 2-21 "Transcriber's Notes" (BANA 2.6.1): built as a `tnpage` (Transcriber's Notes page
+  // renderer, plan stage 3) from print.tnEntries — the entries' PRINT wording, one string per 3-1
+  // paragraph — when a gold file states it. None does today (print.blocks is [] and no file carries
+  // print.tnEntries): the wording exists only in the expected braille, and deriving input from the
+  // expected braille is forbidden, so without tnEntries the sample is not-representable, with the
+  // specific reason below. BANA states in print form only the sentence "The atlas is omitted." (2.6.1d).
+  const tnEntries = sample.id === 'sample-2-21-transcribers-notes' && sample.print && Array.isArray(sample.print.tnEntries)
+    ? sample.print.tnEntries.filter((t) => typeof t === 'string' && t.trim()) : [];
+  if (tnEntries.length) {
+    blocks.push({ type: 'tnpage', matter: 'transcriber', entries: tnEntries.map((text) => ({ text })) });
+  } else if (!printBlocks.length && hasBrl) {
+    limitations.push(sample.id === 'sample-2-21-transcribers-notes'
+      ? "Transcriber's Notes page (BANA 2.6.1): Emboss now has the tnpage renderer (centred heading, 3-1 entries, t-number; plan stage 3), but the gold gives no print wording for the entries (print.blocks is [] and there is no print.tnEntries; only \"The atlas is omitted.\" is stated in print form, BANA 2.6.1d, and its other two entries appear only as braille). Building the page would mean reading the expected braille back into text, which is not allowed. Also unmatched: the expected page ends with a final \"444\" line and carries t3 (third transcriber page of Sample 2-21), not t1."
+      : sample.id === 'sample-2-21-special-symbols'
+        ? "Special Symbols page (BANA 2.5): Emboss now has the sympage renderer (G8 stage 5: centred heading, .= entries with 1-3 margins, t-number), but the gold gives no print description (print.blocks is [] and there is no print field naming the symbols). Its entries (dot locator, boldface word indicator, boldface passage indicator, acute accent above letter, boldface terminator) exist only as braille, and the typeform indicators are not symbols the formatter collects; building them would mean reading the expected braille back into text, which is not allowed. Also unmatched: the expected page ends with a final \"444\" line and carries t2, not t1."
+        : limitation2(sample));
+  }
+  return { doc: { title: null, blocks }, limitations, hasTable: blocks.length > 0 };
+}
+
+// ---------------------------------------------------------------------------
+// Model building for section-20 (Pronunciation) and section-22 (Bibliographies) — from
+// sample.print ONLY.
+// ---------------------------------------------------------------------------
+// §20's gold (tests/gold/bana-formats-2016/section-20/README.md) has print.blocks of one
+// 'paragraph' (a snippet of pronunciation notation, \n = a print line), 'table' (a
+// pronunciation key) or 'heading'; the emphasis lives only in print.features prose, so the
+// gold's print blocks record it as structured print fields (`emphasis`, `lineEmphasis`, `entry`, `lineBreaks`, `runningText`), never read from the braille.
+//   - An inline "Example" snippet is not a whole print paragraph, so it is built as an
+//     isolated paragraph with continuation:true (cell 1, no blank line — the same convention
+//     buildModel17 uses for an isolated worked example). Examples 20-19/20-20 are running text
+//     (a sentence), so they are ordinary indented paragraphs.
+//   - Dictionary entries (Examples 20-21..20-26: entry word, optional respelling, definition)
+//     are built as a glossary list item (the entry-word+definition mechanism §21 uses),
+//     term = entry word segment (with any respelling), def = definition segment.
+//   - Diacritics are the print text's own Unicode characters; nothing is pre-converted to
+//     braille modifiers. What the print text cannot carry (ligature ties, a stroke through a
+//     letter, a transcriber-defined tertiary-stress indicator) is recorded as a limitation
+//     (-> not-representable, F-158/F-160). Pronunciation KEYS (tables) are never built:
+//     Emboss has no pronunciation-key node (F-162), so a key is not-representable.
+const TF20 = { i: 1, u: 2, b: 4 };
+function spanSegs20(text, spans) {
+  const ranges = [];
+  for (const [sub, tf, nth = 1] of (spans || [])) {
+    let idx = -1, from = 0;
+    for (let k = 0; k < nth; k++) { idx = text.indexOf(sub, from); if (idx < 0) break; from = idx + sub.length; }
+    if (idx >= 0) ranges.push([idx, idx + sub.length, TF20[tf]]);
+  }
+  if (!ranges.length) return { text };
+  ranges.sort((a, b) => a[0] - b[0]);
+  const segments = []; let pos = 0;
+  for (const [st, en, tf] of ranges) {
+    if (st > pos) segments.push({ type: 'text', text: text.slice(pos, st) });
+    segments.push({ type: 'text', text: text.slice(st, en), tf });
+    pos = en;
+  }
+  if (pos < text.length) segments.push({ type: 'text', text: text.slice(pos) });
+  return { segments };
+}
+// A print snippet of several lines: the paragraph model has no forced line break (a \n is collapsed to a
+// space by formatPara), so a block the print description marks `lineBreaks:true` (each print line is its own line) is built
+// as one isolated paragraph per print line. Otherwise a line break in the text is a space.
+// Independence rule: everything below comes from print fields on the block: `emphasis` / `lineEmphasis` ([substring,
+// 'i'|'u'|'b', nth] runs seen in the print image), `lineBreaks`, `entry` ({term, termBold, def}: a dictionary entry whose
+// entry word and definition segment are visible in print) and `runningText` (a complete sentence of running text, not a
+// notation snippet). No id-keyed tables. The choice to build an entry as a glossary list item (BANA 20.6) and a snippet as
+// an isolated paragraph (20.3..20.5) is the format selected by the illustrated rule, which the transcriber decides.
+const plain20 = (tos) => (tos.segments ? tos.segments.map((g) => g.text || '').join('') : tos.text);
+// Print marks Emboss has no representation for, recognised from the PRINT description (features), not from an example id.
+const LIMIT20_RULES = [
+  [/tertiary stress/i, 'tertiary stress (grave accent) needs a transcriber-defined indicator with its own explanatory transcriber\'s note (BANA 20.4.1d, 20.4.1b); Emboss has no transcriber-defined modifier mechanism (F-158). Built without it.'],
+  [/ligature tie|tie joins|and ligatured|\(ligatured\)/i, 'a ligature tie is printed (BANA 20.4.3-20.4.5) — a tie/ligature diacritic has no representation in Emboss (F-160); the print text carries no tie, so it is dropped.'],
+  [/diagonal stroke|cross-?bar/i, 'a stroke or cross-bar through a letter is printed (BANA 20.4.3, 20.4.4) — no representation in Emboss (F-158/F-160); the print text carries no such mark, so it is dropped.'],
+];
+function buildModel20(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  const blocks = [];
+  for (const b of printBlocks) {
+    if (!b || typeof b !== 'object') continue;
+    if (b.kind === 'table' || b.kind === 'heading') {
+      limitations.push(`print block kind '${b.kind}' not modeled${b.kind === 'table' ? ' (a pronunciation key needs a pronunciation-key node — 1-3 list, dot locators, columns linearised, BANA 20.7 — Emboss has none, F-162)' : ''}: "${String(b.text ?? '').slice(0, 80)}"`);
+    } else if (b.kind === 'paragraph') {
+      for (const [re, msg] of LIMIT20_RULES) if (re.test(String(b.features ?? ''))) limitations.push(msg);
+      if (b.entry && typeof b.entry === 'object') {
+        const e = b.entry;
+        const tt = spanSegs20(e.term, [[e.termBold, 'b']]);
+        const item = { level: 0, term: plain20(tt), def: e.def };
+        if (tt.segments) item.termSegments = tt.segments;
+        blocks.push({ type: 'list', kind: 'glossary', style: 'glossary', items: [item] });
+      } else {
+        const lines = b.lineBreaks ? String(b.text).split('\n') : [String(b.text).replace(/\n/g, ' ')];
+        lines.forEach((ln, li) => {
+          const spans = b.lineBreaks ? (b.lineEmphasis || [])[li] : b.emphasis;
+          const para = { type: 'para', ...spanSegs20(ln, spans) };
+          if (!b.runningText) para.continuation = true;   // an isolated notation snippet, not a whole print paragraph
+          blocks.push(para);
+        });
+      }
+    } else {
+      limitations.push(`print block kind '${b.kind}' not modeled: "${String(b.text ?? '').slice(0, 80)}"`);
+    }
+  }
+  return { doc: { title: null, blocks }, limitations, hasTable: blocks.length > 0 };
+}
+
+// §22 (Bibliographies): print.blocks 'entry' (a citation) and 'paragraph' (an annotation). One
+// bibliography = one plain list, entries at level 0; an annotation is a level-1 item (the only
+// way Emboss expresses BANA 22.3.1's 1-5/3-5 margins; nothing in the data model marks where a
+// citation ends and its annotation begins, F-184). Italic/bold runs are from print.features.
+// Emphasis runs come from the block's own print `emphasis` field (no id-keyed table).
+function buildModel22(sample) {
+  const printBlocks = (sample.print && Array.isArray(sample.print.blocks)) ? sample.print.blocks : [];
+  const limitations = [];
+  const items = [];
+  for (const b of printBlocks) {
+    if (!b || typeof b !== 'object') continue;
+    if (b.kind === 'entry' || b.kind === 'paragraph') {
+      const tos = spanSegs20(b.text, b.emphasis);
+      const item = tos.segments ? { segments: tos.segments } : { text: tos.text };
+      item.level = b.kind === 'paragraph' ? 1 : 0;
+      items.push(item);
+    } else {
+      limitations.push(`print block kind '${b.kind}' not modeled: "${String(b.text ?? '').slice(0, 80)}"`);
+    }
+  }
+  const blocks = items.length ? [{ type: 'list', kind: 'plain', items }] : [];
+  return { doc: { title: null, blocks }, limitations, hasTable: blocks.length > 0 };
+}
+
+// Format selected by the illustrated rule: several builders (sections 11, 15, 17, 19, 21) read `sample.illustrates.rule` to
+// pick a format the transcriber chooses for that kind of material (which table format, spelling-list uncontracting, a
+// thesaurus/dictionary entry mode, segmented numbers). That is a legitimate INPUT — the transcriber decides the format and
+// the rule names it — but it is not evidence that Emboss finds the format from the print alone. The README lists these as
+// "known weak matches".
+const MODEL_BUILDERS = { 'section-2': buildModel2, 'section-11': buildModel11, 'section-4': buildModel4, 'section-8': buildModel8, 'section-7': buildModel7, 'section-1': buildModel1, 'b004-6-9': buildModel1, 'section-16': buildModel16, 'b004-11': buildModel16, 'section-9': buildModel9, 'b004-appendix-g': buildModel9, 'section-5': buildModel5, 'section-13': buildModel13, 'b004-appendix-j': buildModel13, 'b004-appendix-e': buildModel11, 'section-3': buildModel3, 'section-12': buildModel12, 'section-6': buildModel6, 'section-15': buildModel15, 'section-19': buildModel19, 'section-14': buildModel14, 'section-17': buildModel17, 'section-10': buildModel10, 'section-21': buildModel21, 'section-18': buildModel18, 'section-20': buildModel20, 'section-22': buildModel22 };
 function buildModel(sample) {
   const fn = MODEL_BUILDERS[SECTION];
   if (!fn) throw new Error(`No model builder registered for --section ${SECTION}`);
-  return fn(sample);
+  return applyForeignText(sample, fn(sample));
+}
+
+// K16 / BANA Formats 1.16.3 (June 2024): the document option `foreignText` (foreign material uncontracted, with the
+// foreign alphabet signs of Appendix D) is set ONLY for samples whose print is foreign-language material, and the
+// language is given to exactly the print text that is foreign (a reader would record it as `seg.lang`). The language of
+// a print word is print information, read from the sample's own print description and print text, never from the braille.
+//   1.16.3 foreign-language instructional texts / foreign-language materials (the section itself says so):
+//     Examples 17-1, 17-2  "Word Lists in Foreign Language Texts" (17.7), print notes "bilingual (Spanish/English)
+//                          vocabulary list" / "Foreign words (with preceding Spanish articles ...)": the entry words are Spanish.
+//     Examples 21-38, 21-39 "Alphabetic References in Foreign Language Materials" (21.9.3): each entry is French, German or
+//                          Spanish (coup / Laden / Leben; dessus / Tisch / Spass / exacto / tu ... il).
+//   21.6.3b bilingual glossaries ("Use uncontracted braille for foreign language entry words, using the appropriate
+//   accented letters and symbols for the language"): Emboss does this AUTOMATICALLY in every glossary (K16 follow-up,
+//   26 Sep; document.mjs foreignRefSegments), so these samples get the language tags only, NOT the document option
+//   (they are English textbooks, not 1.16.3 foreign-language texts):
+//     Example 21-22 "Simple English/Spanish Glossary": the entry word after the slash and the definition are Spanish.
+//     Samples 21-5, 21-6 "English/Spanish Glossary": the second entry (factores / absorción) and its definition are Spanish.
+// Not set: Examples 1-18, 1-19 (1.16.2, incidental foreign words in English text), Example 5-10 (English glossary),
+// and the not-representable 21-36, 21-37 and Samples 21-3, 21-4.
+const FOREIGN_TEXT_SAMPLES = {
+  'BANA Example 17-1': { glossary: (it) => ({ term: 'es' }) },
+  'BANA Example 17-2': { glossary: (it) => ({ term: 'es' }) },
+  'BANA Example 21-38': { index: ['fr', 'de', 'de'] },
+  'BANA Example 21-39': { index: ['fr', 'de', 'de', 'es', 'fr'] },
+};
+const FOREIGN_LANG_SAMPLES_21_6_3 = {                     // language tags only (print information); no foreignText
+  'BANA Example 21-22': { glossary: () => ({ termAfterSlash: 'es', def: 'es' }) },
+  'BANA Sample 21-5': { glossary: (it, i) => (i === 1 ? { term: 'es', def: 'es' } : {}) },
+  'BANA Sample 21-6': { glossary: (it, i) => (i === 1 ? { term: 'es', def: 'es' } : {}) },
+};
+function applyForeignText(sample, model) {
+  const option = FOREIGN_TEXT_SAMPLES[sample && sample.id];
+  const spec = option || FOREIGN_LANG_SAMPLES_21_6_3[sample && sample.id];
+  if (!spec || !model || !model.doc) return model;
+  const tag = (segs, text, lang) => (Array.isArray(segs) && segs.length ? segs.map((g) => (g && (g.type === 'text' || g.type == null) ? { ...g, lang } : g)) : [{ type: 'text', text: String(text ?? ''), lang }]);
+  for (const b of model.doc.blocks || []) {
+    if (!b || !Array.isArray(b.items)) continue;
+    if (spec.glossary && (b.type === 'glossary' || b.kind === 'glossary')) {
+      b.items.forEach((it, i) => {
+        const s = spec.glossary(it, i) || {};
+        if (s.term) it.termSegments = tag(it.termSegments, it.term, s.term);
+        if (s.termAfterSlash && typeof it.term === 'string' && it.term.includes('/') && !it.termSegments) {
+          const k = it.term.indexOf('/');
+          it.termSegments = [{ type: 'text', text: it.term.slice(0, k + 1) }, { type: 'text', text: it.term.slice(k + 1), lang: s.termAfterSlash }];
+        }
+        if (s.def) it.defSegments = tag(it.defSegments, it.def, s.def);
+      });
+    }
+    if (spec.index && b.kind === 'index') b.items.forEach((it, i) => { if (spec.index[i]) it.segments = tag(it.segments, it.text, spec.index[i]); });
+  }
+  if (option) model.doc.foreignText = true;                // 1.16.3 samples only; 21.6.3b glossaries need no option
+  return model;
 }
 
 // ---------------------------------------------------------------------------
@@ -2622,7 +3706,7 @@ function buildModel(sample) {
 // precedent (tests/gold/ukaaf-b004/appendix-e/README.md §"How these files were
 // made" step 3). suppressHeader stays true for every section, including these
 // (see buildModel1's own header comment for why).
-const IS_UKAAF_SECTION = SECTION === 'b004-6-9' || SECTION === 'b004-11' || SECTION === 'b004-appendix-j';
+const IS_UKAAF_SECTION = SECTION === 'b004-6-9' || SECTION === 'b004-11' || SECTION === 'b004-appendix-j' || SECTION === 'b004-appendix-e';
 // b004-appendix-j is UKAAF-formatted (App J's own cell-1/cell-3/cell-5 poetry margins) but,
 // unlike b004-6-9/b004-11, its own gold reconciliation recorded a genuine width:40 for both
 // worked examples (not the width-agnostic default 38 the other two UKAAF sections fall back
@@ -2756,7 +3840,14 @@ export function loadSamples() {
   return files.map((f) => ({ file: f, sample: JSON.parse(fs.readFileSync(path.join(GOLD_DIR, f), 'utf8')) }));
 }
 
-export { GOLD_DIR, STATUS_FILE };
+// buildModel/MODEL_BUILDERS/SECTION exported for Emboss/scripts/check-layout-parity.mjs,
+// which needs each gold section's built document models (`.doc.blocks`) to feed into its
+// own formatBlock/traceBlock comparison, without paying for runOne's own formatDocument +
+// gold-line diff on every sample. It imports this module fresh per section (a cache-busted
+// specifier, since SECTION/MODEL_BUILDERS/GOLD_DIR are read from GOLD_RUN_SECTION at import
+// time — see gold_bana_section4.test.mjs's own header comment for why a dynamic import is
+// required here rather than a static one).
+export { GOLD_DIR, STATUS_FILE, SECTION, MODEL_BUILDERS, buildModel, OPTS };
 
 export function runOne(sample) {
   const model = buildModel(sample);
@@ -2781,7 +3872,7 @@ export function runOne(sample) {
   expected.lines = trimEnd(expected.lines);
   const diffOps = diffLines(expected.lines, actual.lines);
   const isMatch = expected.lines.length === actual.lines.length && expected.lines.every((l, i) => l === actual.lines[i]);
-  const coreUnrepresentable = (SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j' || SECTION === 'section-3' || SECTION === 'section-6' || SECTION === 'section-15' || SECTION === 'section-19' || SECTION === 'section-14' || SECTION === 'section-17' || SECTION === 'section-10' || SECTION === 'section-21' || SECTION === 'section-18')
+  const coreUnrepresentable = (SECTION === 'section-2' || SECTION === 'section-4' || SECTION === 'section-8' || SECTION === 'section-7' || SECTION === 'section-1' || SECTION === 'b004-6-9' || SECTION === 'section-16' || SECTION === 'b004-11' || SECTION === 'section-9' || SECTION === 'b004-appendix-g' || SECTION === 'section-13' || SECTION === 'b004-appendix-j' || SECTION === 'b004-appendix-e' || SECTION === 'section-3' || SECTION === 'section-6' || SECTION === 'section-15' || SECTION === 'section-19' || SECTION === 'section-14' || SECTION === 'section-17' || SECTION === 'section-10' || SECTION === 'section-21' || SECTION === 'section-18' || SECTION === 'section-20' || SECTION === 'section-22')
     // §4/§7/§8/§1/§16/b004-6-9/b004-11/§9/b004-appendix-g: any recorded limitation means
     // some real print content was left out of the model (a heading with no level, a
     // bullet/column/box/colour-note Emboss has no mechanism for, a block kind this flat

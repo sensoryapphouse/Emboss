@@ -6,6 +6,7 @@ import { parseFile } from '../input/parse.mjs';
 import { formatDocument } from '../format/document.mjs';
 import { DOMParser } from '@xmldom/xmldom';
 import * as louis from '../engine/louis-browser.mjs';
+import { editorTranslators } from '../format/node-translate-helper.mjs';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -31,6 +32,9 @@ globalThis.fetch = async (url) => {
 
 await louis.init({ tablesBaseUrl: 'http://localhost/tables' });
 console.log('Liblouis WASM initialized version:', louis.version());
+// Quick Mode's own translators (liblouis inside styledTranslate, plus the grade 1 translator the app passes) - import fix
+// list #55; a bare liblouis call here never exercised the sub/superscript, quote-exchange and invisible-character handling.
+const { translate, translateG1 } = editorTranslators(louis);
 
 // Load BrailleBlaster audit logs
 const bbEpubAudit = fs.existsSync('tests/bb_broad_corpus_audit.jsonl')
@@ -74,7 +78,7 @@ for (let i = 0; i < files.length; i++) {
       depth: 25,
       paragraphStyle: 'indented',
       listStyle: 'spaced',
-      translate: (t) => louis.translate(t, louis.TABLES.uebG2)
+      translate, translateG1
     });
     emPages = emBrf ? emBrf.split('\f').length : 0;
     emLines = emBrf ? emBrf.split(/\r?\n/).filter(l => l.trim().length > 0).length : 0;

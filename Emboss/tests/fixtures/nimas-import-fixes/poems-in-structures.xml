@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3"><head><meta name="dc:Title" content="Edge"/></head>
+<book><bodymatter>
+<level1><h1>Edges</h1>
+<blockquote><poem><title>Quoted poem title</title><author>Quoted poet</author><linegroup><line>Quoted line one</line><line>Quoted line two</line></linegroup></poem><cite>Source cite</cite></blockquote>
+<epigraph><poem><title>Epigraph poem</title><linegroup><line>Epi line one</line></linegroup></poem></epigraph>
+<div class="anthology"><poem><title>Div poem</title><author>Div poet</author><linegroup><line>Div line</line></linegroup></poem><p>After the div poem.</p></div>
+<sidebar render="required"><hd>Box</hd><poem><title>Box poem</title><author>Box poet</author><linegroup><line>Box line</line></linegroup></poem></sidebar>
+<poem><title>Paged poem</title><pagenum id="p9" page="normal">9</pagenum><author>Paged poet</author><linegroup><line>Paged line one</line><pagenum id="p10" page="normal">10</pagenum><line>Paged line two</line></linegroup></poem>
+<poem><title>Emph <em>title</em></title><author>By <strong>bold</strong> poet</author><linegroup><line>Line with <em>emphasis</em></line></linegroup></poem>
+<poem class="sonnet"><hd>HD title</hd><linegroup class="stanza"><line>Stanza A1</line></linegroup><linegroup><line>Stanza B1</line></linegroup><byline>Closing byline</byline></poem>
+<h2>Heading then author-only poem</h2>
+<poem><author>Lone author</author><linegroup><line>Lone line</line></linegroup></poem>
+<p>End.</p>
+</level1></bodymatter></book></dtbook>

@@ -65,10 +65,10 @@
       ".=#' ,num]ic t]m9ator@.>",
       "",
       "     ,mon   ,tue   ,w$    ,?ur   ,fri",
-      "     \"3333 \"3333 \"3333 \"3333 \"33333",
-      "##a hgaga dcjfb cigac ajjbd cbgb",
-      "b    bhijc ejhef cjedi hiahg afgd",
-      "c    hfbdd gaaea eejcf acjdd ccaf#'"
+      "     \"3333  \"3333  \"3333  \"3333  \"33333",
+      "##a  hgaga  dcjfb  cigac  ajjbd  cbgb",
+      "b    bhijc  ejhef  cjedi  hiahg  afgd",
+      "c    hfbdd  gaaea  eejcf  acjdd  ccaf#'"
     ],
     "pageBreaks": [],
     "notes": "Caption is bracketed in a double-quote/emphasis marker (,,,...,'). A transcriber's note lists the two special symbols required (numeric passage indicator '.=##' and numeric terminator '.=#\\''). The row headings 1/2/3 are rendered as the single letters a/b/c inside the numeric passage (since inside a numeric passage, letters a-j stand for digits 1-0), and the numeric terminator (#') closes the passage at the very end of the last row rather than after every number."
@@ -80,5 +80,25 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines: run B dropped the 8 leading blank-cell spaces on line 1 (source .txt line 8729 has 8 leading U+2800 cells after the fixed 9-space margin); run A preserved them correctly and is used. pdfPages corrected to [296] (run B's 297 was wrong, by the same page-boundary evidence as Example 11-8). print.caption resolved to 'SAMPLE NUMBER TABLE' (all caps, matching the print image and the heavy capitalization marking -- ',,,' -- on the corresponding braille line). print.headers' first cell resolved to '' (blank in print above the row labels 1/2/3), not a fabricated '(row label)' placeholder."
+  "resolution": "braille.lines: run B dropped the 8 leading blank-cell spaces on line 1 (source .txt line 8729 has 8 leading U+2800 cells after the fixed 9-space margin); run A preserved them correctly and is used. pdfPages corrected to [296] (run B's 297 was wrong, by the same page-boundary evidence as Example 11-8). print.caption resolved to 'SAMPLE NUMBER TABLE' (all caps, matching the print image and the heavy capitalization marking -- ',,,' -- on the corresponding braille line). print.headers' first cell resolved to '' (blank in print above the row labels 1/2/3), not a fabricated '(row label)' placeholder.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "     \"3333 \"3333 \"3333 \"3333 \"33333",
+        "##a hgaga dcjfb cigac ajjbd cbgb",
+        "b    bhijc ejhef cjedi hiahg afgd",
+        "c    hfbdd gaaea eejcf acjdd ccaf#'"
+      ],
+      "after": [
+        "     \"3333  \"3333  \"3333  \"3333  \"33333",
+        "##a  hgaga  dcjfb  cigac  ajjbd  cbgb",
+        "b    bhijc  ejhef  cjedi  hiahg  afgd",
+        "c    hfbdd  gaaea  eejcf  acjdd  ccaf#'"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 8, 9, 10, 11 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 296 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (4). Where: column gap (table / related columns / columned list) (3); table separation line (1)."
+    }
+  ]
 }

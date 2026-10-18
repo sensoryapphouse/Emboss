@@ -40,7 +40,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "**Example:** Cultured pearls come in a variety of colors.",
+        "text": "Example: Cultured pearls can be found in a variety of colors.",
         "features": "Bold label 'Example:' followed by a plain demonstration sentence.",
         "items": null
       },
@@ -102,5 +102,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille re-derived independently from .txt lines 4261-4276 (field width 5); matches run A's rendering, which correctly preserves the genuine 4/6/2-cell runover indents run B stripped (the same section-wide bug documented elsewhere). `lineNumbers` (run B's own schema addition, not in the original task-brief schema) is adopted here since the source itself prints an explicit line number on every line of the three numbered Samples — a genuinely present structural fact worth preserving separately from `lines`."
+  "resolution": "Braille re-derived independently from .txt lines 4261-4276 (field width 5); matches run A's rendering, which correctly preserves the genuine 4/6/2-cell runover indents run B stripped (the same section-wide bug documented elsewhere). `lineNumbers` (run B's own schema addition, not in the original task-brief schema) is adopted here since the source itself prints an explicit line number on every line of the three numbered Samples — a genuinely present structural fact worth preserving separately from `lines`. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.3.text",
+      "was": "**Example:** Cultured pearls come in a variety of colors.",
+      "now": "Example: Cultured pearls can be found in a variety of colors.",
+      "evidence": "Page image PDF p.140 (Sample 5-1), zoomed 300 dpi: the line reads 'Example: Cultured pearls can be found in a variety of colors.' with 'Example:' in plain (not bold) sans-serif; gold said 'come in' and bold 'Example:'."
+    }
+  ]
 }

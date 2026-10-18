@@ -5,6 +5,7 @@
 // <g data-cell> so a later pass can link/highlight it against the source print.
 import { brfCharDots, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
 import { renderTactileDotCanvas } from '/format/tactile-svg.mjs';
+import { iconSvg } from '/web/icons.mjs';
 
 // dot d (0..5) → dot numbers 1-6 laid out  1 4 / 2 5 / 3 6
 const COL = (d) => (d < 3 ? 0 : 1);
@@ -141,10 +142,14 @@ export function renderBraille(container, brf, opts = {}) {
         }
       }
       const blockObj = (b != null && b >= 0 && opts.blocks) ? opts.blocks[b] : null;
-      const isGraphic = (blockObj && blockObj.type === 'graphic' && !renderedGraphicBlocks.has(b));
+      // The tactile-graphic hardware preview (the embosser badge, the dot canvas or the note in large print) is an expert hardware
+      // feature, shown only when the caller asks for it (opts.hardwarePreview: the editor's expert hardware toggle, Ctrl/Cmd+Shift+\).
+      // Otherwise a picture is its braille lines, like any other block (feedback 30 Sep item 8, Paul, 1 Oct).
+      const preview = opts.hardwarePreview === true;
+      const isGraphic = (preview && blockObj && blockObj.type === 'graphic' && !renderedGraphicBlocks.has(b));
       if (isGraphic) renderedGraphicBlocks.add(b);
 
-      const isGraphicSkip = (blockObj && blockObj.type === 'graphic' && opts.tactileGraphics !== false && blockObj.svg && !isGraphic);
+      const isGraphicSkip = (preview && blockObj && blockObj.type === 'graphic' && opts.tactileGraphics !== false && blockObj.svg && !isGraphic);
       if (isGraphicSkip) {
         rowIndex++;
         continue;
@@ -176,7 +181,7 @@ export function renderBraille(container, brf, opts = {}) {
     if (it.type === 'volbreak') {
       const volSep = document.createElement('div');
       volSep.className = 'brl-volumebreak';
-      volSep.innerHTML = `<span class="brl-vol-tag">📚 Volume ${it.volNum} of ${it.totalVols}</span> <span class="brl-vol-page">(Starts at Page ${it.pageNum})</span>`;
+      volSep.innerHTML = `<span class="brl-vol-tag">${iconSvg('open-book', 'icon icon-inline')} Volume ${it.volNum} of ${it.totalVols}</span> <span class="brl-vol-page">(Starts at Page ${it.pageNum})</span>`;
       return volSep;
     }
     if (it.type === 'pagebreak') {
@@ -213,29 +218,29 @@ export function renderBraille(container, brf, opts = {}) {
       const badge = document.createElement('div');
       if (isTiger) {
         badge.className = 'hardware-badge tiger';
-        badge.innerHTML = '<span>🖨 ViewPlus Tiger / PixBlaster</span> · <span>8-Height 3D Relief</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' ViewPlus Tiger / PixBlaster</span> · <span>8-Height 3D Relief</span>';
       } else if (isMonarch) {
         badge.className = 'hardware-badge monarch';
-        badge.innerHTML = '<span>🖨 APH Monarch Dynamic Display</span> · <span>32×10 Refreshable Tactile Grid</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' APH Monarch Dynamic Display</span> · <span>32×10 Refreshable Tactile Grid</span>';
       } else if (isDotpad) {
         badge.className = 'hardware-badge dotpad';
-        badge.innerHTML = '<span>📱 DotPad 320 Dynamic Display</span> · <span>60×40 Pin Grid + 20-Cell Braille</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' DotPad 320 Dynamic Display</span> · <span>60×40 Pin Grid + 20-Cell Braille</span>';
       } else if (isIndex) {
         badge.className = 'hardware-badge index';
-        badge.innerHTML = '<span>🖨 Index Braille / PageBlaster</span> · <span>ESC +g Dot Matrix</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' Index Braille / PageBlaster</span> · <span>ESC +g Dot Matrix</span>';
       } else if (isSwell) {
         badge.className = 'hardware-badge swell';
-        badge.innerHTML = '<span>📄 Swell Paper / PIAF</span> · <span>Microcapsule Thermal Tactile</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' Swell Paper / PIAF</span> · <span>Microcapsule Thermal Tactile</span>';
       } else {
         badge.className = 'hardware-badge textonly';
-        badge.innerHTML = '<span>🖨 Text Embosser</span> · <span>Transcriber Note Mode</span>';
+        badge.innerHTML = '<span>' + iconSvg('printer', 'icon icon-inline') + ' Text Embosser</span> · <span>Transcriber Note Mode</span>';
       }
       gWrap.appendChild(badge);
 
       if (hasGraphics && blockObj.svg) {
         const canvas = document.createElement('canvas');
         canvas.className = 'tactile-dot-canvas';
-        canvas.style.cssText = 'max-width:100%; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.12); margin:4px auto; display:block;';
+        canvas.style.cssText = 'max-width:100%; border-radius:6px; border:1px solid var(--line); margin:4px auto; display:block;';
         gWrap.appendChild(canvas);
         
         renderTactileDotCanvas(canvas, blockObj.svg, {

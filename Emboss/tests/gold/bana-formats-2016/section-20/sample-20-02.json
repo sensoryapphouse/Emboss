@@ -1,0 +1,33 @@
+{
+  "id": "sample-20-02",
+  "title": "Sample 20-2: Pronunciation and Paragraph Summary (Print Only)",
+  "pdfPages": [
+    14
+  ],
+  "textLines": [
+    15997,
+    15997
+  ],
+  "illustrates": {
+    "rule": "20.7.2",
+    "quote": "Summary keys are a reminder of the diacritics being used, and appear typically on each page or alternate pages in some alphabetic reference material. (See Sample 20-1: Pronunciation and Summary Keys on page 20-13, Sample 20-2: Pronunciation and Paragraph Summary on page 20-14, and Sample 20-3: Pronunciation Key on Odd Pages on page 20-15.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print only: the sample is a full-page photograph or scan of dictionary/glossary pages (gold-20-A/page-552.png), not modellable as flat print blocks; no braille is given.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [],
+    "pageBreaks": [],
+    "notes": "Print only; the source has no braille for this sample."
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree ([]). illustrates: A recorded rule '20.x' and the caption as the quote; B recorded '20.8' with the section-contents line as the quote; both wrong. The three samples are cited together in rule 20.7.2's cross-reference, so 20.7.2 and its wording are used. print: A's blocks (a transcription and summary of the photographed pages, partly summarised and not verifiable at that size) are dropped rather than kept; B left them empty ('TODO'). The page image is the only print source."
+}

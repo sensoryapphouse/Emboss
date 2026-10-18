@@ -1,0 +1,64 @@
+{
+  "id": "example-20-13",
+  "title": "Example 20-13: Italics and Capitals with Diacritics",
+  "pdfPages": [
+    5
+  ],
+  "textLines": [
+    15696,
+    15704
+  ],
+  "illustrates": {
+    "rule": "20.4.3",
+    "quote": "Follow print for emphasis or capital letters appearing in diacritic notation. (See UEB, §4, Letters and Their Modifiers and §8.8, Choice of Capitalized Indicators.)"
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "paragraph",
+        "level": null,
+        "text": "thumb\nthumb\nTHen\nŦHen",
+        "features": "Line 1: 'th' in italics. Line 2: 'th' in italics and ligatured. Line 3: 'TH' in capitals. Line 4: 'TH' with a cross-bar through the T",
+        "lineEmphasis": [
+          [
+            [
+              "th",
+              "i"
+            ]
+          ],
+          [
+            [
+              "th",
+              "i"
+            ]
+          ],
+          [],
+          []
+        ],
+        "lineBreaks": true
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-543.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ".1?.'umb",
+      ".1t^6h.'umb",
+      ",,?,'5",
+      ",,@3th,'5"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 9. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded."
+  },
+  "uncertain": [
+    "Print diacritics are combined-Unicode approximations read from a small page image; the braille modifiers, not the glyphs, are the authority."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (cited rule is the one the example follows). print: B left blocks empty; A's blocks checked against the page image; corrected: A wrote lines 3 and 4 identically and lost the ligature and cross-bar; the cross-bar T is approximated by U+0166.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

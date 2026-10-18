@@ -60,10 +60,13 @@
     "toc": "Innholdsfortegnelse",
     "print": "Utskriftvisning (venstre)",
     "braille": "Punktskrift",
+    "export": "Eksporter",
+    "export_title": "Eksporter punktskriften (BRF, eBraille) eller send den til pregemaskin",
+    "emboss_menu": "Send til pregemaskin",
     "braille_view": "Punktskriftvisning",
     "download_brf": "Punktskrift (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Preging",
     "emboss_tooltip": "Send dokument til pregemaskin eller skriver",
     "clear_doc": "Tøm dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Poetisk stanzaverslinje (1-3)",
     "exercise_title": "Øvingsspørsmål",
     "exercise_desc": "Nummerert øvingsspørsmål (1-5 / 3-5)",
-    "caption_title": "Bildetekst / tilskrivning",
-    "caption_desc": "Figurbildetekst eller tilskrivning (7-5)",
     "footnote_title": "Fotnote",
     "footnote_desc": "Fotnotetekst (1-3)",
     "note_title": "Transkribernotat",
@@ -163,8 +164,6 @@
     "page_desc": "Sett inn indikatoren for kildesideskift",
     "printpage_title": "Utskriftssiden",
     "printpage_desc": "Sett inn indikatoren for kildesideskift",
-    "code_title": "Datakode",
-    "code_desc": "Sett inn kodebokk med UEB-indikatorer",
     "indent_title": "Indent / Nest Sub-item",
     "indent_desc": "Nest list item or exercise deeper (Tab)",
     "outdent_title": "Outdent / Promote Item",
@@ -185,8 +184,8 @@
     "language_label": "Grensesnittspråk",
     "language_help": "Velg språket som brukes for knapper, menyer, dialoger og skjermleseravkunngjøringer.",
     "standard_label": "Punktskriftstandard",
-    "standard_bana": "BANA (USA og Canada — 40×25 celler)",
-    "standard_ukaaf": "UKAAF (Storbritannia og internasjonalt — 38×25 celler)",
+    "standard_bana": "BANA (USA og Canada — 38×25 celler)",
+    "standard_ukaaf": "UKAAF (Storbritannia og internasjonalt — 38×27 celler)",
     "grade_label": "Kontraksjonstilstand",
     "grade_1": "Grad 1 (ukontrahert / bokstav-for-bokstav)",
     "grade_2": "Grad 2 (kontrahert)",
@@ -261,7 +260,7 @@
     "size_full": "Hele arket (linje 1 anti-skitt)",
     "lead_lines": "Taktile lederlinje",
     "braille_labels": "Punktskriftetiketter",
-    "footer_tip": "💡 Svarte konturer blir faste taktile grenser; farger kartlegger automatisk til distinkte taktile teksturer.",
+    "footer_tip": "Svarte konturer blir faste taktile grenser; farger kartlegger automatisk til distinkte taktile teksturer.",
     "open_repositories": "Åpne taktile oppbevaringssteder:",
     "no_diagrams": "Ingen matchende diagrammer funnet."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Tapsfri rundturstatus",
     "precedence_status": "Status for punktskriftprecedensregler",
     "perfect_match": "100% rundturmatch (0 avvik)",
-    "badge_warn": "⚠ {count} å gjennomgå",
+    "badge_warn": "{count} å gjennomgå",
     "badge_title": "{count} ordet avvik(ene) funnet under rundturoversettelse. Klikk for å gå til den første.",
     "badge_clean": "Rundtursjekk: ingen ordavvik funnet."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Du har ulagrede endringer. Er du sikker på at du vil avslutte uten å lagre?",
     "unsaved_load": "Du har ulagrede endringer. Hvis du laster en ny fil, erstattes det gjeldende dokumentet. Fortsette?",
     "unsaved_clear": "Du har ulagrede endringer. Er du sikker på at du vil tømme dokumentet?",
-    "drop_hint": "⬇ Slipp et dokument for å importere det til redigeringsprogrammet",
+    "drop_hint": "Slipp et dokument for å importere det til redigeringsprogrammet",
     "notice": "Merknad",
     "close_notice": "Lukk merknad"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumenttekst",
+      "math_keyboard_toggle": "Matematikktastatur",
       "label": "Tekst",
       "toolbar_aria": "Formatering",
       "style_label": "Avsnittsstil",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafikkategorier",
       "graphic_list": "Taktile grafikk-diagrammer",
       "formula_search_label": "Søk formler",
-      "btactile_link": "BTactile (Gratis) ↗",
-      "tgil_link": "APH TGIL (1 800+ maler) ↗"
+      "btactile_link": "BTactile (Gratis)",
+      "tgil_link": "APH TGIL (1 800+ maler)"
     },
     "settings": {
       "list_spaced": "Liste med blank linje (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Koble direkte til tilpassede mikrokontroller pregemetamor (ESP32-S3, RP2040/RP2350, STM32, Arduino) som omgår OS-skriverlåser.",
       "graphics_hint": "Når avmerket, eksporteres diagrammer som tilgjengelige transkribernotat-beskrivelser for bare-tekst pregemetamorrer og punktskriftskjermer.",
       "tactile_heading": "Direkte streaming av taktilt display (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Koble til Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Koble USB / HID (Monarch)",
+      "tactile_connect_ble": "Koble til Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Koble USB / HID (Monarch)",
       "tactile_disconnect": "Koble fra skjerm",
       "tactile_sim_monarch": "Test simulert Monarch (32×10)",
       "tactile_sim_dotpad": "Test simulert DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Strømmer live punktskriftvisning og taktile grafikkdirekte over WebBluetooth (DotPad BLE UART) eller WebHID (Monarch/USB) uten eksterne drivere.",
       "perkins_hint": "— skriv punktskrift med SDF og JKL tasterne",
       "ascii_hint": "— vis rå ASCII-punktskrifttegn",
+      "show_explanation_bar": "Vis forklaringslinjen",
+      "show_explanation_bar_hint": "— stripen under teksten og punktskriften som forklarer punktskriften for ordet du er på",
+      "simple_mode_hint": "— åpne Emboss i den enkle konverteren. Å bytte mellom Hurtigmodus og redigeringsprogrammet endrer ikke dette.",
       "covers_hint": "— pregepapiroverslag når bøker deles"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Overskrift {n}",
       "cell_aria_named": "{header}, rad {row}",
       "cell_aria": "Kolonne {col}, rad {row}",
-      "too_wide_listed": "⚠ For bred for kolonner — skrives som listet tabell i punktskrift",
+      "too_wide_listed": "For bred for kolonner — skrives som listet tabell i punktskrift",
       "too_wide_listed_title": "Denne tabellen passer ikke i kolonner med gjeldende antall celler per linje og punktskriftmodus, så den vil bli skrevet som listet tabell (BANA Formats §11.9) i punktskrift i stedet for kolonner side om side.",
-      "too_wide_paragraph": "⚠ For bred for kolonner — skrives i avsnittsform i punktskrift",
+      "too_wide_paragraph": "For bred for kolonner — skrives i avsnittsform i punktskrift",
       "too_wide_paragraph_title": "Denne tabellen passer ikke i kolonner med gjeldende antall celler per linje og punktskriftmodus, så den vil bli skrevet i avsnittsform (UKAAF B004 §12) i punktskrift i stedet for kolonner side om side."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Kunne ikke laste tabeller for \"{code}\" — bruker fortsatt forrige punktskriftkode.",
-      "failed": "⚠ Punktskrift kunne ikke genereres.",
+      "failed": "Punktskrift kunne ikke genereres.",
       "failed_hint": "(Hvis det sier at motoren ikke er initialisert, lastet ikke punktskriftmotoren — hard oppdatering med Cmd/Ctrl+Shift+R.)",
       "error_status": "Gjengivingsfeil: {message}"
     },
     "engine": {
       "loading": "Laster punktskriftmotor…",
-      "failed": "⚠ Punktskriftmotoren klarte ikke å laste.",
+      "failed": "Punktskriftmotoren klarte ikke å laste.",
       "failed_hint": "Hard oppdatering med Cmd/Ctrl+Shift+R. Hvis det vedvarer, åpne nettleserkonsollen (Vis ▸ Utvikler) og send feilene.",
       "failed_status": "Motor klarte ikke å laste: {message}",
       "ready": "Klar — skriv eller format til venstre; punktskrift oppdateres direkte."
@@ -715,7 +718,7 @@
       "network_unreachable": "Kunne ikke nå {url}: {message}. Nettlesere kan ikke åpne rå TCP (port 9100) forbindelser; pregemaskin må akseptere HTTP POST eller laste ned .brf og sende det med utskriftshantereren din.",
       "usb_bridge_done": "Pregejobb levert til USB-skriver!",
       "needs_webserial": "Direkte seriell preging trenger en nettleser med WebSerial (Chrome, Edge, Opera). Du kan laste ned .brf-filen for å preges med utskriftsbehandleren din, eller bruke nettverksmodus (port 9100) i innstillinger.",
-      "detected": "🔌 Oppdaget {name} — sett til {cells}×{lines} på {baud} baud."
+      "detected": "Oppdaget {name} — sett til {cells}×{lines} på {baud} baud."
     },
     "symbols": {
       "title": "Bibliotek for taktile symbold",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamisk matrise",
       "badge_text_only": "Bare tekst",
       "badge_index": "Prikkmatrise"
+    },
+    "offline": {
+      "ready": "Emboss er klar til å brukes uten internett.",
+      "ready_short": "Klar til å brukes uten internett",
+      "not_yet": "Gjør fortsatt klar til å brukes uten internett…"
     }
   }
 }

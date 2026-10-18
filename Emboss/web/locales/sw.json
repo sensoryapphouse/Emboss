@@ -60,10 +60,13 @@
     "toc": "Orodha ya Yaliyomo",
     "print": "Mwonekano wa Kuchapisha (Kushoto)",
     "braille": "Breli",
+    "export": "Safirisha",
+    "export_title": "Safirisha breli (BRF, eBraille) au itume kwa mashine ya breli",
+    "emboss_menu": "Tuma kwa mashine ya breli",
     "braille_view": "Mwonekano wa Breli",
     "download_brf": "Breli (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Chapisha kwa Breli",
     "emboss_tooltip": "Tuma hati kwa mashine ya kuchapisha breli au printa",
     "clear_doc": "Futa Hati",
@@ -133,8 +136,6 @@
     "poem_desc": "Mstari wa ubeti wa shairi (1-3)",
     "exercise_title": "Swali la Zoezi",
     "exercise_desc": "Swali la zoezi lililopangwa namba (1-5 / 3-5)",
-    "caption_title": "Maelezo / Chanzo",
-    "caption_desc": "Maelezo ya picha au chanzo (7-5)",
     "footnote_title": "Maelezo ya Chini",
     "footnote_desc": "Maandishi ya maelezo ya chini (1-3)",
     "note_title": "Dokezo la Mfasiri",
@@ -163,8 +164,6 @@
     "page_desc": "Ingiza kiashiria cha mkato wa ukurasa wa chapisho asili",
     "printpage_title": "Namba ya Ukurasa wa Chapisho",
     "printpage_desc": "Ingiza kiashiria cha mkato wa ukurasa wa chapisho asili",
-    "code_title": "Msimbo wa Kompyuta",
-    "code_desc": "Ingiza kizuizi cha Msimbo chenye viashiria vya UEB",
     "indent_title": "Ongeza Ingizo / Weka Kipengele Ndani",
     "indent_desc": "Weka kipengele cha orodha au zoezi ndani zaidi (Tab)",
     "outdent_title": "Punguza Ingizo / Panda Kipengele",
@@ -185,8 +184,8 @@
     "language_label": "Lugha ya Kiolesura",
     "language_help": "Chagua lugha itakayotumika kwa vitufe, menyu, masanduku ya mazungumzo, na matangazo ya kisoma skrini.",
     "standard_label": "Kiwango cha Breli",
-    "standard_bana": "BANA (Marekani na Kanada — viini 40×25)",
-    "standard_ukaaf": "UKAAF (Uingereza na Kimataifa — viini 38×25)",
+    "standard_bana": "BANA (Marekani na Kanada — viini 38×25)",
+    "standard_ukaaf": "UKAAF (Uingereza na Kimataifa — viini 38×27)",
     "grade_label": "Kiwango cha Ufupisho",
     "grade_1": "Daraja la 1 (Bila ufupisho / Herufi kwa herufi)",
     "grade_2": "Daraja la 2 (Yenye ufupisho)",
@@ -261,7 +260,7 @@
     "size_full": "Karatasi Nzima (Mstari wa 1 Bila Kukatwa)",
     "lead_lines": "Mistari ya Mwongozo Inayoguswa",
     "braille_labels": "Lebo za Breli",
-    "footer_tip": "💡 Mistari myeusi inayozunguka inakuwa mipaka thabiti inayoguswa; rangi hubadilishwa kiotomatiki kuwa maumbo tofauti yanayoguswa.",
+    "footer_tip": "Mistari myeusi inayozunguka inakuwa mipaka thabiti inayoguswa; rangi hubadilishwa kiotomatiki kuwa maumbo tofauti yanayoguswa.",
     "open_repositories": "Hazina Huria za Michoro Inayoguswa:",
     "no_diagrams": "Hakuna michoro inayolingana iliyopatikana."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Hali ya Ufasiri wa Kwenda na Kurudi Bila Hasara",
     "precedence_status": "Hali ya Kanuni za Kipaumbele cha Breli",
     "perfect_match": "Ulinganifu wa 100% wa Kwenda na Kurudi (tofauti 0)",
-    "badge_warn": "⚠ {count} za kukaguliwa",
+    "badge_warn": "{count} za kukaguliwa",
     "badge_title": "Tofauti {count} za maneno zimepatikana wakati wa kufasiri kwenda na kurudi. Bofya kuruka kwenye ya kwanza.",
     "badge_clean": "Ukaguzi wa kwenda na kurudi: hakuna tofauti za maneno zilizopatikana."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Una mabadiliko ambayo hayajahifadhiwa. Una uhakika unataka kutoka bila kuhifadhi?",
     "unsaved_load": "Una mabadiliko ambayo hayajahifadhiwa. Kupakia faili jipya kutabadilisha hati yako ya sasa. Endelea?",
     "unsaved_clear": "Una mabadiliko ambayo hayajahifadhiwa. Una uhakika unataka kufuta hati?",
-    "drop_hint": "⬇ Dondosha hati ili kuiingiza kwenye kihariri",
+    "drop_hint": "Dondosha hati ili kuiingiza kwenye kihariri",
     "notice": "Taarifa",
     "close_notice": "Funga Taarifa"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Maandishi ya hati",
+      "math_keyboard_toggle": "Kibodi ya hisabati",
       "label": "Maandishi",
       "toolbar_aria": "Upangaji",
       "style_label": "Mtindo wa aya",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategoria za Michoro",
       "graphic_list": "Michoro inayoguswa",
       "formula_search_label": "Tafuta fomula",
-      "btactile_link": "BTactile (Bila Malipo) ↗",
-      "tgil_link": "APH TGIL (Vielelezo 1,800+) ↗"
+      "btactile_link": "BTactile (Bila Malipo)",
+      "tgil_link": "APH TGIL (Vielelezo 1,800+)"
     },
     "settings": {
       "list_spaced": "Orodha yenye mstari mtupu (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Unganisha moja kwa moja na mashine za breli za mikrokontroleri maalum (ESP32-S3, RP2040/RP2350, STM32, Arduino) bila kupitia vizuizi vya dereva za printa za mfumo wa uendeshaji.",
       "graphics_hint": "Isipoteuliwa, michoro husafirishwa kama maelezo ya Dokezo la Mfasiri yanayofikika kwa mashine za breli za maandishi tu na vionyesho vya breli.",
       "tactile_heading": "Mtiririko wa Moja kwa Moja wa Kionyesho Kinachoguswa (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Unganisha Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Unganisha USB / HID (Monarch)",
+      "tactile_connect_ble": "Unganisha Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Unganisha USB / HID (Monarch)",
       "tactile_disconnect": "Katisha Kionyesho",
       "tactile_sim_monarch": "Jaribu Monarch ya Kuigwa (32×10)",
       "tactile_sim_dotpad": "Jaribu DotPad ya Kuigwa (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Hutiririsha mwonekano wa breli wa moja kwa moja na michoro inayoguswa moja kwa moja kupitia WebBluetooth (DotPad BLE UART) au WebHID (Monarch/USB) bila dereva za nje.",
       "perkins_hint": "— andika breli kwa vitufe vya SDF na JKL",
       "ascii_hint": "— onyesha herufi halisi za breli za ASCII",
+      "show_explanation_bar": "Onyesha upau wa maelezo",
+      "show_explanation_bar_hint": "— mstari chini ya maandishi na breli unaoelezea breli ya neno ulilopo",
+      "simple_mode_hint": "— fungua Emboss kwenye kigeuzi rahisi. Kubadilisha kati ya Hali ya Haraka na kihariri hakubadilishi hili.",
       "covers_hint": "— majalada ya kichwa yaliyochapishwa vitabu vinapogawanywa"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Kichwa {n}",
       "cell_aria_named": "{header}, safu mlalo {row}",
       "cell_aria": "Safu wima {col}, safu mlalo {row}",
-      "too_wide_listed": "⚠ Pana mno kwa safu wima — litaandikwa kwa breli kama jedwali lililoorodheshwa",
+      "too_wide_listed": "Pana mno kwa safu wima — litaandikwa kwa breli kama jedwali lililoorodheshwa",
       "too_wide_listed_title": "Jedwali hili haliingii kwenye safu wima kwa idadi ya sasa ya viini kwa kila mstari na hali ya breli, hivyo litaandikwa kwa breli kama jedwali lililoorodheshwa (BANA Formats §11.9) badala ya safu wima zilizo karibu.",
-      "too_wide_paragraph": "⚠ Pana mno kwa safu wima — litaandikwa kwa breli katika fomu ya aya",
+      "too_wide_paragraph": "Pana mno kwa safu wima — litaandikwa kwa breli katika fomu ya aya",
       "too_wide_paragraph_title": "Jedwali hili haliingii kwenye safu wima kwa idadi ya sasa ya viini kwa kila mstari na hali ya breli, hivyo litaandikwa kwa breli katika fomu ya aya (UKAAF B004 §12) badala ya safu wima zilizo karibu."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Imeshindwa kupakia majedwali kwa \"{code}\" — bado inatumia msimbo wa breli uliopita.",
-      "failed": "⚠ Imeshindwa kutengeneza breli.",
+      "failed": "Imeshindwa kutengeneza breli.",
       "failed_hint": "(Ikiwa hii inasema injini haijaanzishwa, injini ya breli haikupakia — fanya upakiaji mgumu kwa Cmd/Ctrl+Shift+R.)",
       "error_status": "Hitilafu ya kuonyesha: {message}"
     },
     "engine": {
       "loading": "Inapakia injini ya breli…",
-      "failed": "⚠ Injini ya breli imeshindwa kupakia.",
+      "failed": "Injini ya breli imeshindwa kupakia.",
       "failed_hint": "Fanya upakiaji mgumu kwa Cmd/Ctrl+Shift+R. Ikiwa tatizo linaendelea, fungua kidhibiti cha kivinjari (Tazama ▸ Msanidi) na tuma hitilafu.",
       "failed_status": "Injini imeshindwa kupakia: {message}",
       "ready": "Tayari — andika au panga upande wa kushoto; breli inasasishwa moja kwa moja."
@@ -715,7 +718,7 @@
       "network_unreachable": "Imeshindwa kufikia {url}: {message}. Vivinjari haviwezi kufungua muunganisho halisi wa TCP (bandari 9100); mashine ya breli lazima ikubali HTTP POST, au pakua faili la .brf na ulitume kwa kidhibiti chako cha uchapishaji.",
       "usb_bridge_done": "Kazi ya kuchapisha imefikishwa kwa printa ya USB!",
       "needs_webserial": "Uchapishaji wa breli wa moja kwa moja wa serial unahitaji kivinjari chenye WebSerial (Chrome, Edge, Opera). Unaweza kupakua faili la .brf ili kuchapisha kwa kidhibiti chako cha uchapishaji, au tumia hali ya Mtandao (Bandari 9100) kwenye Mipangilio.",
-      "detected": "🔌 {name} imegunduliwa — imewekwa kwa {cells}×{lines} kwa kasi ya {baud} baud."
+      "detected": "{name} imegunduliwa — imewekwa kwa {cells}×{lines} kwa kasi ya {baud} baud."
     },
     "symbols": {
       "title": "Maktaba ya Alama Zinazoguswa",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matriki ya Mabadiliko",
       "badge_text_only": "Maandishi Pekee",
       "badge_index": "Matriki ya Vitone"
+    },
+    "offline": {
+      "ready": "Emboss iko tayari kufanya kazi bila intaneti.",
+      "ready_short": "Tayari kufanya kazi bila intaneti",
+      "not_yet": "Bado inajiandaa kufanya kazi bila intaneti…"
     }
   }
 }

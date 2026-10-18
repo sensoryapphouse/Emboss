@@ -18,7 +18,7 @@
         "kind": "poem",
         "level": null,
         "text": null,
-        "features": "One line shown twice: first as ordinary text with foot marks (vertical pipes) between words, then repeated with a foot mark placed UNSPACED inside a single word ('u|pon') to show a foot division occurring within a word.",
+        "features": "The single line is printed once, with foot marks (vertical pipes) between the feet and one pipe placed UNSPACED inside a single word (\"u|pon\"). The plain (unmarked) writing seen in the braille is the transcriber’s first writing, not print.",
         "stanzas": [
           {
             "lines": [
@@ -34,7 +34,7 @@
     ],
     "notes": "Picture on PDF p.363; the pipe between 'u' and 'pon' is printed with no surrounding space, unlike the other (spaced) pipes in the same line.",
     "surroundingText": null,
-    "printFeatures": "Boxed inline example; plain body-text serif font with vertical-pipe foot marks."
+    "printFeatures": "Boxed inline example; the print box shows one line only, in plain body-text serif font with vertical-pipe foot marks."
   },
   "braille": {
     "width": 40,
@@ -53,5 +53,13 @@
     "A",
     "B"
   ],
-  "resolution": "Same all-blank-row correction (index 1; .txt line 10540, 40 literal U+2800 characters after the 9-space box margin) -- run A's padding replaced with \"\". Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account."
+  "resolution": "Same all-blank-row correction (index 1; .txt line 10540, 40 literal U+2800 characters after the 9-space box margin) -- run A's padding replaced with \"\". Run A and run B independently transcribed this item's braille.lines identically, character-for-character; independently re-verified against the cited source .txt lines (U+2800 blank cells / ASCII-space converted, reference-line-number or box-margin field measured and stripped per this section's own convention) as part of this reconciliation. print.blocks content agreed in substance between both runs (only prose-wording differences in `features`/`notes`, not resolved as errors); run A's wording is kept. See compare-gold-13/differences.md for the file-by-file account. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].features and print.printFeatures",
+      "was": "\"One line shown twice: first as ordinary text with foot marks ..., then repeated ...\"",
+      "now": "One marked line, printed once; the plain first writing is braille-only",
+      "evidence": "PDF p.363 (references/bana/braille-formats-2016.pdf, rendered 110 dpi), Example 13-6 box: one print line \"All the | night sleep | came not u|pon my | eyelids\" above two braille writings. print.blocks text unchanged (already the marked line only)."
+    }
+  ]
 }

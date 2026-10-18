@@ -1,8 +1,8 @@
 // Finding F-4 — BANA Formats 2016 §11: a table's HEADING (its own title, §11.3.1a,
 // centred) vs its CAPTION (§11.2.8, an explanatory blurb, 7-5 margins, never centred);
 // where the heading sits relative to an enclosing box's top line (§11.3.1b/c/d); and the
-// related gutter-narrowing rule (F-10/Q-7, BANA 11.2.5b) that the gold §11 samples' own
-// worked braille exposed while proving this fix. Standard first: every rule used below is
+// related column gap (BANA 11.2.5b: two blank cells; the one-cell narrowing once read from the
+// gold §11 samples, F-10/Q-7, was withdrawn in K33 — a text-dump artefact). Standard first: every rule used below is
 // quoted from `Emboss/docs/standards-map.md`/`standards-findings.md`, both of which cite the
 // line numbers in `references/_text/braille-formats-2016.txt`.
 //
@@ -115,49 +115,42 @@ test('F-4: formatBlock and traceBlock agree for in-box and before-box headings',
   }
 });
 
-// --- Gutter (F-10/Q-7, BANA 11.2.5b) ---------------------------------------------------
+// --- Gutter (BANA 11.2.5b; K33) -------------------------------------------------------
 
-// Gold-verified, BANA Example 11-2: an entry that exactly fills its column's own width (no
-// guide-dot/space fill needed) narrows the following gutter to one cell; a short entry that
-// still needs fill keeps the nominal two.
-test('F-10/Q-7: the gutter narrows to one cell only where an entry exactly fills its column', () => {
+// BANA 11.2.5b: "Each column is separated from a following column by two blank cells" — on
+// every line. K33 (26 Sep 2026): these tests used to pin a gutter narrowed to one cell where
+// an entry or its guide dots filled the column (F-10/Q-7, read from Example 11-2 and Sample
+// 11-1); that reading came from a gold transcription taken from a text dump that had
+// collapsed two blank cells to one. The book's page images show two cells (Example 11-2
+// `"mosquito  #cj  "ds`, Sample 11-1 `,daily """""""""  #e4ci.0`); transcriber KD confirms.
+test('11.2.5b: two blank cells after an entry that exactly fills its column (K33)', () => {
   const block = { type: 'table', headers: ['Animal', 'X'], rows: [['mosquito', 'a'], ['gorilla', 'b']] };
   const lines = clean(formatBlock(block, opts(30)));
-  // "MOSQUITO" (8 cells) exactly fills column 1 (width 8, set by "MOSQUITO"/"ELEPHANT"-style
-  // entries) — one cell before column 2's "A".
-  assert.ok(lines.some((l) => l.startsWith('MOSQUITO A')), JSON.stringify(lines));
-  // "GORILLA" (7 cells) needs one fill cell to reach width 8 — plus the nominal two-cell
-  // gutter — three blank cells before column 2's "B", not one.
+  // "MOSQUITO" (8 cells) exactly fills column 1 — still two cells before column 2's "A".
+  assert.ok(lines.some((l) => l.startsWith('MOSQUITO  A')), JSON.stringify(lines));
+  // "GORILLA" (7 cells) pads one cell to the column's width, then the two-cell gap: "B" lines up under "A".
   assert.ok(lines.some((l) => l.startsWith('GORILLA   B')), JSON.stringify(lines));
 });
 
-// Gold-verified, BANA Sample 11-1: a guide-dot RUN that reaches the column's own edge
-// narrows the gutter the same way, even though tableCellFill's guide-dot branch still
-// returns a non-empty trailing fill (dots, not nothing) — the discriminator is "ends in a
-// plain space", not "no fill at all".
-test('F-10/Q-7: a guide-dot run reaching the column edge also narrows the gutter to one cell', () => {
-  // Column 1's width (12) is set by "SEMIANNUALLY", not "DAILY" — so "DAILY" needs a
-  // guide-dot run to reach the column's edge (as BANA Sample 11-1's own "daily"/"quarterly"/
-  // "semiannually"/"annually" column does, against "compounded" in the header).
+test('11.2.5b / 11.6.1f: two blank cells after a guide-dot run that reaches the column edge (K33)', () => {
+  // Column 1's width (12) is set by "SEMIANNUALLY", so "DAILY" is followed by a guide-dot run to the column's edge.
   const block = { type: 'table', headers: [], rows: [['Daily', '10'], ['Semiannually', '20']] };
   const lines = clean(formatBlock(block, opts(30)));
   const row = lines.find((l) => l.startsWith('DAILY'));
   assert.ok(row, JSON.stringify(lines));
-  const dotsThenNum = row.match(/"+ 1/);
+  const dotsThenNum = row.match(/"+ +1/);
   assert.ok(dotsThenNum, `expected a guide-dot run then the number: ${JSON.stringify(row)}`);
-  assert.equal(dotsThenNum[0].slice(-2), ' 1', `exactly one blank cell between the guide dots and the number: ${JSON.stringify(row)}`);
+  assert.equal(dotsThenNum[0].replace(/"+/, ''), '  1', `exactly two blank cells between the guide dots and the number: ${JSON.stringify(row)}`);
+  assert.equal(row.indexOf('#') < 0 ? row.indexOf('1') : row.indexOf('#'), lines.find((l) => l.startsWith('SEMIANNUALLY')).indexOf('2'), 'both rows start column 2 in the same cell');
 });
 
-// BANA §11.4.2b's separation line is a dot-run that, by construction, always exactly fills
-// its own column — so the gap between two separator runs is always the narrowed one cell,
-// never the nominal two (gold-verified, BANA Example 11-2).
-test('F-10/Q-7: the header separation line always uses a one-cell gap between columns', () => {
+test('11.4.2b / 11.2.5b: the separation line runs are two blank cells apart (K33)', () => {
   const block = { type: 'table', headers: ['Name', 'Age'], rows: [['Ann', '3'], ['Bob', '5']] };
   const lines = clean(formatBlock(block, opts(30)));
-  assert.ok(lines.some((l) => l === '"333 "33'), `expected a one-cell gap in the separator line: ${JSON.stringify(lines)}`);
+  assert.ok(lines.some((l) => l === '"333  "33'), `expected a two-cell gap in the separator line: ${JSON.stringify(lines)}`);
 });
 
-test('F-10/Q-7: formatBlock and traceBlock agree on the narrowed gutter', () => {
+test('11.2.5b: formatBlock and traceBlock agree on the two-cell gutter', () => {
   const block = { type: 'table', headers: ['Animal', 'X'], rows: [['mosquito', 'a'], ['gorilla', 'b']] };
   const formatted = clean(formatBlock(block, opts(30)));
   const traced = clean(traceBlock(block, opts(30), false, 0).map((t) => t.s));
@@ -295,27 +288,24 @@ test('11.4.3a: an overhanging primary heading stays unwrapped when the whole tab
     '',
     'OVERHANGING HEADING',
     '"333333333333333333',
-    'X Y                 Z',
-    '" "3                "3',
-    '1 22                ZZ',
+    'X  Y                 Z',   // K33: two cells between X and Y (11.2.5b), so the span is the 5 cells the plan counts
+    '"  "3                "3',
+    '1  22                ZZ',
     '',
   ], JSON.stringify(lines));
   // The separation line is exactly the heading's own (unwrapped) width, per 11.4.3a.
   assert.equal(lines[2].length, 'OVERHANGING HEADING'.length, JSON.stringify(lines));
   // The un-grouped column ("Z"/"ZZ") starts at the same cell on every row after the
   // group (sub-tier heading row and data row alike) — two cells after the overhang
-  // padding ends. (Column 0's own "X"/"1" happens to exactly fill its 1-cell width, so
-  // F-10/Q-7's pre-existing, unrelated gutter-narrowing rule narrows THAT one internal
-  // boundary to 1 cell rather than 2 — this is the same rule Example 11-2 already
-  // gold-verifies, not something Change 2 alters — so column Z lands one cell left of a
-  // naive "heading width + 2" count; what Change 2 actually guarantees is proved by the
-  // next two assertions: the overhang is never guide-dotted, and every row after the
-  // group lines up with every other row.)
+  // padding ends: "heading width + 2" (K33: every column gap is two cells, 11.2.5b, so the
+  // group's span is exactly the width the plan counts). The overhang is never guide-dotted,
+  // and every row after the group lines up with every other row.
   assert.equal(lines[3].indexOf('Z'), lines[5].indexOf('ZZ'), 'column Z lines up between the heading row and the data row');
+  assert.equal(lines[3].indexOf('Z'), 'OVERHANGING HEADING'.length + 2, 'column Z starts two cells after the overhanging heading (K33)');
   assert.ok(!/["]/.test(lines[3].slice(lines[3].indexOf('Y') + 1, lines[3].indexOf('Z'))), 'the overhang padding itself is plain blank, never guide-dotted (11.6.1g\'s reasoning)');
   // The sub-columns themselves are untouched: column 0 ("X"/"1") and column 1 ("Y"/"22")
   // keep their own natural widths (1 and 2), never widened for the heading's sake.
-  assert.ok(lines[3].startsWith('X Y'), JSON.stringify(lines));
+  assert.ok(lines[3].startsWith('X  Y'), JSON.stringify(lines));
 });
 
 test('11.4.3a: an overhanging primary heading wraps within its span when the overhang would not fit the page', () => {
@@ -331,9 +321,9 @@ test('11.4.3a: an overhanging primary heading wraps within its span when the ove
     'OVERHANGING',
     'HEADING',
     '"3333333333',
-    'X Y',
-    '" "3333333',
-    '1 22',
+    'X  Y',   // two cells between columns (11.2.5b, K33)
+    '"  "3333333',
+    '1  22',
     '',
   ], JSON.stringify(lines));
   // Wrapped within the span — never a single unwrapped 19-cell line at this width.

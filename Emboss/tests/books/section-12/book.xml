@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 12 Sidebars"/><meta name="dc:Identifier" content="stage4-12"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 12 Sidebars</doctitle></frontmatter><bodymatter><level1>
+<h1>Sidebars</h1>
+<p>The main text introduces the topic of volcanoes.</p>
+<sidebar><hd>Did You Know?</hd><p>Mount Everest is not the tallest mountain from base to peak.</p></sidebar>
+<p>Main text continues after the sidebar.</p>
+<sidebar><hd>Try This</hd><p>Mix baking soda and vinegar.</p><list type="pl"><li>Baking soda</li><li>Vinegar</li></list></sidebar>
+<sidebar><p>A sidebar with no heading.</p></sidebar>
+</level1></bodymatter></book></dtbook>

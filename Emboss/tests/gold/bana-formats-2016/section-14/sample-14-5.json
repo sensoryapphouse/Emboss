@@ -17,12 +17,12 @@
       { "kind": "speech", "speaker": "Peter:", "text": "Peter: What is that?" },
       { "kind": "speech", "speaker": "Nicky:", "text": "Nicky: The Delphis are coming." },
       { "kind": "note", "text": "Craig, Peter Together" },
-      { "kind": "speech", "speaker": "Craig", "text": "Craig Yes, the Delphis." },
-      { "kind": "speech", "speaker": "Peter", "text": "Peter Run, Run." },
+      { "kind": "speech", "speaker": "Craig", "text": "Craig  Yes, the Delphis." },
+      { "kind": "speech", "speaker": "Peter", "text": "Peter  Run, Run." },
       { "kind": "note", "text": "Solo" },
       { "kind": "speech", "speaker": "Nicky:", "text": "Nicky: We will all be killed." }
     ],
-    "notes": "Craig's and Peter's own speeches are grouped in print by a large right-pointing brace with the italicised word 'Together' beside it; the given braille encloses only 'Craig, Peter' in transcriber's-note indicators (the note 14.5.2a itself requires, identifying WHO is speaking simultaneously) and keeps print's own word 'Together' as ordinary, unenclosed text immediately after — not the idealised full-sentence note wording ('Martha and Peter together') rule 14.5.2a's own illustrative Sample: shows, since print already supplies a usable word here. Craig's and Peter's own speaker names carry NO colon (just a single space before the dialogue, matching their own full/lower-case print styling with no other distinguishing mark); Peter's EARLIER (non-grouped) line and both of Nicky's lines DO carry a colon.",
+    "notes": "Craig's and Peter's own speeches are grouped in print by a large right-pointing brace with the italicised word 'Together' beside it; the given braille encloses only 'Craig, Peter' in transcriber's-note indicators (the note 14.5.2a itself requires, identifying WHO is speaking simultaneously) and keeps print's own word 'Together' as ordinary, unenclosed text immediately after — not the idealised full-sentence note wording ('Martha and Peter together') rule 14.5.2a's own illustrative Sample: shows, since print already supplies a usable word here. Craig's and Peter's own speaker names carry NO colon: print sets each name, the brace, italic 'Together', and the dialogue in separate tab-stop columns (a much wider gap than a single space — see printCorrections), with no other distinguishing mark, so 14.5.1d/14.6.1e's own rule applies; the two literal spaces this file's print.blocks[].text now carries between name and dialogue stand in for that gap (the marker Emboss's K33 speakerGapSegments default reads to insert the required 2-cell braille gap — see corrections, below). Peter's EARLIER (non-grouped) line and both of Nicky's lines DO carry a colon.",
     "surroundingText": [],
     "printFeatures": "Ordinary dialogue lines interrupted by a braced pair of simultaneous speeches, marked off by two transcriber's notes (grouping-plus-'Together', then 'Solo' to resume normal dialogue)."
   },
@@ -32,8 +32,8 @@
       ",pet]3 ,:at is t8",
       ",nicky3 ,! ,delphis >e com+4",
       "      @.<,craig1 ,pet]@.> ,tgr",
-      ",craig ,yes1 ! ,delphis4",
-      ",pet] ,run1 ,run4",
+      ",craig  ,yes1 ! ,delphis4",
+      ",pet]  ,run1 ,run4",
       "      @.<,solo@.>",
       ",nicky3 ,we w all 2 kill$4"
     ],
@@ -45,5 +45,29 @@
     "A",
     "B"
   ],
-  "resolution": "A/B agreed on braille (byte-for-byte) and, in substance, on print.blocks (A's own note field already correctly identified line 3's own '<Craig, Peter>' + plain 'Together' split; B mistakenly described the given braille as adding a note 'not present in the print', when the given braille's own line 3 is exactly what both runs' own print.blocks already describe). illustrates.quote: A's own full rule text kept over B's bare title-repeat. Forward-translated through Emboss's translator ({type:'play'}/{type:'note'} blocks): every line matches exactly EXCEPT line 3, where Emboss's 'note' block (formatTranscriberNote) always encloses its ENTIRE text in transcriber's-note indicators with no way to leave part of it — print's own 'Together' — outside the enclosure (the same gap already documented for example-14-10, F-241) — EXPECTED MISMATCH on that one line, not a gold-file error (see differences.md)."
+  "resolution": "A/B agreed on braille (byte-for-byte) and, in substance, on print.blocks (A's own note field already correctly identified line 3's own '<Craig, Peter>' + plain 'Together' split; B mistakenly described the given braille as adding a note 'not present in the print', when the given braille's own line 3 is exactly what both runs' own print.blocks already describe). illustrates.quote: A's own full rule text kept over B's bare title-repeat. Forward-translated through Emboss's translator ({type:'play'}/{type:'note'} blocks): every line matches exactly EXCEPT line 3, where Emboss's 'note' block (formatTranscriberNote) always encloses its ENTIRE text in transcriber's-note indicators with no way to leave part of it — print's own 'Together' — outside the enclosure (the same gap already documented for example-14-10, F-241) — EXPECTED MISMATCH on that one line, not a gold-file error (see differences.md).",
+  "printCorrections": [
+    {
+      "field": "print.notes, print.blocks[3].text, print.blocks[4].text",
+      "was": "print.notes described Craig's/Peter's names as set off from their dialogue by \"just a single space\"; print.blocks[3].text was \"Craig Yes, the Delphis.\" and print.blocks[4].text was \"Peter Run, Run.\" (one literal space each).",
+      "now": "print.notes now describes the real layout; print.blocks[3].text is \"Craig  Yes, the Delphis.\" and print.blocks[4].text is \"Peter  Run, Run.\" (two literal spaces each).",
+      "evidence": "PDF p400 (printed 14-16) page image rendered from references/bana/braille-formats-2016.pdf (26 Sep 2026): Craig's and Peter's lines are NOT simple space-separated text — print sets the speaker name, a right-pointing brace, the italicised word 'Together', and the dialogue in separate tab-stop columns, so no literal print 'space count' exists at all, let alone one. Neither name carries a colon or other distinguishing punctuation, so BANA 14.5.1d/14.6.1e (insert two blank braille cells when print shows no other distinction between a speaker's name and the dialogue) applies regardless of the exact print mechanism. The two literal spaces recorded in print.blocks[].text are this corpus's own modelling convention for 'no distinguishing mark, needs the 2-cell gap' (the marker Emboss's K33 default, speakerGapSegments in document.mjs, reads to insert it) — not a transcription of print's own literal spacing, which is a column gap of its own separate width. Added for Task 3(b) (26 Sep 2026); does not change sample-14-5's already-recorded 'mismatch' status (first differing line is line 3, the unrelated F-241 transcriber's-note-enclosure gap)."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",craig ,yes1 ! ,delphis4",
+        ",pet] ,run1 ,run4"
+      ],
+      "after": [
+        ",craig  ,yes1 ! ,delphis4",
+        ",pet]  ,run1 ,run4"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 400 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (2). Where: speaker name gap (14.10.5a / 14.11 / 14.5.2) (2)."
+    }
+  ]
 }

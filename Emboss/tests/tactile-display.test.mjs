@@ -303,3 +303,111 @@ test('TactileDisplayManager: getDotPadActiveFrame formats 20x10 standalone when 
   assert.equal(frame.viewportLines[0].length, 20);
   assert.equal(typeof frame.brailleLine, 'string');
 });
+
+// --- A38: a stalled tactile display must not hang updateBraille() forever ---
+//
+// These use a fake HID connection (device.sendReport) with the profile left at the
+// default 'monarch' (non-DotPad) id, so TactileDisplayManager#renderCurrentViewport
+// takes the plain HID write path (one sendReport call per display line) rather than
+// the DotPad dual-zone / Bluetooth / Serial paths.
+
+test('TactileDisplayManager: a stalled hardware push times out instead of hanging updateBraille', { timeout: 5000 }, async () => {
+  const manager = new TactileDisplayManager();
+  assert.equal(manager.getDeviceProfile().id, 'monarch');
+  manager.pushTimeoutMs = 50;
+
+  const fakeDevice = {
+    opened: true,
+    sendReport: () => new Promise(() => {}) // never resolves — simulates a stalled display
+  };
+  manager.connection = { type: 'hid', name: 'Stalled Test Display', device: fakeDevice };
+
+  const errors = [];
+  manager.subscribe((event, data) => {
+    if (event === 'error') errors.push(data);
+  });
+
+  const start = Date.now();
+  await manager.updateBraille(['⠓⠑⠇⠇⠕']);
+  const elapsed = Date.now() - start;
+
+  assert.ok(elapsed < 2000, `updateBraille should return quickly once the push times out, took ${elapsed}ms`);
+  assert.equal(errors.length, 1, 'a timeout should be reported exactly once via notify("error", ...)');
+  assert.match(String(errors[0]?.message ?? errors[0]), /did not respond/i);
+});
+
+test('TactileDisplayManager: a second push while one is stuck does not start another write', { timeout: 5000 }, async () => {
+  const manager = new TactileDisplayManager();
+  manager.pushTimeoutMs = 50;
+
+  let sendReportCount = 0;
+  const fakeDevice = {
+    opened: true,
+    sendReport: () => {
+      sendReportCount++;
+      return new Promise(() => {}); // stuck forever
+    }
+  };
+  manager.connection = { type: 'hid', name: 'Stalled Test Display', device: fakeDevice };
+
+  await manager.updateBraille(['⠓⠑⠇⠇⠕']);
+  const countAfterFirst = sendReportCount;
+  assert.equal(countAfterFirst, 1, 'only the first packet write should have been attempted before it stalled');
+
+  await manager.updateBraille(['⠞⠑⠎⠞']); // a second push arrives while the first write is still in flight
+  assert.equal(sendReportCount, countAfterFirst, 'a second push must not start a new write while one is stuck');
+});
+
+test('TactileDisplayManager: when a stuck push finally resolves, the latest content is pushed once', { timeout: 5000 }, async () => {
+  const manager = new TactileDisplayManager();
+  manager.pushTimeoutMs = 50;
+
+  let resolveFirstSend;
+  const firstSendPromise = new Promise((resolve) => { resolveFirstSend = resolve; });
+  const sendReportCalls = [];
+  const fakeDevice = {
+    opened: true,
+    sendReport: (reportId, data) => {
+      sendReportCalls.push({ reportId, data: data.slice() });
+      return sendReportCalls.length === 1 ? firstSendPromise : Promise.resolve();
+    }
+  };
+  manager.connection = { type: 'hid', name: 'Test Display', device: fakeDevice };
+
+  await manager.updateBraille(['⠁⠁⠁⠁⠁']); // starts the stuck push; times out after 50ms and returns
+  assert.equal(sendReportCalls.length, 1);
+
+  await manager.updateBraille(['⠃⠃⠃⠃⠃']); // newer content arrives while the first push is still stuck
+  assert.equal(sendReportCalls.length, 1, 'still no new write while the first push is in flight');
+
+  const firstPushLineCount = manager.getDeviceProfile().lines;
+  resolveFirstSend(); // the stuck write finally settles
+
+  // Allow the completion of the first push and the follow-up (pending) push to run.
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  assert.equal(sendReportCalls.length, firstPushLineCount * 2,
+    'the stalled push should finish, then exactly one follow-up push for the latest content should run');
+
+  // The follow-up push's first packet must carry the newer content ('⠃' not '⠁').
+  const followUpFirstPacket = sendReportCalls[firstPushLineCount];
+  assert.equal(followUpFirstPacket.data[0], charToDotMask('⠃'));
+});
+
+test('TactileDisplayManager: a fast connection writes every line packet as before', async () => {
+  const manager = new TactileDisplayManager();
+
+  const sendReportCalls = [];
+  const fakeDevice = {
+    opened: true,
+    sendReport: (reportId, data) => {
+      sendReportCalls.push({ reportId, data: data.slice() });
+      return Promise.resolve();
+    }
+  };
+  manager.connection = { type: 'hid', name: 'Fast Test Display', device: fakeDevice };
+
+  await manager.updateBraille(['⠓⠑⠇⠇⠕']);
+  assert.equal(sendReportCalls.length, manager.getDeviceProfile().lines);
+  assert.equal(sendReportCalls[0].reportId, 1);
+});

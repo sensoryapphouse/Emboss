@@ -60,8 +60,8 @@
         "pelas"
       ]
     ],
-    "notes": "A note above the table states: \"This sample is technical foreign language French.\" (despite the vocabulary being Portuguese prepositions/articles — as printed, not corrected here).",
-    "surroundingText": "\"Note: This sample is technical foreign language French.\" appears above the table caption.",
+    "notes": "A note above the table states: \"This sample is technical foreign language Portuguese.\" (BANA Errata March 2024, C8: the book originally mislabeled the language as French; the vocabulary is Portuguese prepositions/articles).",
+    "surroundingText": "\"Note: This sample is technical foreign language Portuguese.\" appears above the table caption.",
     "printFeatures": "Bordered box, two-row column heading (\"article défini\" spanning masc./fém. sub-columns); header cells bold."
   },
   "braille": {
@@ -70,14 +70,14 @@
       "text",
       "",
       "7777777777777777777777777777777777777777",
-      "     article d=fini",
-      "     \"3333333333333333333333333333333",
-      "pr=p masc sg masc pl f=m sg f=m pl",
-      "\"333 \"333333 \"333333 \"33333 \"33333",
-      "a \"\" ao \"\"\"\" dos \"\"\" ( \"\"\"\" (s",
-      "de    do \"\"\"\" dos \"\"\" da \"\"\" das",
-      "em    no \"\"\"\" nos \"\"\" na \"\"\" nos",
-      "por   pelo \"\" pelos     pela    pelas",
+      "      article d=fini",
+      "      \"3333333333333333333333333333333",
+      "pr=p  masc sg  masc pl  f=m sg  f=m pl",
+      "\"333  \"333333  \"333333  \"33333  \"33333",
+      "a \"\"  ao \"\"\"\"  dos \"\"\"  ( \"\"\"\"  (s",
+      "de    do \"\"\"\"  dos \"\"\"  da \"\"\"  das",
+      "em    no \"\"\"\"  nos \"\"\"  na \"\"\"  nos",
+      "por   pelo \"\"  pelos    pela    pelas",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
     ],
@@ -85,11 +85,47 @@
     "notes": "Line 1 placeholder \"text\". Per rule 11.7.1.c/e/f, accent marks and periods on abbreviations are omitted without a transcriber's note: \"prép.\" becomes \"prep\" (no accent, no period), \"masc. sg.\" becomes \"masc sg\" (no periods), \"à\"/\"às\" appear without their accent grave, matching rule 11.7.1.e (punctuation may be omitted) applied silently."
   },
   "uncertain": [
-    "Whether the missing accent marks (e.g. in 'a', 'a') in the braille are because literary braille has no distinct accented-letter cells in this technical-French context, or because they were omitted per some other rule, was not resolved -- recorded as transcribed, not re-derived."
+    "Whether the missing accent marks (e.g. in 'a', 'a') in the braille are because literary braille has no distinct accented-letter cells in this technical-Portuguese context, or because they were omitted per some other rule, was not resolved -- recorded as transcribed, not re-derived."
   ],
   "sources": [
     "A",
     "B"
   ],
-  "resolution": "No content differences beyond header-schema normalization; both runs' 2-row header (prep./article defini spanning 4 sub-columns) matches the PDF image (p. 320)."
+  "resolution": "No content differences beyond header-schema normalization; both runs' 2-row header (prep./article defini spanning 4 sub-columns) matches the PDF image (p. 320).",
+  "corrections": [
+    {
+      "date": "2026-09-25",
+      "source": "BANA Errata March 2024",
+      "field": "print",
+      "before": "\"This sample is technical foreign language French.\"",
+      "after": "\"This sample is technical foreign language Portuguese.\"",
+      "note": "Errata (C8): Sample 11-13 is Portuguese, not French. Label/note text only; braille.lines is unchanged."
+    },
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "     article d=fini",
+        "     \"3333333333333333333333333333333",
+        "pr=p masc sg masc pl f=m sg f=m pl",
+        "\"333 \"333333 \"333333 \"33333 \"33333",
+        "a \"\" ao \"\"\"\" dos \"\"\" ( \"\"\"\" (s",
+        "de    do \"\"\"\" dos \"\"\" da \"\"\" das",
+        "em    no \"\"\"\" nos \"\"\" na \"\"\" nos",
+        "por   pelo \"\" pelos     pela    pelas"
+      ],
+      "after": [
+        "      article d=fini",
+        "      \"3333333333333333333333333333333",
+        "pr=p  masc sg  masc pl  f=m sg  f=m pl",
+        "\"333  \"333333  \"333333  \"33333  \"33333",
+        "a \"\"  ao \"\"\"\"  dos \"\"\"  ( \"\"\"\"  (s",
+        "de    do \"\"\"\"  dos \"\"\"  da \"\"\"  das",
+        "em    no \"\"\"\"  nos \"\"\"  na \"\"\"  nos",
+        "por   pelo \"\"  pelos    pela    pelas"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 3, 4, 5, 6, 7, 8, 9, 10 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 320 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (5); run misplaced (2); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap after guide dots (4); leading indentation / centring (2); column gap (table / related columns / columned list) (2); table separation line (1)."
+    }
+  ]
 }

@@ -60,10 +60,13 @@
     "toc": "INHOUD",
     "print": "Drukkasieweergawe (LHS)",
     "braille": "Braille",
+    "export": "Uitvoer",
+    "export_title": "Voer die braille uit (BRF, eBraille) of stuur dit na 'n embosser",
+    "emboss_menu": "Stuur na embosser",
     "braille_view": "Brailleweergawe",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Embosseer",
     "emboss_tooltip": "Stuur dokument na brailleembosser of -drukker",
     "clear_doc": "Wis dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Poëtieke stansa vers-lyn (1-3)",
     "exercise_title": "Oefenvraag",
     "exercise_desc": "Nommer oefenvraag (1-5 / 3-5)",
-    "caption_title": "Onderskrif/toewysing",
-    "caption_desc": "Figuur onderskrif of toewysing (7-5)",
     "footnote_title": "Voetnoot",
     "footnote_desc": "Voetnoot-teks (1-3)",
     "note_title": "Transkripsie-opmerking",
@@ -163,8 +164,6 @@
     "page_desc": "Voeg brondrukbladsyskuif-aanduider in",
     "printpage_title": "Drukbladsypersentasie",
     "printpage_desc": "Voeg brondrukbladsyskuif-aanduider in",
-    "code_title": "Rekenaarcode",
-    "code_desc": "Voeg kodeblok met UEB-aanduiders in",
     "indent_title": "Inspringing / Nes onderitem",
     "indent_desc": "Nes lysitem of oefening dieper (Tab)",
     "outdent_title": "Buite-inspringing / Bevorder item",
@@ -185,8 +184,8 @@
     "language_label": "Koppelvlaktaal",
     "language_help": "Kies die taal wat gebruik word vir knoppies, menu's, dialoogvensters en skermleser-aankondigings.",
     "standard_label": "Braillestandaard",
-    "standard_bana": "BANA (VSA & Kanada — 40×25 selle)",
-    "standard_ukaaf": "UKAAF (Verenigde Koninkryk & Internasionaal — 38×25 selle)",
+    "standard_bana": "BANA (VSA & Kanada — 38×25 selle)",
+    "standard_ukaaf": "UKAAF (Verenigde Koninkryk & Internasionaal — 38×27 selle)",
     "grade_label": "Samestelling vlak",
     "grade_1": "Graad 1 (Saamgesteld / Letter-vir-letter)",
     "grade_2": "Graad 2 (Saamgesteld)",
@@ -261,7 +260,7 @@
     "size_full": "Volle vel (lyn 1 anti-gesnee)",
     "lead_lines": "Taktiële leiline",
     "braille_labels": "Brailleetikette",
-    "footer_tip": "💡 Swart omlyne raak vaste taktiële grense; kleure word outomaties op duidelike taktiële teksture kaartgewys.",
+    "footer_tip": "Swart omlyne raak vaste taktiële grense; kleure word outomaties op duidelike taktiële teksture kaartgewys.",
     "open_repositories": "Maak taktiële opslagplekke oop:",
     "no_diagrams": "Geen ooreenstemmende diagramme gevind nie."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Losslose rontegaanstatus",
     "precedence_status": "Braille voorkeurs reëls status",
     "perfect_match": "100% ronde wedstryd (0 verskille)",
-    "badge_warn": "⚠ {count} om op te sien",
+    "badge_warn": "{count} om op te sien",
     "badge_title": "{count} woord verskille gevind tydens rontegaan terugtranslasie. Klik om na die eerste te spring.",
     "badge_clean": "Ronte wedstryd-kontrole: geen woord verskille gevind nie."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Jy het ongestoorde veranderinge. Is jy seker dat jy wil afgaan sonder stoor?",
     "unsaved_load": "Jy het ongestoorde veranderinge. As jy 'n nuwe lêer laai, vervang jy jou huidige dokument. Gaan voort?",
     "unsaved_clear": "Jy het ongestoorde veranderinge. Is jy seker dat jy die dokument wil wis?",
-    "drop_hint": "⬇ Sleep 'n dokument om dit in die redigeerder in te voer",
+    "drop_hint": "Sleep 'n dokument om dit in die redigeerder in te voer",
     "notice": "Kennisgeving",
     "close_notice": "Sluit kennisgeving"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Dokumentteks",
+      "math_keyboard_toggle": "Wiskunde-sleutelbord",
       "label": "Teks",
       "toolbar_aria": "Formatering",
       "style_label": "Paragraafstyl",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafieka kategorieë",
       "graphic_list": "Taktiële grafieka diagramme",
       "formula_search_label": "Soek formules",
-      "btactile_link": "BTactile (Gratis) ↗",
-      "tgil_link": "APH TGIL (1 800+ sjablone) ↗"
+      "btactile_link": "BTactile (Gratis)",
+      "tgil_link": "APH TGIL (1 800+ sjablone)"
     },
     "settings": {
       "list_spaced": "Lys met leë lyne (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Koppel direk aan pasgemaakte mikro-kontroleur embossers (ESP32-S3, RP2040/RP2350, STM32, Arduino) wat OS-drukkerdryfstofversperring omseil.",
       "graphics_hint": "Wanneer ongemerkt, word diagramme uitgevoer as toeganklike Transkripsieopmerkingbeskrywings vir lees-alleenembossers en braillevensters.",
       "tactile_heading": "Taktiële skermlewende stroom (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Koppel Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Koppel USB / HID (Monarch)",
+      "tactile_connect_ble": "Koppel Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Koppel USB / HID (Monarch)",
       "tactile_disconnect": "Ontkoppel skerm",
       "tactile_sim_monarch": "Toets Gesimuleerde Monarch (32×10)",
       "tactile_sim_dotpad": "Toets Gesimuleerde DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Stroom die lewende braille-oorsig en taktiële grafieka direk oor WebBluetooth (DotPad BLE UART) of WebHID (Monarch/USB) sonder eksterne dryfstowwe.",
       "perkins_hint": "— tik braille met SDF en JKL sleutels",
       "ascii_hint": "— wys rou ASCII braillekarakters",
+      "show_explanation_bar": "Wys die verduidelikingsbalk",
+      "show_explanation_bar_hint": "— die strook onder die teks en braille wat die braille vir die woord waarop jy is, verduidelik",
+      "simple_mode_hint": "— maak Emboss oop by die eenvoudige omskakelaar. Wisseling tussen Vinnige modus en die redigeerder verander dit nie.",
       "covers_hint": "— embossed titeltitelblaaie wanneer boeke verdeel word"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Kop {n}",
       "cell_aria_named": "{header}, ry {row}",
       "cell_aria": "Kolom {col}, ry {row}",
-      "too_wide_listed": "⚠ Te wyd vir kolomme — as geleiste tabel gebraileer",
+      "too_wide_listed": "Te wyd vir kolomme — as geleiste tabel gebraileer",
       "too_wide_listed_title": "Hierdie tabel pas nie in kolomme by die huidige selle-per-lyn en braillemodus nie, dus sal dit as 'n geleiste tabel gebraileer word (BANA Formats §11.9) in plaas van kolomme langs mekaar.",
-      "too_wide_paragraph": "⚠ Te wyd vir kolomme — in paragraafvorm gebraileer",
+      "too_wide_paragraph": "Te wyd vir kolomme — in paragraafvorm gebraileer",
       "too_wide_paragraph_title": "Hierdie tabel pas nie in kolomme by die huidige selle-per-lyn en braillemodus nie, dus sal dit in paragraafvorm gebraileer word (UKAAF B004 §12) in plaas van kolomme langs mekaar."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Kon nie die tabelle vir \"{code}\" laai nie — gebruik nog steeds die vorige braillekode.",
-      "failed": "⚠ Braille kon nie gegenereer word nie.",
+      "failed": "Braille kon nie gegenereer word nie.",
       "failed_hint": "(As dit sê die enjin is nie inisialiseer, laai die brailleenjin nie — hard-verfris met Cmd/Ctrl+Shift+R.)",
       "error_status": "Renderfout: {message}"
     },
     "engine": {
       "loading": "Laai brailleenjin…",
-      "failed": "⚠ Brailleenjin het gelaai aangewys.",
+      "failed": "Brailleenjin het gelaai aangewys.",
       "failed_hint": "Hard-verfris met Cmd/Ctrl+Shift+R. As dit aanhou, open die blaaier konsole (Aansig ▸ Ontwikkelaar) en stuur die foute.",
       "failed_status": "Enjin het gelaai aangewys: {message}",
       "ready": "Gereed — tik of formaat aan die linker kant; braille opdateer lewe."
@@ -715,7 +718,7 @@
       "network_unreachable": "Kon nie {url} bereik nie: {message}. Blaaiers kan nie rou TCP (poort 9100) verbindings oopmaak nie; die embosser moet HTTP POST aanvaar of die .brf aflaai en dit met u drukbestuurder versuur.",
       "usb_bridge_done": "Embosseer werk afgelewer na die USB drukker!",
       "needs_webserial": "Direkte seriële embossering benodig n blaaier met WebSerial (Chrome, Edge, Opera). U kan die .brf lêer aflaai om te embosseer met u drukbestuurder of Netwerk (Poort 9100) modus in Instellings te gebruik.",
-      "detected": "🔌 Bespeur {name} — gestel op {cells}×{lines} by {baud} baud."
+      "detected": "Bespeur {name} — gestel op {cells}×{lines} by {baud} baud."
     },
     "symbols": {
       "title": "Taktiële simboolbiblioteek",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamiese matriks",
       "badge_text_only": "Slegs teks",
       "badge_index": "Puntmatriks"
+    },
+    "offline": {
+      "ready": "Emboss is gereed om vanlyn te werk.",
+      "ready_short": "Gereed om vanlyn te werk",
+      "not_yet": "Besig om gereed te maak om vanlyn te werk…"
     }
   }
 }

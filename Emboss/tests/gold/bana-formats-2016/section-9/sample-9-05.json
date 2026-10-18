@@ -23,6 +23,7 @@
       },
       {
         "kind": "epigraph",
+        "blocked": true,
         "level": null,
         "text": "This story is told in full only by Ovid. There is nothing noteworthy in his treatment of it. The verse at the end is taken from the Alexandrian poet Moschus.",
         "features": "Entirely italicized in print. Per 9.3.1c ('do not treat epigraphs as displayed material') the epigraph is NOT given an adjusted/indented margin -- it is blocked at cell 1 in this excerpt, the same block-paragraph margin this book's own surrounding narrative uses; per 9.3.1e no italics markup is added despite the whole passage being italic in print."
@@ -60,5 +61,13 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6993-7005 after stripping the 5-character line-number field (the '(Return to Text)' line 7006 excluded). `illustrates.rule` narrowed to 9.3.1.c specifically (both runs quoted the whole of 9.3.1): the epigraph's own measured margin (cell 1, matching this book's ordinary block-paragraph style, NOT the cell-3 adjusted displayed-material margin used elsewhere in this section, e.g. the quote in Sample 9-1) is exactly what clause c's 'do not treat epigraphs as displayed material' means in practice, and is the one fact this sample settles unambiguously. Heading level 1 (centred) confirmed directly against the agreed braille's own centering-formula match for both the running-head line and the title line."
+  "printCorrections": [
+    {
+      "field": "print.blocks[2].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p242 (Sample 9-5): the italic epigraph starts flush left at the same margin as the page, with no first-line indent, while the body paragraph \"In Ortygia ...\" below it is indented."
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6993-7005 after stripping the 5-character line-number field (the '(Return to Text)' line 7006 excluded). `illustrates.rule` narrowed to 9.3.1.c specifically (both runs quoted the whole of 9.3.1): the epigraph's own measured margin (cell 1, matching this book's ordinary block-paragraph style, NOT the cell-3 adjusted displayed-material margin used elsewhere in this section, e.g. the quote in Sample 9-1) is exactly what clause c's 'do not treat epigraphs as displayed material' means in practice, and is the one fact this sample settles unambiguously. Heading level 1 (centred) confirmed directly against the agreed braille's own centering-formula match for both the running-head line and the title line. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

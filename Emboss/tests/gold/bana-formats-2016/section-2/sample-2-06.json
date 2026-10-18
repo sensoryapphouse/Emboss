@@ -1,0 +1,52 @@
+{
+  "id": "sample-2-06",
+  "title": "Sample 2-6: Title with Edition Number and Subtitle",
+  "pdfPages": [
+    29
+  ],
+  "textLines": [
+    2393,
+    2400
+  ],
+  "illustrates": {
+    "rule": "2.3.4h",
+    "quote": "h. The publisher’s name is included in the full title when it appears with the title of the book. Publishers have stated that the publisher’s name is a part of the title in this situation. Typically the publisher’s name included as part of the title is important, because the publisher is an imprint of a larger publishing company. For example, Prentice Hall is a Pearson Education subsidiary. While the book may be published by Pearson Education, the title is a Prentice Hall book and consequently Prentice Hall is part of the title. (See Sample 2-5: Title and Subtitle Including Publisher’s Name on page 2-28 and Sample 2-6: Title with Edition Number and Subtitle on page 2-29.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-073.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      ",we/]n ,civiliza;n2 ,,f\\r? ,,$i;n",
+      ",compreh5sive ,volume"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 4"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: A's quote was correctly scoped but had a stray mid-sentence page-footer line (a running head/page-number pair from the source's own page break) spliced into the middle or end of the text; removed here. B's own quote field was not used (it echoed the file's title, not the rule).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "pdf-glyphs",
+      "field": "braille.lines",
+      "reasonClass": "blank-line",
+      "before": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "after": [],
+      "note": "Gold regeneration from the PDF (Fable review recommendation 1): the K33 spacing audit (gold-spacing-audit/) never checked blank-line counts, since a text dump has no way to show a wholly blank line at all. This regenerates blank-line counts from the vertical gap between the book's own SimBraille text rows either side of the gap (gap in points divided by this box's own measured single-line pitch, rounded), which is unaffected by the earlier 2-cells-collapsed-to-1 text-dump bug. 1 delete. Evidence per gap: PDF p.73: this box's first matched line is itself margin line 1 -- 0 leading blank line(s); gold had 4"
+    }
+  ]
+}

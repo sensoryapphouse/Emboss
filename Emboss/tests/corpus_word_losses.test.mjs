@@ -28,7 +28,10 @@ test('a poem keeps its dateline, epigraph, images and captions', () => {
 test('an inline production note is separated from the text after it', () => {
   const d = parseDtbook(wrap('', '<p>Part A <code><prodnote>note</prodnote>This is code</code> Part B</p>'));
   assert.match(d.blocks[0].text, /note This is code/);
-  assert.ok(d.blocks[0].segments.some((g) => /note This/.test(g.text || '')), JSON.stringify(d.blocks[0]));
+  // F-S4-02: the note is an embedded-note segment, and the text after it starts after a space.
+  const segs = d.blocks[0].segments;
+  const i = segs.findIndex((g) => g.type === 'imgnote' && g.prodnote && g.text === 'note');
+  assert.ok(i >= 0 && /^ This is code/.test(segs.slice(i + 1).map((g) => g.text || '').join('')), JSON.stringify(d.blocks[0]));
 });
 
 test('every <thead> row is kept (the first as headers, the rest leading the body)', () => {

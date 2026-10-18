@@ -76,10 +76,10 @@
       "7777777777777777777777777777777777777777",
       "      ,9 ,millions ( ,doll>s",
       "      \"33333333333333333333333333333333",
-      "ye>   total    pay;ts   9ve/;t rema9d]",
+      "ye>   total    pay;ts   9ve/;t  rema9d]",
       "\"3333 \"3333333 \"3333333 \"333333 \"333333",
-      "#aiij #ace1cbe #gg1bfd #bg1ahe #cj1hgf",
-      "#aiia #aed1eai #ib1hfe #bh1bcg #cc1dag",
+      "#aiij #ace1cbe  #gg1bfd #bg1ahe #cj1hgf",
+      "#aiia #aed1eai  #ib1hfe #bh1bcg #cc1dag",
       "#aiib #agh1jfe #aab1ebb #bi1big #cf1bdg",
       "#aiic #aic1fab #abd1aee #ca1agj #ch1bhg",
       "gggggggggggggggggggggggggggggggggggggggg",
@@ -93,5 +93,23 @@
     "A",
     "B"
   ],
-  "resolution": "print.headers rebuilt with the same rowspan pattern as Sample 11-02: 'Year' appears once, in row 1 (matching the PDF image, p. 322, where it is one cell spanning both header rows); row 2 col 1 is blank. Run A's shape was correct; run B's repeated 'Year' was not."
+  "resolution": "print.headers rebuilt with the same rowspan pattern as Sample 11-02: 'Year' appears once, in row 1 (matching the PDF image, p. 322, where it is one cell spanning both header rows); row 2 col 1 is blank. Run A's shape was correct; run B's repeated 'Year' was not.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "ye>   total    pay;ts   9ve/;t rema9d]",
+        "#aiij #ace1cbe #gg1bfd #bg1ahe #cj1hgf",
+        "#aiia #aed1eai #ib1hfe #bh1bcg #cc1dag"
+      ],
+      "after": [
+        "ye>   total    pay;ts   9ve/;t  rema9d]",
+        "#aiij #ace1cbe  #gg1bfd #bg1ahe #cj1hgf",
+        "#aiia #aed1eai  #ib1hfe #bh1bcg #cc1dag"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 9, 11, 12 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 322 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (3). Where: column gap (table / related columns / columned list) (3)."
+    }
+  ]
 }

@@ -1,0 +1,21 @@
+Extreme-document test set: 1 unit(s), seed 20261002, 1 job(s), time scale 1
+node v26.5.1, 10 cpus, load 66.5 38.3 61.4, 32 GB RAM
+working folder: /scratch/ex-known
+[1/1] 08-hostile:nest-5000-html-table                      FAIL 0/1          30.1 s      - MB
+
+UNIT (case:format)               RESULT                  TIME s  PEAK MB    INPUT   BUDGET s/MB  WHY (first failure)
+-----------------------------------------------------------------------------------------------------------------------
+08-hostile:nest-5000-html-table  FAIL 0/1                  30.1        -   161 KB        30/800  timeout: the whole unit passed its 30 s budget during "parse" (item running: nest-5000-html-table)
+
+FAILURES (1 in 1 unit(s))
+
+* 08-hostile:nest-5000-html-table
+    timeout: the whole unit passed its 30 s budget during "parse" (item running: nest-5000-html-table)
+        (NOTE: depth 5000 is beyond what a browser builds (its HTML parser stops at about 512 levels, its XML parser at about 2,000); only the Node DOM makes a tree this deep, so this is not a failure a transcriber can meet today)
+        input: /scratch/ex-known/inputs/08-hostile_nest-5000-html-table/001-nest-5000-html-table.html
+    repeat: node Emboss/scripts/check-extreme-documents.mjs --filter "08-hostile:nest-5000-html-table" --out <dir>
+    one input alone: node Emboss/scripts/check-extreme-documents.mjs --file "/scratch/ex-known/inputs/08-hostile_nest-5000-html-table/001-nest-5000-html-table.html"
+
+0/1 units passed, 1 failed; 0 min 34 s
+inputs and logs kept in /scratch/ex-known
+exit 1

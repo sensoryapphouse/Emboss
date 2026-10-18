@@ -65,7 +65,7 @@
       "    is set = ,micros(t ,5gli% \"<,u4,s4\">",
       "    v#f4a ,recogniz]2 ,recogni;n",
       "    ,pr(iles3 .1,s&y is *eck$@.>     #,-",
-      "      @.<,note@.> ,text to spee*      a#d",
+      "      @.<,note@.> ,text to spee*     a#d",
       "    sett+s = comput]s ) ,w9d[s op]at+",
       "    sy/ems c 2 f.d 9 ! 3trol panel4",
       "      ,if y >e us+ ,w9d[s ,,xp1 444"
@@ -80,5 +80,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs' margins are 2 cells short of the raw source throughout this file (confirmed directly against source-6.txt lines 5309-5338, decoded the same way as every other file in this reconciliation); corrected here. Both runs already preserved this file's two embedded '444' ellipses correctly (they sit inside otherwise non-blank lines, so the session-wide all-digit-line blanking bug did not remove them here — see differences.md for the files it did affect). print.blocks were reorganised to include a {kind:'pagenum'} block for the mid-excerpt braille-page turn and {kind:'note'} blocks for the two speaker's notes (6.13.1d), which neither run modelled as notes at all (both used a plain, untruncated paragraph); this file is expected to be substantially not-representable regardless of these fixes, per F-171 (no semantic slide/speaker-note support at all in Emboss)."
+  "resolution": "Both runs' margins are 2 cells short of the raw source throughout this file (confirmed directly against source-6.txt lines 5309-5338, decoded the same way as every other file in this reconciliation); corrected here. Both runs already preserved this file's two embedded '444' ellipses correctly (they sit inside otherwise non-blank lines, so the session-wide all-digit-line blanking bug did not remove them here — see differences.md for the files it did affect). print.blocks were reorganised to include a {kind:'pagenum'} block for the mid-excerpt braille-page turn and {kind:'note'} blocks for the two speaker's notes (6.13.1d), which neither run modelled as notes at all (both used a plain, untruncated paragraph); this file is expected to be substantially not-representable regardless of these fixes, per F-171 (no semantic slide/speaker-note support at all in Emboss).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "      @.<,note@.> ,text to spee*      a#d"
+      ],
+      "after": [
+        "      @.<,note@.> ,text to spee*     a#d"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 25 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 183 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

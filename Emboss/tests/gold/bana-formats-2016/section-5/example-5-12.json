@@ -31,7 +31,7 @@
       {
         "kind": "heading",
         "level": 1,
-        "text": "a biography by Laura Hillenbrand",
+        "text": "Biography by Laura Hillenbrand",
         "features": "Centered, plain roman byline.",
         "items": null
       },
@@ -69,5 +69,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on braille byte-for-byte and on the substantive print facts. Heading level (1, centered) verified directly against the (40−len)//2 formula for all three centered lines (title indent 10/len 20; subtitle line1 indent 12/len 15; subtitle line2 indent 10/len 19; byline indent 5/len 30 — all match exactly)."
+  "resolution": "Both runs agree on braille byte-for-byte and on the substantive print facts. Heading level (1, centered) verified directly against the (40−len)//2 formula for all three centered lines (title indent 10/len 20; subtitle line1 indent 12/len 15; subtitle line2 indent 10/len 19; byline indent 5/len 30 — all match exactly). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.2.text",
+      "was": "a biography by Laura Hillenbrand",
+      "now": "Biography by Laura Hillenbrand",
+      "evidence": "Page image PDF p.134 (Example 5-12): centred byline reads 'Biography by Laura Hillenbrand', capital B, no leading 'a'."
+    }
+  ]
 }

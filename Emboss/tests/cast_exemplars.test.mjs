@@ -2,8 +2,8 @@
 // to be re-posted, so not in git): skipped when the folder is absent.
 //  - "All About Coyotes" (9781930583733): images, glossary, full package (OPF + PDF).
 //  - "NIMAS and MathML 3" (9780000000000).
-// Glossary entries braille as "term: definition" whether or not the parts carry segments
-// (BANA Formats Sample 21-1).
+// Glossary entries braille as "term  definition" (no invented colon: BANA 17.6.1b-c, 21.5.1c-d,
+// F-183/F-194) whether or not the parts carry segments.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -25,10 +25,10 @@ test('glossary entries braille alike with or without segments', () => {
   const segd = { type: 'list', kind: 'glossary', items: [{ term: 'anxious', def: 'Worried.', text: 'anxious — Worried.', termSegments: [{ type: 'text', text: 'anxious' }], defSegments: [{ type: 'text', text: 'Worried.' }], segments: [{ type: 'text', text: 'anxious — Worried.' }] }] };
   const a = formatBlock(plain, opts), b = formatBlock(segd, opts);
   assert.deepEqual(a, b);
-  assert.ok(a.includes('ANXIOUS: WORRIED.'), JSON.stringify(a));
+  assert.ok(/ANXIOUS +WORRIED\./.test(a.join(' ')) && !a.join(' ').includes('ANXIOUS:'), JSON.stringify(a));
   assert.deepEqual(traceBlock(segd, opts).map((t) => t.s), b);
   const bold = { type: 'list', kind: 'glossary', items: [{ term: 'anxious', def: 'Worried.', termSegments: [{ type: 'text', text: 'anxious', tf: 4 }], defSegments: [{ type: 'text', text: 'Worried.' }] }] };
-  assert.ok(formatBlock(bold, opts).some((l) => l.includes(': WORRIED.')));
+  assert.ok(formatBlock(bold, opts).some((l) => /WORRIED\./.test(l) && !l.includes(': WORRIED.')));
 });
 
 const books = [

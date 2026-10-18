@@ -24,34 +24,34 @@
         "text": "Write each word, adding ie or ei. If you are not sure about a spelling, check the dictionary."
       },
       {
-        "kind": "note",
-        "text": "Print uses a square to represent the omission of letters; in braille an underscore is used for the omissions."
-      },
-      {
         "kind": "list",
         "items": [
           {
-            "marker": "a.",
-            "text": "w_ght"
+            "marker": "1.",
+            "text": "w□ght"
           },
           {
-            "marker": "b.",
-            "text": "s_ge"
+            "marker": "2.",
+            "text": "s□ge"
           },
           {
-            "marker": "c.",
-            "text": "br_f"
+            "marker": "3.",
+            "text": "br□f"
           },
           {
-            "marker": "d.",
-            "text": "v_l"
+            "marker": "4.",
+            "text": "v□l"
           }
         ]
       }
     ],
-    "notes": "A cell-5 heading, activity directions, an embedded transcriber's note explaining the print-square-to-braille-underscore substitution (17.9.2a's own 'explain the substitution' clause), then a 4-item lettered list of words with a single omitted-letter blank each.",
+    "notes": "A cell-5 heading, activity directions, an embedded transcriber's note explaining the print-square-to-braille-underscore substitution (17.9.2a's own 'explain the substitution' clause), then a 4-item numbered list of words with a single omitted-letter blank each.",
     "surroundingText": [],
-    "printFeatures": "Italic heading and directions; a light shaded square marks each omission in print."
+    "printFeatures": "Italic heading and directions; a light shaded square marks each omission in print.",
+    "transcriberNote": "Print uses a square to represent the omission of letters, in braille an underscore is used for the omissions.",
+    "transcriberSupplied": [
+      "the transcriber's note explaining the print square and the braille underscore (17.9.2a), and the substitution of an underscore for each printed square"
+    ]
   },
   "braille": {
     "width": 40,
@@ -76,5 +76,31 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (normalised 'a.'/'a' spelling; both runs agreed on content, matches source). Modeled with a standalone 'note' block for the substitution explanation (block-level TN, 'done') and a lettered list whose items each carry one literal underscore standing for the blank-fill symbol."
+  "resolution": "Both runs (A, B) came from the same model (Gemini Pro via Antigravity, 17 Sep 2026) and are not independent; agreement was treated as no evidence. braille.lines independently re-extracted from references/_text/braille-formats-2016.txt (the line-number field, digits + >=3 spaces, or the fixed left margin measured in ASCII spaces before any U+2800 cell, stripped by counting; U+2800->space; trailing spaces removed). Braille and rule id unchanged (normalised 'a.'/'a' spelling; both runs agreed on content, matches source). Modeled with a standalone 'note' block for the substitution explanation (block-level TN, 'done') and a lettered list whose items each carry one literal underscore standing for the blank-fill symbol. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[3].items[*].marker",
+      "was": "a. b. c. d.",
+      "now": "1. 2. 3. 4.",
+      "evidence": "references/_gemini/_done/gold-17-A/page-488.png: the print list reads \"1. w[]ght  2. s[]ge  3. br[]f  4. v[]l\" (numerals). Braille lines 8-11 begin #A4 #B4 #C4 #D4."
+    },
+    {
+      "field": "print.blocks[2].text (transcriber note)",
+      "was": "...omission of letters; in braille an underscore...",
+      "now": "...omission of letters, in braille an underscore...",
+      "evidence": "references/_text/braille-formats-2016.txt line 14105 (braille line 6): \"lrs1 9 brl an\" - the punctuation cell after \"letters\" is 1 (comma), not 2 (semicolon); the note has a comma. (The note is the transcriber-supplied text in the braille, not print.)"
+    },
+    {
+      "field": "print.notes",
+      "was": "4-item lettered list",
+      "now": "4-item numbered list",
+      "evidence": "page-488.png"
+    },
+    {
+      "field": "print.blocks[2] (note block removed) and print.blocks[2].items[*].text",
+      "was": "a 'note' block \"Print uses a square to represent the omission of letters, in braille an underscore is used for the omissions.\" before the list; item texts with underscores (w_ght, s_ge, br_f, v_l)",
+      "now": "no note block (the note is in print.transcriberNote); item texts keep the printed square: w□ght, s□ge, br□f, v□l",
+      "evidence": "references/bana/braille-formats-2016.pdf p.488, rendered at 110 dpi: the print original shows the heading, the directions and the numbered list 1. w□ght 2. s□ge 3. br□f 4. v□l with a square glyph. The note and the underscores are braille-side (transcriber) content."
+    }
+  ]
 }

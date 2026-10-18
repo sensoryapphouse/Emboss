@@ -124,9 +124,9 @@ const TARGET_PATH = fs.existsSync(PRIMARY_PATH) ? PRIMARY_PATH : FALLBACK_PATH;
 if (fs.existsSync(TARGET_PATH)) {
   const rawXml = fs.readFileSync(TARGET_PATH, 'utf8');
   const tbDoc = parseDtbook(rawXml);
-  // Every <table> in the book, including those in sidebars (tables inside list items are
-  // split out of the list as their own blocks).
-  const allTables = (blocks, out = []) => { for (const b of blocks) { if (b.type === 'table') out.push(b); if (Array.isArray(b.blocks)) allTables(b.blocks, out); } return out; };
+  // Every <table> in the book, including those in sidebars and those inside list items (a table
+  // among an item's paragraphs is kept in item.blocks since 25 Sep, list_item_blocks.test.mjs).
+  const allTables = (blocks, out = []) => { for (const b of blocks) { if (b.type === 'table') out.push(b); if (Array.isArray(b.blocks)) allTables(b.blocks, out); for (const it of (Array.isArray(b.items) ? b.items : [])) if (it && Array.isArray(it.blocks)) allTables(it.blocks, out); } return out; };
   const SOURCE_TABLES = (rawXml.match(/<table\b/g) || []).length;
   const tbTables = allTables(tbDoc.blocks);
   check(`Extracted all production tables: found ${tbTables.length} tables`, tbTables.length === SOURCE_TABLES && SOURCE_TABLES === 164);

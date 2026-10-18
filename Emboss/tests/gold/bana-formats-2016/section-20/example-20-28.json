@@ -1,0 +1,57 @@
+{
+  "id": "example-20-28",
+  "title": "Example 20-28: Example Words Without Emphasis",
+  "pdfPages": [
+    10
+  ],
+  "textLines": [
+    15915,
+    15927
+  ],
+  "illustrates": {
+    "rule": "20.7.5c",
+    "quote": "c. Follow print for use of emphasis."
+  },
+  "print": {
+    "blocks": [
+      {
+        "kind": "heading",
+        "level": null,
+        "text": "Pronunciation Key",
+        "features": "Centered title, roman"
+      },
+      {
+        "kind": "table",
+        "level": null,
+        "text": "a\tback\tch\tnature\nah\tfather\te\tless\nay\tday\ti\tidea, life",
+        "features": "Two side-by-side key columns (symbol, example words), all roman, no emphasis"
+      }
+    ],
+    "notes": "Print original is the picture in the example box; transcribed from the page image (gold-20-A/page-548.png).",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "           ,pronuncia;n ,key",
+      "",
+      "a back",
+      "ah \"f",
+      "ay \"d",
+      "ch nature",
+      ";e less",
+      "i idea1 life"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 10. 4 blank source lines between the caption and the first braille line are the print-original picture area, not braille, and are excluded. Line 2 is a genuine blank braille line (all U+2800 cells in the source) and is kept."
+  },
+  "uncertain": [
+    "Cited rule: example words without emphasis, 20.7.5c."
+  ],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on every character; they differ only in that B also lists the 4 blank source lines after the caption as braille lines (leading '' entries). Those lines are the print-original picture area (page image shows the print text there), so they are excluded here; A's version is kept. illustrates: A recorded rule '20.x' and the file title as the quote (not the rule's wording); B's rule id was usable but its quote was sometimes a spliced page footer or a table-of-contents line. Rule and quote re-derived from the source text (example words without emphasis, 20.7.5c). print: B left blocks empty; A's blocks checked against the page image; corrected: A folded the title into the table text.. pdfPages: A empty; B's value agrees with the page derived from the source's page footers (printed page 20-N)."
+}

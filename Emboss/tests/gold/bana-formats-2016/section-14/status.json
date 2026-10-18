@@ -4,8 +4,8 @@
     "note": "match"
   },
   "BANA Example 14-10": {
-    "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,C>TOON@.> TITLE1 >TI/'S \\\"N1\" vs actual \"      @.<,C>TOON TITLE1 >TI/'S \\\"N1 DATE\"."
+    "status": "not-representable",
+    "note": "first differing line 1: expected \"      @.<,C>TOON@.> TITLE1 >TI/'S \\\"N1\" vs actual null. line count differs by -5 (expected 5, actual 0). Input-model limitation: the book shows no print original for this example (braille-only template); print.blocks was written from the braille, so it is not used as input and nothing is built."
   },
   "BANA Example 14-2": {
     "status": "match",
@@ -28,12 +28,12 @@
     "note": "match"
   },
   "BANA Example 14-7": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \",,SEBA/IAN3   ,D S4 ,TO EBB\" vs actual \",,SEBA/IAN3 ,D S4 ,TO EBB\"."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 14-8": {
-    "status": "mismatch",
-    "note": "first differing line 2: expected \"      ,EXEUNT ALL B ,,BRUTUS\" vs actual \"\". line count differs by +2 (expected 4, actual 6)."
+    "status": "match",
+    "note": "match"
   },
   "BANA Example 14-9": {
     "status": "match",
@@ -44,16 +44,16 @@
     "note": "match"
   },
   "BANA Sample 14-10": {
-    "status": "match",
-    "note": "match"
+    "status": "mismatch",
+    "note": "first differing line 2: expected \"  .1,JABEZ' H&S & .1,M>Y'S\\\">4 ,& :OM\" vs actual \"  .1,JABEZ' H&S & .1,M>Y'S.'\\\">4 ,& :OM\"."
   },
   "BANA Sample 14-11": {
     "status": "mismatch",
-    "note": "first differing line 1: expected \"      @.<,C>TOON@.>                  #,-\" vs actual \"      @.<,C>TOON@.>\"."
+    "note": "first differing line 1: expected \"      @.<,C>TOON@.>                  #,-\" vs actual \"  ,,,CTRL\\\"6ALT\\\"6DEL BY TIM BUCKLEY 8TOO\". line count differs by -9 (expected 24, actual 15)."
   },
   "BANA Sample 14-12": {
     "status": "mismatch",
-    "note": "first differing line 5: expected \",CAPTA9 ,JU/ICE @.</&+ AT ! ICE\" vs actual \",CAPTA9 ,JU/ICE \\\"</&+ AT ! ICE PRISON\\\">\". line count differs by -1 (expected 17, actual 16)."
+    "note": "first differing line 1: expected \"      @.<,FRAME #A@.>\" vs actual \",KUABORSK ,ICE ,PRISON #BIF NAUTICAL\". line count differs by -12 (expected 17, actual 5)."
   },
   "BANA 14.5.2a Sample": {
     "status": "no-braille",
@@ -97,6 +97,6 @@
   },
   "BANA Sample 14-9": {
     "status": "mismatch",
-    "note": "first differing line 5: expected \"  C\\\\NCEL4 ,COME1 MY COA*6 ,GD NI<T1\" vs actual \"  C\\\\NSEL4 ,COME1 MY COA*6 ,GD NI<T1\". line count differs by +1 (expected 16, actual 17)."
+    "note": "first differing line 5: expected \"  C\\\\NCEL4 ,COME1 MY COA*6 ,GD NI<T1\" vs actual \"  C\\\\NSEL4 ,COME1 MY COA*6 ,GD NI<T1\"."
   }
 }

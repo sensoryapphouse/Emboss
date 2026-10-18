@@ -24,26 +24,21 @@
       {
         "kind": "note",
         "level": null,
-        "text": "Shark'd up: Got together in haphazard fashion; resolutes: Desperadoes.\nfood and diet: No pay but their keep.",
+        "text": "**Shark’d up** Got together in haphazard fashion; **resolutes** Desperadoes.\n**food and diet** No pay but their keep.",
         "features": "Two bold-keyed glossary notes below a short rule; the first note bundles two of the three marked terms ('Shark'd up' and 'resolutes') together on one note line.",
         "items": null
       }
     ],
     "notes": [
       {
-        "ref": "°",
+        "ref": "",
         "placement": "footnote",
-        "text": "Shark'd up: Got together in haphazard fashion."
+        "text": "**Shark’d up** Got together in haphazard fashion; **resolutes** Desperadoes."
       },
       {
-        "ref": "°",
+        "ref": "",
         "placement": "footnote",
-        "text": "resolutes: Desperadoes."
-      },
-      {
-        "ref": "°",
-        "placement": "footnote",
-        "text": "food and diet: No pay but their keep."
+        "text": "**food and diet** No pay but their keep."
       }
     ],
     "surroundingText": "Cross-referenced from rule 16.7.1 (via Example 16-10), illustrating two separately marked reference points ('Shark'd up' and 'resolutes') falling on the very same unnumbered print line, each still treated as its own reference.",
@@ -74,5 +69,19 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.7.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988 and 12999 (field width 5, digits(13)+3) are each exactly 40 characters, the first right-justified to '#,-', the second a dashed page-change rule ending '#bii'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed."
+  "resolution": "illustrates.rule set to 16.7.1 per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: lines 12988 and 12999 (field width 5, digits(13)+3) are each exactly 40 characters, the first right-justified to '#,-', the second a dashed page-change rule ending '#bii'. braille.lines: the two runs agreed byte-for-byte; kept as transcribed. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.1.text",
+      "was": "Shark'd up: Got together in haphazard fashion; resolutes: Desperadoes.\nfood and diet: No pay but their keep.",
+      "now": "**Shark’d up** Got together in haphazard fashion; **resolutes** Desperadoes.\n**food and diet** No pay but their keep.",
+      "evidence": "Page image PDF p.449 (Sample 16-4): the two notes under the rule read \"Shark’d up Got together in haphazard fashion; resolutes Desperadoes.\" and \"food and diet No pay but their keep.\" -- headwords bold, NO colons, NO reference mark before either note; the first note bundles two of the three marked terms."
+    },
+    {
+      "field": "print.print.notes",
+      "was": "3 notes (ref °): \"Shark'd up: Got together in haphazard fashion.\" / \"resolutes: Desperadoes.\" / \"food and diet: No pay but their keep.\" (colons, split in three)",
+      "now": "2 notes: bundled \"**Shark’d up** Got ... **resolutes** Desperadoes.\" and \"**food and diet** No pay but their keep.\" (bold headwords, no colons, no printed mark)",
+      "evidence": "Page image PDF p.449 (Sample 16-4): the two notes under the rule read \"Shark’d up Got together in haphazard fashion; resolutes Desperadoes.\" and \"food and diet No pay but their keep.\" -- headwords bold, NO colons, NO reference mark before either note; the first note bundles two of the three marked terms. Marks in the passage (three hollow dots) are unchanged. Builder must learn: notes with no printed mark (16.5.1d) and a note serving two marks."
+    }
+  ]
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Audit HTML tables</title></head>
+<body>
+<h2>Table 1 thead tbody tfoot caption</h2>
+<table>
+<caption>Caption alphacaption1</caption>
+<thead><tr><th>alphaH1</th><th>alphaH2</th><th>alphaH3</th></tr></thead>
+<tbody><tr><td>a1</td><td>a2</td><td>a3</td></tr><tr><td>b1</td><td>b2</td><td>b3</td></tr></tbody>
+<tfoot><tr><td>alphafoot</td><td>total</td><td>9</td></tr></tfoot>
+</table>
+<h2>Table 2 colspan and rowspan</h2>
+<table>
+<thead><tr><th colspan="2">alphaSpanHead</th><th>alphaH3b</th></tr></thead>
+<tbody>
+<tr><td rowspan="2">alphaRowspan</td><td>d2</td><td>d3</td></tr>
+<tr><td>e2</td><td>e3</td></tr>
+<tr><td>f1</td><td colspan="2">alphaColspan</td></tr>
+</tbody>
+</table>
+<h2>Table 3 row headers (th in first column)</h2>
+<table>
+<tr><th>alphaCorner</th><th scope="col">Mon</th><th scope="col">Tue</th></tr>
+<tr><th scope="row">alphaRowHead</th><td>1</td><td>2</td></tr>
+<tr><th scope="row">Second</th><td>3</td><td>4</td></tr>
+</table>
+<h2>Table 4 empty cells and inline formatting</h2>
+<table>
+<tr><th>alphaE1</th><th>alphaE2</th></tr>
+<tr><td></td><td><b>alphabold</b> <i>alphaitalic</i> x<sup>2</sup> H<sub>2</sub>O</td></tr>
+<tr><td><a href="http://example.org/cell">alphacelllink</a></td><td></td></tr>
+</table>
+<h2>Table 5 nested table</h2>
+<table border="1"><tr><td>alphaOuter1</td><td><table border="1"><tr><td>alphaInner1</td><td>alphaInner2</td></tr></table></td></tr></table>
+<h2>Table 6 cell with lists and paragraphs</h2>
+<table border="1"><tr><th>alphaCL1</th><th>alphaCL2</th></tr><tr><td><ul><li>alphacellbullet1</li><li>alphacellbullet2</li></ul></td><td><p>alphacellp1</p><p>alphacellp2</p></td></tr></table>
+<h2>Table 7 no header at all</h2>
+<table><tr><td>alphaN11</td><td>alphaN12</td></tr><tr><td>alphaN21</td><td>alphaN22</td></tr></table>
+<h2>Table 8 numeric, aligned</h2>
+<table><thead><tr><th>Item</th><th style="text-align:right">alphaPrice</th></tr></thead><tbody><tr><td>Apple</td><td style="text-align:right">1.50</td></tr><tr><td>Pear</td><td style="text-align:right">10.25</td></tr></tbody></table>
+<h2>Table 9 layout table (single cell)</h2>
+<table><tr><td><p>alphalayout paragraph one</p><p>alphalayout paragraph two</p></td></tr></table>
+<h2>Table 10 multiple header rows</h2>
+<table><thead><tr><th colspan="2">alphaGroup</th></tr><tr><th>alphaSub1</th><th>alphaSub2</th></tr></thead><tbody><tr><td>x1</td><td>x2</td></tr></tbody></table>
+</body></html>

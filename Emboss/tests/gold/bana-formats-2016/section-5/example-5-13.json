@@ -17,7 +17,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "Sociologists refer to the trend as **feminization of poverty** (*The State of America's Children*, 1998).",
+        "text": "Sociologists refer to this trend as the **feminization of poverty** (*The State of America's Children,* 1998).",
         "features": "Plain sentence with two distinct retained attributes: the multi-word glossary term 'feminization of poverty' is bold, and the parenthetical book-title citation 'The State of America's Children' is italic; the year '1998' is plain.",
         "items": null
       }
@@ -41,5 +41,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on braille byte-for-byte (including line 1's genuine 2-cell runover indent, correctly preserved by both here) and on the substantive print facts."
+  "resolution": "Both runs agree on braille byte-for-byte (including line 1's genuine 2-cell runover indent, correctly preserved by both here) and on the substantive print facts. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.text",
+      "was": "Sociologists refer to the trend as **feminization of poverty** (*The State of America's Children*, 1998).",
+      "now": "Sociologists refer to this trend as the **feminization of poverty** (*The State of America's Children,* 1998).",
+      "evidence": "Page image references/bana/braille-formats-2016.pdf p.135 (Example 5-13): print reads 'refer to this trend as the feminization of poverty'; 'this' not 'the', 'the' plain before the bold words; the comma after 'Children' is inside the italics."
+    }
+  ]
 }

@@ -141,6 +141,7 @@ function buildModelFromEditor(editor) {
             const val = li.getValue ? li.getValue() : null;
             item.marker = `${val && val > 0 ? val : n}.`;
           }
+          else if (listType === 'bullet' && !isExercise) item.marker = '•';   // as the real editor does (planListMarkers): a typed bullet item saves with a bullet marker, so it is type="ul" not a plain list
           const page = li.getPage();
           if (page) item.page = page;
           else if (isPlain || listKind === 'toc') {

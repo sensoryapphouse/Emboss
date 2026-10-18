@@ -18,35 +18,21 @@
         "kind": "other",
         "level": null,
         "text": null,
-        "features": "Braille-only transcriber's note restating rule 5.8.1's own printed 'Sample:' text ('Each sentence is shown first without emphasis and then repeated with all indicators used'); has no counterpart inside Example 5-16's own print box.",
+        "features": "Transcriber's-note symbols key that opens the braille (braille-only; not in the print).",
         "items": null
       },
       {
         "kind": "paragraph",
         "level": null,
-        "text": "1. It is snowing outside. The street is wet.",
-        "features": "Plain restatement (no emphasis) of sentence 1, shown first per 5.8.1's technique.",
+        "text": "1. It {{td1: is}} <u>snowing</u> outside. The street {{td2: is}} wet.",
+        "features": "Numbered line; 'is' red, 'snowing' underlined, second 'is' blue (colours are transcriber-defined typeforms).",
         "items": null
       },
       {
         "kind": "paragraph",
         "level": null,
-        "text": "It {{td1: is}} <u>snowing</u> outside. The street {{td2: is}} wet.",
-        "features": "Sentence 1 repeated with all indicators: the first 'is' is colored (transcriber-defined symbol 1), 'snowing' is underlined, and the second 'is' is a second, distinct color (transcriber-defined symbol 2) — confirmed by the two different braille symbols used for the two occurrences, per 5.5.2's 'use indicators in order' convention, not the same color reused.",
-        "items": null
-      },
-      {
-        "kind": "paragraph",
-        "level": null,
-        "text": "2. I have bought new boots. They have woolly linings.",
-        "features": "Plain restatement (no emphasis) of sentence 2.",
-        "items": null
-      },
-      {
-        "kind": "paragraph",
-        "level": null,
-        "text": "I {{td1: have}} <u>bought</u> new boots. They {{td2: have}} woolly linings.",
-        "features": "Sentence 2 repeated with all indicators: the first 'have' takes transcriber-defined symbol 1 (same symbol as sentence 1's first occurrence), 'bought' is underlined, the second 'have' takes transcriber-defined symbol 2; 'woolly linings' is plain.",
+        "text": "2. I {{td1: have}} <u>bought</u> new boots. They {{td2: have}} woolly linings.",
+        "features": "Numbered line; 'have' red, 'bought' underlined, second 'have' blue.",
         "items": null
       }
     ],
@@ -78,5 +64,13 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on braille byte-for-byte once run B's leading-indentation-stripping bug is corrected (lines 5,6,8,9,10 in this file all lost their genuine 2-4 cell runover/list indent in run B). The 'two different symbols for the same-looking red word' puzzle A flagged as uncertain is resolved, not left open: per rule 5.5.2 ('use the first transcriber-defined symbol...then the second...'), two distinct symbols in the same sentence necessarily mark two distinct print attributes (i.e. two different colors, matching B's direct account), not the same color reused — A's own uncertain-framing is superseded by this rule-text inference; B's residual uncertainty about the exact hues (red/blue) stands, since neither run cross-checked against a printed color key."
+  "resolution": "Both runs agree on braille byte-for-byte once run B's leading-indentation-stripping bug is corrected (lines 5,6,8,9,10 in this file all lost their genuine 2-4 cell runover/list indent in run B). The 'two different symbols for the same-looking red word' puzzle A flagged as uncertain is resolved, not left open: per rule 5.5.2 ('use the first transcriber-defined symbol...then the second...'), two distinct symbols in the same sentence necessarily mark two distinct print attributes (i.e. two different colors, matching B's direct account), not the same color reused — A's own uncertain-framing is superseded by this rule-text inference; B's residual uncertainty about the exact hues (red/blue) stands, since neither run cross-checked against a printed color key. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "4 blocks: other, plus plain and emphasised paragraphs for each sentence pair, no numerals",
+      "now": "3 blocks: other, plus the two numbered emphasised lines '1. It is snowing outside. The street is wet.' and '2. I have bought new boots. They have woolly linings.'",
+      "evidence": "Page image PDF p.138 (Example 5-16): print shows only two numbered lines, '1. It is snowing outside. The street is wet.' and '2. I have bought new boots. They have woolly linings.', with red/blue coloured words and underlined 'snowing'/'bought'. The plain (unemphasised) repeats appear only in the braille (5.8.1 repeat technique), not in print."
+    }
+  ]
 }

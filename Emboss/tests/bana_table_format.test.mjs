@@ -46,18 +46,16 @@ const spatialOut = clean(formatDocument(spatialDoc, {
 }));
 
 const spatialLines = spatialOut.split('\n').filter(l => l.length > 0);
-// BANA §11.2.5b's nominal two-blank-cell gutter narrows to one wherever a column's content
-// on that line already reaches the column's full width with no fill needed after it (no room
-// for a guide-dot run) — gold-verified against the standard's own worked examples (BANA
-// Example 11-2/11-3; standards-findings.md F-10, standards-questions.md Q-7, Paul's decision
-// 17 Sep 2026 EMBOSS-TASKS.md T7). "NAME" (4 cells) exactly fills column 1 (width 4, set by
-// "NAME" itself) so the gutter before "AGE" narrows to one cell.
-check('Spatial table has header line with 1-cell gutter where the header exactly fills its column (F-10/Q-7)', spatialLines.some(l => l.includes('NAME AGE')));
+// BANA §11.2.5b: "Each column is separated from a following column by two blank cells" — on
+// every line, even where "NAME" (4 cells) exactly fills column 1. K33 (26 Sep 2026): this test
+// used to pin a one-cell gap there (F-10/Q-7, read from BANA Example 11-2); that reading came from
+// a gold transcription taken from a text dump that had collapsed two blank cells to one. The
+// book's page images show two cells, and transcriber KD confirms 11.2.5b.
+check('Spatial table has header line with the 2-cell gutter even where the header exactly fills its column (§11.2.5b, K33)', spatialLines.some(l => l.includes('NAME  AGE')));
 // BANA §11.4.2b: the separation line is dot 5 followed by dots 25 ("3333) across each column's
-// full width — a dot-run always exactly fills its own column, so by the same F-10/Q-7 rule the
-// gap between two separator runs is always the narrowed one cell, never two (gold-verified,
-// BANA Example 11-2: `"3333333 "33333333333333333`, one blank cell, not two).
-check('Spatial table has "333 separation line, one cell between columns (§11.4.2b, F-10/Q-7)', spatialLines.some(l => l === '"333 "33'), `lines: ${JSON.stringify(spatialLines)}`);
+// full width; the runs are two blank cells apart like the columns (K33 — Example 11-2's page image:
+// `"3333333  "33333333333333333`).
+check('Spatial table has "333 separation line, two cells between columns (§11.4.2b, §11.2.5b, K33)', spatialLines.some(l => l === '"333  "33'), `lines: ${JSON.stringify(spatialLines)}`);
 check('Spatial table has row 1 data', spatialLines.some(l => l.includes('ANN   3')));
 check('Spatial table has row 2 data', spatialLines.some(l => l.includes('BOB   5')));
 // Single-line rows should not have blank lines between them
@@ -240,10 +238,10 @@ const noHeadersOut = clean(formatDocument(noHeadersDoc, {
   standard: 'bana'
 }));
 
-// "Item A"/"Item B" (6 cells) exactly fill column 1 (width 6, set by their own length), so
-// the gutter before the number column narrows to one cell (F-10/Q-7, as above).
-check('Table without headers formats in spatial columns without errors', noHeadersOut.includes('ITEM A 100'));
-check('Second row of headerless table formats cleanly', noHeadersOut.includes('ITEM B 200'));
+// "Item A"/"Item B" (6 cells) exactly fill column 1; the gap before the number column is still
+// two cells (§11.2.5b; K33 — the one-cell gap this test used to pin is withdrawn, as above).
+check('Table without headers formats in spatial columns without errors', noHeadersOut.includes('ITEM A  100'));
+check('Second row of headerless table formats cleanly', noHeadersOut.includes('ITEM B  200'));
 
 console.log(`\nTable formatting tests complete: ${pass} passed, ${fail} failed.`);
 process.exit(fail ? 1 : 0);

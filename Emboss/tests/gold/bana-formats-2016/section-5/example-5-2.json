@@ -20,9 +20,9 @@
         "text": null,
         "features": "Three short word-part fragments stacked one per line in a bordered box: 'dis-' bold, 'ible' italic, '-ance' bold.",
         "items": [
-          "**dis-**",
+          "**dis**-",
           "*ible*",
-          "**-ance**"
+          "**-**ance"
         ]
       }
     ],
@@ -45,5 +45,19 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on the braille (independently pixel-verified by run A against PDF p.129) and on the underlying print facts (three word-parts, differing weights); only prose wording differed, synthesized here."
+  "resolution": "Both runs agree on the braille (independently pixel-verified by run A against PDF p.129) and on the underlying print facts (three word-parts, differing weights); only prose wording differed, synthesized here. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.items.0",
+      "was": "**dis-**",
+      "now": "**dis**-",
+      "evidence": "Page image PDF p.129 (Example 5-2), zoomed at 300 dpi: in 'dis-' only the letters 'dis' are bold; the trailing hyphen is plain weight."
+    },
+    {
+      "field": "print.print.blocks.0.items.2",
+      "was": "**-ance**",
+      "now": "**-**ance",
+      "evidence": "Same zoomed image: in '-ance' only the leading hyphen is bold; 'ance' is plain weight."
+    }
+  ]
 }

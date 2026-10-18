@@ -60,10 +60,13 @@
     "toc": "Obsah",
     "print": "Tlačový náhľad (ľavá strana)",
     "braille": "Braillov písmo",
+    "export": "Exportovať",
+    "export_title": "Exportovať Braillovo písmo (BRF, eBraille) alebo odoslať do reliéfnej tlačiarne",
+    "emboss_menu": "Odoslať do reliéfnej tlačiarne",
     "braille_view": "Náhľad Braillova písma",
     "download_brf": "Braillov písmo (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Tlačať reliéf",
     "emboss_tooltip": "Odoslať dokument do reliéfnej tlačiarne alebo tlačiarne",
     "clear_doc": "Vymazať dokument",
@@ -133,8 +136,6 @@
     "poem_desc": "Riadok verša poetickej slohy (1-3)",
     "exercise_title": "Otázka cvičenia",
     "exercise_desc": "Čísovaná otázka cvičenia (1-5 / 3-5)",
-    "caption_title": "Titulok / priradenie",
-    "caption_desc": "Titulok obrázku alebo priradenie (7-5)",
     "footnote_title": "Poznámka pod čiarou",
     "footnote_desc": "Text poznámky pod čiarou (1-3)",
     "note_title": "Poznámka prepisovateľa",
@@ -163,8 +164,6 @@
     "page_desc": "Vložiť ukazovateľ zalomenia zdrojovej stránky",
     "printpage_title": "Číslo tlačovej stránky",
     "printpage_desc": "Vložiť ukazovateľ zalomenia zdrojovej stránky",
-    "code_title": "Počítačový kód",
-    "code_desc": "Vložiť blok kódu s ukazovateľmi UEB",
     "indent_title": "Odsadiť / Vnoriť podpoložku",
     "indent_desc": "Vnoriť položku zoznamu alebo cvičenie hlbšie (Tab)",
     "outdent_title": "Zrušiť odsadenie / Povýšiť položku",
@@ -185,8 +184,8 @@
     "language_label": "Jazyk rozhrania",
     "language_help": "Vyberte si jazyk používaný pre tlačidlá, ponuky, dialógy a oznámenia čítačky obrazovky.",
     "standard_label": "Brailov štandard",
-    "standard_bana": "BANA (USA a Kanada — 40×25 buniek)",
-    "standard_ukaaf": "UKAAF (Spojené kráľovstvo a Medzinárodný — 38×25 buniek)",
+    "standard_bana": "BANA (USA a Kanada — 38×25 buniek)",
+    "standard_ukaaf": "UKAAF (Spojené kráľovstvo a Medzinárodný — 38×27 buniek)",
     "grade_label": "Úroveň skracovania",
     "grade_1": "Stupeň 1 (neskratovaný / písmeno-za-písmenom)",
     "grade_2": "Stupeň 2 (skratovaný)",
@@ -261,7 +260,7 @@
     "size_full": "Celý hárok (riadok 1 bez rezania)",
     "lead_lines": "Hmatové vedúce riadky",
     "braille_labels": "Braillove štítky",
-    "footer_tip": "💡 Čierne obrysy sa stanú pevnými hmatovými hranicami; farby sa automaticky mapujú na odlišné hmatové textúry.",
+    "footer_tip": "Čierne obrysy sa stanú pevnými hmatovými hranicami; farby sa automaticky mapujú na odlišné hmatové textúry.",
     "open_repositories": "Otvorené hmatové úložiská:",
     "no_diagrams": "Nenašli sa žiadne zodpovedajúce diagramy."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Stav spiatočnej cesty bez straty",
     "precedence_status": "Stav pravidiel priority Braille",
     "perfect_match": "100% spätočné zhody (0 nesúladov)",
-    "badge_warn": "⚠ {count} na kontrolu",
+    "badge_warn": "{count} na kontrolu",
     "badge_title": "{count} nesúlady slova nájdené počas spiatočnej cesty. Kliknite, aby ste preskočili na prvú.",
     "badge_clean": "Kontrola spiatočnej cesty: nešli nájdené žiadne nesúlady slov."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Máte neuložené zmeny. Ste si istí, že chcete skončiť bez uloženia?",
     "unsaved_load": "Máte neuložené zmeny. Načítanie nového súboru nahradí váš aktuálny dokument. Pokračovať?",
     "unsaved_clear": "Máte neuložené zmeny. Ste si istí, že chcete vymazať dokument?",
-    "drop_hint": "⬇ Presuňte dokument, aby ste ho importovali do editora",
+    "drop_hint": "Presuňte dokument, aby ste ho importovali do editora",
     "notice": "Oznámenie",
     "close_notice": "Zatvoriť oznámenie"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Text dokumentu",
+      "math_keyboard_toggle": "Matematická klávesnica",
       "label": "Text",
       "toolbar_aria": "Formátovanie",
       "style_label": "Štýl odseku",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategórie grafiky",
       "graphic_list": "Diagramy hmatovej grafiky",
       "formula_search_label": "Hľadať vzorce",
-      "btactile_link": "BTactile (zadarmo) ↗",
-      "tgil_link": "APH TGIL (vyše 1 800 šablón) ↗"
+      "btactile_link": "BTactile (zadarmo)",
+      "tgil_link": "APH TGIL (vyše 1 800 šablón)"
     },
     "settings": {
       "list_spaced": "Zoznam s prázdnym riadkom (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Priame pripojenie k reliéfnym tlačiarňam s vlastným mikrokontrolérom (ESP32-S3, RP2040/RP2350, STM32, Arduino) obchádzajúce blokovanie ovládačov tlačiarne v OS.",
       "graphics_hint": "Ak nie je zaškrtnuté, diagramy sa exportujú ako prístupné popisy typu Poznámka prepisovateľa pre reliéfne tlačiarne a Braillove displeje len s textom.",
       "tactile_heading": "Živé vysielanie hmatového displeja (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Pripojiť Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Pripojiť USB / HID (Monarch)",
+      "tactile_connect_ble": "Pripojiť Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Pripojiť USB / HID (Monarch)",
       "tactile_disconnect": "Odpojiť displej",
       "tactile_sim_monarch": "Otestovať simulovaný Monarch (32×10)",
       "tactile_sim_dotpad": "Otestovať simulovaný DotPad (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Vysiela živé okno Braillovho písma a hmatovú grafiku priamo cez WebBluetooth (DotPad BLE UART) alebo WebHID (Monarch/USB) bez externých ovládačov.",
       "perkins_hint": "— píšte Braillovo písmo klávesmi SDF a JKL",
       "ascii_hint": "— zobraziť surové znaky ASCII Braillovho písma",
+      "show_explanation_bar": "Zobraziť panel s vysvetlením",
+      "show_explanation_bar_hint": "— pruh pod textom a Braillovým písmom, ktorý vysvetľuje Braillovo písmo pre slovo, na ktorom sa nachádzate",
+      "simple_mode_hint": "— otvoriť Emboss v jednoduchom konvertore. Prepínanie medzi Rýchlym režimom a editorom to nemení.",
       "covers_hint": "— reliéfne titulné strany pri delení kníh"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Hlavička {n}",
       "cell_aria_named": "{header}, riadok {row}",
       "cell_aria": "Stĺpec {col}, riadok {row}",
-      "too_wide_listed": "⚠ Príliš široká pre stĺpce — bude vytlačená v Braillovom písme ako zoznamová tabuľka",
+      "too_wide_listed": "Príliš široká pre stĺpce — bude vytlačená v Braillovom písme ako zoznamová tabuľka",
       "too_wide_listed_title": "Táto tabuľka sa nezmestí do stĺpcov pri aktuálnom počte buniek na riadok a režime Braillovho písma, preto bude vytlačená v Braillovom písme ako zoznamová tabuľka (BANA Formats §11.9) namiesto stĺpcov vedľa seba.",
-      "too_wide_paragraph": "⚠ Príliš široká pre stĺpce — bude vytlačená v Braillovom písme vo forme odsekov",
+      "too_wide_paragraph": "Príliš široká pre stĺpce — bude vytlačená v Braillovom písme vo forme odsekov",
       "too_wide_paragraph_title": "Táto tabuľka sa nezmestí do stĺpcov pri aktuálnom počte buniek na riadok a režime Braillovho písma, preto bude vytlačená v Braillovom písme vo forme odsekov (UKAAF B004 §12) namiesto stĺpcov vedľa seba."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Nepodarilo sa načítať tabuľky pre „{code}“ — naďalej sa používa predchádzajúci kód Braillovho písma.",
-      "failed": "⚠ Braillovo písmo sa nepodarilo vygenerovať.",
+      "failed": "Braillovo písmo sa nepodarilo vygenerovať.",
       "failed_hint": "(Ak sa zobrazuje, že mechanizmus nie je inicializovaný, mechanizmus Braillovho písma sa nenačítal — vynútene obnovte pomocou Cmd/Ctrl+Shift+R.)",
       "error_status": "Chyba vykresľovania: {message}"
     },
     "engine": {
       "loading": "Načítava sa mechanizmus Braillovho písma…",
-      "failed": "⚠ Mechanizmus Braillovho písma sa nepodarilo načítať.",
+      "failed": "Mechanizmus Braillovho písma sa nepodarilo načítať.",
       "failed_hint": "Vynútene obnovte pomocou Cmd/Ctrl+Shift+R. Ak problém pretrváva, otvorte konzolu prehliadača (Zobraziť ▸ Vývojár) a odošlite chyby.",
       "failed_status": "Mechanizmus sa nepodarilo načítať: {message}",
       "ready": "Pripravené — píšte alebo formátujte vľavo; Braillovo písmo sa aktualizuje priebežne."
@@ -715,7 +718,7 @@
       "network_unreachable": "Nepodarilo sa dosiahnuť {url}: {message}. Prehliadače nemôžu otvárať priame pripojenia TCP (port 9100); reliéfna tlačiareň musí prijímať HTTP POST, alebo stiahnite súbor .brf a odošlite ho pomocou svojho správcu tlače.",
       "usb_bridge_done": "Reliéfna tlačová úloha doručená do tlačiarne USB!",
       "needs_webserial": "Priama sériová reliéfna tlač vyžaduje prehliadač s WebSerial (Chrome, Edge, Opera). Súbor .brf môžete stiahnuť a vytlačiť pomocou svojho správcu tlače, alebo v Nastaveniach použite režim Sieť (port 9100).",
-      "detected": "🔌 Zistené {name} — nastavené na {cells}×{lines} pri {baud} baudoch."
+      "detected": "Zistené {name} — nastavené na {cells}×{lines} pri {baud} baudoch."
     },
     "symbols": {
       "title": "Knižnica hmatových symbolov",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dynamická matica",
       "badge_text_only": "Len text",
       "badge_index": "Bodová matica"
+    },
+    "offline": {
+      "ready": "Emboss je pripravený na prácu offline.",
+      "ready_short": "Pripravené na prácu offline",
+      "not_yet": "Stále sa pripravuje na prácu offline…"
     }
   }
 }

@@ -1,0 +1,58 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 7,
+ "engine": "webkit",
+ "kind": "editor",
+ "doc": "gen:1763563818-s7",
+ "docSource": "generated",
+ "docFeatures": [
+  "break",
+  "display-math",
+  "h1",
+  "h5",
+  "h6",
+  "link",
+  "picture-alt",
+  "picture-noalt",
+  "poem",
+  "script:emoji",
+  "sidebar",
+  "table"
+ ],
+ "docs": {
+  "gen:1763563818-s7": "docs/00-gen-1763563818-s7.xml",
+  "tests/real_samples/odt/model-services-contract-core-terms.odt": "docs/01-model-services-contract-core-terms.odt"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 800,
+  "height": 800
+ },
+ "invariant": "caret-in-card",
+ "key": "caret-in-card",
+ "message": "a collapsed caret sits inside a card that cannot be typed in (figure.doc-image-block) and no card is selected",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 26,
+ "originalActions": 25,
+ "actions": [
+  {
+   "t": "load",
+   "doc": "tests/real_samples/odt/model-services-contract-core-terms.odt"
+  },
+  {
+   "t": "clickText",
+   "fx": 0.6955,
+   "fy": 0.9342,
+   "n": 1
+  }
+ ]
+}

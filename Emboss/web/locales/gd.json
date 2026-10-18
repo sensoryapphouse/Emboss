@@ -60,10 +60,13 @@
     "toc": "Clàr-innse",
     "print": "Sealladh Clò-bhualaidh (Taobh Clì)",
     "braille": "Braille",
+    "export": "Às-phortaich",
+    "export_title": "Às-phortaich am Braille (BRF, eBraille) no cuir gu clò-bhualadair Braille e",
+    "emboss_menu": "Cuir gu clò-bhualadair Braille",
     "braille_view": "Sealladh Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Clò-bhuail",
     "emboss_tooltip": "Cuir an sgrìobhainn dhan chlò-bhualadair Braille no dhan chlò-bhualadair àbhaisteach",
     "clear_doc": "Falamhaich an Sgrìobhainn",
@@ -133,8 +136,6 @@
     "poem_desc": "Loidhne rainn bàrdachd (1-3)",
     "exercise_title": "Ceist Eacarsaich",
     "exercise_desc": "Ceist eacarsaich àireamhaichte (1-5 / 3-5)",
-    "caption_title": "Fo-thiotal / Iomradh",
-    "caption_desc": "Fo-thiotal deilbh no iomradh (7-5)",
     "footnote_title": "Nota-coise",
     "footnote_desc": "Teacsa nota-coise (1-3)",
     "note_title": "Nota an Neach-tar-sgrìobhaidh",
@@ -163,8 +164,6 @@
     "page_desc": "Cuir a-steach comharra briseadh duilleige an tùs clò-bhuailte",
     "printpage_title": "Àireamh Duilleige a’ Chlò",
     "printpage_desc": "Cuir a-steach comharra briseadh duilleige an tùs clò-bhuailte",
-    "code_title": "Còd Coimpiutair",
-    "code_desc": "Cuir a-steach bloca còd le comharran UEB",
     "indent_title": "Cuir Eag Ann / Neadaich Fo-nì",
     "indent_desc": "Neadaich nì liosta no ceist eacarsaich nas doimhne (Tab)",
     "outdent_title": "Thoir Eag Air Falbh / Àrdaich Nì",
@@ -185,8 +184,8 @@
     "language_label": "Cànan na h-Eadar-aghaidh",
     "language_help": "Tagh an cànan a thathar a’ cleachdadh airson putanan, clàran-taice, còmhraidhean, agus brathan leughadair-sgrìn.",
     "standard_label": "Inbhe Braille",
-    "standard_bana": "BANA (SAA is Canada — 40×25 ceallan)",
-    "standard_ukaaf": "UKAAF (An Rìoghachd Aonaichte is Eadar-nàiseanta — 38×25 ceallan)",
+    "standard_bana": "BANA (SAA is Canada — 38×25 ceallan)",
+    "standard_ukaaf": "UKAAF (An Rìoghachd Aonaichte is Eadar-nàiseanta — 38×27 ceallan)",
     "grade_label": "Ìre Giorrachaidh",
     "grade_1": "Ìre 1 (Gun ghiorrachadh / litir air litir)",
     "grade_2": "Ìre 2 (Giorraichte)",
@@ -261,7 +260,7 @@
     "size_full": "Duilleag Shlàn (Loidhne 1 Anti-shlisichte)",
     "lead_lines": "Loidhnichean Iùil Tactile",
     "braille_labels": "Leubailean Braille",
-    "footer_tip": "💡 Bidh oir-loidhnichean dubha nan iomallan tactile teann; bidh dathan a’ mapadh gu fèin-obrachail gu innreachdan tactile eadar-dhealaichte.",
+    "footer_tip": "Bidh oir-loidhnichean dubha nan iomallan tactile teann; bidh dathan a’ mapadh gu fèin-obrachail gu innreachdan tactile eadar-dhealaichte.",
     "open_repositories": "Ionadan-tasgaidh Tactile Fosgailte:",
     "no_diagrams": "Cha deach diagram a fhreagras a lorg."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Staid Ais-eadar-theangachadh Gun Chall",
     "precedence_status": "Staid nan Riaghailtean Tùs-àite Braille",
     "perfect_match": "100% Co-fhreagairt Ais-eadar-theangachaidh (0 eadar-dhealachadh)",
-    "badge_warn": "⚠ {count} ri sgrùdadh",
+    "badge_warn": "{count} ri sgrùdadh",
     "badge_title": "Chaidh {count} eadar-dhealachadh facal a lorg rè an ais-eadar-theangachaidh. Briog gus leum dhan chiad fhear.",
     "badge_clean": "Sgrùdadh ais-eadar-theangachaidh: cha deach eadar-dhealachadh facail a lorg."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Tha atharrachaidhean gun sàbhaladh agad. A bheil thu cinnteach gu bheil thu airson fàgail às aonais sàbhaladh?",
     "unsaved_load": "Tha atharrachaidhean gun sàbhaladh agad. Ma luchdaicheas tu faidhle ùr, thèid an sgrìobhainn làithreach a chur na àite. A leanas tu air adhart?",
     "unsaved_clear": "Tha atharrachaidhean gun sàbhaladh agad. A bheil thu cinnteach gu bheil thu airson an sgrìobhainn fhalamhachadh?",
-    "drop_hint": "⬇ Leig sìos sgrìobhainn gus a thoirt a-steach dhan deasaiche",
+    "drop_hint": "Leig sìos sgrìobhainn gus a thoirt a-steach dhan deasaiche",
     "notice": "Sanas",
     "close_notice": "Dùin an Sanas"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Teacsa na sgrìobhainn",
+      "math_keyboard_toggle": "Meur-chlàr matamataig",
       "label": "Teacsa",
       "toolbar_aria": "Fòrmatadh",
       "style_label": "Stoidhle paragraif",
@@ -443,8 +443,8 @@
       "graphic_cats": "Roinnean Grafaig",
       "graphic_list": "Diagraman grafaig tactile",
       "formula_search_label": "Lorg foirmlean",
-      "btactile_link": "BTactile (Saor an-asgaidh) ↗",
-      "tgil_link": "APH TGIL (còrr is 1,800 Teamplaid) ↗"
+      "btactile_link": "BTactile (Saor an-asgaidh)",
+      "tgil_link": "APH TGIL (còrr is 1,800 Teamplaid)"
     },
     "settings": {
       "list_spaced": "Liosta le loidhne bhàn (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Ceangail gu dìreach ri clò-bhualadairean microcontroller gnàthaichte (ESP32-S3, RP2040/RP2350, STM32, Arduino) a’ seachnadh glasan dràibhear a’ chlò-bhualadair OS.",
       "graphics_hint": "Nuair nach eil seo air a chomharrachadh, thèid diagraman às-phortadh mar thuairisgeulan Nota an Neach-tar-sgrìobhaidh ruigsinneach airson clò-bhualadairean teacsa-a-mhàin agus taisbeanaidhean Braille.",
       "tactile_heading": "Sruth Beò Taisbeanaidh Tactile (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Ceangail Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Ceangail USB / HID (Monarch)",
+      "tactile_connect_ble": "Ceangail Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Ceangail USB / HID (Monarch)",
       "tactile_disconnect": "Dì-cheangail an Taisbeanadh",
       "tactile_sim_monarch": "Feuch Monarch Aithriste (32×10)",
       "tactile_sim_dotpad": "Feuch DotPad Aithriste (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "A’ sruthadh sealladh beò Braille agus grafaigean tactile gu dìreach thar WebBluetooth (DotPad BLE UART) no WebHID (Monarch/USB) gun dràibhearan bhon taobh a-muigh.",
       "perkins_hint": "— sgrìobh Braille leis na h-iuchraichean SDF is JKL",
       "ascii_hint": "— seall caractaran Braille ASCII amh",
+      "show_explanation_bar": "Seall bàr na mìneachaidh",
+      "show_explanation_bar_hint": "— an stiall fon teacsa is fon Bhraille a mhìnicheas am Braille airson an fhacail air a bheil thu",
+      "simple_mode_hint": "— fosgail Emboss anns an iompaiche shìmplidh. Chan atharraich gluasad eadar Modh Luath is an deasaiche seo.",
       "covers_hint": "— còmhdaichean tiotail clò-bhuailte nuair a thathar a’ sgaradh leabhraichean"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Bann-cinn {n}",
       "cell_aria_named": "{header}, sreath {row}",
       "cell_aria": "Colbh {col}, sreath {row}",
-      "too_wide_listed": "⚠ Ro leathann airson colbhan — thèid a chur ann am Braille mar chlàr liostaichte",
+      "too_wide_listed": "Ro leathann airson colbhan — thèid a chur ann am Braille mar chlàr liostaichte",
       "too_wide_listed_title": "Chan eil an clàr seo a' freagairt ann an colbhan aig an àireamh làithreach de cheallan gach loidhne agus modh Braille, mar sin thèid a chur ann am Braille mar chlàr liostaichte (BANA Formats §11.9) an àite colbhan taobh ri taobh.",
-      "too_wide_paragraph": "⚠ Ro leathann airson colbhan — thèid a chur ann am Braille ann an cruth paragraf",
+      "too_wide_paragraph": "Ro leathann airson colbhan — thèid a chur ann am Braille ann an cruth paragraf",
       "too_wide_paragraph_title": "Chan eil an clàr seo a' freagairt ann an colbhan aig an àireamh làithreach de cheallan gach loidhne agus modh Braille, mar sin thèid a chur ann am Braille ann an cruth paragraf (UKAAF B004 §12) an àite colbhan taobh ri taobh."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Cha b’ urrainn dhuinn na clàran airson “{code}” a luchdadh — a’ cleachdadh a’ chòd Braille roimhe fhathast.",
-      "failed": "⚠ Cha b’ urrainn dhuinn Braille a ghintinn.",
+      "failed": "Cha b’ urrainn dhuinn Braille a ghintinn.",
       "failed_hint": "(Ma tha seo ag ràdh nach eil an t-einnsean air a thòiseachadh, cha do luchdaich an t-einnsean Braille — ath-nuadhaich gu cruaidh le Cmd/Ctrl+Shift+R.)",
       "error_status": "Mearachd rendaraidh: {message}"
     },
     "engine": {
       "loading": "A’ luchdadh an einnsean Braille…",
-      "failed": "⚠ Dh’fhàillig luchdadh an einnsean Braille.",
+      "failed": "Dh’fhàillig luchdadh an einnsean Braille.",
       "failed_hint": "Ath-nuadhaich gu cruaidh le Cmd/Ctrl+Shift+R. Mura h-obraich sin, fosgail consal a’ bhrabhsair (Sealladh ▸ Leasaiche) is cuir na mearachdan thugainn.",
       "failed_status": "Dh’fhàillig luchdadh an einnsean: {message}",
       "ready": "Deiseil — sgrìobh no fòrmataich air an taobh chlì; bidh Braille ag ùrachadh beò."
@@ -715,7 +718,7 @@
       "network_unreachable": "Cha b’ urrainn dhuinn {url} a ruighinn: {message}. Chan urrainn dha brabhsairean ceanglaichean TCP amh (port 9100) fhosgladh; feumaidh an clò-bhualadair gabhail ri HTTP POST, no luchdaich a-nuas am faidhle .brf agus cuir e le do mhanaidsear clò-bhualaidh.",
       "usb_bridge_done": "Chaidh an obair Emboss a lìbhrigeadh dhan chlò-bhualadair USB!",
       "needs_webserial": "Feumaidh clò-bhualadh sreathach dìreach brabhsair le WebSerial (Chrome, Edge, Opera). ’S urrainn dhut am faidhle .brf a luchdadh a-nuas gus clò-bhualadh le do mhanaidsear clò-bhualaidh, no cleachd modh Lìonra (Port 9100) sna Roghainnean.",
-      "detected": "🔌 Mhothaich sinn dha {name} — air a shuidheachadh gu {cells}×{lines} aig {baud} baud."
+      "detected": "Mhothaich sinn dha {name} — air a shuidheachadh gu {cells}×{lines} aig {baud} baud."
     },
     "symbols": {
       "title": "Leabharlann Samhlaidhean Tactile",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrix Fiùghantach",
       "badge_text_only": "Teacsa a-mhàin",
       "badge_index": "Matrix Dot"
+    },
+    "offline": {
+      "ready": "Tha Emboss deiseil airson obrachadh far loidhne.",
+      "ready_short": "Deiseil airson obrachadh far loidhne",
+      "not_yet": "A’ ullachadh fhathast airson obrachadh far loidhne…"
     }
   }
 }

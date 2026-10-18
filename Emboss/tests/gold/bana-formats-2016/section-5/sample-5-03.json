@@ -32,7 +32,7 @@
       {
         "kind": "paragraph",
         "level": null,
-        "text": "{{td1: Yesterday our class had a special visitor.}} {{td2: His name is Charles Hoover. He was born in 1925, and he is 85 years old.}} {{td3: He came to explain what life was like here in Montgomery, Alabama, more than 80 years ago.}} {{td4: He talked about old-time cars, Negro baseball leagues, and games he played as a boy.}} {{td5: He could tell us a lot about the history of our state.}} {{td6: That's what we have been studying this month. Mr. Hoover was part of the Selma-to-Montgomery civil rights march in 1965.}}",
+        "text": "{{td1: Yesterday our class had a special visitor.}} {{td2: His name is Charles Hoover. He was born in 1925, and he is 85 years old.}} {{td3: He came to explain what life was like here in Montgomery, Alabama, more than 80 years ago.}} {{td5: He talked about old-time cars, Negro baseball leagues, and games he played as a boy.}} {{td3: He could tell us a lot about the history of our state.}} {{td4: That's what we have been studying this month.}} {{td6: Mr. Hoover was part of the Selma-to-Montgomery civil rights march in 1965.}}",
         "features": "Six consecutive color-coded sentence-groups on a tinted background: td1=blue, td2=green, td3=orange, td4=purple, td5=pink/magenta, td6=dark violet (colors numbered in first-use order within this passage, which is NOT the Special-Symbols legend's own listed order — the legend lists pink before purple, but the passage uses purple before pink appears at all, see braille.notes). Only td1 (blue), td2 (green), td3 (orange), and the opening of td4 (purple, through 'He talked about') are confirmed against the braille, which truncates there; td4's remainder and td5/td6 are a best-effort read of the print image only, with no braille to check them against.",
         "items": null
       }
@@ -44,7 +44,7 @@
   "braille": {
     "width": 40,
     "lines": [
-      "       @.<,symbols us$ 2l3            #,-",
+      "      @.<,symbols us$ 2l3            #,-",
       "",
       ".=@#7 ,blue passage 9dicator",
       ".=@#' ,blue t]m9ator",
@@ -108,5 +108,27 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on the braille byte-for-byte (down to the truncation and the unexplained '#,-' marker) and on the underlying color facts once reconciled: run A's prose left the legend-vs-usage-order mismatch and the pink/purple substitution implicit and slightly vague; run B's account is more precise and directly matches this section's own independent re-derivation of the braille from .txt lines 4317-4341 (field width 5), so B's phrasing is used as the base for print.blocks and braille.notes here. `illustrates.rule`: A cited 5.5.2 (the 'if all... indicators are used, other typeform indicators may be used for color' rule, thematically closest to needing six colour symbols), B cited 5.5.3 (whose own text is the literal printed source of the cross-reference '(See Sample 5-3...)' immediately following Example 5-14). Resolved in favor of 5.5.3, matching this section's convention (also used for Sample 5-1/5-2) of citing the rule whose own text contains the explicit cross-reference to the Sample, while noting 5.5.2's relevance in `print.notes`. The '#,-' marker and the truncation are both left genuinely unresolved (not a disagreement between the runs — both flagged them identically as open questions in the primary source itself); see differences.md's unresolved list."
+  "resolution": "Both runs agree on the braille byte-for-byte (down to the truncation and the unexplained '#,-' marker) and on the underlying color facts once reconciled: run A's prose left the legend-vs-usage-order mismatch and the pink/purple substitution implicit and slightly vague; run B's account is more precise and directly matches this section's own independent re-derivation of the braille from .txt lines 4317-4341 (field width 5), so B's phrasing is used as the base for print.blocks and braille.notes here. `illustrates.rule`: A cited 5.5.2 (the 'if all... indicators are used, other typeform indicators may be used for color' rule, thematically closest to needing six colour symbols), B cited 5.5.3 (whose own text is the literal printed source of the cross-reference '(See Sample 5-3...)' immediately following Example 5-14). Resolved in favor of 5.5.3, matching this section's convention (also used for Sample 5-1/5-2) of citing the rule whose own text contains the explicit cross-reference to the Sample, while noting 5.5.2's relevance in `print.notes`. The '#,-' marker and the truncation are both left genuinely unresolved (not a disagreement between the runs — both flagged them identically as open questions in the primary source itself); see differences.md's unresolved list. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.2.text",
+      "was": "td4 'He talked...' td5 'He could tell...' td6 'That's what... 1965.' (6 spans)",
+      "now": "7 spans: td1 blue, td2 green, td3 orange, td5 purple 'He talked...', td3 orange 'He could tell...', td4 pink 'That's what we have been studying this month.', td6 violet 'Mr. Hoover... 1965.'",
+      "evidence": "Page images PDF p.142 (Sample 5-3) and a 200 dpi crop: colours run blue, green, orange, purple ('He talked ... as a boy.'), orange again ('He could tell us ... our state.'), pink ('That's what we have been studying this month.'), violet ('Mr. Hoover ... 1965.'). Gold merged the last two colours into one td6 span and gave 'He could tell...' its own td5. tdN ids here follow the order of the colour legend in the braille (blue, green, orange, pink, purple, violet)."
+    }
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "       @.<,symbols us$ 2l3            #,-"
+      ],
+      "after": [
+        "      @.<,symbols us$ 2l3            #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 143 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: leading indentation / centring (1)."
+    }
+  ]
 }

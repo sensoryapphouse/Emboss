@@ -38,9 +38,9 @@
       "      ,v]bs",
       "",
       "b1t    bl[   cat*   d",
-      "2come br1k *oose draw",
+      "2come  br1k  *oose  draw",
       "2g9    br+   come   dr9k",
-      "bet    bur/ cut     drive",
+      "bet    bur/  cut    drive",
       "bite   buy   dive   eat",
       ""
     ],
@@ -54,5 +54,21 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines agree; `kind` resolved to `other` for the same reason as Example 4-10 (no related/unrelated-columns block type available). Heading level 3 (cell-7) confirmed directly by the 6-cell indent."
+  "resolution": "braille.lines agree; `kind` resolved to `other` for the same reason as Example 4-10 (no related/unrelated-columns block type available). Heading level 3 (cell-7) confirmed directly by the 6-cell indent.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "2come br1k *oose draw",
+        "bet    bur/ cut     drive"
+      ],
+      "after": [
+        "2come  br1k  *oose  draw",
+        "bet    bur/  cut    drive"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 4, 6 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 113 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (1); two blank cells collapsed to one, with a later gap widened by one (1). Where: column gap (table / related columns / columned list) (2)."
+    }
+  ]
 }

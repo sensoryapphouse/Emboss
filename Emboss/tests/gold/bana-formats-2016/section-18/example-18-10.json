@@ -16,7 +16,9 @@
     "blocks": [
       {
         "kind": "paragraph",
-        "text": "The boy | played in the park."
+        "text": "The boy | played in the park.",
+        "blocked": true,
+        "diagram": true
       }
     ],
     "notes": "The vertical line \"|\" is an ordinary UEB print symbol (dots 456, 1256) — translates correctly with zero Emboss-specific code. The required 1-3 margin (18.7.1, shared by every linear diagram) cannot be produced (F-189); an ordinary paragraph block’s own default indent is used instead — expected mismatch on indent only.",
@@ -36,5 +38,19 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly. The sentence forward-translates to the given braille exactly at zero indent; built as a plain paragraph, with the required 1-3 margin recorded as the expected F-189 mismatch cause rather than guessed at with an unsupported block option."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly. The sentence forward-translates to the given braille exactly at zero indent; built as a plain paragraph, with the required 1-3 margin recorded as the expected F-189 mismatch cause rather than guessed at with an unsupported block option. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.0.blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-505.png (Example 18-10): the one-line diagram 'The boy | played in the park.' starts flush at the box margin with no paragraph indent (contrast the indented first paragraph of Example 18-9 above it)."
+    },
+    {
+      "field": "print.blocks.0.diagram",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-505.png: Example 18-10 is titled 'Linear Diagram with a Vertical Line' under 18.7.2; the print is a one-line sentence diagram ('The boy | played in the park.') whose parts are separated by a vertical line; 18.7.1 on page-504.png says to use 1-3 margins for each diagrammed sentence."
+    }
+  ]
 }

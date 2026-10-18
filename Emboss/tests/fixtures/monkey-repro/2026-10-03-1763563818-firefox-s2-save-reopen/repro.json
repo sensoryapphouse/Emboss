@@ -1,0 +1,420 @@
+{
+ "version": 2,
+ "runSeed": "1763563818",
+ "session": 2,
+ "engine": "firefox",
+ "kind": "editor",
+ "doc": "gen:1763563818-s2",
+ "docSource": "generated",
+ "docFeatures": [
+  "break",
+  "h1",
+  "inline-math",
+  "link",
+  "note",
+  "pagenum",
+  "picture-noalt",
+  "poem",
+  "script:arabic",
+  "script:combining",
+  "script:cyrillic",
+  "script:emoji",
+  "script:greek",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1763563818-s2": "docs/00-gen-1763563818-s2.md"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "bana",
+  "standard": "bana",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": false
+ },
+ "viewport": {
+  "width": 1600,
+  "height": 1000
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: footnote",
+ "message": "the saved file reopens to different braille [first differing block: footnote] (block #40 not counting empty ones, footnote / indicator): first tab has 326 lines, reopened tab has 326; first differences: line 284: first tab \"\\\"333333\\r\" / reopened tab \"------------------------------------#B\\r\" | line 285: first tab \"------------------------------------#B\\r\" / reopened tab \"               \\\"9 \\\"9 \\\"9\\r\" | line 286: first tab \"               \\\"9 \\\"9 \\\"9\\r\" / reopened tab \"\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 10,
+ "originalActions": 68,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.3596,
+   "i": 3,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 4
+  },
+  {
+   "t": "insertAll",
+   "i": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 6
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5218,
+   "i": 4,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7685,
+   "i": 5,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 7
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9334,
+   "i": 6,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 9
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0032,
+   "i": 7,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4092,
+   "i": 8,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 10
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8582,
+   "i": 9,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8995,
+   "i": 10,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.172,
+   "i": 11,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 11
+  },
+  {
+   "t": "insertAll",
+   "i": 12
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6972,
+   "i": 12,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 13
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.264,
+   "i": 13,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "check",
+   "which": "save"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4706,
+   "i": 14,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1538,
+   "i": 15,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 14
+  },
+  {
+   "t": "insertAll",
+   "i": 15
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6713,
+   "i": 16,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 16
+  },
+  {
+   "t": "insertAll",
+   "i": 17
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.9552,
+   "i": 17,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "resize",
+   "w": 1600,
+   "h": 1000
+  },
+  {
+   "t": "insertAll",
+   "i": 18
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8625,
+   "i": 18,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0369,
+   "i": 19,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 19
+  },
+  {
+   "t": "clickBraille",
+   "fx": 0.5118,
+   "fy": 0.4354,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0491,
+   "i": 20,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 20
+  },
+  {
+   "t": "insertAll",
+   "i": 21
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8473,
+   "i": 21,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 22
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1484,
+   "i": 22,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.3327,
+   "i": 23,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 23
+  },
+  {
+   "t": "check",
+   "which": "perf"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.0244,
+   "i": 24,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 24
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8508,
+   "i": 25,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "insertAll",
+   "i": 25
+  },
+  {
+   "t": "insertAll",
+   "i": 26
+  },
+  {
+   "t": "insertAll",
+   "i": 27
+  },
+  {
+   "t": "save"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.5702,
+   "i": 26,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 28
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.7241,
+   "i": 27,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 29
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4238,
+   "i": 28,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8789,
+   "i": 29,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.357,
+   "i": 30,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.6483,
+   "i": 31,
+   "q": "b",
+   "end": "Enter"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.293,
+   "i": 32,
+   "q": "p",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 30
+  },
+  {
+   "t": "insertAll",
+   "i": 31
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.2045,
+   "i": 33,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 32
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.4131,
+   "i": 34,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "insertAll",
+   "i": 33
+  },
+  {
+   "t": "check",
+   "which": "all"
+  }
+ ]
+}

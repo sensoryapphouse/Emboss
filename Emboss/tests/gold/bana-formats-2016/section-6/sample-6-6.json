@@ -36,31 +36,10 @@
             "Abner Harris Sr.",
             "Deborah Marcy"
           ]
-        },
-        "description": "Each individual in the ancestral tree below is given an identifying number. The numbers following an individual's name are the identifying numbers for the parents."
-      },
-      {
-        "kind": "list",
-        "items": [
-          { "marker": "1", "text": "Nelson Slater Smith 1827-1908 2, 3" },
-          { "marker": "2", "text": "Daniel Smith 1775-1854 4, 5" },
-          { "marker": "3", "text": "Susan Holmes 1786-1864 6, 7" },
-          { "marker": "4", "text": "Samuel Smith 1742-1827 8, 9" },
-          { "marker": "5", "text": "Abigail Wright 1748-1798 10, 11" },
-          { "marker": "6", "text": "Thomas Holmes II 1756-1840 12, 13" },
-          { "marker": "7", "text": "Tamar Harris 14, 15" },
-          { "marker": "8", "text": "Jasiel Smith Sr. 1700-" },
-          { "marker": "9", "text": "Hannah Gachet -1755" },
-          { "marker": "10", "text": "John Wright" },
-          { "marker": "11", "text": "Mercy Mary Kellogg" },
-          { "marker": "12", "text": "Thomas Holmes I" },
-          { "marker": "13", "text": "Abigail Pike" },
-          { "marker": "14", "text": "Abner Harris Sr." },
-          { "marker": "15", "text": "Deborah Marcy" }
-        ]
+        }
       }
     ],
-    "notes": "The print is a visual ancestral tree (fan-chart diagram) containing names and dates in boxes; the transcriber converts this to a flat, 1-3-margin numbered list (6.8.2a), assigning a unique number to each individual and following each with the identifying numbers of that person's two parents (6.8.2b) — numbers that do not exist in the original print at all, but are mandated transcriber additions and so are built here as real content. print.blocks[0].description is the transcriber's note explaining the numbering convention (6.8.2c) and is built as a standalone note (no caption follows this figure).",
+    "notes": "The print is a visual ancestral tree (fan-chart diagram) of boxes holding names and dates (see figure.labels). The flat numbered list, the identifying numbers and parent numbers, and the note explaining the numbering are the transcriber's additions (BANA 6.8.2) and do not exist in print, so none of them is part of the input.",
     "surroundingText": null,
     "printFeatures": "diagram, fan-chart, boxes"
   },
@@ -98,5 +77,19 @@
     "A",
     "B"
   ],
-  "resolution": "A and B agreed byte-for-byte, but share three errors, all confirmed by decoding the raw source directly (source-6.txt lines 4938-4959) and cross-checked by forward translation: (1) item 1's death year is '#aijh' = 1908, not 1898 as both runs wrote (translating '...1827-1898...' does not reproduce '#aijh'; '...1827-1908...' does, exactly). (2) 'Abigail Weir'/'John Weir' (items 5 and 10) should be 'Abigail Wright'/'John Wright' — forward-translating 'Weir' gives ',WEIR' but the agreed braille reads ',w\"r', which only 'Wright' reproduces. (3) 'Hannah Gasset' (item 9) should be 'Hannah Gachet' — same test, 'Gasset' gives ',GASSET' but the agreed braille reads ',ga*et', which only 'Gachet' reproduces. The parent-reference numbers also need a space after the comma ('2, 3', not '2,3') to reproduce the agreed braille's own contraction pattern exactly. No braille-side changes were needed — A and B's braille.lines (after dropping the two running-head lines) already match the raw source exactly."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].description, print.blocks[1] (list)",
+      "was": "the transcriber's numbering note and a 15-item numbered list with parent numbers (\"1 Nelson Slater Smith 1827-1908 2, 3\" ...)",
+      "now": "(removed; the print holds only the tree diagram, whose names and dates stay in figure.labels)",
+      "evidence": "The old print.notes itself says the numbers \"do not exist in the original print at all\". Transcriber-made content (the numbering scheme and its note, taken from the braille) is not an input."
+    },
+    {
+      "field": "print.notes",
+      "was": "The print is a visual ancestral tree (fan-chart diagram) containing names and dates in boxes; the transcriber converts this to a flat, 1-3-margin numbered list (6.8.2a), assigning a unique number to each individual and following each with the identifying numbers of that person's two parents (6.8.2b) — numbers that do not exist in the original print at all, but are mandated transcriber additions and so are built here as real content. print.blocks[0].description is the transcriber's note explaining the numbering convention (6.8.2c) and is built as a standalone note (no caption follows this figure).",
+      "now": "The print is a visual ancestral tree (fan-chart diagram) of boxes holding names and dates (see figure.labels). The flat numbered list, the identifying numbers and parent numbers, and the note explaining the numbering are the transcriber's additions (BANA 6.8.2) and do not exist in print, so none of them is part of the input.",
+      "evidence": "Rewritten to state only what the print holds."
+    }
+  ],
+  "resolution": "A and B agreed byte-for-byte, but share three errors, all confirmed by decoding the raw source directly (source-6.txt lines 4938-4959) and cross-checked by forward translation: (1) item 1's death year is '#aijh' = 1908, not 1898 as both runs wrote (translating '...1827-1898...' does not reproduce '#aijh'; '...1827-1908...' does, exactly). (2) 'Abigail Weir'/'John Weir' (items 5 and 10) should be 'Abigail Wright'/'John Wright' — forward-translating 'Weir' gives ',WEIR' but the agreed braille reads ',w\"r', which only 'Wright' reproduces. (3) 'Hannah Gasset' (item 9) should be 'Hannah Gachet' — same test, 'Gasset' gives ',GASSET' but the agreed braille reads ',ga*et', which only 'Gachet' reproduces. The parent-reference numbers also need a space after the comma ('2, 3', not '2,3') to reproduce the agreed braille's own contraction pattern exactly. No braille-side changes were needed — A and B's braille.lines (after dropping the two running-head lines) already match the raw source exactly. Print description corrected 23 Sep 2026 (see printCorrections)."
 }

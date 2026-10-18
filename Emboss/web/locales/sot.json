@@ -60,10 +60,13 @@
     "toc": "Diteng",
     "print": "Pono ya Hatiso (LHS)",
     "braille": "Braille",
+    "export": "Romela kantle",
+    "export_title": "Romela Braille kantle (BRF, eBraille) kapa e romele sehatelling",
+    "emboss_menu": "Romela sehatelling sa Braille",
     "braille_view": "Pono ya Braille",
     "download_brf": "Mongolo wa Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Hatella",
     "emboss_tooltip": "Romela tokomane ho sehatelli sa Braille kapa sehatisi",
     "clear_doc": "Hlakola Tokomane",
@@ -133,8 +136,6 @@
     "poem_desc": "Mola wa temana ya thothokiso (1-3)",
     "exercise_title": "Potso ya Boitlhahiso",
     "exercise_desc": "Potso ya boitlhahiso e nang le nomoro (1-5 / 3-5)",
-    "caption_title": "Hlaloso / Mohlodi",
-    "caption_desc": "Hlaloso ya setshwantsho kapa mohlodi (7-5)",
     "footnote_title": "Tlhaloso ya Tlasana",
     "footnote_desc": "Mongolo wa tlhaloso ya tlasana (1-3)",
     "note_title": "Tlhaloso ya Mofetoledi",
@@ -163,8 +164,6 @@
     "page_desc": "Kenya sesupo sa karohano ya leqephe la pampiri ya mohlodi",
     "printpage_title": "Nomoro ya Leqephe la Pampiri",
     "printpage_desc": "Kenya sesupo sa karohano ya leqephe la pampiri ya mohlodi",
-    "code_title": "Khoutu ya Khomphyutha",
-    "code_desc": "Kenya poloko ya khoutu e nang le matshwao a UEB",
     "indent_title": "Kenya ka Hare / Kenya Ntho ka Hare",
     "indent_desc": "Kenya ntho ya lenane kapa boitlhahiso ka hare ho feta (Tab)",
     "outdent_title": "Ntshetsa ka Ntle / Phahamisa Ntho",
@@ -185,8 +184,8 @@
     "language_label": "Puo ya Sebopeho",
     "language_help": "Kgetha puo e sebediswang bakeng sa dikonopo, dilenane, mabokose a puisano, le ditsebiso tsa sebadi sa skrine.",
     "standard_label": "Tekanyetso ya Braille",
-    "standard_bana": "BANA (USA le Canada — disele tse 40×25)",
-    "standard_ukaaf": "UKAAF (United Kingdom le Machabeng — disele tse 38×25)",
+    "standard_bana": "BANA (USA le Canada — disele tse 38×25)",
+    "standard_ukaaf": "UKAAF (United Kingdom le Machabeng — disele tse 38×27)",
     "grade_label": "Boemo ba Kgutsufatso",
     "grade_1": "Boemo 1 (E sa Kgutsufaditsweng / Tlhaku ka Tlhaku)",
     "grade_2": "Boemo 2 (E Kgutsufaditsweng)",
@@ -261,7 +260,7 @@
     "size_full": "Pampiri e Felletseng (Mola 1 o sa Arohanngwang)",
     "lead_lines": "Mela e Etelletseng Pele e Amwang",
     "braille_labels": "Dileibole tsa Braille",
-    "footer_tip": "💡 Meedi e ntsho e fetoha meedi e tiileng e amwang; mebala e fetohela ka boyona setshwaong se fapaneng se amwang.",
+    "footer_tip": "Meedi e ntsho e fetoha meedi e tiileng e amwang; mebala e fetohela ka boyona setshwaong se fapaneng se amwang.",
     "open_repositories": "Diponelo tse Bulehileng tsa Dintho tse Amwang:",
     "no_diagrams": "Ha ho setshwantsho se fumanweng se tshwanang."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Boemo ba Tlhahlobo ya Phetolelo e Kgutlelang",
     "precedence_status": "Boemo ba Melawana ya Bohlokwa ba Braille",
     "perfect_match": "Tshwantshano ya 100% ya Phetolelo e Kgutlelang (ha ho phapang)",
-    "badge_warn": "⚠ {count} tse hlokang tlhahlobo",
+    "badge_warn": "{count} tse hlokang tlhahlobo",
     "badge_title": "Diphapang tsa {count} tsa mantswe tse fumanweng nakong ya phetolelo e kgutlelang. Klika ho ya ho ya pele.",
     "badge_clean": "Tlhahlobo ya phetolelo e kgutlelang: ha ho diphapang tsa mantswe tse fumanweng."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "O na le diphetoho tse sa bolokwang. Na o kgonthe hore o batla ho tswa ntle le ho boloka?",
     "unsaved_load": "O na le diphetoho tse sa bolokwang. Ho laisha faele e ntjha ho tla nkela tokomane ya hao ya jwale sebaka. Na o tswela pele?",
     "unsaved_clear": "O na le diphetoho tse sa bolokwang. Na o kgonthe hore o batla ho hlakola tokomane?",
-    "drop_hint": "⬇ Latlhela tokomane ho e kenya mofetoling",
+    "drop_hint": "Latlhela tokomane ho e kenya mofetoling",
     "notice": "Tsebiso",
     "close_notice": "Kwala Tsebiso"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Mongolo wa Tokomane",
+      "math_keyboard_toggle": "Boto ya linotlolo ya lipalo",
       "label": "Mongolo",
       "toolbar_aria": "Foromete",
       "style_label": "Setaele sa Temana",
@@ -443,8 +443,8 @@
       "graphic_cats": "Mekgahlelo ya Ditshwantsho",
       "graphic_list": "Ditshwantsho tse amwang",
       "formula_search_label": "Batla diforomo",
-      "btactile_link": "BTactile (Mahala) ↗",
-      "tgil_link": "APH TGIL (Meetlo e fetang 1,800) ↗"
+      "btactile_link": "BTactile (Mahala)",
+      "tgil_link": "APH TGIL (Meetlo e fetang 1,800)"
     },
     "settings": {
       "list_spaced": "Lenane la mola o hlwekileng (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Kopana ka ho toba le dihatelli tsa microcontroller (ESP32-S3, RP2040/RP2350, STM32, Arduino) ntle le ho hloka diraevara tsa sistimi.",
       "graphics_hint": "Ha e sa kgethwa, ditshwantsho di ngolwa jwalo ka ditlhaloso tsa Tlhaloso ya Mofetoledi tse fumanehang bakeng sa dihatelli tse hatellang mongolo feela le dipontsho tsa Braille.",
       "tactile_heading": "Phallo e Phelang ya Pontsho e Amwang (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Kopanya Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Kopanya USB / HID (Monarch)",
+      "tactile_connect_ble": "Kopanya Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Kopanya USB / HID (Monarch)",
       "tactile_disconnect": "Kgaola Pontsho",
       "tactile_sim_monarch": "Leka Monarch e Etshetshwang (32×10)",
       "tactile_sim_dotpad": "Leka DotPad e Etshetshwang (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "E phalla pontsho ya Braille e phelang le ditshwantsho tse amwang ka ho toba ka WebBluetooth (DotPad BLE UART) kapa WebHID (Monarch/USB) ntle le diraevara tsa kantle.",
       "perkins_hint": "— ngola Braille o sebedisa diqheka tsa SDF le JKL",
       "ascii_hint": "— bontsha ditlhaku tsa nnete tsa ASCII Braille",
+      "show_explanation_bar": "Bontša bara ya tlhaloso",
+      "show_explanation_bar_hint": "— lekhalo le ka tlase ho mongolo le Braille le hlalosang Braille bakeng sa lentsoe leo u leng ho lona",
+      "simple_mode_hint": "— bula Emboss sehlopheng se bonolo sa phetoho. Ho fetola pakeng tsa Mokgwa o Potlakileng le mofetoli ha ho fetole sena.",
       "covers_hint": "— disekwahelo tse hatetsweng sehlooho ha ho arolwa dibuka"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Hlooho {n}",
       "cell_aria_named": "{header}, mola {row}",
       "cell_aria": "Kholomo {col}, mola {row}",
-      "too_wide_listed": "⚠ E sephara haholo bakeng sa dikholomo — e tla ngolwa ka Braille e le tafole e thathamisitsweng",
+      "too_wide_listed": "E sephara haholo bakeng sa dikholomo — e tla ngolwa ka Braille e le tafole e thathamisitsweng",
       "too_wide_listed_title": "Tafole ena ha e kene dikholomong ho ea ka palo ea hona joale ea disele ka mola le mokhoa oa Braille, kahoo e tla ngolwa ka Braille e le tafole e thathamisitsweng (BANA Formats §11.9) ho e-na le dikholomo tse haufi le tse ling.",
-      "too_wide_paragraph": "⚠ E sephara haholo bakeng sa dikholomo — e tla ngolwa ka Braille ka mofuta oa temana",
+      "too_wide_paragraph": "E sephara haholo bakeng sa dikholomo — e tla ngolwa ka Braille ka mofuta oa temana",
       "too_wide_paragraph_title": "Tafole ena ha e kene dikholomong ho ea ka palo ea hona joale ea disele ka mola le mokhoa oa Braille, kahoo e tla ngolwa ka Braille ka mofuta oa temana (UKAAF B004 §12) ho e-na le dikholomo tse haufi le tse ling."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "E hlolehile ho laisha ditafole tsa \"{code}\" — e ntse e sebedisa khoutu ya Braille e fetileng.",
-      "failed": "⚠ Braille e hlolehile ho hlahiswa.",
+      "failed": "Braille e hlolehile ho hlahiswa.",
       "failed_hint": "(Haeba sena se re entjene ha e a qalwa, entjene ya Braille ha e a laishwa — nchafatsa ka thata ka Cmd/Ctrl+Shift+R.)",
       "error_status": "Phoso ya ho hlahisa: {message}"
     },
     "engine": {
       "loading": "E laisha entjene ya Braille…",
-      "failed": "⚠ Entjene ya Braille e hlolehile ho laishwa.",
+      "failed": "Entjene ya Braille e hlolehile ho laishwa.",
       "failed_hint": "Nchafatsa ka thata ka Cmd/Ctrl+Shift+R. Haeba ho tswela pele, bula console ya browser (View ▸ Developer) mme o romele diphoso.",
       "failed_status": "Entjene e hlolehile ho laishwa: {message}",
       "ready": "E itokiselitse — ngola kapa forometa ka letshehadi; Braille e ntjhafatsa ka nako ya nnete."
@@ -715,7 +718,7 @@
       "network_unreachable": "E hlolehile ho fihla ho {url}: {message}. Dibrowser ha di kgone ho bula dikopano tsa TCP (portho 9100) ka ho toba; sehatelli se lokela ho amohela HTTP POST, kapa o theole faele ya .brf mme o e romele ka mookamedi wa hao wa hatiso.",
       "usb_bridge_done": "Mosebetsi wa ho hatella o fihlile sehatising sa USB!",
       "needs_webserial": "Ho hatella ka ho toba ka Serial ho hloka browser e nang le WebSerial (Chrome, Edge, Opera). O ka theola faele ya .brf ho e hatella ka mookamedi wa hao wa hatiso, kapa o sebedise mokgwa wa Marang-rang (Portho 9100) Ditlhophisong.",
-      "detected": "🔌 {name} e fumanwe — e behilwe ho {cells}×{lines} ho {baud} baud."
+      "detected": "{name} e fumanwe — e behilwe ho {cells}×{lines} ho {baud} baud."
     },
     "symbols": {
       "title": "Laeborari ya Matshwao a Amwang",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrix e Fetofetohang",
       "badge_text_only": "Mongolo Feela",
       "badge_index": "Matrix ya Dintlha"
+    },
+    "offline": {
+      "ready": "Emboss e itokiselitse ho sebetsa ntle le Inthanete.",
+      "ready_short": "E itokiselitse ho sebetsa ntle le Inthanete",
+      "not_yet": "E ntse e itokisetsa ho sebetsa ntle le Inthanete…"
     }
   }
 }

@@ -1,0 +1,11 @@
+lamejs 1.2.1 — MP3 encoder in JavaScript (a rewrite of libmp3lame via jump3r)
+https://github.com/zhuker/lamejs  (npm package "lamejs")
+License: LGPL (package.json: "LGPL-3.0"; every source file header: GNU Lesser
+General Public License, version 2 or any later version). See LICENSE.txt, the
+project's own statement, and https://www.gnu.org/licenses/lgpl-3.0.html
+Files: lame.min.js (unmodified, from the npm tarball lamejs-1.2.1.tgz).
+mp3-worker.js is BrlDuet's own small wrapper that loads it inside a Web Worker.
+lamejs is loaded lazily, only when "Audio (MP3)" is chosen in Save, as a
+separate, replaceable file: drop in another build of lame.min.js with the same
+lamejs.Mp3Encoder interface and nothing else changes.
+LAME: http://lame.sourceforge.net

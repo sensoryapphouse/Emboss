@@ -1,0 +1,52 @@
+✖ huge file in a child (6.875833ms)
+✖ a real mistake (1.386959ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1357.750958
+
+✖ failing tests:
+
+test at tests/e_mixed.test.mjs:2:1
+✖ huge file in a child (6.875833ms)
+  AssertionError [ERR_ASSERTION]: huge-nimas: still running after 90 s (hang)
+  
+  null !== 'x'
+  
+      at TestContext.<anonymous> (file:///scratch/fakeEmboss/tests/e_mixed.test.mjs:2:43)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'x',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/e_mixed.test.mjs:3:1
+✖ a real mistake (1.386959ms)
+  AssertionError [ERR_ASSERTION]: the heading text is wrong
+  
+  'abc' !== 'abd'
+  
+      at TestContext.<anonymous> (file:///scratch/fakeEmboss/tests/e_mixed.test.mjs:3:37)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'abc',
+    expected: 'abd',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

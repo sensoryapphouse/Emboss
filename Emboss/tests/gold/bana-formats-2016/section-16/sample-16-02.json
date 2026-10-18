@@ -23,16 +23,23 @@
         "items": null
       },
       {
+        "kind": "heading",
+        "level": 1,
+        "text": "**Emily Dickinson**",
+        "features": "Bold author byline centred beneath the poem title.",
+        "items": null
+      },
+      {
         "kind": "paragraph",
         "level": null,
-        "text": "I like a look of Agony, Because I know it's true— Men do not sham [ref:3]Convulsion, Nor simulate, a [ref:4]Throe—\nThe Eyes glaze once—and that is Death— Impossible to feign The Beads upon the Forehead By homely Anguish strung.",
+        "text": "I like a look of Agony, Because I know it's true— Men do not sham Convulsion, Nor simulate, a Throe—\nThe Eyes glaze once—and that is Death— Impossible to feign The Beads upon the Forehead By homely Anguish strung.",
         "features": "Poem set with print line number '5' beside its fifth line; two words ('Convulsion', 'Throe') carry superscript numeral reference marks keyed to notes at the right.",
         "items": null
       },
       {
         "kind": "note",
         "level": null,
-        "text": "[ref:3] sham Convulsion: pretend to have a seizure.\n[ref:4] Throe: sudden surge of pain.",
+        "text": "3 **sham Convulsion:** pretend to have a seizure.\n4 **Throe:** sudden surge of pain.",
         "features": "Two short glossary notes at the right margin of the first poem.",
         "items": null
       },
@@ -44,9 +51,16 @@
         "items": null
       },
       {
+        "kind": "heading",
+        "level": 1,
+        "text": "**Alice Walker**",
+        "features": "Bold author byline centred beneath the poem title.",
+        "items": null
+      },
+      {
         "kind": "paragraph",
         "level": null,
-        "text": "Looking down into my father's dead face for the last time my mother said without tears, without smiles without regrets but with [ref:1]civility “Good night, Willie Lee, I'll see you in the morning.”",
+        "text": "Looking down into my father's dead face for the last time my mother said without tears, without smiles without regrets but with *civility*[ref:1] “Good night, Willie Lee, I'll see you in the morning.”",
         "features": "Left column of the second poem, with print line number '5' at its fifth line; the word 'civility' carries a superscript numeral note reference.",
         "items": null
       },
@@ -69,12 +83,12 @@
       {
         "ref": "3",
         "placement": "margin",
-        "text": "sham Convulsion: pretend to have a seizure."
+        "text": "**sham Convulsion:** pretend to have a seizure."
       },
       {
         "ref": "4",
         "placement": "margin",
-        "text": "Throe: sudden surge of pain."
+        "text": "**Throe:** sudden surge of pain."
       },
       {
         "ref": "1",
@@ -135,5 +149,25 @@
     "A",
     "B"
   ],
-  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12918 (field width 5, digits(23)+3), after stripping a leading form-feed page-break character and the line-number field, is exactly 40 characters, right-justified to '#bfh'; line 12942 (the note-separation line on the second braille page) is also exactly 40. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count."
+  "resolution": "illustrates.rule set to 16.5.1.h per standards-map.md's own BANA §16/B004 §11 worked-examples table (the project's established canonical id), not either run's own guess. print.blocks/print.notes follow Run B's schema ([ref:MARK] tokens inline + a separate print.notes[] array of {ref, placement, text}), matching this task's required schema; Run A instead folded each note's real content directly into a sibling print.blocks entry with no [ref:MARK] markers and always an empty print.notes[] -- a schema-level difference, not a content disagreement. braille.width: verified directly: line 12918 (field width 5, digits(23)+3), after stripping a leading form-feed page-break character and the line-number field, is exactly 40 characters, right-justified to '#bfh'; line 12942 (the note-separation line on the second braille page) is also exactly 40. braille.lines: the two runs' transcriptions disagreed on leading blank-cell counts / an inserted anomalous token on specific lines; resolved by direct re-extraction from references/_text/braille-formats-2016.txt (U+2800 cells converted to spaces, fixed padding measured exactly) -- see differences.md for the line-by-line count. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "poem 1 paragraph with [ref:3]/[ref:4] marks; no bylines; poem 2 \"[ref:1]civility\"; plain note headwords",
+      "now": "no marks in poem 1 (notes are keyed by print line numbers 3 and 4, bold headwords); \"*civility*[ref:1]\" (italic word, superscript 1 AFTER it); bold bylines added as centred headings",
+      "evidence": "Page image PDF p.446 (Sample 16-2) and a 300 dpi crop: in poem 1 \"Convulsion,\" and \"Throe—\" carry no superscript mark; the notes at the right begin with the line numbers \"3\" and \"4\" and bold headwords \"sham Convulsion:\" and \"Throe:\". In poem 2 the italic word \"civility\" is followed by a raised 1, and the foot note \"1 civility: politeness...\" has a plain headword. Each poem has a centred bold byline (Emily Dickinson, Alice Walker) under the title, which the gold braille also shows (lines 3 and 16) but print.blocks lacked."
+    },
+    {
+      "field": "print.print.notes.0.text",
+      "was": "sham Convulsion: pretend to have a seizure.",
+      "now": "**sham Convulsion:** pretend to have a seizure.",
+      "evidence": "Same crop: bold headword \"sham Convulsion:\"."
+    },
+    {
+      "field": "print.print.notes.1.text",
+      "was": "Throe: sudden surge of pain.",
+      "now": "**Throe:** sudden surge of pain.",
+      "evidence": "Same crop: bold headword \"Throe:\"."
+    }
+  ]
 }

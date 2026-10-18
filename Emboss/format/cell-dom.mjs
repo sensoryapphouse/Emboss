@@ -14,7 +14,7 @@
 // data-annoref) so the round trip needs no "was this cell edited?" comparison against the
 // previous value: MathML survives an edit to the cell's other text exactly, with no markup
 // characters ever visible to a screen reader.
-import { TF_ITALIC, TF_UNDERLINE, TF_BOLD, cellSegments, cellFromSegments } from './cell-markup.mjs';
+import { TF_ITALIC, TF_UNDERLINE, TF_BOLD, TF_SCRIPT, cellSegments, cellFromSegments } from './cell-markup.mjs';
 
 const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -86,20 +86,54 @@ function mathAltText(g) {
   return 'equation';
 }
 
-/** One text run's HTML: bold > italic > underline > uncontracted, a fixed nesting order so
- * every combination of `tf` bits round-trips through the same tag order every time. */
-function textRunHtml(text, tf, uncontracted) {
-  let html = escapeHtml(text);
+/** One text run's HTML: bold > italic > script > underline > uncontracted, a fixed nesting
+ * order so every combination of `tf` bits round-trips through the same tag order every time. */
+// Sub/superscript markers (format/text-style.mjs SCRIPT_MARKS, U+E000/U+E001 open, U+E002 close) inside a run's text
+// are shown as real <sub>/<sup> in the cell and read back by cellHtmlToSegments (30 Sep: a cell showed them as boxes).
+function scriptsToHtml(html) {
+  return html.replace(/([\uE000\uE001])([^\uE000-\uE002]*)\uE002?/g, (_, open, inner) => (inner ? (open === '\uE000' ? `<sub>${inner}</sub>` : `<sup>${inner}</sup>`) : '')).replace(/\uE002/g, '');
+}
+function textRunHtml(text, tf, uncontracted, strike = false) {
+  let html = scriptsToHtml(escapeHtml(text));
   if (!html) return '';
   if (uncontracted) html = `<span class="cell-code">${html}</span>`;
+  if (strike) html = `<s>${html}</s>`;   // UEB 9.5.1 strikethrough (transcriberTypeform 'strike'): shown in the cell, as bold and underline are (audit w19)
   if (tf & TF_UNDERLINE) html = `<u>${html}</u>`;
+  if (tf & TF_SCRIPT) html = `<span class="cell-script">${html}</span>`;   // K5: UEB §9 script typeform, no native tag
   if (tf & TF_ITALIC) html = `<em>${html}</em>`;
   if (tf & TF_BOLD) html = `<strong>${html}</strong>`;
   return html;
 }
 
-/** Inline segments → the HTML a contenteditable table cell shows. */
-export function segmentsToCellHtml(segments) {
+// K35: a picture kept in a data-table cell (parse.mjs's docxCellValue and friends,
+// BANA 10.11.1) is an inline `imgnote` segment — the same embedded transcriber's-note shape
+// exercise pictures use ({ type: 'imgnote', text: description, src?, prodnote?, render?,
+// uncontracted?, spanTypeform? }: format/cell-markup.mjs, input/nimas-export.mjs's
+// serializeInlineLeaf). Before this it fell through to the plain-text branch below, so
+// editing anything else in the cell replaced the whole cell with the description text alone
+// and silently dropped the picture (no src, no prodnote/render flags). It is now an atomic
+// chip like the maths/note-reference chips above, carrying every field it needs in data-*
+// attributes so cellHtmlToSegments rebuilds the exact same segment untouched by an edit
+// elsewhere in the cell, plus a small thumbnail when the caller can resolve `src` to a
+// displayable URL (the editor's loadedDocInfo.resourceUrls — see editor.mjs's makeTableCell).
+function imgnoteChipHtml(g, resolveImgSrc) {
+  const text = String(g.text ?? '');
+  const attrs = [`data-text="${escapeHtml(text)}"`];
+  if (g.src) attrs.push(`data-src="${escapeHtml(g.src)}"`);
+  if (g.prodnote) attrs.push('data-prodnote="1"');
+  if (g.render) attrs.push(`data-render="${escapeHtml(g.render)}"`);   // 'required' or 'optional' (parse.mjs reads either literally from <prodnote render>)
+  if (g.uncontracted) attrs.push('data-uncontracted="1"');
+  if (g.spanTypeform) attrs.push('data-span-typeform="1"');
+  const label = text || 'picture';
+  const thumbUrl = g.src && typeof resolveImgSrc === 'function' ? resolveImgSrc(g.src) : null;
+  const thumb = thumbUrl ? `<img class="cell-imgnote-thumb" src="${escapeHtml(thumbUrl)}" alt="" aria-hidden="true"/>` : '🖼️ ';
+  return `<span class="cell-imgnote-chip" contenteditable="false" role="img" aria-label="${escapeHtml(`picture: ${label}`)}" title="${escapeHtml(label)}" ${attrs.join(' ')}>${thumb}${escapeHtml(label)}</span>`;
+}
+
+/** Inline segments → the HTML a contenteditable table cell shows. `resolveImgSrc(src)` (optional)
+ * turns an imgnote segment's own `src` into a displayable URL for its thumbnail (K35); with none,
+ * or when it returns nothing, the chip still shows a picture glyph and its description. */
+export function segmentsToCellHtml(segments, resolveImgSrc) {
   const segs = Array.isArray(segments) ? segments : [];
   return segs.map((g) => {
     if (g.type === 'math') {
@@ -120,13 +154,15 @@ export function segmentsToCellHtml(segments) {
       if (g.annoref) attrs.push('data-annoref="1"');
       return `<span class="cell-noteref-chip" contenteditable="false" role="img" aria-label="${escapeHtml(`note reference ${mark}`)}" ${attrs.join(' ')}>${escapeHtml(mark)}</span>`;
     }
-    return textRunHtml(g.text || '', g.tf || 0, !!g.uncontracted);
+    if (g.type === 'imgnote') return imgnoteChipHtml(g, resolveImgSrc);
+    return textRunHtml(g.text || '', g.tf || 0, !!g.uncontracted, g.transcriberTypeform === 'strike');
   }).join('');
 }
 
-/** The HTML a cell's contenteditable should show, from a cell (string or {text, segments}). */
-export function cellToEditableHtml(cell) {
-  return segmentsToCellHtml(cellSegments(cell));
+/** The HTML a cell's contenteditable should show, from a cell (string or {text, segments}).
+ * `resolveImgSrc` is passed straight through to segmentsToCellHtml (K35). */
+export function cellToEditableHtml(cell, resolveImgSrc) {
+  return segmentsToCellHtml(cellSegments(cell), resolveImgSrc);
 }
 
 const TAG_TF = { strong: TF_BOLD, b: TF_BOLD, em: TF_ITALIC, i: TF_ITALIC, u: TF_UNDERLINE };
@@ -139,10 +175,10 @@ const ATTR = (attrs, name) => {
 export function cellHtmlToSegments(html) {
   const s = String(html || '');
   const segments = [];
-  let tf = 0, unc = false;
+  let tf = 0, unc = false, strike = false;
   const push = (seg) => {
     const last = segments[segments.length - 1];
-    if (seg.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (seg.tf || 0) && !!last.uncontracted === !!seg.uncontracted) {
+    if (seg.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (seg.tf || 0) && !!last.uncontracted === !!seg.uncontracted && (last.transcriberTypeform || null) === (seg.transcriberTypeform || null)) {
       last.text += seg.text;
     } else {
       segments.push(seg);
@@ -157,9 +193,10 @@ export function cellHtmlToSegments(html) {
     const seg = { type: 'text', text };
     if (tf) seg.tf = tf;
     if (unc) seg.uncontracted = true;
+    if (strike) seg.transcriberTypeform = 'strike';
     push(seg);
   };
-  const tokenRe = /<(\/)?(strong|b|em|i|u|span|div|br)\b([^>]*)>|([^<]+)/gi;
+  const tokenRe = /<(\/)?(strong|b|em|i|u|s|strike|del|span|div|br|sub|sup)\b([^>]*)>|([^<]+)/gi;
   let m;
   while ((m = tokenRe.exec(s)) !== null) {
     if (m[4] !== undefined) { pushText(m[4]); continue; }
@@ -167,6 +204,16 @@ export function cellHtmlToSegments(html) {
     const tag = m[2].toLowerCase();
     const attrs = m[3] || '';
     if (tag === 'br') { continue; }
+    if (tag === 's' || tag === 'strike' || tag === 'del') { strike = !isClose; continue; }
+    if (tag === 'sub' || tag === 'sup') {   // back to the markers the rest of Emboss uses (scriptsToHtml, above)
+      const mark = isClose ? '\uE002' : (tag === 'sub' ? '\uE000' : '\uE001');
+      const seg = { type: 'text', text: mark };
+      if (tf) seg.tf = tf;
+      if (unc) seg.uncontracted = true;
+      if (strike) seg.transcriberTypeform = 'strike';
+      push(seg);
+      continue;
+    }
     if (tag === 'div') { continue; }
     if (tag === 'span') {
       if (!isClose && /class="[^"]*\bcell-math-chip\b/.test(attrs)) {
@@ -188,9 +235,30 @@ export function cellHtmlToSegments(html) {
         if (closeIdx >= 0) tokenRe.lastIndex = closeIdx + 7;
         continue;
       }
-      // A plain (cell-code) span: only its open/close toggles the uncontracted run.
+      // K35: a picture kept in the cell (imgnoteChipHtml above) — its thumbnail <img>, if
+      // any, is inside the span and is skipped the same way a maths chip's rendered MathML
+      // is: jump straight to the matching </span> rather than tokenizing the chip's content.
+      if (!isClose && /class="[^"]*\bcell-imgnote-chip\b/.test(attrs)) {
+        const closeIdx = s.indexOf('</span>', tokenRe.lastIndex);
+        const seg = { type: 'imgnote', text: ATTR(attrs, 'data-text') };
+        const src = ATTR(attrs, 'data-src');
+        if (src) seg.src = src;
+        if (/\bdata-prodnote="1"/.test(attrs)) seg.prodnote = true;
+        const render = ATTR(attrs, 'data-render');
+        if (render) seg.render = render;
+        if (/\bdata-uncontracted="1"/.test(attrs)) seg.uncontracted = true;
+        if (/\bdata-span-typeform="1"/.test(attrs)) seg.spanTypeform = true;
+        segments.push(seg);
+        if (closeIdx >= 0) tokenRe.lastIndex = closeIdx + 7;
+        continue;
+      }
+      // A plain (cell-code / cell-script) span: only its open/close toggles the run. Neither
+      // ever nests inside the other (uncontracted text and script text are set separately in
+      // the editor), so a closing </span> with no class simply clears whichever was open —
+      // the same simplification segmentsToCellHtml's fixed nesting order already relies on.
       if (!isClose && /class="[^"]*\bcell-code\b/.test(attrs)) unc = true;
-      else if (isClose) unc = false;
+      else if (!isClose && /class="[^"]*\bcell-script\b/.test(attrs)) tf |= TF_SCRIPT;
+      else if (isClose) { unc = false; tf &= ~TF_SCRIPT; }
       continue;
     }
     const bit = TAG_TF[tag];

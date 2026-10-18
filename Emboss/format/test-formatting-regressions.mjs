@@ -15,7 +15,11 @@ const translate = styledTranslate(raw, 'faithful');
 const translateG1 = (t) => louis.translate(t, louis.TABLES.uebG1);
 const BRF_SET = new Set(BRF64.split(''));
 const cell = (...dots) => dots.map((d) => String.fromCodePoint(0x2800 + d)).join('');   // Unicode braille from dot values
-const base = (mode, extra = {}) => ({ mode, width: mode === 'bana' ? 40 : 38, depth: 25, listStyle: 'spaced', toc: false, translate, ...extra });
+// UK-6 (28 Sep, James / decisions.md "UKAAF"): tableEndMarker/docEndMarker default true in UKAAF —
+// off here since none of these pins are about end markers, and the very narrow test widths some of
+// them use (#3's width:10) are far below any real UKAAF page size (28+ cells, UK-7) an end marker's
+// fixed 12-cell content assumes.
+const base = (mode, extra = {}) => ({ mode, width: mode === 'bana' ? 40 : 38, depth: 25, listStyle: 'spaced', toc: false, translate, tableEndMarker: false, docEndMarker: false, ...extra });
 const pagesOf = (brf) => brf.split('\x0c').map((p) => { const a = p.split('\r\n'); a.pop(); return a; });
 const allLines = (brf) => pagesOf(brf).flat();
 const badChars = (brf) => allLines(brf).flatMap((l) => [...l].filter((c) => !BRF_SET.has(c)));
@@ -66,10 +70,10 @@ for (const mode of ['ukaaf', 'bana']) {
   ok(line && line.indexOf('@.<') === (mode === 'bana' ? 6 : 0), `#4 ${mode} TN starts in cell ${mode === 'bana' ? 7 : 1}: ${JSON.stringify(line)}`);
 }
 
-// #5 the colon is translated (UEB dots 25 = "3"), not a raw ":" cell
+// #5 a glossary entry is translated whole (no invented colon: F-183/F-194); a listed-table value keeps its translated colon (UEB dots 25 = "3"), not a raw ":" cell
 {
   const g = formatDocument({ blocks: [{ type: 'glossary', items: [{ term: 'Cat', def: 'A small animal.' }] }] }, base('ukaaf'));
-  ok(allLines(g).includes(translate('Cat: A small animal.')), `#5 glossary entry translated whole: ${JSON.stringify(allLines(g).filter(Boolean))}`);
+  ok(allLines(g).includes(translate('Cat A small animal.')), `#5 glossary entry translated whole: ${JSON.stringify(allLines(g).filter(Boolean))}`);
   const t = formatDocument({ blocks: [{ type: 'table', headers: ['Name', 'Age'], rows: [['Ann', '31']] }] }, base('ukaaf', { tableFormat: 'listed' }));
   ok(allLines(t).some((l) => l.trim() === translate('Age: 31')), `#5 listed-table value line translated whole`);
 }
@@ -241,7 +245,22 @@ for (const mode of ['ukaaf', 'bana']) {
 // #18 box lines (Formats §7.1.3, Example 4-6): top `7`, bottom `G`; exterior `=` for
 // a nested set; heading on the line after the top line with no blank (§4.3.5);
 // no blank after the top / before the bottom line (§7.2.1c/d) but the blank a
-// list needs (§8.3.2a) is kept. UKAAF has no box rule and takes the same form.
+// list needs (§8.3.2a) is kept — BANA only. UKAAF has no box rule and used to take
+// the same form, EXCEPT for the blank line before/after the box itself: UK-5 (28
+// Sep, James / decisions.md "UKAAF") removes it in UKAAF (the box's own top/bottom
+// border lines already separate it from the surrounding text); BANA §7.2.1 is
+// unaffected.
+// UPDATED (this brief, A74/UK-5): the interior "kept" blank around the list was
+// itself a box-code bug, not a real UKAAF exception — a UKAAF box's children were
+// laid out through a hand-rolled loop that never consulted joinsWithoutBlank (only
+// BANA's own narrow §10.2.3 "directions" case was mirrored there), so a UKAAF box
+// kept a spaced-style list's blank margin that the SAME list, at the top level
+// (outside any box), already loses to UK-5's joinsWithoutBlank (checked directly:
+// formatDocument with the same listStyle:'spaced' list outside a box, UKAAF, has
+// no blank line around it either — UK-5 does not carve out an exception for
+// listStyle). Boxes now consult joinsWithoutBlank too (traceBlockCore's 'box'
+// case), so the interior blank is gone in UKAAF, matching the top-level behaviour;
+// BANA is unaffected (still only the P5 case), so its own interior blank is intact.
 {
   const box = { type: 'box', title: 'Care', blocks: [{ type: 'heading', level: 2, text: 'Care' }, { type: 'para', text: 'Sit up.' }, { type: 'list', items: [{ text: 'one' }] }, { type: 'para', text: 'Tail.' }] };
   for (const mode of ['bana', 'ukaaf']) {
@@ -249,11 +268,13 @@ for (const mode of ['ukaaf', 'bana']) {
     const ls = allLines(formatDocument({ blocks: [{ type: 'para', text: 'Lead.' }, box, { type: 'para', text: 'Trail.' }] }, base(mode)));
     const t = ls.indexOf('7'.repeat(w)), b = ls.indexOf('G'.repeat(w));
     ok(t > 0 && b > t, `#18 ${mode}: 7 top line and G bottom line present (${t},${b})`);
-    ok(ls[t - 1] === '' && ls[b + 1] === '', `#18 ${mode}: blank line before and after the box (§7.2.1)`);
+    if (mode === 'bana') ok(ls[t - 1] === '' && ls[b + 1] === '', `#18 ${mode}: blank line before and after the box (§7.2.1)`);
+    else ok(ls[t - 1] !== '' && ls[b + 1] !== '', `#18 ${mode}: UK-5 — no blank line before or after the box: ${JSON.stringify(ls.slice(Math.max(0, t - 2), t + 1))} / ${JSON.stringify(ls.slice(b, b + 3))}`);
     // BANA cell-5 heading (Formats §4.5); UKAAF L2 heading in cell 1 (B004 §5)
     ok(ls[t + 1].trim() === translate('Care').trim() && ls[t + 1].startsWith(mode === 'bana' ? '    ' : ','), `#18 ${mode}: heading on the line after the top box line, no blank (§4.3.5): ${JSON.stringify(ls[t + 1])}`);
     ok(ls[b - 1] !== '' && ls[t + 1] !== '', '#18 no blank after top / before bottom line (§7.2.1c/d)');
-    ok(ls.slice(t, b).includes('') , `#18 ${mode}: interior blank line around the list kept (§8.3.2a): ${JSON.stringify(ls.slice(t, b + 1))}`);
+    if (mode === 'bana') ok(ls.slice(t, b).includes(''), `#18 ${mode}: interior blank line around the list kept (§8.3.2a): ${JSON.stringify(ls.slice(t, b + 1))}`);
+    else ok(!ls.slice(t, b).includes(''), `#18 ${mode}: UK-5 (A74, this brief) — no interior blank line around the list either, same as the top-level document flow: ${JSON.stringify(ls.slice(t, b + 1))}`);
     ok(!ls.some((l) => /^3{5}/.test(l) || l.startsWith('333 ')), `#18 ${mode}: no old-style 333 border`);
   }
   const nested = { type: 'box', blocks: [{ type: 'para', text: 'Outer.' }, { type: 'box', blocks: [{ type: 'para', text: 'Inner.' }] }, { type: 'para', text: 'Outer tail.' }] };

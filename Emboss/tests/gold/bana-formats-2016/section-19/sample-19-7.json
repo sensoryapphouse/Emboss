@@ -51,7 +51,7 @@
       },
       {
         "kind": "paragraph",
-        "text": "6 9 _ _ 2 _ _ 7 _"
+        "text": "6 9 _ _ 2 _ 7 _ _"
       },
       {
         "kind": "paragraph",
@@ -89,5 +89,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side reconciled: the 9x9 grid is rebuilt from the given braille's own digits/underscores (both runs had left this print-side largely undocumented); modeled as ordinary paragraph rows to exercise F-218's own positive finding, with the line-mode divider rows recorded separately as a limitation (F-222)."
+  "resolution": "Braille unchanged (A and B agree, byte-identical; independently re-derived and matches exactly). Print side reconciled: the 9x9 grid is rebuilt from the given braille's own digits/underscores (both runs had left this print-side largely undocumented); modeled as ordinary paragraph rows to exercise F-218's own positive finding, with the line-mode divider rows recorded separately as a limitation (F-222). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks.8.text",
+      "was": "6 9 _ _ 2 _ _ 7 _",
+      "now": "6 9 _ _ 2 _ 7 _ _",
+      "evidence": "Page image references/_gemini/_done/gold-19-B/page-538.png (Sample 19-7): the grid's seventh row reads 6 9 _ _ 2 _ 7 _ _ (the 7 is in column 7); gold text put it in column 8."
+    }
+  ]
 }

@@ -100,12 +100,18 @@ await testAsync('exportToEbraille produces valid OCF/EPUB3 ZIP container', async
   assert.ok(opfXml.includes('<meta property="a11y:tactileGraphics">SVG</meta>'));
   assert.ok(opfXml.includes('media-type="image/svg+xml"'));
 
-  // 4. Entry Navigation and Volume Content
-  assert.ok(unzipped.has('volume-1.html'), 'Must contain volume-1.html');
-  const volHtml = dec.decode(unzipped.get('volume-1.html'));
-  assert.ok(volHtml.includes('<div class="sah-page"'));
-  assert.ok(volHtml.includes('<figure>'));
-  assert.ok(volHtml.includes('<img src="graphics/graphic-1.svg"'));
+  // 4. Entry Navigation and Content
+  // Paul, 1 Oct 2026 (feedback: the export was monolithic): the export is built from the document model, as structured
+  // reflowable XHTML in content documents split at the top-level headings - not the embosser pages (volume-N.html, a
+  // <div class="sah-page"> of <p> lines). The old expectations pinned that form; see ebraille_structure.test.mjs and
+  // docs/expectation-changes.md.
+  assert.ok(unzipped.has('content/section-01.html'), 'Must contain the first content document');
+  assert.ok(!unzipped.has('volume-1.html'), 'No volume documents: the export is not the embosser pages');
+  const volHtml = dec.decode(unzipped.get('content/section-01.html'));
+  assert.ok(!volHtml.includes('sah-page'), 'No pages of lines');
+  assert.ok(/<h1\b[^>]*\bid="/.test(volHtml), 'The heading is an h1 with an id');
+  assert.ok(volHtml.includes('<figure'));
+  assert.ok(volHtml.includes('<img src="../graphics/graphic-1.svg"'));
 
   // 5. Embedded Graphic SVG
   assert.ok(unzipped.has('graphics/graphic-1.svg'), 'Must bundle graphic SVG');
@@ -184,7 +190,9 @@ test('BRF output obeys BANA margin rules across styles', () => {
 // -----------------------------------------------------------------------------
 // 5. Multi-Volume eBraille Packaging
 // -----------------------------------------------------------------------------
-await testAsync('Multi-volume eBraille bundles multiple volume HTML documents and TOC', async () => {
+// Paul, 1 Oct 2026: volumes belong to the embosser (BRF, PEF); an eBraille publication is divided by its headings and by
+// size, never by volumePages. This test used to expect volume-1.html and volume-2.html.
+await testAsync('eBraille ignores volumePages: one section is one content document, however long', async () => {
   const blocks = [
     { type: 'heading', level: 1, text: 'Multi Volume eBraille' }
   ];
@@ -197,8 +205,8 @@ await testAsync('Multi-volume eBraille bundles multiple volume HTML documents an
   assert.ok(looksLikeEbraille(bytes));
 
   const unzipped = await unzip(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
-  assert.ok(unzipped.has('volume-1.html'), 'Must contain volume-1.html');
-  assert.ok(unzipped.has('volume-2.html'), 'Must contain volume-2.html');
+  assert.ok(unzipped.has('content/section-01.html'), 'Must contain the section document');
+  assert.ok(!unzipped.has('volume-1.html') && !unzipped.has('volume-2.html'), 'No volume documents');
   assert.ok(unzipped.has('package.opf'), 'Must contain package.opf');
 });
 
@@ -269,7 +277,7 @@ await testAsync('Comprehensive 15-Style Document Exports Cleanly to eBraille and
   assert.ok(looksLikeEbraille(ebrailleBytes));
   const unzipped = await unzip(ebrailleBytes.buffer.slice(ebrailleBytes.byteOffset, ebrailleBytes.byteOffset + ebrailleBytes.byteLength));
   assert.ok(unzipped.has('package.opf'));
-  assert.ok(unzipped.has('volume-1.html'));
+  assert.ok(unzipped.has('content/section-01.html'));   // Paul, 1 Oct 2026: content documents, not volume-N.html
   assert.ok(unzipped.has('graphics/graphic-1.svg'));
 
   // Export BRF

@@ -60,10 +60,13 @@
     "toc": "TOC",
     "print": "Affichage texte (LHS)",
     "braille": "Braille",
+    "export": "Exporter",
+    "export_title": "Exporter le braille (BRF, eBraille) ou l'envoyer à l'embosseuse",
+    "emboss_menu": "Envoyer à l'embosseuse",
     "braille_view": "Vue Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Embosser",
     "emboss_tooltip": "Envoyer le document à l'embosseuse ou à l'imprimante",
     "clear_doc": "Effacer le document",
@@ -133,8 +136,6 @@
     "poem_desc": "Ligne de vers de strophe poétique (1-3)",
     "exercise_title": "Question d'exercice",
     "exercise_desc": "Question d'exercice numérotée (1-5 / 3-5)",
-    "caption_title": "Légende / Attribution",
-    "caption_desc": "Légende de figure ou attribution (7-5)",
     "footnote_title": "Note de bas de page",
     "footnote_desc": "Texte de note de bas de page (1-3)",
     "note_title": "Note du transcripteur",
@@ -163,8 +164,6 @@
     "page_desc": "Insérer un indicateur de saut de page imprimée source",
     "printpage_title": "Numéro de page imprimée",
     "printpage_desc": "Insérer un indicateur de saut de page imprimée source",
-    "code_title": "Code informatique",
-    "code_desc": "Insérer un bloc de code avec indicateurs UEB",
     "indent_title": "Indent / Nest Sub-item",
     "indent_desc": "Nest list item or exercise deeper (Tab)",
     "outdent_title": "Outdent / Promote Item",
@@ -185,8 +184,8 @@
     "language_label": "Langue de l'interface",
     "language_help": "Sélectionnez la langue des boutons, menus, fenêtres et annonces de lecteur d'écran.",
     "standard_label": "Norme braille",
-    "standard_bana": "BANA (USA et Canada — 40×25 cellules)",
-    "standard_ukaaf": "UKAAF (Royaume-Uni et International — 38×25 cellules)",
+    "standard_bana": "BANA (USA et Canada — 38×25 cellules)",
+    "standard_ukaaf": "UKAAF (Royaume-Uni et International — 38×27 cellules)",
     "grade_label": "Niveau de braille",
     "grade_1": "Intégral (Non abrégé / Lettre à lettre)",
     "grade_2": "Abrégé",
@@ -261,7 +260,7 @@
     "size_full": "Pleine page (Ligne 1 protégée)",
     "lead_lines": "Lignes de guidage tactiles",
     "braille_labels": "Étiquettes braille",
-    "footer_tip": "💡 Les contours noirs deviennent des bordures tactiles solides ; les couleurs se mappent automatiquement sur des textures tactiles distinctes.",
+    "footer_tip": "Les contours noirs deviennent des bordures tactiles solides ; les couleurs se mappent automatiquement sur des textures tactiles distinctes.",
     "open_repositories": "Ouvrir les référentiels tactiles :",
     "no_diagrams": "Aucun diagramme correspondant trouvé."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Statut de conversion bidirectionnelle sans perte",
     "precedence_status": "Statut des règles de priorité braille",
     "perfect_match": "Correspondance exacte à 100 % (0 divergence)",
-    "badge_warn": "⚠ {count} à vérifier",
+    "badge_warn": "{count} à vérifier",
     "badge_title": "{count} divergence(s) trouvée(s) pendant la conversion bidirectionnelle. Cliquez pour accéder à la première.",
     "badge_clean": "Vérification de conversion bidirectionnelle : aucune divergence trouvée."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir quitter sans enregistrer ?",
     "unsaved_load": "Vous avez des modifications non enregistrées. Charger un nouveau fichier remplacera votre document actuel. Continuer ?",
     "unsaved_clear": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir effacer le document ?",
-    "drop_hint": "⬇ Déposez un document pour l'importer dans l'éditeur",
+    "drop_hint": "Déposez un document pour l'importer dans l'éditeur",
     "notice": "Notification",
     "close_notice": "Fermer la notification"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Texte du document",
+      "math_keyboard_toggle": "Clavier mathématique",
       "label": "Texte",
       "toolbar_aria": "Formatage",
       "style_label": "Style de paragraphe",
@@ -443,8 +443,8 @@
       "graphic_cats": "Catégories graphiques",
       "graphic_list": "Diagrammes graphiques tactiles",
       "formula_search_label": "Rechercher des formules",
-      "btactile_link": "BTactile (gratuit) ↗",
-      "tgil_link": "APH TGIL (1800+ modèles) ↗"
+      "btactile_link": "BTactile (gratuit)",
+      "tgil_link": "APH TGIL (1800+ modèles)"
     },
     "settings": {
       "list_spaced": "Liste à lignes vierges (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Connexion directe aux embosseuses microcontrôleur personnalisées (ESP32-S3, RP2040/RP2350, STM32, Arduino) contournant les verrouillages de pilotes d'imprimante OS.",
       "graphics_hint": "Lorsque décoché, les diagrammes sont exportés en tant que descriptions de notes du transcripteur accessibles pour les embosseuses et affichages braille texte seul.",
       "tactile_heading": "Flux en direct d'affichage tactile (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Connecter Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Connecter USB / HID (Monarch)",
+      "tactile_connect_ble": "Connecter Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Connecter USB / HID (Monarch)",
       "tactile_disconnect": "Déconnecter l'affichage",
       "tactile_sim_monarch": "Tester Monarch simulé (32×10)",
       "tactile_sim_dotpad": "Tester DotPad simulé (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Diffuse en continu la fenêtre braille en direct et les graphiques tactiles directement sur WebBluetooth (DotPad BLE UART) ou WebHID (Monarch/USB) sans pilotes externes.",
       "perkins_hint": "— dactylographiez le braille avec les touches SDF et JKL",
       "ascii_hint": "— afficher les caractères braille ASCII bruts",
+      "show_explanation_bar": "Afficher la barre d'explication",
+      "show_explanation_bar_hint": "— la bande sous le texte et le braille qui explique le braille du mot où vous êtes",
+      "simple_mode_hint": "— ouvrir Emboss dans le convertisseur simple. Passer du Mode Rapide à l'éditeur ne change pas ce réglage.",
       "covers_hint": "— couvertures de titre embossées lors de la division des livres"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "En-tête {n}",
       "cell_aria_named": "{header}, ligne {row}",
       "cell_aria": "Colonne {col}, ligne {row}",
-      "too_wide_listed": "⚠ Trop large pour des colonnes — transcrit en braille sous forme de tableau listé",
+      "too_wide_listed": "Trop large pour des colonnes — transcrit en braille sous forme de tableau listé",
       "too_wide_listed_title": "Ce tableau ne tient pas en colonnes avec le nombre actuel de cellules par ligne et le mode braille, il sera donc transcrit en braille sous forme de tableau listé (BANA Formats §11.9) plutôt qu'en colonnes côte à côte.",
-      "too_wide_paragraph": "⚠ Trop large pour des colonnes — transcrit en braille sous forme de paragraphe",
+      "too_wide_paragraph": "Trop large pour des colonnes — transcrit en braille sous forme de paragraphe",
       "too_wide_paragraph_title": "Ce tableau ne tient pas en colonnes avec le nombre actuel de cellules par ligne et le mode braille, il sera donc transcrit en braille sous forme de paragraphe (UKAAF B004 §12) plutôt qu'en colonnes côte à côte."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Impossible de charger les tableaux pour \"{code}\" — utilisation toujours du code braille précédent.",
-      "failed": "⚠ Le braille n'a pas pu être généré.",
+      "failed": "Le braille n'a pas pu être généré.",
       "failed_hint": "(Si cela dit que le moteur n'est pas initialisé, le moteur braille ne s'est pas chargé — actualisez fortement avec Ctrl+Maj+R.)",
       "error_status": "Erreur de rendu: {message}"
     },
     "engine": {
       "loading": "Chargement du moteur braille…",
-      "failed": "⚠ Le moteur braille n'a pas pu être chargé.",
+      "failed": "Le moteur braille n'a pas pu être chargé.",
       "failed_hint": "Actualisez fortement avec Ctrl+Maj+R. S'il persiste, ouvrez la console du navigateur (Affichage ▸ Développeur) et envoyez les erreurs.",
       "failed_status": "Impossible de charger le moteur: {message}",
       "ready": "Prêt — tapez ou formatez à gauche; le braille se met à jour en direct."
@@ -715,7 +718,7 @@
       "network_unreachable": "Impossible d'atteindre {url}: {message}. Les navigateurs ne peuvent pas ouvrir les connexions TCP brutes (port 9100); l'embosseuse doit accepter HTTP POST, ou télécharger le .brf et l'envoyer avec votre gestionnaire d'impression.",
       "usb_bridge_done": "Travail d'embossage livré à l'imprimante USB!",
       "needs_webserial": "L'embossage en série directe nécessite un navigateur avec WebSerial (Chrome, Edge, Opera). Vous pouvez télécharger le fichier .brf pour l'embosser avec votre gestionnaire d'impression, ou utiliser le mode Réseau (Port 9100) dans les paramètres.",
-      "detected": "🔌 Détecté {name} — défini sur {cells}×{lines} à {baud} baud."
+      "detected": "Détecté {name} — défini sur {cells}×{lines} à {baud} baud."
     },
     "symbols": {
       "title": "Bibliothèque de symboles tactiles",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matrice dynamique",
       "badge_text_only": "Texte seul",
       "badge_index": "Matrice de points"
+    },
+    "offline": {
+      "ready": "Emboss est prêt à fonctionner hors ligne.",
+      "ready_short": "Prêt à fonctionner hors ligne",
+      "not_yet": "Préparation en cours pour travailler hors ligne…"
     }
   }
 }

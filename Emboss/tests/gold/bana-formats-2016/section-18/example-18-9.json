@@ -19,8 +19,13 @@
         "text": "In the following sentence the single underlined word is the verb and the double underlined words are a prepositional phrase."
       },
       {
-        "kind": "other",
-        "text": "Diagrammed sentence (back-translated): \"We arrived at the hotel in the evening.\" with \"arrived\" single-underlined (the verb) and \"at the hotel\" double-underlined (the prepositional phrase), at a required 1-3 margin (18.7.1). Not modeled: F-188 (Emboss’s TYPEFORM has only one underline bit, so a second, visually distinct double-underline cannot be produced) and F-189 (no 1-3 \"diagrammed sentence\" margin exists; an ordinary paragraph defaults to a different indent)."
+        "kind": "paragraph",
+        "level": null,
+        "text": "We <u>arrived</u> at the hotel in the evening.",
+        "blocked": true,
+        "features": "'arrived' single underlined (the verb); 'at the hotel' DOUBLE underlined (prepositional phrase) -- the double underline is not expressible in the builder's markup. Sentence set flush left at the box margin.",
+        "items": null,
+        "diagram": true
       }
     ],
     "notes": null,
@@ -44,5 +49,19 @@
     "A",
     "B"
   ],
-  "resolution": "Braille already agreed and re-extraction confirms it exactly; the diagrammed sentence and its single/double-underline distinction confirmed by back-translation. Kept the intro sentence as an ordinary, representable paragraph but the diagrammed sentence itself as 'other' (F-188 + F-189 both apply and neither is fixable by choosing different wording)."
+  "resolution": "Braille already agreed and re-extraction confirms it exactly; the diagrammed sentence and its single/double-underline distinction confirmed by back-translation. Kept the intro sentence as an ordinary, representable paragraph but the diagrammed sentence itself as 'other' (F-188 + F-189 both apply and neither is fixable by choosing different wording). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.print.blocks",
+      "was": "paragraph + one 'other' block holding the diagrammed sentence as a description",
+      "now": "paragraph + a flush paragraph 'We <u>arrived</u> at the hotel in the evening.' (double underline on 'at the hotel' noted in features only)",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-505.png (Example 18-9): sentence 'We arrived at the hotel in the evening.' with 'arrived' underlined once and 'at the hotel' underlined twice, starting flush left (the instruction paragraph above is indented). Builder must learn: double underline (transcriber-defined typeform)."
+    },
+    {
+      "field": "print.blocks.1.diagram",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "Page image references/_gemini/_done/gold-18-A/page-505.png (top): Example 18-9 'Diagramming with Underlining' is a diagrammed sentence (single and double underlines mark verb and prepositional phrase), placed under 18.7.1 which says 1-3 margins for each diagrammed sentence (page-504.png)."
+    }
+  ]
 }

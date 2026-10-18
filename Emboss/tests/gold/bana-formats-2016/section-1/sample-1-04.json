@@ -29,10 +29,10 @@
   "braille": {
     "width": 40,
     "lines": [
-      ",text is r1d acr fac+ pages z         #dd-#de",
+      ",text is r1d acr fac+ pages z    #dd-#de",
       "if bo? pages 7 a s+le page4 444",
       "444                                  #,-",
-      "444                                a#dd-#de"
+      "444                             a#dd-#de"
     ],
     "pageBreaks": [
       {
@@ -49,5 +49,21 @@
     "A",
     "B"
   ],
-  "resolution": "Both runs agree on wording. Not representable for the same reasons as sample-1-03: no combined/facing-page-number transform in Emboss (F-46, F-47), and the source's own excerpt has a genuine content gap. status: not-representable."
+  "resolution": "Both runs agree on wording. Not representable for the same reasons as sample-1-03: no combined/facing-page-number transform in Emboss (F-46, F-47), and the source's own excerpt has a genuine content gap. status: not-representable.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        ",text is r1d acr fac+ pages z         #dd-#de",
+        "444                                a#dd-#de"
+      ],
+      "after": [
+        ",text is r1d acr fac+ pages z    #dd-#de",
+        "444                             a#dd-#de"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0, 3 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 40 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (2). Where: before right-margin page number (2)."
+    }
+  ]
 }

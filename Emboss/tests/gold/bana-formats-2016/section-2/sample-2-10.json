@@ -1,0 +1,79 @@
+{
+  "id": "sample-2-10",
+  "title": "Sample 2-10: Canadian Title Page and Reproduction Notice",
+  "pdfPages": [
+    33
+  ],
+  "textLines": [
+    2473,
+    2504
+  ],
+  "illustrates": {
+    "rule": "2.4.2 cross-reference",
+    "quote": "(See Sample 2-10: Canadian Title Page and Reproduction Notice on page 2-33.)"
+  },
+  "print": {
+    "blocks": [],
+    "notes": "Print original is a photographic reproduction of a real book's cover/title/copyright/contents page (references/_gemini/gold-2-A/page-077.png), not encoded as running text anywhere in the source .txt. Neither independent transcription run modelled it into print.blocks (both left print.blocks empty); this reconciliation viewed the page image directly to confirm the braille.lines transcription and the sample's own title/rule citation, but likewise leaves print.blocks empty -- building a faithful print.blocks model of a photographed book cover is out of this reconciliation's scope (reconciling two existing transcription runs), not a disagreement between them to resolve.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "          ,,reluctant ,,g5ius",
+      "  ,! ,pas.nate ,life & ,9v5tive ,m9d (",
+      "         ,alex&] ,graham ,bell",
+      "",
+      "            ,,*>lotte ,,gray",
+      "",
+      "        ,a ,phyllis ,bruce ,book",
+      "              ,publi%$ by",
+      "      ,h>p],coll9s ,publi%]s ,ltd",
+      "           ,toronto1 ,ont>io",
+      "   ,copy\"r ^c #bjjf by ,*>lotte ,gray",
+      "",
+      "             ,transcrip;n (",
+      "   ,,isbn #ac3 #igh-#j-#jj-#bjjfgf-#g",
+      "     ,,isbn #aj3 #j-#jj-#bjjfgf-#f",
+      "      ,translat$ #bjaj 9to ,unifi$",
+      "           ,5gli% ,brl by ,\"n",
+      "     ,transcrip;n ,complet$ by ,\"n",
+      "                 ,,cnib",
+      "    ,toronto1 ,ont>io ,m#d,g #c,e#h",
+      "",
+      "             ,9 #f ,volumes",
+      "               ,volume #a",
+      "  ,brl pages t#a1 p#a-p#aj1 & #a-#adb",
+      "           ,pr9t pages #a-#ha        t#a",
+      "  ,? \"w is produc$ = p]sons ) a",
+      "p]ceptual 4abil;y z p] ! ,canadian",
+      "copy\"r act4 ,fur!r 4tribu;n or",
+      "reproduc;n m/ comply ) ? act4"
+    ],
+    "pageBreaks": [
+      25
+    ],
+    "notes": "Margin stripped: 5"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree byte-for-byte. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id.",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "           ,pr9t pages #a-#ha         t#a"
+      ],
+      "after": [
+        "           ,pr9t pages #a-#ha        t#a"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 24 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 77 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: contents entry: gap before its page number (2.10.7a) (1)."
+    }
+  ]
+}

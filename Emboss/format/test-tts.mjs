@@ -54,6 +54,26 @@ ok(listItems[0].unit === 0 && listItems[1].unit === 1, 'list items carry their u
 ok(items.some((it) => it.blockIdx === 4 && it.map && it.map.length === 0), 'indicator produces a (pause) item with no map');
 ok(mathItem && mathItem.srcStart === 8, 'math item carries srcStart (flat offset "area is " = 8)');
 
+// ---- list item.blocks: a further paragraph (editor "Continue Item") and a table the item holds ----
+// (document.mjs formatItemBlocks / editor.mjs mergeListItemBlocks build this same shape from a
+// multi-paragraph list item; Quick Mode's parsed model can carry it directly, with no editor at all.)
+const itemBlocksModel = { blocks: [
+  { type: 'list', items: [
+    { text: 'First line of the item.', blocks: [
+      { type: 'para', text: 'A further paragraph of the same item.' },
+      { type: 'table', headers: ['A', 'B'], rows: [['1', '2']] },
+    ] },
+    { text: 'Second item, no further content.' },
+  ] },
+] };
+const ibItems = buildSpokenItems(itemBlocksModel, speakMath);
+const ibTexts = ibItems.filter((it) => it.blockIdx === 0).map((it) => it.text);
+ok(ibTexts.join(' | ') === 'First line of the item. | A further paragraph of the same item. | A | B | 1 | 2 | Second item, no further content.',
+  `item.blocks (further paragraph + table cells) read in order: ${ibTexts.join(' | ')}`);
+// units are sequential list LINES: item(0), its further paragraph(1), its table's 4 cells(2-5), next item(6)
+const ibUnits = ibItems.filter((it) => it.blockIdx === 0).map((it) => it.unit);
+ok(ibUnits.join(',') === '0,1,2,3,4,5,6', `item.blocks units are sequential list lines: ${ibUnits.join(',')}`);
+
 // ---- Quadratic formula mixed text and math offset test ----
 const quadLatex = 'x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}';
 const quadModel = {

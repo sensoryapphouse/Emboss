@@ -41,7 +41,12 @@ test('Step 1: <bridgehead> is parsed as level-2 heading and formatted at Cell 5 
   assert.equal(headingLine.indexOf('ANALYZE THE TEXT'), 4, 'Heading should start at cell 5 (4 spaces)');
 });
 
-test('Step 1: <byline> is parsed as attribution and formatted at Cell 5 with a blank line after (Formats §9.4.1)', () => {
+// K2 / BANA 4.3.3, Example 4-2 (EMBOSS-TASKS G1/13b, KD's answer, 25 Sep 2026): a title and its
+// author's name are two separate items. A <byline> directly under a heading is no longer folded
+// into a cell-5 attribution — it becomes a second centred heading (same tier), with the ordinary
+// blank line kept between the two (Example 4-2's own braille), not joined as a "connected
+// heading" the way a genuinely split heading (e.g. chapter number + title, Example 4-3) is.
+test('Step 1: <byline> right under a heading becomes a second centred heading, blank line kept (BANA 4.3.3, Example 4-2)', () => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book>
@@ -56,9 +61,11 @@ test('Step 1: <byline> is parsed as attribution and formatted at Cell 5 with a b
 </dtbook>`;
 
   const doc = parseNimasXml(xml);
-  const bylineBlock = doc.blocks.find((b) => b.type === 'attribution');
-  assert.ok(bylineBlock, 'Attribution block should be found');
-  assert.equal(bylineBlock.text, 'By Emily Dickinson');
+  assert.equal(doc.blocks.find((b) => b.type === 'attribution'), undefined, 'No attribution block: the byline is a heading now');
+  const bylineBlock = doc.blocks.find((b) => b.type === 'heading' && b.text === 'By Emily Dickinson');
+  assert.ok(bylineBlock, 'Byline heading block should be found');
+  assert.equal(bylineBlock.level, 1, 'Same level as the title it follows');
+  assert.equal(bylineBlock.notConnected, true, 'Opts out of the default connected-heading join');
 
   const brf = formatDocument(doc, {
     mode: 'bana',
@@ -68,9 +75,13 @@ test('Step 1: <byline> is parsed as attribution and formatted at Cell 5 with a b
   });
 
   const lines = brf.split(/\r?\n/).map((l) => l.replace(/\s+$/, ''));
-  const bylineLine = lines.find((l) => l.includes('BY EMILY DICKINSON'));
-  assert.ok(bylineLine, 'Byline text should be in formatted output');
-  assert.equal(bylineLine.indexOf('BY EMILY DICKINSON'), 4, 'Attribution should start at cell 5 (4 spaces)');
+  const titleIdx = lines.findIndex((l) => l.includes('POEM TITLE'));
+  const bylineIdx = lines.findIndex((l) => l.includes('BY EMILY DICKINSON'));
+  assert.ok(titleIdx >= 0 && bylineIdx > titleIdx, 'Both lines should be in the formatted output, title first');
+  assert.equal(lines[bylineIdx - 1], '', 'A blank line separates the title from the byline heading (Example 4-2)');
+  // Centred, not the fixed cell-5 attribution offset (4 spaces).
+  assert.notEqual(lines[bylineIdx].indexOf('BY EMILY DICKINSON'), 4, 'Byline is centred, not blocked at cell 5');
+  assert.ok(lines[bylineIdx].indexOf('BY EMILY DICKINSON') > 4, lines[bylineIdx]);
 });
 
 test('Step 2: Prose Play Dialogue is formatted with 1-3 margin (speaker cell 1, runover cell 3)', () => {

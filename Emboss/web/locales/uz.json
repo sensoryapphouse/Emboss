@@ -60,10 +60,13 @@
     "toc": "MAJ",
     "print": "Chop etish ko'rinishi (LDS)",
     "braille": "Brayl",
+    "export": "Eksport",
+    "export_title": "Braylni eksport qilish (BRF, eBraille) yoki printerga yuborish",
+    "emboss_menu": "Brayl printeriga yuborish",
     "braille_view": "Brayl ko'rinishi",
     "download_brf": "Brayl (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Bosgich",
     "emboss_tooltip": "Hujjatni brayl printeriga yoki printerga yuborish",
     "clear_doc": "Hujjatni tozalash",
@@ -133,8 +136,6 @@
     "poem_desc": "Shoir qatori (1-3)",
     "exercise_title": "Mashq savoli",
     "exercise_desc": "Raqamli mashq savoli (1-5 / 3-5)",
-    "caption_title": "Izohlatma / Atribuciya",
-    "caption_desc": "Rasm izohlatmasi yoki atribuciya (7-5)",
     "footnote_title": "Pastki izoh",
     "footnote_desc": "Pastki izoh matni (1-3)",
     "note_title": "Transkriberning eslatmasi",
@@ -163,8 +164,6 @@
     "page_desc": "Chop etilgan sahifa kesimi ko'rsatgichini kiritish",
     "printpage_title": "Chop etilgan sahifa raqami",
     "printpage_desc": "Chop etilgan sahifa kesimi ko'rsatgichini kiritish",
-    "code_title": "Kompyuter kodi",
-    "code_desc": "UEB ko'rsatgichlari bilan kod blokini kiritish",
     "indent_title": "Kirish / Kichik bandni ichiga joylash",
     "indent_desc": "Ro'yxat bandi yoki mashqni chuqurroq joylash (Tab)",
     "outdent_title": "Chegirib chiqarish / Bandni ko'tarish",
@@ -185,8 +184,8 @@
     "language_label": "Interfeys tili",
     "language_help": "Tugmachalar, menyular, suhbatlar va ekran o'qiyuvchisining e'lonlari uchun tilni tanlang.",
     "standard_label": "Brayl standart",
-    "standard_bana": "BANA (AQSH va Kanada — 40×25 katakcha)",
-    "standard_ukaaf": "UKAAF (Birlashtirilgan Qirollik va xalqaro — 38×25 katakcha)",
+    "standard_bana": "BANA (AQSH va Kanada — 38×25 katakcha)",
+    "standard_ukaaf": "UKAAF (Birlashtirilgan Qirollik va xalqaro — 38×27 katakcha)",
     "grade_label": "Qisqartirish darajasi",
     "grade_1": "Daraja 1 (Qisqartirimsiz / Harf orqali harf)",
     "grade_2": "Daraja 2 (Qisqartirilgan)",
@@ -261,7 +260,7 @@
     "size_full": "To'liq sahifa (1-qator himoya qilingan)",
     "lead_lines": "Teginish rahbari chiziqlar",
     "braille_labels": "Brayl belgilari",
-    "footer_tip": "💡 Qora konturlar qat'iy teginish chegaralariga aylanadi; ranglar turli xil teginish teksturalarini avtomatik moslashtiradi.",
+    "footer_tip": "Qora konturlar qat'iy teginish chegaralariga aylanadi; ranglar turli xil teginish teksturalarini avtomatik moslashtiradi.",
     "open_repositories": "Ochiq teginish ambar:",
     "no_diagrams": "Mos keladigan diagrammalar topilmadi."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Zarar bermasdan round-trip holati",
     "precedence_status": "Brayl e'tibor qoidalari holati",
     "perfect_match": "100% round-trip moslik (0 nomuvofiqlik)",
-    "badge_warn": "⚠ {count} ko'rib chiqish uchun",
+    "badge_warn": "{count} ko'rib chiqish uchun",
     "badge_title": "{count} so'z nomuvofiqlik round-trip vaqtida aniqlandi. Birinchisiga o'tish uchun bosing.",
     "badge_clean": "Round-trip tekshiruvi: nomuvofiqlik topilmadi."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Saqlangan o'zgartirishlar bo'lsa, saqlashsiz chiqasizmi?",
     "unsaved_load": "Saqlangan o'zgartirishlar bo'lsa, yangi fayl yuklash joriy hujjatni almashtirishadi. Davom etish?",
     "unsaved_clear": "Saqlangan o'zgartirishlar bo'lsa, hujjatni tozalasinizmi?",
-    "drop_hint": "⬇ Tahrirlashchiga import qilish uchun hujjatni tashlang",
+    "drop_hint": "Tahrirlashchiga import qilish uchun hujjatni tashlang",
     "notice": "Bildirisj",
     "close_notice": "Bildirishni yopish"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Hujjat matni",
+      "math_keyboard_toggle": "Matematik klaviatura",
       "label": "Matn",
       "toolbar_aria": "Formatlash",
       "style_label": "Abzac uslubi",
@@ -443,8 +443,8 @@
       "graphic_cats": "Grafika toifalari",
       "graphic_list": "Teginish grafik diagrammalar",
       "formula_search_label": "Formulalarni qidirish",
-      "btactile_link": "BTactile (Bepul) ↗",
-      "tgil_link": "APH TGIL (1 800+ shablon) ↗"
+      "btactile_link": "BTactile (Bepul)",
+      "tgil_link": "APH TGIL (1 800+ shablon)"
     },
     "settings": {
       "list_spaced": "Bo'sh qatorli ro'yxat (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "OT printer drayveri cheklovlarini chetlab, mikrokontrollerli printerlarga (ESP32-S3, RP2040/RP2350, STM32, Arduino) to'g'ridan-to'g'ri ulaning.",
       "graphics_hint": "Belgilanmaganda, diagrammalar faqat matnli printerlar va Brayl displeylari uchun transkriberning eslatmasi tavsiflari sifatida eksport qilinadi.",
       "tactile_heading": "Teginish displeyiga jonli uzatish (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Bluetooth ulash (DotPad BLE)",
-      "tactile_connect_hid": "🔌 USB / HID ulash (Monarch)",
+      "tactile_connect_ble": "Bluetooth ulash (DotPad BLE)",
+      "tactile_connect_hid": "USB / HID ulash (Monarch)",
       "tactile_disconnect": "Displeyni uzish",
       "tactile_sim_monarch": "Simulyatsiya qilingan Monarch'ni sinash (32×10)",
       "tactile_sim_dotpad": "Simulyatsiya qilingan DotPad'ni sinash (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Tashqi drayverlarsiz WebBluetooth (DotPad BLE UART) yoki WebHID (Monarch/USB) orqali Brayl ko'rinishini va teginish grafikasini jonli uzatadi.",
       "perkins_hint": "— SDF va JKL tugmalari bilan Brayl yozish",
       "ascii_hint": "— xom ASCII Brayl belgilarini ko'rsatish",
+      "show_explanation_bar": "Tushuntirish panelini ko'rsatish",
+      "show_explanation_bar_hint": "— matn va brayl ostidagi, siz turgan so'zning braylini tushuntiruvchi panel",
+      "simple_mode_hint": "— Emboss'ni oddiy konvertorda ochish. Tez rejim va tahrirlash o'rtasida almashish buni o'zgartirmaydi.",
       "covers_hint": "— kitoblarni bo'lishda bosilgan sarlavha muqovalari"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Sarlavha {n}",
       "cell_aria_named": "{header}, qator {row}",
       "cell_aria": "Ustun {col}, qator {row}",
-      "too_wide_listed": "⚠ Ustunlar uchun juda keng — ro'yxatdagi jadval sifatida Braylga o'giriladi",
+      "too_wide_listed": "Ustunlar uchun juda keng — ro'yxatdagi jadval sifatida Braylga o'giriladi",
       "too_wide_listed_title": "Bu jadval joriy qatordagi katakchalar soni va Brayl rejimida ustunlarga sig'maydi, shuning uchun yonma-yon ustunlar o'rniga ro'yxatdagi jadval (BANA Formats §11.9) sifatida Braylga o'giriladi.",
-      "too_wide_paragraph": "⚠ Ustunlar uchun juda keng — abzac shaklida Braylga o'giriladi",
+      "too_wide_paragraph": "Ustunlar uchun juda keng — abzac shaklida Braylga o'giriladi",
       "too_wide_paragraph_title": "Bu jadval joriy qatordagi katakchalar soni va Brayl rejimida ustunlarga sig'maydi, shuning uchun yonma-yon ustunlar o'rniga abzac shaklida (UKAAF B004 §12) Braylga o'giriladi."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "\"{code}\" uchun jadvallarni yuklab bo'lmadi — hozircha oldingi Brayl kodi ishlatilmoqda.",
-      "failed": "⚠ Brayl yaratib bo'lmadi.",
+      "failed": "Brayl yaratib bo'lmadi.",
       "failed_hint": "(Agar bu yerda mexanizm ishga tushmagan deyilsa, Brayl mexanizmi yuklanmadi — Cmd/Ctrl+Shift+R bilan qattiq yangilang.)",
       "error_status": "Ko'rsatish xatosi: {message}"
     },
     "engine": {
       "loading": "Brayl mexanizmi yuklanmoqda…",
-      "failed": "⚠ Brayl mexanizmi yuklanmadi.",
+      "failed": "Brayl mexanizmi yuklanmadi.",
       "failed_hint": "Cmd/Ctrl+Shift+R bilan qattiq yangilang. Agar davom etsa, brauzer konsolini oching (Ko'rish ▸ Ishlab chiquvchi) va xatolarni yuboring.",
       "failed_status": "Mexanizm yuklanmadi: {message}",
       "ready": "Tayyor — chapda yozing yoki formatlang; Brayl jonli yangilanadi."
@@ -715,7 +718,7 @@
       "network_unreachable": "{url} ga yetib bo'lmadi: {message}. Brauzerlar to'g'ridan-to'g'ri TCP (port 9100) ulanishlarini ocha olmaydi; printer HTTP POST qabul qilishi kerak, yoki .brf faylini yuklab olib chop etish menejeringiz orqali yuboring.",
       "usb_bridge_done": "Bosish vazifasi USB printerga yetkazib berildi!",
       "needs_webserial": "To'g'ridan-to'g'ri serial bosish WebSerial'li brauzer talab qiladi (Chrome, Edge, Opera). .brf faylini yuklab olib chop etish menejeringiz orqali bosishingiz, yoki Sozlamalarda Tarmoq (Port 9100) rejimidan foydalanishingiz mumkin.",
-      "detected": "🔌 {name} aniqlandi — {baud} bodda {cells}×{lines} ga sozlandi."
+      "detected": "{name} aniqlandi — {baud} bodda {cells}×{lines} ga sozlandi."
     },
     "symbols": {
       "title": "Teginish belgilari kutubxonasi",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Dinamik matritsa",
       "badge_text_only": "Faqat matn",
       "badge_index": "Nuqta matritsasi"
+    },
+    "offline": {
+      "ready": "Emboss internetsiz ishlashga tayyor.",
+      "ready_short": "Internetsiz ishlashga tayyor",
+      "not_yet": "Internetsiz ishlashga hali tayyorlanmoqda…"
     }
   }
 }

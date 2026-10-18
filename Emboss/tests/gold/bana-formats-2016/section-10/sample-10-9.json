@@ -27,7 +27,7 @@
           },
           {
             "level": 0,
-            "text": "<u>Ms. Ross, are the seasons at the South Pole like ours?</u>"
+            "text": "*Ms. Ross, are the seasons at the South Pole like ours?*"
           },
           {
             "level": 0,
@@ -69,5 +69,13 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8106-8118). Print unchanged from A/B."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 8106-8118). Print unchanged from A/B. Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[1].items[1].text",
+      "was": "<u>Ms. Ross, are ... ours?</u>",
+      "now": "*Ms. Ross, are ... ours?*",
+      "evidence": "references/_gemini/_done/gold-10-A/page-278.png, Sample 10-9 print: the corrected sentence under \"Example:\" is set in italics, not underlined (the notes field already says italics); gold braille uses the italic indicators .7 ... .'."
+    }
+  ]
 }

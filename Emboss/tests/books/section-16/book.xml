@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head><meta name="dc:Title" content="Stage 4 Book Section 16 Notes"/><meta name="dc:Identifier" content="stage4-16"/></head>
+<book><frontmatter><doctitle>Stage 4 Book Section 16 Notes</doctitle></frontmatter><bodymatter><level1>
+<h1>Notes</h1>
+<p>The town was founded in 1820<noteref idref="fn1">1</noteref> and grew quickly<noteref idref="fn2">2</noteref>.</p>
+<note id="fn1"><p>Some records give 1821.</p></note>
+<note id="fn2"><p>Population figures come from the census.</p></note>
+<p>Another paragraph without notes.</p>
+<prodnote render="required">Transcriber's note: page numbers refer to the print edition.</prodnote>
+<h2>Endnotes</h2>
+<p>A closing paragraph<noteref idref="fn3">3</noteref>.</p>
+<note id="fn3"><p>First paragraph of a longer note.</p><p>Second paragraph of the same note.</p></note>
+</level1></bodymatter></book></dtbook>

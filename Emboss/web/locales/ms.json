@@ -60,10 +60,13 @@
     "toc": "Kandungan",
     "print": "Paparan Cetak (LHS)",
     "braille": "Braille",
+    "export": "Eksport",
+    "export_title": "Eksport braille (BRF, eBraille) atau hantar ke pencetak braille",
+    "emboss_menu": "Hantar ke pencetak braille",
     "braille_view": "Paparan Braille",
     "download_brf": "Braille (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "Cetak Braille",
     "emboss_tooltip": "Hantar dokumen ke pencetak Braille atau pencetak",
     "clear_doc": "Kosongkan Dokumen",
@@ -133,8 +136,6 @@
     "poem_desc": "Baris syair puitis bait (1-3)",
     "exercise_title": "Soalan Latihan",
     "exercise_desc": "Soalan latihan bernombor (1-5 / 3-5)",
-    "caption_title": "Keterangan / Kredit",
-    "caption_desc": "Keterangan rajah atau kredit (7-5)",
     "footnote_title": "Nota Kaki",
     "footnote_desc": "Teks nota kaki (1-3)",
     "note_title": "Nota Penterjemah",
@@ -163,8 +164,6 @@
     "page_desc": "Sisipkan penunjuk pemisah halaman cetak sumber",
     "printpage_title": "Nombor Halaman Cetak",
     "printpage_desc": "Sisipkan penunjuk pemisah halaman cetak sumber",
-    "code_title": "Kod Komputer",
-    "code_desc": "Sisipkan blok kod dengan penunjuk UEB",
     "indent_title": "Indent / Nest Sub-item",
     "indent_desc": "Nest list item or exercise deeper (Tab)",
     "outdent_title": "Outdent / Promote Item",
@@ -185,8 +184,8 @@
     "language_label": "Bahasa Antara Muka",
     "language_help": "Pilih bahasa yang digunakan untuk butang, menu, dialog, dan pengumuman pembaca skrin.",
     "standard_label": "Piawaian Braille",
-    "standard_bana": "BANA (USA & Kanada — 40×25 sel)",
-    "standard_ukaaf": "UKAAF (United Kingdom & Antarabangsa — 38×25 sel)",
+    "standard_bana": "BANA (USA & Kanada — 38×25 sel)",
+    "standard_ukaaf": "UKAAF (United Kingdom & Antarabangsa — 38×27 sel)",
     "grade_label": "Tahap Penguncian",
     "grade_1": "Gred 1 (Tanpa Penguncian / Huruf-demi-huruf)",
     "grade_2": "Gred 2 (Penguncian)",
@@ -261,7 +260,7 @@
     "size_full": "Helaian Penuh (Baris 1 Tanpa Hirisan)",
     "lead_lines": "Garis Panduan Sentuhan",
     "braille_labels": "Label Braille",
-    "footer_tip": "💡 Garis besar hitam menjadi sempadan sentuhan pepejal; warna secara automatik memetakan ke tekstur sentuhan yang berbeza.",
+    "footer_tip": "Garis besar hitam menjadi sempadan sentuhan pepejal; warna secara automatik memetakan ke tekstur sentuhan yang berbeza.",
     "open_repositories": "Buka Repositori Sentuhan:",
     "no_diagrams": "Tiada rajah yang sepadan ditemui."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Status Bulatan Alik Tanpa Kehilangan",
     "precedence_status": "Status Peraturan Keutamaan Braille",
     "perfect_match": "Padanan Bulatan Alik 100% (0 ketidakselarasan)",
-    "badge_warn": "⚠ {count} untuk ditinjau",
+    "badge_warn": "{count} untuk ditinjau",
     "badge_title": "{count} ketidakselarasan perkataan ditemui semasa terjemahan balik bulatan alik. Klik untuk lompat ke yang pertama.",
     "badge_clean": "Semakan bulatan alik: tiada ketidakselarasan perkataan ditemui."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Anda mempunyai perubahan yang belum disimpan. Adakah anda pasti ingin keluar tanpa menyimpan?",
     "unsaved_load": "Anda mempunyai perubahan yang belum disimpan. Memuatkan fail baharu akan menggantikan dokumen semasa anda. Teruskan?",
     "unsaved_clear": "Anda mempunyai perubahan yang belum disimpan. Adakah anda pasti ingin mengosongkan dokumen?",
-    "drop_hint": "⬇ Lepaskan dokumen untuk mengimportnya ke dalam penyunting",
+    "drop_hint": "Lepaskan dokumen untuk mengimportnya ke dalam penyunting",
     "notice": "Notis",
     "close_notice": "Tutup Notis"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Teks dokumen",
+      "math_keyboard_toggle": "Papan kekunci matematik",
       "label": "Teks",
       "toolbar_aria": "Pemformatan",
       "style_label": "Gaya perenggan",
@@ -443,8 +443,8 @@
       "graphic_cats": "Kategori Grafik",
       "graphic_list": "Gambar rajah grafik sentuhan",
       "formula_search_label": "Cari formula",
-      "btactile_link": "BTactile (Percuma) ↗",
-      "tgil_link": "APH TGIL (1,800+ Templat) ↗"
+      "btactile_link": "BTactile (Percuma)",
+      "tgil_link": "APH TGIL (1,800+ Templat)"
     },
     "settings": {
       "list_spaced": "Senarai garis kosong (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Sambung terus ke pencetak braille pengawal mikro tersuai (ESP32-S3, RP2040/RP2350, STM32, Arduino) dengan melintasi kunci pemandu pencetak OS.",
       "graphics_hint": "Apabila tidak ditandai, gambar rajah dieksport sebagai perihal Catatan Penyunting yang boleh diakses untuk pencetak braille dan paparan braille sahaja teks.",
       "tactile_heading": "Aliran Langsung Paparan Sentuhan (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Sambung Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Sambung USB / HID (Monarch)",
+      "tactile_connect_ble": "Sambung Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Sambung USB / HID (Monarch)",
       "tactile_disconnect": "Putuskan Paparan",
       "tactile_sim_monarch": "Uji Monarch Simulasi (32×10)",
       "tactile_sim_dotpad": "Uji DotPad Simulasi (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Mengalir paparan braille langsung dan grafik sentuhan melalui WebBluetooth (DotPad BLE UART) atau WebHID (Monarch/USB) tanpa pemandu luaran.",
       "perkins_hint": "— taipkan braille dengan kunci SDF dan JKL",
       "ascii_hint": "— tunjukkan aksara braille ASCII mentah",
+      "show_explanation_bar": "Tunjukkan bar penerangan",
+      "show_explanation_bar_hint": "— jalur di bawah teks dan braille yang menerangkan braille untuk perkataan yang anda berada",
+      "simple_mode_hint": "— buka Emboss pada penukar ringkas. Bertukar antara Mod Pantas dan penyunting tidak mengubah ini.",
       "covers_hint": "— penutup bertajuk emboss apabila membahagi buku"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Pengepala {n}",
       "cell_aria_named": "{header}, baris {row}",
       "cell_aria": "Lajur {col}, baris {row}",
-      "too_wide_listed": "⚠ Terlalu lebar untuk lajur — akan dibraille sebagai jadual senarai",
+      "too_wide_listed": "Terlalu lebar untuk lajur — akan dibraille sebagai jadual senarai",
       "too_wide_listed_title": "Jadual ini tidak muat dalam lajur pada bilangan sel per baris dan mod Braille semasa, jadi ia akan dibraille sebagai jadual senarai (BANA Formats §11.9) dan bukannya lajur bersebelahan.",
-      "too_wide_paragraph": "⚠ Terlalu lebar untuk lajur — akan dibraille dalam bentuk perenggan",
+      "too_wide_paragraph": "Terlalu lebar untuk lajur — akan dibraille dalam bentuk perenggan",
       "too_wide_paragraph_title": "Jadual ini tidak muat dalam lajur pada bilangan sel per baris dan mod Braille semasa, jadi ia akan dibraille dalam bentuk perenggan (UKAAF B004 §12) dan bukannya lajur bersebelahan."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Tidak dapat memuatkan jadual untuk \"{code}\" — masih menggunakan kod braille sebelumnya.",
-      "failed": "⚠ Braille tidak dapat dijana.",
+      "failed": "Braille tidak dapat dijana.",
       "failed_hint": "(Jika ini mengatakan enjin tidak dimulakan, enjin braille tidak memuatkan — segar keras dengan Cmd/Ctrl+Shift+R.)",
       "error_status": "Ralat render: {message}"
     },
     "engine": {
       "loading": "Memuatkan enjin braille…",
-      "failed": "⚠ Enjin braille gagal memuatkan.",
+      "failed": "Enjin braille gagal memuatkan.",
       "failed_hint": "Segar keras dengan Cmd/Ctrl+Shift+R. Jika ia berterusan, buka konsol pelayar (Lihat ▸ Pembangun) dan hantar ralat.",
       "failed_status": "Enjin gagal memuatkan: {message}",
       "ready": "Siap — taipkan atau format pada kiri; braille dikemas kini secara langsung."
@@ -715,7 +718,7 @@
       "network_unreachable": "Tidak dapat menjangkau {url}: {message}. Pelayar tidak dapat membuka sambungan TCP mentah (port 9100); pencetak braille mesti menerima POST HTTP, atau muat turun .brf dan hantarnya dengan pengurus cetak anda.",
       "usb_bridge_done": "Pekerjaan emboss dihantar ke pencetak USB!",
       "needs_webserial": "Embossing bersiri langsung memerlukan pelayar dengan WebSerial (Chrome, Edge, Opera). Anda boleh memuat turun fail .brf untuk emboss dengan pengurus cetak anda, atau gunakan mod Rangkaian (Port 9100) dalam Tetapan.",
-      "detected": "🔌 Dikesan {name} — ditetapkan kepada {cells}×{lines} pada {baud} baud."
+      "detected": "Dikesan {name} — ditetapkan kepada {cells}×{lines} pada {baud} baud."
     },
     "symbols": {
       "title": "Perpustakaan Simbol Sentuhan",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Matriks Dinamik",
       "badge_text_only": "Teks Sahaja",
       "badge_index": "Matriks Titik"
+    },
+    "offline": {
+      "ready": "Emboss sedia untuk berfungsi secara luar talian.",
+      "ready_short": "Sedia berfungsi secara luar talian",
+      "not_yet": "Masih bersiap untuk berfungsi secara luar talian…"
     }
   }
 }

@@ -5,6 +5,7 @@
 // read back the same), but a FAILED round-trip reliably flags something to review.
 // Pure (no DOM); the caller supplies translate/backTranslate so this runs the same
 // in Node tests and the browser.
+import { cellSegments } from '../format/cell-markup.mjs';
 
 // Common Liblouis back-translation wordsign expansions after apostrophe or single letters
 // Common Liblouis back-translation wordsign expansions after apostrophe or single letters
@@ -119,6 +120,7 @@ export function norm(s) {
     .replace(/^\s*\d+[\.\)]\s*/, '')                          // list item numbering
     .replace(/[‘’]/g, "'").replace(/[“”]/g, '"')              // curly quotes
     .replace(/[–—]/g, '-').replace(/…/g, '...')               // dashes / ellipsis
+    .replace(/[\u2010\u2011]/g, '-')                          // Unicode hyphen / non-breaking hyphen: brailled as a hyphen, read back as one (feedback 30 Sep item 7)
     .replace(/\bp\.more\./gi, 'p.m.')
     .replace(/\ba\.more\./gi, 'a.m.')
     .replace(/\btr\.very\b/gi, 'tr.v')
@@ -162,9 +164,45 @@ export function blockEntries(b) {
       if (Array.isArray(it.segments) && !it.segments.some((s) => s.type === 'math')) return it.segments.map((s) => s.text || '').join('');
       return '';
     };
-    return (b.items || [])
-      .map((it, itemIdx) => ({ text: itemText(it), segments: (it && it.segments) || null, itemIdx }))
-      .filter((e) => e.text && !/[\u2800-\u28FF]/.test(e.text));
+    // A segments-array text helper for a table cell's inline markup (format/cell-markup.mjs).
+    const segText = (segs) => (Array.isArray(segs) && segs.length && !segs.some((s) => s.type === 'math')) ? segs.map((s) => s.text || '').join('') : '';
+    const out = [];
+    // An item's further content (item.blocks \u2014 a further paragraph, or a table the item
+    // holds; document.mjs formatItemBlocks / editor.mjs mergeListItemBlocks) is checked right
+    // after the item's own line, in order: `itemIdx` counts every list LINE (the item's own
+    // line, then each further paragraph, then each table cell), matching the numbering
+    // buildSpokenItems (tts.mjs) and traceItemBlocks (document.mjs) use for the same lines.
+    let line = 0;
+    (b.items || []).forEach((it) => {
+      const itemIdx = line++;
+      const t = itemText(it);
+      if (t && !/[\u2800-\u28FF]/.test(t)) out.push({ text: t, segments: (it && it.segments) || null, itemIdx });
+      for (const cb of (it && Array.isArray(it.blocks) ? it.blocks : [])) {
+        if (!cb || typeof cb !== 'object') continue;
+        if (cb.type === 'table') {
+          const rawHeaders = Array.isArray(cb.headers) ? cb.headers : [];
+          const rawRows = (Array.isArray(cb.rows) ? cb.rows : []).map((r) => (Array.isArray(r) ? r : (r == null ? [] : [r])));
+          for (const h of rawHeaders) {
+            const ct = segText(cellSegments(h));
+            if (ct && !/[\u2800-\u28FF]/.test(ct)) out.push({ text: ct, segments: null, itemIdx: line });
+            line++;
+          }
+          rawRows.forEach((r) => {
+            const colCount = Math.max(rawHeaders.length, r.length);
+            for (let ci = 0; ci < colCount; ci++) {
+              const ct = segText(cellSegments(r[ci]));
+              if (ct && !/[\u2800-\u28FF]/.test(ct)) out.push({ text: ct, segments: null, itemIdx: line });
+              line++;
+            }
+          });
+          continue;
+        }
+        const contIdx = line++;
+        const cbText = cb.text != null ? cb.text : segText(cb.segments);
+        if (cbText && !/[\u2800-\u28FF]/.test(cbText)) out.push({ text: cbText, segments: cb.segments || null, itemIdx: contIdx });
+      }
+    });
+    return out;
   }
   if (b.type === 'para') {
     if (b.segments) {
@@ -181,7 +219,7 @@ export function blockEntries(b) {
 
 // Normalise a single word for comparison
 export function normWord(w) {
-  let word = stripDiacritics(decodeEntities(w))
+  let word = stripDiacritics(decodeEntities(w)).replace(/[\u2010\u2011]/g, '-')   // as norm(): a Unicode hyphen reads back as '-'
     .replace(/\bp\.more\./gi, 'p.m.')
     .replace(/\ba\.more\./gi, 'a.m.')
     .replace(/\btr\.very\b/gi, 'tr.v')

@@ -1,0 +1,209 @@
+{
+ "version": 2,
+ "runSeed": "1982326777",
+ "session": 0,
+ "engine": "chrome",
+ "kind": "editor",
+ "doc": "gen:1982326777-s0",
+ "docSource": "generated",
+ "docFeatures": [
+  "display-math",
+  "h3",
+  "h4",
+  "h6",
+  "inline-math",
+  "link",
+  "note",
+  "pagenum",
+  "picture-noalt",
+  "script:arabic",
+  "script:cjk",
+  "script:combining",
+  "script:emoji",
+  "script:greek",
+  "script:hebrew",
+  "table",
+  "underline"
+ ],
+ "docs": {
+  "gen:1982326777-s0": "docs/00-gen-1982326777-s0.html"
+ },
+ "settings": {
+  "simpleMode": false,
+  "mode": "ukaaf",
+  "standard": "ukaaf",
+  "grade": "g2",
+  "brailleCode": "en-ueb-g2",
+  "uiLanguage": "en",
+  "transcriberTools": true
+ },
+ "viewport": {
+  "width": 1300,
+  "height": 900
+ },
+ "invariant": "save-reopen",
+ "key": "save-reopen: no block differs",
+ "message": "the saved file reopens to different braille [first differing block: no block differs] (blocks equal): first tab has 331 lines, reopened tab has 331; first differences: line 217: first tab \"#AB./SIN9#H,.SN) ^1*APT]\\r\" / reopened tab \"#AB./SIN9#H,.SN) ^1*APT] ,A #HE,,.?\\r\" | line 218: first tab \"      ;C4 ,,UKAAF \\\"? 5CE WH3 LAZY3\\r\" / reopened tab \";;SIN(BR./8),\\r\" | line 219: first tab \"RIV]'S P>AGRAPH \\\"? ^1) ^1JUMPS_/Q\\r\" / reopened tab \"      ;C4 ,,UKAAF \\\"? 5CE WH3 LAZY3\\r\"",
+ "reproducedWhenShrinking": true,
+ "shrinkTests": 18,
+ "originalActions": 55,
+ "actions": [
+  {
+   "t": "slashAll",
+   "pf": 0.5148,
+   "i": 11,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "paste",
+   "how": "html",
+   "html": "<table><tr><td>lonely</td></tr></table>",
+   "text": ""
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.099,
+   "i": 12,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowRight",
+   "n": 5
+  },
+  {
+   "t": "toolbarBtn",
+   "id": "btnSymRegen",
+   "close": "button"
+  },
+  {
+   "t": "shiftSel",
+   "key": "ArrowLeft",
+   "n": 3,
+   "word": false
+  },
+  {
+   "t": "undoRedo",
+   "dir": "redo",
+   "n": 1
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 8
+  },
+  {
+   "t": "key",
+   "key": "Shift+Enter",
+   "n": 1
+  },
+  {
+   "t": "check",
+   "which": "recovery"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.8978,
+   "i": 13,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "paste",
+   "how": "text",
+   "text": "\tindented\n\t\tdeeper\nback"
+  },
+  {
+   "t": "scroll",
+   "where": "braille",
+   "dy": -3000
+  },
+  {
+   "t": "keyrun",
+   "key": "ArrowUp",
+   "n": 5
+  },
+  {
+   "t": "insertAll",
+   "i": 8
+  },
+  {
+   "t": "type",
+   "text": "{x}"
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.234,
+   "i": 14,
+   "q": "",
+   "end": "Enter"
+  },
+  {
+   "t": "undoRun",
+   "n": 25,
+   "redo": 0
+  },
+  {
+   "t": "key",
+   "key": "Enter",
+   "n": 1
+  },
+  {
+   "t": "clickText",
+   "fx": 0.2633,
+   "fy": 0.9396,
+   "n": 1
+  },
+  {
+   "t": "slashAll",
+   "pf": 0.1941,
+   "i": 15,
+   "q": "",
+   "end": "Escape"
+  },
+  {
+   "t": "type",
+   "text": "k fox N ``` 😀 ``` p i Z CAPS ; 3.14"
+  },
+  {
+   "t": "clickCard",
+   "f": 0.6971,
+   "n": 1
+  },
+  {
+   "t": "slash",
+   "q": "br",
+   "down": 2,
+   "end": "Enter"
+  },
+  {
+   "t": "selOp",
+   "fx": 0.9481,
+   "fy": 0.4779,
+   "ext": "shiftUp",
+   "n": 3,
+   "fx2": 0.8559,
+   "fy2": 0.8111,
+   "op": "copyPaste",
+   "dx": 0.6354,
+   "dy": 0.9251,
+   "key": "Backspace",
+   "text": "Z I &amp; <",
+   "f": 0.7967,
+   "fmt": "b"
+  },
+  {
+   "t": "slash",
+   "q": "q",
+   "down": 1,
+   "end": "Backspace"
+  }
+ ]
+}

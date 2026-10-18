@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { parseNimasXml } from '../input/parse.mjs';
 import { formatDocument } from '../format/document.mjs';
 import * as louis from '../engine/louis.mjs';
+import { editorTranslators } from '../format/node-translate-helper.mjs';
 import { DOMParser } from '@xmldom/xmldom';
 
 if (!globalThis.DOMParser) globalThis.DOMParser = DOMParser;
@@ -31,6 +32,8 @@ async function main() {
   // 1. Initialize Liblouis
   const tablesDir = path.join(projectRoot, 'liblouis/tables');
   await louis.init(tablesDir);
+  // Quick Mode's own translators (liblouis inside styledTranslate, plus the grade 1 translator the app passes) - import fix list #55.
+  const { translate, translateG1 } = editorTranslators(louis);
 
   // 2. Read and Parse XML with Emboss
   console.log('Step 1: Reading and parsing 1.45 MB NIMAS XML with Emboss...');
@@ -58,8 +61,7 @@ async function main() {
     width: 40,
     depth: 25,
     listStyle: 'spaced',
-    translate: (text, typeform) => louis.translate(text, louis.TABLES.uebG2, typeform),
-    translateG1: (text) => louis.translate(text, louis.TABLES.uebG1),
+    translate, translateG1,
   });
   const t3 = performance.now();
   console.log(`-> Formatted into BRF in ${(t3 - t2).toFixed(1)}ms.`);

@@ -60,10 +60,13 @@
     "toc": "Mục lục",
     "print": "Chế độ xem in (LHS)",
     "braille": "Chữ nổi",
+    "export": "Xuất",
+    "export_title": "Xuất chữ nổi (BRF, eBraille) hoặc gửi đến máy in nổi",
+    "emboss_menu": "Gửi đến máy in nổi",
     "braille_view": "Chế độ xem chữ nổi",
     "download_brf": "Chữ nổi (BRF)",
     "download_pef": "PEF 1.0 (.pef)",
-    "download_ebrl": "eBraille (.ebraille)",
+    "download_ebrl": "eBraille (.ebrl)",
     "emboss": "In nổi",
     "emboss_tooltip": "Gửi tài liệu đến máy in nổi hoặc máy in",
     "clear_doc": "Xóa tài liệu",
@@ -133,8 +136,6 @@
     "poem_desc": "Dòng thơ thơ lục bát (1-3)",
     "exercise_title": "Câu hỏi bài tập",
     "exercise_desc": "Câu hỏi bài tập được đánh số (1-5 / 3-5)",
-    "caption_title": "Chú thích / Ghi công",
-    "caption_desc": "Chú thích hình hoặc ghi công (7-5)",
     "footnote_title": "Chú thích cuối trang",
     "footnote_desc": "Văn bản chú thích cuối trang (1-3)",
     "note_title": "Ghi chú của dịch giả",
@@ -163,8 +164,6 @@
     "page_desc": "Chèn chỉ báo dấu ngắt trang in nguồn",
     "printpage_title": "Số trang in",
     "printpage_desc": "Chèn chỉ báo dấu ngắt trang in nguồn",
-    "code_title": "Mã máy tính",
-    "code_desc": "Chèn khối mã với chỉ báo UEB",
     "indent_title": "Thụt lề / Lồng mục con",
     "indent_desc": "Lồng mục danh sách hoặc bài tập sâu hơn (Tab)",
     "outdent_title": "Giảm lề / Nâng cấp mục",
@@ -185,8 +184,8 @@
     "language_label": "Ngôn ngữ giao diện",
     "language_help": "Chọn ngôn ngữ được sử dụng cho các nút, menu, hộp thoại và thông báo trình đọc màn hình.",
     "standard_label": "Tiêu chuẩn chữ nổi",
-    "standard_bana": "BANA (Mỹ & Canada — 40×25 ô)",
-    "standard_ukaaf": "UKAAF (Vương quốc Anh & Quốc tế — 38×25 ô)",
+    "standard_bana": "BANA (Mỹ & Canada — 38×25 ô)",
+    "standard_ukaaf": "UKAAF (Vương quốc Anh & Quốc tế — 38×27 ô)",
     "grade_label": "Mức độ viết tắt",
     "grade_1": "Cấp 1 (Không viết tắt / Từng chữ)",
     "grade_2": "Cấp 2 (Viết tắt)",
@@ -261,7 +260,7 @@
     "size_full": "Tờ đầy đủ (Dòng 1 không cắt)",
     "lead_lines": "Đường hướng dẫn xúc giác",
     "braille_labels": "Nhãn chữ nổi",
-    "footer_tip": "💡 Các đường viền đen trở thành các ranh giới xúc giác rắn; các màu sắc tự động ánh xạ đến các kết cấu xúc giác khác nhau.",
+    "footer_tip": "Các đường viền đen trở thành các ranh giới xúc giác rắn; các màu sắc tự động ánh xạ đến các kết cấu xúc giác khác nhau.",
     "open_repositories": "Mở kho lưu trữ xúc giác:",
     "no_diagrams": "Không tìm thấy sơ đồ phù hợp."
   },
@@ -317,7 +316,7 @@
     "roundtrip_status": "Trạng thái vòng tròn không mất dữ liệu",
     "precedence_status": "Trạng thái quy tắc ưu tiên chữ nổi",
     "perfect_match": "Khớp vòng tròn 100% (0 sự khác biệt)",
-    "badge_warn": "⚠ {count} để xem lại",
+    "badge_warn": "{count} để xem lại",
     "badge_title": "Phát hiện {count} sự không khớp của từ trong quá trình dịch ngược vòng tròn. Nhấp để nhảy đến từ đầu tiên.",
     "badge_clean": "Kiểm tra vòng tròn: không phát hiện sự không khớp từ."
   },
@@ -342,7 +341,7 @@
     "unsaved_changes": "Bạn có những thay đổi chưa được lưu. Bạn có chắc chắn muốn thoát mà không lưu không?",
     "unsaved_load": "Bạn có những thay đổi chưa được lưu. Tải một tệp mới sẽ thay thế tài liệu hiện tại của bạn. Tiếp tục?",
     "unsaved_clear": "Bạn có những thay đổi chưa được lưu. Bạn có chắc chắn muốn xóa tài liệu không?",
-    "drop_hint": "⬇ Kéo một tài liệu để nhập nó vào trình soạn thảo",
+    "drop_hint": "Kéo một tài liệu để nhập nó vào trình soạn thảo",
     "notice": "Thông báo",
     "close_notice": "Đóng thông báo"
   },
@@ -354,6 +353,7 @@
     },
     "editor": {
       "pane_aria": "Văn bản tài liệu",
+      "math_keyboard_toggle": "Bàn phím toán học",
       "label": "Văn bản",
       "toolbar_aria": "Định dạng",
       "style_label": "Kiểu đoạn văn",
@@ -443,8 +443,8 @@
       "graphic_cats": "Danh mục đồ họa",
       "graphic_list": "Sơ đồ đồ họa xúc giác",
       "formula_search_label": "Tìm công thức",
-      "btactile_link": "BTactile (Miễn phí) ↗",
-      "tgil_link": "APH TGIL (Hơn 1.800 mẫu) ↗"
+      "btactile_link": "BTactile (Miễn phí)",
+      "tgil_link": "APH TGIL (Hơn 1.800 mẫu)"
     },
     "settings": {
       "list_spaced": "Danh sách có dòng trống (1-3)",
@@ -461,8 +461,8 @@
       "hid_hint": "Kết nối trực tiếp với máy in nổi vi điều khiển tùy chỉnh (ESP32-S3, RP2040/RP2350, STM32, Arduino), bỏ qua khóa trình điều khiển máy in của hệ điều hành.",
       "graphics_hint": "Khi bỏ chọn, sơ đồ được xuất dưới dạng mô tả Ghi chú của dịch giả dễ tiếp cận cho máy in nổi chỉ có văn bản và màn hình chữ nổi.",
       "tactile_heading": "Truyền trực tiếp màn hình xúc giác (APH Monarch / DotPad / HID)",
-      "tactile_connect_ble": "📶 Kết nối Bluetooth (DotPad BLE)",
-      "tactile_connect_hid": "🔌 Kết nối USB / HID (Monarch)",
+      "tactile_connect_ble": "Kết nối Bluetooth (DotPad BLE)",
+      "tactile_connect_hid": "Kết nối USB / HID (Monarch)",
       "tactile_disconnect": "Ngắt kết nối màn hình",
       "tactile_sim_monarch": "Thử Monarch mô phỏng (32×10)",
       "tactile_sim_dotpad": "Thử DotPad mô phỏng (20×10 + 20)",
@@ -470,6 +470,9 @@
       "tactile_hint": "Truyền trực tiếp khung nhìn chữ nổi và đồ họa xúc giác qua WebBluetooth (DotPad BLE UART) hoặc WebHID (Monarch/USB) mà không cần trình điều khiển ngoài.",
       "perkins_hint": "— gõ chữ nổi bằng các phím SDF và JKL",
       "ascii_hint": "— hiển thị ký tự chữ nổi ASCII thô",
+      "show_explanation_bar": "Hiện thanh giải thích",
+      "show_explanation_bar_hint": "— dải bên dưới văn bản và chữ nổi giải thích chữ nổi cho từ bạn đang đứng",
+      "simple_mode_hint": "— mở Emboss ở trình chuyển đổi đơn giản. Chuyển giữa Chế độ nhanh và trình soạn thảo không làm thay đổi điều này.",
       "covers_hint": "— bìa tiêu đề in nổi khi tách sách thành nhiều tập"
     },
     "update": {
@@ -513,9 +516,9 @@
       "header_n": "Tiêu đề {n}",
       "cell_aria_named": "{header}, hàng {row}",
       "cell_aria": "Cột {col}, hàng {row}",
-      "too_wide_listed": "⚠ Quá rộng cho các cột — sẽ được chuyển thành chữ nổi dạng bảng liệt kê",
+      "too_wide_listed": "Quá rộng cho các cột — sẽ được chuyển thành chữ nổi dạng bảng liệt kê",
       "too_wide_listed_title": "Bảng này không vừa với các cột ở số ô trên một dòng và chế độ chữ nổi hiện tại, vì vậy nó sẽ được chuyển thành chữ nổi dạng bảng liệt kê (BANA Formats §11.9) thay vì các cột cạnh nhau.",
-      "too_wide_paragraph": "⚠ Quá rộng cho các cột — sẽ được chuyển thành chữ nổi dạng đoạn",
+      "too_wide_paragraph": "Quá rộng cho các cột — sẽ được chuyển thành chữ nổi dạng đoạn",
       "too_wide_paragraph_title": "Bảng này không vừa với các cột ở số ô trên một dòng và chế độ chữ nổi hiện tại, vì vậy nó sẽ được chuyển thành chữ nổi dạng đoạn (UKAAF B004 §12) thay vì các cột cạnh nhau."
     },
     "printpage": {
@@ -536,13 +539,13 @@
     },
     "render": {
       "table_failed": "Không thể tải bảng dịch cho \"{code}\" — vẫn dùng mã chữ nổi trước đó.",
-      "failed": "⚠ Không thể tạo chữ nổi.",
+      "failed": "Không thể tạo chữ nổi.",
       "failed_hint": "(Nếu thông báo cho biết bộ máy chưa được khởi tạo, bộ máy chữ nổi chưa tải xong — hãy tải lại bằng Cmd/Ctrl+Shift+R.)",
       "error_status": "Lỗi hiển thị: {message}"
     },
     "engine": {
       "loading": "Đang tải bộ máy chữ nổi…",
-      "failed": "⚠ Bộ máy chữ nổi tải không thành công.",
+      "failed": "Bộ máy chữ nổi tải không thành công.",
       "failed_hint": "Hãy tải lại bằng Cmd/Ctrl+Shift+R. Nếu vẫn còn lỗi, mở bảng điều khiển trình duyệt (Xem ▸ Nhà phát triển) và gửi lỗi cho chúng tôi.",
       "failed_status": "Bộ máy tải không thành công: {message}",
       "ready": "Sẵn sàng — gõ hoặc định dạng ở bên trái; chữ nổi sẽ cập nhật trực tiếp."
@@ -715,7 +718,7 @@
       "network_unreachable": "Không thể kết nối đến {url}: {message}. Trình duyệt không thể mở kết nối TCP thô (cổng 9100) trực tiếp; máy in nổi phải chấp nhận HTTP POST, hoặc tải xuống tệp .brf và gửi bằng trình quản lý in của bạn.",
       "usb_bridge_done": "Đã gửi công việc in nổi đến máy in USB!",
       "needs_webserial": "In nổi trực tiếp qua cổng nối tiếp cần trình duyệt có WebSerial (Chrome, Edge, Opera). Bạn có thể tải xuống tệp .brf để in nổi bằng trình quản lý in, hoặc dùng chế độ Mạng (Cổng 9100) trong Cài đặt.",
-      "detected": "🔌 Đã phát hiện {name} — đặt thành {cells}×{lines} ở tốc độ {baud} baud."
+      "detected": "Đã phát hiện {name} — đặt thành {cells}×{lines} ở tốc độ {baud} baud."
     },
     "symbols": {
       "title": "Thư viện ký hiệu xúc giác",
@@ -752,6 +755,11 @@
       "badge_dotpad": "Ma trận động",
       "badge_text_only": "Chỉ văn bản",
       "badge_index": "Ma trận chấm"
+    },
+    "offline": {
+      "ready": "Emboss đã sẵn sàng làm việc ngoại tuyến.",
+      "ready_short": "Sẵn sàng làm việc ngoại tuyến",
+      "not_yet": "Vẫn đang chuẩn bị để làm việc ngoại tuyến…"
     }
   }
 }

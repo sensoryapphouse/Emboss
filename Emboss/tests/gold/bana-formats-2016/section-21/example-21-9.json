@@ -27,7 +27,7 @@
   "braille": {
     "width": 58,
     "lines": [
-      "           aborig9al,--agogy                           #,-"
+      "           aborig9al,--agogy         #,-"
     ],
     "pageBreaks": [],
     "notes": "Re-extracted from source: the given run's braille.lines wrongly included 4 leading blank lines that do not exist in the source (lines 4-24 of this simulated braille page carry no transcribed text at all — they are omitted, not blank); only the real line 25 guide-word line remains. Width is the actual 58-cell extent (27 literal spaces precede the page number in the source's own plain-text rendering)."
@@ -37,5 +37,19 @@
     "A",
     "B"
   ],
-  "resolution": "braille.lines corrected: removed 4 bogus leading blank lines not present in the source (this simulated page has NO transcribed content at lines 4-24, only line 25)."
+  "resolution": "braille.lines corrected: removed 4 bogus leading blank lines not present in the source (this simulated page has NO transcribed content at lines 4-24, only line 25).",
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "           aborig9al,--agogy                           #,-"
+      ],
+      "after": [
+        "           aborig9al,--agogy         #,-"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 0 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 562 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: spurious extra blanks (gold line wider than 40 cells) (1). Where: before right-margin page number (1)."
+    }
+  ]
 }

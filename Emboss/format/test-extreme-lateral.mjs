@@ -46,17 +46,24 @@ function check(name, cond, detail = '') {
   const T_G2 = louis.TABLES.uebG2;
   const T_G1 = louis.TABLES.uebG1;
   const translateG2 = styledTranslate((t, tf) => louis.translate(t, T_G2, tf), 'faithful');
-  const translatePosG2 = (t, tf) => louis.translatePos(t, T_G2, tf);
   const translateG1 = styledTranslate((t, tf) => louis.translate(t, T_G1, tf), 'faithful');
-  const translatePosG1 = (t, tf) => louis.translatePos(t, T_G1, tf);
 
+  // This file only ever calls formatDocument (never traceBlock/the editor path), so
+  // o.translatePos is deliberately left unset: document.mjs's own header comment ("A39
+  // safety net") documents that o.translatePos is a CALLER's responsibility to keep
+  // mirroring o.translate exactly, invisible-char normalization (styledTranslate) included
+  // — raw louis.translatePos here does not. "One layout path" stage 2 routes formatBlock's
+  // own 'para'/heading/list/box cases through the same o.translatePos-preferring code
+  // traceBlock uses, so a translatePos that does not mirror translate would now be visible
+  // even via plain formatDocument (previously invisible, since formatPara/etc. never looked
+  // at translatePos at all). Every real formatDocument/gold/BRF-export caller already omits
+  // translatePos entirely (it is only ever supplied by the editor) — this file matches that.
   const baseOpts = (extra = {}) => ({
     mode: 'ukaaf',
     width: 38,
     depth: 25,
     listStyle: 'spaced',
     translate: translateG2,
-    translatePos: translatePosG2,
     mathToBrf: null,
     ...extra
   });

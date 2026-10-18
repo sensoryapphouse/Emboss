@@ -16,18 +16,18 @@
     "blocks": [
       {
         "kind": "directions",
-        "text": "A. Choose the answer that shows the best way to write the italicized part. Write the letter. If a part needs no change, write the letter for \"Correct as is.\""
+        "text": "A. Choose the answer that shows the best way to write the italicized part. Write that letter. If a part needs no change, write the letter for \"Correct as is.\""
       },
       {
         "kind": "paragraph",
-        "text": "<u>Tamara did a good job starring in the school play.</u> She was the lead actress. She had to work hard to master the part."
+        "text": "*Tamara did a good job starring in the school play.* She was the lead actress. She had to work hard to master the part."
       },
       {
         "kind": "exercise",
         "items": [
           {
             "level": 0,
-            "text": "1."
+            "text": "1"
           },
           {
             "level": 1,
@@ -35,7 +35,7 @@
           },
           {
             "level": 1,
-            "text": "b. Tamara did a good job starring, in the school play."
+            "text": "b. Tamara did a good job starring. In the school play."
           },
           {
             "level": 1,
@@ -83,5 +83,31 @@
     "A",
     "B"
   ],
-  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7962-7980). Print unchanged from A/B (B’s own wording for choice b, \"starring. In\", corrected to A’s \"starring, in\" to match the given braille’s own comma)."
+  "resolution": "Braille byte-identical to both A and B (independently re-extracted, source lines 7962-7980). Print unchanged from A/B (B’s own wording for choice b, \"starring. In\", corrected to A’s \"starring, in\" to match the given braille’s own comma). Print description corrected 23 Sep 2026 (see printCorrections).",
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].text",
+      "was": "... Write the letter. ...",
+      "now": "... Write that letter. ...",
+      "evidence": "references/_gemini/_done/gold-10-A/page-272.png (zoomed), Sample 10-3 print: \"Write that letter.\"; gold braille \",write t lr4\" also reads \"that\"."
+    },
+    {
+      "field": "print.blocks[1].text",
+      "was": "<u>Tamara did a good job starring in the school play.</u> She was ...",
+      "now": "*Tamara did a good job starring in the school play.* She was ...",
+      "evidence": "references/_gemini/_done/gold-10-A/page-272.png (zoomed): the first sentence of the displayed paragraph is italic (directions say \"the italicized part\"), not underlined; braille .7 ... .' is the italic indicator."
+    },
+    {
+      "field": "print.blocks[2].items[2].text",
+      "was": "b. Tamara did a good job starring, in the school play.",
+      "now": "b. Tamara did a good job starring. In the school play.",
+      "evidence": "references/_gemini/_done/gold-10-A/page-272.png (zoomed): choice b reads \"starring. In the school play.\" (period); gold braille \",tam>a did a gd job />r+4 ,9 !\"."
+    },
+    {
+      "field": "print.blocks[2].items[0].text",
+      "was": "1.",
+      "now": "1",
+      "evidence": "references/_gemini/_done/gold-10-A/page-272.png (zoomed): the question number is a bare \"1\" with no period; gold braille \"#a\"."
+    }
+  ]
 }

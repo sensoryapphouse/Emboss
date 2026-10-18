@@ -1,0 +1,30 @@
+✖ wrong braille (2.401417ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 607.952208
+
+✖ failing tests:
+
+test at tests/b_real_fail.test.mjs:2:1
+✖ wrong braille (2.401417ms)
+  AssertionError [ERR_ASSERTION]: the cell for a is not the cell for b
+  
+  '⠁' !== '⠃'
+  
+      at TestContext.<anonymous> (file:///scratch/fakeEmboss/tests/b_real_fail.test.mjs:2:36)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '⠁',
+    expected: '⠃',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

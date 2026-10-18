@@ -175,22 +175,22 @@
       "    m1n+ phrase4",
       "",
       "@.<yell[@.> 7777777777777777777777777777",
-      "#a4 >my an ^1>my tra9$ = battle",
-      "#b4 />ve ^1/>ve )\\t food to eat",
-      "#c4 sc> a ^1sc> on 8 >m f a burn",
-      "#d4 g>bage put ^1g>bage 9 ! tra% c",
-      "#e4 hamburg] ate a ^1hamburg] ) catsup",
-      "#f4 return 2f y ^1return home",
-      "#g4 purpose ! ^1purpose ( ! lesson",
-      "#h4 surface pa9t$ ! ^1surface ( ! table",
-      "#i4 c\\rage h ^1c\\rage to face dang]",
-      "#aj4 j\\rnal a ^1j\\rnal 5try ab a vaca;n",
+      "#a4 >my  an ^1>my tra9$ = battle",
+      "#b4 />ve  ^1/>ve )\\t food to eat",
+      "#c4 sc>  a ^1sc> on 8 >m f a burn",
+      "#d4 g>bage  put ^1g>bage 9 ! tra% c",
+      "#e4 hamburg]  ate a ^1hamburg] ) catsup",
+      "#f4 return  2f y ^1return home",
+      "#g4 purpose  ! ^1purpose ( ! lesson",
+      "#h4 surface  pa9t$ ! ^1surface ( ! table",
+      "#i4 c\\rage  h ^1c\\rage to face dang]",
+      "#aj4 j\\rnal  a ^1j\\rnal 5try ab a vaca;n",
       "gggggggggggggggggggggggggggggggggggggggg",
       "",
       "@.<orange@.> 777777777777777777777777777",
-      "#aa4 >gue ^1>gue ab : t1m is bett]",
+      "#aa4 >gue  ^1>gue ab : t1m is bett]",
       "444",
-      "#bj4 j\\rney a ^1j\\rney f ,africa to",
+      "#bj4 j\\rney  a ^1j\\rney f ,africa to",
       "  ,am]ica",
       "gggggggggggggggggggggggggggggggggggggggg",
       ""
@@ -203,5 +203,41 @@
   "sources": [
     "A",
     "B"
+  ],
+  "corrections": [
+    {
+      "date": "2026-09-26",
+      "source": "page image (PDF text layer drops one of two spaces)",
+      "field": "braille.lines",
+      "before": [
+        "#a4 >my an ^1>my tra9$ = battle",
+        "#b4 />ve ^1/>ve )\\t food to eat",
+        "#c4 sc> a ^1sc> on 8 >m f a burn",
+        "#d4 g>bage put ^1g>bage 9 ! tra% c",
+        "#e4 hamburg] ate a ^1hamburg] ) catsup",
+        "#f4 return 2f y ^1return home",
+        "#g4 purpose ! ^1purpose ( ! lesson",
+        "#h4 surface pa9t$ ! ^1surface ( ! table",
+        "#i4 c\\rage h ^1c\\rage to face dang]",
+        "#aj4 j\\rnal a ^1j\\rnal 5try ab a vaca;n",
+        "#aa4 >gue ^1>gue ab : t1m is bett]",
+        "#bj4 j\\rney a ^1j\\rney f ,africa to"
+      ],
+      "after": [
+        "#a4 >my  an ^1>my tra9$ = battle",
+        "#b4 />ve  ^1/>ve )\\t food to eat",
+        "#c4 sc>  a ^1sc> on 8 >m f a burn",
+        "#d4 g>bage  put ^1g>bage 9 ! tra% c",
+        "#e4 hamburg]  ate a ^1hamburg] ) catsup",
+        "#f4 return  2f y ^1return home",
+        "#g4 purpose  ! ^1purpose ( ! lesson",
+        "#h4 surface  pa9t$ ! ^1surface ( ! table",
+        "#i4 c\\rage  h ^1c\\rage to face dang]",
+        "#aj4 j\\rnal  a ^1j\\rnal 5try ab a vaca;n",
+        "#aa4 >gue  ^1>gue ab : t1m is bett]",
+        "#bj4 j\\rney  a ^1j\\rney f ,africa to"
+      ],
+      "note": "K33: the gold was transcribed from a text dump of the PDF that collapses a run of exactly two blank cells to one (and in some lines adds spurious blanks). Line(s) 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 19 rewritten to the book's exact cell positions, measured from the SimBraille glyph origins on PDF page 195 and checked cell by cell against the 300 dpi page image (blank vs dotted cell). What changed: two blank cells collapsed to one (12). Where: column gap (table / related columns / columned list) (12)."
+    }
   ]
 }

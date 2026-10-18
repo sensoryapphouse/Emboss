@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+<head>
+<meta name="dtb:uid" content="test-section-1"/>
+<meta name="dc:Title" content="Basic principles and general formats"/>
+<meta name="dc:Identifier" content="test-section-1"/>
+<meta name="dc:Language" content="en-US"/>
+<meta name="dc:Publisher" content="Emboss test"/>
+<meta name="dc:Date" content="2026-01-01"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter><doctitle>Basic principles and general formats</doctitle><docauthor>Test Author</docauthor></frontmatter>
+<bodymatter>
+<level1>
+<h1>The Fields in Spring</h1>
+<p>The fields are awash in a sea of blue. Farmers walk the rows each morning before the dew has dried.</p>
+<p>A second paragraph follows, a little longer than the first so that it must wrap across more than one braille line at forty cells.</p>
+<pagenum id="p21" page="normal">21</pagenum>
+<p>Choose the letter of the answer that best completes each statement.</p>
+<list type="ol" enum="1">
+<li>Which crop grows in water?</li>
+<li>Which crop needs the most sun?</li>
+</list>
+<level2><h2>Vocabulary</h2>
+<list type="pl">
+<li>down</li>
+<li>territory</li>
+<li>migrate</li>
+</list>
+<table>
+<thead><tr><th>Crop</th><th>Season</th></tr></thead>
+<tbody>
+<tr><td>Wheat</td><td>Autumn</td></tr>
+<tr><td>Rice</td><td>Spring</td></tr>
+</tbody>
+</table>
+<sidebar render="required"><hd>Did you know?</hd><p>Rice feeds more than half the world.</p></sidebar>
+</level2>
+<pagenum id="p22" page="normal">22</pagenum>
+<p>The last paragraph continues on the next print page.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

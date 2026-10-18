@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-GB">
+<head><meta name="dc:Title" content="Multi-file Fixture Book"/><meta name="dtb:uid" content="9780000000001"/></head>
+<book>
+<bodymatter>
+<level1><h1>Chapter two</h1>
+<p>Words of chapter two with a note<noteref idref="#n1">1</noteref> attached.</p>
+<note id="n1"><p>Note text of part two.</p></note>
+<imggroup><img src="../images/fig1.png" alt="Figure one again"/><caption>Shared figure caption</caption></imggroup>
+<imggroup><img src="art/fig2.png" alt="Figure two picture"/><caption>Figure two caption</caption></imggroup>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

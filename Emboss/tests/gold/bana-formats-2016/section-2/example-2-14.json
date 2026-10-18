@@ -1,0 +1,39 @@
+{
+  "id": "example-2-14",
+  "title": "Example 2-14: Print Page Information in Subsequent Volume",
+  "pdfPages": [
+    11
+  ],
+  "textLines": [
+    1824,
+    1829
+  ],
+  "illustrates": {
+    "rule": "2.3.8d(4)",
+    "quote": "(4) Only the actual print page numbers are indicated on the title page in subsequent volumes. For example, the table of contents may be pages iv-xv for the volume, therefore i-iii are not included on the title page in any volume other than volume 1."
+  },
+  "print": {
+    "blocks": [],
+    "notes": "No separate print original: this inline Example is a bare braille fragment illustrating the cited rule directly -- the book's own page (references/_gemini/gold-2-A/page-055.png) shows only the rule text and the boxed braille, no accompanying print excerpt to transcribe.",
+    "surroundingText": null,
+    "printFeatures": null
+  },
+  "braille": {
+    "width": 40,
+    "lines": [
+      "",
+      "",
+      "",
+      "",
+      ",pr9t pages iv-xv & #ef-#ha"
+    ],
+    "pageBreaks": [],
+    "notes": "Margin stripped: 8"
+  },
+  "uncertain": [],
+  "sources": [
+    "A",
+    "B"
+  ],
+  "resolution": "braille.lines: A and B agree on content; A's version (kept here) retains the source's own leading/internal/trailing blank braille lines verbatim (confirmed by direct re-derivation from source-lines-1390-2934.txt), matching this gold corpus's established convention (see e.g. tests/gold/bana-formats-2016/section-5's own U+2800-filler-line handling); B's version silently strips those blank lines. illustrates.quote: A's rule text was verbatim-correct but scoped to the whole lettered rule (plus, in some files, a stray page-footer line glued in by the extraction) rather than the specific numbered sub-item/cross-reference this example cites; B's own quote field was not a quote at all (it echoed the file's own title/caption). Re-derived directly from source-lines-1390-2934.txt, scoped to exactly the cited rule id."
+}

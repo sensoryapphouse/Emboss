@@ -12,6 +12,7 @@
       {
         "kind": "paragraph",
         "level": null,
+        "blocked": true,
         "text": "Many upper-class people from Judah were sent to Babylonia in exile, the memory of which is still evoked in the stirring words of Psalm 137:",
         "features": null
       },
@@ -19,17 +20,19 @@
         "kind": "list",
         "level": null,
         "text": null,
-        "features": "Four-line displayed verse, entirely italicized in print; per 9.2.3b the italic font attribute is omitted in braille since the whole displayed section is emphasized -- each verse line at the adjusted left margin (cell 3), runovers at cell 5, per this section's own 'multiple displayed sentences treated as a list' pattern (9.2.2e).",
+        "features": "Four-line displayed verse, set off from the narrative text and entirely italicized in print.",
         "items": [
           "By the rivers of Babylon, we sat and wept when we remembered Zion …",
           "How can we sing the songs of the Lord while in a foreign land?",
           "If I forgot you, O Jerusalem, may my right hand forget its skill.",
           "May my tongue cling to the roof of my mouth if I do not remember you, if I do not consider Jerusalem my highest joy."
-        ]
+        ],
+        "displayed": true
       },
       {
         "kind": "paragraph",
         "level": null,
+        "blocked": true,
         "text": "But the Babylonian captivity of the people of Judah did not last.",
         "features": null
       }
@@ -63,5 +66,19 @@
   },
   "uncertain": [],
   "sources": ["A", "B"],
-  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6914-6929 after stripping the 5-character line-number field (the '(Return to Text)' line 6930 excluded). `illustrates.rule` narrowed to 9.2.3.b specifically (B quoted the whole of 9.2.3 including clause a; A cited b alone) since the sample shows the WHOLE passage emphasized, clause b's specific case, not clause a's partial-emphasis case. Structural choice: A recorded the verse as a 'quote' block carrying an `items` array (poem-like); B flattened it into one 'quote' block's `text` (joining the four lines with spaces, losing the line-per-line structure). Resolved to A's `items` structure: the agreed braille shows each verse line independently satisfying the cell-3-first/cell-5-runover pattern (measured directly, matching this section's own 'displayed sentences as a list' convention, 9.2.2e) rather than one continuously-wrapped paragraph, so a flat joined `text` would lose the very line-per-line structure the braille exhibits; kept as `kind:'list'` (not 'quote'+items) for buildModel9's consistency with example-9-4's identical list-of-displayed-sentences pattern."
+  "printCorrections": [
+    {
+      "field": "print.blocks[0].blocked and blocks[2].blocked",
+      "was": "(absent)",
+      "now": "true",
+      "evidence": "references/bana/braille-formats-2016.pdf rendered at 110/300 dpi, PDF p239 (Sample 9-2): both paragraphs (\"Many upper-class people ...\" and \"But the Babylonian captivity ...\") start flush left; the verse is indented italic."
+    },
+    {
+      "field": "print.blocks[1].features / .displayed",
+      "was": "\"...per 9.2.3b the italic font attribute is omitted in braille ... each verse line at the adjusted left margin (cell 3), runovers at cell 5...\" (braille formatting text)",
+      "now": "print wording only (displayed verse, all italic); print flag displayed:true added",
+      "evidence": "references/bana/braille-formats-2016.pdf p.239 (Sample 9-2), rendered at 80 dpi: the four verse lines are indented from the narrative paragraphs, on their own lines, all in italics (the last one wraps with a hanging indent). The braille margins in the old wording came from the braille; the runner now reads the print flag displayed:true instead of matching the words 'adjusted left margin'."
+    }
+  ],
+  "resolution": "A and B transcribed identical `braille.lines`, verified byte-for-byte against lines 6914-6929 after stripping the 5-character line-number field (the '(Return to Text)' line 6930 excluded). `illustrates.rule` narrowed to 9.2.3.b specifically (B quoted the whole of 9.2.3 including clause a; A cited b alone) since the sample shows the WHOLE passage emphasized, clause b's specific case, not clause a's partial-emphasis case. Structural choice: A recorded the verse as a 'quote' block carrying an `items` array (poem-like); B flattened it into one 'quote' block's `text` (joining the four lines with spaces, losing the line-per-line structure). Resolved to A's `items` structure: the agreed braille shows each verse line independently satisfying the cell-3-first/cell-5-runover pattern (measured directly, matching this section's own 'displayed sentences as a list' convention, 9.2.2e) rather than one continuously-wrapped paragraph, so a flat joined `text` would lose the very line-per-line structure the braille exhibits; kept as `kind:'list'` (not 'quote'+items) for buildModel9's consistency with example-9-4's identical list-of-displayed-sentences pattern. Print description corrected 23 Sep 2026 (see printCorrections)."
 }
