@@ -39,7 +39,7 @@ import { exportToText, exportToMarkdown, exportToHtml, bytesToBase64 } from '/we
 import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs';
 import * as louis from '/engine/louis-browser.mjs';
 import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs';
-import { proofread, roundTrip, blockEntries } from '/web/proofread.mjs';
+import { proofread, roundTrip, blockEntries, segmentsBraille, issueWordSkipped } from '/web/proofread.mjs';
 import { parseFile, BINARY_EXTS } from '/input/parse.mjs';
 import { BRF64, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
 import * as maths from '/engine/maths.mjs';
@@ -9451,30 +9451,13 @@ function runProofread(model, table) {
         checked++;
         try {
           const hasSeg = entry.segments && entry.segments.some((seg) => seg.uncontracted || seg.tf);
-          const cacheKey = `${entry.text}|${table}|${hasSeg ? 'seg' : 'plain'}`;
+          const cacheKey = `${entry.text}|${table}|${hasSeg ? 'seg:' + entry.segments.map((g) => `${g.tf || 0}.${g.uncontracted ? 1 : 0}.${String(g.text ?? '').length}`).join(',') : 'plain'}`;   // the runs' emphasis too: the braille depends on it
           let res = proofreadCache.get(cacheKey);
           if (!res) {
             const tr = makeTranslators(louis, table);
             const trG1 = /en-ueb/.test(table) ? (s) => makeTranslators(louis, UEB_TABLES.g1).translate(s) : null;
-            const translateEntry = (s) => {
-              if (hasSeg) {
-                let out = '';
-                for (const seg of entry.segments) {
-                  const t = String(seg.text ?? '');
-                  if (!t) continue;
-                  if (seg.uncontracted) {
-                    const g1 = trG1 ? trG1(t) : tr.translate(t);
-                    out += t.includes(' ') ? `;;;${g1};'` : `;;${g1}`;
-                  } else if (seg.tf) {
-                    out += tr.translate(t, Array(t.length).fill(seg.tf));
-                  } else {
-                    out += tr.translate(t);
-                  }
-                }
-                return out;
-              }
-              return tr.translate(s);
-            };
+            // A line's runs are brailled together, as the braille itself is (segmentsBraille; Paul, 31 Oct 2026).
+            const translateEntry = (s) => (hasSeg ? segmentsBraille(entry.segments, tr.translate, trG1) : tr.translate(s));
             // The text as the real translator sees it (feedback 30 Sep item 7): invisible characters such as a soft hyphen
             // removed, no-break spaces as spaces — the check brailled them raw and flagged "soft­hyphen" though its braille was
             // right. Word positions are mapped back to the original text for highlighting.
@@ -9491,22 +9474,9 @@ function runProofread(model, table) {
           }
           if (!res.ok && res.wordIssues && res.wordIssues.length > 0) {
             for (const w of res.wordIssues) {
-              // A word next to or inside a sub/superscript (Emboss's script markers U+E000-U+E002) is not one this check can judge:
-              // it brailles the raw text, and reading back cannot turn script indicators into markers, so every such word came back
-              // "different" while its braille was right (feedback 30 Sep item 7: Paul's test document showed "4 to review", all
-              // the words of its subscript and superscript line).
-              if (/[\uE000-\uE002]/.test(entry.text.slice(Math.max(0, w.start - 1), w.end + 1))) continue;
-              // Nor is a word of a web or email address: UEB brailles those by its computer-material rules, which reading back
-              // cannot reverse ("https" was flagged in every document with a link).
-              // Nor a word touching a note reference: its number is brailled as the reference mark, which reading back cannot
-              // reverse ("script:" + reference 3 came back as two words to check).
-              if (Array.isArray(entry.segments)) {
-                let c = 0, touches = false;
-                for (const g of entry.segments) { const len = String((g && g.text) || '').length; if (g && g.type === 'noteref' && w.start <= c + len + 1 && w.end >= c - 1) touches = true; /* next to it, or one punctuation mark away ("script:³") */ c += len; }
-                if (touches) continue;
-              }
-              const tokA = entry.text.lastIndexOf(' ', w.start) + 1, tokB = entry.text.indexOf(' ', w.end);
-              if (/:\/\/|^www\.|\S@\S/i.test(entry.text.slice(tokA, tokB < 0 ? entry.text.length : tokB))) continue;
+              // Words the check cannot judge (next to a sub/superscript, a note reference or a line number; a web or email
+              // address): issueWordSkipped, web/proofread.mjs.
+              if (issueWordSkipped(entry, w)) continue;
               issues.push({ idx: i, itemIdx: entry.itemIdx, word: w.word, start: w.start, end: w.end, src: entry.text, back: res.back });
               const pe = printUnitEl(i, entry.itemIdx) || editorEl.querySelector(`[data-block-idx="${i}"]`);
               if (pe) {

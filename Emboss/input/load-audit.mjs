@@ -10,10 +10,37 @@ const MATHML_NS = 'http://www.w3.org/1998/Math/MathML';
 // block-level elements do.
 const INLINE = new Set(['a', 'abbr', 'acronym', 'bdo', 'cite', 'code', 'dfn', 'em', 'kbd', 'q', 'samp', 'span', 'strong', 'sub', 'sup', 'var', 'w', 'sent', 'linenum', 'b', 'i', 'u', 'small', 'big', 'tt']);
 
+// Does a class (or id) string contain the wanted name as a WHOLE WORD? (Paul, 23 Oct 2026.)
+// A plain substring test read <p class="headline"> and <p class="outline"> ("line") and
+// <p class="universe"> ("verse") as verse, and "photocopy" ("toc") as a contents list; DTBook made
+// from PDF/OCR or by other tools carries arbitrary class names. The rule:
+//   - the string is a whitespace-separated list of tokens (an id is one token);
+//   - inside a token, words are separated by '-' or '_' ("poem-verse", "verse_line");
+//   - case is ignored;
+//   - the wanted name matches when its words appear, consecutively, as whole words of ONE token:
+//       'verse' matches verse, poem-verse, verse_line, Verse; not headline, universe, versed, verse2;
+//       'bana-heading' matches bana-heading and bana-heading-before-box; not urbana-heading,
+//       bana-headings, "bana heading" (two tokens) or bana-x-heading.
+// This is the one class-name test of the document reader (input/parse.mjs imports and re-exports
+// it); the load check below uses it too, so the two always agree about a print line number.
+export function hasClassWord(classString, needle) {
+  if (!classString || needle == null) return false;   // (most elements have no class at all: the cheap exit)
+  const want = String(needle).toLowerCase().replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '');
+  if (!want) return false;
+  const have = String(classString).toLowerCase().replace(/_/g, '-');
+  const edge = (ch) => ch === '' || ch === '-' || /\s/.test(ch);
+  for (let i = have.indexOf(want); i !== -1; i = have.indexOf(want, i + 1)) {
+    if (edge(i === 0 ? '' : have[i - 1]) && edge(have[i + want.length] || '')) return true;
+  }
+  return false;
+}
+// A print line number's class: "linenum" or "line-number" (whole words, as above).
+export const isLinenumClass = (cls) => hasClassWord(cls, 'linenum') || hasClassWord(cls, 'line-number');
+
 // A print line number (<linenum>, or class="linenum"/"line-number").
 const isLinenum = (el) => {
-  const cls = String((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
-  return (el.localName || '').toLowerCase() === 'linenum' || cls.includes('linenum') || cls.includes('line-number');
+  const cls = String((el.getAttribute && el.getAttribute('class')) || '');
+  return (el.localName || '').toLowerCase() === 'linenum' || isLinenumClass(cls);
 };
 const byTag = (dom, name, ns = '*') => (dom.getElementsByTagNameNS ? [...dom.getElementsByTagNameNS(ns, name)] : []);
 export const wordList = (s) => String(s || '').match(/[\p{L}\p{N}]+/gu) || [];

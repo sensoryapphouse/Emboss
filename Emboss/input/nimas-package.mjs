@@ -168,7 +168,9 @@ export function buildNimasOpf(model, options = {}) {
   const title = meta.title || model?.title || 'Untitled Document';
   const lang = meta.language || meta.lang || 'en';
   const date = options.date || meta.date || new Date().toISOString().slice(0, 10);
-  const format = meta.format || 'NIMAS 1.1';
+  // Always NIMAS 1.1, the value the NIMAS rules require of a package's OPF. metadata.format is the BOOK's own format (its DTBook head's
+  // dc:Format, ANSI/NISO Z39.86-2005), which a re-saved package used to copy here (found 23 Oct 2026; nimas_package_export.test.mjs).
+  const format = 'NIMAS 1.1';
   const creator = meta.creator || meta.author || meta.docauthor || '';
   const publisher = meta.publisher || 'Emboss Braille Editor';   // matches nimas-export.mjs's dc:Publisher fallback
   // NIMAS requires the dc:Date/@event, dc:Creator/@role and dc:Identifier/@scheme attributes

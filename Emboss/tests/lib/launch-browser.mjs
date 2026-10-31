@@ -28,7 +28,7 @@ export const LABELS = KNOWN;
 export async function launchBrowser(extra = {}, engine = ENGINE) {
   const headless = !process.argv.includes('--show');
   if (engine === 'chrome') {
-    return chromium.launch({ channel: process.env.PW_CHANNEL || 'chrome', headless, ...extra });
+    return chromium.launch({ channel: process.env.PW_CHANNEL || 'chrome', headless, ...extra, args: ['--mute-audio', ...((extra && extra.args) || [])] });
   }
   // eslint-disable-next-line no-unused-vars
   const { channel, args, ...portable } = extra;   // Chromium-only launch options

@@ -15,9 +15,21 @@ import { SCRIPT_MARKS } from '../format/text-style.mjs';
 import { mathmlToLatex } from '../engine/mathml-to-latex.mjs';
 import { cellFromSegments, cellIsBlank, cellSegments } from '../format/cell-markup.mjs';
 import { classifyTable } from './table-kind.mjs';
-import { loadWarnings } from './load-audit.mjs';
+import { loadWarnings, hasClassWord, isLinenumClass } from './load-audit.mjs';
 import { docxLangContext, docxRunLang, odtLangContext, odtTextLang, primaryLang, lcidLang, scriptSlot, foreignLangOf, setMarkupMainLang, markupForeignLang, markupHasForeignLang, keepLangOn, langAttrOf, markdownInlineLang, finishLanguages } from './lang.mjs';
 import { NUMBER_PREFIX_RE, synthesizeOrderedMarker, readBanaFlags, isNonDotBulletMarker, isBulletMarker, isCustomBulletMarker, bulletName, BULLET_NAMES, BANA_DOC_OPTIONS, docOptionValue, classifyOrderedMarkerGroup } from './nimas-export.mjs';
+// Class names and ids are matched as WHOLE WORDS (Paul, 23 Oct 2026) with hasClassWord (defined, with the rule, in
+// load-audit.mjs so the load check agrees with the reader): 'verse' matches `verse` and `poem-verse` but not
+// `headline`, `universe` or `versed`. Deliberately NOT whole-word, and why:
+//   1. hasBanaClass below: a token that STARTS with "bana-" (any of Emboss's own optional-field classes).
+//   2. The exporter's own classes are still read as exact tokens (/(^|\s)bana-label(\s|$)/ and the like): those
+//      are stricter than a whole word, because they are Emboss's own save format and a longer class that merely
+//      contains such a name must not be mistaken for it.
+//   3. getElementLevel's /\blevel-(\d+)\b/ captures a number, so it cannot be a plain word test; it is already
+//      anchored on word boundaries.
+// There is no other substring test of a class or id left.
+export { hasClassWord };
+const hasBanaClass = (cls) => /(^|\s)bana-/i.test(String(cls || ''));
 
 // ---------- $-delimited LaTeX (shared by parseText / parseMarkdown) ----------
 //
@@ -1329,7 +1341,7 @@ function brlTextOf(el) {
 // "note" alone is NOT a box class (26 Sep, main session): Project Gutenberg marks every marginal sidenote
 // `<div class="note">` (britannica_39001: 31 one-paragraph "boxes"). A compound like "note-box" still matches
 // via "box"; role="note" / epub:type="note" and a full CSS border still count.
-const BOX_CLASS_RE = /\b(sidebar|box|callout|tip|panel)\b/i;
+const BOX_CLASS_WORDS = ['sidebar', 'box', 'callout', 'tip', 'panel'];   // whole words of a class (hasClassWord), as the old /\b…\b/i did
 function htmlHasVisibleBorder(style) {
   const s = String(style || '');
   const isNone = (v) => !v || /^none\b/i.test(v.trim()) || /^0(\.0+)?(px|pt|em|%)?(\s+none)?$/i.test(v.trim());
@@ -1350,8 +1362,8 @@ function htmlBoxSignal(node) {
   const epubType = (node.getAttribute('epub:type') || '').toLowerCase().split(/\s+/);
   if (epubType.includes('sidebar') || epubType.includes('tip') || epubType.includes('note')) return true;
   if (tag === 'div' || tag === 'section' || tag === 'article') {
-    const cls = (node.getAttribute('class') || '').replace(/_/g, '-');
-    if (BOX_CLASS_RE.test(cls)) return true;
+    const cls = node.getAttribute('class') || '';
+    if (BOX_CLASS_WORDS.some((w) => hasClassWord(cls, w))) return true;
     if (htmlHasVisibleBorder(node.getAttribute('style') || '')) return true;
   }
   return false;
@@ -1583,7 +1595,8 @@ function parseHtmlDoc(str, opts) {
         // wrapper invented for text that never had one). Only a class-marked
         // poem/verse paragraph is treated this way; an ordinary paragraph with a
         // stray <br> keeps its existing (space-joined) behaviour.
-        const isVerse = clsList.some((c) => c.includes('poem') || c.includes('verse'));
+        const classString = clsList.join(' ');
+        const isVerse = hasClassWord(classString, 'poem') || hasClassWord(classString, 'verse');
         // A one-line verse paragraph (`<p class="poem">“Wow! wow! wow!”</p>`, a refrain between
         // two stanzas — 2 in the corpus's Alice) has no <br> and was read as prose; a paragraph
         // whose class is exactly `poem`/`verse` is verse line even with a single line.
@@ -11176,8 +11189,8 @@ export function parseDtbook(xmlStr) {
   // A print line number: <linenum>, or an element classed "linenum" / "line-number".
   const isLinenumEl = (el) => {
     const t = (el.localName || el.tagName || '').toLowerCase();
-    const c = ((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
-    return t === 'linenum' || c.includes('linenum') || c.includes('line-number');
+    const c = (el.getAttribute && el.getAttribute('class')) || '';
+    return t === 'linenum' || isLinenumClass(c);
   };
   const findLinenum = (el) => {
     for (let k = el.firstChild; k; k = k.nextSibling) {
@@ -11226,7 +11239,7 @@ export function parseDtbook(xmlStr) {
           }
           const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
           if (tag === 'img' || tag === 'image') { text += ' '; continue; }
-          if (tag === 'brl' || tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) continue;
+          if (tag === 'brl' || tag === 'linenum' || isLinenumClass(cls)) continue;
           // A print page turn is never part of the running text ("…know, xxixtake a moment…");
           // pagenumBlock() / inlineSegments() carry it as its own block or segment instead.
           if (PAGENUM_TAGS.has(tag)) continue;
@@ -11612,7 +11625,7 @@ export function parseDtbook(xmlStr) {
   function pushNote(target, el) {
     const cls = ((el.getAttribute && el.getAttribute('class')) || '').toLowerCase();
     const id = (el.getAttribute && el.getAttribute('id')) || '';
-    const kind = (cls.includes('endnote') || cls.includes('rearnote')) ? 'endnote' : null;
+    const kind = (hasClassWord(cls, 'endnote') || hasClassWord(cls, 'rearnote')) ? 'endnote' : null;
     const directPs = [...el.childNodes].filter((c) => c.nodeType === 1 && (c.localName || c.tagName || '').toLowerCase() === 'p');
     if (directPs.length > 1) {
       const paras = directPs.map((p) => {
@@ -11892,7 +11905,7 @@ export function parseDtbook(xmlStr) {
           let nextTf = parentTf;
           let nextUnc = parentUnc;
 
-          if (tag === 'linenum' || cls.includes('linenum') || cls.includes('line-number')) {
+          if (tag === 'linenum' || isLinenumClass(cls)) {
             // A print line number in prose (BANA Formats §15.4; A30) is kept as a segment.
             const num = (child.textContent || '').replace(/\s+/g, ' ').trim();
             if (num && !inVerseLine(child)) {
@@ -11974,7 +11987,7 @@ export function parseDtbook(xmlStr) {
               flush();
               const seg = { type: 'noteref', text: mark };
               if (idref) seg.idref = idref;
-              if (tag === 'annoref' || (unlinkedRef && cls.includes('annoref'))) seg.annoref = true;
+              if (tag === 'annoref' || (unlinkedRef && hasClassWord(cls, 'annoref'))) seg.annoref = true;
               segments.push(seg);
             }
             continue;
@@ -12072,13 +12085,13 @@ export function parseDtbook(xmlStr) {
           }
           if (tag === 'b' || tag === 'strong') nextTf |= TF_BOLD;
           else if (tag === 'i' || tag === 'em') nextTf |= TF_ITALIC;
-          else if (tag === 'u' || cls.includes('underline')) nextTf |= TF_UNDERLINE;
+          else if (tag === 'u' || hasClassWord(cls, 'underline')) nextTf |= TF_UNDERLINE;
           // K5 / UEB §9: nimas-export.mjs's own round-trip convention (serializeInlineLeaf)
           // writes Emboss's script typeform as `<span class="script">`; a bare `<script>` tag
           // (DTBook has no native element of that name, so no ambiguity) is read the same
           // leniently, matching how a bare `<u>` is read alongside `class="underline"` above.
           else if (tag === 'script' || /(^|\s)script(\s|$)/.test(cls)) nextTf |= TF_SCRIPT;
-          else if (tag === 'code' || cls.includes('uncontracted') || cls.includes('bai-trans4') || cls.includes('phonetic') || cls.includes('pronunciation') || cls.includes('pron') || cls.includes('ipa')) nextUnc = true;
+          else if (tag === 'code' || hasClassWord(cls, 'uncontracted') || hasClassWord(cls, 'bai-trans4') || hasClassWord(cls, 'phonetic') || hasClassWord(cls, 'pronunciation') || hasClassWord(cls, 'pron') || hasClassWord(cls, 'ipa')) nextUnc = true;
           else if (tag === 'br') {
             flush();
             text += '\n';
@@ -12162,19 +12175,20 @@ export function parseDtbook(xmlStr) {
       }
     }
     
-    let isToc = listClass.toLowerCase().includes('toc') || (child.getAttribute && (child.getAttribute('id') || '').toLowerCase().includes('toc'));
-    let isIndex = listClass.toLowerCase().includes('index') || (child.getAttribute && (child.getAttribute('id') || '').toLowerCase().includes('index'));
+    const listId = (child.getAttribute && child.getAttribute('id')) || '';
+    let isToc = hasClassWord(listClass, 'toc') || hasClassWord(listId, 'toc');
+    let isIndex = hasClassWord(listClass, 'index') || hasClassWord(listId, 'index');
     if (!isToc && !isIndex) {
       // Check parent container (e.g., <level1 class="toc"> or <sidebar id="toc"> or previous sibling heading)
       let p = child.parentNode;
       while (p && p.nodeType === 1) {
-        const pCls = (p.getAttribute ? (p.getAttribute('class') || '') : '').toLowerCase();
-        const pId = (p.getAttribute ? (p.getAttribute('id') || '') : '').toLowerCase();
-        if (pCls.includes('toc') || pId.includes('toc')) {
+        const pCls = (p.getAttribute ? (p.getAttribute('class') || '') : '');
+        const pId = (p.getAttribute ? (p.getAttribute('id') || '') : '');
+        if (hasClassWord(pCls, 'toc') || hasClassWord(pId, 'toc')) {
           isToc = true;
           break;
         }
-        if (pCls.includes('index') || pId.includes('index')) {
+        if (hasClassWord(pCls, 'index') || hasClassWord(pId, 'index')) {
           isIndex = true;
           break;
         }
@@ -12216,7 +12230,7 @@ export function parseDtbook(xmlStr) {
     // Index components (<lic class="index-line">/<lic class="index-pg">) make an index (A2).
     if (!isToc && !isIndex) {
       isIndex = [...(child.childNodes || [])].some((li) => li.nodeType === 1 && [...(li.childNodes || [])].some((c) => c.nodeType === 1
-        && (c.localName || c.tagName || '').toLowerCase() === 'lic' && /(^|[-_\s])index([-_\s]|$)/.test(((c.getAttribute && c.getAttribute('class')) || '').toLowerCase())));
+        && (c.localName || c.tagName || '').toLowerCase() === 'lic' && hasClassWord((c.getAttribute && c.getAttribute('class')) || '', 'index')));
     }
     // K32: a nested <list> (subentries) inherits its enclosing item's own index/toc-ness — its
     // own ancestor walk above only ever sees as far back as the <li> that holds it, never the
@@ -12231,7 +12245,7 @@ export function parseDtbook(xmlStr) {
     // `<list class="bai-exercise" type="ol">` with plain, unclassed <li> children still
     // takes the exercise-item path (BANA §10.11, F-229) instead of falling through to an
     // ordinary numbered list that drops any inline <img>.
-    const listIsExercise = listClass.toLowerCase().includes('bai-exercise');
+    const listIsExercise = hasClassWord(listClass, 'bai-exercise');
     let items = [];
     let counter = isOl ? (parseInt((child.getAttribute && child.getAttribute('start')) || '1', 10) || 1) : 1;   // DTBook @start
     let detectedKind = isToc ? 'toc' : (isIndex ? 'index' : (listTypeAttr.toLowerCase() === 'pl' ? 'plain' : null));
@@ -12450,28 +12464,31 @@ export function parseDtbook(xmlStr) {
         for (let p = l.parentNode; p && p !== li; p = p.parentNode) if (LIST_TAGS.has((p.localName || p.tagName || '').toLowerCase())) return false;
         return true;
       }) : [];
-      const PAGE_CLASS = /(^|[-_\s])(page|pagenum|pg|pageno)([-_\s]|$)/;
+      // A page-number component: one of these WHOLE words in its class ("page", "toc-pg", "page-number"; not "homepage").
+      // (Before 23 Oct 2026 `includes('page')` also let "homepage", "pagination" and the like through, which made
+      // PAGE_CLASS's whole-word test for "pg"/"pageno" the only one of the two that meant what it said.)
+      const classIsPage = (cls) => ['page', 'pagenum', 'pg', 'pageno'].some((w) => hasClassWord(cls, w));
       // <lic> is DTBook's general "list item component": it makes a contents entry only when
       // one component is a page reference (class or pagenum), or the list is a contents list,
       // or the last of several components is a bare page number. "1." + an equation is an
       // ordinary numbered item (its maths was lost when every <lic> item was read as contents).
       const hasMathml = (el) => !!(el.getElementsByTagNameNS && el.getElementsByTagNameNS('http://www.w3.org/1998/Math/MathML', 'math').length);
       const licIsPage = (l) => {
-        const c = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
-        return c.includes('page') || PAGE_CLASS.test(c) || (l.getElementsByTagName && (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0));
+        const c = (l.getAttribute && l.getAttribute('class')) || '';
+        return classIsPage(c) || (l.getElementsByTagName && (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0));
       };
       const PAGE_NO = /^\s*[\divxlcdm]+[a-z]?\s*$/i;           // "12", "xiv", "12a"
       const ITEM_NO = /^\s*[\divxlcdm]+[.)]\s*$/i;              // "1." / "iv)" — an item number, not a page
       const lastLic = lics[lics.length - 1];
       const licsAreContents = lics.length >= 2 && !hasMathml(lastLic) && PAGE_NO.test(getCleanText(lastLic)) && !ITEM_NO.test(getCleanText(lics[0]));
       const hasLics = lics.length > 0 && (isToc || lics.some(licIsPage) || licsAreContents);
-      const isLiToc = isToc || liClass.includes('toc-entry') || liClass.includes('bai-toc-entry') || hasLics;
+      const isLiToc = isToc || hasClassWord(liClass, 'toc-entry') || hasClassWord(liClass, 'bai-toc-entry') || hasLics;
       // Page turns in this item (nested lists handle their own): before the item's text
       // → emitted before it; anywhere else → after it (an item cannot be split).
       const liPn = collectPagenums(li, LIST_AND_TABLE_TAGS);
       for (const b of liPn.before) emitPagenum(b);
 
-      if (liClass.includes('bai-toc-center')) {
+      if (hasClassWord(liClass, 'bai-toc-center')) {
         const t = getCleanText(li, LIST_AND_TABLE_TAGS);
         if (t && targetBlocks) { emitListBlock(); targetBlocks.push({ type: 'heading', level: 1, text: t }); }
         emitTables(liTables.after);
@@ -12479,7 +12496,7 @@ export function parseDtbook(xmlStr) {
         continue;
       }
 
-      if (liClass.includes('toc-page') || liClass.includes('bai-toc-page')) {
+      if (hasClassWord(liClass, 'toc-page') || hasClassWord(liClass, 'bai-toc-page')) {
         detectedKind = isIndex ? 'index' : 'toc';
         const pVal = getCleanText(li, LIST_AND_TABLE_TAGS);
         const pHref = pageColumnHref(li, LIST_AND_TABLE_TAGS);   // A36
@@ -12517,13 +12534,13 @@ export function parseDtbook(xmlStr) {
 
         if (hasLics) {
           textEl = lics.find(l => {
-            const cls = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
-            return cls.includes('toc-text') || cls.includes('bai-toc-text') || cls.includes('entry') || cls.includes('title');
+            const cls = (l.getAttribute && l.getAttribute('class')) || '';
+            return hasClassWord(cls, 'toc-text') || hasClassWord(cls, 'bai-toc-text') || hasClassWord(cls, 'entry') || hasClassWord(cls, 'title');
           });
           pageEl = lics.find(l => {
-            const cls = ((l.getAttribute && l.getAttribute('class')) || '').toLowerCase();
+            const cls = (l.getAttribute && l.getAttribute('class')) || '';
             const hasPageTag = l.getElementsByTagName ? (l.getElementsByTagName('pagenum').length > 0 || l.getElementsByTagName('print-page').length > 0) : false;
-            return cls.includes('toc-page') || cls.includes('bai-toc-page') || cls.includes('page') || cls.includes('pagenum') || PAGE_CLASS.test(cls) || hasPageTag;
+            return hasClassWord(cls, 'toc-page') || hasClassWord(cls, 'bai-toc-page') || classIsPage(cls) || hasPageTag;
           });
           if (!textEl && !pageEl) {
             if (lics.length >= 2) {
@@ -12592,7 +12609,7 @@ export function parseDtbook(xmlStr) {
         continue;
       }
 
-      if (liClass.includes('bai-exercise') || listIsExercise) {
+      if (hasClassWord(liClass, 'bai-exercise') || listIsExercise) {
         detectedKind = 'exercise';
         // imageAsNote (BANA §10.11.1/Example 10-31): an <img> inside an exercise item
         // becomes an embedded transcriber's-note segment instead of being dropped (F-229).
@@ -12651,7 +12668,7 @@ export function parseDtbook(xmlStr) {
         continue;
       }
 
-      if (liClass.includes('bai-index')) {
+      if (hasClassWord(liClass, 'bai-index')) {
         detectedKind = 'index';
         // Several <p> in an index entry: the first is the entry, the rest its further paragraphs (item.blocks).
         const ixPieces = splitItemParagraphs(mergeWhitespaceRuns(segsWithoutPagenums(inlineSegments(li, true, LI_SPLIT_TAGS, false, 'blocks'))));
@@ -13100,7 +13117,7 @@ export function parseDtbook(xmlStr) {
           if (!bareLinegroup) blk.poemRole = cTag === 'author' ? 'author' : 'byline';
           return blk;
         });
-      } else if (cTag === 'linegroup' || cTag === 'stanza' || (cTag === 'div' && (cCls.includes('stanza') || cCls.includes('linegroup') || cCls.includes('line-group') || cCls.includes('verse') || cCls.includes('poem')))) {
+      } else if (cTag === 'linegroup' || cTag === 'stanza' || (cTag === 'div' && (hasClassWord(cCls, 'stanza') || hasClassWord(cCls, 'linegroup') || hasClassWord(cCls, 'line-group') || hasClassWord(cCls, 'verse') || hasClassWord(cCls, 'poem')))) {
         let stanzaLinenum = '';
         let hasLinesInGroup = false;
         for (let ln = c.firstChild; ln; ln = ln.nextSibling) {
@@ -13110,12 +13127,12 @@ export function parseDtbook(xmlStr) {
           if (PAGENUM_TAGS.has(lnTag)) {
             const pn = pagenumBlock(ln);
             if (pn && targetBlocks) targetBlocks.push(pn);
-          } else if (lnTag === 'linenum' || lnCls.includes('linenum')) {
+          } else if (lnTag === 'linenum' || hasClassWord(lnCls, 'linenum')) {
             stanzaLinenum = (ln.textContent || '').trim();
           } else if (lnTag === 'title' || lnTag === 'hd' || /^h[1-6]$/.test(lnTag)) {
             if (targetBlocks) pushTextOnly(targetBlocks, ln, (t) => (t ? { type: 'heading', level: 3, text: t } : null));
           } else if (lnTag === 'line' || lnTag === 'ln' || lnTag === 'p') {
-            if (lnCls.includes('bai-stanza-break') || lnCls.includes('stanza-break')) {
+            if (hasClassWord(lnCls, 'bai-stanza-break') || hasClassWord(lnCls, 'stanza-break')) {
               if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
             } else {
               const lvlAttr = ln.getAttribute ? ln.getAttribute('level') : null;
@@ -13153,7 +13170,7 @@ export function parseDtbook(xmlStr) {
               }
               if (targetBlocks) targetBlocks.push(...pn.after);
             }
-          } else if (lnTag === 'byline' || lnTag === 'author' || lnTag === 'cite' || lnTag === 'attrib' || lnCls.includes('attribution') || lnCls.includes('byline')) {
+          } else if (lnTag === 'byline' || lnTag === 'author' || lnTag === 'cite' || lnTag === 'attrib' || hasClassWord(lnCls, 'attribution') || hasClassWord(lnCls, 'byline')) {
             if (targetBlocks) pushAtomic(targetBlocks, ln, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
           } else if (lnTag === 'note') {
             if (targetBlocks) pushNote(targetBlocks, ln);
@@ -13171,7 +13188,7 @@ export function parseDtbook(xmlStr) {
           if (nextSibling.nodeType === 1) {
             const nsTag = (nextSibling.localName || nextSibling.tagName || '').toLowerCase();
             const nsCls = (nextSibling.getAttribute ? (nextSibling.getAttribute('class') || '') : '').toLowerCase();
-            if (nsTag === 'linegroup' || nsTag === 'stanza' || (nsTag === 'div' && (nsCls.includes('stanza') || nsCls.includes('linegroup') || nsCls.includes('verse')))) {
+            if (nsTag === 'linegroup' || nsTag === 'stanza' || (nsTag === 'div' && (hasClassWord(nsCls, 'stanza') || hasClassWord(nsCls, 'linegroup') || hasClassWord(nsCls, 'verse')))) {
               hasMoreStanzas = true;
               break;
             }
@@ -13209,10 +13226,10 @@ export function parseDtbook(xmlStr) {
           targetBlocks.push(blk);
         }
         if (targetBlocks) targetBlocks.push(...pn.after);
-      } else if (cTag === 'linenum' || cCls.includes('linenum')) {
+      } else if (cTag === 'linenum' || hasClassWord(cCls, 'linenum')) {
         pendingLinenum = (c.textContent || '').trim();
       } else if (cTag === 'p') {
-        if (cCls.includes('bai-stanza-break') || cCls.includes('stanza-break')) {
+        if (hasClassWord(cCls, 'bai-stanza-break') || hasClassWord(cCls, 'stanza-break')) {
           if (targetBlocks) targetBlocks.push({ type: 'indicator', kind: 'line' });
         } else if (targetBlocks) {
           const lvlAttr = c.getAttribute ? c.getAttribute('level') : null;
@@ -13287,7 +13304,7 @@ export function parseDtbook(xmlStr) {
       if (pend) { applyBanaFlags(pend.el, pend.tag, innerBlocks, pend.from); pend = null; }
       if (c.nodeType !== 1) continue;
       const cTag = (c.localName || c.tagName || '').toLowerCase();
-      if ((c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase().includes('bana-')) pend = { el: c, tag: cTag, from: innerBlocks.length };
+      if (hasBanaClass(c.getAttribute ? (c.getAttribute('class') || '') : '')) pend = { el: c, tag: cTag, from: innerBlocks.length };
       if (cTag === 'hd' || /^h[1-6]$/.test(cTag)) {
         const hdText = getCleanText(c);
         if (!boxTitle) {
@@ -13305,9 +13322,9 @@ export function parseDtbook(xmlStr) {
         }
         const rawSegs = inlineSegments(c);
         const makeP = (t, segs) => {
-          if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker')) {
+          if (hasClassWord(cls, 'bai-play') || hasClassWord(cls, 'play-speaker') || hasClassWord(cls, 'speaker')) {
             return { type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: segs };
-          } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem')) {
+          } else if (hasClassWord(cls, 'bai-verse') || hasClassWord(cls, 'play-verse') || hasClassWord(cls, 'verse') || hasClassWord(cls, 'poem')) {
             // BANA §14.6.1a (F-180): D5's own "verse drama" class marker (bai-verse/play-verse,
             // the ONE thing that tells a verse-PLAY line apart from a genuine <poem> line, which
             // never reaches here — it goes through parsePoem instead) needs the wider 1-5/3-5
@@ -13315,21 +13332,21 @@ export function parseDtbook(xmlStr) {
             // ambiguous bare "verse"/"poem" class (an occasional prose-imported poem-as-<p>
             // fallback, not drama) keeps the plain poetry-nesting default, unchanged.
             const blk = { type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: segs };
-            if (cls.includes('bai-verse') || cls.includes('play-verse')) blk.playVerse = true;
+            if (hasClassWord(cls, 'bai-verse') || hasClassWord(cls, 'play-verse')) blk.playVerse = true;
             return blk;
-          } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage')) {
+          } else if (hasClassWord(cls, 'bai-stage') || hasClassWord(cls, 'play-stage') || hasClassWord(cls, 'stage')) {
             return { type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: segs };
-          } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+          } else if (hasClassWord(cls, 'bai-stanza-break') || hasClassWord(cls, 'stanza-break')) {
             return { type: 'indicator', kind: 'line' };
-          } else if (cls.includes('bana-break-asterisks')) {
+          } else if (hasClassWord(cls, 'bana-break-asterisks')) {
             return { type: 'break', kind: 'asterisks' };
-          } else if (cls.includes('bana-break-dot2s')) {
+          } else if (hasClassWord(cls, 'bana-break-dot2s')) {
             return { type: 'break', kind: 'dot2s' };
           } else if (t || (!segs && hasEmptyMark(c))) {   // A89: <p class="bana-empty"/> is an empty paragraph of its own
             // BANA Formats §1.9.3 (F-39): per-paragraph "blocked" flag, e.g. a box paragraph
             // (Example 4-6) that carries class="blocked" (see parse.mjs's top-level makeP).
             const blk = segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
-            if (cls.includes('blocked')) blk.blocked = true;
+            if (hasClassWord(cls, 'blocked')) blk.blocked = true;
             if (!t && !segs) blk.keptEmpty = true;   // A89: saved empty on purpose (the editor gives it back as an empty paragraph the user made)
             return blk;
           }
@@ -13410,7 +13427,7 @@ export function parseDtbook(xmlStr) {
         const renderAttr = (c.getAttribute && c.getAttribute('render')) || null;
         pushProdnote(innerBlocks, c, (t) => {
           if (!t) return null;
-          const blk = cls.includes('tabletn') ? { type: 'note', kind: 'tabletn', text: t } : { type: 'note', text: t };
+          const blk = hasClassWord(cls, 'tabletn') ? { type: 'note', kind: 'tabletn', text: t } : { type: 'note', text: t };
           // A22/A43: keep the source's own value, either way — an Emboss-created note (no
           // value at all) is the only one the exporter defaults to required (D6).
           if (renderAttr === 'required' || renderAttr === 'optional') blk.render = renderAttr;
@@ -13418,7 +13435,7 @@ export function parseDtbook(xmlStr) {
         });
       } else if (cTag === 'byline' || cTag === 'author' || cTag === 'cite' || cTag === 'attrib') {
         pushAtomic(innerBlocks, c, (t, segs) => (t ? (segs ? { type: 'attribution', text: t, segments: segs } : { type: 'attribution', text: t }) : null));
-      } else if (cTag === 'sidebar' || (cTag === 'div' && (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase().includes('sidebar'))) {
+      } else if (cTag === 'sidebar' || (cTag === 'div' && hasClassWord(c.getAttribute ? (c.getAttribute('class') || '') : '', 'sidebar'))) {
         parseSidebar(c, innerBlocks);
       } else if (cTag === 'math' || cTag.endsWith(':math')) {
         let mathml = mathOuterXml(c);
@@ -13466,9 +13483,9 @@ export function parseDtbook(xmlStr) {
         if (pn) innerBlocks.push(pn);
       } else if (cTag === 'hr' || cTag === 'break') {
         const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '').toLowerCase();
-        if (cls.includes('stanza')) innerBlocks.push({ type: 'indicator', kind: 'line' });
-        else if (cls.includes('asterisks')) innerBlocks.push({ type: 'break', kind: 'asterisks' });
-        else if (cls.includes('dot2s')) innerBlocks.push({ type: 'break', kind: 'dot2s' });
+        if (hasClassWord(cls, 'stanza')) innerBlocks.push({ type: 'indicator', kind: 'line' });
+        else if (hasClassWord(cls, 'asterisks')) innerBlocks.push({ type: 'break', kind: 'asterisks' });
+        else if (hasClassWord(cls, 'dot2s')) innerBlocks.push({ type: 'break', kind: 'dot2s' });
         else innerBlocks.push({ type: 'break', kind: 'line' });
       } else if (!INLINE_TAGS.has(cTag) && cTag !== 'brl') {
         // Any other child (<div>, <epigraph>, <address>…) keeps its content (A2): a container
@@ -13550,9 +13567,9 @@ export function parseDtbook(xmlStr) {
         tabletnText = getCleanText(c);
       } else if (cTag === 'caption' || cTag === 'figcaption') {
         const cls = (c.getAttribute ? (c.getAttribute('class') || '') : '');
-        if (cls.includes('bana-heading')) {
+        if (hasClassWord(cls, 'bana-heading')) {
           headingLines = getTextLines(c);
-          headingBeforeBox = cls.includes('bana-heading-before-box');
+          headingBeforeBox = hasClassWord(cls, 'bana-heading-before-box');
         } else {
           captionText = getCleanText(c);
         }
@@ -13658,19 +13675,19 @@ export function parseDtbook(xmlStr) {
 
     const cls = tableEl.getAttribute ? (tableEl.getAttribute('class') || '') : '';
     let format = null;
-    if (cls.includes('bana-listed') || cls.includes('listed')) { format = 'listed'; brAsNewline = true; }
+    if (hasClassWord(cls, 'bana-listed') || hasClassWord(cls, 'listed')) { format = 'listed'; brAsNewline = true; }
     // T4 (EMBOSS-TASKS.md, Paul's decision 17 Sep 2026): BANA §11.14 Wide Tables: Vertical
     // Division, round-tripped as class="bana-vertical" (see nimas-export.mjs's table case).
-    else if (cls.includes('bana-vertical') || cls.includes('vertical')) format = 'vertical';
+    else if (hasClassWord(cls, 'bana-vertical') || hasClassWord(cls, 'vertical')) format = 'vertical';
     // BANA §11.18 Stairstep / §11.17 Linear (T4, F-18): class="bana-stairstep" / "bana-linear".
     // Stairstep's subdivision data (§11.18.1j) is `<tr class="bana-subdivision">` on each
     // subdivision row plus the heading's text in the table's own DTBook `title` attribute
     // (allowed on <table> via %coreattrs; — see nimas-export.mjs's table case).
-    else if (cls.includes('bana-stairstep')) { format = 'stairstep'; brAsNewline = true; }
-    else if (cls.includes('bana-linear')) format = 'linear';
-    else if (cls.includes('bana-facing')) format = 'facing';   // K15: BANA §11.13 facing pages (nimas-export.mjs)
-    else if (cls.includes('bana-interchange')) format = 'interchange';   // BANA §11.15 interchanged columns and rows (nimas-export.mjs)
-    else if (cls.includes('bana-spatial') || cls.includes('spatial')) format = 'spatial';
+    else if (hasClassWord(cls, 'bana-stairstep')) { format = 'stairstep'; brAsNewline = true; }
+    else if (hasClassWord(cls, 'bana-linear')) format = 'linear';
+    else if (hasClassWord(cls, 'bana-facing')) format = 'facing';   // K15: BANA §11.13 facing pages (nimas-export.mjs)
+    else if (hasClassWord(cls, 'bana-interchange')) format = 'interchange';   // BANA §11.15 interchanged columns and rows (nimas-export.mjs)
+    else if (hasClassWord(cls, 'bana-spatial') || hasClassWord(cls, 'spatial')) format = 'spatial';
     const subdivisionRows = [];
     const totalRows = [];                                    // bana-total rows (F-17)
     const rowSubheadings = [];                               // bana-subheading rows (F-12): { row, text } above data row `row`
@@ -14223,7 +14240,7 @@ export function parseDtbook(xmlStr) {
       const tag = (child.localName || child.tagName || '').toLowerCase();
       const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
       if (tag === 'doctitle' || tag === 'docauthor' || tag === 'head') continue;
-      if (cls.includes('bana-')) pend = { el: child, tag, from: blocks.length };
+      if (hasBanaClass(cls)) pend = { el: child, tag, from: blocks.length };
       if (/^level[1-6]$/.test(tag) && isTitlePageLevel(child)) { parseTitlePage(child); continue; }
       if (/^level[1-6]$/.test(tag) && isSymPageLevel(child)) { parseSymPage(child); continue; }
       if (/^level[1-6]$/.test(tag) && isTnPageLevel(child)) { parseTnPage(child); continue; }
@@ -14245,7 +14262,7 @@ export function parseDtbook(xmlStr) {
         parseTable(child);
       } else if (tag === 'dl') {
         parseDefinitionList(child);
-      } else if (tag === 'poem' || tag === 'linegroup' || tag === 'stanza' || (tag === 'div' && (cls.includes('poem') || cls.includes('verse') || cls.includes('stanza')))) {
+      } else if (tag === 'poem' || tag === 'linegroup' || tag === 'stanza' || (tag === 'div' && (hasClassWord(cls, 'poem') || hasClassWord(cls, 'verse') || hasClassWord(cls, 'stanza')))) {
         // A42: a bare <linegroup>/<stanza>, or a poem/verse/stanza-classed <div> (no <poem>
         // wrapper in the source), is tagged so the exporter writes it back without inventing
         // one — a real <poem> (tag === 'poem') keeps round-tripping with its wrapper, unchanged.
@@ -14449,37 +14466,37 @@ export function parseDtbook(xmlStr) {
         const hasStageChild = (child.getElementsByTagName ? child.getElementsByTagName('stage').length > 0 : false) || (child.getElementsByClassName ? child.getElementsByClassName('stage').length > 0 : false);
         // Builds the block for this <p> from (text, segments-or-undefined); null = nothing.
         const makeP = (t, segs) => {
-          if (cls.includes('bai-play') || cls.includes('play-speaker') || cls.includes('speaker') || hasSpeakerChild) {
+          if (hasClassWord(cls, 'bai-play') || hasClassWord(cls, 'play-speaker') || hasClassWord(cls, 'speaker') || hasSpeakerChild) {
             return { type: 'play', subtype: 'prose', style: 'play-speaker', level: pLevel, text: t, segments: segs };
-          } else if (cls.includes('bai-verse') || cls.includes('play-verse') || cls.includes('verse') || cls.includes('poem') || cls.includes('line')) {
+          } else if (hasClassWord(cls, 'bai-verse') || hasClassWord(cls, 'play-verse') || hasClassWord(cls, 'verse') || hasClassWord(cls, 'poem') || hasClassWord(cls, 'line')) {
             // F-180 — see the matching branch in parseSidebar's makeP just above.
             const blk = { type: 'play', subtype: 'verse', style: 'verse', level: pLevel, text: t, segments: segs };
-            if (cls.includes('bai-verse') || cls.includes('play-verse')) blk.playVerse = true;
+            if (hasClassWord(cls, 'bai-verse') || hasClassWord(cls, 'play-verse')) blk.playVerse = true;
             return blk;
-          } else if (cls.includes('bai-stage') || cls.includes('play-stage') || cls.includes('stage') || hasStageChild) {
+          } else if (hasClassWord(cls, 'bai-stage') || hasClassWord(cls, 'play-stage') || hasClassWord(cls, 'stage') || hasStageChild) {
             return { type: 'stage', style: 'play-stage', level: pLevel, text: t, segments: segs };
-          } else if (cls.includes('byline') || cls.includes('attribution') || cls.includes('author')) {
+          } else if (hasClassWord(cls, 'byline') || hasClassWord(cls, 'attribution') || hasClassWord(cls, 'author')) {
             return { type: 'attribution', text: t, segments: segs };
-          } else if (cls.includes('quote') || cls.includes('blockquote') || cls.includes('extract') || isInsideQuote) {
+          } else if (hasClassWord(cls, 'quote') || hasClassWord(cls, 'blockquote') || hasClassWord(cls, 'extract') || isInsideQuote) {
             return { type: 'para', style: 'quote', level: pLevel, text: t, segments: segs };
           } else if (isInsideEpigraph) {
             return { type: 'para', style: 'epigraph', level: pLevel, text: t, segments: segs };
-          } else if (cls.includes('bai-stanza-break') || cls.includes('stanza-break')) {
+          } else if (hasClassWord(cls, 'bai-stanza-break') || hasClassWord(cls, 'stanza-break')) {
             return { type: 'indicator', kind: 'line' };
-          } else if (cls.includes('bana-break-asterism') || ((cls.includes('doc-break') || cls === 'break') && /^[⁂\s]+$/.test(t || '') && t.includes('⁂')) || /^⁂(\s+⁂)*$/.test(t || '')) {
+          } else if (hasClassWord(cls, 'bana-break-asterism') || ((hasClassWord(cls, 'doc-break') || cls === 'break') && /^[⁂\s]+$/.test(t || '') && t.includes('⁂')) || /^⁂(\s+⁂)*$/.test(t || '')) {
             // A print asterism (⁂) is kept as its own kind: BANA Formats §1.9.5 follows the
             // print symbol (a transcriber-defined symbol in braille); UKAAF uses asterisks.
             return { type: 'break', kind: 'asterism' };
-          } else if (cls.includes('bana-break-asterisks') || cls.includes('doc-break') || cls === 'break' || t === '* * *' || t === '∗ ∗ ∗') {
+          } else if (hasClassWord(cls, 'bana-break-asterisks') || hasClassWord(cls, 'doc-break') || cls === 'break' || t === '* * *' || t === '∗ ∗ ∗') {
             return { type: 'break', kind: 'asterisks' };
-          } else if (cls.includes('bana-break-dot2s')) {
+          } else if (hasClassWord(cls, 'bana-break-dot2s')) {
             return { type: 'break', kind: 'dot2s' };
           } else if (t || (!segs && hasEmptyMark(child))) {
             // BANA Formats §1.9.3 (F-39): a per-paragraph "blocked" (1-1 margins) flag,
             // round-tripped as class="blocked" (see nimas-export.mjs's matching 'para' case).
             // A89: <p class="bana-empty"/> is an empty paragraph of its own (nimas-export.mjs saves one that way).
             const blk = segs ? { type: 'para', segments: segs, text: t } : { type: 'para', text: t };
-            if (cls.includes('blocked')) blk.blocked = true;
+            if (hasClassWord(cls, 'blocked')) blk.blocked = true;
             if (!t && !segs) blk.keptEmpty = true;   // A89: saved empty on purpose (the editor gives it back as an empty paragraph the user made)
             return blk;
           }
@@ -14511,9 +14528,9 @@ export function parseDtbook(xmlStr) {
         }
       } else if (tag === 'hr' || tag === 'break') {
         const cls = (child.getAttribute ? (child.getAttribute('class') || '') : '').toLowerCase();
-        if (cls.includes('stanza')) blocks.push({ type: 'indicator', kind: 'line' });
-        else if (cls.includes('asterisks')) blocks.push({ type: 'break', kind: 'asterisks' });
-        else if (cls.includes('dot2s')) blocks.push({ type: 'break', kind: 'dot2s' });
+        if (hasClassWord(cls, 'stanza')) blocks.push({ type: 'indicator', kind: 'line' });
+        else if (hasClassWord(cls, 'asterisks')) blocks.push({ type: 'break', kind: 'asterisks' });
+        else if (hasClassWord(cls, 'dot2s')) blocks.push({ type: 'break', kind: 'dot2s' });
         else blocks.push({ type: 'break', kind: 'line' });
       } else if (tag === 'list') {
         parseSingleList(child);
@@ -14525,7 +14542,7 @@ export function parseDtbook(xmlStr) {
         const renderAttr = (child.getAttribute && child.getAttribute('render')) || null;
         pushProdnote(blocks, child, (t) => {
           if (!t) return null;
-          const blk = cls.includes('tabletn') ? { type: 'note', kind: 'tabletn', text: t } : { type: 'note', text: t };
+          const blk = hasClassWord(cls, 'tabletn') ? { type: 'note', kind: 'tabletn', text: t } : { type: 'note', text: t };
           // A22/A43: keep the source's own value, either way — an Emboss-created note (no
           // value at all) is the only one the exporter defaults to required (D6).
           if (renderAttr === 'required' || renderAttr === 'optional') blk.render = renderAttr;

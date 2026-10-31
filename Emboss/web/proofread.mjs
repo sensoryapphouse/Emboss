@@ -309,6 +309,56 @@ export function findWordMismatches(srcText, backText) {
   return mismatches;
 }
 
+// The braille of an entry's segments, as the braille itself is made (format/document.mjs segmentsToBraille): a line's text runs,
+// plain, bold or italic, are translated together with one typeform array, so a word split between runs ("**I**n", "*unio*n") is
+// still one word and a lone italic "were" keeps its context (Paul, 31 Oct 2026: brailled run by run they read back as "Ition",
+// "uniotion" and a lower wordsign, and were flagged; tests/proofread_segments.test.mjs). An uncontracted run keeps its own
+// grade-1 translation with its indicator.
+export function segmentsBraille(segments, translate, translateG1 = null) {
+  let out = '', run = '', tf = [];
+  const flush = () => {
+    if (run) out += tf.some(Boolean) ? translate(run, tf) : translate(run);
+    run = ''; tf = [];
+  };
+  for (const seg of segments) {
+    const t = String(seg.text ?? '');
+    if (!t) continue;
+    if (seg.uncontracted) {
+      flush();
+      const g1 = translateG1 ? translateG1(t) : translate(t);
+      out += t.includes(' ') ? `;;;${g1};'` : `;;${g1}`;
+    } else {
+      run += t;
+      for (let k = 0; k < t.length; k++) tf.push(seg.tf || 0);
+    }
+  }
+  flush();
+  return out;
+}
+
+// A flagged word the check cannot judge (its braille is made by rules reading back cannot reverse), so it is not shown:
+//   - next to or inside a sub/superscript (Emboss's script markers U+E000-U+E002; feedback 30 Sep item 7);
+//   - next to a note reference or a margin line number, with up to three punctuation marks between ("Eden,”²", "right,”580";
+//     Paul, 31 Oct 2026 — one mark was allowed before, and line numbers not at all): a reference becomes the note mark and a line
+//     number goes to the margin, but the check brailles both as plain digits run on to the word;
+//   - a word of a web or email address (UEB's computer-material rules).
+export function issueWordSkipped(entry, w) {
+  const text = String(entry.text ?? '');
+  if (/[-]/.test(text.slice(Math.max(0, w.start - 1), w.end + 1))) return true;
+  if (Array.isArray(entry.segments)) {
+    const onlyPunct = (s) => s.length <= 3 && /^[^\p{L}\p{N}\s]*$/u.test(s);
+    let c = 0;
+    for (const g of entry.segments) {
+      const len = String((g && g.text) || '').length;
+      if (g && (g.type === 'noteref' || g.type === 'linenum')
+        && ((w.end <= c && onlyPunct(text.slice(w.end, c))) || (w.start >= c + len && onlyPunct(text.slice(c + len, w.start))) || (w.start < c + len && w.end > c))) return true;
+      c += len;
+    }
+  }
+  const tokA = text.lastIndexOf(' ', w.start) + 1, tokB = text.indexOf(' ', w.end);
+  return /:\/\/|^www\.|\S@\S/i.test(text.slice(tokA, tokB < 0 ? text.length : tokB));
+}
+
 export function roundTrip(text, translate, backTranslate) {
   const cleanSrc = decodeEntities(text);
   const brf = translate(cleanSrc);
@@ -330,29 +380,14 @@ export function proofread(model, translate, backTranslate, translateG1 = null) {
       checked++;
       let r;
       try {
-        const translateEntry = (s) => {
-          if (entry.segments && entry.segments.some((seg) => seg.uncontracted || seg.tf)) {
-            let out = '';
-            for (const seg of entry.segments) {
-              const t = String(seg.text ?? '');
-              if (!t) continue;
-              if (seg.uncontracted) {
-                const g1 = translateG1 ? translateG1(t) : translate(t);
-                out += t.includes(' ') ? `;;;${g1};'` : `;;${g1}`;
-              } else if (seg.tf) {
-                out += translate(t, Array(t.length).fill(seg.tf));
-              } else {
-                out += translate(t);
-              }
-            }
-            return out;
-          }
-          return translate(s);
-        };
+        const translateEntry = (s) => (entry.segments && entry.segments.some((seg) => seg.uncontracted || seg.tf)
+          ? segmentsBraille(entry.segments, translate, translateG1)
+          : translate(s));
         r = roundTrip(entry.text, translateEntry, backTranslate);
       } catch { continue; }
       if (!r.ok && r.wordIssues && r.wordIssues.length > 0) {
         for (const w of r.wordIssues) {
+          if (issueWordSkipped(entry, w)) continue;
           issues.push({
             idx,
             itemIdx: entry.itemIdx,

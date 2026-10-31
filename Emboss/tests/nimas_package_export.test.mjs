@@ -111,6 +111,21 @@ test('buildNimasOpf: a document typed from scratch is still structurally NIMAS-c
   }
 });
 
+// Found 23 Oct 2026 (Paul: "fix all three"): a NIMAS package Emboss had read and saved again said <dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+// in its OPF - the DTBook head's own format (metadata.format, read from the book) - where the NIMAS 1.1 rules require "NIMAS 1.1".
+// The OPF's format is now always NIMAS 1.1; the book's head keeps its own (nimas-export.mjs, tests/bana_project_save.test.mjs).
+test('buildNimasOpf: the OPF says NIMAS 1.1 whatever format the book itself carries (a re-saved package)', async () => {
+  const model = { title: 'Re-saved', metadata: { title: 'Re-saved', format: 'ANSI/NISO Z39.86-2005' }, blocks: [{ type: 'para', text: 'Hello.' }] };
+  const opf = buildNimasOpf(model, { bookFile: 'x.xml', items: [], identifier: 'emboss-fixed-id' });
+  assert.match(opf, /<dc:Format>NIMAS 1\.1<\/dc:Format>/);
+  assert.doesNotMatch(opf, /<dc:Format>ANSI/);
+  // and through a real save and re-read: read the package back, save it again
+  const again = await parseNimasZip(await buildNimasPackageZip(model));
+  const pkg2 = buildNimasPackage(again);
+  const opf2 = new TextDecoder().decode(pkg2.files.find((f) => /\.opf$/.test(f.path || f.name)).data || pkg2.files.find((f) => /\.opf$/.test(f.path || f.name)).content);
+  assert.match(opf2, /<dc:Format>NIMAS 1\.1<\/dc:Format>/);
+});
+
 test('buildNimasOpf: a custom dc:Date/@event, dc:Creator/@role or dc:Identifier/@scheme from the source survives', () => {
   const model = {
     title: 'T', blocks: [],

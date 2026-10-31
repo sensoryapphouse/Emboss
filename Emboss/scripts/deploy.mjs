@@ -40,6 +40,9 @@
 //                         run-all-tests, build-dist and offline-dist; a source check that passed for the commit in another kind
 //                         of run in the last 12 hours is reused (Paul, 17 Oct 2026). With it, the deploy goes ahead under a loud warning
 //                         that is also written into the release tag. Only with Paul's say-so.
+//   --no-publish          A beta deploy also publishes the deployed commit to the public repository github.com/sensoryapphouse/Emboss
+//                         (publish-emboss.sh, via lib/publish-mirror.mjs; Paul, 18 Oct 2026); this flag skips that. Plus, previews
+//                         and dry runs never publish.
 //   --check-release-only  Evaluate that rule for this ref and flags, print the verdict, and exit (0 = a deploy would be
 //                         allowed, 1 = refused). Builds nothing, uploads nothing, tags nothing.
 //
@@ -60,7 +63,9 @@
 //      (never --commit-dirty).
 //   6. Tags the commit `emboss-YYYY-MM-DD-vNNN`, removes the scratch
 //      worktree, and prints (but does not run) the push command.
+//   7. A beta deploy publishes the deployed commit to the public repository (see --no-publish).
 import { execFileSync } from 'child_process';
+import { shouldPublishMirror, publishMirror } from './lib/publish-mirror.mjs';
 import { promises as fs } from 'fs';
 import os from 'os';
 import path from 'path';
@@ -94,7 +99,7 @@ function git(args, opts = {}) {
 }
 
 function parseArgs(argv) {
-  const out = { ref: 'HEAD', dryRun: false, allowDirtyOther: false, beta: false, plus: false, preview: null, skipReleaseCheck: false, checkReleaseOnly: false };
+  const out = { ref: 'HEAD', dryRun: false, allowDirtyOther: false, beta: false, plus: false, preview: null, skipReleaseCheck: false, checkReleaseOnly: false, noPublish: false };
   for (const a of argv) {
     if (a === '--dry-run') out.dryRun = true;
     else if (a.startsWith('--preview=')) out.preview = a.slice('--preview='.length);
@@ -102,6 +107,7 @@ function parseArgs(argv) {
     else if (a === '--plus') out.plus = true;   // Emboss Plus: the full build to emboss-plus.pages.dev (Paul, 16 Oct 2026)
     else if (a === '--allow-dirty-other') out.allowDirtyOther = true;
     else if (a === '--skip-release-check') out.skipReleaseCheck = true;   // S5a: deploy without release-check evidence (loud; Paul's say-so only)
+    else if (a === '--no-publish') out.noPublish = true;   // a beta deploy without publishing the public repository (lib/publish-mirror.mjs)
     else if (a === '--check-release-only') out.checkReleaseOnly = true;   // S5a: print the evidence verdict and exit
     else if (!a.startsWith('--')) out.ref = a;
     else die(`unknown flag: ${a}`);
@@ -161,7 +167,7 @@ function nextTag(dateStr, prefix = 'emboss') {
 }
 
 async function main() {
-  const { ref, dryRun, allowDirtyOther, beta, plus, preview, skipReleaseCheck, checkReleaseOnly } = parseArgs(process.argv.slice(2));
+  const { ref, dryRun, allowDirtyOther, beta, plus, preview, skipReleaseCheck, checkReleaseOnly, noPublish } = parseArgs(process.argv.slice(2));
   const { project: PROJECT, url: PAGES_URL, tagPrefix } = plus ? PROJECTS.plus : PROJECTS.emboss;
 
   if (git(['rev-parse', '--is-inside-work-tree']).trim() !== 'true') die('not a git repository');
@@ -237,6 +243,8 @@ async function main() {
     // origin is the private sensoryapphouse/brlit: push as the sensoryapphouse GitHub account (the default
     // credential is PaulBlenkhorn, which cannot see it and gets "Repository not found").
     console.log(`    GH_TOKEN=$(gh auth token --user sensoryapphouse) git -c credential.helper= -c credential.helper='!gh auth git-credential' push origin ${branch} --follow-tags`);
+    // The public repository follows the public beta (Paul, 18 Oct 2026). The deploy is live already, so a failure here only warns.
+    if (shouldPublishMirror({ beta, plus, preview, dryRun, checkReleaseOnly, noPublish })) publishMirror({ root: ROOT, commit: resolvedCommit });
   } finally {
     if (worktreeAdded) {
       try { git(['worktree', 'remove', '--force', worktree]); }
