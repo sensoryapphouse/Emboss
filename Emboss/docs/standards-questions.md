@@ -279,12 +279,12 @@ list can suppress its blank line (BANA 8.3.3c)?**
 BANA 8.3.3c says a list is not preceded by a blank line "when it follows directions" (in
 exercise material, §10). Emboss has no representation of a "directions" line distinct from
 an ordinary paragraph at all — `style-specification.md` itself already lists "Exercise
-Directions (BANA §10, BB Directions 5-5 / 7-5)" among the styles awaiting a decision. Until
+Directions (BANA §10, the reference translator's Directions 5-5 / 7-5)" among the styles awaiting a decision. Until
 that's decided, 8.3.3c can't be implemented (see `standards-findings.md` F-37): should a
 directions line be (a) any plain paragraph immediately before an `exercise`-kind list, keyed
 purely by position (simplest, but would also silently suppress the blank line before any
 ordinary paragraph that happens to precede an exercise list without being "directions"); (b)
-a dedicated style/class the transcriber marks explicitly (matches BrailleBlaster's own
+a dedicated style/class the transcriber marks explicitly (matches the reference translator's own
 Directions 5-5/7-5 margin styles, per `style-specification.md`); or (c) out of scope for now,
 left as the current default-blank-line behaviour until Exercise Directions is decided as its
 own style? This question is upstream of, and blocks, F-37.
@@ -413,7 +413,7 @@ border, and `Emboss/tests/bana_sidebar_sync.test.mjs` has its own regression tes
 titles are *not* spliced into the border line. See `boxes-writeup.md` F-72.
 
 This is already flagged as an open question in Paul's own baseline
-(`Emboss/docs/style-specification.md:158`: "Q: support BB's Full Box and colour boxes
+(`Emboss/docs/style-specification.md:158`: "Q: support the reference translator's Full Box and colour boxes
 (§7.4–7.5)?"). Options: (a) don't support it (out of scope, current behaviour); (b) add a
 `color` field to the box block/DTBook markup (e.g. a class) and a distinct border-line-splice
 render path used only when it's set, leaving the existing after-the-line title placement
@@ -558,7 +558,7 @@ inside a list is likely to be?
 BANA 9.2.2d gives transcribers a choice: paragraphs of displayed material can be "blocked" at
 the adjusted margin (what Emboss always does today) or "indented" 2 cells further right on the
 first line only. `Emboss/docs/style-specification.md` already asks this as an open question
-("offer BANA's blocked vs indented choice (BB has both)?"). See F-97.
+("offer BANA's blocked vs indented choice (the reference translator has both)?"). See F-97.
 
 Options: (a) blocked only (current, simplest); (b) add an indented variant, selectable per
 document or per quote block. Which does Paul want?
@@ -1087,9 +1087,9 @@ as shared infrastructure? See `assess-18/grammar-writeup.md` F-187 for the plain
 ---
 
 **Q-62. Should Emboss build dedicated "Alphabetic Division" and "Guide Word" constructs
-(matching BrailleBlaster's own styles), rather than continuing to have neither?**
+(matching the reference translator's own styles), rather than continuing to have neither?**
 
-`style-specification.md`'s Index Entry entry already flags this as open: "Q: add BB's
+`style-specification.md`'s Index Entry entry already flags this as open: "Q: add the reference translator's
 Alphabetic Division and Guide Word styles?" Right now:
 - an alphabetical division letter has no representation of its own at all — the only way one
   reaches the formatter is as an ordinary heading, which gets the blank-line-before-every-

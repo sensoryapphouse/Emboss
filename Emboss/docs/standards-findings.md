@@ -1487,7 +1487,7 @@ spells the alphabet and the a-j/1-0 digit letters in **lowercase** — e.g. Exam
 
 **What real North American Braille ASCII actually uses:** **uppercase** for the same dot
 patterns. This is independently verifiable inside this same repository, three ways:
-1. BrailleBlaster's own real `.brf` output, already checked in at
+1. The reference translator's own real `.brf` output, already checked in at
    `Emboss/tests/nimas_samples/*.bb_out.brf` (a comparison-only reference tool per
    `standards-testing.md`) — e.g. `sample1.docx.bb_out.brf` begins
    `",ONCE ^U A "T A POOR WOODMAN LIV$..."` — uppercase throughout.
@@ -1531,7 +1531,7 @@ transcription slip on the same line) so future stages don't need this normalisat
 Not done here — Stage 4/5's brief is to measure, not to edit Stage 3's gold files.
 
 **Test that would prove this is understood, not guessed:** `Emboss/scripts/gold-run.mjs`'s
-own three-way cross-check above (BrailleBlaster reference output, Emboss's own translate(),
+own three-way cross-check above (the reference translator reference output, Emboss's own translate(),
 Emboss's own pre-existing uppercase-box-line tests) — no gold file was edited to reach this
 conclusion.
 
@@ -2308,7 +2308,7 @@ list it introduces.
 **Classification:** **not built** — pending a decision on how a "directions" line should
 even be represented in Emboss's model (a plain paragraph immediately preceding an
 `exercise`-kind list, by position? a dedicated block/class, per `style-specification.md`'s
-own open question on "Exercise Directions (BANA §10, BB Directions 5-5 / 7-5)")? That
+own open question on "Exercise Directions (BANA §10, the reference translator's Directions 5-5 / 7-5)")? That
 representation question is itself open (see Q-13) — this finding is downstream of it, not a
 simple formatter bug.
 
@@ -3510,7 +3510,7 @@ before the border characters resume.
 
 **Classification:** **not done.** This is a genuinely unimplemented feature, not a narrow bug
 — confirmed as an open, undecided area in Paul's own baseline: `Emboss/docs/
-style-specification.md:158` already flags "Q: support BB's Full Box and colour boxes
+style-specification.md:158` already flags "Q: support the reference translator's Full Box and colour boxes
 (§7.4–7.5)?" as unresolved. See `questions-7.md` Q-21.
 
 **Test that would prove a fix:** once a colour field and an opening-line splice mechanism
@@ -4767,7 +4767,7 @@ for BANA (`{first: 2+nest, runover: 2+nest, blank:true}`) — i.e. only the "blo
 or 5-5/7-7 nested) is ever produced. The "indented" alternative (first line 2 cells right of
 the adjusted margin, e.g. 5-3) has no code path and no style-registry option.
 `Emboss/docs/style-specification.md` (line 128) already records this as an open question:
-"offer BANA's blocked vs indented choice (BB has both)?"
+"offer BANA's blocked vs indented choice (the reference translator has both)?"
 
 **What the standard requires:** either option is print-format-dependent; Emboss should be
 able to produce whichever the transcriber selects.
@@ -4871,7 +4871,7 @@ moves earlier, carrying the last line of the preceding text across with it.
 
 **What Emboss does:** there is no `citation`/`source` block type or style-registry entry
 anywhere (`Emboss/format/styles.mjs` has no such entry; `Emboss/docs/style-specification.md`
-line 138 explicitly flags this as open: "add BANA's Source Citation (§9.5, BB has it) as a
+line 138 explicitly flags this as open: "add BANA's Source Citation (§9.5, the reference translator has it) as a
 separate style?"). The only way to get the cell-5 blocking 9.5.1b wants is to reuse the
 `attribution` block/style, which happens to give the right margin and blank-line behaviour
 (reproduced in `probe2.mjs`: an `attribution` block placed after an ordinary paragraph gets no
@@ -4963,7 +4963,7 @@ like block Emboss has is the Transcriber's Note (`formatTranscriberNote`, docume
 transcriber's *own* commentary, but semantically wrong for a cross-reference or incidental
 note, which is real print content the author wrote, not a transcriber's aside. Reusing it
 would misrepresent the source. `Emboss/docs/style-specification.md` (line 185) already lists
-"Incidental Note (BB)" among the style candidates not yet built. No code anywhere implements
+"Incidental Note (reference translator)" among the style candidates not yet built. No code anywhere implements
 the specific 7-7-heading/5-5-note or 7-5-no-heading margin scheme these rules describe, or
 reference-mark suppression for this construct, or its own blank-line rule.
 
@@ -7465,7 +7465,7 @@ stand-in gets some behaviours right by accident and one demonstrably wrong
 **What Emboss does:** there is no `division` block/kind anywhere in the codebase (grep of
 `document.mjs`/`parse.mjs`/`styles.mjs`/`nimas-export.mjs` for "division" turns up only the
 unrelated §11 wide-table "vertical division" feature). `Emboss/docs/style-specification.md`'s
-own Index Entry entry says so directly: **"⚠ New-page rule not implemented (A8). Q: add BB's
+own Index Entry entry says so directly: **"⚠ New-page rule not implemented (A8). Q: add the reference translator's
 Alphabetic Division and Guide Word styles?"** — an open, unresolved question, not a built
 feature. The only way a division letter can reach the formatter at all today is if the
 transcriber authors it as an ordinary `heading` block between index/glossary list blocks.
@@ -7537,7 +7537,7 @@ insensitive) across `document.mjs`, `parse.mjs`, `nimas-export.mjs`, and `editor
 content for its first/last main entry, no centring of a guide-word line, no "at least three
 blank cells" spacing, no dash-joining, no shortening, and no "(cont.)" continuation logic.
 `style-specification.md`'s Index Entry entry flags this as a known, undecided gap: **"Q: add
-BB's Alphabetic Division and Guide Word styles?"**. Because no guide-word generator exists at
+The reference translator's Alphabetic Division and Guide Word styles?"**. Because no guide-word generator exists at
 all, every rule that depends on guide words being generated (21.6.3d — which language to draw
 them from; 21.6.5d — generating them from cell-5 headings; 21.9.4a/b — which words to select
 in foreign material) has nothing to attach to and is equally not done. 21.3.1b–e (retaining
