@@ -38,8 +38,10 @@ ok('the #set-pageSize preset select exists in Quick Mode', hasSelect);
 // Open the settings dialog and switch to the Page Geometry tab, same as a user would.
 await page.click('#settingsBtn');
 await page.waitForSelector('#settingsDialog[open]', { timeout: 10000 }).catch(() => {});
-await page.click('.tab-btn[data-tab="tab-document"]');
-await page.waitForSelector('#tab-document.settings-panel', { timeout: 10000 });
+// Paul, 1 Nov 2026, X1 decision 1 (braille settings behind the template): the page size moved from the Page Geometry tab into Template > Template settings (a closed disclosure).
+await page.click('.tab-btn[data-tab="tab-rules"]');
+await page.click('#tplSettings > summary');
+await page.waitForSelector('#set-pageSize', { state: 'visible', timeout: 10000 });
 
 const before = await page.evaluate(() => ({ cells: document.getElementById('set-cells').value, lines: document.getElementById('set-lines').value }));
 ok('starts at the plain BANA default (38x25), not a UK preset', before.cells === '38' && before.lines === '25', before);

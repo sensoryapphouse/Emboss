@@ -5,14 +5,14 @@ import { chromium } from 'playwright';
 import path from 'node:path';
 import fs from 'node:fs';
 
-const outputPath = '/Users/paulblenkhorn/Downloads/Emboss_vs_BrailleBlaster_Comparative_Report.pdf';
+const outputPath = '/Users/paulblenkhorn/Downloads/Emboss_vs_Reference_Comparative_Report.pdf';
 
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Emboss vs BrailleBlaster: Comparative Transcription Report</title>
+  <title>Emboss vs the reference translator: Comparative Transcription Report</title>
   <style>
     @page {
       size: A4 portrait;
@@ -179,7 +179,7 @@ const htmlContent = `
 
   <div class="header">
     <div class="badge">NIMAS / BANA Transcription Audit</div>
-    <h1>Emboss vs. BrailleBlaster</h1>
+    <h1>Emboss vs. the reference translator</h1>
     <div class="subtitle">Comprehensive Comparative Transcription & Formatting Analysis</div>
   </div>
 
@@ -204,14 +204,14 @@ const htmlContent = `
 
   <h2>1. Executive Summary & Macro Metrics</h2>
   <p>
-    An exhaustive, whole-document comparative transcription audit was conducted between <strong>Emboss</strong> and <strong>BrailleBlaster</strong> on the complete official NIMAS textbook <em>Collections, Grade 7</em>. The analysis encompassed all 5,026 semantic blocks without sampling.
+    An exhaustive, whole-document comparative transcription audit was conducted between <strong>Emboss</strong> and <strong>The reference translator</strong> on the complete official NIMAS textbook <em>Collections, Grade 7</em>. The analysis encompassed all 5,026 semantic blocks without sampling.
   </p>
 
   <table>
     <thead>
       <tr>
         <th>Metric</th>
-        <th class="text-right">BrailleBlaster</th>
+        <th class="text-right">The reference translator</th>
         <th class="text-right">Emboss</th>
         <th class="text-right">Delta</th>
         <th class="text-right">Relative Variance</th>
@@ -273,7 +273,7 @@ const htmlContent = `
     <thead>
       <tr>
         <th>Structural Feature</th>
-        <th class="text-center">BrailleBlaster</th>
+        <th class="text-center">The reference translator</th>
         <th class="text-center">Emboss</th>
         <th>Formatting & Standard Assessment</th>
       </tr>
@@ -289,13 +289,13 @@ const htmlContent = `
         <td><strong>Sidebar / Box Bottom Borders (777...)</strong></td>
         <td class="text-center">0</td>
         <td class="text-center highlight">1,684</td>
-        <td>BrailleBlaster drops closing bottom borders. Emboss strictly enforces BANA closing lines.</td>
+        <td>The reference translator drops closing bottom borders. Emboss strictly enforces BANA closing lines.</td>
       </tr>
       <tr>
         <td><strong>Inline Italic Indicators (^1 / .1)</strong></td>
         <td class="text-center">7,090</td>
         <td class="text-center highlight">4,420</td>
-        <td>BrailleBlaster duplicates indicators on nested tags. Emboss uses unified bitmask deduplication.</td>
+        <td>The reference translator duplicates indicators on nested tags. Emboss uses unified bitmask deduplication.</td>
       </tr>
       <tr>
         <td><strong>Inline Bold Indicators (^7 / .7)</strong></td>
@@ -333,7 +333,7 @@ const htmlContent = `
     Standard braille paper widths (40 cells) cannot accommodate 5+ column tables in a horizontal spatial grid without severe line wrapping and column collisions.
   </p>
   <ul>
-    <li><strong>BrailleBlaster:</strong> Emits table text without structural indicators or row/column separation, resulting in unsegmented blocks.</li>
+    <li><strong>The reference translator:</strong> Emits table text without structural indicators or row/column separation, resulting in unsegmented blocks.</li>
     <li><strong>Emboss:</strong> Inspects natural column widths. If the table width exceeds 40 cells, it automatically renders <strong>BANA Listed Table Format</strong> preceded by a transcriber note:
       <div class="code-block">' Table: Listed Table Format
 
@@ -345,7 +345,7 @@ Item 1
 
   <h3>B. Sidebar & Container Boundary Integrity</h3>
   <ul>
-    <li><strong>BrailleBlaster:</strong> Omitted bottom borders (0 found) and flattened nested sub-elements (child headings, bullet lists, and paragraphs) into continuous prose.</li>
+    <li><strong>The reference translator:</strong> Omitted bottom borders (0 found) and flattened nested sub-elements (child headings, bullet lists, and paragraphs) into continuous prose.</li>
     <li><strong>Emboss:</strong> Preserves discrete child blocks inside the container and encloses each with standard BANA top (<code>3333333333...</code>) and bottom (<code>7777777777...</code>) lines.</li>
   </ul>
 
@@ -354,7 +354,7 @@ Item 1
     Publishers often nest formatting in educational XML: <code>&lt;p&gt;&lt;strong&gt;&lt;em&gt;Text&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</code>.
   </p>
   <ul>
-    <li><strong>BrailleBlaster:</strong> Emits redundant stacked typeform indicators for each tag level.</li>
+    <li><strong>The reference translator:</strong> Emits redundant stacked typeform indicators for each tag level.</li>
     <li><strong>Emboss:</strong> Merges inline emphasis into an exact bitwise-OR mask (<code>TF_BOLD | TF_ITALIC</code>), allowing Liblouis to emit the optimal minimal UEB indicators.</li>
   </ul>
 
@@ -398,11 +398,11 @@ COPIES ( ANY "P ( ! "W %D 2 ADDRESS$ TO</div>
 
   <h2>5. Conclusion & Verification Summary</h2>
   <p>
-    Emboss demonstrates full transcription parity with BrailleBlaster across complex educational materials while delivering:
+    Emboss demonstrates full transcription parity with the reference translator across complex educational materials while delivering:
   </p>
   <ol>
     <li><strong>Superior BANA Rule Compliance:</strong> Full enclosure of boxlines, structured listed tables, and cleaner typeform indicator placement.</li>
-    <li><strong>Engine Performance:</strong> Full book processing in <strong>2.13 seconds</strong> (vs ~18.5s in BrailleBlaster).</li>
+    <li><strong>Engine Performance:</strong> Full book processing in <strong>2.13 seconds</strong> (vs ~18.5s in the reference translator).</li>
     <li><strong>Memory Resilience:</strong> 100% memory safety across multi-megabyte XML structures with zero data loss or truncation.</li>
   </ol>
 

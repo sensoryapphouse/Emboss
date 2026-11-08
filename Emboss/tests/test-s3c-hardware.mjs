@@ -73,9 +73,11 @@ const HW_INIT = (none) => {
   def('usb', undefined);   // the serial choice must use WebSerial when the browser has it
 };
 
-const newCtx = async (settings, { none = false, beta = false } = {}) => {
+// Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P, P-HW): writing to embossers is put aside, so the hardware code is reachable only where a test sets
+// window.EMBOSS_HARDWARE (settings.mjs hardwareEnabled) - this suite does, for every case except the one that proves a normal page ignores the saved switch (`off`).
+const newCtx = async (settings, { none = false, off = false } = {}) => {
   const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 }, acceptDownloads: true, serviceWorkers: 'block', locale: 'en-US' });
-  await ctx.addInitScript(({ s, beta }) => { if (beta) window.EMBOSS_BETA = true; try { if (!sessionStorage.getItem('s3c-init')) { sessionStorage.setItem('s3c-init', '1'); localStorage.setItem('emboss-settings', JSON.stringify(s)); } } catch {} }, { s: settings, beta });
+  await ctx.addInitScript(({ s, off }) => { if (!off) window.EMBOSS_HARDWARE = true; try { if (!sessionStorage.getItem('s3c-init')) { sessionStorage.setItem('s3c-init', '1'); localStorage.setItem('emboss-settings', JSON.stringify(s)); } } catch {} }, { s: settings, off });
   if (CHROMIUM) await ctx.addInitScript(HW_INIT, none);
   return ctx;
 };
@@ -300,20 +302,24 @@ if (CHROMIUM) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-console.log('--- #22 a beta build keeps the hardware controls hidden; ?tools=1 shows them ---');
+// Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P, P-HW "put aside for now"): this was "a beta build keeps the hardware controls hidden; ?tools=1 shows them". There
+// is no beta lock any more and ?tools=1 only turns Transcriber tools on. A normal page (no EMBOSS_HARDWARE test switch) never shows the hardware, whatever is saved.
+console.log('--- #22 a normal page keeps the hardware controls hidden, even if the saved settings ask for them; ?tools=1 does not show them ---');
 if (on('beta')) {
   const shown = (page) => page.evaluate(() => ({ expert: document.body.classList.contains('expert-hardware'), emboss: getComputedStyle(document.getElementById('embossBtn')).display !== 'none' }));
-  const ctx = await newCtx(EDITOR_SET({ connectionType: 'hid' }), { beta: true });
-  const page = await openEditor(ctx, 'beta');
+  const ctx = await newCtx(EDITOR_SET({ connectionType: 'hid' }), { off: true });
+  const page = await openEditor(ctx, 'normal');
   let s = await shown(page);
-  ok('beta: the Emboss button and the hardware controls are hidden even though the saved settings ask for them', !s.expert && !s.emboss, s);
+  ok('normal page: the Emboss button and the hardware controls are hidden even though the saved settings ask for them', !s.expert && !s.emboss, s);
+  await page.evaluate(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '\\', code: 'Backslash', ctrlKey: true, shiftKey: true, bubbles: true })));
+  await sleep(300);
+  s = await shown(page);
+  ok('... Ctrl/Cmd+Shift+\\ does nothing', !s.expert && !s.emboss, s);
   await page.goto(`${BASE}/web/editor/index.html?tools=1`, { waitUntil: 'load' });
   await page.waitForFunction(() => typeof window.modelToLexical === 'function', null, { timeout: 60000 });
   await sleep(1000);
   s = await shown(page);
-  ok('beta with ?tools=1: they are shown', s.expert && s.emboss, s);
-  await page.goto(`${BASE}/web/editor/index.html?tools=0`, { waitUntil: 'load' });
-  await sleep(500);
+  ok('... and ?tools=1 turns Transcriber tools on but still shows no hardware', !s.expert && !s.emboss && (await page.evaluate(() => document.body.classList.contains('transcriber-tools'))), s);
   await cleanUp(page);
   await ctx.close();
 }

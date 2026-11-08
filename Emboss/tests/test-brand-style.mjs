@@ -112,6 +112,17 @@ try {
       const dlg = await page.evaluate(() => { const d = [...document.querySelectorAll('dialog')].find((x) => x.open); if (!d) return null; const s = getComputedStyle(d); return { border: s.borderTopStyle, radius: s.borderTopLeftRadius, shadow: s.boxShadow }; });
       ok(`editor [${scheme}]: the Help dialog has no browser border, 16px corners, no drop shadow`, dlg && dlg.border === 'none' && dlg.radius === '16px' && dlg.shadow === 'none', dlg);
       ok(`editor [${scheme}]: nothing to fix with Help open`, (await axeScan(page)).length === 0, await axeScan(page));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+      // one Emboss (Paul, 4 Nov 2026): with the template made for a Monarch the braille pane has view tabs. The unselected tab's muted grey also took
+      // the general .tab-btn's 0.78 opacity: 3.6:1 in dark (needs 4.5:1)
+      await page.click('#settingsBtn');
+      await page.click('.settings-nav .tab-btn[data-tab="tab-rules"]');
+      if (!(await page.evaluate(() => document.getElementById('tplSettings')?.open))) await page.click('#tplSettings > summary');
+      await page.selectOption('#set-madeFor', 'monarch');
+      await page.click('#settingsDialog .dialog-foot button');
+      await page.waitForFunction(() => !!document.getElementById('tabViewMonarch')?.getClientRects().length, null, { timeout: 30000 });
+      await page.click('#tabViewMonarch'); await page.waitForTimeout(1200);
+      ok(`editor [${scheme}]: nothing to fix in the Monarch view (the braille pane's view tabs)`, (await axeScan(page)).length === 0, await axeScan(page));
       await ctx.close();
     }
   }

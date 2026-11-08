@@ -106,7 +106,7 @@ export function cellPlainText(cell) {
 }
 
 // A {type:'brl'} segment's `text` (the print it stands for) is deliberately '' for a cell
-// that is ONLY literal braille with no print equivalent of its own (a BrailleBlaster
+// that is ONLY literal braille with no print equivalent of its own (a braille-editor
 // <brl>-only table cell) — cellPlainText correctly reports no PRINT text for it, but the
 // cell itself is not blank: it has real braille to emboss (`.brl`). Every other rich
 // segment type (math's latex, imgnote's alt text) already surfaces through cellPlainText,
@@ -154,7 +154,7 @@ export function cellFromSegments(text, segments) {
   // (parse.mjs's walkInline) is dropped the moment the cell collapses to a plain string.
   // A picture kept in a table cell (parse.mjs, DOCX data tables) is an `imgnote` segment
   // (an embedded transcriber's note with its description, BANA §10.11.1): kept the same way.
-  // BrailleBlaster-style table test fixtures (TablesTestXml.xml) hold a cell's LITERAL
+  // braille-editor-style table test fixtures (TablesTestXml.xml) hold a cell's LITERAL
   // braille as a {type:'brl'} segment (document.mjs's F-187/F-188/F-222 model) — that must
   // count as "rich" too, or a cell whose only content is one brl segment (no tf/href/etc.,
   // print `text` empty) collapses back to the empty plain string here and the segment

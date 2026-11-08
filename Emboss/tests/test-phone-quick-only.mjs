@@ -58,6 +58,21 @@ try {
     ok(`${label}: the editor opens`, onEditor(page) && (await page.evaluate(() => typeof window.modelToLexical === 'function' || !!document.getElementById('editor'))), page.url());
     await ctx.close();
   }
+  // 4 Nov 2026 (random-action testing): the screen changing while Quick Mode is open (a browser's device mode, a window moved to another screen). The
+  // button was hidden only at load, but its click checked the screen each time: shown, it did nothing. It now follows the screen. Only Chromium's
+  // Playwright changes the screen with the window, so the check is skipped where the screen does not change.
+  {
+    const { ctx, page } = await open({ viewport: { width: 1300, height: 900 } }, '/web/index.html');
+    const before = await shown(page, '#advancedBtn');
+    await page.setViewportSize({ width: 414, height: 896 }); await page.waitForTimeout(400);
+    if (await page.evaluate(() => Math.min(screen.width, screen.height) < 500)) {
+      const asPhone = await shown(page, '#advancedBtn');
+      await page.setViewportSize({ width: 1300, height: 900 }); await page.waitForTimeout(400);
+      const back = await shown(page, '#advancedBtn');
+      ok('the screen becoming a phone\'s while Quick Mode is open hides the Advanced Editor button, and a larger screen shows it again', before && !asPhone && back, { before, asPhone, back });
+    } else console.log('  - skip  the screen changing while open (this engine keeps the screen size)');
+    await ctx.close();
+  }
 } catch (e) { ok('run completed', false, String(e && e.stack || e)); }
 await browser.close();
 console.log(`\n=== Phone: Quick Mode only [${ENGINE_LABEL}]: ${pass} passed, ${failures.length} failed ===`);

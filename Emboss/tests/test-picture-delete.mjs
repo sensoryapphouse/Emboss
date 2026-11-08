@@ -97,6 +97,69 @@ try {
   await page.keyboard.press('Delete');
   ok('the second Delete removes it', (await settle()) === 'para,para', await types());
 
+  // Paul, 4 Nov 2026: with no caret placed in the text (nothing clicked in it yet), deleting a picture sometimes scrolled the
+  // document to the top. The card's Delete button removed the card and left the caret where it was (a freshly loaded document has it at
+  // the start, out of view), so Lexical scrolled that caret into view, and the button that held the focus was gone. Now deleting a picture, a graphic or a table puts the caret where it was (end of the
+  // block before it, or the start of the block after), the view does not move and the keyboard is in the text.
+  console.log('--- no caret placed: deleting far down a long document keeps the view and leaves the caret where the card was ---');
+  const LONG = [];
+  for (let i = 0; i < 300; i++) {
+    if (i === 200) LONG.push({ type: 'graphic', src: PNG, alt: 'A grey square' });
+    if (i === 100) LONG.push({ type: 'table', headers: ['A', 'B'], rows: [['1', '2']] });
+    LONG.push({ type: 'para', text: `Paragraph number ${i} with some words in it.` });
+  }
+  const scrollTo = async (sel) => {   // scroll like a user (the wheel), never touching the text
+    await page.mouse.move(400, 400);
+    for (let k = 0; k < 120; k++) {
+      const y = await page.evaluate((s) => document.querySelector(s)?.getBoundingClientRect().top, sel);
+      if (y > 150 && y < 650) break;
+      const top = await page.evaluate(() => document.getElementById('editor').scrollTop);
+      await page.mouse.wheel(0, y > 650 ? 400 : -400); await wait(30);
+      if (k > 100 && top === (await page.evaluate(() => document.getElementById('editor').scrollTop))) break;
+    }
+    await wait(800);
+  };
+  const viewState = () => page.evaluate(() => {
+    const s = getSelection(); const ed = document.getElementById('editor');
+    let blockText = null, inView = false;
+    if (s.rangeCount && ed.contains(s.anchorNode)) {
+      let el = s.anchorNode.nodeType === 3 ? s.anchorNode.parentElement : s.anchorNode;
+      if (el === ed) el = ed.childNodes[s.anchorOffset] || ed.lastChild;   // a caret on the editor itself: the block it stands at
+      blockText = (el.closest('[data-block-idx]')?.textContent || el.textContent || '').slice(0, 40);
+      const r = el.getBoundingClientRect(), er = ed.getBoundingClientRect(); inView = r.bottom > er.top && r.top < er.bottom;
+    }
+    return { scrollTop: ed.scrollTop, caretIn: blockText, caretInView: inView, focusInText: ed.contains(document.activeElement) };
+  });
+  const cases = [   // [label, card selector, click target, button, how, the paragraph numbers beside it]
+    ['a picture', '#editor .doc-image-block', '#editor .doc-image-block', 'button.doc-image-delete', 'button', /Paragraph number (199|200)\b/],
+    ['a picture', '#editor .doc-image-block', '#editor .doc-image-block', null, 'key', /Paragraph number (199|200)\b/],
+    ['a table', '#editor .table-context-bar', '#editor .table-context-bar strong', null, 'key', /Paragraph number (99|100)\b/],
+  ];
+  for (const [label, sel, clickSel, btnSel, how, near] of cases) {
+    await load(LONG);
+    await scrollTo(sel);
+    const before = await viewState();
+    ok(`${label} by ${how}: before deleting, the caret is not near the card (none placed, or still at the start of the document, out of view)`, before.caretIn === null || !before.caretInView, before);
+    if (how === 'button') await page.click(`${sel} ${btnSel}`);
+    else { await clickAt(clickSel, 12, 8); await page.keyboard.press('Delete'); await wait(300); await page.keyboard.press('Delete'); }
+    await wait(1200);
+    const after = await viewState();
+    ok(`${label} by ${how}: it is deleted`, (await count(sel)) === 0, await types());
+    ok(`${label} by ${how}: the view stays put`, Math.abs(after.scrollTop - before.scrollTop) <= 150, { before: before.scrollTop, after: after.scrollTop });
+    ok(`${label} by ${how}: the caret is where the card was (in the paragraph beside it, in view)`, near.test(after.caretIn || '') && after.caretInView, after);
+    ok(`${label} by ${how}: the keyboard is in the text`, after.focusInText, after);
+  }
+  // …and the table's own Delete button
+  await load(LONG);
+  await scrollTo('#editor .table-context-bar');
+  const tb = await viewState();
+  await page.click('#editor .table-context-bar button.danger'); await wait(1200);
+  const ta = await viewState();
+  ok('a table deleted by its button: view stays, caret beside it, keys in the text', (await count('#editor .table-context-bar')) === 0 && Math.abs(ta.scrollTop - tb.scrollTop) <= 150 && /Paragraph number (99|100)\b/.test(ta.caretIn || '') && ta.focusInText, { tb, ta });
+  // typing goes where the card was
+  await page.keyboard.type('X'); await settle();
+  ok('typing after the delete goes into the paragraph beside it', await page.evaluate(() => window.lastModel.blocks.some((b) => /Paragraph number (99|100) with some words in it\.X|^XParagraph number (99|100) /.test(b.text || ''))));
+
   console.log('--- an imported Word file (w13-images.docx) ---');
   await page.evaluate(() => window.markDocumentClean());
   await page.setInputFiles('#loadFileInput', path.join(HERE, 'fixtures', 'import-audit', 'docx', 'w13-images.docx'));

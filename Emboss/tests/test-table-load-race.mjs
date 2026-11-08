@@ -26,7 +26,8 @@ for (const key of (ENGINE_SET ? [ENGINE] : ENGINES)) {
   page.on('console', (m) => { if (/Cannot resolve table|table fetch failed/i.test(m.text())) logged.push(m.text().slice(0, 200)); });
   try {
     await page.goto(`http://localhost:${PORT}/web/index.html`, { waitUntil: 'load' });
-    await page.waitForFunction(() => { const s = document.getElementById('status'); return s && !/Loading braille engine/.test(s.textContent || ''); }, null, { timeout: 60000 });
+    // "Ready", not just "not loading": under load the status line can say something else before the engine has started (4 Nov 2026: 'call init() first')
+    await page.waitForFunction(() => /Ready/.test(document.getElementById('status')?.textContent || ''), null, { timeout: 60000 });
     // the second request starts a moment after the first (after its first file has arrived, while it fetches the files that one
     // includes), at several moments, each with a code not loaded yet
     const tables = ['de-comp6.utb', 'fr-bfu-comp6.utb', 'Es-Es-G0.utb', 'hu-hu-comp8.ctb', 'en-us-comp6.ctb', 'en-gb-comp8.ctb', 'it-it-comp6.utb', 'sv-1989.ctb'];

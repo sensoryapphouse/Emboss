@@ -116,28 +116,26 @@ try {
   for (const id of ['math', 'matrix', 'formula']) ok(`toggle off: maths insert "${id}" is still visible`, off.ids.includes(id));
   ok('toggle off: body has no expert-hardware class', !(await page.evaluate(() => document.body.classList.contains('expert-hardware'))));
 
+  // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P, P-D / P-HW): the tactile graphic and plot commands are Transcriber tools now, not behind Ctrl/Cmd+Shift+\,
+  // which does nothing.
   await page.keyboard.press('Control+Shift+Backslash');
-  ok('Ctrl+Shift+\\ turns the expert class on', await page.evaluate(() => document.body.classList.contains('expert-hardware')));
-  const on = await slashIds();
-  ok('toggle on: Tactile Graphic is offered', on.ids.includes('graphic'), on.ids);
-  ok('toggle on: Plot Tactile Graph is offered', on.ids.includes('plot'), on.ids);
-  for (const id of ['math', 'matrix', 'formula']) ok(`toggle on: maths insert "${id}" is offered`, on.ids.includes(id));
-  ok('toggle on adds exactly graphic + plot', on.ids.length === off.ids.length + 2, { off: off.ids.length, on: on.ids.length });
-
-  // ---- 4. the toggle is remembered across a reload ----
-  ok('the toggle is saved in settings (expertHardware)', await page.evaluate(() => JSON.parse(localStorage.getItem('emboss-settings') || '{}').expertHardware === true));
+  ok('Ctrl+Shift+\\ does nothing (no expert class; the slash menu is unchanged)', !(await page.evaluate(() => document.body.classList.contains('expert-hardware'))) && (await slashIds()).ids.length === off.ids.length);
+  const setToolsSaved = (v) => page.evaluate((x) => { const s = JSON.parse(localStorage.getItem('emboss-settings') || '{}'); s.transcriberTools = x; localStorage.setItem('emboss-settings', JSON.stringify(s)); }, v);
+  await setToolsSaved(true);
   await openEditor();
-  ok('after a reload the expert class is still on', await page.evaluate(() => document.body.classList.contains('expert-hardware')));
+  const on = await slashIds();
+  ok('Transcriber tools on: Tactile Graphic is offered', on.ids.includes('graphic'), on.ids);
+  ok('Transcriber tools on: Plot Tactile Graph is offered', on.ids.includes('plot'), on.ids);
+  for (const id of ['math', 'matrix', 'formula']) ok(`Transcriber tools on: maths insert "${id}" is offered`, on.ids.includes(id));
+
+  // ---- 4. the choice is remembered across a reload; off again hides them ----
+  await openEditor();
   const onAfterReload = await slashIds();
   ok('after a reload Tactile Graphic / Plot are still offered', onAfterReload.ids.includes('graphic') && onAfterReload.ids.includes('plot'), onAfterReload.ids);
-
-  await page.keyboard.press('Control+Shift+Backslash');
-  ok('toggling off again removes the class', !(await page.evaluate(() => document.body.classList.contains('expert-hardware'))));
-  ok('toggling off is saved', await page.evaluate(() => JSON.parse(localStorage.getItem('emboss-settings') || '{}').expertHardware === false));
+  await setToolsSaved(false);
   await openEditor();
-  ok('after a reload the toggle is still off', !(await page.evaluate(() => document.body.classList.contains('expert-hardware'))));
   const offAfterReload = await slashIds();
-  ok('after a reload with the toggle off, Tactile Graphic / Plot are hidden', !offAfterReload.ids.includes('graphic') && !offAfterReload.ids.includes('plot'), offAfterReload.ids);
+  ok('with Transcriber tools off again, Tactile Graphic / Plot are hidden', !offAfterReload.ids.includes('graphic') && !offAfterReload.ids.includes('plot'), offAfterReload.ids);
 
   // ---- 5. the styles really apply and save (Attribution -> <byline>, Plain, Index) ----
   const setTools = async (on) => {
@@ -263,19 +261,28 @@ try {
     await load([{ type: 'tnpage', entries: [{ text: 'The atlas is omitted.' }] }, { type: 'heading', level: 1, text: 'Chapter' }]);
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('.tab-btn[data-tab="tab-document"]');
-    ok('settings: Transcriber tools checkbox is labelled and explained', await page.evaluate(() => { const c = document.getElementById('set-transcriberTools'); return !!c && !c.checked && /Transcriber tools/.test(document.querySelector('label[for="set-transcriberTools"]').textContent) && /formal braille books/.test(document.getElementById('set-transcriberToolsHelp').textContent); }));
+    // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P item 2): the switch is in User Interface, "Show transcriber tools"; Advanced Production shows only while it is on
+    await page.click('.tab-btn[data-tab="tab-display"]');
+    ok('settings: Transcriber tools checkbox is labelled and explained', await page.evaluate(() => { const c = document.getElementById('set-transcriberTools'); return !!c && !c.checked && /transcriber tools/i.test(document.querySelector('label[for="set-transcriberTools"]').textContent) && /formal braille books/.test(document.getElementById('set-transcriberToolsHelp').textContent); }));
+    // Paul, 1 Nov 2026, X1 decision 1 (braille settings behind the template): the document options group and Volume Split Interval moved from this tab into
+    // Template > Template settings (a closed disclosure), so they are looked for there, with the disclosure open. Tactile Volume Covers stays in this tab.
+    const inTemplate = async () => { await page.click('.tab-btn[data-tab="tab-rules"]'); if (!(await page.evaluate(() => document.getElementById('tplSettings').open))) await page.click('#tplSettings > summary'); };
+    const backToProduction = () => page.click('.tab-btn[data-tab="tab-document"]');
+    await inTemplate();
     ok('settings: with it off, the document options group is hidden', !(await shown('docOptionsGroup')));
     // Addendum (Paul, 24 Sep 2026): title page (Tactile Volume Covers), running head (the
     // registry's Running head key words, checked above via docOptionsGroup) and volume-splitting
     // (Volume Split Interval) are transcriber-only too -- hidden with the rest, never removed.
     ok('settings: with it off, Volume Split Interval is hidden', !(await shown('set-volumePages')));
-    ok('settings: with it off, Tactile Volume Covers is hidden', !(await shown('set-includeCovers')));
+    ok('settings: with it off, the Advanced Production tab (Tactile Volume Covers) is hidden', await page.evaluate(() => getComputedStyle(document.querySelector('.tab-btn[data-tab="tab-document"]')).display === 'none'));
+    await page.click('.tab-btn[data-tab="tab-display"]');
     await page.click('#set-transcriberTools');
     await wait(200);
+    await backToProduction();
+    ok('settings: turning it on shows the Advanced Production tab with Tactile Volume Covers', await shown('set-includeCovers'));
+    await inTemplate();
     ok('settings: turning it on shows the document options group', await shown('docOptionsGroup'));
     ok('settings: turning it on shows Volume Split Interval', await shown('set-volumePages'));
-    ok('settings: turning it on shows Tactile Volume Covers', await shown('set-includeCovers'));
     ok('settings: the choice is saved (transcriberTools)', await page.evaluate(() => JSON.parse(localStorage.getItem('emboss-settings') || '{}').transcriberTools === true));
     // F9 E2a (PAUL'S DECISION, 9 Oct 2026): the Title field follows Transcriber tools, and with the field shown the document's title is added
     // to the braille (hidden: it is not). So turning the tools on would change the braille by the title; this check is about the tools

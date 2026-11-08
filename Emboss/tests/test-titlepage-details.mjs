@@ -46,8 +46,10 @@ async function openEditor(ctx) {
 async function openSettings(page) {
   await page.click('#settingsBtn');
   await page.waitForSelector('#settingsDialog[open]', { timeout: 10000 });
-  // The document tab holds "Book details…" (next to docOptionsGroup).
-  await page.click('.settings-nav .tab-btn[data-tab="tab-document"]');
+  // The Advanced Production tab holds "Book details…". Paul, 4 Nov 2026 (one Emboss, EMBOSS-TASKS section P item 2): that tab shows only while Transcriber tools is
+  // on, and the switch is in User Interface; so with the tools off this opens User Interface.
+  const adv = await page.evaluate(() => getComputedStyle(document.querySelector('.settings-nav .tab-btn[data-tab="tab-document"]')).display !== 'none');
+  await page.click(adv ? '.settings-nav .tab-btn[data-tab="tab-document"]' : '.settings-nav .tab-btn[data-tab="tab-display"]');
 }
 
 // ==================================================================================
@@ -70,8 +72,9 @@ console.log('--- Transcriber tools gate ---');
   ok('body has no transcriber-tools class while the setting is off', btnState.bodyHasClass === false);
   ok('Book details button is not rendered while Transcriber tools is off', btnState.rendered === false, btnState);
 
-  // Turn Transcriber tools on (the checkbox is in the same tab-document panel, above Book details).
+  // Turn Transcriber tools on (the checkbox is in User Interface now); the Advanced Production tab appears, with Book details.
   await page.check('#set-transcriberTools');
+  await page.click('.settings-nav .tab-btn[data-tab="tab-document"]');
   const btnAfter = await page.evaluate(() => {
     const btn = document.getElementById('btnTitlepageDetails');
     return { rendered: !!(btn && btn.getClientRects().length) };

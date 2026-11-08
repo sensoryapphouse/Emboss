@@ -1,8 +1,8 @@
-// A24 — read BrailleBlaster's own elements on import. BrailleBlaster writes elements that are
+// A24 — read the bai-* elements on import. Some braille editors write elements that are
 // not valid DTBook (`<bai-play level="N">`, `<bai-verse level="N">`, `<bai-stage level="N">`,
 // `<bai-tabletn>`, `<bai-trans1>`…`<bai-trans5>`) instead of Emboss's own `<p class="bai-*">`
 // (D5, EMBOSS-TASKS.md). Emboss must read them on import, but a save must keep writing valid
-// DTBook — never BrailleBlaster's own `<bai-*>` elements. See Emboss/docs/nimas-style-mapping.md
+// DTBook — never the `<bai-*>` elements. See Emboss/docs/nimas-style-mapping.md
 // ("Class names — Decided (D5)") for what each element means; follows the style of
 // save_fidelity.test.mjs (one `describe` per element/case).
 
@@ -17,7 +17,7 @@ globalThis.DOMParser = DOMParser;
 // A save must never contain a literal `<bai-…` element (attribute values like
 // class="bai-play" are fine and expected — only the element-name spelling `<bai-` is checked).
 function assertNoBaiElements(xml) {
-  assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, `saved XML must not contain a BrailleBlaster <bai-*> element:\n${xml}`);
+  assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, `saved XML must not contain a <bai-*> element:\n${xml}`);
 }
 
 // The exported XML is well-formed (xmldom's DOMParser throws/records errors on unclosed or
@@ -216,7 +216,7 @@ describe('A24: <bai-trans1>…<bai-trans5> — transcriber-defined typeform runs
   }
 });
 
-describe('A24: a whole small BrailleBlaster-shaped document round-trips', () => {
+describe('A24: a whole small bai-*-shaped document round-trips', () => {
   test('play, verse drama, stage direction, a table transcriber\'s note and a trans1 run all survive parse -> export', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
@@ -260,7 +260,7 @@ describe('A24: a whole small BrailleBlaster-shaped document round-trips', () => 
     assert.ok(exportedXml.includes('<prodnote class="tabletn"'), 'table transcriber\'s note saved as valid DTBook');
 
     // Re-parsing the exported XML (a second load) recovers the same block shapes — the
-    // BrailleBlaster-only spelling was only ever needed on the way in.
+    // The bai-* spelling was only ever needed on the way in.
     const doc2 = parseDtbook(exportedXml);
     assert.equal(doc2.blocks.filter((b) => b.type === 'stage').length, 1);
     assert.equal(doc2.blocks.filter((b) => b.type === 'play' && b.subtype === 'prose').length, 1);

@@ -4,7 +4,7 @@
 // For every file below: read it with the real parser, format the model in BANA and in UKAAF mode, save
 // it with exportToNimasXml, read the saved XML with the same parser, format again — the braille must be
 // identical, line for line. Files:
-//   - every tests/nimas_samples/*.xml (real NIMAS books and BrailleBlaster test files)
+//   - every tests/nimas_samples/*.xml (real NIMAS books and braille-editor test files)
 //   - every tests/fixtures/import-audit/dtbook/*.xml and tests/fixtures/nimas-import-fixes/*.xml
 //   - every other tests/fixtures/import-audit file (docx, doc, odt, rtf, html, md, epub): those exercise the
 //     EXPORT of each reader's model shapes, which a DTBook file never reaches

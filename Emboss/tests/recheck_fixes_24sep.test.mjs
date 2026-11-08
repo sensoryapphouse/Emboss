@@ -148,7 +148,7 @@ describe('problem 2: a listed table\'s title and note stay with its first row', 
 // ====================================================================================================================
 // Problem 3. UEB 9.7.3: "For better readability, ignore a change in typeform for closing punctuation when a typeform
 // word indicator is used." The colon after a listed table's heading (BANA 11.16.1d) is Emboss's, not print's, so it
-// takes the heading's typeform: `^1,DEF9I;N3`, as BrailleBlaster writes `^1,A2REVIA;NS3` - not `^1,DEF9I;N^'3`
+// takes the heading's typeform: `^1,DEF9I;N3`, as the reference translator writes `^1,A2REVIA;NS3` - not `^1,DEF9I;N^'3`
 // (745 terminators in the anthology). 9.7.2: "When there is doubt ... consider the punctuation as being included in
 // the typeform", so a passage's terminator follows the colon.
 // ====================================================================================================================

@@ -1,7 +1,9 @@
 // Shared Emboss settings, persisted to localStorage so the drag-and-drop converter
 // ("Simple mode") and the live editor stay in sync and honour the same standard,
 // grade, page geometry, quote style and list style.
+import { cleanContractions, contractionsSet } from './reader-profiles.mjs';
 const KEY = 'emboss-settings';
+export const SETTINGS_KEY = KEY;
 export const DEFAULTS = {
   simpleMode: true,            // checked on install → the drag-and-drop converter
   mode: 'ukaaf',               // 'ukaaf' | 'bana'
@@ -29,8 +31,13 @@ export const DEFAULTS = {
   connectionType: 'serial',    // 'serial' (WebSerial USB) | 'hid' (Universal WebHID) | 'ble' (Web Bluetooth) | 'network' (REST / WebSockets / IP)
   networkHost: '192.168.1.150',// IP address or hostname for network embossing
   networkPort: 9100,           // Network TCP port (standard JetDirect port 9100)
+  // One Emboss (Paul, 4 Nov 2026: EMBOSS-TASKS section P). "Made for" (P-J) is a template setting: 'paper' | 'monarch' | 'dotpad'. Monarch and DotPad
+  // set the page size (MADE_FOR_PAGE below: 32 x 10, 20 x 10) and their emulator tab always shows beside the braille, for everyone.
+  madeFor: 'paper',
+  // The paper embosser model (P-K: the names are kept - the model says which graphics a job can have, and at what level). A template setting,
+  // shown to everyone under "Made for: Paper" (Paul, 4 Nov 2026: teachers need it too). It no longer sets the page size (the page size presets do); unused for printing while writing to devices is put aside.
   embosser: 'generic',         // 'generic' | 'aph' | 'viewplus' | 'braillo' | 'index' | 'romeo' | 'custom'
-  embosserDuplex: 'double',    // 'double' (interpoint) | 'single' (simplex)
+  embosserDuplex: 'double',    // 'double' (interpoint) | 'single' (simplex). A template setting (P-L: Settings > Template > Template settings > Interpoint / single-sided)
   interline: false,            // interline view (print text line directly above braille line)
   language: 'ueb',             // 'ueb' | 'spanish' | 'french' | 'german' | 'italian' | 'welsh' | 'gaelic'
   mathCode: 'auto',            // 'auto' (follow the layout standard: UKAAF→UEB maths, BANA→Nemeth) | 'ueb' | 'nemeth'
@@ -38,23 +45,16 @@ export const DEFAULTS = {
   recentCodes: ['en-ueb-g2'],   // up to 5 recently used braille codes (pinned at top)
   tableFormat: 'auto',         // 'auto' | 'listed' | 'columnar' | 'vertical' | 'facing' | 'interchange' | 'stairstep' | 'linear'
   codeIndicators: true,        // UEB computer code indicators
-  paragraphStyle: 'indented',  // 'indented' (3-1 standard) | 'block' (1-1 with blank lines)
+  paragraphStyle: 'indented',  // 'indented' (3-1 standard) | 'block' (1-1 with blank lines) | 'indented-spaced' (UKAAF B004 s9 Ex2: blank line before each paragraph, cell 3)
   baudRate: 9600,              // WebSerial embosser baud rate (9600, 19200, 38400, 115200)
-  tactileGraphics: true,       // true: rasterize tactile graphics (Tiger/Index); false: text notes only
-  // Off by default (23 Sep 2026, Paul). format/spooler.mjs's rasterizeSvgToTiger/
-  // rasterizeSvgToIndex are implemented and unit-tested, but no embosser output path in
-  // Emboss calls them yet — spoolToEmbosser/prepareEmbosserStream only ever send plain
-  // BRF text (see format/spooler.mjs), and no other export path sends a raster stream
-  // either. This setting is a documented placeholder for that still-unbuilt wiring, so a
-  // transcriber who turns it on gets an honest "not yet connected, untested on real
-  // hardware" message rather than a silent no-op. Turning it on today changes nothing.
-  tactileRip: false,
+  tactileGraphics: true,       // true: rasterize tactile graphics (Tiger/Index); false: text notes only. Embosser output: its checkbox is hidden with the hardware controls (Paul, 4 Nov 2026, section P item 8)
+  // (The "Tactile graphics RIP" setting was removed, Paul, 4 Nov 2026, P-F: it never did anything - no output path sent a raster stream.)
   includeCovers: false,        // generate tactile volume covers when splitting volumes
   includeSpineLabels: false,   // generate braille spine labels
   uiLanguage: 'en',            // active UI localization language code ('en', 'es', 'fr', 'de', etc.)
-  // The Ctrl/Cmd+Shift+\ "expert" toggle in the editor (G1, 16 Sep decision): when on, the
-  // Emboss button, Insert > Graphic, the Embosser & Hardware settings tab and the Tactile
-  // Graphic / Plot Tactile Graph slash commands are shown. Remembered across reloads.
+  // The Ctrl/Cmd+Shift+\ hardware toggle (G1, 16 Sep decision) shows the Emboss button and the Embosser & Hardware settings tab. One Emboss (Paul, 4 Nov
+  // 2026, P-HW): writing to embossers and live displays is put aside - the code stays, unshown. The toggle works only where a test switches the hardware on
+  // (hardwareEnabled below); for everyone else this setting is ignored. Insert > Graphic and the tactile graphic commands are Transcriber tools now (P-D).
   expertHardware: false,
   // "Transcriber tools" (Paul's decision, 24 Sep 2026; docs/transcriber-tools-setting.md): when on, the editor also
   // offers the controls for formal braille books (Transcriber's Notes / Special Symbols pages, the Braille formatting
@@ -66,6 +66,10 @@ export const DEFAULTS = {
   showTitleField: null,
   // The editor's explanation bar under the text and braille (Paul, 17 Oct 2026): on by default; off hides it, with its drag handle. Speech is unaffected.
   showExplanationBar: true,
+  // Relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the contractions the reader has learned, the "ticks" of the template in force.
+  // null = All (every contraction: ordinary braille); else a list of catalogue keys (format/relaxed-signs.mjs), an empty list = none ticked. Only
+  // used when relaxed braille is switched on (relaxedEnabled below) and the braille code is UEB contracted. A template carries it (web/templates.mjs).
+  contractions: null,
 };
 // UK-7: UKAAF's own default is 38x27 (James — "40x25 is a US size"). BANA 38x25 (Paul, 28 Sep, PAGE-BANA-1): BANA 1.7.1
 // sets a MAXIMUM of 40 cells, and KD normally produces 38x25; switching a document to BANA no longer widens it to 40.
@@ -143,8 +147,15 @@ export const EMBOSSER_PRESETS = {
   index: { cells: 42, lines: 25, baudRate: 38400 },
   romeo: { cells: 40, lines: 25, baudRate: 9600 },
 };
+// "Made for" (Paul, 4 Nov 2026, P-J): the device a template's braille is made for. Monarch and DotPad fix the page size (the same 32 x 10 and 20 x 10 the
+// embosser presets above hold); Paper uses the page size presets. The emulator tab of a Monarch / DotPad template always shows beside the braille.
+export const MADE_FOR = ['paper', 'monarch', 'dotpad'];
+export const MADE_FOR_PAGE = { monarch: { cells: 32, lines: 10 }, dotpad: { cells: 20, lines: 10 } };
+// The paper embosser models Settings offers under "Made for: Paper" (P-K). The Monarch and DotPad entries of EMBOSSER_NAMES are "Made for" choices now.
+export const PAPER_EMBOSSERS = ['generic', 'aph', 'viewplus', 'braillo', 'index', 'romeo', 'custom'];
 export function isGraphicsSupported(st = {}) {
   if (st.tactileGraphics === false) return false;
+  if (st.madeFor === 'monarch' || st.madeFor === 'dotpad') return true;
   const emb = st.embosser || 'generic';
   return ['viewplus', 'aph', 'index', 'monarch', 'dotpad', 'generic', 'custom'].includes(emb);
 }
@@ -162,12 +173,14 @@ export const CONNECTION_TYPES = ['serial', 'hid', 'ble', 'network'];   // the em
 export function sanitizeSettings(s) {
   const raw = s || {};
   const clean = { ...DEFAULTS, ...raw };
-  clean.embosser = ['generic', 'monarch', 'dotpad', 'aph', 'viewplus', 'braillo', 'index', 'romeo', 'custom'].includes(clean.embosser) ? clean.embosser : 'generic';
-  const preset = EMBOSSER_PRESETS[clean.embosser];
-  const defaultCells = preset ? preset.cells : DEFAULTS.cells;
-  const defaultLines = preset ? preset.lines : DEFAULTS.lines;
-  clean.cells = Math.max(10, Math.min(60, Math.round(Number(clean.cells)) || defaultCells));
-  clean.lines = Math.max(10, Math.min(45, Math.round(Number(clean.lines)) || defaultLines));
+  // Made for (P-J). An older setup that chose the Monarch or DotPad as its "embosser" is made for that device now (P-K: the paper models stay in `embosser`).
+  clean.madeFor = MADE_FOR.includes(raw.madeFor) ? raw.madeFor : (raw.embosser === 'monarch' || raw.embosser === 'dotpad' ? raw.embosser : 'paper');
+  clean.embosser = PAPER_EMBOSSERS.includes(clean.embosser) ? clean.embosser : 'generic';
+  clean.embosserDuplex = clean.embosserDuplex === 'single' ? 'single' : 'double';
+  // The model no longer sets the page size (P-K); a device fixes it (P-J): Monarch 32 x 10, DotPad 20 x 10, whatever Cells and Lines were given.
+  const device = MADE_FOR_PAGE[clean.madeFor] || null;
+  clean.cells = device ? device.cells : Math.max(10, Math.min(60, Math.round(Number(clean.cells)) || DEFAULTS.cells));
+  clean.lines = device ? device.lines : Math.max(10, Math.min(45, Math.round(Number(clean.lines)) || DEFAULTS.lines));
   clean.volumePages = Math.max(0, Math.min(300, Math.round(Number(clean.volumePages)) || 0));
   clean.brailleCellW = Math.max(8, Math.min(36, Math.round(Number(clean.brailleCellW)) || DEFAULTS.brailleCellW));
   clean.ttsRate = Math.max(0.5, Math.min(2.0, Number(clean.ttsRate) || 1));
@@ -176,7 +189,7 @@ export function sanitizeSettings(s) {
   // Feedback item 6 (Paul, 1 Oct): a setup with no page size of its own takes its standard's (MODE_GEOMETRY: BANA 38x25, UKAAF
   // 38x27) — the built-in defaults are UKAAF's, and a saved BANA setup without a size was laid out on the UK page. A saved size,
   // or a hardware preset's, always wins.
-  if ((!raw.embosser || raw.embosser === 'generic') && MODE_GEOMETRY[clean.mode]) {
+  if (!device && MODE_GEOMETRY[clean.mode]) {
     if (!(Number(raw.cells) > 0)) clean.cells = MODE_GEOMETRY[clean.mode].cells;
     if (!(Number(raw.lines) > 0)) clean.lines = MODE_GEOMETRY[clean.mode].lines;
   }
@@ -184,7 +197,7 @@ export function sanitizeSettings(s) {
   clean.mathCode = ['auto', 'ueb', 'nemeth'].includes(clean.mathCode) ? clean.mathCode : 'auto';
   clean.quoteStyle = clean.quoteStyle === 'exchange' ? 'exchange' : 'faithful';
   clean.listStyle = clean.listStyle === 'compact' ? 'compact' : 'spaced';
-  clean.paragraphStyle = clean.paragraphStyle === 'block' ? 'block' : 'indented';
+  clean.paragraphStyle = ['block', 'indented-spaced'].includes(clean.paragraphStyle) ? clean.paragraphStyle : 'indented';   // 'indented-spaced': UKAAF B004 section 9 Example 2 (blank line before each paragraph; UKAAF only, ignored in BANA)
   // The editor's Table Layout setting also offers the BANA wide-table formats (T4; K15 facing pages; BANA 11.15 interchanged
   // columns and rows): keep them on reload.
   clean.tableFormat = ['auto', 'listed', 'columnar', 'vertical', 'facing', 'interchange', 'stairstep', 'linear'].includes(clean.tableFormat) ? clean.tableFormat : 'auto';
@@ -195,12 +208,13 @@ export function sanitizeSettings(s) {
   clean.networkPort = Math.max(1, Math.min(65535, Number(clean.networkPort) || 9100));
   clean.brailleCode = String(clean.brailleCode || 'en-ueb-g2');
   clean.tactileGraphics = clean.tactileGraphics !== false;
-  clean.tactileRip = clean.tactileRip === true;
+  delete clean.tactileRip;   // removed (Paul, 4 Nov 2026, P-F); an older saved setting just drops out
   clean.expertHardware = clean.expertHardware === true;
   clean.transcriberTools = clean.transcriberTools === true;
   clean.sixKeyOn = clean.sixKeyOn === true;
   clean.showTitleField = clean.showTitleField === true ? true : clean.showTitleField === false ? false : null;
   clean.showExplanationBar = clean.showExplanationBar !== false;
+  clean.contractions = cleanContractions(clean.contractions);
   return clean;
 }
 
@@ -215,12 +229,19 @@ export function effectiveMathCode(s) {
 
 export function loadSettings() {
   try {
+    const link = toolsFromLink();   // ?tools=1 / ?tools=0 (see above): saved first, so everything that reads the settings sees it
+    if (link !== null) {
+      try {
+        const was = localStorage.getItem(KEY);
+        const base = was == null ? { mode: machineStandard() } : JSON.parse(was || '{}');
+        localStorage.setItem(KEY, JSON.stringify(sanitizeSettings({ ...base, transcriberTools: link })));
+      } catch { /* private mode etc. */ }
+    }
     const stored = localStorage.getItem(KEY);
     if (stored == null) {
       // The very first run (nothing saved yet): the standard follows the browser and machine (machineStandard), and is saved at
-      // once so it never changes by itself afterwards (feedback item 6, Paul, 1 Oct).
-      // Emboss Plus (Paul, 16 Oct 2026, P1): a first visit starts with Transcriber tools on; a saved choice is never overridden.
-      const first = sanitizeSettings({ mode: machineStandard(), ...(isPlusBuild() ? { transcriberTools: true } : {}) });
+      // once so it never changes by itself afterwards (feedback item 6, Paul, 1 Oct). Transcriber tools start off for everyone (Paul, 4 Nov 2026).
+      const first = sanitizeSettings({ mode: machineStandard() });
       try { localStorage.setItem(KEY, JSON.stringify(first)); } catch { /* private mode etc. */ }
       return first;
     }
@@ -258,37 +279,64 @@ export function stayInQuickMode(now = Date.now()) {
 // "Open the editor anyway" is remembered until the tab is closed.
 export const PHONE_EDITOR_ANYWAY_KEY = 'emboss-editor-anyway';
 
-// Feedback 30 Sep item 15 (Paul, 2 Oct): a beta build (./deploy-emboss.sh --beta marks both pages with
-// <meta name="emboss-beta" content="1">; a test may set window.EMBOSS_BETA) shows only the everyday editor: Transcriber tools and
-// the hardware controls stay off and their switches are hidden. A link with ?tools=1 unlocks them on that computer (remembered);
-// ?tools=0 locks them again. Not a separate codebase: the same code, with these switches.
-export function isBetaBuild() {
-  try {
-    if (window.EMBOSS_BETA === true) return true;
-    const m = document.querySelector('meta[name="emboss-beta"]');
-    return !!m && m.getAttribute('content') === '1';
-  } catch { return false; }
-}
-// Emboss Plus (./deploy-emboss.sh --plus marks both pages with <meta name="emboss-plus" content="1">; a test may set
-// window.EMBOSS_PLUS): the full build, where a first visit starts with Transcriber tools on (loadSettings above).
-export function isPlusBuild() {
-  try {
-    if (window.EMBOSS_PLUS === true) return true;
-    const m = document.querySelector('meta[name="emboss-plus"]');
-    return !!m && m.getAttribute('content') === '1';
-  } catch { return false; }
-}
-const BETA_UNLOCK_KEY = 'emboss-beta-unlock';
-export function betaToolsUnlocked() {
+// ONE EMBOSS (Paul, 4 Nov 2026: EMBOSS-TASKS section P). There is no beta lock and no Plus build any more: a page marked emboss-beta or emboss-plus (the deploy
+// scripts still write the marker) behaves exactly like an unmarked one. Everyone starts in everyday braille mode (Transcriber tools off, no first-visit question)
+// and turns Transcriber tools on in Settings > User Interface. The old isBetaBuild / isPlusBuild / betaLocked / betaToolsUnlocked are gone.
+//
+// A link with ?tools=1 (testers have them) turns Transcriber tools on, ?tools=0 turns them off; the choice is saved like any other, and a link is applied once
+// per page load, before anything reads the settings.
+let TOOLS_LINK_DONE = false;
+function toolsFromLink() {
+  if (TOOLS_LINK_DONE) return null;
+  TOOLS_LINK_DONE = true;
   try {
     const q = new URLSearchParams(location.search).get('tools');
-    if (q === '1') localStorage.setItem(BETA_UNLOCK_KEY, '1');
-    else if (q === '0') localStorage.removeItem(BETA_UNLOCK_KEY);
-    return localStorage.getItem(BETA_UNLOCK_KEY) === '1';
+    return q === '1' ? true : q === '0' ? false : null;
+  } catch { return null; }
+}
+// Writing to embossers and live tactile displays is put aside in this version (P-HW, P-M): the Emboss button, the Embosser & Hardware tab, the connection
+// settings, the live Monarch / DotPad connection and Ctrl/Cmd+Shift+\ are not available. The code stays. A test (or a developer) can switch it back on with
+// window.EMBOSS_HARDWARE = true before the page loads; nothing a user can do reaches it.
+export function hardwareEnabled() {
+  try { return window.EMBOSS_HARDWARE === true; } catch { return false; }
+}
+
+// Relaxed braille (A91, task 3; Paul 3 Oct 2026, decision L): UEB contracted braille that uses only the contractions a reader has
+// learned, every other one spelled out. OFF unless switched on: a link with ?relaxed=1 turns it on for that computer (remembered in
+// localStorage), ?relaxed=0 turns it off again; with it off, or with the All profile, the braille is byte-identical to today.
+export const RELAXED_KEY = 'emboss-relaxed';
+export function relaxedEnabled() {
+  try {
+    const q = new URLSearchParams(location.search).get('relaxed');
+    if (q === '1') localStorage.setItem(RELAXED_KEY, '1');
+    else if (q === '0') localStorage.removeItem(RELAXED_KEY);
+    return localStorage.getItem(RELAXED_KEY) === '1';
   } catch { return false; }
 }
-// True when this is a beta build and nobody has unlocked the full tools on this computer.
-export function betaLocked() { return isBetaBuild() && !betaToolsUnlocked(); }
+// The ticks in force (Paul, 2 Nov 2026: relaxed braille is part of the template - one name): the setting `contractions`, which the template in
+// force carries and Settings > Template > Contractions > Choose... changes. A Set of the catalogue keys (format/relaxed-signs.mjs) the reader
+// holds, or null = All (and null whenever relaxed braille is off, whatever is stored). What makeTranslators(louis, table, { relaxed }) takes.
+// Read afresh on every call, so a change made in another tab is used at the next render; it is cheap (the parsed Set is kept while the stored
+// settings text is unchanged, so the same Set comes back and relaxedProfileKey below is worked out once).
+let TICKS_MEMO = { raw: undefined, set: null };
+export function activeRelaxedProfile() {
+  if (!relaxedEnabled()) return null;
+  let raw = null;
+  try { raw = localStorage.getItem(KEY); } catch { raw = null; }
+  if (TICKS_MEMO.raw === raw && raw !== undefined) return TICKS_MEMO.set;
+  let set = null;
+  try { set = contractionsSet(raw == null ? null : JSON.parse(raw || '{}').contractions); } catch { set = null; }
+  TICKS_MEMO = { raw, set };
+  return set;
+}
+// A short text for anything that must tell braille made with different profiles apart (a cache key): '' when off or All.
+const PROFILE_KEYS = new WeakMap();   // activeRelaxedProfile hands out the same Set while nothing changed, so the text is worked out once
+export function relaxedProfileKey(p = activeRelaxedProfile()) {
+  if (!p) return '';
+  let k = PROFILE_KEYS.get(p);
+  if (k === undefined) { k = `relaxed:${[...p].sort().join(',')}`; PROFILE_KEYS.set(p, k); }
+  return k;
+}
 
 // A number field takes the nearest allowed value as soon as it is changed (A89, found by random-action testing): Cells -1 became
 // -1 in Quick Mode's braille settings, and Settings — a form — then refused to close ("An invalid form control … is not

@@ -1562,7 +1562,7 @@ function buildModel9(sample) {
 // There is no markup token for this in Emboss's own cell-markup DSL. Script has its own `tf`
 // bit since 26 Sep 2026 (TF_SCRIPT = 8, EMBOSS-TASKS K5), and the braille can carry the five
 // UEB transcriber-defined indicators via `segment.transcriberTypeform` (hyperlinks = first,
-// strikethrough = second, BrailleBlaster trans1–trans5), but nothing assigns an arbitrary print
+// strikethrough = second, the bai-trans1–bai-trans5 import numbers), but nothing assigns an arbitrary print
 // feature (colour, double underline, a shape outline) to one, so `{{tdN}}` is not mapped
 // (standards-findings.md F-86 / F-T1). Every
 // `{{tdN: X}}` span is unwrapped to its own inner text X (recorded as a limitation, once
@@ -2970,6 +2970,10 @@ function stageDirectionEmphasis(text) {
 }
 function buildBlocks14(printBlocks, limitations) {
   const blocks = [];
+  // BANA 14.3.1e (Paul's blank-line audit W5, 4 Nov 2026): a scene-setting paragraph - in a sample that illustrates 14.3 (format selected by the
+  // illustrated rule, independence rule) - is the paragraph(s) printed directly before the first speech: `sceneSetting` gives the blank line after it.
+  const sceneSettingParas = new Set();
+  (printBlocks || []).forEach((b, i) => { if (b && b.kind === 'paragraph' && printBlocks[i + 1] && printBlocks[i + 1].kind === 'speech' && /^14\.3\./.test(CUR14_RULE)) sceneSettingParas.add(b); });
   for (const b of (printBlocks || [])) {
     if (!b || typeof b !== 'object') continue;
     const kind = b.kind;
@@ -2986,6 +2990,7 @@ function buildBlocks14(printBlocks, limitations) {
     } else if (kind === 'paragraph') {
       const para = { type: 'para', ...textOrSegments(b.text) };
       if (b.blocked) para.blocked = true;
+      if (sceneSettingParas.has(b)) para.sceneSetting = true;
       blocks.push(para);
     } else if (kind === 'speech') {
       const text = String(b.text ?? '');
@@ -3783,8 +3788,8 @@ function firstDiffLine(expected, actual) {
 // FINDING (see standards-findings.md, "gold §11 letter-case convention"):
 // every gold `braille.lines` entry in this section spells the braille alphabet
 // in LOWERCASE ("gorilla", ",daily"), but the real North American Braille
-// ASCII convention — verified in this repo against BrailleBlaster's own .brf
-// output (Emboss/tests/nimas_samples/*.bb_out.brf, e.g. "ONCE U A TIME A POOR
+// ASCII convention — verified in this repo against the reference translator's .brf
+// output (Emboss/tests/nimas_samples/*.reference.brf, e.g. "ONCE U A TIME A POOR
 // WOODMAN...") and against Emboss's own liblouis-backed translate() and its
 // existing box-line tests (bana_sidebar_sync.test.mjs etc., which assert the
 // UPPERCASE 'GGGGGGG' bottom box rule) — is UPPERCASE for the alphabet and for

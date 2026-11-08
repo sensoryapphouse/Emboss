@@ -36,26 +36,26 @@ console.log('Liblouis WASM initialized version:', louis.version());
 // list #55; a bare liblouis call here never exercised the sub/superscript, quote-exchange and invisible-character handling.
 const { translate, translateG1 } = editorTranslators(louis);
 
-// Load BrailleBlaster audit logs
-const bbEpubAudit = fs.existsSync('tests/bb_broad_corpus_audit.jsonl')
-  ? fs.readFileSync('tests/bb_broad_corpus_audit.jsonl', 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse)
+// Load Reference audit logs
+const refEpubAudit = fs.existsSync('tests/reference_broad_corpus_audit.jsonl')
+  ? fs.readFileSync('tests/reference_broad_corpus_audit.jsonl', 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse)
   : [];
-const bbMap = new Map(bbEpubAudit.map(r => [r.file, r]));
+const refMap = new Map(refEpubAudit.map(r => [r.file, r]));
 
 const corpusDir = path.join(ROOT, 'tests/broad_corpus');
 const files = fs.readdirSync(corpusDir).filter(f => f.endsWith('.epub'));
 
 console.log('='.repeat(110));
-console.log(`RUNNING FULL COMPARATIVE TEST: EMBOSS (UEB Grade 2, BANA 3-1) vs BRAILLEBLASTER across ${files.length} EPUBs`);
+console.log(`RUNNING FULL COMPARATIVE TEST: EMBOSS (UEB Grade 2, BANA 3-1) vs REFERENCE across ${files.length} EPUBs`);
 console.log('='.repeat(110));
 
 const rows = [];
-let totalBbPages = 0;
+let totalRefPages = 0;
 let totalEmPages = 0;
-let totalBbLines = 0;
+let totalRefLines = 0;
 let totalEmLines = 0;
 let totalEmbossTime = 0;
-let totalBbTime = 0;
+let totalRefTime = 0;
 
 for (let i = 0; i < files.length; i++) {
   const file = files[i];
@@ -90,25 +90,25 @@ for (let i = 0; i < files.length; i++) {
   const emTime = Date.now() - t0;
   totalEmbossTime += emTime;
 
-  const bb = bbMap.get(file) || { bb_pages: 0, bb_lines: 0, ms: 0, status: 'NOT_RUN' };
-  totalBbPages += bb.bb_pages;
+  const ref = refMap.get(file) || { ref_pages: 0, ref_lines: 0, ms: 0, status: 'NOT_RUN' };
+  totalRefPages += ref.ref_pages;
   totalEmPages += emPages;
-  totalBbLines += bb.bb_lines;
+  totalRefLines += ref.ref_lines;
   totalEmLines += emLines;
-  totalBbTime += bb.ms || 0;
+  totalRefTime += ref.ms || 0;
 
-  const pageDiff = bb.bb_pages > 0 ? (((emPages - bb.bb_pages) / bb.bb_pages) * 100).toFixed(1) + '%' : 'N/A';
-  const lineDiff = bb.bb_lines > 0 ? (((emLines - bb.bb_lines) / bb.bb_lines) * 100).toFixed(1) + '%' : 'N/A';
+  const pageDiff = ref.ref_pages > 0 ? (((emPages - ref.ref_pages) / ref.ref_pages) * 100).toFixed(1) + '%' : 'N/A';
+  const lineDiff = ref.ref_lines > 0 ? (((emLines - ref.ref_lines) / ref.ref_lines) * 100).toFixed(1) + '%' : 'N/A';
 
   rows.push({
     file: file.length > 32 ? file.slice(0, 29) + '...' : file,
-    'BB Pages': bb.bb_pages,
+    'Reference Pages': ref.ref_pages,
     'EM Pages (G2)': emPages,
     'Page Diff%': pageDiff,
-    'BB Lines': bb.bb_lines,
+    'Reference Lines': ref.ref_lines,
     'EM Lines (G2)': emLines,
     'Line Diff%': lineDiff,
-    'BB Time': (bb.ms || 0) + 'ms',
+    'Reference Time': (ref.ms || 0) + 'ms',
     'EM Time': emTime + 'ms'
   });
 }
@@ -117,11 +117,11 @@ console.table(rows);
 
 console.log('='.repeat(110));
 console.log(`TOTALS ACROSS ALL ${files.length} FULL-LENGTH BOOKS:`);
-console.log(`BrailleBlaster Total Pages: ${totalBbPages.toLocaleString()}`);
+console.log(`Reference Total Pages: ${totalRefPages.toLocaleString()}`);
 console.log(`Emboss (G2) Total Pages:    ${totalEmPages.toLocaleString()}`);
-console.log(`BrailleBlaster Total Lines: ${totalBbLines.toLocaleString()}`);
+console.log(`Reference Total Lines: ${totalRefLines.toLocaleString()}`);
 console.log(`Emboss (G2) Total Lines:    ${totalEmLines.toLocaleString()}`);
-console.log(`Line Count Agreement:       ${(((totalBbLines / totalEmLines)) * 100).toFixed(1)}%`);
-console.log(`Total BB Run Time:          ${(totalBbTime / 1000).toFixed(1)}s`);
-console.log(`Total Emboss Run Time:      ${(totalEmbossTime / 1000).toFixed(1)}s (${(totalBbTime / totalEmbossTime).toFixed(0)}x faster)`);
+console.log(`Line Count Agreement:       ${(((totalRefLines / totalEmLines)) * 100).toFixed(1)}%`);
+console.log(`Total Reference Run Time:          ${(totalRefTime / 1000).toFixed(1)}s`);
+console.log(`Total Emboss Run Time:      ${(totalEmbossTime / 1000).toFixed(1)}s (${(totalRefTime / totalEmbossTime).toFixed(0)}x faster)`);
 console.log('='.repeat(110));

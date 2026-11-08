@@ -11,6 +11,7 @@
 // which is all a BRF cell can carry.
 import { CODES } from '../Translate/braille-codes.mjs';
 import { unicodeBrailleToBrf, brfToUnicodeBraille } from '../engine/brf-ascii.mjs';
+import { relaxTranslation, allowsEverything } from '../format/relaxed-braille.mjs';
 
 export const UEB_TABLES = {
   g1: '/tables/en-us-brf.dis,/tables/en-ueb-g1.ctb',
@@ -57,18 +58,43 @@ export function codeLanguage(settings) {
 
 export function isUnicodeTable(tableList) { return /unicode\.dis/.test(String(tableList)); }
 
+// Relaxed braille (A91, task 3; Paul 3 Oct 2026): UEB contracted braille using only the contractions a reader has learned, the rest
+// spelled out in letters (format/relaxed-braille.mjs). It applies to the UEB grade 2 table ONLY: the grade 1 table, every other
+// braille code and all maths (MathCAT, never these translators) are left exactly as they are.
+export const RELAXABLE_TABLE_RE = /en-ueb-g2\.ctb/;
+// True when `relaxed` (a Set of the catalogue keys a reader holds; null / undefined = All) changes the braille of this table list.
+export function relaxedApplies(tableList, relaxed) {
+  return relaxed != null && RELAXABLE_TABLE_RE.test(String(tableList)) && !allowsEverything(relaxed);
+}
+
 // Wrap the raw engine so every caller gets BRF ASCII out and can hand BRF ASCII back
 // in, whatever display table the code was listed with. translatePos keeps its
 // cell→source map valid because the conversion is one character per cell.
-export function makeTranslators(louis, tableList) {
+//
+// options.relaxed (A91): a Set of contraction keys to KEEP (format/relaxed-signs.mjs UEB_CONTRACTION_SIGNS[].key), or null = All.
+// With a Set that leaves signs out AND the UEB grade 2 table, translate / translatePos translate in full contracted UEB as always,
+// then spell out each contraction not in the Set (relaxTranslation). In every other case - no option, null, the All Set, grade 1,
+// another braille code - both are exactly what they were. translate(text) = translatePos(text).braille when relaxed (the two
+// liblouis calls give the same braille; tests/relaxed_translators.test.mjs checks it). translatePos's result then also carries
+// `spelledOut` and `unresolved` (relaxTranslation's lists, for the status bar).
+export function makeTranslators(louis, tableList, options) {
   const uni = isUnicodeTable(tableList);
+  const relaxed = options && options.relaxed;
+  const basePos = (text, typeform) => {
+    const r = louis.translatePos(text, tableList, typeform);
+    return { braille: unicodeBrailleToBrf(r.braille), inputPos: r.inputPos };
+  };
+  const relax = relaxedApplies(tableList, relaxed)
+    ? (text, typeform) => relaxTranslation(text, basePos(text, typeform), relaxed, { translatePos: (w) => basePos(w, null) })
+    : null;
   return {
     table: tableList,
-    translate: (text, typeform) => unicodeBrailleToBrf(louis.translate(text, tableList, typeform)),
-    translatePos: (text, typeform) => {
-      const r = louis.translatePos(text, tableList, typeform);
-      return { braille: unicodeBrailleToBrf(r.braille), inputPos: r.inputPos };
-    },
+    translate: relax
+      ? (text, typeform) => relax(text, typeform).braille
+      : (text, typeform) => unicodeBrailleToBrf(louis.translate(text, tableList, typeform)),
+    translatePos: relax
+      ? (text, typeform) => relax(text, typeform)
+      : (text, typeform) => basePos(text, typeform),
     backTranslate: (brf) => louis.backTranslate(uni ? brfToUnicodeBraille(brf) : brf, tableList),
     backTranslateRuns: (brf) => {
       const input = uni ? brfToUnicodeBraille(brf) : brf;

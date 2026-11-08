@@ -16,12 +16,12 @@ const projectRoot = fs.existsSync(path.join(__dirname, '../../liblouis/tables'))
 
 async function main() {
   console.log('========================================================================================');
-  console.log('       EXHAUSTIVE DEEP COMPARISON: EMBOSS vs BRAILLEBLASTER (1.45 MB NIMAS XML)         ');
+  console.log('       EXHAUSTIVE DEEP COMPARISON: EMBOSS vs REFERENCE (1.45 MB NIMAS XML)         ');
   console.log('       File: Collections, Grade 7 (9780544087507NIMAS.xml)                              ');
   console.log('========================================================================================\n');
 
   const xmlPath = path.join(rootDir, 'tests/nimas_samples/9780544087507NIMAS.xml');
-  const bbBrfPath = path.join(rootDir, 'tests/nimas_samples/9780544087507NIMAS.brailleblaster_out.brf');
+  const refBrfPath = path.join(rootDir, 'tests/nimas_samples/9780544087507NIMAS.reference.brf');
   const outEmbossBrfPath = path.join(rootDir, 'tests/nimas_samples/9780544087507NIMAS_emboss.brf');
 
   if (!fs.existsSync(xmlPath)) {
@@ -68,50 +68,50 @@ async function main() {
   fs.writeFileSync(outEmbossBrfPath, emBrf, 'utf8');
   console.log(`-> Saved Emboss BRF to: ${outEmbossBrfPath} (${(Buffer.byteLength(emBrf, 'utf8') / 1024).toFixed(1)} KB)`);
 
-  // 4. Load BrailleBlaster BRF
-  console.log('\nStep 3: Loading BrailleBlaster baseline BRF...');
-  const bbBrf = fs.readFileSync(bbBrfPath, 'utf8');
-  console.log(`-> Loaded BrailleBlaster BRF: ${bbBrfPath} (${(Buffer.byteLength(bbBrf, 'utf8') / 1024).toFixed(1)} KB)`);
+  // 4. Load Reference BRF
+  console.log('\nStep 3: Loading Reference baseline BRF...');
+  const refBrf = fs.readFileSync(refBrfPath, 'utf8');
+  console.log(`-> Loaded Reference BRF: ${refBrfPath} (${(Buffer.byteLength(refBrf, 'utf8') / 1024).toFixed(1)} KB)`);
 
   // 5. Macro Metrics & High-Level Comparison
   console.log('\n========================================================================================');
   console.log('                                1. MACRO METRICS & SIZES                                ');
   console.log('========================================================================================');
 
-  const bbPages = bbBrf.split('\f').filter(Boolean);
+  const refPages = refBrf.split('\f').filter(Boolean);
   const emPages = emBrf.split('\f').filter(Boolean);
 
-  const bbLines = bbBrf.split(/\r?\n/);
+  const refLines = refBrf.split(/\r?\n/);
   const emLines = emBrf.split(/\r?\n/);
 
-  const bbNonEmptyLines = bbLines.filter((l) => l.trim().length > 0);
+  const refNonEmptyLines = refLines.filter((l) => l.trim().length > 0);
   const emNonEmptyLines = emLines.filter((l) => l.trim().length > 0);
 
   const tokenize = (str) => str.split(/\s+/).filter(Boolean);
-  const bbWords = tokenize(bbBrf);
+  const refWords = tokenize(refBrf);
   const emWords = tokenize(emBrf);
 
-  console.log(`Total Braille Pages:        BrailleBlaster: ${bbPages.length.toLocaleString().padStart(6)} | Emboss: ${emPages.length.toLocaleString().padStart(6)} | Diff: ${(emPages.length - bbPages.length > 0 ? '+' : '')}${(emPages.length - bbPages.length)} (${(((emPages.length - bbPages.length) / bbPages.length) * 100).toFixed(1)}%)`);
-  console.log(`Total Braille Lines:        BrailleBlaster: ${bbLines.length.toLocaleString().padStart(6)} | Emboss: ${emLines.length.toLocaleString().padStart(6)} | Diff: ${(emLines.length - bbLines.length > 0 ? '+' : '')}${(emLines.length - bbLines.length)} (${(((emLines.length - bbLines.length) / bbLines.length) * 100).toFixed(1)}%)`);
-  console.log(`Non-Empty Content Lines:    BrailleBlaster: ${bbNonEmptyLines.length.toLocaleString().padStart(6)} | Emboss: ${emNonEmptyLines.length.toLocaleString().padStart(6)} | Diff: ${(emNonEmptyLines.length - bbNonEmptyLines.length > 0 ? '+' : '')}${(emNonEmptyLines.length - bbNonEmptyLines.length)} (${(((emNonEmptyLines.length - bbNonEmptyLines.length) / bbNonEmptyLines.length) * 100).toFixed(1)}%)`);
-  console.log(`Total Translated Words:     BrailleBlaster: ${bbWords.length.toLocaleString().padStart(6)} | Emboss: ${emWords.length.toLocaleString().padStart(6)} | Diff: ${(emWords.length - bbWords.length > 0 ? '+' : '')}${(emWords.length - bbWords.length)} (${(((emWords.length - bbWords.length) / bbWords.length) * 100).toFixed(1)}%)`);
-  console.log(`Average Lines / Page:       BrailleBlaster: ${(bbNonEmptyLines.length / bbPages.length).toFixed(2).padStart(6)} | Emboss: ${(emNonEmptyLines.length / emPages.length).toFixed(2).padStart(6)}`);
+  console.log(`Total Braille Pages:        Reference: ${refPages.length.toLocaleString().padStart(6)} | Emboss: ${emPages.length.toLocaleString().padStart(6)} | Diff: ${(emPages.length - refPages.length > 0 ? '+' : '')}${(emPages.length - refPages.length)} (${(((emPages.length - refPages.length) / refPages.length) * 100).toFixed(1)}%)`);
+  console.log(`Total Braille Lines:        Reference: ${refLines.length.toLocaleString().padStart(6)} | Emboss: ${emLines.length.toLocaleString().padStart(6)} | Diff: ${(emLines.length - refLines.length > 0 ? '+' : '')}${(emLines.length - refLines.length)} (${(((emLines.length - refLines.length) / refLines.length) * 100).toFixed(1)}%)`);
+  console.log(`Non-Empty Content Lines:    Reference: ${refNonEmptyLines.length.toLocaleString().padStart(6)} | Emboss: ${emNonEmptyLines.length.toLocaleString().padStart(6)} | Diff: ${(emNonEmptyLines.length - refNonEmptyLines.length > 0 ? '+' : '')}${(emNonEmptyLines.length - refNonEmptyLines.length)} (${(((emNonEmptyLines.length - refNonEmptyLines.length) / refNonEmptyLines.length) * 100).toFixed(1)}%)`);
+  console.log(`Total Translated Words:     Reference: ${refWords.length.toLocaleString().padStart(6)} | Emboss: ${emWords.length.toLocaleString().padStart(6)} | Diff: ${(emWords.length - refWords.length > 0 ? '+' : '')}${(emWords.length - refWords.length)} (${(((emWords.length - refWords.length) / refWords.length) * 100).toFixed(1)}%)`);
+  console.log(`Average Lines / Page:       Reference: ${(refNonEmptyLines.length / refPages.length).toFixed(2).padStart(6)} | Emboss: ${(emNonEmptyLines.length / emPages.length).toFixed(2).padStart(6)}`);
 
   // 6. Vocabulary & Lexical Alignment
   console.log('\n========================================================================================');
   console.log('                          2. VOCABULARY & TRANSLATION OVERLAP                           ');
   console.log('========================================================================================');
 
-  const bbVocab = new Set(bbWords);
+  const refVocab = new Set(refWords);
   const emVocab = new Set(emWords);
 
   let sharedWords = 0;
   for (const w of emVocab) {
-    if (bbVocab.has(w)) sharedWords++;
+    if (refVocab.has(w)) sharedWords++;
   }
-  const jaccard = ((sharedWords / (bbVocab.size + emVocab.size - sharedWords)) * 100).toFixed(2);
+  const jaccard = ((sharedWords / (refVocab.size + emVocab.size - sharedWords)) * 100).toFixed(2);
 
-  console.log(`Unique Vocabulary Tokens:   BrailleBlaster: ${bbVocab.size.toLocaleString().padStart(6)} | Emboss: ${emVocab.size.toLocaleString().padStart(6)}`);
+  console.log(`Unique Vocabulary Tokens:   Reference: ${refVocab.size.toLocaleString().padStart(6)} | Emboss: ${emVocab.size.toLocaleString().padStart(6)}`);
   console.log(`Shared Vocabulary Tokens:   ${sharedWords.toLocaleString().padStart(6)}`);
   console.log(`Jaccard Lexical Similarity: ${jaccard}%`);
 
@@ -122,64 +122,64 @@ async function main() {
 
   const countMatches = (text, regex) => (text.match(regex) || []).length;
 
-  const bbTopBoxes = countMatches(bbBrf, /3333333333/g);
+  const refTopBoxes = countMatches(refBrf, /3333333333/g);
   const emTopBoxes = countMatches(emBrf, /3333333333/g);
 
-  const bbBottomBoxes = countMatches(bbBrf, /7777777777/g);
+  const refBottomBoxes = countMatches(refBrf, /7777777777/g);
   const emBottomBoxes = countMatches(emBrf, /7777777777/g);
 
   console.log(`\nA. Boxlines & Sidebars:`);
-  console.log(`   - Top Borders (333...):    BrailleBlaster: ${bbTopBoxes.toLocaleString().padStart(5)} | Emboss: ${emTopBoxes.toLocaleString().padStart(5)}`);
-  console.log(`   - Bottom Borders (777...): BrailleBlaster: ${bbBottomBoxes.toLocaleString().padStart(5)} | Emboss: ${emBottomBoxes.toLocaleString().padStart(5)}`);
+  console.log(`   - Top Borders (333...):    Reference: ${refTopBoxes.toLocaleString().padStart(5)} | Emboss: ${emTopBoxes.toLocaleString().padStart(5)}`);
+  console.log(`   - Bottom Borders (777...): Reference: ${refBottomBoxes.toLocaleString().padStart(5)} | Emboss: ${emBottomBoxes.toLocaleString().padStart(5)}`);
 
   // Typeforms indicators
-  const bbItalicWords = countMatches(bbBrf, /\^1|\.1/g);
+  const refItalicWords = countMatches(refBrf, /\^1|\.1/g);
   const emItalicWords = countMatches(emBrf, /\^1|\.1/g);
 
-  const bbBoldWords = countMatches(bbBrf, /\^7|\.7/g);
+  const refBoldWords = countMatches(refBrf, /\^7|\.7/g);
   const emBoldWords = countMatches(emBrf, /\^7|\.7/g);
 
-  const bbUnderlineWords = countMatches(bbBrf, /\^2|\.2/g);
+  const refUnderlineWords = countMatches(refBrf, /\^2|\.2/g);
   const emUnderlineWords = countMatches(emBrf, /\^2|\.2/g);
 
   console.log(`\nB. Inline Typeforms (UEB Rulebook §9):`);
-  console.log(`   - Italic Indicators:       BrailleBlaster: ${bbItalicWords.toLocaleString().padStart(5)} | Emboss: ${emItalicWords.toLocaleString().padStart(5)}`);
-  console.log(`   - Bold Indicators:         BrailleBlaster: ${bbBoldWords.toLocaleString().padStart(5)} | Emboss: ${emBoldWords.toLocaleString().padStart(5)}`);
-  console.log(`   - Underline Indicators:    BrailleBlaster: ${bbUnderlineWords.toLocaleString().padStart(5)} | Emboss: ${emUnderlineWords.toLocaleString().padStart(5)}`);
+  console.log(`   - Italic Indicators:       Reference: ${refItalicWords.toLocaleString().padStart(5)} | Emboss: ${emItalicWords.toLocaleString().padStart(5)}`);
+  console.log(`   - Bold Indicators:         Reference: ${refBoldWords.toLocaleString().padStart(5)} | Emboss: ${emBoldWords.toLocaleString().padStart(5)}`);
+  console.log(`   - Underline Indicators:    Reference: ${refUnderlineWords.toLocaleString().padStart(5)} | Emboss: ${emUnderlineWords.toLocaleString().padStart(5)}`);
 
   // Table structures
-  const bbTableNotes = countMatches(bbBrf, /Table: Listed Table Format|Table: Listed Format/gi);
+  const refTableNotes = countMatches(refBrf, /Table: Listed Table Format|Table: Listed Format/gi);
   const emTableNotes = countMatches(emBrf, /Table: Listed Table Format|Table: Listed Format/gi);
-  const bbTableGridLines = countMatches(bbBrf, /--\s+--/g);
+  const refTableGridLines = countMatches(refBrf, /--\s+--/g);
   const emTableGridLines = countMatches(emBrf, /--\s+--/g);
 
   console.log(`\nC. Table Structures:`);
-  console.log(`   - Listed Table Notes:      BrailleBlaster: ${bbTableNotes.toLocaleString().padStart(5)} | Emboss: ${emTableNotes.toLocaleString().padStart(5)}`);
-  console.log(`   - Columnar Table Grid Seps:BrailleBlaster: ${bbTableGridLines.toLocaleString().padStart(5)} | Emboss: ${emTableGridLines.toLocaleString().padStart(5)}`);
+  console.log(`   - Listed Table Notes:      Reference: ${refTableNotes.toLocaleString().padStart(5)} | Emboss: ${emTableNotes.toLocaleString().padStart(5)}`);
+  console.log(`   - Columnar Table Grid Seps:Reference: ${refTableGridLines.toLocaleString().padStart(5)} | Emboss: ${emTableGridLines.toLocaleString().padStart(5)}`);
 
   // Transcriber notes & Footnotes
-  const bbTNQuotes = countMatches(bbBrf, /'\s|\s'/g);
+  const refTNQuotes = countMatches(refBrf, /'\s|\s'/g);
   const emTNQuotes = countMatches(emBrf, /'\s|\s'/g);
-  const bbUEBTN = countMatches(bbBrf, /\.\s,|,\./g);
+  const refUEBTN = countMatches(refBrf, /\.\s,|,\./g);
   const emUEBTN = countMatches(emBrf, /\.\s,|,\./g);
 
   console.log(`\nD. Transcriber Notes & Indicators:`);
-  console.log(`   - BANA TN Quotes (' ... '):BrailleBlaster: ${bbTNQuotes.toLocaleString().padStart(5)} | Emboss: ${emTNQuotes.toLocaleString().padStart(5)}`);
-  console.log(`   - UEB TN Quotes (., ... ,.):BrailleBlaster: ${bbUEBTN.toLocaleString().padStart(5)} | Emboss: ${emUEBTN.toLocaleString().padStart(5)}`);
+  console.log(`   - BANA TN Quotes (' ... '):Reference: ${refTNQuotes.toLocaleString().padStart(5)} | Emboss: ${emTNQuotes.toLocaleString().padStart(5)}`);
+  console.log(`   - UEB TN Quotes (., ... ,.):Reference: ${refUEBTN.toLocaleString().padStart(5)} | Emboss: ${emUEBTN.toLocaleString().padStart(5)}`);
 
   // Dot leaders
-  const bbDotLeaders = countMatches(bbBrf, /"{3,}/g);
+  const refDotLeaders = countMatches(refBrf, /"{3,}/g);
   const emDotLeaders = countMatches(emBrf, /"{3,}/g);
 
   console.log(`\nE. TOC & Guide Dot Leaders:`);
-  console.log(`   - Dot-5 Leaders ("""):     BrailleBlaster: ${bbDotLeaders.toLocaleString().padStart(5)} | Emboss: ${emDotLeaders.toLocaleString().padStart(5)}`);
+  console.log(`   - Dot-5 Leaders ("""):     Reference: ${refDotLeaders.toLocaleString().padStart(5)} | Emboss: ${emDotLeaders.toLocaleString().padStart(5)}`);
 
   // Print page numbers
-  const bbPrintPageNums = countMatches(bbBrf, /---\s+.*?\s+---/g);
+  const refPrintPageNums = countMatches(refBrf, /---\s+.*?\s+---/g);
   const emPrintPageNums = countMatches(emBrf, /---\s+.*?\s+---/g);
 
   console.log(`\nF. Print Page Number Indicators:`);
-  console.log(`   - Print Page Lines:        BrailleBlaster: ${bbPrintPageNums.toLocaleString().padStart(5)} | Emboss: ${emPrintPageNums.toLocaleString().padStart(5)}`);
+  console.log(`   - Print Page Lines:        Reference: ${refPrintPageNums.toLocaleString().padStart(5)} | Emboss: ${emPrintPageNums.toLocaleString().padStart(5)}`);
 
   // 8. Detailed Sample Comparison Across Chapters
   console.log('\n========================================================================================');
@@ -187,20 +187,20 @@ async function main() {
   console.log('========================================================================================');
 
   console.log('\n--- Page 1 Comparison ---');
-  console.log('BrailleBlaster Page 1:');
-  console.log((bbPages[0] || '').split(/\r?\n/).slice(0, 15).join('\n'));
+  console.log('Reference Page 1:');
+  console.log((refPages[0] || '').split(/\r?\n/).slice(0, 15).join('\n'));
   console.log('\nEmboss Page 1:');
   console.log((emPages[0] || '').split(/\r?\n/).slice(0, 15).join('\n'));
 
   console.log('\n--- Page 50 Comparison ---');
-  console.log('BrailleBlaster Page 50:');
-  console.log((bbPages[49] || '').split(/\r?\n/).slice(0, 15).join('\n'));
+  console.log('Reference Page 50:');
+  console.log((refPages[49] || '').split(/\r?\n/).slice(0, 15).join('\n'));
   console.log('\nEmboss Page 50:');
   console.log((emPages[49] || '').split(/\r?\n/).slice(0, 15).join('\n'));
 
   console.log('\n--- Page 200 Comparison ---');
-  console.log('BrailleBlaster Page 200:');
-  console.log((bbPages[199] || '').split(/\r?\n/).slice(0, 15).join('\n'));
+  console.log('Reference Page 200:');
+  console.log((refPages[199] || '').split(/\r?\n/).slice(0, 15).join('\n'));
   console.log('\nEmboss Page 200:');
   console.log((emPages[199] || '').split(/\r?\n/).slice(0, 15).join('\n'));
 

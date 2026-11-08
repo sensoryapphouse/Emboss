@@ -94,7 +94,7 @@ async function inTransaction(mode, work) {
 // differ, which is the safe outcome (the receiver brailles the document itself). Resolves a hex string, or null when it cannot be worked out.
 // `settings` is every saved setting as well (main session, review): both pages read the one store, so the whole of it costs nothing to compare and a
 // setting the formatter reads that the list above forgets can never let braille made under other settings through.
-const KEY_FLAGS = ['brailleCode', 'quoteStyle', 'mode', 'cells', 'lines', 'paragraphStyle', 'listStyle', 'tableFormat', 'interpoint', 'mathCode', 'titleInBraille', 'toc', 'suppressHeader', 'mathsReady', 'settings'];
+const KEY_FLAGS = ['brailleCode', 'quoteStyle', 'mode', 'cells', 'lines', 'paragraphStyle', 'listStyle', 'tableFormat', 'interpoint', 'mathCode', 'titleInBraille', 'toc', 'suppressHeader', 'mathsReady', 'settings', 'relaxed'];
 export async function brailleKey(doc, flags) {
   try {
     const f = {};
@@ -113,13 +113,14 @@ export function brailleFlags(s, extra = {}) {
     brailleCode: s.brailleCode, quoteStyle: s.quoteStyle, mode: s.mode, cells: Number(s.cells), lines: Number(s.lines),
     paragraphStyle: s.paragraphStyle, listStyle: s.listStyle, tableFormat: s.tableFormat, interpoint: s.embosserDuplex !== 'single', mathCode: s.mathCode,
     titleInBraille: !!extra.titleInBraille, toc: !!extra.toc, suppressHeader: !!extra.suppressHeader, mathsReady: extra.mathsReady !== false,
+    relaxed: extra.relaxed || '',   // relaxed braille (A91): the reader profile in use ('' = off or All; settings.mjs relaxedProfileKey), not a saved setting
     settings: Object.fromEntries(Object.entries(s || {}).filter(([k]) => k !== 'simpleMode').sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))),
   };
 }
 
 /** Stores `doc` as the transfer `id` (and, optionally, `braille`: { key, brf, warnings } made from it, see brailleKey). Resolves true only when it is
- *  safely in IndexedDB (the transaction completed); false otherwise (a copy of the document is then tried in sessionStorage, which the destination
- *  tab also reads, but it is not called stored; the braille is not copied there). */
+ *  safely in IndexedDB (the transaction completed); false otherwise. Either way a copy of the document is also tried in sessionStorage, which the
+ *  destination tab reads when IndexedDB has nothing or does not answer (it is not called stored; the braille is not copied there). */
 export async function setHandoffDoc(doc, id, braille = null) {
   if (!id) return false;
   try {
@@ -135,6 +136,10 @@ export async function setHandoffDoc(doc, id, braille = null) {
       } catch { /* sweeping is housekeeping only */ }
       store.put({ v: 2, id, createdAt: Date.now(), doc, braille: braille || null }, KEY_PREFIX + id);
     });
+    // The tab's own copy as well (4 Nov 2026): IndexedDB can answer here and not, a moment later, on the destination page (Safari, now and then;
+    // 18 Oct 2026), which then found nothing. The destination reads IndexedDB first (it has the braille) and removes both copies once it has loaded
+    // the document (confirmHandoff). A document too big for sessionStorage just has no copy, as before.
+    try { if (doc) sessionStorage.setItem(SS_PREFIX + id, JSON.stringify(doc)); } catch { /* quota / private mode */ }
     return true;
   } catch (err) {
     // Fallback to sessionStorage if IndexedDB fails (it stays in this tab, which is the one that navigates)
@@ -183,10 +188,10 @@ export async function readHandoff(id = handoffIdFromHash(globalThis.location && 
 export async function confirmHandoff(h) {
   if (!h || !h.id) return true;
   let removed = true;
+  try { sessionStorage.removeItem(SS_PREFIX + h.id); } catch { /* */ }   // first: IndexedDB below may take its few seconds not answering
   try {
     await inTransaction('readwrite', (store) => { store.delete(KEY_PREFIX + h.id); });
   } catch { removed = false; }
-  try { sessionStorage.removeItem(SS_PREFIX + h.id); } catch { /* */ }
   try {
     if (handoffIdFromHash(location.hash) === h.id) history.replaceState(history.state, '', location.pathname + location.search);
   } catch { /* */ }

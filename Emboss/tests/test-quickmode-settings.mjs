@@ -63,7 +63,8 @@ try {
     if (tools) {
       // switch it off again in the page itself: the controls go at once
       await page.goto(`${URL_BASE}/web/index.html`, { waitUntil: 'load' }); await page.waitForTimeout(1200);
-      await page.click('#settingsBtn'); await page.click('.tab-btn[data-tab="tab-document"]');
+      // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P item 2): the switch is in User Interface now
+      await page.click('#settingsBtn'); await page.click('.tab-btn[data-tab="tab-display"]');
       await page.uncheck('#set-transcriberTools'); await page.click('.tab-btn[data-tab="tab-rules"]');
       ok('switching Transcriber tools off in Quick Mode hides the transcriber-only settings at once, and it is saved for the editor', await page.evaluate(() => !document.getElementById('set-paragraphStyle').offsetParent && JSON.parse(localStorage.getItem('emboss-settings')).transcriberTools === false));
       await page.keyboard.press('Escape');
@@ -83,7 +84,8 @@ try {
   await page.waitForFunction(() => window.lastBrf && document.querySelector('#preview .brl-row'), null, { timeout: 60000 });
   const widthOf = (brf) => Math.max(...brf.split(/\r?\n/).map((l) => l.replace(/\f/g, '').length));
   const before = await page.evaluate(() => ({ brf: window.lastBrf, summary: document.getElementById('settingsSummary').textContent }));
-  await page.click('#settingsBtn'); await page.click('.tab-btn[data-tab="tab-document"]');
+  await page.click('#settingsBtn'); await page.click('.tab-btn[data-tab="tab-rules"]');
+  if (!(await page.evaluate(() => document.getElementById('tplSettings').open))) await page.click('#tplSettings > summary');   // the page size is in Template settings (X1)
   await page.selectOption('#set-pageSize', 'uk-28x27');
   await page.waitForFunction((b) => window.lastBrf && window.lastBrf !== b, before.brf, { timeout: 30000 });
   await page.waitForTimeout(300);

@@ -138,7 +138,7 @@ export function norm(s) {
     .replace(/([a-zA-Z]+);(\d+)/g, '$1 $2')
     .replace(/ff\)/g, '!)')                                   // closing exclamation parenthesis cluster
     .replace(/[,;:\.!\?'"()\[\]{}/\\_]/g, ' ')                // punctuation & slashes
-    .replace(/brl/gi, 'braille')                              // braille shortform (e.g. BrlBlaster -> BrailleBlaster)
+    .replace(/brl/gi, 'braille')                              // braille shortform (e.g. "brl" -> "braille")
     .replace(/\s+/g, ' ').trim().toLowerCase();
 }
 

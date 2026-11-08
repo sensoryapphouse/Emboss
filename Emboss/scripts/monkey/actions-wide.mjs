@@ -350,6 +350,8 @@ async function runSetting(env, a, res) {
     const panel = e && e.closest('.settings-panel');
     const tab = panel && document.querySelector(`#settingsDialog .tab-btn[data-tab="${panel.id}"]`);
     if (tab) tab.click();
+    const disclosure = e && e.closest('details');   // X1 (Templates): the braille settings sit in Template > Template settings, closed at first
+    if (disclosure) disclosure.open = true;
   }, id);
   await pause(page, 100);
   const sel = '#' + id;
@@ -414,6 +416,8 @@ async function runRoundTrip(env, a, res) {
         }
       }
     } else {
+      // a phone is Quick Mode only (Paul, 18 Oct 2026): no Advanced Editor button, so no round trip to make (4 Nov 2026: the run's "navigated-away")
+      if (!(await page.evaluate(() => { const b = document.getElementById('advancedBtn'); return !!(b && b.getClientRects().length); }))) { res.note = 'no Advanced Editor button (a phone: Quick Mode only)'; return res; }
       const before = await read('quick');
       await clickIf(page, '#advancedBtn');
       await sleep(300);

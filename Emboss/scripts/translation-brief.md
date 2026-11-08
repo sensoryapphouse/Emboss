@@ -31,7 +31,7 @@ blind people themselves. You are translating its interface (buttons, menus, sett
 4. Keep leading and trailing spaces exactly as in the English value.
 5. Do not translate names and standards (keep them in Latin letters): Emboss, BANA, UKAAF, UEB,
    NIMAS, DAISY, DTBook, BRF, PEF, eBraille, MathML, LaTeX, SVG, Nemeth, liblouis, MathLive,
-   DotPad, BrailleBlaster, Tiger, ViewPlus, Index, Braillo, Enabling, Web Bluetooth, WebSerial, HID.
+   DotPad, the reference translator, Tiger, ViewPlus, Index, Braillo, Enabling, Web Bluetooth, WebSerial, HID.
 6. Braille terms: use the language's established braille terminology where it exists (from its
    national braille authority or schools for the blind). Otherwise use a clear descriptive term.
    Concepts: braille; braille cell; braille dots; contracted and uncontracted braille; embosser

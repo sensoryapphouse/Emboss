@@ -516,3 +516,23 @@ export function styledTranslate(translate, quoteStyle, translateG1 = null) {
     return translateWithBraillePreservation(cleanT, cleanTf, withScripts);
   };
 }
+
+// Paul, 4 Nov 2026: a dash printed without spaces ("waited—until") is a word boundary. The editor finds the word under the caret or click
+// (print and braille highlight, the explanation bar) from the whitespace-delimited token; this narrows that token [s,e) at pos so the dash
+// is a word of its own and the words either side are separate. The braille is untouched (UEB writes the dash unspaced, as print has it).
+// Em dash, en dash, two-em and three-em dashes, horizontal bar; a run of them is one dash.
+export const DASH_CHARS = '—–⸺⸻―';
+export const isDashChar = (c) => !!c && DASH_CHARS.includes(c);
+export function clipWordAtDashes(text, pos, s, e) {
+  if (!text || !(pos >= 0 && pos < text.length)) return [s, e];
+  if (isDashChar(text[pos])) {
+    let a = pos, b = pos + 1;
+    while (a > s && isDashChar(text[a - 1])) a--;
+    while (b < e && isDashChar(text[b])) b++;
+    return [a, b];
+  }
+  let a = pos, b = pos + 1;
+  while (a > s && !isDashChar(text[a - 1])) a--;
+  while (b < e && !isDashChar(text[b])) b++;
+  return [a, b];
+}

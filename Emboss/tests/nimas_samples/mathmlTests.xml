@@ -52,7 +52,7 @@
 	<!ENTITY end-complex-fraction "&#xf50b;">
 ]>
 <tests xmlns:m="http://www.w3.org/1998/Math/MathML"
-	xsltResource="/org/brailleblaster/utd/xslt/mathml.xsl">
+	xsltResource="mathml.xsl">
 	<test name="Insert begin and end math characters">
 		<input><m:math></m:math></input>
 		<expected>&begin-math;&end-math;</expected>

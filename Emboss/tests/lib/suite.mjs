@@ -43,3 +43,11 @@ export async function loadIntoEditor(page, name, body, mimeType = 'text/html') {
   await page.waitForFunction(() => window.lastModel && window.lastModel !== window.__prevModel && (window.lastModel.blocks || []).length > 0, null, { timeout: 60000 });
   await page.waitForTimeout(1500);
 }
+
+// Templates (X1, Paul 1 Nov 2026): the braille settings (braille code, standard, page size, lists, tables, volumes, document options) sit in the
+// "Template settings" disclosure of Settings' first tab, closed at first. Opens Settings if it is closed, goes to the Template tab, and opens the disclosure.
+export async function openTemplateSettings(page) {
+  if (!(await page.evaluate(() => document.getElementById('settingsDialog')?.open))) await page.click('#settingsBtn');
+  await page.click('.settings-nav .tab-btn[data-tab="tab-rules"]');
+  if (!(await page.evaluate(() => document.getElementById('tplSettings')?.open))) await page.click('#tplSettings > summary');
+}

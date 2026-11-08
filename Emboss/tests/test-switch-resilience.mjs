@@ -9,7 +9,7 @@
 //
 // Usage: node Emboss/scripts/serve.mjs 8258 &   then   node Emboss/tests/test-switch-resilience.mjs [port]
 // (Emboss's own dev server: its service worker installs there.)
-import { launchBrowser, ENGINE_LABEL } from './lib/launch-browser.mjs';
+import { launchBrowser, ENGINE, ENGINE_LABEL } from './lib/launch-browser.mjs';
 
 const PORT = Number(process.argv[2] || process.env.PORT || 8258);
 const B = `http://localhost:${PORT}`;
@@ -21,15 +21,21 @@ const ok = (name, cond, detail = '') => {
 };
 const browser = await launchBrowser();
 // IndexedDB.open that never answers, switched on with window.__hangIdb (set before load with sessionStorage 'hang-idb')
+// 'hang-idb-quick' = '1' holds it up on the Quick Mode page only. Patched on IDBFactory.prototype (4 Nov 2026): WebKit ignored the patch on the
+// indexedDB object itself on some loads, so the earlier WebKit runs did not hold IndexedDB up at all.
 const hangIdb = () => {
-  const real = indexedDB.open.bind(indexedDB);
-  indexedDB.open = function (...a) {
-    let on = false; try { on = sessionStorage.getItem('hang-idb') === '1' || window.__hangIdb; } catch { /* */ }
+  const real = IDBFactory.prototype.open;
+  IDBFactory.prototype.open = function (...a) {
+    let on = false;
+    try { on = sessionStorage.getItem('hang-idb') === '1' || window.__hangIdb || (sessionStorage.getItem('hang-idb-quick') === '1' && /\/web\/index\.html$/.test(location.pathname)); } catch { /* */ }
     if (on) return { set onsuccess(f) {}, set onerror(f) {}, set onupgradeneeded(f) {}, set onblocked(f) {} };
-    return real(...a);
+    return real.apply(this, a);
   };
 };
-const editorReady = (page, ms) => page.waitForFunction(() => /\S/.test(document.querySelector('.braille')?.textContent || '') && !!document.querySelector('#editor [data-lexical-editor], #editor'), null, { timeout: ms }).then(() => true, () => false);
+// "Ready" means the document itself is in the editor (its demo text, or a handed-over one) and the braille pane shows braille, not
+// "Loading the braille engine…": that placeholder is non-blank text too, and a click on Quick Mode before the document has loaded
+// hands over an EMPTY document (nothing to lose, so no id and no copy), which is not what this suite is about (4 Nov 2026).
+const editorReady = (page, ms) => page.waitForFunction(() => /\S/.test(document.querySelector('#editor')?.innerText || '') && /[⠀-⣿]/.test(document.querySelector('.braille')?.textContent || ''), null, { timeout: ms }).then(() => true, () => false);
 try {
   // ---- IndexedDB that never answers
   {
@@ -56,8 +62,56 @@ try {
     ok('no "could not take your document" question for a document with nothing unsaved', !dialogs.some((m) => /couldn.t take your document/i.test(m)), dialogs);
     await ctx.close();
   }
-  // ---- a slow network, with the service worker in charge
+  // ---- IndexedDB answering for the editor but not, a moment later, for Quick Mode (Safari's now-and-then, 18 Oct 2026): the document was kept only in
+  // IndexedDB, so Quick Mode found nothing (4 Nov 2026: found in WebKit). The tab's own copy is kept too, until the destination has loaded it.
   {
+    const ctx = await browser.newContext({ viewport: { width: 1300, height: 850 } });
+    await ctx.addInitScript(() => { try { if (!sessionStorage.getItem('rs')) { sessionStorage.setItem('rs', '1'); localStorage.setItem('emboss-settings', JSON.stringify({ simpleMode: false })); } } catch {} });
+    await ctx.addInitScript(hangIdb);
+    const page = await ctx.newPage();
+    page.on('dialog', (d) => d.accept());
+    await page.goto(B + '/web/editor/index.html');
+    ok('the editor loads', await editorReady(page, 30000));
+    await page.evaluate(() => sessionStorage.setItem('hang-idb-quick', '1'));
+    await page.click('#backToSimple');
+    await page.waitForURL(/\/web\/index\.html/, { timeout: 15000 });
+    const arrived = await page.waitForFunction(() => /\S/.test(document.getElementById('fileName')?.textContent || '') && /ready below/i.test(document.body.innerText), null, { timeout: 60000 }).then(() => true, () => false);
+    ok('IndexedDB not answering in Quick Mode only: the document still arrives (the tab\'s own copy)', arrived);
+    ok('… and the copy is gone once Quick Mode has it', await page.evaluate(() => !Object.keys(sessionStorage).some((k) => k.startsWith('emboss-editor-doc:'))));
+    await ctx.close();
+  }
+  // ---- Quick Mode pressed while the editor is still loading its document (Paul, 4 Nov 2026, answer B): the button waits for the load, so the
+  // document goes back to Quick Mode - before, an empty editor was handed over and the document did not come back. The load is held up by an
+  // IndexedDB that does not answer (the editor reads the hand-over from it and gives up after 4 s, then uses the tab's own copy).
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1300, height: 850 } });
+    await ctx.addInitScript(() => { try { if (!sessionStorage.getItem('rs')) { sessionStorage.setItem('rs', '1'); localStorage.setItem('emboss-settings', JSON.stringify({ simpleMode: false })); } } catch {} });
+    await ctx.addInitScript(hangIdb);
+    const page = await ctx.newPage();
+    page.on('dialog', (d) => d.accept());
+    await page.goto(B + '/web/editor/index.html');
+    ok('the editor loads', await editorReady(page, 30000));
+    await page.click('#backToSimple');
+    await page.waitForURL(/\/web\/index\.html/, { timeout: 15000 });
+    const inQuick = await page.waitForFunction(() => /\S/.test(document.getElementById('fileName')?.textContent || '') && /ready below/i.test(document.body.innerText), null, { timeout: 60000 }).then(() => true, () => false);
+    ok('the document is in Quick Mode', inQuick);
+    await page.evaluate(() => sessionStorage.setItem('hang-idb', '1'));
+    await page.click('#advancedBtn');
+    await page.waitForURL(/\/web\/editor\//, { timeout: 15000 });
+    const midLoad = await page.waitForFunction(() => window.__quickButtonWired === true && window.__editorStartupLoaded !== true, null, { timeout: 15000, polling: 20 }).then(() => true, () => false);
+    ok('the editor is still loading the document when Quick Mode is pressed', midLoad);
+    // pressed and read in one step (the button's first, synchronous part sets the status), so the load cannot finish in between
+    const press = await page.evaluate(() => { const loading = window.__editorStartupLoaded !== true; document.getElementById('backToSimple').click(); return { loading, said: document.getElementById('docStats')?.textContent || '' }; });   // the editor's status text shows in the status bar's docStats
+    const back = await page.waitForURL(/\/web\/index\.html/, { timeout: 20000 }).then(() => true, () => false);
+    const arrived = back && await page.waitForFunction(() => /\S/.test(document.getElementById('fileName')?.textContent || '') && /ready below/i.test(document.body.innerText), null, { timeout: 60000 }).then(() => true, () => false);
+    ok('Quick Mode pressed during the load waits, then the document comes back to Quick Mode', back && arrived, { back, arrived, url: page.url() });
+    ok('… and the status line said it was waiting for the document', press.loading && /as soon as the document has loaded/i.test(press.said), press);
+    await ctx.close();
+  }
+  // ---- a slow network, with the service worker in charge: Chrome only. Playwright can slow the requests a service worker makes only in Chromium;
+  // in WebKit and Firefox its route holds back the browser's own page request, which no page could get round (4 Nov 2026). Safari: by hand.
+  if (ENGINE !== 'chrome') console.log(`  - skip  the slow-network checks (Chrome only: Playwright cannot slow a service worker's requests in ${ENGINE_LABEL})`);
+  else {
     const ctx = await browser.newContext({ viewport: { width: 1300, height: 850 }, serviceWorkers: 'allow' });
     await ctx.addInitScript(() => { try { if (!sessionStorage.getItem('rs')) { sessionStorage.setItem('rs', '1'); localStorage.setItem('emboss-settings', JSON.stringify({ simpleMode: false })); } } catch {} });
     const page = await ctx.newPage();

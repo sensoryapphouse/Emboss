@@ -8,7 +8,7 @@ const ASSETS = [
   // UI localisation: imported by both app.mjs and editor.mjs; the dictionary is fetched
   // with a ?v= cache-buster, which the shell fallback below ignores (ignoreSearch)
   '/web/i18n.mjs', '/web/locales-data.mjs', '/web/locales/en.json',
-  '/web/settings.mjs', '/web/settings-panes.mjs', '/web/offline-ready.mjs', '/web/icons.mjs', '/web/problem-report.mjs', '/web/braille-table.mjs', '/web/braille-render.mjs', '/web/proofread.mjs', '/web/zip.mjs', '/web/tts.mjs',
+  '/web/settings.mjs', '/web/settings-panes.mjs', '/web/templates.mjs', '/web/offline-ready.mjs', '/web/icons.mjs', '/web/problem-report.mjs', '/web/braille-table.mjs', '/web/braille-render.mjs', '/web/proofread.mjs', '/web/zip.mjs', '/web/tts.mjs',
   '/web/handoff-db.mjs', '/web/docx-export.mjs', '/web/export-formats.mjs', '/web/formulas.js', '/web/tactile-library.js', '/web/tactile-browser.mjs',
   // output + hardware layer (imported by both modes — without these an offline first
   // load of app.mjs fails at import time even though the shell itself is cached)

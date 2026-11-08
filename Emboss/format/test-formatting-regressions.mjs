@@ -274,7 +274,8 @@ for (const mode of ['ukaaf', 'bana']) {
     ok(ls[t + 1].trim() === translate('Care').trim() && ls[t + 1].startsWith(mode === 'bana' ? '    ' : ','), `#18 ${mode}: heading on the line after the top box line, no blank (§4.3.5): ${JSON.stringify(ls[t + 1])}`);
     ok(ls[b - 1] !== '' && ls[t + 1] !== '', '#18 no blank after top / before bottom line (§7.2.1c/d)');
     if (mode === 'bana') ok(ls.slice(t, b).includes(''), `#18 ${mode}: interior blank line around the list kept (§8.3.2a): ${JSON.stringify(ls.slice(t, b + 1))}`);
-    else ok(!ls.slice(t, b).includes(''), `#18 ${mode}: UK-5 (A74, this brief) — no interior blank line around the list either, same as the top-level document flow: ${JSON.stringify(ls.slice(t, b + 1))}`);
+    // CHANGED 4 Nov 2026 (Paul approved the blank-line audit's W3): base() uses listStyle 'spaced' = B004 section 10 Example 1, which keeps its blank lines (the default compact list loses them to UK-5).
+    else ok(ls.slice(t, b).includes(''), `#18 ${mode}: W3 — the spaced list keeps its blank lines in a UKAAF box too: ${JSON.stringify(ls.slice(t, b + 1))}`);
     ok(!ls.some((l) => /^3{5}/.test(l) || l.startsWith('333 ')), `#18 ${mode}: no old-style 333 border`);
   }
   const nested = { type: 'box', blocks: [{ type: 'para', text: 'Outer.' }, { type: 'box', blocks: [{ type: 'para', text: 'Inner.' }] }, { type: 'para', text: 'Outer tail.' }] };

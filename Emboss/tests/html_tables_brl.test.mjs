@@ -1,6 +1,6 @@
-// BrailleBlaster-style HTML/DTBook table test fixtures (Emboss/tests/nimas_samples/
-// TablesTestXml.xml — a real BrailleBlaster test file: an <html><body> document with 7
-// <table>s whose cells hold print text followed by a BrailleBlaster <brl>…</brl> child
+// braille-editor-style HTML/DTBook table test fixtures (Emboss/tests/nimas_samples/
+// TablesTestXml.xml — a real braille-editor test file: an <html><body> document with 7
+// <table>s whose cells hold print text followed by a braille-editor <brl>…</brl> child
 // carrying the pre-supplied braille for that print text).
 //
 // Two real bugs, found by importing this file into the editor:

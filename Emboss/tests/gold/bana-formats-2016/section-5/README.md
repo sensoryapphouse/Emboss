@@ -72,7 +72,7 @@ transcription run's own documentation described:
   appears). There is deliberately no real markup token for this. (Update 26 Sep 2026: script is
   now its own typeform — `tf` bit 8, EMBOSS-TASKS K5 — and the braille can carry all five
   transcriber-defined indicators through `segment.transcriberTypeform`, used today for hyperlinks
-  (first), strikethrough (second) and BrailleBlaster's own trans1–trans5. What is still missing is
+  (first), strikethrough (second) and the reference translator's own trans1–trans5. What is still missing is
   a way to assign an arbitrary print feature such as a colour or a double underline to one, and
   this runner does not map `{{tdN}}` to them — `standards-findings.md` F-86, cross-referenced from
   F-83/F-84.) `buildModel5` unwraps every `{{tdN: X}}` span to its own inner text X (recording a
@@ -155,7 +155,7 @@ purely as braille-cell content while still preserving this genuinely-present str
   and the five UEB transcriber-defined typeform indicators were supported by the bundled liblouis
   UEB table but unreachable from Emboss. **Update 26 Sep 2026:** script is reachable (K5), and the
   five indicators are reachable in the braille (`transcriberTypeform`: hyperlinks, strikethrough,
-  BrailleBlaster imports); only assigning an arbitrary print feature (colour, double underline, a
+  The reference translator imports); only assigning an arbitrary print feature (colour, double underline, a
   shape outline) to one is still not built, and `{{tdN}}` spans are still unwrapped here.
   Affects every `{{tdN}}`-bearing file: example-5-14, 5-16, 5-17, sample-5-01, sample-5-03.
 - **F-84 (new)** — `HEADING_JOIN_TIERS` (`document.mjs:273`) unconditionally suppresses the

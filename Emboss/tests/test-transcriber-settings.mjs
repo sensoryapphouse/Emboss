@@ -47,7 +47,7 @@ try {
       const { ctx, page, errors } = await open(beta, { ...base, simpleMode: p.simpleMode, transcriberTools: tt });
       await page.goto(BASE + p.url, { waitUntil: 'load' });
       await page.waitForTimeout(1800);
-      const want = tt && !beta;
+      const want = tt;   // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P) - the beta marker no longer locks Transcriber tools off
       const t = await shown(page, p.transcriber);
       ok(`${p.label}, ${what}: Paragraph Style and Quotation Marks are ${want ? 'shown' : 'hidden'}`, Object.values(t).every((v) => v === want), t);
       const e = await shown(page, p.everyone);
@@ -66,7 +66,7 @@ try {
     ['Transcriber tools on', { transcriberTools: true }, false, true],
     ['Transcriber tools off, the setting ticked', { showTitleField: true }, false, true],
     ['Transcriber tools on, the setting unticked', { transcriberTools: true, showTitleField: false }, false, false],
-    ['a beta build', { transcriberTools: true }, true, false],
+    ['a page marked beta (Paul, 4 Nov 2026: one Emboss - the marker no longer locks it)', { transcriberTools: true }, true, true],
   ]) {
     console.log(`--- the Title field: ${what} (${ENGINE_LABEL}) ---`);
     const { ctx, page, errors } = await open(beta, { ...base, simpleMode: false, ...extra });

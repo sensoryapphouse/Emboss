@@ -250,7 +250,7 @@ export function renderBraille(container, brf, opts = {}) {
         });
       } else {
         const noteEl = document.createElement('div');
-        noteEl.style.cssText = 'padding:10px; font-family:monospace; font-size:1.1em; color:var(--ink); background:var(--btn-bg); border-radius:6px;';
+        noteEl.style.cssText = 'padding:10px; font-family:monospace; font-size:1.1em; color:var(--ink); background:var(--btn-bg); border-radius:6px; white-space:normal; overflow-wrap:anywhere;';   // wraps: the braille row around it is white-space:pre (a long description ran off the pane, 4 Nov 2026)
         noteEl.textContent = `[Transcriber's Note: Tactile diagram — ${blockObj.title || blockObj.alt || 'Graphic'}]`;
         gWrap.appendChild(noteEl);
       }
@@ -338,6 +338,18 @@ export function renderBraille(container, brf, opts = {}) {
   let activeLinkedBlock = null;
   let activeReadingBlock = null;
   let activeWordHl = null;
+  let activeSpeak = null;                 // the word being read aloud: { block, unit, s, e } (cells get .cell-speaking, also on rows rendered later)
+
+  function applySpeakToRow(rowEl, blockIdx) {
+    if (!activeSpeak || blockIdx !== activeSpeak.block) return;
+    expandRowCells(rowEl);
+    const { unit, s, e } = activeSpeak;
+    rowEl.querySelectorAll('.bcell[data-char]').forEach((c) => {
+      if (Number(c.dataset.unit) !== unit) return;
+      const n = +c.dataset.char;
+      if (n >= s && n < e) c.classList.add('cell-speaking');
+    });
+  }
 
   function applyActiveClassesToRow(rowEl, it) {
     if (it.block != null) {
@@ -412,6 +424,7 @@ export function renderBraille(container, brf, opts = {}) {
       el.style.cssText = (el.style.cssText || '') + `;position:absolute;top:${it.top}px;left:0;right:0;`;
       applyActiveClassesToRow(el, it);
       applyWordHighlightToRow(el, it);
+      if (it.type === 'row') applySpeakToRow(el, it.block);
       frag.appendChild(el);
     }
 
@@ -502,6 +515,12 @@ export function renderBraille(container, brf, opts = {}) {
       if (blockIdx != null) {
         windowEl.querySelectorAll(`.brl-row[data-block="${blockIdx}"]`).forEach((r) => r.classList.add('brl-reading'));
       }
+    },
+    setSpeakingWord: (w) => {             // w = { block, unit, s, e } or null; returns the marked cells now in the DOM
+      activeSpeak = w;
+      windowEl.querySelectorAll('.bcell.cell-speaking').forEach((c) => c.classList.remove('cell-speaking'));
+      if (w) windowEl.querySelectorAll(`.brl-row[data-block="${w.block}"]`).forEach((r) => applySpeakToRow(r, w.block));
+      return windowEl.querySelectorAll('.bcell.cell-speaking');
     },
     setWordHighlight: (hl) => {
       activeWordHl = hl;

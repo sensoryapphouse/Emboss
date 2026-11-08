@@ -1,5 +1,5 @@
 // A89 step 3 (robustness programme; Paul, 2 Oct: "It is vital that Emboss is robust … transcribers lost confidence in
-// BrailleBlaster because it crashed"): never lose work. Autosave used to write every 30 s and when the tab was hidden or closed;
+// another braille editor because it crashed"): never lose work. Autosave used to write every 30 s and when the tab was hidden or closed;
 // a tab that crashed or hung lost up to 30 s of typing, because a crashed or frozen page runs no closing code. Now the editor
 // saves a backup about 2 s after the typing pauses, and at least every 30 s while it does not pause (Paul, 2 Oct).
 //

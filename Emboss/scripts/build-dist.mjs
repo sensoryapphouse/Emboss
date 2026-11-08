@@ -85,16 +85,26 @@ for (const [s, d] of [
   ['web/settings.mjs', 'settings.mjs'],
   // 17 Oct 2026 (feedback item 9a): the Settings dialog both pages are made from (imported by app.mjs and editor.mjs)
   ['web/settings-panes.mjs', 'settings-panes.mjs'],
+  // X1 (Templates, Paul 1 Nov 2026): the template store and rules (imported by settings-panes.mjs, app.mjs and editor.mjs)
+  ['web/templates.mjs', 'templates.mjs'],
   ['web/offline-ready.mjs', 'offline-ready.mjs'],
   // feedback 30 Sep, item 18: the Iconoir interface icons (imported by app.mjs, editor.mjs, braille-render.mjs)
   ['web/icons.mjs', 'icons.mjs'],
   // A89 step 2: Report a problem (imported by app.mjs and editor.mjs)
   ['web/problem-report.mjs', 'problem-report.mjs'],
   ['web/braille-table.mjs', 'braille-table.mjs'],
+  // A91 relaxed braille, Stage 2: the ticks helpers and the old reader-profile store the templates migrate from (imported by settings.mjs, templates.mjs), and
+  // (Paul, 2 Nov 2026: part of the template) the Contractions line + Choose contractions dialog (app.mjs, editor.mjs; it replaced reader-profile-ui.mjs)
+  ['web/reader-profiles.mjs', 'reader-profiles.mjs'],
+  ['web/contractions-ui.mjs', 'contractions-ui.mjs'],
+  // A91 relaxed braille, Stage 3: the template label and the status bar's spelled-out note (imported by contractions-ui.mjs and editor.mjs)
+  ['web/relaxed-explain.mjs', 'relaxed-explain.mjs'],
   ['web/braille-render.mjs', 'braille-render.mjs'],
   ['web/proofread.mjs', 'proofread.mjs'],
   ['web/zip.mjs', 'zip.mjs'],
   ['web/tts.mjs', 'tts.mjs'],
+  // Braille proofreading aloud (Paul, 4 Nov 2026; imported by editor.mjs): what is said for each braille word
+  ['web/braille-readback.mjs', 'braille-readback.mjs'],
   ['web/handoff-db.mjs', 'handoff-db.mjs'],
   ['web/docx-export.mjs', 'docx-export.mjs'],
   ['web/export-formats.mjs', 'export-formats.mjs'],   // S5d: the txt / Markdown / HTML saves (imported by editor.mjs)
@@ -102,10 +112,25 @@ for (const [s, d] of [
   ['web/formulas.js', 'formulas.js'],
   ['web/tactile-library.js', 'tactile-library.js'],
   ['web/tactile-browser.mjs', 'tactile-browser.mjs'],
+  // W14 (Paul, 4 Nov 2026): the tactile drawing tool, loaded by editor.mjs on demand
+  ['web/tactile-draw/index.mjs', 'tactile-draw/index.mjs'],
+  ['web/tactile-draw/dialog.mjs', 'tactile-draw/dialog.mjs'],
+  ['web/tactile-draw/canvas.mjs', 'tactile-draw/canvas.mjs'],
+  ['web/tactile-draw/model.mjs', 'tactile-draw/model.mjs'],
+  ['web/tactile-draw/geometry.mjs', 'tactile-draw/geometry.mjs'],
+  ['web/tactile-draw/path.mjs', 'tactile-draw/path.mjs'],
+  ['web/tactile-draw/svg-io.mjs', 'tactile-draw/svg-io.mjs'],
+  ['web/tactile-draw/tactile.mjs', 'tactile-draw/tactile.mjs'],
+  ['web/tactile-draw/constants.mjs', 'tactile-draw/constants.mjs'],
+  ['web/tactile-draw/describe.mjs', 'tactile-draw/describe.mjs'],
+  ['web/tactile-draw/dots.mjs', 'tactile-draw/dots.mjs'],
+  ['web/tactile-draw/styles.mjs', 'tactile-draw/styles.mjs'],
   ['web/editor/index.html', 'editor/index.html'],
   ['web/editor/editor.mjs', 'editor/editor.mjs'],
   // 28 Sep 2026: the editor's autosave (imported by editor.mjs).
   ['web/editor/autosave.mjs', 'editor/autosave.mjs'],
+  // 4 Nov 2026 (X9 / W16): the box over a run of six-key braille (imported by editor.mjs).
+  ['web/editor/sixkey-box.mjs', 'editor/sixkey-box.mjs'],
   ['web/word/index.html', 'word/index.html'],
   ['web/word/word.mjs', 'word/word.mjs'],
   ['engine/louis-browser.mjs', 'engine/louis-browser.mjs'],
@@ -118,6 +143,11 @@ for (const [s, d] of [
   ['format/page.mjs', 'format/page.mjs'],
   ['format/document.mjs', 'format/document.mjs'],
   ['format/text-style.mjs', 'format/text-style.mjs'],
+  // A91 relaxed braille: web/braille-table.mjs (task 3) imports relaxed-braille, which imports relaxed-signs; settings.mjs imports relaxed-signs
+  ['format/relaxed-braille.mjs', 'format/relaxed-braille.mjs'],
+  ['format/relaxed-signs.mjs', 'format/relaxed-signs.mjs'],
+  // A91 Stage 4: the contractions a profile leaves out of the open document (imported by web/contractions-ui.mjs)
+  ['format/relaxed-report.mjs', 'format/relaxed-report.mjs'],
   ['format/tactile-svg.mjs', 'format/tactile-svg.mjs'],
   ['format/math-plotter.mjs', 'format/math-plotter.mjs'],
   ['format/tiger-raster.mjs', 'format/tiger-raster.mjs'],
@@ -148,6 +178,8 @@ for (const [s, d] of [
   ['format/styles.mjs', 'format/styles.mjs'],
   ['input/parse.mjs', 'input/parse.mjs'],
   ['input/nimas-export.mjs', 'input/nimas-export.mjs'],
+  // 4 Nov 2026 (X9 / W16): six-key braille runs and the print they replaced (imported by editor.mjs, input/parse.mjs and input/nimas-export.mjs).
+  ['input/sixkey-runs.mjs', 'input/sixkey-runs.mjs'],
   ['input/omml.mjs', 'input/omml.mjs'],
   // Added in Sep 2026 (A25, A2, A4, G15). check-dist.mjs now also resolves every import
   // in the build, so a module missing from this list fails the build instead of the site.

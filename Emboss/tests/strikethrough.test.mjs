@@ -7,7 +7,7 @@
 // automatically (Paul's decision, 25 Sep 2026) — so a link and crossed-out text stay visually
 // distinct in the finished braille. Model: parse.mjs readers stamp a struck-through text segment
 // with `segment.transcriberTypeform = 'strike'` (a semantic value of Emboss's own, never a bare
-// 'trans1'..'trans5' — those remain BrailleBlaster's own bai-trans1..bai-trans5 import numbers,
+// 'trans1'..'trans5' — those remain the bai-trans1..bai-trans5 import numbers,
 // parse.mjs A24), a field kept separate from the existing `segment.tf` (italic/underline/bold)
 // bitmask; format/document.mjs's segTf() folds the two together only at the point a segment's
 // typeform reaches liblouis (see its own comment for the full model, including why
@@ -17,7 +17,7 @@
 // One describe block per reader, then the shared braille-output matrix (word / passage /
 // single letter / mid-word / combined with bold, in both UEB grades), a link-and-strikethrough
 // test proving the two indicators stay distinct, the Special Symbols page listing (both
-// indicators), and the NIMAS export/import round trip. BrailleBlaster's own
+// indicators), and the NIMAS export/import round trip. The
 // <bai-trans1>…<bai-trans5> (parse.mjs A24) is exercised too, since this feature is what
 // finally makes bai-trans2 among them actually braille (previously recorded on the segment and
 // then silently dropped by the formatter).
@@ -187,7 +187,7 @@ describe('readers: HTML/EPUB, ODT, RTF, Markdown, DTBook — each marks \'strike
     assert.ok(p.segments && p.segments.length, 'kept as rich segments, not collapsed to text');
   });
 
-  test('DTBook: BrailleBlaster\'s <bai-trans1> keeps its OWN source slot number (not Emboss\'s \'strike\')', () => {
+  test('DTBook: the <bai-trans1> keeps its OWN source slot number (not Emboss\'s \'strike\')', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <dtbook version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   <book><bodymatter><level1><p>before <bai-trans1>struck</bai-trans1> after</p></level1></bodymatter></book>
@@ -197,7 +197,7 @@ describe('readers: HTML/EPUB, ODT, RTF, Markdown, DTBook — each marks \'strike
     const hit = (p.segments || []).filter((s) => s.transcriberTypeform === 'bai-trans1');
     assert.equal(hit.length, 1);
     assert.equal(hit[0].text, 'struck');
-    // Genuine source clash (task requirement): a BrailleBlaster file that uses bai-trans1 for
+    // Genuine source clash (task requirement): a file with bai-* elements that uses bai-trans1 for
     // something else AND separately has hyperlinks now collides on the SAME first-slot braille
     // indicator (bai-trans1 -> TRANS_TF_BIT.trans1, same bit HYPERLINK_OPEN/CLOSE's literal
     // cells represent) — collectSpecialSymbols must not crash over it, only report one entry
@@ -374,7 +374,7 @@ describe('round trip: HTML -> NIMAS export -> DTBook re-import -> same braille',
 
     const xml = exportToNimasXml(model, { uid: 'strike-roundtrip', date: '2026-01-01' });
     assert.ok(xml.includes('<span class="strikethrough">'), `exporter should write class="strikethrough":\n${xml}`);
-    assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, 'never a literal BrailleBlaster element');
+    assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, 'never a literal bai-* element');
 
     const reloaded = parseDtbook(xml);
     const p = reloaded.blocks.find((b) => b.type === 'para' && /struck/.test(b.text || ''));

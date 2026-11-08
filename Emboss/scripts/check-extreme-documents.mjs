@@ -1,6 +1,6 @@
 // Extreme-document test set (A89 step 4 of the robustness programme; Paul, 2 Oct 2026).
 //
-// WHY: transcribers lost confidence in BrailleBlaster because it crashed. "Every aspect needs to be bullet proof and properly deal
+// WHY: transcribers lost confidence in another braille editor because it crashed. "Every aspect needs to be bullet proof and properly deal
 // with even the most extreme documents." This script proves that Emboss never crashes, hangs or runs out of memory on the most
 // extreme documents a transcriber could give it, and turns any failure into a clear report (what, where, how to repeat it).
 //

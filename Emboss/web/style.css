@@ -337,6 +337,28 @@ body.expert-hardware .tab-btn.hardware-expert-only { display: flex !important; }
 .check-label span { font-size: 0.84rem; color: var(--ink); opacity: 0.85; }
 .dialog-foot { margin-top: 20px; display: flex; justify-content: flex-end; }
 
+/* Templates (X1): the picker at the top of Settings, its buttons, the name box, and the "Template settings" disclosure. Shared markup, web/settings-panes.mjs. */
+.settings-panel .fmt-help { color: var(--muted); font-size: .82rem; margin: 0 0 6px; }
+.tpl-state { min-height: 1.2em; margin: 6px 0 0; font-size: .84rem; color: var(--ink); }
+.tpl-status { min-height: 1.2em; margin: 8px 0 0; font-size: .84rem; color: var(--ink); }
+.tpl-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tpl-actions button[hidden], .tpl-ask[hidden], .tpl-ask input[hidden] { display: none !important; }
+.tpl-actions .pill-btn, .tpl-ask-buttons .pill-btn { height: 34px; padding: 0 12px; border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink); border-radius: 8px; font: inherit; font-size: .86rem; font-weight: 500; cursor: pointer; }
+.tpl-actions .pill-btn:hover, .tpl-ask-buttons .pill-btn:hover { border-color: var(--accent); color: var(--accent-text); }
+.tpl-actions .pill-btn:disabled { opacity: .55; cursor: not-allowed; }
+.tpl-actions .pill-btn:disabled:hover { border-color: var(--line); color: var(--ink); }
+.tpl-actions .pill-btn.danger { color: var(--danger); border-color: var(--danger-line); }
+.tpl-actions .pill-btn.danger:hover { color: var(--danger); border-color: var(--danger-line); background: var(--danger-wash); }
+.tpl-actions .pill-btn:focus-visible, .tpl-ask-buttons .pill-btn:focus-visible, .tpl-details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tpl-ask { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--btn-bg); display: flex; flex-direction: column; gap: 6px; }
+.tpl-ask > label { font-size: .88rem; font-weight: 600; color: var(--ink); }
+.tpl-ask input[type="text"] { font: inherit; font-size: .88rem; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--select-bg); width: 100%; color: var(--ink); box-sizing: border-box; }
+.tpl-error { margin: 0; min-height: 1.1em; font-size: .84rem; color: var(--danger); }
+.tpl-ask-buttons { display: flex; gap: 8px; }
+.tpl-details { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 10px; }
+.tpl-details > summary { cursor: pointer; font-weight: 700; font-size: .92rem; color: var(--accent-text); padding: 4px 0; }
+.tpl-sub { margin: 16px 0 0; font-size: .86rem; font-weight: 700; color: var(--ink); }
+
 /* Dropdown Menus */
 .menu-wrap { position: relative; display: inline-flex; }
 .menu-dropdown {
@@ -1186,6 +1208,70 @@ body:not(.editor-page) .menu-dropdown-item:focus-visible { background: var(--sel
 .problem-dialog .problem-foot { gap: 8px; }
 .problem-dialog .problem-foot .pill-btn { padding: 10px 18px; border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink); border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; }
 
+/* Contractions (relaxed braille, A91; Paul, 2 Nov 2026: part of the template): the one line in Settings and the Choose contractions dialog (web/contractions-ui.mjs). */
+.dialog .rp-field { margin-top: 6px; }
+.dialog .rp-field[hidden] { display: none; }
+.rp-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: .92rem; color: var(--ink); }
+.rp-btn { font: inherit; font-weight: 600; padding: 8px 14px; border: 1px solid var(--line); background: var(--pill-bg); color: var(--ink); border-radius: 8px; cursor: pointer; }
+.rp-btn:hover, .rp-btn:focus-visible { border-color: var(--accent); color: var(--accent-text); filter: none; }
+.rp-btn:disabled { background: var(--pill-bg); color: var(--muted); opacity: .6; cursor: not-allowed; border-color: var(--line); }
+/* no button is filled with colour (Paul, 17 Oct 2026; see :root) */
+.rp-field .rp-btn { align-self: flex-start; }
+/* Relaxed braille, Stage 3 (F): the template in use, beside the page size in Quick Mode's header (plain text) */
+.sub .rp-label::before { content: " · "; }
+.sub .rp-label[hidden] { display: none; }
+.rp-dialog { max-width: 780px; overflow: hidden; }
+/* One scrolling area (Paul, 7 Oct 2026): the sample, the groups and the left-out list scroll together */
+.rp-dialog .rp-body { display: flex; flex-direction: column; max-height: 85vh; overflow-y: auto; }
+.rp-dialog .dialog-head, .rp-dialog .dialog-foot { flex: 0 0 auto; }
+.rp-dialog .dialog-foot { margin-top: 12px; }
+.rp-foot { display: flex; justify-content: flex-end; gap: 8px; }
+.rp-text { margin: 4px 0 10px; line-height: 1.45; font-size: .92rem; }
+.rp-summary { margin: 8px 0; }
+.rp-dirty { color: var(--ink); }
+/* One row per group, collapsed: group checkbox, name, count, Show / Hide. The group's own checkboxes open under its row. */
+.rp-table { padding-right: 4px; margin-top: 8px; }
+.rp-grouprow { border-bottom: 1px solid var(--line); padding: 4px 0; }
+.rp-grouphead { display: flex; align-items: center; gap: 10px; min-height: 36px; }
+.rp-grouphead > input[type="checkbox"] { width: 17px; height: 17px; margin: 0; flex: 0 0 auto; cursor: pointer; }
+.rp-gname { flex: 1 1 auto; font-weight: 700; font-size: .92rem; color: var(--ink); cursor: pointer; text-transform: none; letter-spacing: normal; }
+.rp-gcount { font-size: .82rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rp-expand { padding: 4px 10px; font-size: .82rem; min-width: 4.2rem; }
+.rp-expand::before { content: "\25B8"; display: inline-block; margin-right: 6px; transition: transform .12s; }
+.rp-expand[aria-expanded="true"]::before { transform: rotate(90deg); }
+.rp-check { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: .9rem; color: var(--ink); text-transform: none; letter-spacing: normal; font-weight: 400; opacity: 1; }
+.rp-check input { width: 17px; height: 17px; margin: 0; flex: 0 0 auto; cursor: pointer; }
+.rp-signs { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: 4px 10px; padding: 6px 0 8px 27px; }
+.rp-signs[hidden] { display: none; }
+.rp-print { overflow-wrap: anywhere; }
+.rp-cells { font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace; font-size: 1.4rem; line-height: 1; letter-spacing: .06em; color: var(--accent-text); white-space: nowrap; margin-left: auto; }
+/* Stage 4 (A91, decision H): the sample sentence above the table, the contractions left out of the open document below it */
+/* Everything under the profile buttons scrolls as one (the sample stays at the top of it while the table goes by); the table stays the main thing */
+.rp-scroll { flex: 0 0 auto; padding-right: 4px; border-top: 1px solid var(--line); }
+.rp-sample { margin: 0; padding: 8px 10px 8px; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 8px 8px; background: var(--head-bg, #ffffff); }
+/* a short window: the whole dialog scrolls as one, and the sample no longer stays at the top */
+.rp-sample[hidden], .rp-leftout[hidden] { display: none; }
+.rp-h { margin: 0 0 2px; font-size: .95rem; font-weight: 700; color: var(--accent-text); }
+.rp-sample-hint { margin: 0 0 6px; font-size: .82rem; color: var(--muted); }
+/* label and "Use the standard sentence" on one line, the sentence under them; in the page the field comes before the button (Tab, screen readers) */
+.rp-sample-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+.rp-sample-row label { grid-area: 1 / 1; font-weight: 700; font-size: .85rem; }
+.rp-sample-row .rp-small { grid-area: 1 / 2; }
+.rp-sample-row textarea { grid-area: 2 / 1 / 3 / 3; }
+.rp-small { padding: 4px 10px; font-size: .82rem; }
+.rp-sample textarea { display: block; width: 100%; box-sizing: border-box; resize: none; font: inherit; line-height: 1.35; padding: 6px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--select-bg); color: var(--ink); }
+.rp-sample-lab { margin: 6px 0 0; font-weight: 700; font-size: .85rem; }
+.rp-braille { margin: 2px 0 0; font-family: "APHfont", "Apple Braille", "Segoe UI Symbol", monospace; font-size: 1.25rem; line-height: 1.3; color: var(--accent-text); overflow-wrap: anywhere; }
+.rp-leftout { margin-top: 8px; padding-top: 2px; }
+.rp-leftout summary { cursor: pointer; font-weight: 700; font-size: .92rem; padding: 4px 2px; color: var(--accent-text); }
+.rp-leftout-body { padding: 2px 4px 4px; }
+.rp-lo-wrap[hidden], .rp-leftout .rp-btn[hidden] { display: none; }
+.rp-lo-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0 8px; }
+.rp-lo-table th, .rp-lo-table td { text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.rp-lo-table thead th { font-size: .78rem; color: var(--muted); font-weight: 700; }
+.rp-lo-table th[scope="row"] { font-weight: 700; white-space: nowrap; }
+.rp-lo-table .rp-cells { margin-left: 10px; font-weight: 400; }
+.rp-lo-num { text-align: right !important; font-variant-numeric: tabular-nums; padding-right: 2px !important; }
 
 /* =====================================================================================================================
    THE BRAILLE AS DRAWN BY web/braille-render.mjs (renderBraille): the editor's braille pane and, since 17 Oct 2026 (feedback item 8), Quick Mode's
@@ -1245,6 +1331,11 @@ body:not(.editor-page) .menu-dropdown-item:focus-visible { background: var(--sel
 @media (prefers-color-scheme: dark) { :root:not(.light) .braille .bcell.cell-hl { background:var(--linkb); color:#0d1117; } }
 .braille .bcell.cell-hl circle.doff { fill:var(--link); }
 .braille .bcell.cell-speaking circle.don { fill:var(--accent-text); }
+/* The word being read aloud (Paul, 4 Nov 2026): its cells take Paige yellow with near-black dots - the same look as the word linked from print, and
+   different from the green tint of the line being read (.brl-reading); in light and dark (--linkb is the same yellow in both). The selector is
+   one class longer than '.brl-row.brl-reading *' (index.html) so the line's colour never wins over the word's. */
+.braille .brl-row .bcell.cell-speaking { background:var(--linkb); color:#0d1117; border-radius:2px; box-shadow:0 0 0 1px #0d1117; }
+@media (forced-colors: active) { .braille .brl-row .bcell.cell-speaking { background:Highlight; color:HighlightText; forced-color-adjust:none; } }
 .braille .brl-sr-hint { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
   clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
 .braille .brl-svg { display:block; width:100%; max-width:100%; height:auto; }

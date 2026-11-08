@@ -1,6 +1,6 @@
 // Random-action ("monkey") testing of the Emboss editor and Quick Mode, in Chrome, WebKit (Safari's engine) and Firefox.
 //
-// Why (A89 step 3, Paul 2 Oct 2026): transcribers lost confidence in BrailleBlaster because it crashed, and the worst bugs a
+// Why (A89 step 3, Paul 2 Oct 2026): transcribers lost confidence in another braille editor because it crashed, and the worst bugs a
 // tester finds are the ones nobody wrote a test for — the Down key that stuck on every line with an equation in Safari
 // (feedback 30 Sep item 19) was found by hand. This script presses keys, clicks, types, pastes, undoes, resizes the window,
 // opens menus and dialogs, changes settings and loads documents at random, for minutes at a time, and after EVERY action checks

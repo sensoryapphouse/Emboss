@@ -325,7 +325,7 @@ describe('round trip: HTML -> NIMAS export -> DTBook re-import -> same braille',
 
     const xml = exportToNimasXml(model, { uid: 'script-roundtrip', date: '2026-01-01' });
     assert.ok(xml.includes('<span class="script">'), `exporter should write class="script":\n${xml}`);
-    assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, 'never a literal BrailleBlaster element');
+    assert.doesNotMatch(xml, /<bai-[a-z0-9]+[ >/]/i, 'never a literal bai-* element');
 
     const reloaded = parseDtbook(xml);
     const p = reloaded.blocks.find((b) => b.type === 'para' && /scripted/.test(b.text || ''));

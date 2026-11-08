@@ -215,8 +215,8 @@ export function prepareEmbosserStream(brfText, options = {}) {
     // published source, and no manufacturer manual was found — see A12 in
     // EMBOSS-TASKS.md). NONE of this has been tested on real Enabling Technologies
     // hardware; these machines also ignore escape sequences entirely unless the
-    // front-panel parameter 23 has been switched on by hand (Duxbury's technical
-    // note), which no software can do.
+    // front-panel parameter 23 has been switched on by hand (an embosser
+    // driver's documentation), which no software can do.
     //
     // The constructor writes nine escape commands, in this order, to a
     // ByteArrayDataOutput (offsets from the decompiled bytecode):
@@ -269,7 +269,7 @@ export function prepareEmbosserStream(brfText, options = {}) {
   }
 
   if (m === 'viewplus' || m === 'columbia' || m === 'pixblaster' || m === 'tiger' || m === 'premier' || m === 'embraille') {
-    // ViewPlus / Tiger — BrailleBlaster's ViewPlusEmbosser class (libembosser-
+    // ViewPlus / Tiger — libembosser's ViewPlusEmbosser class (libembosser-
     // viewplus-driver-1.4.3.jar, read with javap) extends BaseGraphicsEmbosser and
     // writes NO header or trailer bytes of its own at all: it drives the machine as
     // a graphics/PCL printer, rendering braille through an installed "Braille29"

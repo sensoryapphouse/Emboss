@@ -97,7 +97,7 @@ describe('A19/A21 Stage 2: poems save as <poem>/<linegroup>/<line>, not <p class
     assert.equal(!!verseBlocks[0].fromPoem, false, 'not read from a <poem>, so not tagged fromPoem');
 
     const exportedXml = exportToNimas(doc);
-    assert.ok(exportedXml.includes('<p class="bai-verse">that is the question'), 'BrailleBlaster\'s bai-verse (verse drama, D5) is unchanged by the poem fix');
+    assert.ok(exportedXml.includes('<p class="bai-verse">that is the question'), 'the bai-verse (verse drama, D5) is unchanged by the poem fix');
     assert.equal(exportedXml.includes('<poem>'), false, 'verse drama must not be wrapped in <poem>');
   });
 

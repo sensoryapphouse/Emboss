@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // page-end-blanks.mjs — diagnosis metric for the "Emboss produces 11-15% more
-// pages than BrailleBlaster" question (Fable review, 26 Sep 2026, section 1;
+// pages than the reference translator" question (Fable review, 26 Sep 2026, section 1;
 // see docs/diagnosis-ukaaf-and-page-count-26sep.md and
 // docs/real-book-validation-24sep*.md, which first measured "pages ending
 // with 5 or more blank lines" by hand for one book). This script makes that
-// metric runnable against ANY BRF (Emboss's own, or a BrailleBlaster export)
+// metric runnable against ANY BRF (Emboss's own, or a reference-translator export)
 // so it can be tracked per-commit / per-book instead of re-measured by hand.
 //
 // DIAGNOSIS ONLY — this script does not change, and must not be used to
@@ -35,7 +35,7 @@
 // recheck.md defines it: line 1 is furniture (running head / print page
 // number) and the last line of the page is furniture (the braille page
 // number), so the body is every line strictly between them. This matches
-// both Emboss's and BrailleBlaster's BANA 40x25 output (both put exactly
+// both Emboss's and the reference translator's BANA 40x25 output (both put exactly
 // one furniture line at the top and bottom of every full page). The script
 // does not assume a fixed depth: it always drops just the first and last
 // line of whatever lines a page has, so a short final page (or a
@@ -53,7 +53,7 @@
 //                       few body lines" check for the same reason)
 //     [--causes]       print the best-effort per-book "top causes" breakdown
 //                       (Emboss BRFs only — meaningless noise on a
-//                       BrailleBlaster file, since its line shapes don't
+//                       reference-translator file, since its line shapes don't
 //                       match Emboss's block vocabulary; the script does not
 //                       try to guess which is which, so pass this only for
 //                       Emboss files)

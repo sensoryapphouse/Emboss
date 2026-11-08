@@ -38,13 +38,16 @@ const COLONS = '"33333333333';   // indicatorLine('colons', 38) trimmed
 // -------------------------------------------------------------------------------------------------------
 // UK-5: no blank lines, except before a sub-heading not directly after a centred heading
 // -------------------------------------------------------------------------------------------------------
+// CHANGED 4 Nov 2026 (Paul approved the blank-line audit's W3): the explicit 'spaced' List Format option is B004 section 10 Example 1
+// ("Place a blank line before the list and blank line at the end of the list"), so it KEEPS its blank lines; UK-5's "no blank line"
+// (James) still holds for the default compact list, which is what this test now asserts. Spaced is covered in blank_lines_audit.test.mjs.
 test('UK-5: no blank line before or after a list in UKAAF', () => {
   const blocks = [
     { type: 'para', text: 'Before.' },
     { type: 'list', items: [{ text: 'Apples' }, { text: 'Pears' }] },
     { type: 'para', text: 'After.' },
   ];
-  const lines = trimmed(formatDocument({ blocks }, opts('ukaaf', { suppressHeader: true, docEndMarker: false, listStyle: 'spaced' })));
+  const lines = trimmed(formatDocument({ blocks }, opts('ukaaf', { suppressHeader: true, docEndMarker: false, listStyle: 'compact' })));
   const before = lines.indexOf(upper('Before.'));
   assert.ok(before >= 0);
   assert.equal(lines[before + 1], upper('Apples'), `no blank before the list: ${JSON.stringify(lines)}`);

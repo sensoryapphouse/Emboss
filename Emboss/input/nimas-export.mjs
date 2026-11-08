@@ -8,6 +8,7 @@ import { FIELDS, flagFieldTable, textFieldTable, docOptionTable, TITLE_SEP, titl
 // that export's own comment. No circular import: document.mjs never imports from input/.
 import { titlePageFieldsFrom } from '../format/document.mjs';
 import { htmlNamedCharsToText } from './omml.mjs';
+import { splitTextBySixkey, printToAttr } from './sixkey-runs.mjs';   // X9 / W16: six-key braille runs and the print they replaced
 
 const TF_ITALIC = 1;
 const TF_UNDERLINE = 2;
@@ -789,9 +790,9 @@ function serializeInlineLeaf(seg, idAlloc) {
   // editor's toolbar/Ctrl+Shift+X control — brailled as the SECOND transcriber-defined typeform,
   // not the first, which the hyperlink indicator below already claims) and round-trips through
   // `<span class="strikethrough">` (read back by parse.mjs's parseDtbook walkInline, which maps
-  // that class back to 'strike'). A value shaped 'bai-transN' is BrailleBlaster's own import
+  // that class back to 'strike'). A value shaped 'bai-transN' is a braille editor's own import
   // (parse.mjs A24) — its print meaning is unknown to Emboss, and A24's own established
-  // behaviour (braille_blaster_import.test.mjs, "keeps its text and records the loss") is that a
+  // behaviour (bai_elements_import.test.mjs, "keeps its text and records the loss") is that a
   // save keeps the plain text and lets the typeform go, same as every other field this run has
   // no representation for; it is deliberately NOT written back as a span here, so only 'strike'
   // (Emboss's own, known meaning) round-trips. (Strikethrough used to be written as the bare
@@ -806,6 +807,9 @@ function serializeInlineLeaf(seg, idAlloc) {
   // A foreign-language run (seg.lang, a BCP-47 primary subtag — input/lang.mjs): DTBook's %attrs gives every inline element
   // xml:lang, and parseDtbook reads the nearest xml:lang back onto the run's text.
   if (seg.lang && /^[a-z]{2,3}$/i.test(String(seg.lang))) text = `<span xml:lang="${escapeXml(String(seg.lang).toLowerCase())}">${text}</span>`;
+  // X9 / W16: braille typed with the six keys, with the print it replaced (JSON in the title) when it replaced any; the editor marks the run and
+  // offers the print back. The cells are written as typed; the braille output never reads this.
+  if (seg.sixkey) { const pr = printToAttr(seg.sixkey.print); text = `<span class="bana-sixkey"${pr ? ` title="${escapeXml(pr)}"` : ''}>${text}</span>`; }
   return text;
 }
 
@@ -1018,7 +1022,7 @@ export function renderListGroup(nodes, parentLevel, indentLevel, idAlloc, topTag
     // than one level -- nesting alone can't record it -- falls back to the same class="level-N"
     // form older flat lists used; getElementLevel reads it ahead of the nesting depth.
     const named = namedMarkerOf(item, keepMarkers, tagOpen);
-    const liCls = [trueLevel !== parentLevel + 1 ? `level-${trueLevel}` : null, bulletClass(item), itemExampleClass(item), item.ignoreFont ? 'bana-ignore-font' : null, (!item.marker && ((keepMarkers && tagOpen.startsWith('<list type="ol"')) || (!item.bullet && tagOpen.startsWith('<list type="ul"') && nodes.some((n) => n.item && (n.item.marker || n.item.bullet))))) ? 'bana-no-marker' : null, named ? 'bana-marker' : null].filter(Boolean);   // bana-no-marker: an unnumbered item inside a numbered list (else it is numbered on re-import), or an unmarked one in a bulleted list (#46: else it takes a bullet)
+    const liCls = [trueLevel !== parentLevel + 1 ? `level-${trueLevel}` : null, bulletClass(item), itemExampleClass(item), item.ignoreFont ? 'bana-ignore-font' : null, item.divisionBreak ? 'bana-division-break' : null, (!item.marker && ((keepMarkers && tagOpen.startsWith('<list type="ol"')) || (!item.bullet && tagOpen.startsWith('<list type="ul"') && nodes.some((n) => n.item && (n.item.marker || n.item.bullet))))) ? 'bana-no-marker' : null, named ? 'bana-marker' : null].filter(Boolean);   // bana-no-marker: an unnumbered item inside a numbered list (else it is numbered on re-import), or an unmarked one in a bulleted list (#46: else it takes a bullet)
     const marker = (keepMarkers || named) && item.marker && item.marker !== '\u0000' ? `${escapeXml(item.marker)} ` : (!keepMarkers && isNonDotBulletMarker(item.marker) ? `${item.marker} ` : '');
     const emptyItem = isEmptyListItem(item);
     const body = itemLabelXml(item, idAlloc) + (emptyItem ? '' : serializeInlineSegments(item.segments, item.text, idAlloc));
@@ -1195,8 +1199,9 @@ function serializeBlockCore(block, indentLevel = 4, idAlloc = null) {
           if (item.term != null && item.def != null && (item.term || item.def)) {
             termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term, idAlloc) : escapeXml(item.term);
             defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def, idAlloc) : escapeXml(item.def);
-          } else if (item.text) {
-            const sepIdx = item.text.indexOf(' — ');
+          } else if (item.text || item.segments?.length) {
+            // A term-less item (a definition split by an edit) has segments but maybe no .text: still written (as a <dt>), never dropped.
+            const sepIdx = item.text ? item.text.indexOf(' — ') : -1;
             if (sepIdx !== -1) {
               termContent = escapeXml(item.text.slice(0, sepIdx));
               defContent = escapeXml(item.text.slice(sepIdx + 3));
@@ -1319,19 +1324,19 @@ function serializeBlockCore(block, indentLevel = 4, idAlloc = null) {
           // An index (or other) entry with page references keeps them as a page component (A2);
           // A36: and keeps the page number's own href, same as the toc case above.
           const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
-          const cls = kind === 'index' ? `bai-index${itemLvlClass}` : itemLvlClass.trim();
+          const cls = kind === 'index' ? `bai-index${itemLvlClass}${item.divisionBreak ? ' bana-division-break' : ''}` : itemLvlClass.trim();
           const pageContent = item.pageHref ? `<a href="${escapeXml(item.pageHref)}">${escapeXml(item.page)}</a>` : escapeXml(item.page);
           itemsXml.push(`${itemIndent}<li${cls ? ` class="${cls}"` : ''}><lic class="bai-index-text">${textContent}</lic><lic class="bai-index-page">${pageContent}</lic></li>`);
         } else if (kind === 'index') {
           const textContent = serializeInlineSegments(item.segments, item.text, idAlloc);
-          itemsXml.push(`${itemIndent}<li class="bai-index${itemLvlClass}">${textContent}${itemBlocksTail(item)}</li>`);
+          itemsXml.push(`${itemIndent}<li class="bai-index${itemLvlClass}${item.divisionBreak ? ' bana-division-break' : ''}">${textContent}${itemBlocksTail(item)}</li>`);
         } else {
           const named2 = namedMarkerOf(item, keepMarkers, listTagOpen);
           const marker = (keepMarkers || named2) && item.marker && item.marker !== '\u0000' ? `${escapeXml(item.marker)} ` : (!keepMarkers && isNonDotBulletMarker(item.marker) ? `${item.marker} ` : '');
           const emptyItem2 = isEmptyListItem(item);
           const textContent = marker + itemLabelXml(item, idAlloc) + (emptyItem2 ? '' : serializeInlineSegments(item.segments, item.text, idAlloc));
           const noMarker2 = !item.marker && !item.bullet && listTagOpen.startsWith('<list type="ul"') && block.items.some((x) => x && (x.marker || x.bullet));   // #46: an unmarked item in a bulleted list (else it takes a bullet on re-import)
-          const liCls2 = [itemLvlClass.trim() || null, bulletClass(item), itemExampleClass(item), item.ignoreFont ? 'bana-ignore-font' : null, named2 ? 'bana-marker' : null, noMarker2 ? 'bana-no-marker' : null].filter(Boolean);   // ignoreFont: a plain-list item kept it only in the generic path
+          const liCls2 = [itemLvlClass.trim() || null, bulletClass(item), itemExampleClass(item), item.ignoreFont ? 'bana-ignore-font' : null, item.divisionBreak ? 'bana-division-break' : null, named2 ? 'bana-marker' : null, noMarker2 ? 'bana-no-marker' : null].filter(Boolean);   // ignoreFont: a plain-list item kept it only in the generic path
           if (emptyItem2 && !textContent && !itemBlocksTail(item)) liCls2.push(EMPTY_CLASS);   // A89: an empty item is kept
           if (liCls2.length) {
             itemsXml.push(`${itemIndent}<li class="${liCls2.join(' ')}"${named2 ? ` title="${escapeXml(named2)}"` : ''}>${textContent}${itemBlocksTail(item)}</li>`);
@@ -1609,8 +1614,8 @@ function serializeBlockCore(block, indentLevel = 4, idAlloc = null) {
         if (item.term != null && item.def != null && (item.term || item.def)) {
           termContent = item.termSegments ? serializeInlineSegments(item.termSegments, item.term, idAlloc) : escapeXml(item.term);
           defContent = item.defSegments ? serializeInlineSegments(item.defSegments, item.def, idAlloc) : escapeXml(item.def);
-        } else if (item.text) {
-          const sepIdx = item.text.indexOf(' — ');
+        } else if (item.text || item.segments?.length) {
+          const sepIdx = item.text ? item.text.indexOf(' — ') : -1;
           if (sepIdx !== -1) {
             termContent = escapeXml(item.text.slice(0, sepIdx));
             defContent = escapeXml(item.text.slice(sepIdx + 3));
@@ -1807,7 +1812,7 @@ function serializeBlockCore(block, indentLevel = 4, idAlloc = null) {
  */
 // A19/A21/D5: a block parse.mjs's parsePoem read out of a genuine <poem> is tagged
 // block.fromPoem (see parse.mjs). Only those are swept back up into <poem>/<linegroup>/<line>;
-// an untagged play/verse block (BrailleBlaster's bai-verse — verse *drama*, or a hand-built AST
+// an untagged play/verse block (the bai-verse — verse *drama*, or a hand-built AST
 // with no source <poem> at all) keeps going through serializeBlock's ordinary
 // <p class="bai-verse"> case below, per D5.
 function isPoemLineBlock(b) {
@@ -2419,6 +2424,18 @@ export function exportToNimasXml(docModel, options = {}) {
       dropNulls(b.items); dropNulls(b.blocks);
     }
   })(blocks);
+  // X9 / W16 (Paul, 4 Nov 2026): a paragraph kept as plain text carries its six-key braille runs beside it (`sixkey: [{ start, end, print }]`);
+  // they are written as marked segments, which is how every other run is saved (serializeInlineLeaf).
+  (function expandSixkey(list) {
+    for (const b of list || []) {
+      if (!b || typeof b !== 'object') continue;
+      if (Array.isArray(b.sixkey)) {
+        if (!(Array.isArray(b.segments) && b.segments.length) && typeof b.text === 'string' && b.sixkey.length) b.segments = splitTextBySixkey(b.text, b.sixkey);
+        delete b.sixkey;
+      }
+      expandSixkey(b.items); expandSixkey(b.blocks);
+    }
+  })(blocks);
   // An attribution straight after a heading is written as <byline class="bana-attribution">: a bare <byline> there is read back as
   // a second heading (K2 / BANA 4.3.3, an author's name under a title in a source book), so the attribution was lost (A89).
   (function markAfterHeading(list) {
@@ -2481,6 +2498,19 @@ export function exportToNimasXml(docModel, options = {}) {
   for (const o of BANA_DOC_OPTIONS) {
     const c = docOptionContent(o, isModel && docModel[o.field] !== undefined ? docModel[o.field] : meta[o.field]);
     if (c != null) headXml += `${headXml ? '\n' : ''}    <meta name="${o.meta}" content="${escapeXml(c)}" />`;
+  }
+  // X1 (Templates; Paul, 1 Nov 2026): a document remembers the template it was made under - its name, and the settings that shaped its braille - so it
+  // reopens as it was set up. Two metas (web/templates.mjs TEMPLATE_META_NAME / TEMPLATE_META_SETTINGS; the document part of a template is the
+  // bana-* options above). Written only when the caller (the editor's save) gives `template: { name, settings }`; read by parse.mjs.
+  const tpl = isModel && docModel.template && typeof docModel.template === 'object' ? docModel.template : (options.template && typeof options.template === 'object' ? options.template : null);
+  const tplName = tpl ? String(tpl.name == null ? '' : tpl.name).replace(/\s+/g, ' ').trim() : '';
+  if (tplName) {
+    headXml += `${headXml ? '\n' : ''}    <meta name="emboss-template" content="${escapeXml(tplName)}" />`;
+    const tplSettings = tpl.settings && typeof tpl.settings === 'object' && Object.keys(tpl.settings).length ? JSON.stringify(tpl.settings) : '';
+    if (tplSettings) headXml += `\n    <meta name="emboss-template-settings" content="${escapeXml(tplSettings)}" />`;
+    // Relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the contractions the template's reader has learned, a JSON list of catalogue keys
+    // (web/templates.mjs TEMPLATE_META_CONTRACTIONS). Written only when the caller gives `template.contractions` as a list (none ticked is "[]"); All writes nothing.
+    if (Array.isArray(tpl.contractions)) headXml += `\n    <meta name="emboss-template-contractions" content="${escapeXml(JSON.stringify(tpl.contractions.filter((k) => typeof k === 'string')))}" />`;
   }
   // Every author of the source (<docauthor> may repeat), unless the caller names one.
   const authors = !options.author && Array.isArray(meta.docauthors) && meta.docauthors.length ? meta.docauthors : (author ? [author] : []);

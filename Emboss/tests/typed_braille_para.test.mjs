@@ -42,7 +42,8 @@ test('a typed line longer than the page wraps at its last space that fits, the r
 
 test('typed braille is not given the blank line of UKAAF block paragraphs', () => {
   const o = { mode: 'ukaaf', width: 40, translate: tr, paragraphStyle: 'block' };
-  assert.deepEqual(formatBlock({ type: 'para', text: 'Ab' }, o, false), ['AB', ''], 'an ordinary block paragraph has its blank line');
+  // CHANGED 4 Nov 2026 (Paul approved the audit's W6, BANA 1.9.3 "a blank line precedes each blocked paragraph"): the block style's blank line is now BEFORE the paragraph.
+  assert.deepEqual(formatBlock({ type: 'para', text: 'Ab' }, o, false), ['', 'AB'], 'an ordinary block paragraph has its blank line');
   assert.deepEqual(formatBlock({ type: 'para', text: U('AB') }, o, false), ['AB']);
 });
 

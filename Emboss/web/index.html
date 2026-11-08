@@ -93,12 +93,9 @@
     })();
   </script>
   <style>
-    /* Feedback 30 Sep item 15: a beta build hides the Transcriber tools switch and the help lines about it and the hardware toggle. */
-    body.beta-locked .beta-hide, body.beta-locked .help-tt-off.help-note { display:none !important; }
-    /* Paragraph style and quotation marks are transcriber settings (Paul, 7 Oct 2026): shown only with Transcriber tools on (the editor's switch, shared settings) */
+    /* One Emboss (Paul, 4 Nov 2026, EMBOSS-TASKS section P): the beta lock is gone, so its .beta-hide / .beta-only rules are too. */
+    /* Paragraph style and quotation marks are transcriber settings (Paul, 7 Oct 2026): shown only with Transcriber tools on (Settings > User Interface, shared settings) */
     body:not(.transcriber-tools) .fmt-transcriber { display:none !important; }
-    .beta-only { display:none; }
-    body.beta-locked .beta-only { display:inline; }
   </style>
 </head>
 <body>
@@ -145,7 +142,7 @@
         <button id="settingsBtn" class="icon-btn" type="button" data-i18n-title="common.settings" data-i18n-aria="common.settings" title="Settings" aria-label="Settings"><svg class="icon icon-settings" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></button>
       </div>
     </div>
-    <p class="sub">document → <strong>BRF</strong> braille · UEB (<span id="settingsSummary">…</span>)</p>
+    <p class="sub">document → <strong>BRF</strong> braille · UEB (<span id="settingsSummary">…</span>)<span id="contractionsLabel" class="rp-label" hidden></span></p>
   </header>
 
   <main>
@@ -222,22 +219,37 @@
         <p>Choose the language of the buttons and menus in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg> › User Interface</strong>. This does not change the braille: choose the braille code separately, in the braille settings.</p>
 
         <h3>Working with Document Structure</h3>
-        <p>Emboss reads document <em>structure</em> rather than visual styling. In Word, apply <strong>Title</strong> and <strong>Heading&nbsp;1–3</strong> styles for headings, and standard bulleted/numbered lists for lists. In Markdown or HTML, use semantic heading and list tags. House-style choices (indented 3-1 vs block paragraphs, quotation mark exchange, and list formats) can be customized in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>.</p>
+        <p>Emboss reads document <em>structure</em> rather than visual styling. In Word, apply <strong>Title</strong> and <strong>Heading&nbsp;1–3</strong> styles for headings, and standard bulleted/numbered lists for lists. In Markdown or HTML, use semantic heading and list tags. House-style choices (indented 3-1 vs block paragraphs, quotation mark exchange, and list formats) can be customized in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>. Making formal braille books? Switch on <strong>Show transcriber tools</strong> in <strong>Settings › User Interface</strong> for the extra choices.</p>
 
         <h3>Maths &amp; Equations (MathCAT)</h3>
         <p>Emboss transcribes mathematics using <a href="https://daisy.github.io/MathCAT/" target="_blank" rel="noopener">MathCAT</a> into <strong>UEB&nbsp;maths</strong> (UKAAF) or <strong>Nemeth Code</strong> (BANA). Word equations (<kbd>Alt + =</kbd>), LaTeX math (<code>$...$</code> or <code>$$...$$</code>), and MathML (<code>&lt;math&gt;...&lt;/math&gt;</code>) are transcribed with full code-switch indicators.</p>
 
         <h3>Tables</h3>
-        <p>Tables are brailled in columns when they fit the braille page. A table too wide for columns is brailled as a listed table (BANA) or in paragraph form (UKAAF). <span class="beta-hide">The table layout can be changed in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>.</span></p>
+        <p>Tables are brailled in columns when they fit the braille page. A table too wide for columns is brailled as a listed table (BANA) or in paragraph form (UKAAF). The table layout can be changed in <strong>Settings&nbsp;<svg class="icon icon-inline" aria-hidden="true" focusable="false"><use href="#icon-settings"/></svg></strong>, under <strong>Template settings</strong>.</p>
 
         <h3>Embossing</h3>
-        <p>Export the BRF file and send it to your embosser with the embosser's own software.<span class="beta-hide"> To send braille straight to an embosser from Emboss, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>\</kbd> on a Mac) to add <strong>Send to embosser</strong> to the <strong>Export</strong> menu and show the embosser settings. Tactile graphics are not yet sent to embossers.</span></p>
+        <p>Export the BRF file and send it to your embosser with the embosser's own software.</p>
 
         <h3>Working Offline</h3>
         <p>Emboss works without the internet once it has been opened with a connection. On that first visit it quietly downloads everything it needs (the braille tables, the maths engine and the fonts), and the status line says <strong>Emboss is ready to work offline</strong> once. Help shows whether it is ready, next to the version. A new version arrives the next time Emboss is opened online.</p>
 
         <h3>Standards</h3>
         <p><strong>UKAAF</strong> follows the UK layout guidance (38×27 default); <strong>BANA</strong> follows the US guidance (38×25 default), including the braille page number on the last line rather than the first. The first time Emboss runs it picks the standard that matches your browser's country (BANA in the United States and Canada, UKAAF elsewhere); you can change it in Settings, and changing it sets that standard's usual page size.</p>
+
+        <section id="helpRelaxed" class="help-relaxed" hidden>
+          <h3>Contractions (relaxed braille)</h3>
+          <p>Relaxed braille makes braille for someone who is still learning the contractions. Emboss uses only the contractions ticked in the template and spells every other contraction out in letters. Letters, capitals, numbers, punctuation and maths are not changed. It works with English UEB contracted braille, for both UKAAF and BANA. The ticks are part of the template, so a teacher makes one template for each learner.</p>
+          <ol>
+            <li>Open <strong>Settings</strong>. In <strong>Template settings</strong>, under <strong>Braille code</strong>, the line <strong>Contractions: All</strong> has a <strong>Choose…</strong> button. (It is there only when a UEB contracted code is chosen.)</li>
+            <li>Press <strong>Choose…</strong>. Each group of contractions is one row. Tick the box beside a group to tick the whole group, or press <strong>Show</strong> to open the group and tick single contractions. The <strong>Sample</strong> shows a sentence in braille with your ticks as you go, and <strong>Left out in this document</strong> lists the contractions these ticks spell out in the open document, commonest first.</li>
+            <li>Press <strong>Done</strong>. The braille is made again, the template shows as modified, and its name is shown in the line under the Emboss title. <strong>Cancel</strong> throws the ticks away.</li>
+            <li>To keep them for this learner, use the template's <strong>Save as…</strong> (a name such as “Sam – Year 2”). Choose that template again whenever you braille for Sam.</li>
+          </ol>
+          <ul>
+            <li>The built-in templates <strong>BANA</strong> and <strong>UKAAF</strong> use all the contractions. <strong>Undo changes</strong> puts the ticks back to the template's.</li>
+            <li>The ticks are saved with the template, saved in the document, and exported and imported with the template file.</li>
+          </ul>
+        </section>
 
         <h3>Credits &amp; Licensing</h3>
         <ul class="credits">

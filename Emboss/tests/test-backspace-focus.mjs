@@ -53,7 +53,10 @@ try {
   await run('after Bold with a plain caret inside a word', async (page) => { await page.click('#btnBold'); }, atCaret);
   await run('after a click on the explanation bar', async (page) => { await page.click('#statusBar'); }, atCaret);
   await run('after a click on a blank part of the page', async (page) => { await page.mouse.click(700, 40); }, atCaret);
-  await run('after a click on the contents entry "A short list"', async (page) => { await page.locator('a[data-jump-block]').nth(1).click(); }, { text: 'd. | ', before: 'the other way roun', where: 'at that heading (joined to the paragraph above, as Backspace at a heading\'s start does)' });
+  // Paul, 4 Nov 2026 (default text, option B): the sample has one heading, "Chapter One", at the very start, so the caret goes there and three
+  // Backspaces delete nothing (before, the step clicked a second heading, "A short list", now gone). Still told apart from the old fault, where
+  // the caret stayed behind in "emphasised" and "has" was deleted off-screen.
+  await run('after a click on the contents entry "Chapter One"', async (page) => { await page.locator('a[data-jump-block]').first().click(); }, { text: '', where: 'at that heading (the start of the document: nothing before it to delete)' });
 } catch (e) { ok('run completed', false, String(e && e.stack || e)); }
 await browser.close();
 console.log(`\n=== Backspace after a click outside the text [${ENGINE_LABEL}]: ${pass} passed, ${failures.length} failed ===`);

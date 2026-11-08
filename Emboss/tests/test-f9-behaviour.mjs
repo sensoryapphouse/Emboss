@@ -162,7 +162,7 @@ try {
       await ctx.close();
     }
     // Quick Mode: no Title field; the title is not added unless Transcriber tools is on (and this is not a beta build)
-    for (const [what, extra, beta, shown] of [['Transcriber tools off', {}, false, false], ['Transcriber tools on', { transcriberTools: true }, false, true], ['a beta build with Transcriber tools saved on', { transcriberTools: true }, true, false]]) {
+    for (const [what, extra, beta, shown] of [['Transcriber tools off', {}, false, false], ['Transcriber tools on', { transcriberTools: true }, false, true], ['a page marked beta with Transcriber tools saved on (Paul, 4 Nov 2026: one Emboss - the marker locks nothing, so the title is added)', { transcriberTools: true }, true, true]]) {
       for (const mode of ['bana', 'ukaaf']) {
         const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 }, locale: 'en-US', acceptDownloads: true });
         await ctx.addInitScript(([s, b]) => { try { if (b) window.EMBOSS_BETA = true; localStorage.setItem('emboss-settings', JSON.stringify(s)); } catch {} }, [{ simpleMode: true, mode, grade: 'g2', cells: 40, lines: 25, uiLanguage: 'en', ...extra }, beta]);

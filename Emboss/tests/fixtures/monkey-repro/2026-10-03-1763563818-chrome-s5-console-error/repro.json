@@ -10,7 +10,7 @@
  "docs": {
   "web/test_samples/9780076996285NIMAS.xml": "docs/00-9780076996285NIMAS.xml",
   "gen:1763563818-s5-l6": "docs/01-gen-1763563818-s5-l6.html",
-  "tests/nimas_samples/bb_pagenum_input.xml": "docs/02-bb_pagenum_input.xml",
+  "tests/nimas_samples/ref_pagenum_input.xml": "docs/02-ref_pagenum_input.xml",
   "gen:1763563818-s5-l2": "docs/03-gen-1763563818-s5-l2.html",
   "tests/real_samples/md/ch10-01-syntax.md": "docs/04-ch10-01-syntax.md",
   "tests/nimas_samples/NIMAS_valid_baseline.xml": "docs/05-NIMAS_valid_baseline.xml"
@@ -108,7 +108,7 @@
   },
   {
    "t": "load",
-   "doc": "tests/nimas_samples/bb_pagenum_input.xml"
+   "doc": "tests/nimas_samples/ref_pagenum_input.xml"
   },
   {
    "t": "menu",
@@ -156,7 +156,7 @@
   },
   {
    "t": "load",
-   "doc": "tests/nimas_samples/bb_pagenum_input.xml"
+   "doc": "tests/nimas_samples/ref_pagenum_input.xml"
   },
   {
    "t": "resize",

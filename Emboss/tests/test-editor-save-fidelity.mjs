@@ -1357,13 +1357,14 @@ try {
     page.on('console', onErr);
     const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const xmlNow = () => page.evaluate(() => window.exportCurrentDocumentXml());
+    const openTemplateSettings = async () => { await page.click('.tab-btn[data-tab="tab-rules"]'); if (!(await page.evaluate(() => document.getElementById('tplSettings').open))) await page.click('#tplSettings > summary'); };
     await page.evaluate(() => { window.markDocumentClean(); window.modelToLexical({ blocks: [{ type: 'heading', level: 1, text: 'Doc' }, { type: 'para', text: 'Body text.' }] }); });
     await wait(600);
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('.tab-btn[data-tab="tab-document"]');
+    await openTemplateSettings();   // Paul, 1 Nov 2026, X1 decision 1: the document options moved into Template > Template settings (a closed disclosure)
     await page.waitForSelector('#docOptionsGroup');
-    ok('doc options: the group is in the Advanced Production tab, labelled and described', await page.evaluate(() => {
+    ok('doc options: the group is in Template settings, labelled and described', await page.evaluate(() => {
       const fs = document.getElementById('docOptionsGroup');
       return !!fs && fs.querySelector('legend')?.textContent.trim().length > 0 && [...fs.querySelectorAll('input')].every((c) => c.id && document.querySelector(`label[for="${c.id}"], label ~ #${c.id}`) || document.querySelector(`label[for="${c.id}"]`));
     }));
@@ -1386,7 +1387,7 @@ try {
     // a bad line indicator (a space) is refused and the good value is kept
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('.tab-btn[data-tab="tab-document"]');
+    await openTemplateSettings();   // Paul, 1 Nov 2026, X1 decision 1: the document options moved into Template > Template settings (a closed disclosure)
     await page.fill('#docLineIndicator', 'a b');
     await page.locator('#docLineIndicator').blur();
     await wait(200);
@@ -1400,7 +1401,7 @@ try {
     await wait(600);
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('.tab-btn[data-tab="tab-document"]');
+    await openTemplateSettings();   // Paul, 1 Nov 2026, X1 decision 1: the document options moved into Template > Template settings (a closed disclosure)
     await page.waitForSelector('#docOptionsGroup');
     ok('doc options: save -> reload keeps the settings group in sync with the reloaded document', await page.evaluate(() =>
       !document.getElementById('docVerseKeep').checked && document.getElementById('docInterpointOmitEven').checked

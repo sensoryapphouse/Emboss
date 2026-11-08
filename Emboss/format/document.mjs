@@ -562,6 +562,12 @@ function joinsWithoutBlank(prev, block, o, nb = null) {
     // also drives poem-run boundary detection elsewhere, where the distinction may matter.)
     const isBlankLineBlock = (b) => b.type === 'blank' || ((b.type === 'break' || b.type === 'indicator') && (b.kind === 'line' || b.kind === 'stanza'));
     if (isBlankLineBlock(prev) || isBlankLineBlock(block)) return false;
+    // Blank-line audit W3 (Paul, 4 Nov 2026): B004 section 10 Example 1 - "Place a blank line before the list and blank line at
+    // the end of the list. List items start in cell 1 with runovers in cell 3." Only the explicit 'spaced' List Format option
+    // (the default is the compact layout, James's UK-5 decision, unchanged) keeps the blank lines formatList gives such a list.
+    if (o.listStyle === 'spaced' && (isPlainList(prev) || isPlainList(block))) return false;
+    // W4: B004 section 9 Example 2 - Paragraph Style 'indented-spaced' (off by default) keeps the blank line before each paragraph.
+    if (block.type === 'para' && spacedParaStyle(o) && !quoteMargins(block, o) && !block.continuation) return false;
     return true;   // UK-5: no blank line anywhere else
   }
   // BANA 6.2.2a: no blank line before or after an image caption/description "unless required by
@@ -607,7 +613,7 @@ function joinsWithoutBlank(prev, block, o, nb = null) {
     // §1.9.3's own exception, having failed the centred check above `prevTier` is now either
     // cell-5 or cell-7: "[a blank line precedes each blocked paragraph] unless it follows a
     // cell-5 or cell-7 heading" — drop the blocked paragraph's own leading blank (F-39).
-    if (block.type === 'para' && (block.blocked || directionsMargins(block, o))) return true;   // directions: §4.5.3 "usually not followed by a blank line"
+    if (block.type === 'para' && (block.blocked || directionsMargins(block, o) || (o.paragraphStyle === 'block' && !quoteMargins(block, o)))) return true;   // directions: §4.5.3 "usually not followed by a blank line"; W6: the 'block' Paragraph Style is 1.9.3's blocked paragraph throughout
     if (block.type === 'list' && block.columns > 1 && columnedListPlan(block, o)) return false;   // §4.5.3 / §8.4.1a: a blank line separates the heading from columns
     return block.type === 'list' || block.type === 'glossary' || isVerseBlock(block);
   }
@@ -1338,6 +1344,22 @@ const quoteLines = (lines, q, block) => {
 const hangingMargins = (block) => (block && block.hangingMargins ? { first: 0, runover: 2 } : null);
 const directionsMargins = (block, o) => (block && block.directions && o.mode === 'bana' ? { first: block.directionsContinued ? 6 : (block.directionsLabelled ? 0 : 4), runover: 4 }
   : (block && block.songInfo && o.mode === 'bana' ? { first: 6, runover: 4 } : null));   // 13.11.2b: `songInfo` (default off) - each item under a song title takes 7-5 margins
+// Blank-line audit (Paul, 4 Nov 2026), W6 / W4 / W5. Three paragraph-level blank lines, each the standard's own text:
+//  W6  BANA 1.9.3: "A blank line precedes each blocked paragraph" - the whole-document 'block' Paragraph Style now puts its
+//      blank line BEFORE each paragraph, as the per-paragraph `blocked` flag does (it used to put it after each paragraph,
+//      so a paragraph after a print page change line, 1.11.3c, got none).
+//  W4  UKAAF B004 section 9, Example 2 (young children and learners): "paragraphs can be preceded by a blank line and then
+//      commence in cell 3 with runovers starting in cell 1" - Paragraph Style 'indented-spaced' (UKAAF only; off by default).
+//      joinsWithoutBlank (UK-5) leaves this blank alone for such a paragraph.
+// W1 (BANA 10.2.1): do these directions open an exercise set that follows other text? Not the further paragraphs of one set
+// (`directionsContinued`, 10.3.2), not a directions paragraph that follows another (10.3.3: lettered directions), not the first block.
+const directionsNeedBlankBefore = (block, prev, o) => !!prev && o.mode === 'bana' && block.type === 'para' && !!block.directions && !block.directionsContinued
+  && !(prev.type === 'para' && prev.directions);
+const spacedParaStyle = (o) => o.mode !== 'bana' && o.paragraphStyle === 'indented-spaced';
+const styleBlankBefore = (block, o) => !block.continuation && (o.paragraphStyle === 'block' || spacedParaStyle(o));
+//  W5  BANA 14.3.1e: "Insert a blank line to separate scene settings from dialogue" - optional paragraph flag `sceneSetting`
+//      (a transcriber's choice; default off) gives the blank line after the paragraph.
+const sceneBlankAfter = (block, o) => !!block.sceneSetting && o.mode === 'bana' && !block.continued;
 // F-219/F-206 / BANA 19.4.1c (Morse: three blank cells between words), optional `block.wordGaps`
 // (default: a run of spaces collapses to one, as always): every interior run of two or more spaces
 // becomes a non-collapsible gap of two or three blank cells (a longer run is kept at three).
@@ -1734,10 +1756,10 @@ function typedBrailleLinesTc(runs, width, unit) {
 //     strikethrough uses the SECOND slot instead, to stay visually distinct from a hyperlink in
 //     the finished braille. 'strike' maps onto trans2's bit purely as an implementation detail
 //     (below); nothing outside this file/parse.mjs ever sees the word 'trans2' for strikethrough.
-//   - 'bai-trans1'..'bai-trans5' — BrailleBlaster's own '<bai-trans1>'..'<bai-trans5>' import
+//   - 'bai-trans1'..'bai-trans5' — the '<bai-trans1>'..'<bai-trans5>' import
 //     (parse.mjs A24, matched below by the trailing 'trans' + digit the regex looks for), kept
 //     as the source's own slot number because Emboss does not know what any of them print-meant
-//     (braille_blaster_import.test.mjs asserts the exact string, so it is never rewritten). A
+//     (bai_elements_import.test.mjs asserts the exact string, so it is never rewritten). A
 //     source file that both uses bai-trans1 AND has hyperlinks is a genuine clash
 //     already present in the source (both now render as the same first-slot indicator) — Emboss
 //     does not attempt to resolve it; see collectSpecialSymbols below for how the Special
@@ -2284,7 +2306,7 @@ function imgnoteBraille(note, o) {
 }
 // UEB 9.3.1-9.3.2 / 9.7.2 and BANA Example 1-18 (`.1TR9EO4`): a typeform WORD indicator runs to the end of its symbols-sequence, attached
 // punctuation included, so an emphasised single word followed directly by punctuation needs no terminator. Optional (`o.typeformWordPunct`
-// or `doc.typeformWordPunct`; default off: liblouis / BrailleBlaster write `.1TR9EO.'4`). Extends the typeform over that trailing
+// or `doc.typeformWordPunct`; default off: liblouis / the reference translator write `.1TR9EO.'4`). Extends the typeform over that trailing
 // punctuation before translation (same length: cell-trace positions are untouched). Words followed by letters/digits keep the terminator.
 function typeformWordPunct(text, tf, o) {
   if (!o || !o.typeformWordPunct || !Array.isArray(tf) || !tf.some(Boolean)) return tf;
@@ -3400,7 +3422,7 @@ function tcPutRhymeLetter(t, letter, w, o) {
 }
 function playWrapWidth(block, o, w, numbered, isVerse) {
   const lnw = o.lineNumberWidth || 0;
-  return (isVerse && block.lnMargin && o.mode === 'bana' && lnw > 0 && !numbered) ? Math.max(9, w - lnw) : w;   // unnumbered verse lines wrap before the number column; BrailleBlaster 3.2.3 wraps at w - widest number (Collections: 36), so no extra 2 cells (checked 23 Sep)
+  return (isVerse && block.lnMargin && o.mode === 'bana' && lnw > 0 && !numbered) ? Math.max(9, w - lnw) : w;   // unnumbered verse lines wrap before the number column; the reference translator wraps at w - widest number (Collections: 36), so no extra 2 cells (checked 23 Sep)
 }
 
 // Stage Directions formatting per BANA Formats §14 (7-7 or 9-7); font attributes
@@ -4872,7 +4894,7 @@ function trimSegs(segs) {
 // print's. UEB 9.7.3: "ignore a change in typeform for closing punctuation when a typeform word indicator is used", and
 // 9.7.2: "When there is doubt, except for the hyphen, dash and ellipsis, consider the punctuation as being included in
 // the typeform". So when the heading ends in emphasised text the colon takes the same typeform: a bold one-word heading
-// is `^1,DEF9I;N3` (BrailleBlaster: `^1,A2REVIA;NS3`), not `^1,DEF9I;N^'3` (24 Sep re-check, problem 3: 745 terminators
+// is `^1,DEF9I;N3` (the reference translator: `^1,A2REVIA;NS3`), not `^1,DEF9I;N^'3` (24 Sep re-check, problem 3: 745 terminators
 // in the anthology). A passage indicator's terminator then follows the colon. A plain heading keeps a plain colon.
 // Returns the colon segment to append to the heading's segments.
 function listedColonSeg(h) {
@@ -4929,7 +4951,7 @@ function computeTableColumns(block, o) {
   const segsBraille = (segs) => {
     // A61 (Paul, 26 Sep): a cell that is only a link (or another transcriber-defined typeform) is not
     // plain text either: it keeps its indicator in every table format (LINK-1).
-    const rich = segs.length > 1 || (segs[0] && (segs[0].tf || segs[0].hyperlink || segs[0].transcriberTypeform || segs[0].uncontracted || segs[0].type === 'math' || segs[0].type === 'imgnote' || segs[0].type === 'brl' || (o.foreignText && foreignLangIndex(segs[0].lang))));   // K16: a foreign cell (foreignText); imgnote: a picture alone in a cell keeps its TN indicators; brl: literal braille cells (a BrailleBlaster-style cell with no print text of its own)
+    const rich = segs.length > 1 || (segs[0] && (segs[0].tf || segs[0].hyperlink || segs[0].transcriberTypeform || segs[0].uncontracted || segs[0].type === 'math' || segs[0].type === 'imgnote' || segs[0].type === 'brl' || (o.foreignText && foreignLangIndex(segs[0].lang))));   // K16: a foreign cell (foreignText); imgnote: a picture alone in a cell keeps its TN indicators; brl: literal braille cells (a braille-editor-style cell with no print text of its own)
     if (rich) return segmentsToBraille(segs, o).replace(/\s+$/, '');
     return o.translate(segs.map((g) => g.text || '').join('')).replace(/\s+$/, '');
   };
@@ -6147,8 +6169,8 @@ function traceBlockCore(block, o, atStart, unit = 0) {
     const dm = directionsMargins(block, o) || hangingMargins(block);
     const first = dm ? dm.first : (blocked || isBlock || block.continuation) ? 0 : 2;
     const res = tcWrap(o, tcRun(o, text, null, unit, 0), w, first, dm ? dm.runover : 0);
-    if (blocked && !block.continuation) res.unshift(tcBlank);
-    else if (isBlock && !block.continued) res.push(tcBlank);
+    if ((blocked || styleBlankBefore(block, o)) && !block.continuation) res.unshift(tcBlank);   // W6 / W4: see styleBlankBefore
+    if (sceneBlankAfter(block, o)) res.push(tcBlank);      // W5
     return withEpigraphBlanksTc(res, block, o);           // mirror formatPara (F-94 / §9.3.1d)
   };
   switch (block.type) {
@@ -6222,8 +6244,8 @@ function traceBlockCore(block, o, atStart, unit = 0) {
         const dm = directionsMargins(block, o) || hangingMargins(block);
         const first = dm ? dm.first : (blocked || isBlock || block.continuation) ? 0 : 2;   // a paragraph resumed after a page turn: cell 1
         const res = tcWrapBody(o, tr, w, first, dm ? dm.runover : 0, !!block.countedWords);
-        if (blocked && !block.continuation) res.unshift(tcBlank);
-        else if (isBlock && !block.continued) res.push(tcBlank);
+        if ((blocked || styleBlankBefore(block, o)) && !block.continuation) res.unshift(tcBlank);   // W6 / W4: see styleBlankBefore
+        if (sceneBlankAfter(block, o)) res.push(tcBlank);      // W5
         return [...note, ...gap, ...withEpigraphBlanksTc(res, block, o)];   // §9.3.1d (F-94)
       }
       return paraLike(block);
@@ -6498,6 +6520,8 @@ function traceBlockCore(block, o, atStart, unit = 0) {
           return;
         }
 
+        // S2 / BANA 21.2.3g: print separates the alphabetical divisions of an index only by a blank line -> one blank line here.
+        if (item.divisionBreak && o.mode === 'bana' && ui > 0 && out.length && out[out.length - 1].s !== '') out.push(tcBlank);
         if (o.mode === 'bana' && !compact) {                 // mirror formatList (10.8.3, 10.8.5, 10.8.6, 10.8.2)
           const ex = !!item.example;
           if (ex !== prevExample && out.length && out[out.length - 1].s !== '') out.push(tcBlank);
@@ -6567,6 +6591,7 @@ function traceBlockCore(block, o, atStart, unit = 0) {
         const { first, runover } = gm(it);
         const segs = foreignRefSegments(block, glossarySegments(it, mixed, !!block.dictionary, o, punctOnly, termMask));   // mirror formatGlossary (K16 / 21.6.3b)
         const seg = segs.length ? tcSegs(o, segs, ui) : { s: '' };
+        if (seg.s && it.divisionBreak && o.mode === 'bana' && ui > 0 && out.length && out[out.length - 1].s !== '') out.push(tcBlank);   // S2 / BANA 21.2.3g
         if (seg.s) out.push(...tcWrap(o, seg, w, first, runover));
       });
       out.push(tcBlank);
@@ -6610,17 +6635,29 @@ function traceBlockCore(block, o, atStart, unit = 0) {
         // themselves (a table, a footnote run, …). Consulting joinsWithoutBlank for every sibling pair
         // here too — including the box's own title heading against its first child — fixes that. BANA is
         // unchanged: the guard still only fires for that same para+directions case as before.
+        // Blank-line audit W2 (Paul, 4 Nov 2026): BANA 7.2.1 only removes the blank after the top line and before the bottom
+        // line; "everything else inside a box follows the normal rules" - so BANA uses the same join logic as the main flow
+        // (buildDocPages): the joinsWithoutBlank rules (4.3.3, 4.5.3, 4.5.7/4.6.2, 8.3.3a, 1.9.3 ...), the blank before and
+        // after a poem (13.3.1a, poemRunBoundaries) and the blank before directions that begin an exercise set (W1).
         const ukaaf = !isBanaOpts(inner);
-        let prevKid = titleHeadingBlock;
+        const kidRuns = ukaaf ? null : poemRunBoundaries(renderKids.map((cb) => (cb && typeof cb === 'object' ? cb : {})));
+        let prevKid = titleHeadingBlock, prevKidBefore = null;
         renderKids.forEach((cb, u) => {
           if (!cb || typeof cb !== 'object') return;
           let lines = traceBlock(cb, inner, false, u);
-          const drop = prevKid && (ukaaf ? joinsWithoutBlank(prevKid, cb, inner) : (prevKid.type === 'para' && prevKid.directions && joinsWithoutBlank(prevKid, cb, inner)));   // mirror formatBox (P5) for BANA; UK-5 for UKAAF
+          if (kidRuns && lines.length) {
+            const stageNeighbour = (k) => !!(cb.playVerse && renderKids[k] && renderKids[k].type === 'stage');   // 14.5.3d, as buildDocPages
+            if (kidRuns.starts.has(u) && !stageNeighbour(u - 1)) lines = [tcBlank, ...lines];
+            if (kidRuns.ends.has(u) && !stageNeighbour(u + 1) && !(renderKids[u + 1] && renderKids[u + 1].type === 'attribution')) lines = [...lines, tcBlank];
+          }
+          if (kidRuns && directionsNeedBlankBefore(cb, prevKid, inner) && lines.length && lines[0].s !== '') lines = [tcBlank, ...lines];   // W1
+          const drop = prevKid && joinsWithoutBlank(prevKid, cb, inner, ukaaf ? null : { before: prevKidBefore, after: renderKids[u + 1] });   // UK-5 for UKAAF; the main flow's rules for BANA
           if (drop) {
             while (body.length && body[body.length - 1].s === '') body.pop();
             while (lines.length && lines[0] && lines[0].s === '') lines = lines.slice(1);
           }
           add(lines);
+          prevKidBefore = prevKid;
           prevKid = cb;
         });
       } else if (text.trim()) {
@@ -8631,6 +8668,24 @@ function applyPageBoundaries(content, contentBlock, contentCells, blocks, perPag
   return { content: out, contentBlock: outBlock, contentCells: outCells, contentNote: outNote, pagePlan };
 }
 
+// Blank-line audit (Paul, 4 Nov 2026) / BANA Formats 16.5.1b: "Insert a blank line before a note separation line only when the blank line
+// is required by other formats ... Exception: To reinforce a change in context, insert a blank line before the page change indicator when
+// the text after the page change indicator begins in the same cell as note runovers." Notes use 1-3 margins, so their runovers start in
+// cell 3: a page change line that directly follows a footnote and is followed by a line that begins in cell 3 gets a blank line before it.
+// (Not built: "leave line 1 of the following braille page blank if the note ends on line 25" - the same sentence's page-bottom case.)
+function blankBeforePageChangeAfterNotes(content, contentBlock, contentCells, blocks, contentKeep = []) {
+  const kind = (bi) => (bi >= 0 && blocks[bi] && typeof blocks[bi] === 'object' ? blocks[bi] : null);
+  for (let i = content.length - 2; i >= 1; i--) {
+    const pb = kind(contentBlock[i]);
+    if (!pb || pb.type !== 'pagenum' || banaPageChangeNumber(content[i]) === null || content[i - 1] === '') continue;
+    const nb = kind(contentBlock[i - 1]);
+    if (!nb || nb.type !== 'footnote' || nb.kind === 'endnote') continue;
+    if (!/^ {2}\S/.test(String(content[i + 1] ?? ''))) continue;
+    content.splice(i, 0, ''); contentBlock.splice(i, 0, contentBlock[i]); contentCells.splice(i, 0, null); contentKeep.splice(i, 0, null);
+  }
+  return { content, contentBlock, contentCells, contentKeep };
+}
+
 // BANA Formats §1.11.3d: "Use only one blank line following a page change
 // indicator when the guidelines require a blank line before and after a page
 // change indicator" (Example 1-10: a list ends, the indicator follows it
@@ -9210,6 +9265,13 @@ function buildDocPages(doc, o) {
     if (isBana && block.type === 'para' && block.directions && bi > 0 && blocks[bi - 1] && blocks[bi - 1].type === 'pagenum' && lines.length && lines[0] !== '') {
       lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs];
     }
+    // Blank-line audit W1 (Paul, 4 Nov 2026) / BANA 10.2.1: "Each exercise set, with accompanying directions or headings, is
+    // preceded and followed by a blank line" (Appendix C: blank line before but not after instructions). Directions that begin
+    // an exercise set after other text get the blank line before them; joinsWithoutBlank drops it again after a cell-5/cell-7
+    // heading (4.5.3) and the push loop below collapses it into the blank the previous block already ends with.
+    else if (directionsNeedBlankBefore(block, content.length ? blocks[contentBlock[contentBlock.length - 1]] : null, o) && lines.length && lines[0] !== '') {
+      lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs];
+    }
 
     const headingText = block.text || (Array.isArray(block.segments) ? block.segments.map(s => (s && s.text) || '').join('') : '');   // A64: a malformed block must not stop the whole document
     if (o.toc && block && block.type === 'heading' && String(headingText ?? '').trim()) {
@@ -9257,6 +9319,7 @@ function buildDocPages(doc, o) {
   const shift = preLen - content.length;
   if (shift) { contentBlock.splice(0, shift); contentCells.splice(0, shift); contentKeep.splice(0, shift); }
   if (!content.length) return { empty: true, opts: o };
+  if (isBana) ({ content, contentBlock, contentCells, contentKeep } = blankBeforePageChangeAfterNotes(content, contentBlock, contentCells, blocks, contentKeep));   // 16.5.1b exception
   if (isBana) ({ content, contentBlock, contentCells, contentKeep } = singleBlankAroundPageChange(content, contentBlock, contentCells, blocks, contentKeep));
   const hasTP = blocks.some((b) => b && typeof b === 'object' && b.type === 'titlepage');   // K29 Stage 1b
   // UK-9 follow-up (this brief): the title page (1) and, for UKAAF, its accessible-copy notice page (2,
@@ -9480,6 +9543,13 @@ async function buildDocPagesAsync(doc, o) {
     if (isBana && block.type === 'para' && block.directions && bi > 0 && blocks[bi - 1] && blocks[bi - 1].type === 'pagenum' && lines.length && lines[0] !== '') {
       lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs];
     }
+    // Blank-line audit W1 (Paul, 4 Nov 2026) / BANA 10.2.1: "Each exercise set, with accompanying directions or headings, is
+    // preceded and followed by a blank line" (Appendix C: blank line before but not after instructions). Directions that begin
+    // an exercise set after other text get the blank line before them; joinsWithoutBlank drops it again after a cell-5/cell-7
+    // heading (4.5.3) and the push loop below collapses it into the blank the previous block already ends with.
+    else if (directionsNeedBlankBefore(block, content.length ? blocks[contentBlock[contentBlock.length - 1]] : null, o) && lines.length && lines[0] !== '') {
+      lines = ['', ...lines]; if (srcs) srcs = [null, ...srcs];
+    }
 
     const headingText = block.text || (Array.isArray(block.segments) ? block.segments.map(s => (s && s.text) || '').join('') : '');   // A64: a malformed block must not stop the whole document
     if (o.toc && block && block.type === 'heading' && String(headingText ?? '').trim()) {
@@ -9526,6 +9596,7 @@ async function buildDocPagesAsync(doc, o) {
   const shift = preLen - content.length;
   if (shift) { contentBlock.splice(0, shift); contentCells.splice(0, shift); contentKeep.splice(0, shift); }
   if (!content.length) return { empty: true, opts: o };
+  if (isBana) ({ content, contentBlock, contentCells, contentKeep } = blankBeforePageChangeAfterNotes(content, contentBlock, contentCells, blocks, contentKeep));   // 16.5.1b exception
   if (isBana) ({ content, contentBlock, contentCells, contentKeep } = singleBlankAroundPageChange(content, contentBlock, contentCells, blocks, contentKeep));
   const hasTP = blocks.some((b) => b && typeof b === 'object' && b.type === 'titlepage');   // K29 Stage 1b
   // UK-9 follow-up (this brief): the title page (1) and, for UKAAF, its accessible-copy notice page (2,
@@ -10326,7 +10397,7 @@ const BULLET_GLYPH_NAME = Object.fromEntries(Object.entries(BULLET_NAMES).map(([
 // BANA Sample 6-15, `seg.hyperlink`); slot 2 is Emboss's own strikethrough
 // (`seg.transcriberTypeform === 'strike'`, UEB 9.5.1 crossed-out text — kept off slot 1 on
 // purpose so a link and crossed-out text never look the same, Paul's decision). Any slot can
-// ALSO arrive as BrailleBlaster's own bai-trans1..5 import (parse.mjs A24), whose print meaning
+// ALSO arrive as the bai-trans1..5 import (parse.mjs A24), whose print meaning
 // Emboss does not know, so that gets a generic description instead — unless the slot is
 // otherwise known (hyperlink/strike), in which case whichever use is found FIRST in document
 // order wins the Special Symbols page entry ("first use wins", found.set is keyed by braille).

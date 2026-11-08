@@ -11,6 +11,7 @@ export function speechAvailable() {
 }
 
 export class Reader {
+  static GRACE_MS = 700;
   // opts: { rate, voice, onBlock(item), onBoundary(item, charIndex, charLength), onEnd() }
   constructor(opts = {}) {
     this.rate = opts.rate || 1;
@@ -72,14 +73,17 @@ export class Reader {
       if (this._u === u) this._u = null;
     };
 
+    let gotBoundary = false;
     u.onstart = () => {
       if (stale()) return;
       started = true;
       this._safe(() => this.onBlock(item));
+      this._estimateBoundaries(item, () => gotBoundary || stale() || done);
     };
     u.onboundary = (e) => {
       if (stale()) return;
       if (!e.name || e.name === 'word') {
+        gotBoundary = true;
         this._safe(() => this.onBoundary(item, e.charIndex || 0, e.charLength || 0));
       }
     };
@@ -123,6 +127,32 @@ export class Reader {
       this._timers.push(t2);
     }, 2000);
     this._timers.push(t1);
+  }
+
+  // Safari's built-in and Siri voices never fire 'boundary' events (Paul, 4 Nov 2026: in Safari the braille did not move at all while reading).
+  // When no boundary has arrived GRACE_MS after the utterance starts, the words are stepped through on a timer at an average speaking pace
+  // (about 15 characters a second at rate 1), so the word marks in print and braille still follow the voice - roughly, but they follow. A real
+  // boundary, the end of the utterance or a stop ends the estimate at once. Paused time does not count.
+  _estimateBoundaries(item, finished) {
+    const text = item.text || '';
+    const words = [];
+    const re = /\S+/g; let m;
+    while ((m = re.exec(text))) words.push([m.index, m[0].length]);
+    if (!words.length) return;
+    const msPerChar = 1000 / (15 * (this.rate || 1));
+    const starts = []; let acc = 0;
+    for (const [, len] of words) { starts.push(acc); acc += (len + 1) * msPerChar; }
+    let elapsed = 0, last = -1;
+    const iv = setInterval(() => {
+      if (finished()) { clearInterval(iv); return; }
+      if (this.paused) return;
+      elapsed += 80;
+      if (elapsed < Reader.GRACE_MS) return;
+      let idx = last;
+      while (idx + 1 < words.length && starts[idx + 1] <= elapsed) idx++;
+      if (idx > last) { last = idx; this._safe(() => this.onBoundary(item, words[idx][0], words[idx][1])); }
+    }, 80);
+    this._timers.push(iv);
   }
 
   pause() { if (this.active && !this.paused) { this.paused = true; try { speechSynthesis.pause(); } catch { /* */ } } }

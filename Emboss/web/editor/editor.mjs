@@ -4,6 +4,8 @@
 // typeform emphasis, a braille-cell preview, and ARIA-toolbar a11y.
 // First, so it records any error from the moment the page starts (A89 step 2, Report a problem).
 import { openProblemDialog, recordProblem, problemCount, problemLog } from '/web/problem-report.mjs';
+import { initContractionsUI, refreshContractionsLine, contractionsText } from '/web/contractions-ui.mjs';   // relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the Contractions line in Settings; hidden unless ?relaxed=1
+import { spelledOutNote } from '/web/relaxed-explain.mjs';   // relaxed braille (A91 Stage 3): the status bar says which contractions the template spelled out
 import {
   createEditor, $getRoot, $getSelection, $isRangeSelection,
   ParagraphNode, $createParagraphNode, $createTextNode, FORMAT_TEXT_COMMAND,
@@ -37,17 +39,20 @@ import { makeZip } from '/web/zip.mjs';
 import { exportToDocxBlob } from '/web/docx-export.mjs';
 import { exportToText, exportToMarkdown, exportToHtml, bytesToBase64 } from '/web/export-formats.mjs';   // S5d: the alternative saves (txt, md, html), one traversal of the model
 import { Reader, buildSpokenItems, speechAvailable, sliceItemsFrom } from '/web/tts.mjs';
+import { readbackWord, dotsPhrase, backTranslateWord, isRuleToken, DEFAULT_WORDS as READBACK_WORDS } from '/web/braille-readback.mjs';   // Proofread braille aloud (Paul, 4 Nov 2026)
 import * as louis from '/engine/louis-browser.mjs';
 import { renderBraille, expandRowCells, autoFitBraille } from '/web/braille-render.mjs';
 import { proofread, roundTrip, blockEntries, segmentsBraille, issueWordSkipped } from '/web/proofread.mjs';
 import { parseFile, BINARY_EXTS } from '/input/parse.mjs';
-import { BRF64, brfToUnicodeBraille } from '/engine/brf-ascii.mjs';
+import { BRF64, brfToUnicodeBraille, unicodeBrailleToBrf } from '/engine/brf-ascii.mjs';
+import { capturePrint, normalizePrint, sixkeyForText, piecesOfText } from '/input/sixkey-runs.mjs';   // X9 / W16: six-key braille runs keep the print they replaced
+import { initSixkeyBox } from '/web/editor/sixkey-box.mjs';
 import * as maths from '/engine/maths.mjs';
 import { mathmlToLatex } from '/engine/mathml-to-latex.mjs';
-import { styledTranslate, styledTranslatePos, SCRIPT_MARKS, normalizeTextAndTypeform } from '/format/text-style.mjs';
-import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, PAGE_SIZE_PRESETS, fillPageSizeSelect, isGraphicsSupported, effectiveMathCode, isPhoneScreen, PHONE_EDITOR_ANYWAY_KEY, markStayInQuick, betaLocked, keepNumbersInRange, largeFileWarning, largeFileQuestion } from '/web/settings.mjs';
+import { styledTranslate, styledTranslatePos, SCRIPT_MARKS, normalizeTextAndTypeform, clipWordAtDashes } from '/format/text-style.mjs';
+import { loadSettings, saveSettings, MODE_GEOMETRY, EMBOSSER_NAMES, EMBOSSER_PRESETS, PAGE_SIZE_PRESETS, fillPageSizeSelect, isGraphicsSupported, effectiveMathCode, isPhoneScreen, PHONE_EDITOR_ANYWAY_KEY, markStayInQuick, hardwareEnabled, keepNumbersInRange, largeFileWarning, largeFileQuestion, activeRelaxedProfile, relaxedProfileKey } from '/web/settings.mjs';
 keepNumbersInRange(document.getElementById('settingsDialog'));   // Settings only: dialogs that check their own numbers say why (Braille formatting)
-import { resolveTable, makeTranslators, UEB_TABLES, registryName, codeLanguage, settingsForTable } from '/web/braille-table.mjs';
+import { resolveTable, makeTranslators, relaxedApplies, UEB_TABLES, registryName, codeLanguage, settingsForTable } from '/web/braille-table.mjs';
 import { spoolToNetworkEmbosser, connectionSupport, chooseEmbosserTarget, sendToEmbosserTarget, initEmbosserAutoDetect } from '/format/spooler.mjs';
 import { transpileTactileSvg, transpileTactileSvgForDevice, createGraphicBlock, defaultBrailleTranslator, createLeadLineSvg } from '/format/tactile-svg.mjs';
 import { plotTactileFunction, isPlottableEquation } from '/format/math-plotter.mjs';
@@ -64,7 +69,8 @@ import { initI18n, t, setLocale, getLocale, getLocaleInfo, getSupportedLocales, 
 import { watchOfflineReady } from '/web/offline-ready.mjs';
 import { getBuildInfo } from '/web/build-info.mjs';
 import { iconSvg, iconEl } from '/web/icons.mjs';   // Iconoir line icons; also adds the page's icon symbols (feedback 30 Sep, item 18)
-import { mountSettingsDialog } from '/web/settings-panes.mjs';
+import { mountSettingsDialog, bindTemplateUi, syncMadeForControls, applyMadeForSize } from '/web/settings-panes.mjs';
+import { adoptDocumentTemplate, templateForSave, activeDocPart, activeProducer, settingsPatch, docPatch, producerPatch, cleanProducer, adoptReaderProfiles, activeTemplateName } from '/web/templates.mjs';   // ... and names the template in use
 import { initAutosave, checkForRecovery, clearSnapshot as clearAutosaveSnapshot, forceAutosaveTick, noteChange as noteAutosaveChange } from '/web/editor/autosave.mjs';
 
 // The Settings dialog is made from the one source Quick Mode uses too (web/settings-panes.mjs; feedback 17 Oct 2026, item 9a), before anything below looks for its controls.
@@ -77,7 +83,7 @@ if (typeof window !== 'undefined') {
     let currentDocModel = null;
     editor.getEditorState().read(() => { currentDocModel = mergeListItemBlocks(buildModel()); });
     const doc = currentDocModel || lastModel || { title: 'Document', blocks: [] };
-    return exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode });   // UK-9: an auto title page's saved wording follows the current format mode
+    return exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode, template: templateRecord() });   // UK-9: an auto title page's saved wording follows the current format mode
   };
   window.importFile = importFile;
   window.showRuleInfo = showRuleInfo;
@@ -89,13 +95,16 @@ if (typeof window !== 'undefined') {
   window.__clearAutosaveSnapshot = clearAutosaveSnapshot;
 }
 
+adoptReaderProfiles();                         // the reader profiles of the earlier relaxed-braille preview become templates, once, before the settings are read (Paul, 2 Nov 2026; web/templates.mjs)
 let settings = loadSettings();                 // standard / grade / geometry / quotes / lists / toc (shared with the converter)
+// X1 (Templates; Paul, 1 Nov 2026, decision 3): a saved document records the template it was made under (its name and the settings in force) in its head;
+// reopening it applies them (applyOpenedTemplate, below). Never lets a failure here stop a save.
+const templateRecord = () => { try { return templateForSave(settings); } catch (e) { console.warn('the template could not be recorded:', e); return null; } };
 // "Transcriber tools" (settings.transcriberTools, off by default): see applyTranscriberTools. Declared here, before any
 // code that may ask for it (toolbar-button updates run from editor update listeners).
-// A beta build keeps it off, its switch hidden, unless unlocked with ?tools=1 (feedback item 15; betaLocked, settings.mjs).
-const BETA_LOCKED = betaLocked();
-if (BETA_LOCKED) document.body.classList.add('beta-locked');
-let transcriberTools = settings.transcriberTools === true && !BETA_LOCKED;
+// One Emboss (Paul, 4 Nov 2026, EMBOSS-TASKS section P): no beta lock. Everyone starts with Transcriber tools off and turns them on in Settings > User Interface
+// (a ?tools=1 link turns them on too; settings.mjs).
+let transcriberTools = settings.transcriberTools === true;
 function transcriberToolsOn() { return transcriberTools; }
 // The caret's last known place in the editor. Declared up here (not with the other caret state further down) because the
 // Transcriber tools setup runs at load and asks the remove-box check where the caret is (it read this variable before
@@ -542,7 +551,7 @@ ParagraphNode.prototype.getTabletn = function() { return !!this.getLatest().__ta
 ParagraphNode.prototype.setTabletn = function(v) { this.getWritable().__tabletn = !!v; return this; };
 // A19/A21 Stage 2/9: a verse line's own <poem> provenance (parse.mjs's parsePoem/fromPoem) —
 // only a line tagged fromPoem sweeps back into <poem>/<linegroup>/<line> on save; an untagged
-// verse-styled paragraph (BrailleBlaster's own bai-verse, verse drama, D5) is unaffected and
+// verse-styled paragraph (the bai-verse, verse drama, D5) is unaffected and
 // keeps saving as <p class="bai-verse">.
 ParagraphNode.prototype.getFromPoem = function() { return !!this.getLatest().__fromPoem; };
 ParagraphNode.prototype.setFromPoem = function(v) { this.getWritable().__fromPoem = !!v; return this; };
@@ -1473,6 +1482,34 @@ class CiteNode extends TextNode {
 const $createCiteNode = (text) => new CiteNode(text).setMode('token');
 const $isCiteNode = (n) => n instanceof CiteNode;
 
+// X9 / W16 (Paul, 4 Nov 2026): braille typed with the six keys is a run of its own — ordinary editable text (so it can be typed into, deleted from
+// and selected like any), marked so it shows a dotted underline and a small box, and carrying the print it REPLACED (`__print`: an array of
+// strings and { latex, mathml } equations, input/sixkey-runs.mjs) when the writer typed over selected print or an equation. Typing more
+// six-key braille at the end of the run extends it (skInsert); ordinary typing there starts plain text (canInsertText* are false), so the
+// run stays the braille that was typed. The braille output reads the run as the text it is: nothing about the mark or the print reaches it.
+class SixKeyNode extends TextNode {
+  static getType() { return 'emboss-sixkey'; }
+  static clone(n) { return new SixKeyNode(n.__text, n.__print, n.__key); }
+  constructor(text = '', print = null, key) {
+    super(text, key);
+    this.__print = normalizePrint(print);
+  }
+  getPrint() { return this.getLatest().__print; }
+  setPrint(print) { this.getWritable().__print = normalizePrint(print); return this; }
+  canInsertTextBefore() { return false; }
+  canInsertTextAfter() { return false; }
+  createDOM(config) {
+    const dom = super.createDOM(config);
+    dom.classList.add('ed-sixkey');
+    dom.dataset.sixkey = this.__key;
+    return dom;
+  }
+  exportJSON() { return { ...super.exportJSON(), type: 'emboss-sixkey', version: 1, print: this.__print }; }
+  static importJSON(j) { return new SixKeyNode(j.text || '', j.print || null).updateFromJSON(j); }
+}
+const $createSixKeyNode = (text, print = null) => new SixKeyNode(text, print);
+const $isSixKeyNode = (n) => n instanceof SixKeyNode;
+
 class MathNode extends DecoratorNode {
   static getType() { return 'emboss-math'; }
   static clone(n) { return new MathNode(n.__latex, n.__key, n.__mathml, n.__srcLatex); }
@@ -1776,6 +1813,8 @@ class GraphicNode extends DecoratorNode {
   getBrailleLabels() { return this.__brailleLabels; }
   getSize() { return this.__size || 'half'; }
   setSvg(s) { this.getWritable().__svg = s; }
+  setTitle(s) { this.getWritable().__title = String(s ?? ''); }   // W14: the drawing tool saves the title and description with the drawing
+  setAlt(s) { this.getWritable().__alt = String(s ?? ''); }
   setTextures(t) { this.getWritable().__textures = Boolean(t); }
   setBrailleLabels(b) { this.getWritable().__brailleLabels = Boolean(b); }
   setSize(s) { this.getWritable().__size = s; }
@@ -2557,7 +2596,7 @@ function $titlePageSegments(node) {
 let lexicalErrorCount = 0;
 const editor = createEditor({
   namespace: 'emboss',
-  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, ImgNoteNode, BrlNode, LinkNode, CiteNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode, TnPageNode, SymPageNode, TitlePageNode, TpSegmentNode, TpFieldNode],
+  nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, MathNode, NoteRefNode, LineNumberNode, ImgNoteNode, BrlNode, LinkNode, CiteNode, SixKeyNode, BreakNode, GraphicNode, ImageNode, TableNode, PrintPageNode, SidebarNode, TnPageNode, SymPageNode, TitlePageNode, TpSegmentNode, TpFieldNode],
   onError: (e) => { lexicalErrorCount++; recordProblem('editor', `Lexical: ${e?.message || e}`, { stack: e?.stack || '' }); console.warn('Lexical non-fatal state warning:', e); },
   theme: { heading: { h1: 'ed-h1', h2: 'ed-h2', h3: 'ed-h3' }, list: { ul: 'ed-ul', ol: 'ed-ol' }, paragraph: 'ed-p',
     text: { bold: 'ed-b', italic: 'ed-i', underline: 'ed-u', strikethrough: 'ed-s', underlineStrikethrough: 'ed-u ed-s' } },
@@ -3067,6 +3106,14 @@ function $removeProtectedDecorator(node) {
   target.remove();
   if (prev && typeof prev.selectEnd === 'function') prev.selectEnd();
   else if (next && typeof next.selectStart === 'function') next.selectStart();
+}
+// Paul, 4 Nov 2026: a card's own Delete button (picture, graphic, table, print page) used plain node.remove(): the caret stayed wherever
+// it was (often the unseen start of the document, or nowhere), so Lexical scrolled that caret into view — the document jumped to the
+// top — and the button, which had the focus, was gone, leaving the keys on the page. The buttons now use $removeProtectedDecorator
+// (the caret goes to the end of the block before the card, or the start of the one after) and the keyboard goes back to the text.
+function keepKeysInText() {
+  if (editorEl.contains(document.activeElement) && document.activeElement !== document.body) return;
+  editorEl.focus({ preventScroll: true });
 }
 function $deleteArmedProtectedDecorator(selection, caret, forward) {
   // The caret is still where the first press armed the item: this press is the second one.
@@ -3613,6 +3660,14 @@ editor.registerNodeTransform(RootNodeClass, (root) => {
   const first = root.getFirstChild();
   if (first && !first.is(tps[0])) first.insertBefore(tps[0]);
 });
+// X9 / W16: a six-key run whose text has all been deleted goes (Lexical only drops an empty plain TextNode), and one pasted or typed into
+// with nothing of braille left in it is no longer a run of hand-brailled cells: it becomes ordinary text, so the mark and the box never
+// sit on print.
+editor.registerNodeTransform(SixKeyNode, (n) => {
+  const txt = n.getTextContent();
+  if (!txt) { n.remove(); return; }
+  if (!/[\u2800-\u28ff]/.test(txt)) n.replace($createTextNode(txt).setFormat(n.getFormat()).setStyle(n.getStyle()));
+});
 // A pasted native (Lexical) list nests real ListNodes inside a ListItemNode. The editor's model is flat (one ListNode, items
 // tagged with __level), so a pasted nested list is flattened on arrival: order kept, level = nesting depth, and a group whose
 // type differs from the list's own (bullets under numbers, numbers under bullets) gets literal item markers so it still
@@ -4011,6 +4066,15 @@ editor.registerDecoratorListener((decorators) => {
       });
       bar.appendChild(btnLeadLine);
 
+      // W14: the drawing tool (a Transcriber tool): a real button, double-click, or Enter on the picture opens this graphic for editing.
+      const btnEditDrawing = document.createElement('button');
+      btnEditDrawing.type = 'button';
+      btnEditDrawing.className = 'graphic-context-btn fmt-transcriber';
+      btnEditDrawing.textContent = 'Edit drawing';
+      btnEditDrawing.title = 'Open this graphic in the drawing tool';
+      btnEditDrawing.addEventListener('click', (e) => { e.stopPropagation(); openTactileDrawing(key); });
+      bar.appendChild(btnEditDrawing);
+
       const btnDel = document.createElement('button');
       btnDel.type = 'button';
       btnDel.className = 'graphic-context-btn danger';
@@ -4020,8 +4084,8 @@ editor.registerDecoratorListener((decorators) => {
         e.stopPropagation();
         editor.update(() => {
           const n = $getNodeByKey(key);
-          if ($isGraphicNode(n)) n.remove();
-        });
+          if ($isGraphicNode(n)) $removeProtectedDecorator(n);
+        }, { onUpdate: keepKeysInText });
       });
       bar.appendChild(btnDel);
 
@@ -4030,6 +4094,11 @@ editor.registerDecoratorListener((decorators) => {
       // The SVG came from an imported .html/.epub/.svg — untrusted. Strip anything
       // that can run script before it becomes live DOM.
       svgWrap.innerHTML = sanitizeSvgMarkup(val.svg);
+      svgWrap.tabIndex = 0;
+      svgWrap.setAttribute('role', 'group');
+      svgWrap.setAttribute('aria-label', `${val.title || val.alt || 'Tactile graphic'}. Press Enter to edit the drawing.`);
+      svgWrap.addEventListener('dblclick', () => { if (document.body.classList.contains('transcriber-tools')) openTactileDrawing(key); });
+      svgWrap.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target === svgWrap && document.body.classList.contains('transcriber-tools')) { e.preventDefault(); e.stopPropagation(); openTactileDrawing(key); } });
 
       el.appendChild(bar);
       el.appendChild(svgWrap);
@@ -4145,7 +4214,7 @@ editor.registerDecoratorListener((decorators) => {
       btnDel.addEventListener('pointerdown', (e) => e.stopPropagation());
       btnDel.addEventListener('click', (e) => {
         e.stopPropagation();
-        editor.update(() => { const n = $getNodeByKey(key); if ($isImageNode(n)) n.remove(); });
+        editor.update(() => { const n = $getNodeByKey(key); if ($isImageNode(n)) $removeProtectedDecorator(n); }, { onUpdate: keepKeysInText });
         announce(tOr('app.editor.image_deleted', 'Picture deleted. Undo brings it back.'));
       });
       const delRow = document.createElement('div');
@@ -4199,7 +4268,7 @@ editor.registerDecoratorListener((decorators) => {
       });
 
       const updatePlotVisibility = () => {
-        const canPlot = isGraphicsSupported(settings) && isPlottableEquation(mf.value || val);
+        const canPlot = transcriberTools && isGraphicsSupported(settings) && isPlottableEquation(mf.value || val);   // Plot Tactile Graph: a Transcriber tool (Paul, 4 Nov 2026, P-D)
         btnPlot.style.display = canPlot ? 'inline-flex' : 'none';
       };
 
@@ -4426,8 +4495,8 @@ editor.registerDecoratorListener((decorators) => {
         e.stopPropagation();
         editor.update(() => {
           const n = $getNodeByKey(key);
-          if ($isTableNode(n)) n.remove();
-        });
+          if ($isTableNode(n)) $removeProtectedDecorator(n);
+        }, { onUpdate: keepKeysInText });
       });
       bar.appendChild(btnDelete);
 
@@ -4507,8 +4576,8 @@ editor.registerDecoratorListener((decorators) => {
         e.stopPropagation();
         editor.update(() => {
           const n = $getNodeByKey(key);
-          if ($isPrintPageNode(n)) n.remove();
-        });
+          if ($isPrintPageNode(n)) $removeProtectedDecorator(n);
+        }, { onUpdate: keepKeysInText });
         clearTranslationCache();
         scheduleRender();
         announce(t('app.printpage.removed'));
@@ -6035,8 +6104,8 @@ const hasHyperlink = (n) => typeof n.getStyle === 'function' && /--bana-hyperlin
 // UEB 9.5.1 transcriber-defined typeform. 'strike' IS the editor's own strikethrough control
 // (Lexical's built-in 'strikethrough' text format — the btnStrike toolbar button / Ctrl+Shift+X,
 // the SECOND transcriber-defined typeform in format/document.mjs's segTf, kept off the first
-// slot on purpose: that one is the hyperlink indicator, F-233). BrailleBlaster's own
-// bai-trans1..bai-trans5 (parse.mjs A24) have no editor control (they only ever arrive already
+// slot on purpose: that one is the hyperlink indicator, F-233). The bai-trans1..bai-trans5 import numbers
+// (the `<bai-transN>` elements some braille editors write;  (parse.mjs A24) have no editor control (they only ever arrive already
 // on a segment from that import) but must still round-trip a save, so — like ignoreFont/
 // hyperlink above — they ride a CSS custom property in the node's own Lexical style,
 // independent of the format bitmask.
@@ -6069,7 +6138,7 @@ const hasScript = (n) => typeof n.getStyle === 'function' && /--bana-script\s*:\
 
 // Used for BOTH paragraphs and list items so emphasis + inline maths survive in lists
 // too (previously list items were flattened to plain text, dropping both).
-function nodeToRuns(node) {
+function nodeToRuns(node, opts = {}) {
   const runs = [];
   let hasEmph = false, hasMath = false;
   for (const child of node.getChildren()) {
@@ -6204,19 +6273,27 @@ function nodeToRuns(node) {
     const lg = langOfNode(child);                        // foreign-language run (input/lang.mjs)
     if (tf || unc || ign || hyp || ttf || lg || text !== rawText.replace(/\s+/g, ' ')) hasEmph = true;   // a sub/superscript run keeps segments too
     const last = runs[runs.length - 1];
+    // X9 / W16: a six-key run is a run of its own (never merged with its neighbours, nor they with it); it carries the print it replaced. In a
+    // paragraph kept as plain text (opts.sidecar: paraBlock) it does not by itself make the paragraph a segment one: paraBlock lists the runs beside the text.
+    if ($isSixKeyNode(child)) {
+      const pr = normalizePrint(child.getPrint());
+      runs.push({ type: 'text', text, tf, ...(unc ? { uncontracted: true } : {}), ...(ttf ? { transcriberTypeform: ttf } : {}), ...(ign ? { ignoreFont: true } : {}), ...(hyp ? { hyperlink: true } : {}), ...(lg ? { lang: lg } : {}), sixkey: pr ? { print: pr } : {} });
+      if (!opts.sidecar) hasEmph = true;
+      continue;
+    }
     // A19/A21 Stage 9: a run tagged .href (LinkNode) or .cite (CiteNode) must never absorb the
     // plain text that follows it — that text was never part of the link/citation. Before this
     // check, an ordinary TextNode right after a LinkNode/CiteNode run (same tf/uncontracted,
     // the only two fields compared here) merged straight into it, silently pulling unrelated
     // words inside the <a>/<cite> on save.
-    if (last && last.type === 'text' && !last.href && !last.cite && (last.tf || 0) === tf && !!last.uncontracted === unc && !!last.ignoreFont === ign && !!last.hyperlink === hyp && (last.transcriberTypeform || null) === ttf && (last.lang || null) === lg) last.text += text;   // one run per form
+    if (last && last.type === 'text' && !last.href && !last.cite && !last.sixkey && (last.tf || 0) === tf && !!last.uncontracted === unc && !!last.ignoreFont === ign && !!last.hyperlink === hyp && (last.transcriberTypeform || null) === ttf && (last.lang || null) === lg) last.text += text;   // one run per form
     else runs.push({ type: 'text', text, tf, ...(unc ? { uncontracted: true } : {}), ...(ttf ? { transcriberTypeform: ttf } : {}), ...(ign ? { ignoreFont: true } : {}), ...(hyp ? { hyperlink: true } : {}), ...(lg ? { lang: lg } : {}) });
   }
   return { runs, hasEmph, hasMath };
 }
 const TYPED_BRAILLE_TEXT_RE = /^[⠀-⣿ \n]*[⠁-⣿][⠀-⣿ \n]*$/;   // as format/document.mjs's TYPED_BRAILLE_RE
 function paraBlock(node) {
-  const { runs, hasEmph, hasMath } = nodeToRuns(node);
+  const { runs, hasEmph, hasMath } = nodeToRuns(node, { sidecar: true });
   if (!runs.length) return null;
   const banaStyle = typeof node.getBanaStyle === 'function' ? node.getBanaStyle() : null;
   // A plain paragraph holding one equation and nothing else is displayed maths (A26): the
@@ -6234,6 +6311,19 @@ function paraBlock(node) {
   const typedBraille = !hasMath && !hasEmph && TYPED_BRAILLE_TEXT_RE.test(raw);
   const block = (hasMath || hasEmph) ? { type: 'para', segments: runs }
     : { type: 'para', text: typedBraille ? raw.replace(/\s+$/, '') : raw.replace(/\s+/g, ' ').trim() };
+  if (!hasMath && !hasEmph) {                           // X9 / W16: six-key runs ride beside the text (the text, so the braille, is exactly as before)
+    const ranges = [];
+    let at = 0;
+    for (const ch of node.getChildren()) {
+      const len = ch.getTextContent().length;
+      if ($isSixKeyNode(ch) && len) ranges.push({ start: at, end: at + len, print: ch.getPrint() });
+      at += len;
+    }
+    if (ranges.length && at === raw.length) {
+      const k = sixkeyForText(raw, ranges, typedBraille);
+      if (k.sixkey.length && k.text === block.text) block.sixkey = k.sixkey;
+    }
+  }
   const turn = typeof node.getPageTurn === 'function' ? node.getPageTurn() : null;
   if (turn === 'continued' || turn === 'both') block.continued = true;
   if (turn === 'continuation' || turn === 'both') block.continuation = true;
@@ -6735,7 +6825,9 @@ function nodeToBlocks(node, blocks) {
       }
       if (listKind === 'glossary') item = glossaryItem(runs) || item;
       const kept = !isPlain && typeof li.getMarker === 'function' && (ordered || li.getMarker() === NO_MARKER) ? li.getMarker() : null;   // (a bullet list keeps only "no marker")
+      const plainKept = isPlain && listKind === 'plain' && typeof li.getMarker === 'function' && li.getMarker() && li.getMarker() !== NO_MARKER && !isBulletMarker(li.getMarker()) ? li.getMarker() : null;   // a plain list's numbered inner item (see appendBlock)
       if (kept !== NO_MARKER && (kept || marker)) item.marker = kept || marker;
+      else if (plainKept) item.marker = plainKept;
       // Bullets (BANA §8.6.2a): item.bullet beside an ordinal, and the glyph of a bullet-only item.
       fmtToBlock(item, li, FMT_ITEM_KEYS);
       { const cf = fmtCarry.get(li.getKey()); if (cf) { if (cf.enum != null && item.enum == null) item.enum = cf.enum; if (cf.start != null && item.start == null) item.start = cf.start; } }
@@ -7188,6 +7280,19 @@ function clearTranslationCache() {
 }
 window.clearTranslationCache = clearTranslationCache;   // test hook: random-action testing compares a cached render with a fresh one
 
+// Relaxed braille (A91, off unless ?relaxed=1; web/settings.mjs): the profile in force, a Set of the contractions the reader holds, or null =
+// All (no change). Every place the editor makes text braille takes it from here: the document (currentFormatOpts) and the status bar's
+// word explanation (alignWord, showRuleInfo). The braille caches above do not know the profile, so a different profile than
+// the one the cached braille was made with empties them first (today a profile changes only with a page load; Stage 2's Settings
+// will change it live). Diagram labels (translateDiagramText) and the proofreading round trip stay unrelaxed - see their comments.
+let relaxedKeyInUse = '';
+function relaxedProfileNow() {
+  const relaxed = activeRelaxedProfile();
+  const key = relaxedProfileKey(relaxed);
+  if (key !== relaxedKeyInUse) { relaxedKeyInUse = key; clearTranslationCache(); }
+  return relaxed;
+}
+
 function getEffectiveCellW() {
   const numCells = Math.max(10, (settings.cells | 0) || 38);
   const container = brailleEl || $id('braille');
@@ -7218,7 +7323,7 @@ async function activateTable() {
 }
 function currentFormatOpts() {
   const table = activeTable;
-  const tr = makeTranslators(louis, table);
+  const tr = makeTranslators(louis, table, { relaxed: relaxedProfileNow() });   // UEB grade 2 only; translateG1 below is never relaxed
   // Grade-1 translator for segments marked `uncontracted` (UEB only — the formatter
   // falls back to bracketing the contracted text when this is absent).
   const translateG1 = /en-ueb/.test(table) ? (s, tf) => makeTranslators(louis, UEB_TABLES.g1).translate(s, tf) : undefined;
@@ -7229,9 +7334,9 @@ function currentFormatOpts() {
   // ... and with the grade-1 translator, as `translate` has it, so a sub/superscript run of more than one item is traced too
   // (feedback 30 Sep item 7: those blocks fell back and showed "Editor link degraded" as a transcription warning).
   const translatePos = styledTranslatePos((s, tf) => tr.translatePos(s, tf || null), settings.quoteStyle, /en-ueb-g2/.test(table) ? translateG1 : null);
-    const preset = EMBOSSER_PRESETS[settings.embosser];
-    const defaultWidth = preset ? preset.cells : 38;
-    const defaultDepth = preset ? preset.lines : 25;
+    // (P-K, Paul 4 Nov 2026: the embosser model no longer sets the page size; sanitizeSettings keeps Cells and Lines, a device's own for Monarch / DotPad)
+    const defaultWidth = 38;
+    const defaultDepth = 25;
     return {
       translateG1,
       mode: settings.mode,
@@ -7478,14 +7583,14 @@ async function render() {
     const prevBrailleScroll = brailleEl.scrollTop;
     perfMark('render:rowPrintText');
     renderBraille(brailleEl, brf, {
-      rows: trace.rows, rowCells: trace.rowCells, cells: (settings.cells | 0) || (EMBOSSER_PRESETS[settings.embosser]?.cells || 38),
+      rows: trace.rows, rowCells: trace.rowCells, cells: (settings.cells | 0) || 38,
       cellW: isManualZoom ? brailleCellW : undefined,   // Ctrl/⌘+Shift+= / − zoom; auto-fit otherwise
       textMode: false, asciiBraille: settings.asciiBraille,
       volumePages: Number(settings.volumePages) || 0,
       rowPrintText, blocks: model.blocks,
       embosser: settings.embosser,
       tactileGraphics: settings.tactileGraphics,
-      hardwarePreview: settings.expertHardware === true,   // the tactile-graphic hardware preview: expert hardware features only (feedback item 8)
+      hardwarePreview: transcriberTools,   // the tactile-graphic hardware preview: a Transcriber tool (feedback item 8; Paul, 4 Nov 2026, section P item 8: tactile graphics are Transcriber tools)
     });
     if (!reader || !reader.speaking) {
       brailleEl.scrollTop = prevBrailleScroll;
@@ -8159,7 +8264,7 @@ function handleTableCellEvent(input, unit) {
   input.classList.add('table-cell-hl');
   showRuleInfo(text.slice(s, en));
 }
-function wordRangeAt(text, pos) {                   // [start,end) of the whitespace-delimited word at pos
+function wordRangeAt(text, pos) {                   // [start,end) of the whitespace-delimited word at pos (a dash splits it)
   pos = Math.max(0, Math.min(pos, text.length - 1));
   
   // Check if pos is strictly inside a $...$ math segment
@@ -8183,7 +8288,7 @@ function wordRangeAt(text, pos) {                   // [start,end) of the whites
   let s = pos, e = pos + 1;
   while (s > 0 && !/\s/.test(text[s - 1])) s--;
   while (e < text.length && !/\s/.test(text[e])) e++;
-  return [s, e];
+  return clipWordAtDashes(text, pos, s, e);   // Paul, 4 Nov 2026: an unspaced dash (waited—until) is a word boundary; the braille is unchanged
 }
 
 // F9 item K (APH feedback, 9 Oct 2026: "the highlight is a few letters out on some paragraphs of the large NIMAS book"): the model's flat text
@@ -8298,6 +8403,7 @@ applyExplanationBarVisibility();
 // word under the caret after a pause of about 700 ms (feedback 17 Oct 2026, item 14b: it flickered through every word as each key was pressed, and
 // blanked to its hint each time the braille was redrawn). It never goes blank in between. A key that only MOVES the caret, or a click, shows the
 // new word at once. Announcements through the live region wait for the pause too (they are made by the same call).
+let sixkeyBox = null;   // X9 / W16: the six-key run box (set up beside the six-key input, below); while it owns the explanation bar a word's explanation waits
 const TYPING_PAUSE_MS = 700;
 function typingHold() { return typingAt > 0 && performance.now() - typingAt < TYPING_PAUSE_MS; }
 function scheduleRuleFlush() {
@@ -8322,6 +8428,7 @@ editorEl.addEventListener('keydown', (e) => {
 editorEl.addEventListener('beforeinput', (e) => { if (/^(insert|delete)/.test(e.inputType || '')) noteTyping(); }, true);
 document.addEventListener('pointerdown', () => noteNavigation(), true);
 function showIdleStatus() {
+  if (sixkeyBox && sixkeyBox.barOwned()) return;                  // X9 / W16: the caret is in a six-key run: the bar says what the run is
   // While typing the bar keeps its last explanation; the idle hint waits for the pause too (unless a word's explanation is already waiting).
   if (typingHold()) { if (!pendingRuleWord) pendingRuleWord = { word: '' }; scheduleRuleFlush(); return; }
   const body = $id('ruleInfoBody');
@@ -8552,7 +8659,7 @@ function alignWord(brl, text, table) {
   for (const t of [tbl, tG1]) {
     if (!t) continue;
     try {
-      const tr = makeTranslators(louis, t);
+      const tr = makeTranslators(louis, t, { relaxed: relaxedProfileNow() });   // the same translators as the rendered braille it is matched against
       const pos = (s2, tf) => (tr.translatePos ? tr.translatePos(s2, tf) : louis.translatePos(s2, t, tf));
       const r = styledTranslatePos(pos, settings.quoteStyle)(text);   // the same house style as the rendered braille it is matched against (A71)
       if (r && (r.braille === brl || !brl)) { res = r; break; }
@@ -8664,6 +8771,7 @@ function showRuleInfo(word) {
   showRuleInfoNow(word);
 }
 function showRuleInfoNow(word) {
+  if (sixkeyBox && sixkeyBox.barOwned()) return;                  // X9 / W16: as showIdleStatus
   const body = $id('ruleInfoBody');
   const el = body || $id('statusBar') || $id('ruleInfo'); if (!el) return;
   const w = (word || '').trim();
@@ -8739,8 +8847,12 @@ function showRuleInfoNow(word) {
 
   const table = activeTable;
   let g2Brf, g1Brf;
+  let spelledOut = [];            // relaxed braille (A91 Stage 3, decision I): the contractions of this word the template in use spelled out
+  const relaxed = relaxedProfileNow();
   try {
-    g2Brf = makeTranslators(louis, table).translate(w);
+    const trW = makeTranslators(louis, table, { relaxed });
+    g2Brf = trW.translate(w);   // the same braille the document shows (alignWord matches it)
+    if (relaxedApplies(table, relaxed)) spelledOut = trW.translatePos(w).spelledOut || [];
     g1Brf = louis.translate(w, louis.TABLES.uebG1);
   } catch { showIdleStatus(); return; }
 
@@ -8748,7 +8860,7 @@ function showRuleInfoNow(word) {
   const uniG1 = brfToUnicodeBraille(g1Brf);
   const g2cells = [...uniG2.replace(/\s/g, '')].length;
   const g1cells = [...uniG1.replace(/\s/g, '')].length;
-  const contracted = settings.grade !== 'g1' && g2cells < g1cells;
+  let contracted = settings.grade !== 'g1' && g2cells < g1cells;
 
   const segs = alignWord(g2Brf, w, table);
   let brlHtml = escapeHtml(uniG2);
@@ -8766,12 +8878,17 @@ function showRuleInfoNow(word) {
     }
   }
 
+  // Relaxed braille: "contracted" must stay true. A word whose every contraction the profile spelled out has no sign left that stands
+  // for several letters, so it is spelt out even if a grade 1 indicator makes its grade 1 form longer.
+  if (relaxedApplies(table, relaxed) && contracted && !rules.length) contracted = false;
+  const relaxedNote = spelledOutNote(spelledOut, spelledOut.length ? activeTemplateName(settings) : '', contractionsText, w);   // '' with All, switched off, or nothing spelled out
+
   const plural = (n) => `${n} cell${n === 1 ? '' : 's'}`;
   const chars = `${w.length} character${w.length === 1 ? '' : 's'}`;
 
-  lastRuleSpoken = contracted
+  lastRuleSpoken = (contracted
     ? `${w}: ${plural(g2cells)} for ${chars} — contracted` + (rules.length ? ` (${rules.map(r => `${r.cell} = ${r.meaning}`).join(', ')})` : '')
-    : `${w}: spelt out in ${plural(g2cells)}`;
+    : `${w}: spelt out in ${plural(g2cells)}`) + (relaxedNote ? `. ${relaxedNote}` : '');
 
   const wordOutput =
     `<span class="ri-brl" aria-hidden="true">${brlHtml}</span> ` +
@@ -8782,6 +8899,7 @@ function showRuleInfoNow(word) {
         ? ` — <strong>contracted</strong> (uncontracted: <span class="ri-brl" style="font-size:1.1em">${escapeHtml(uniG1)}</span>, ${plural(g1cells)})`
         : ' — spelt out, no contraction') +
     `</span> ` +
+    (relaxedNote ? `<span class="ri-note ri-relaxed" aria-hidden="true">${escapeHtml(relaxedNote)}</span> ` : '') +
     rules.map((r) => `<span class="ri-rule" aria-hidden="true"><span class="ri-brl">${escapeHtml(r.cell)}</span> = &ldquo;${escapeHtml(r.meaning)}&rdquo;</span>`).join(' ');
   if (body) {
     body.innerHTML = wordOutput;
@@ -9454,6 +9572,10 @@ function runProofread(model, table) {
           const cacheKey = `${entry.text}|${table}|${hasSeg ? 'seg:' + entry.segments.map((g) => `${g.tf || 0}.${g.uncontracted ? 1 : 0}.${String(g.text ?? '').length}`).join(',') : 'plain'}`;   // the runs' emphasis too: the braille depends on it
           let res = proofreadCache.get(cacheKey);
           if (!res) {
+            // Relaxed braille (A91 task 3): the words-to-check round trip stays on fully contracted UEB on purpose. It checks that
+            // Emboss's translation reads back as the print; a spelled-out word reads back as itself (measured on two real books:
+            // no word reads back differently with the none, strong or group-sign profiles than with all), so the result is the same
+            // and proofreadCache's key needs no profile.
             const tr = makeTranslators(louis, table);
             const trG1 = /en-ueb/.test(table) ? (s) => makeTranslators(louis, UEB_TABLES.g1).translate(s) : null;
             // A line's runs are brailled together, as the braille itself is (segmentsBraille; Paul, 31 Oct 2026).
@@ -9804,7 +9926,97 @@ function sanitizeSvgMarkup(svg) {
   return new XMLSerializer().serializeToString(root);
 }
 
-function skInsert(text) { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.insertText(text); }); }
+// X9 / W16 (Paul, 4 Nov 2026): what a six-key cell does to the document.
+//  - Typed at (or inside) a six-key run: it extends that run.
+//  - Typed over a selection: the selection goes and the cell starts a new run that keeps the print it replaced (text, equations, or an earlier
+//    run's own print when that whole run was selected), so the writer can see it and put it back (Put the print back).
+//  - Typed anywhere else: it starts a new run with no print.
+// A space typed at the end of a run stays in the run; a space anywhere else is an ordinary space.
+const UNEDITABLE_EQ = '\\text{[equation]}';
+function $selectTextEnd(n) { const l = n.getTextContentSize(); n.select(l, l); }
+function $sixkeyRunAtCaret(sel) {
+  const a = sel.anchor, an = a.getNode();
+  if ($isSixKeyNode(an)) return { node: an, offset: a.offset };
+  if (a.type === 'element') {
+    const prev = an.getChildAtIndex(a.offset - 1);
+    if ($isSixKeyNode(prev)) return { node: prev, offset: prev.getTextContentSize() };
+  } else if ($isTextNode(an) && a.offset === 0) {
+    const prev = an.getPreviousSibling();
+    if ($isSixKeyNode(prev)) return { node: prev, offset: prev.getTextContentSize() };
+  }
+  return null;
+}
+function $selectedPrint(sel) {
+  const nodes = sel.getNodes();
+  const [start, end] = sel.isBackward() ? [sel.focus, sel.anchor] : [sel.anchor, sel.focus];
+  const pieces = [];
+  for (const n of nodes) {
+    if ($isMathNode(n)) {
+      const latex = (n.getLatex() || '').trim();
+      pieces.push({ latex: latex === UNEDITABLE_EQ ? '' : latex, mathml: n.getSourceMathml() || undefined });
+    } else if ($isLineBreakNode(n)) pieces.push({ text: '\n' });
+    else if ($isTextNode(n)) {
+      const full = n.getTextContent().replace(/​/g, '');
+      const from = start.type === 'text' && n.is(start.getNode()) ? start.offset : 0;
+      const to = end.type === 'text' && n.is(end.getNode()) ? end.offset : n.getTextContentSize();
+      const text = n.getTextContent().slice(from, to).replace(/​/g, '');
+      pieces.push($isSixKeyNode(n) ? { run: true, text, print: n.getPrint(), whole: text === full } : { text });
+    } else if ($isElementNode(n)) { if (n.isInline && n.isInline()) continue; return null; }   // a whole block (or more) selected: nothing kept
+    else return null;                                  // a picture, table ...: not print text
+  }
+  return capturePrint(pieces);
+}
+function $sixkeyInsert(text, spaceOnly = false) {
+  const sel = $getSelection();
+  if (!$isRangeSelection(sel)) return;
+  if (!sel.isCollapsed()) {
+    if (spaceOnly) { sel.insertText(text); return; }
+    const print = $selectedPrint(sel);
+    const format = sel.format, style = sel.style;
+    sel.removeText();
+    const after = $getSelection();
+    if (!$isRangeSelection(after)) return;
+    const run = $sixkeyRunAtCaret(after);               // the selection ended inside a run: with no print to keep, the cell joins what is left of it
+    if (run && !print) { run.node.select(run.offset, run.offset); run.node.spliceText(run.offset, 0, text, true); return; }
+    const node = $createSixKeyNode(text, print).setFormat(format).setStyle(style);
+    after.insertNodes([node]);
+    $selectTextEnd(node);
+    return;
+  }
+  const run = $sixkeyRunAtCaret(sel);
+  if (run) { run.node.select(run.offset, run.offset); run.node.spliceText(run.offset, 0, text, true); return; }
+  if (spaceOnly) { sel.insertText(text); return; }
+  const node = $createSixKeyNode(text).setFormat(sel.format).setStyle(sel.style);
+  sel.insertNodes([node]);
+  $selectTextEnd(node);
+}
+function skInsert(text) { editor.update(() => $sixkeyInsert(text, text === ' ')); }
+// Put the print back (B1): the run's typed braille is replaced by the print (text, equations) it replaced, as one change (one undo step), the caret after it.
+function putPrintBack(key) {
+  let done = false;
+  window.__flushHistorySnapshot?.();                     // what was typed so far is its own undo step: undo brings the braille back
+  editor.update(() => {
+    const node = $getNodeByKey(key);
+    if (!$isSixKeyNode(node) || !node.isAttached()) return;
+    const parts = normalizePrint(node.getPrint());
+    if (!parts) return;
+    const made = [];
+    for (const p of parts) {
+      if (typeof p === 'string') {
+        p.split('\n').forEach((line, i) => { if (i > 0) made.push($createLineBreakNode()); if (line) made.push($createTextNode(line).setFormat(node.getFormat()).setStyle(node.getStyle())); });
+      } else made.push($createMathNode(p.latex || '', p.mathml || null));
+    }
+    if (!made.length) return;
+    let prev = node;
+    for (const m of made) { prev.insertAfter(m); prev = m; }
+    node.remove();
+    const last = made[made.length - 1];
+    if ($isTextNode(last)) $selectTextEnd(last); else last.selectNext(0, 0);
+    done = true;
+  }, { discrete: true });
+  if (done) window.__flushHistorySnapshot?.();
+  return done;
+}
 function skParagraph() { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.insertParagraph(); }); }
 function skDeleteBack() { editor.update(() => { const s = $getSelection(); if ($isRangeSelection(s)) s.deleteCharacter(true); }); }
 function inMathField(e) { return !!(e.target && e.target.closest && e.target.closest('math-field')); }
@@ -9863,6 +10075,46 @@ editorEl.addEventListener('focusout', (e) => {
   skHeld.clear(); skChord = 0;
 });
 $id('btnSixKey')?.addEventListener('click', () => toggleSixKey());
+
+// X9 / W16 (Paul, 4 Nov 2026): the dotted underline, the floating box ("Replaced print: ..." and "Reads as: ...", Put the print back) and the explanation
+// bar's words for runs of six-key braille. "Reads as" is the typed braille turned back into print by the braille code in use (the engine's back-translation).
+function sixkeyReadsAs(cells) {
+  try {
+    const tr = makeTranslators(louis, activeTable);
+    const out = tr.backTranslate(unicodeBrailleToBrf(String(cells)));
+    return typeof out === 'string' ? out.replace(/\s+/g, ' ').trim() : null;
+  } catch { return null; }
+}
+const SIXKEY_PUTBACK_KEY = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'Command+Option+P' : 'Ctrl+Alt+P';
+sixkeyBox = initSixkeyBox({
+  editorEl,
+  getRun: (key) => editor.getEditorState().read(() => { const n = $getNodeByKey(key); return $isSixKeyNode(n) ? { text: n.getTextContent(), print: n.getPrint() } : null; }),
+  readsAs: sixkeyReadsAs,
+  putBack: (key) => { if (putPrintBack(key)) { announce(tOr('app.sixkey.put_back_done', 'The print is back.')); editorEl.focus(); } },
+  t: tOr,
+  renderEq: (latex) => {
+    if (!latex || typeof globalThis.temml === 'undefined') return null;
+    try { const out = globalThis.temml.renderToString(latex, { displayMode: false }); return out && !out.includes('temml-error') ? out : null; } catch { return null; }
+  },
+  setBar: (html) => { const body = $id('ruleInfoBody'); if (html == null) showIdleStatus(); else if (body) body.innerHTML = html; },
+  announce,
+  typing: typingHold,
+  shortcut: SIXKEY_PUTBACK_KEY,
+});
+editor.registerUpdateListener(() => sixkeyBox.refresh());
+window.__sixkeyBox = sixkeyBox;   // tests
+// Put the print back from the keyboard (Ctrl/Cmd+Alt+P), for the run the caret is in
+document.addEventListener('keydown', (e) => {
+  if (!(e.altKey && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.code === 'KeyP')) return;
+  if (document.querySelector('dialog[open]') || !editorEl.contains(document.activeElement)) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  const key = sixkeyBox.state().caretKey;
+  if (!key) { announce(tOr('app.sixkey.no_run', 'The caret is not in braille typed with the six keys.')); return; }
+  const had = editor.getEditorState().read(() => { const n = $getNodeByKey(key); return $isSixKeyNode(n) && !!n.getPrint(); });
+  if (!had) { announce(tOr('app.sixkey.nothing_to_put_back', 'This braille replaced no print, so there is none to put back.')); return; }
+  sixkeyBox.hide();
+  if (putPrintBack(key)) announce(tOr('app.sixkey.put_back_done', 'The print is back.'));
+}, true);
 
 // ---- read aloud (TTS) with karaoke highlight ----
 // speakMath: plain spoken text (fallback). mathSpeech: SumIt's engine →
@@ -9966,15 +10218,87 @@ function clearReading() {
   } else {
     brailleEl.querySelectorAll('.brl-reading').forEach((r) => r.classList.remove('brl-reading'));
   }
+  brailleEl._virtualBraille?.setSpeakingWord?.(null);
   brailleEl.querySelectorAll('.cell-speaking').forEach((c) => c.classList.remove('cell-speaking'));
   editorEl.querySelectorAll('.math-speaking').forEach((e) => e.classList.remove('math-speaking'));
   clearEqOverlay();
   if (ttsHi) delHl('tts-word');
+  clearTtsFallback();
 }
 function clearSpokenWord() {
+  brailleEl._virtualBraille?.setSpeakingWord?.(null);
   brailleEl.querySelectorAll('.bcell.cell-speaking').forEach((c) => c.classList.remove('cell-speaking'));
   editorEl.querySelectorAll('.math-speaking').forEach((e) => e.classList.remove('math-speaking'));
   if (ttsHi) delHl('tts-word');
+  clearTtsFallback();
+}
+// Where the CSS Highlight API is missing (Safari before 17.2), the spoken print word is marked by boxes laid over it, from its Range's
+// client rects: fixed-position, pointer-events none, outside the editor's own DOM (Lexical owns that). Re-laid when a pane scrolls.
+let ttsFbRange = null, ttsFbWord = '', ttsFbBoxes = null;
+function layTtsFallback() {
+  if (ttsFbBoxes) { ttsFbBoxes.forEach((b) => b.remove()); ttsFbBoxes = null; }
+  if (!ttsFbRange) return;
+  let rects; try { rects = [...ttsFbRange.getClientRects()]; } catch { rects = []; }
+  ttsFbBoxes = rects.filter((r) => r.width > 0 && r.height > 0).map((r) => {
+    const b = document.createElement('div');
+    b.setAttribute('data-tts-fallback', ''); b.setAttribute('data-word', ttsFbWord); b.setAttribute('aria-hidden', 'true');
+    b.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;pointer-events:none;z-index:50;` +
+      'background:var(--sel);border-bottom:2.5px solid var(--accent);border-radius:2px;box-sizing:border-box';
+    document.body.appendChild(b);
+    return b;
+  });
+}
+function setTtsFallback(range) { ttsFbRange = range; ttsFbWord = range.toString(); layTtsFallback(); }
+function clearTtsFallback() { ttsFbRange = null; if (ttsFbBoxes) { ttsFbBoxes.forEach((b) => b.remove()); ttsFbBoxes = null; } }
+document.addEventListener('scroll', () => { if (ttsFbRange) layTtsFallback(); }, { capture: true, passive: true });
+window.addEventListener('resize', () => { if (ttsFbRange) layTtsFallback(); });
+// Keep the braille pane on what is being read (Paul, 4 Nov 2026, Safari: the pane never moved, so the line and word read were out of sight).
+// The two panes' scroll-sync is off while reading, so the reader moves the braille pane itself.
+function followBrailleBlock(block) {
+  const vb = brailleEl._virtualBraille;
+  if (vb?.isVirtualized()) {
+    const top = vb.getBlockOffset(block);
+    if (top == null) return;
+    const h = vb.getBlockHeight(block) || 0;
+    if (top < brailleEl.scrollTop || top + Math.min(h, brailleEl.clientHeight) > brailleEl.scrollTop + brailleEl.clientHeight) vb.scrollToBlock(block, 0);
+    return;
+  }
+  const row = brailleEl.querySelector(`.brl-row[data-block="${block}"]`);
+  if (row && !isElementVisibleIn(row, brailleEl, 4)) scrollWithin(brailleEl, row, { block: 'start' });
+}
+function speakingRowIdx(block, unit, s, e) {         // the braille row holding this word (virtualized pane: its rows may not be in the DOM)
+  if (!lastTrace?.rowCells || !lastTrace?.rows) return -1;
+  for (let r = 0; r < lastTrace.rowCells.length; r++) {
+    if (lastTrace.rows[r] !== block) continue;
+    const cells = lastTrace.rowCells[r];
+    const list = Array.isArray(cells) ? cells : (Array.isArray(cells?.src) ? cells.src : null);
+    if (list && list.some((c) => c && Number(c.u) === unit && c.c >= s && c.c < e)) return r;
+  }
+  return -1;
+}
+function markSpokenBraille(block, unit, fs, fe) {
+  const vb = brailleEl._virtualBraille;
+  let marked;
+  if (vb?.isVirtualized()) {
+    const rIdx = speakingRowIdx(block, unit, fs, fe);
+    const sp = { block, unit, s: fs, e: fe };
+    marked = vb.setSpeakingWord(sp);
+    if (!marked.length && rIdx >= 0) { vb.scrollToRow(rIdx); marked = vb.setSpeakingWord(sp); }   // its row was not drawn: bring it into view
+  } else {
+    const rows = brailleEl.querySelectorAll(`.brl-row[data-block="${block}"]`);
+    rows.forEach(expandRowCells);
+    marked = [];
+    rows.forEach((r) => {
+      r.querySelectorAll('.bcell[data-char]').forEach((c) => {
+        if (Number(c.dataset.unit) !== unit) return;
+        const n = +c.dataset.char; if (n >= fs && n < fe) { c.classList.add('cell-speaking'); marked.push(c); }
+      });
+    });
+  }
+  if (marked.length) {                               // the whole word in view (a line cut by the pane's edge counts as out)
+    const c = brailleEl.getBoundingClientRect(), q = marked[0].getBoundingClientRect();
+    if (q.top < c.top || q.bottom > c.bottom) scrollWithin(brailleEl, marked[0], { block: 'center' });
+  }
 }
 let readingBlock = 0, readingKey = null;              // the block currently being read (for stop→caret); key survives re-index
 const reader = new Reader({
@@ -9989,6 +10313,7 @@ const reader = new Reader({
     } else {
       brailleEl.querySelectorAll(`.brl-row[data-block="${item.blockIdx}"]`).forEach((r) => r.classList.add('brl-reading'));
     }
+    followBrailleBlock(item.blockIdx);                // the braille pane follows the reading, as the print pane does
     if (item.kind === 'math') startEqOverlay(item);    // in-place term highlighting over the real equation
   },
   onBoundary: (item, charIndex, len) => {
@@ -10006,15 +10331,18 @@ const reader = new Reader({
     }
     if (fe > fs) {                                     // a text word: underline print + red braille (unit-aware)
       const pe = printUnitEl(item.blockIdx, unit);
-      if (pe && ttsHi) { const r = charRangeInEl(pe, fs, fe, cellText[`${item.blockIdx}:${unit}`]); if (r) setHl('tts-word', new Highlight(r)); }
-      const rows = brailleEl.querySelectorAll(`.brl-row[data-block="${item.blockIdx}"]`);
-      rows.forEach(expandRowCells);
-      rows.forEach((r) => {
-        r.querySelectorAll('.bcell[data-char]').forEach((c) => {
-          if (Number(c.dataset.unit) !== unit) return;
-          const n = +c.dataset.char; if (n >= fs && n < fe) c.classList.add('cell-speaking');
-        });
-      });
+      if (pe) {
+        const r = charRangeInEl(pe, fs, fe, cellText[`${item.blockIdx}:${unit}`]);
+        if (r) {
+          const q = r.getBoundingClientRect(), eR = editorEl.getBoundingClientRect();
+          if (q.height && (q.bottom > eR.bottom || q.top < eR.top)) {          // a long paragraph: keep the word itself in view
+            const host = r.startContainer.nodeType === 1 ? r.startContainer : r.startContainer.parentElement;
+            if (host) host.scrollIntoView({ block: 'nearest' });
+          }
+          if (ttsHi) setHl('tts-word', new Highlight(r)); else setTtsFallback(r);
+        }
+      }
+      markSpokenBraille(item.blockIdx, unit, fs, fe);
     } else if (isMath) {                               // a maths word ("pie", "squared"…): flag the equation
       editorEl.querySelector(`[data-block-idx="${item.blockIdx}"] math-field`)?.classList.add('math-speaking');
     }
@@ -10077,6 +10405,7 @@ function moveCaretToKey(key) {                      // so the next Play resumes 
 }
 function startReading(fromBlock) {
   if (!speechAvailable()) { announce(t('app.tts.unavailable')); return; }
+  if (proof) stopProofread(false);   // one voice at a time: Read replaces Proofread braille
   const model = editor.getEditorState().read(buildModel);
   const all = buildSpokenItems(model, mathSpeech);
   // Play (no arg) → from the caret word; double-click a braille line → from that block.
@@ -10100,6 +10429,221 @@ $id('btnRead')?.addEventListener('click', onReadClick);
 // double-click a braille line → read from that block
 brailleEl.addEventListener('dblclick', (e) => { const row = e.target.closest('.brl-row[data-block]'); if (row) startReading(Number(row.dataset.block)); });
 editorEl.addEventListener('beforeinput', () => { if (reader.speaking) reader.stop(); });   // editing stops the read (indices shift)
+
+// ---- Proofread the braille aloud (Paul, 4 Nov 2026; a Transcriber tool) ----
+// Reads the BRAILLE back from the caret, not the print: every braille word is back-translated with the braille code in use
+// (web/braille-table.mjs makeTranslators().backTranslate), so a mistake in the braille is heard; web/braille-readback.mjs decides the
+// words said ("cap" before each capital, punctuation named, dots for cells that do not back-translate). It reads on, across braille
+// pages, until the end, Escape, a click in either pane, an edit, or the command again. The braille word being read is marked in both
+// panes by highlightWord (the same link a click makes), which also keeps it in view. Running heads, braille page-number lines and the
+// contents pages (rows with no source block) are not read; crossing to a new braille page says "page N" once.
+// Reading is by braille LINE (one utterance a line, so the voice keeps its flow); the word marked follows the voice's word boundaries.
+const PROOF_CHUNK_ROWS = 40;                      // rows turned into speech at a time; the next chunk is made when these have been spoken
+let proof = null;                                 // while proofreading: { ctx, brf, current, statusText, prevStatus }
+let proofStarting = false;
+const proofWords = () => Object.fromEntries(Object.keys(READBACK_WORDS).map((k) => [k, tOr('app.readback.' + k, READBACK_WORDS[k])]));
+// The braille as the pane shows it: one entry a line (the same split render() makes), and the braille page of each line.
+function proofLayout(brf) {
+  const lines = [], pageOf = [];
+  String(brf || '').split('\f').forEach((page, p) => {
+    const ls = page.split(/\r\n|\n/);
+    if (ls.length && ls[ls.length - 1] === '') ls.pop();
+    for (const l of ls) { lines.push(l); pageOf.push(p + 1); }
+  });
+  return { lines, pageOf };
+}
+// The [start, end) ranges of a (block, unit)'s flat text that are equations (the frame the cell trace uses: `$latex$`).
+function proofMathRanges(ctx, block, unit) {
+  const key = `${block}:${unit}`;
+  let r = ctx.mathMemo.get(key);
+  if (r) return r;
+  r = [];
+  const b = ctx.model && ctx.model.blocks ? ctx.model.blocks[block] : null;
+  let segs = b ? b.segments : null;
+  if (b && b.type === 'list') segs = b.items && b.items[unit] ? b.items[unit].segments : null;
+  else if (b && (b.type === 'box' || b.type === 'sidebar') && Array.isArray(b.blocks)) segs = b.blocks[unit] ? b.blocks[unit].segments : null;
+  if (Array.isArray(segs)) {
+    let pos = 0;
+    for (const seg of segs) {
+      if (!seg) continue;
+      if (seg.type === 'math') { const len = (seg.latex ? `$${seg.latex}$` : '⟨equation⟩').length; r.push([pos, pos + len]); pos += len; }
+      else pos += String(seg.text || '').replace(/\s+/g, ' ').length;
+    }
+  }
+  ctx.mathMemo.set(key, r);
+  return r;
+}
+// The braille words of one line, each with the print word it came from: { brf, block, unit, s, e, math }. A line with no source block
+// (running head, page number, contents page, blank) has none.
+function proofRowTokens(ctx, r) {
+  const block = ctx.rows[r];
+  if (block == null || block < 0) return [];
+  const line = ctx.lines[r] || '';
+  const cells = ctx.rowCells ? ctx.rowCells[r] : null;
+  const cellList = Array.isArray(cells) ? cells : (cells && Array.isArray(cells.src) ? cells.src : null);
+  const toks = [];
+  const re = /\S+/g;
+  let m;
+  while ((m = re.exec(line))) {
+    let unit = null, s = Infinity, e = -1, math = false;
+    if (cellList) {
+      for (let c = m.index; c < m.index + m[0].length; c++) {
+        const cell = cellList[c];
+        if (!cell || typeof cell.c !== 'number') continue;
+        if (unit == null) unit = Number(cell.u) || 0;
+        if ((Number(cell.u) || 0) !== unit) continue;
+        if (cell.c < s) s = cell.c;
+        if (cell.c + 1 > e) e = cell.c + 1;
+        if (!math && proofMathRanges(ctx, block, unit).some(([a, z]) => cell.c >= a && cell.c < z)) math = true;
+      }
+    }
+    toks.push({ brf: m[0], block, unit, s: unit == null ? null : s, e: unit == null ? null : e, math, rule: unit == null && isRuleToken(m[0]) });
+  }
+  return toks;
+}
+// Turn the next rows into speech items (one a line, plus a "page N" item where the page changes).
+function proofBuild(ctx, maxRows) {
+  const items = [];
+  let n = 0;
+  while (ctx.row < ctx.lines.length && n < maxRows) {
+    const r = ctx.row++;
+    n++;
+    let toks = proofRowTokens(ctx, r);
+    if (r === ctx.startRow && ctx.skipTokens) { toks = toks.slice(ctx.skipTokens); ctx.skipTokens = 0; }
+    if (!toks.length) continue;
+    const page = ctx.pageOf[r];
+    if (ctx.page != null && page !== ctx.page) items.push({ kind: 'page', blockIdx: toks[0].block, unit: 0, text: `${ctx.opts.words.page} ${page}`, spans: [], page, row: r });
+    ctx.page = page;
+    let text = '', prevMath = false;
+    const spans = [];
+    for (const tk of toks) {
+      const spoken = tk.rule ? ctx.opts.words.rule_line   // the line under a list or table: "line", not its cells
+        : tk.math
+        ? (prevMath ? '' : `${ctx.opts.words.equation}, `) + dotsPhrase(tk.brf, ctx.opts)   // no back-translation exists for an equation here: its dots
+        : readbackWord(tk.brf, ctx.back(tk.brf), ctx.opts);
+      prevMath = tk.math;
+      if (!spoken) continue;
+      if (text) text += ' ';
+      spans.push({ start: text.length, end: text.length + spoken.length, tk });
+      text += spoken;
+    }
+    if (text) items.push({ kind: 'brl', blockIdx: toks[0].block, unit: toks[0].unit || 0, text, spans, page, row: r });
+  }
+  return items;
+}
+function proofHighlight(item, idx) {
+  const sp = item && item.spans ? item.spans[idx] : null;
+  if (!sp || !proof) return;
+  const tk = sp.tk;
+  proof.current = tk;
+  if (tk.unit != null && tk.s != null && tk.e > tk.s) highlightWord(tk.block, tk.unit, tk.s, tk.e, null, 'proofread');
+  else { clearWordLink(); linkByBlock(tk.block, false); }
+  setStatus(proof.statusText);
+}
+const proofReader = new Reader({
+  onBlock: (item) => { if (proof) proofHighlight(item, 0); },
+  onBoundary: (item, charIndex) => {
+    if (!proof || !item.spans || !item.spans.length) return;
+    let idx = 0;
+    for (let i = 0; i < item.spans.length; i++) { if (item.spans[i].start <= charIndex) idx = i; else break; }
+    if (item._shown !== idx) { item._shown = idx; proofHighlight(item, idx); }
+  },
+  onEnd: () => proofChunkEnded(),
+  onStuck: () => { announce(t('app.tts.stuck')); setStatus(t('app.tts.stuck_status')); },
+});
+function updateProofButton() {
+  const b = $id('btnProofread'); if (!b) return;
+  const on = !!proof;
+  b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  const label = on ? tOr('toolbar.stop_proofreading', 'Stop proofreading') : tOr('toolbar.proofread_braille', 'Proofread braille');
+  const lbl = b.querySelector('.btn-lbl');
+  if (lbl) { lbl.textContent = label; lbl.setAttribute('data-i18n', on ? 'toolbar.stop_proofreading' : 'toolbar.proofread_braille'); }
+}
+function proofChunkEnded() {
+  if (!proof) return;                                                     // stopped by us: nothing more to do
+  if (proof.brf !== lastBrf) { stopProofread(false); return; }            // the braille was remade under us (a setting changed): row numbers no longer fit
+  let items = [];
+  while (!items.length && proof.ctx.row < proof.ctx.lines.length) items = proofBuild(proof.ctx, PROOF_CHUNK_ROWS);
+  if (items.length) { proofReader.speak(items); return; }
+  stopProofread(false, tOr('app.readback.finished', 'Finished proofreading braille.'));
+}
+// Stop. `moveCaret`: Escape or the command put the caret at the block last read (as stopping Read does); a click or an edit leaves it where it is.
+function stopProofread(moveCaret, message) {
+  if (!proof) return;
+  const p = proof;
+  proof = null;                                                           // first: the reader's own end-of-speech callback then does nothing
+  proofReader.stop();
+  clearWordLink();
+  updateProofButton();
+  setStatus(p.prevStatus || '');
+  announce(message || tOr('app.readback.stopped', 'Stopped proofreading braille.'));
+  if (moveCaret) {
+    if (p.current != null) moveCaretToKey(lastKeys[p.current.block]);
+    editor.focus();                                                       // the keyboard goes back to the text
+  }
+}
+async function startProofread() {
+  if (!transcriberToolsOn()) return;
+  if (proof) { stopProofread(true); return; }
+  if (proofStarting) return;
+  if (!speechAvailable()) { announce(tOr('app.readback.unavailable', 'Text-to-speech is not available in this browser.')); return; }
+  proofStarting = true;
+  try {
+    if (reader.speaking) reader.stop();
+    if (renderPending()) await renderSettled(15000);                       // read the braille of the text as it is now
+    if (proof || !lastBrf || !lastTrace || !lastTrace.rows) { announce(tOr('app.readback.nothing', 'There is no braille to read here.')); return; }
+    try { syncCaretWithBraille(true); } catch { /* the caret's word is only a better start */ }
+    let from = activeWordHighlight ? { block: activeWordHighlight.block, unit: activeWordHighlight.unit, s: activeWordHighlight.s } : null;
+    if (!from) { const c = caretPos(); from = { block: c.block, unit: c.unit, s: c.offset }; }
+    const { lines, pageOf } = proofLayout(lastBrf);
+    const tr = makeTranslators(louis, activeTable);
+    const cache = new Map();
+    const back = (brf) => {
+      let v = cache.get(brf);
+      if (v === undefined) { try { v = backTranslateWord(brf, tr.backTranslate, { ueb: /en-ueb/.test(activeTable) }); } catch { v = ''; } cache.set(brf, v); }
+      return v;
+    };
+    const ctx = {
+      lines, pageOf, rows: lastTrace.rows, rowCells: lastTrace.rowCells, model: lastModel, mathMemo: new Map(), back,
+      opts: { standard: ((lastFormatOpts && lastFormatOpts.mode) || settings.mode) === 'bana' ? 'bana' : 'ukaaf', words: proofWords() },
+      row: 0, page: null, startRow: -1, skipTokens: 0,
+    };
+    // The first braille word at or after the caret's print word.
+    const eligible = (tk) => tk.block > from.block || (tk.block === from.block && (tk.unit == null || tk.unit > from.unit || (tk.unit === from.unit && tk.e > from.s)));
+    const findStart = (accept) => {
+      for (let r = 0; r < lines.length; r++) {
+        const b = ctx.rows[r];
+        if (b == null || b < 0 || b < from.block) continue;
+        const toks = proofRowTokens(ctx, r);
+        const i = toks.findIndex(accept);
+        if (i >= 0) return { r, i };
+      }
+      return null;
+    };
+    const start = findStart(eligible) || findStart((tk) => tk.block === from.block);   // the caret past the last word: its block from the top, as Read does
+    if (!start) { announce(tOr('app.readback.nothing', 'There is no braille to read here.')); return; }
+    ctx.row = ctx.startRow = start.r; ctx.skipTokens = start.i; ctx.page = pageOf[start.r];
+    let items = [];
+    while (!items.length && ctx.row < lines.length) items = proofBuild(ctx, PROOF_CHUNK_ROWS);
+    if (!items.length) { announce(tOr('app.readback.nothing', 'There is no braille to read here.')); return; }
+    proof = { ctx, brf: lastBrf, current: null, prevStatus: currentStatusText, statusText: tOr('app.readback.status', 'Proofreading braille from page {page} — Escape to stop').replace('{page}', String(pageOf[start.r])) };
+    proofReader.rate = Number(settings.ttsRate) || 1;
+    proofReader.voice = pickVoice(settings.ttsVoice);
+    announce(tOr('app.readback.started', 'Proofreading braille aloud.'));
+    setStatus(proof.statusText);
+    proofReader.speak(items);
+    updateProofButton();
+  } finally { proofStarting = false; }
+}
+$id('btnProofread')?.addEventListener('click', () => { startProofread(); });
+// Escape stops it and puts the keyboard back in the text; a click in either pane or an edit stops it too (the caret stays where the click put it).
+document.addEventListener('keydown', (e) => {
+  if (proof && e.key === 'Escape' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); e.stopPropagation(); stopProofread(true); }
+}, true);
+editorEl.addEventListener('pointerdown', () => { if (proof) stopProofread(false); }, true);
+brailleEl.addEventListener('pointerdown', () => { if (proof) stopProofread(false); }, true);
+editorEl.addEventListener('beforeinput', () => { if (proof) stopProofread(false); });
+window.__proofreadActive = () => !!proof;   // tests
 
 // ---- reading voice + speed (persisted) ----
 const NOVELTY_VOICES = new Set([
@@ -10205,6 +10749,7 @@ document.addEventListener('keydown', (e) => {
   if (e.shiftKey && (k === '=' || k === '+')) return go('brlLarger');          // braille bigger
   if (e.shiftKey && (k === '-' || k === '_')) return go('brlSmaller');         // braille smaller
   if (e.shiftKey && k === 'd') { e.preventDefault(); describeCaretWord(); }    // describe braille at the caret
+  if (e.shiftKey && k === 'l' && !e.altKey && transcriberToolsOn()) return go('btnProofread');   // proofread the braille aloud, or stop (a transcriber tool)
 });
 
 // ---- ARIA toolbar: roving tabindex + Left/Right navigation ----
@@ -11023,6 +11568,8 @@ function initGraphicDialog() {
   doneBtn?.addEventListener('click', () => { dlg.close(); editor.focus(); });
 }
 
+// Relaxed braille: a tactile graphic's labels stay as they were (fully contracted) - they are short, sit in a drawn layout, and the
+// reader-profile decision (A91) is about the running text; the label's room on the graphic is worked out from this braille.
 function translateDiagramText(txt) {
   if (!txt || !txt.trim()) return '';
   try {
@@ -11035,13 +11582,17 @@ function translateDiagramText(txt) {
   return defaultBrailleTranslator(txt.trim());
 }
 
+// The device a tactile graphic is made for (Paul, 4 Nov 2026): the Monarch or DotPad a template is "Made for", else its paper embosser model (P-K: the model
+// says which graphics a job can have).
+function graphicsTarget() { return settings.madeFor === 'monarch' || settings.madeFor === 'dotpad' ? settings.madeFor : (settings.embosser || 'generic'); }
+
 function plotAndInsertGraph(latex, targetNodeKey) {
   if (!latex || !latex.trim()) return;
   try {
     const plot = plotTactileFunction(latex, {
       brailleCode: settings.brailleCode || 'en-ueb-g2',
-      targetDevice: settings.embosser || 'dotpad',
-      embosser: settings.embosser || 'dotpad',
+      targetDevice: graphicsTarget(),
+      embosser: graphicsTarget(),
       autoScaleY: true,
       translator: translateDiagramText,
     });
@@ -11078,10 +11629,10 @@ function plotAndInsertGraph(latex, targetNodeKey) {
 }
 
 async function insertGraphicDiagram(rawSvg, meta = {}) {
-  const transpiled = await transpileTactileSvgForDevice(rawSvg, {
+  const transpiled = meta.raw ? { svg: rawSvg } : await transpileTactileSvgForDevice(rawSvg, {   // meta.raw (W14): a drawing made in the drawing tool is already tactile
     brailleCode: settings.brailleCode || 'en-ueb-g2',
-    targetDevice: settings.embosser || 'dotpad',
-    embosser: settings.embosser || 'dotpad',
+    targetDevice: graphicsTarget(),
+    embosser: graphicsTarget(),
     applyTextures: true,
     translateLabels: true,
     translator: translateDiagramText,
@@ -11106,6 +11657,29 @@ async function insertGraphicDiagram(rawSvg, meta = {}) {
   ding();
 }
 window.insertGraphicDiagram = insertGraphicDiagram;
+
+// W14: the tactile drawing tool (Emboss/web/tactile-draw/), loaded the first time it is used. `key` is an existing graphic block, or none for a new one.
+const tactileDrawHost = {
+  cells: () => settings.cells || 38,
+  lines: () => settings.lines || 25,
+  translate: (txt) => translateDiagramText(txt),
+  fallback: (txt) => defaultBrailleTranslator(txt),
+  announce: (msg) => announce(msg),
+  read: (key) => editor.getEditorState().read(() => { const n = $getNodeByKey(key); return $isGraphicNode(n) ? { svg: n.getSvg(), title: n.getTitle(), alt: n.getAlt() } : null; }),
+  update: (key, v) => { editor.update(() => { const n = $getNodeByKey(key); if ($isGraphicNode(n)) { n.setSvg(v.svg); n.setTitle(v.title || n.getTitle()); n.setAlt(v.alt || v.title || n.getAlt()); } }); announce('Drawing saved in the document.'); },
+  insert: (v) => insertGraphicDiagram(v.svg, { title: v.title || 'Tactile diagram', alt: v.alt || v.title || 'Tactile diagram', raw: true }),
+};
+async function openTactileDrawing(key = null) {
+  try {
+    const mod = await import('/web/tactile-draw/index.mjs');
+    return await mod.drawTactileGraphic(tactileDrawHost, key);
+  } catch (err) {
+    recordProblem('report', `The drawing tool could not open: ${err?.message || err}`, { stack: err?.stack || '' });
+    announce('The drawing tool could not open.');
+  } finally { editor.focus(); }
+}
+window.openTactileDrawing = openTactileDrawing;
+import('/web/tactile-draw/index.mjs').then((m) => m.installTactileDrawEntries(() => openTactileDrawing())).catch(() => { /* offline before it was cached: the entries just do not appear */ });
 window.plotAndInsertGraph = plotAndInsertGraph;
 
 function insertSidebar(title = 'Sidebar Title') {
@@ -11395,9 +11969,9 @@ function insertTable(numRows = 3, numCols = 3, format = 'spatial') {
 window.insertTable = insertTable;
 
 // The slash menu: the text-format commands, then every style in BLOCK_STYLES (the same
-// registry the style dropdown is built from), then the other inserts. `expertOnly` commands
-// (tactile graphics, graph plotting) are hidden unless the Ctrl/Cmd+Shift+\ toggle is on
-// (body.expert-hardware) — see slashCommandVisible. Maths inserts stay visible (G1).
+// registry the style dropdown is built from), then the other inserts. The tactile graphic and graph-plotting commands
+// are Transcriber tools (audience: 'transcriber'; Paul, 4 Nov 2026, EMBOSS-TASKS P-D — they were hidden behind the
+// Ctrl/Cmd+Shift+\ toggle) — see slashCommandVisible. Maths inserts stay visible (G1).
 const SLASH_FORMAT_COMMANDS = [
   { id: 'slash', title: 'Insert "/"', desc: 'Type a literal slash character', icon: '/', keywords: ['slash', '/', 'text', 'symbol'], action: () => insertTextAtCaret('/') },
   { id: 'bold', title: 'Bold Text', desc: 'Apply bold formatting', icon: 'B', keywords: ['bold', 'b', 'strong'], action: () => $id('btnBold')?.click() },
@@ -11411,11 +11985,12 @@ const SLASH_INSERT_COMMANDS = [
   { id: 'matrix', title: 'Math Matrix (2×2 / 3×3)', desc: 'Insert 2×2 or 3×3 visual MathLive matrix', icon: 'i:calculator', keywords: ['matrix', 'pmatrix', 'bmatrix', 'linalg', 'array', 'grid', 'vector'], action: () => insertMathEquation('\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', 'Matrix equation inserted') },
   { id: 'math', title: 'Insert Equation', desc: 'MathLive visual equation (UEB/Nemeth)', icon: 'i:sigma-function', keywords: ['math', 'maths', 'equation', 'latex', 'formula'], action: () => $id('btnMath')?.click() },
   { id: 'formula', title: 'Equation Templates...', desc: 'Browse 340+ math formulas, matrices & equations', icon: 'i:sigma-function', keywords: ['formula', 'template', 'math', 'equation', 'matrix', 'table', 'algebra', 'calculus', 'frac', 'sqrt'], action: () => openFormulaDialog() },
-  { id: 'plot', expertOnly: true, title: 'Plot Tactile Math Graph...', desc: 'Generate tactile coordinate graph (single or multi-curve)', icon: 'i:graph-up', keywords: ['plot', 'graph', 'function', 'curve', 'math', 'equation', 'parabola', 'sine', 'line', 'coordinate', 'axes', 'multi'], action: () => {
+  { id: 'plot', audience: 'transcriber', title: 'Plot Tactile Math Graph...', desc: 'Generate tactile coordinate graph (single or multi-curve)', icon: 'i:graph-up', keywords: ['plot', 'graph', 'function', 'curve', 'math', 'equation', 'parabola', 'sine', 'line', 'coordinate', 'axes', 'multi'], action: () => {
     const promptEquation = window.prompt('Enter function(s) or comma-separated curves to plot (e.g. x^2 - 4, 2x + 1):', 'x^2 - 4, 2x + 1');
     if (promptEquation) plotAndInsertGraph(promptEquation);
   }},
-  { id: 'graphic', expertOnly: true, title: 'Tactile Graphic Diagram...', desc: 'Browse curated tactile diagrams or upload SVG', icon: 'i:media-image', keywords: ['graphic', 'svg', 'image', 'diagram', 'chart', 'tactile', 'picture', 'drawing', 'map'], action: () => openGraphicDialog() },
+  { id: 'graphic', audience: 'transcriber', title: 'Tactile Graphic Diagram...', desc: 'Browse curated tactile diagrams or upload SVG', icon: 'i:media-image', keywords: ['graphic', 'svg', 'image', 'diagram', 'chart', 'tactile', 'picture', 'drawing', 'map'], action: () => openGraphicDialog() },
+  { id: 'drawgraphic', audience: 'transcriber', title: 'Draw a Tactile Graphic...', desc: 'Draw a tactile graphic: lines, shapes, textures and braille labels', icon: 'i:media-image', keywords: ['draw', 'drawing', 'graphic', 'tactile', 'svg', 'diagram', 'shapes'], action: () => openTactileDrawing() },
   { id: 'brailleformat', when: () => transcriberToolsOn() && bfHasTarget(), title: 'Braille formatting…', desc: 'Optional braille formatting fields for this block (Ctrl/⌘+Alt+B)', icon: 'i:settings', keywords: ['braille', 'formatting', 'format', 'fields', 'bullet', 'columns', 'directions', 'speaker', 'stairstep', 'subdivision', 'note', 'xref', 'prefix'], action: () => openBrailleFmtDialog() },
   // K29 Stage 1d "Insert field": only offered with the caret inside a Title Page line, Transcriber tools on.
   { id: 'titlepageinsertfield', when: () => transcriberToolsOn() && titlePageInsertFieldTarget(editor.getEditorState()).available, title: 'Insert field…', desc: 'Put a Title Page field (title, author, ISBN…) at the cursor (Ctrl/⌘+Shift+F)', icon: 'i:label', keywords: ['field', 'chip', 'title page', 'insert field', 'author', 'isbn', 'publisher'], action: () => openTpInsertFieldMenu() },
@@ -11432,8 +12007,8 @@ const SLASH_COMMANDS = [
   })),
   ...SLASH_INSERT_COMMANDS,
 ];
-// Expert-only commands show only while the Ctrl/Cmd+Shift+\ toggle is on (body.expert-hardware).
-const slashCommandVisible = (cmd) => (!cmd.expertOnly || document.body.classList.contains('expert-hardware')) && audienceVisible(cmd.audience) && (!cmd.when || cmd.when());   // audience: a transcriber page style needs Transcriber tools   // `when`: only offered where it applies (the Braille formatting command needs a block that has fields)
+// Transcriber commands (the tactile graphics) show only while Transcriber tools is on (audienceVisible).
+const slashCommandVisible = (cmd) => audienceVisible(cmd.audience) && (!cmd.when || cmd.when());   // audience: a transcriber page style needs Transcriber tools   // `when`: only offered where it applies (the Braille formatting command needs a block that has fields)
 
 function initSlashMenu() {
   const menuEl = $id('slashMenu');
@@ -11738,6 +12313,16 @@ editorEl.addEventListener('keydown', (e) => {
   }
 });
 
+// The document's text for the Choose contractions dialog's "left out in this document" list (relaxed braille, Stage 4).
+function documentTextForReport() {
+  let model = null;
+  try { editor.getEditorState().read(() => { model = mergeListItemBlocks(buildModel()); }); } catch { model = null; }
+  model = model || lastModel;
+  return model ? buildSpokenItems(model).filter((it) => it.kind !== 'math').map((it) => it.text).join('\n') : '';
+}
+// The text of the demonstration document below, once it is in the editor; that list does not count it (S1).
+let seedDocText = null;
+
 // ---- seed demo content ----
 function seed() {
   editor.update(() => {
@@ -11756,11 +12341,13 @@ function seed() {
     p2.append($createTextNode('.'));
     const p3 = $createParagraphNode();
     p3.append($createTextNode('Click any word here and its braille lights up beside it — and the other way round.'));
-    const h2 = $createHeadingNode('h2'); h2.append($createTextNode('A short list'));
     const ul = $createListNode('bullet');
     ['First item', 'Second item', 'Third item'].forEach((s) => { const li = $createListItemNode(); li.append($createTextNode(s)); ul.append(li); });
-    root.append(h1, p1, $createBreakNode(), p2, p3, h2, ul);
+    // Paul, 4 Nov 2026 (option B): one heading and no "* * *" document break — the break sat between two unrelated sentences, where no
+    // book has one, and put a line of asterisks in the braille; the second heading ("A short list") is gone too, so the sample is small.
+    root.append(h1, p1, p2, p3, ul);
   }, { discrete: true });
+  seedDocText = documentTextForReport();
 }
 
 // ---- drag-and-drop import (parse a document into the editor) ----
@@ -11806,7 +12393,7 @@ function applyEmphasis(node, tf, uncontracted = false, ignoreFont = false, hyper
   if (tf & TF_SCRIPT) node.setStyle([node.getStyle ? node.getStyle() || '' : '', SCRIPT_STYLE].filter(Boolean).join(' '));
   if (uncontracted) node.toggleFormat('code');           // uncontracted (grade 1) run, e.g. a pronunciation (A26)
   // UEB 9.5.1: 'strike' is the editor's own strikethrough control (Lexical format bit); any
-  // other transcriber-defined typeform slot (BrailleBlaster's own bai-transN, parse.mjs A24)
+  // other transcriber-defined typeform slot (a bai-transN, parse.mjs A24)
   // has no editor control, so it rides the CSS-custom-property style channel instead — same
   // mechanism as ignoreFont/hyperlink above, so it round-trips a save.
   if (transcriberTypeform === 'strike') node.toggleFormat('strikethrough');
@@ -11850,6 +12437,14 @@ function fillFromBlock(parent, b) {
       else if (s.type === 'linenum') { if (s.text) parent.append($createLineNumberNode(s.text)); }
       else if (s.type === 'imgnote') { if (s.text) parent.append($createImgNoteNode(s.text, s.src || null, s)); }
       else if (s.type === 'brl') { if (s.brl || s.text) parent.append($createBrlNode(s.text || '', s.brl || '')); }
+      else if (s.sixkey) {
+        // X9 / W16: braille typed with the six keys, with the print it replaced (parse.mjs stamps `.sixkey` on the run's text segment).
+        // A forced line break inside it stays a line break; the cells are not touched.
+        String(s.text ?? '').split('\n').forEach((part, k) => {
+          if (k > 0) parent.append($createLineBreakNode());
+          if (part) $appendScriptAware(parent, part, (x) => applyEmphasis($createSixKeyNode(x, s.sixkey.print), s.tf || 0, !!s.uncontracted, !!s.ignoreFont, !!s.hyperlink, s.transcriberTypeform, s.lang));
+        });
+      }
       else if (s.href) {
         // A19/A21 Stage 3: keep the href through the editor, not just a direct parse->export
         // round trip (parse.mjs's walkInline stamps `.href` on an ordinary text segment —
@@ -11889,6 +12484,15 @@ function fillFromBlock(parent, b) {
     // space runs collapse. (1 Oct 2026: a plain-text paragraph's line break was collapsed to a space, so the editor's braille ran the
     // two lines together where the reader's broke them — tests/test-editor-reader-parity.mjs, r01-inline.rtf.)
     const typedBraille = TYPED_BRAILLE_TEXT_RE.test(String(b.text));   // feedback item 3: typed braille keeps its spaces as typed
+    if (Array.isArray(b.sixkey) && b.sixkey.length && !b.text.includes('\n')) {
+      // X9 / W16: a paragraph of plain text with six-key runs beside it (what paraBlock makes; an undo or a reload of it). The text is already in
+      // its final form (spaces collapsed, ends trimmed), so it is cut at the runs as it stands.
+      for (const pc of piecesOfText(typedBraille ? String(b.text).replace(/\s+$/, '') : String(b.text), b.sixkey)) {
+        if (!pc.text) continue;
+        if (pc.run) parent.append($createSixKeyNode(pc.text, pc.run.print)); else parent.append($createTextNode(pc.text));
+      }
+      return;
+    }
     (typedBraille ? String(b.text).replace(/\s+$/, '') : String(b.text).trim()).split('\n').forEach((part, k) => {
       if (k > 0) parent.append($createLineBreakNode());
       const t = typedBraille ? part : part.replace(/\s+/g, ' ').trim();
@@ -11983,6 +12587,9 @@ function appendBlock(parent, b) {
       if (it.page) li.setPage(it.page);
       if (it.page && it.pageHref) li.setPageHref(it.pageHref);   // A36
       if (isOrdered && !isPlain) li.setMarker(it.marker || NO_MARKER);
+      // A plain list holding a numbered or lettered list (<list type="pl"> with an <list type="ol"> inside, 4 Nov 2026): the inner items keep their
+      // print numbers as their marker, as in a numbered list, else the editor's braille and the saved file lost the inner level's numbering.
+      else if (isPlain && listKind === 'plain' && it.marker && !isBulletMarker(it.marker)) li.setMarker(it.marker);
       else if (it.marker && isBulletMarker(it.marker)) li.setFmt({ ...(li.getFmt() || {}), bulletMarker: it.marker });   // kept for save (the list itself is a bullet list)
       // An item with no print marker in a bulleted list (text straight inside an HTML <ul>, an ODT legal label written into the text):
       // no bullet on screen, in the braille or in the saved file, as the reader has it (it was given "•" on the way back to the model).
@@ -12047,7 +12654,7 @@ function appendBlock(parent, b) {
     parent.append(pn);
   } else if (b.type === 'graphic') {
     if (b.svg) {
-      const transpiled = transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });
+      const transpiled = /data-tactile-draw=["']1["']/.test(b.svg) ? { svg: b.svg } : transpileTactileSvg(b.svg, { brailleCode: settings.brailleCode });   // W14: a drawing from the drawing tool is kept exactly as drawn
       parent.append(fmtFromBlock($createGraphicNode(transpiled.svg || b.svg, b.alt || 'Tactile diagram', b.title || b.alt || 'Tactile diagram', true, true), b, FMT_PBB_KEYS));
     } else {
       parent.append(fmtFromBlock($createImageNode(b), b, FMT_PBB_KEYS));
@@ -12305,6 +12912,7 @@ async function importFile(file) {
     // Build Lexical editor model
     setLoadedDocInfo(model);
     modelToLexical(model);
+    const templateNote = await applyOpenedTemplate(model);   // X1: a document saved under a template reopens with its settings; an import starts with the active template's document options (before the braille is made, below)
     await new Promise((r) => setTimeout(r, 10));
     
     // Format to braille and render
@@ -12319,6 +12927,7 @@ async function importFile(file) {
     markDocumentClean();
     resetUndoHistory();
     announce(t('app.import.done', { name: file.name }));
+    if (templateNote) announce(`${t('app.import.done', { name: file.name })} ${templateNote}`);   // X1: the same tick, so it replaces the line above and is read once
     if (model.warnings && model.warnings.length) {
       showParseWarning(t('app.import.notice', { message: model.warnings.join('; ') }));
     }
@@ -12558,6 +13167,7 @@ function populateLanguageDropdown() {
   } else if (sel.options.length) {
     sel.value = sel.options[0].value;
   }
+  refreshContractionsLine();   // the Contractions line follows the code (UEB contracted only)
 }
 
 // ---- Braille View / Monarch / DotPad Tab Management & Emulators ----
@@ -13080,10 +13690,12 @@ function switchBrailleTab(tab) {
 }
 
 export function updateBrailleTabsVisibility(autoSwitch = false) {
-  const embosserVal = $id('set-embosser')?.value || settings.embosser;
-  const isConn = (typeof tactileDisplay !== 'undefined') && tactileDisplay.isConnected && tactileDisplay.isConnected();
-  const isDotPad = (embosserVal === 'dotpad') || (settings.embosser === 'dotpad') || (isConn && tactileDisplay.deviceProfile?.id === 'dotpad');
-  const isMonarch = (embosserVal === 'monarch') || (settings.embosser === 'monarch') || (isConn && tactileDisplay.deviceProfile?.id === 'monarch');
+  // One Emboss (Paul, 4 Nov 2026, P-J / P-N): the Monarch or DotPad emulator tab shows beside the braille for everyone whose template is "Made for" that device
+  // (not only transcribers). A live connection (put aside, P-M) would show it too.
+  const madeForVal = $id('set-madeFor')?.value || settings.madeFor;
+  const isConn = hardwareEnabled() && (typeof tactileDisplay !== 'undefined') && tactileDisplay.isConnected && tactileDisplay.isConnected();
+  const isDotPad = (madeForVal === 'dotpad') || (settings.madeFor === 'dotpad') || (isConn && tactileDisplay.deviceProfile?.id === 'dotpad');
+  const isMonarch = (madeForVal === 'monarch') || (settings.madeFor === 'monarch') || (isConn && tactileDisplay.deviceProfile?.id === 'monarch');
 
   const tabViewDotPad = $id('tabViewDotPad');
   if (tabViewDotPad) {
@@ -13149,6 +13761,8 @@ window.addEventListener('i18n:localechange', () => syncConnectionControls(settin
 function applySettingsToUI(autoSwitch = false) {
   if ($id('tocToggle')) $id('tocToggle').checked = !!settings.toc;
   for (const k of ['embosser', 'tableFormat', 'quoteStyle', 'listStyle', 'paragraphStyle', 'connectionType']) if ($id('set-' + k)) $id('set-' + k).value = settings[k] || (k === 'embosser' ? 'generic' : (k === 'tableFormat' ? 'auto' : (k === 'paragraphStyle' ? 'indented' : (k === 'connectionType' ? 'serial' : ''))));
+  if ($id('set-madeFor')) $id('set-madeFor').value = settings.madeFor || 'paper';
+  syncMadeForControls(document, settings.madeFor);   // a Monarch / DotPad fixes the page size (P-J)
   populateUiLanguageDropdown();
   populateLanguageDropdown();
   if ($id('set-mathCode')) $id('set-mathCode').value = settings.mathCode || 'auto';
@@ -13169,13 +13783,48 @@ function applySettingsToUI(autoSwitch = false) {
   applyExplanationBarVisibility();
   applyTitleFieldVisibility();
   if ($id('set-tactileGraphics')) $id('set-tactileGraphics').checked = settings.tactileGraphics !== false;
-  if ($id('set-tactileRip')) $id('set-tactileRip').checked = settings.tactileRip === true;
   applySixKeyInput(true);   // the Settings checkbox is gone (F9 E1, Paul 9 Oct): the toolbar's six-key button is the one control, so an old saved "sixKeyInput: false" no longer hides it
 
   syncConnectionControls(settings.connectionType);
   updateGraphicsSupportUI();
   updateBrailleTabsVisibility(autoSwitch);
   applyDocOptionsToUI();
+}
+
+// ---- Templates (X1; Paul, 1 Nov 2026; web/templates.mjs holds the rules, web/settings-panes.mjs the controls) ----
+// A document is opened (or the page starts). A document Emboss saved under a template (model.template) reopens with the settings it was saved with:
+// the template of that name becomes the active one ("(modified)" if the values differ), or "NAME (from document)" when nobody here has that name. The
+// document's own Braille formatting options are in the file already and are authoritative, even when there are none. A document with no template
+// and no options of its own - an import, a new document - starts with the active template's document part. Returns a sentence to announce (or '').
+async function applyOpenedTemplate(model) {
+  try {
+    if (model && model.template) {
+      const r = adoptDocumentTemplate(model.template, loadedDocInfo.options || {}, settings);
+      if (!r) return '';
+      if (r.settings) {
+        const patch = settingsPatch({ settings: r.settings, contractions: r.contractions }, settings);
+        patch.recentCodes = [patch.brailleCode, ...(Array.isArray(settings.recentCodes) ? settings.recentCodes : []).filter((id) => id !== patch.brailleCode)].slice(0, 5);
+        settings = saveSettings(patch);
+        clearTranslationCache();
+        applySettingsToUI();
+        await activateTable();
+      }
+      return r.status === 'known'
+        ? tOr('templates.opened_known', 'This document was made with the template “{name}”; its settings are in force.').replace('{name}', r.template.name)
+        : tOr('templates.opened_from_document', 'This document was made with the template “{name}”, which is not on this computer. Its settings are in force; Settings, Template, Save as keeps them.').replace('{name}', r.template.name);
+    }
+    if (!Object.keys(loadedDocInfo.options || {}).length) {
+      const part = activeDocPart(settings);
+      if (Object.keys(part).length) { loadedDocInfo = { ...loadedDocInfo, options: docPatch(part, loadedDocInfo.options) }; applyDocOptionsToUI(); }
+    }
+    // A NEW document (the page starting with no document) is given the active template's producer fields (agency, place, ...); opening a document
+    // never changes its producer fields (Paul, 2 Nov 2026).
+    if (!model) {
+      const options = producerPatch(activeProducer(settings), loadedDocInfo.options);
+      if (JSON.stringify(options) !== JSON.stringify(loadedDocInfo.options || {})) loadedDocInfo = { ...loadedDocInfo, options };
+    }
+  } catch (e) { console.warn('the document\'s template could not be applied:', e); }
+  return '';
 }
 
 // ---- Settings dialog: "Braille formatting options" (document-level BANA_DOC_OPTIONS, nimas-export.mjs) ----
@@ -13369,8 +14018,25 @@ function wireControls() {
   // to open a file here, so nothing is lost and there is nothing to ask (Paul, 26 Sep). Unsaved
   // edits stay marked unsaved: Quick Mode warns before its page closes, and brings the flag back
   // if the document returns here. Only if the document can't be handed over does it still ask.
+  // Paul, 4 Nov 2026 (answer B): pressed while the editor is still loading its document (a hand-over from Quick Mode, a recovered backup), the button
+  // waits for the load, so the document goes back rather than an empty editor; the status line says so. Never more than 10 s (18 Oct 2026: a switch
+  // must never wait for ever), and a second press while it waits does nothing.
+  let quickSwitchBusy = false;
   $id('backToSimple')?.addEventListener('click', async (e) => {
     e.preventDefault();
+    if (quickSwitchBusy) return;
+    quickSwitchBusy = true;
+    try {
+      if (!editorStartupLoaded) {
+        const msg = tOr('messages.quick_waits_for_document', 'Going to Quick Mode as soon as the document has loaded…');
+        setStatus(msg); announce(msg);
+        await Promise.race([editorStartupLoad, new Promise((r) => setTimeout(r, 10000))]);
+      }
+      await goToQuickMode();
+    } finally { quickSwitchBusy = false; }
+  });
+  window.__quickButtonWired = true;   // tests (test-switch-resilience)
+  async function goToQuickMode() {
     const unsaved = isDocumentDirty();
     let handedOver = false;
     let handoffId = null;   // S2a #4: this transfer's own id, carried to Quick Mode in the address
@@ -13400,7 +14066,7 @@ function wireControls() {
           // braille formats those parts as they stand in the editor and the document as Quick Mode has it formats one list — close, but not always the same
           // braille (a quotation inside a list item was indented two cells less in the editor's), so Quick Mode brailles that document itself.
           if (out && out.brf && out.opts && out.opts.mathToBrf && !renderFailure && !merged) {
-            const key = await brailleKey(handoffDoc, brailleFlags(settings, { titleInBraille: out.opts.titleInBraille, toc: out.opts.toc, suppressHeader: out.opts.suppressHeader, mathsReady: true }));
+            const key = await brailleKey(handoffDoc, brailleFlags(settings, { titleInBraille: out.opts.titleInBraille, toc: out.opts.toc, suppressHeader: out.opts.suppressHeader, mathsReady: true, relaxed: relaxedProfileKey() }));
             const still = currentOutput();   // nothing has changed while the key was worked out
             if (!key) window.__handoffBraille = 'no key'; else if (!still || still.brf !== out.brf) window.__handoffBraille = 'changed while the key was worked out';
             if (key && still && still.brf === out.brf) { window.__handoffBraille = 'carried'; carried = { key, brf: out.brf, warnings: JSON.parse(JSON.stringify(Array.isArray(lastWarnings) ? lastWarnings : [])) }; }
@@ -13422,11 +14088,13 @@ function wireControls() {
     // The mark tells Quick Mode it was CHOSEN, so it stays even with that setting off.
     markStayInQuick();
     location.href = '/web/index.html' + (handoffId ? handoffHash(handoffId) : '');
-  });
+  }
+  let templateUi = null;   // the template picker (X1), bound below once onSet exists
   $id('settingsBtn')?.addEventListener('click', () => {
     cancelScrollSync();
     applySettingsToUI();
     translateDOM($id('settingsDialog'));
+    templateUi?.refresh();   // after the words are translated: the picker's own sentences come from the same dictionary
     $id('settingsDialog')?.showModal();
   });
   // F9 item D2 (APH feedback, 9 Oct 2026: Settings slow in Safari on a big book): closing Settings used to braille the whole document
@@ -13461,7 +14129,7 @@ function wireControls() {
         const extra = { title: doc.title || '', blocks: (doc.blocks || []).length, unsaved: isDocumentDirty(), transcriberTools: document.body.classList.contains('transcriber-tools') };
         if (!includeDocument) return { documentFiles: [], extra };
         const files = [];
-        try { files.push({ name: 'document.xml', text: exportToNimasXml(doc, { title: doc.title || 'document', mode: settings.mode }) }); }
+        try { files.push({ name: 'document.xml', text: exportToNimasXml(doc, { title: doc.title || 'document', mode: settings.mode, template: templateRecord() }) }); }
         catch (e) { recordProblem('report', `Saving the document as NIMAS failed: ${e?.message || e}`, { stack: e?.stack || '' }); }
         try { files.push({ name: 'editor-state.json', text: JSON.stringify(editor.getEditorState().toJSON()) }); } catch { /* the NIMAS file is enough */ }
         if (lastBrf) files.push({ name: 'braille.brf', text: lastBrf });
@@ -13499,15 +14167,10 @@ function wireControls() {
     onSet();
   });
 
-  $id('set-embosser')?.addEventListener('change', () => {
-    const p = EMBOSSER_PRESETS[$id('set-embosser').value];
-    if (p) {
-      $id('set-cells').value = p.cells;
-      $id('set-lines').value = p.lines;
-      if (p.baudRate && $id('set-baudRate')) {
-        $id('set-baudRate').value = String(p.baudRate);
-      }
-    }
+  // Made for (Paul, 4 Nov 2026, P-J): a Monarch or DotPad sets its own page size (32 x 10, 20 x 10); back on Paper the standard's usual page returns.
+  // The embosser model (P-K) no longer sets the page size, so it just saves through the general change handler below.
+  $id('set-madeFor')?.addEventListener('change', () => {
+    applyMadeForSize(document, $id('set-madeFor').value, $id('set-mode')?.value);
     onSet();
   });
   // UK-7 (28 Sep, James / decisions.md "UKAAF"): the UK page-size presets (settings.mjs
@@ -13543,11 +14206,11 @@ function wireControls() {
       connectionType: $id('set-connectionType')?.value || 'serial',
       networkHost: $id('set-networkHost')?.value || '192.168.1.150',
       networkPort: Number($id('set-networkPort')?.value) || 9100,
+      madeFor: $id('set-madeFor')?.value || 'paper',
       embosser: $id('set-embosser')?.value || 'generic',
       embosserDuplex: $id('set-embosserDuplex')?.value || 'double',
       baudRate: Number($id('set-baudRate')?.value) || 9600,
       tactileGraphics: $id('set-tactileGraphics')?.checked !== false,
-      tactileRip: $id('set-tactileRip')?.checked === true,
       tableFormat: $id('set-tableFormat')?.value || 'auto',
       cells: $id('set-cells')?.value,
       lines: $id('set-lines')?.value,
@@ -13561,6 +14224,7 @@ function wireControls() {
     if ($id('set-lines')) $id('set-lines').value = settings.lines;
     if ($id('set-volumePages')) $id('set-volumePages').value = settings.volumePages;
     syncPageSizeSelect();
+    syncMadeForControls(document, settings.madeFor);
 
     updateGraphicsSupportUI();
     updateBrailleTabsVisibility();
@@ -13573,12 +14237,12 @@ function wireControls() {
   // Registered before onSet (below), so the new size is what onSet saves.
   $id('set-mode')?.addEventListener('change', () => {
     const g = MODE_GEOMETRY[$id('set-mode').value];
-    if (g && ($id('set-embosser')?.value || 'generic') === 'generic') { if ($id('set-cells')) $id('set-cells').value = g.cells; if ($id('set-lines')) $id('set-lines').value = g.lines; }
+    if (g && ($id('set-madeFor')?.value || 'paper') === 'paper') { if ($id('set-cells')) $id('set-cells').value = g.cells; if ($id('set-lines')) $id('set-lines').value = g.lines; }   // P-K: the embosser model no longer fixes the page; a Monarch / DotPad does
   });
   ['set-cells', 'set-lines'].forEach((id) => $id(id)?.addEventListener('input', syncPageSizeSelect));   // typing a size shows its preset, or "Custom size"
-  // set-embosser and set-connectionType have their own change handlers above (they call
+  // set-madeFor and set-connectionType have their own change handlers above (they call
   // onSet themselves); listing them here too ran every save and render twice.
-  ['set-networkHost', 'set-networkPort', 'set-baudRate', 'set-embosserDuplex', 'set-language', 'set-mathCode', 'set-mode', 'set-tableFormat', 'set-cells', 'set-lines', 'set-quoteStyle', 'set-listStyle', 'set-paragraphStyle', 'set-volumePages'].forEach((id) => {
+  ['set-networkHost', 'set-networkPort', 'set-baudRate', 'set-embosser', 'set-embosserDuplex', 'set-language', 'set-mathCode', 'set-mode', 'set-tableFormat', 'set-cells', 'set-lines', 'set-quoteStyle', 'set-listStyle', 'set-paragraphStyle', 'set-volumePages'].forEach((id) => {
     $id(id)?.addEventListener('change', onSet);
     if (['set-cells', 'set-lines', 'set-volumePages', 'set-networkHost', 'set-networkPort'].includes(id)) {
       // Live update while typing, but only once the number is complete and in range: onSet clamps and writes the value
@@ -13596,7 +14260,6 @@ function wireControls() {
     }
   });
   $id('set-tactileGraphics')?.addEventListener('change', onSet);
-  $id('set-tactileRip')?.addEventListener('change', onSet);
   $id('set-uiLanguage')?.addEventListener('change', async (e) => {
     const newLang = e.target.value;
     settings = saveSettings({ uiLanguage: newLang });
@@ -13615,6 +14278,9 @@ function wireControls() {
     settings = saveSettings({ transcriberTools });
     applyTranscriberTools();
     if (lastModel) updateSymbolNotice(lastModel, lastFormatOpts);
+    // The Advanced Production tab goes with the switch (Paul, 4 Nov 2026, section P item 2): if it was open, Settings goes back to User Interface.
+    if (!transcriberTools) { const adv = document.querySelector('#settingsDialog .tab-btn[data-tab="tab-document"]'); if (adv && adv.classList.contains('active')) document.querySelector('#settingsDialog .tab-btn[data-tab="tab-display"]')?.click(); }
+    scheduleRender();   // the tactile-graphic preview in the braille pane is a Transcriber tool (item 8)
     announce(t(transcriberTools ? 'app.settings.transcriber_tools_on' : 'app.settings.transcriber_tools_off'));
   });
   $id('set-asciiBraille')?.addEventListener('change', () => {
@@ -13631,9 +14297,42 @@ function wireControls() {
     settings = saveSettings({ showTitleField: $id('set-showTitleField').checked });
     applyTitleFieldVisibility();
   });
+  // Relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the Contractions line under Braille code (shown only with ?relaxed=1 and a UEB contracted
+  // code). Done in the Choose contractions dialog saves the ticks, empties the braille caches and brailles the document again at once (relaxedProfileNow
+  // would also empty them at the next render; this is the render), and the template picker shows "(modified)" if they differ from the template's. A second
+  // tab reads the stored ticks at its own next render, and contractions-ui.mjs's storage listener makes it render at once.
+  initContractionsUI({
+    field: $id('contractionsField'), button: $id('contractionsBtn'), line: $id('contractionsLine'), label: $id('contractionsLabel'), codeSelect: $id('set-language'), t,
+    onChange: () => { settings = { ...settings, contractions: loadSettings().contractions }; clearTranslationCache(); scheduleRender(); templateUi?.refresh(); },
+    getCurrent: () => ({ settings, doc: loadedDocInfo.options || {}, producer: cleanProducer(loadedDocInfo.options) }),
+    // Stage 4 (decision H): the dialog's sample sentence and "left out in this document" use the editor's own engine and table in force, and the document's text
+    getEngine: async () => ({ louis, table: activeTable }),
+    // The demonstration document the editor opens with (seed) is not counted: untouched, it is "no document" (Paul, 3 Oct 2026: S1).
+    getDocumentText: () => { const text = documentTextForReport(); return text === seedDocText ? '' : text; },
+  });
+
+  // Templates (X1; Paul, 1 Nov 2026): the picker at the top of Settings. Choosing one saves its values like any change in the controls (the braille code goes
+  // to the front of the recent codes, onSet), fills the controls from them, replaces the document's Braille formatting options with the template's
+  // document part (Book details stay), and brailles again. The "modified" state compares the settings in force, and the open document's options, with it.
+  templateUi = bindTemplateUi($id('settingsDialog'), {
+    // `producer`: the open document's producer fields (Book details: agency, place, ...), which Save and Save as take into the template; they never make it "modified".
+    getCurrent: () => ({ settings, doc: loadedDocInfo.options || {}, producer: cleanProducer(loadedDocInfo.options) }),
+    say: (m) => { setStatus(m); announce(m); },
+    apply: async (template) => {
+      settings = saveSettings(settingsPatch(template, settings));
+      const before = JSON.stringify(loadedDocInfo.options || {});
+      const options = producerPatch(template.producer, docPatch(template.doc, loadedDocInfo.options));   // only EMPTY producer fields are filled
+      loadedDocInfo = { ...loadedDocInfo, options };
+      if (JSON.stringify(options) !== before) { contentChangedSinceClean = true; docInfoChangedSinceClean = true; }
+      clearTranslationCache();
+      applySettingsToUI();   // the controls (and the document options) show the new values
+      onSet();               // saves them as the controls hold them, finds the braille code's tables, and brailles again
+    },
+  });
 
   // Automatic hardware embosser USB hotplug detection
-  initEmbosserAutoDetect((profile) => {
+  // (Put aside with writing to embossers, P-HW, Paul 4 Nov 2026: it would change the page size when an embosser was plugged in.)
+  if (hardwareEnabled()) initEmbosserAutoDetect((profile) => {
     settings = saveSettings(profile.presets);
     applySettingsToUI();
     render();
@@ -14079,10 +14778,9 @@ function wireControls() {
       announce(t('spooler.status_connected', { device: res.name }));
       const isDot = res.profile?.id === 'dotpad';
       const targetEmbosser = isDot ? 'dotpad' : 'monarch';
-      if (settings.embosser !== targetEmbosser) {
-        if ($id('set-embosser')) $id('set-embosser').value = targetEmbosser;
-        const p = EMBOSSER_PRESETS[targetEmbosser];
-        if (p) { $id('set-cells').value = p.cells; $id('set-lines').value = p.lines; }
+      if (settings.madeFor !== targetEmbosser) {   // (P-J: the device is "Made for" now, not an embosser model)
+        if ($id('set-madeFor')) $id('set-madeFor').value = targetEmbosser;
+        applyMadeForSize(document, targetEmbosser, settings.mode);
         onSet();
       }
       switchBrailleTab('dotpad');
@@ -14097,10 +14795,9 @@ function wireControls() {
       if (tactileConnStatus) tactileConnStatus.textContent = res.error || 'Connection cancelled';
     } else {
       announce(t('spooler.status_connected', { device: res.name }));
-      if (settings.embosser !== 'monarch') {
-        if ($id('set-embosser')) $id('set-embosser').value = 'monarch';
-        const p = EMBOSSER_PRESETS['monarch'];
-        if (p) { $id('set-cells').value = p.cells; $id('set-lines').value = p.lines; }
+      if (settings.madeFor !== 'monarch') {
+        if ($id('set-madeFor')) $id('set-madeFor').value = 'monarch';
+        applyMadeForSize(document, 'monarch', settings.mode);
         onSet();
       }
     }
@@ -14116,10 +14813,9 @@ function wireControls() {
   btnSimulateTactile?.addEventListener('click', async () => {
     await tactileDisplay.connect({ transport: 'simulated', target: 'monarch' });
     announce(t('app.tactile.sim_monarch'));
-    if (settings.embosser !== 'monarch') {
-      if ($id('set-embosser')) $id('set-embosser').value = 'monarch';
-      const p = EMBOSSER_PRESETS['monarch'];
-      if (p) { $id('set-cells').value = p.cells; $id('set-lines').value = p.lines; }
+    if (settings.madeFor !== 'monarch') {
+      if ($id('set-madeFor')) $id('set-madeFor').value = 'monarch';
+      applyMadeForSize(document, 'monarch', settings.mode);
       onSet();
     }
     updateTactileDisplayUI();
@@ -14128,10 +14824,9 @@ function wireControls() {
   btnSimulateDotPad?.addEventListener('click', async () => {
     await tactileDisplay.connect({ transport: 'dotpad-simulated', target: 'dotpad' });
     announce(t('app.tactile.sim_dotpad'));
-    if (settings.embosser !== 'dotpad') {
-      if ($id('set-embosser')) $id('set-embosser').value = 'dotpad';
-      const p = EMBOSSER_PRESETS['dotpad'];
-      if (p) { $id('set-cells').value = p.cells; $id('set-lines').value = p.lines; }
+    if (settings.madeFor !== 'dotpad') {
+      if ($id('set-madeFor')) $id('set-madeFor').value = 'dotpad';
+      applyMadeForSize(document, 'dotpad', settings.mode);
       onSet();
     }
     updateTactileDisplayUI();
@@ -14139,15 +14834,15 @@ function wireControls() {
   });
 
   // Attempt silent background auto-reconnection to any previously paired tactile display
-  tactileDisplay.autoReconnect('dotpad').then((res) => {
+  // (P-M, Paul 4 Nov 2026: a live connection is put aside - nothing reconnects unless the hardware is switched on, hardwareEnabled)
+  if (hardwareEnabled()) tactileDisplay.autoReconnect('dotpad').then((res) => {
     if (res && res.success) {
       announce(t('app.tactile.reconnected', { device: res.name }));
       const isDot = res.profile?.id === 'dotpad';
       const targetEmbosser = isDot ? 'dotpad' : 'monarch';
-      if (settings.embosser !== targetEmbosser) {
-        if ($id('set-embosser')) $id('set-embosser').value = targetEmbosser;
-        const p = EMBOSSER_PRESETS[targetEmbosser];
-        if (p) { $id('set-cells').value = p.cells; $id('set-lines').value = p.lines; }
+      if (settings.madeFor !== targetEmbosser) {
+        if ($id('set-madeFor')) $id('set-madeFor').value = targetEmbosser;
+        applyMadeForSize(document, targetEmbosser, settings.mode);
         onSet();
       }
       updateTactileDisplayUI();
@@ -14216,6 +14911,7 @@ function wireControls() {
   }
   // Leaving the editor (clicking a toolbar button, a dialog, another pane) ends the burst.
   $id('editor')?.addEventListener('blur', flushHistorySnapshot);
+  window.__flushHistorySnapshot = flushHistorySnapshot;   // X9 / W16: Put the print back is a step of its own in the undo history
 
   // A newly loaded document is the undo floor. Deferred so the load's editor update has
   // been committed before the baseline snapshot is taken.
@@ -14349,11 +15045,13 @@ function wireControls() {
   // (settings.expertHardware). It also shows/hides the Tactile Graphic and Plot Tactile
   // Graph slash commands (BLOCK_STYLES / SLASH_COMMANDS — see slashCommandVisible).
   try { localStorage.removeItem('emboss_expert_hardware'); } catch {}   // the old, never-persisted key
-  let expertHardwareMode = settings.expertHardware === true && !BETA_LOCKED;   // a beta build: off unless unlocked (item 15)
+  // One Emboss (Paul, 4 Nov 2026, P-HW / P-M): writing to embossers and live displays is put aside. The code stays, unshown: this works only where a test
+  // switches the hardware on (hardwareEnabled, settings.mjs). Insert > Graphic and the tactile graphic commands are Transcriber tools, not hardware (P-D).
+  let expertHardwareMode = hardwareEnabled() && settings.expertHardware === true;
   document.body.classList.toggle('expert-hardware', expertHardwareMode);
 
   function toggleHardwareExpertMode() {
-    if (BETA_LOCKED) return;   // a beta build: the hardware controls are not offered (feedback item 15)
+    if (!hardwareEnabled()) return;   // Ctrl/Cmd+Shift+\ does nothing in this version
     expertHardwareMode = !expertHardwareMode;
     document.body.classList.toggle('expert-hardware', expertHardwareMode);
     settings = saveSettings({ expertHardware: expertHardwareMode });
@@ -14374,7 +15072,7 @@ function wireControls() {
 
   window.addEventListener('keydown', (e) => {
     // Expert Hardware toggle: Ctrl+Shift+\ or Cmd+Shift+\
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\' || e.code === 'Backslash' || e.key === '|')) {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\' || e.code === 'Backslash' || e.key === '|') && hardwareEnabled()) {
       e.preventDefault();
       toggleHardwareExpertMode();
       return;
@@ -14477,7 +15175,7 @@ function wireControls() {
     editor.getEditorState().read(() => { currentDocModel = mergeListItemBlocks(buildModel()); });
     const doc = currentDocModel || lastModel || { title: null, blocks: [] };
     return {
-      xml: exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode }),   // UK-9: same as window.exportCurrentDocumentXml
+      xml: exportToNimasXml(doc, { title: doc.title || 'Document', mode: settings.mode, template: templateRecord() }),   // UK-9: same as window.exportCurrentDocumentXml
       title: doc.title || null,
       metadata: loadedDocInfo.metadata || null,
       resources: loadedDocInfo.resources || [],
@@ -14500,7 +15198,7 @@ function wireControls() {
       // Its message goes to the status line and is announced; nothing is written, and the document stays unsaved.
       let pkg;
       try {
-        pkg = buildNimasPackage(doc, { mode: settings.mode });   // UK-9: same as the .xml export below
+        pkg = buildNimasPackage(doc, { mode: settings.mode, template: templateRecord() });   // UK-9: same as the .xml export below
         // tests only: window.__embossTestPackageFiles(files) may return other files, to reach the builder's own refusal (a duplicate name)
         // - a real document cannot, since the builder gives every file a name of its own
         if (typeof window.__embossTestPackageFiles === 'function') { pkg.files = window.__embossTestPackageFiles(pkg.files); checkPackagePaths(pkg.files); }
@@ -14524,7 +15222,7 @@ function wireControls() {
         currentDocModel = mergeListItemBlocks(buildModel());
       });
       const doc = currentDocModel || lastModel || { title, blocks: [] };
-      const xmlString = exportToNimasXml(doc, { title: doc.title || title, mode: settings.mode });   // UK-9: same as window.exportCurrentDocumentXml
+      const xmlString = exportToNimasXml(doc, { title: doc.title || title, mode: settings.mode, template: templateRecord() });   // UK-9: same as window.exportCurrentDocumentXml
       saveBlob(new Blob([xmlString], { type: "application/xml;charset=utf-8" }), `${baseName}.xml`);
       // The project file is the one download that *is* the saved document: baseline the
       // dirty tracking on it once the download has been triggered.
@@ -14764,6 +15462,10 @@ getBuildInfo().then((info) => {
   const bi = $id('buildInfo'); if (bi) bi.textContent = info ? `${info.hash}, built ${info.date}` : 'development';
 });
 
+// The start-up load (below): the Quick Mode button waits for it (Paul, 4 Nov 2026). Tests read window.__editorStartupLoaded.
+let editorStartupLoaded = false;
+let markEditorStartupLoaded = () => {};
+const editorStartupLoad = new Promise((r) => { markEditorStartupLoaded = () => { editorStartupLoaded = true; window.__editorStartupLoaded = true; r(); }; });
 (async () => {
   // (The editor no longer sends anyone to Quick Mode because "Start in Quick Mode" is on: that setting decides where the SITE ADDRESS opens, which is
   // Quick Mode's own check; the editor's address, and the switch from Quick Mode, always open the editor — feedback 17 Oct 2026, item 12.)
@@ -14857,7 +15559,7 @@ getBuildInfo().then((info) => {
     }
   }
   if (recovered) { setLoadedDocInfo(recovered); modelToLexical(recovered); }
-  else if (hasHandoff) { setLoadedDocInfo(handoff); modelToLexical(handoff); } else seed();
+  else if (hasHandoff) { setLoadedDocInfo(handoff); await applyOpenedTemplate(handoff); modelToLexical(handoff); } else { seed(); await applyOpenedTemplate(null); }   // X1: a new document starts with the active template's document options
   clearTranslationCache();
   render();
   refreshToolbar();
@@ -14865,6 +15567,7 @@ getBuildInfo().then((info) => {
   resetUndoHistory();
   if (recovered || (hasHandoff && handoff._unsavedEdits)) markDocumentUnsaved();   // a recovered backup, or edits that went to Quick Mode and back, were never saved to a file
   await confirmHandoff(handoffRec);   // the document is loaded here: the stored copy of this transfer can go (S2a #4)
+  markEditorStartupLoaded();   // the Quick Mode button may take the document now
   // Recover / Discard answered: the dialog has gone, so the keyboard goes back to the document, at its start — it was left on the
   // page itself, where Tab reached the toolbar and a space pressed Quick Mode (A89, the nightly random-action run).
   if (recoveryAnswered) { editorEl.focus({ preventScroll: true }); editor.update(() => { $getRoot().selectStart(); }, { discrete: true }); }

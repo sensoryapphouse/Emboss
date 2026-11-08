@@ -1,4 +1,4 @@
-// "Report a problem" (A89 step 2, the robustness programme; Paul, 2 Oct 2026). Transcribers gave up on BrailleBlaster because it
+// "Report a problem" (A89 step 2, the robustness programme; Paul, 2 Oct 2026). Transcribers gave up on another braille editor because it
 // crashed and nobody could see why; a tester who meets a strange bug in Emboss saves ONE file and emails it, and the bug can be
 // reproduced instead of guessed from a screenshot.
 //

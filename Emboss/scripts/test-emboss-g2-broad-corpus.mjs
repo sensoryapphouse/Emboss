@@ -51,14 +51,14 @@ const testBooks = [
   'jane_eyre.epub'
 ];
 
-console.log('\nTesting Emboss with full UEB Grade 2 contracted braille vs BrailleBlaster:');
+console.log('\nTesting Emboss with full UEB Grade 2 contracted braille vs Reference:');
 
-const auditPath = path.join(ROOT, 'tests/bb_broad_corpus_audit.jsonl');
-const bbAudit = fs.existsSync(auditPath) ? fs.readFileSync(auditPath, 'utf8')
+const auditPath = path.join(ROOT, 'tests/reference_broad_corpus_audit.jsonl');
+const refAudit = fs.existsSync(auditPath) ? fs.readFileSync(auditPath, 'utf8')
   .trim().split('\n').filter(Boolean).map(JSON.parse) : [];
-const bbMap = new Map(bbAudit.map(r => [r.file, r]));
+const refMap = new Map(refAudit.map(r => [r.file, r]));
 
-// Line-count tolerance vs BrailleBlaster. Measured 2026-09: deltas ranged
+// Line-count tolerance vs Reference. Measured 2026-09: deltas ranged
 // +1.8% .. +13.6% (relativity_einstein.epub is the worst). 15% is the gate;
 // a book outside it is a formatting regression (or an unexplained improvement
 // worth re-baselining), and the run exits 1.
@@ -86,22 +86,22 @@ for (const book of testBooks) {
   const emPages = embossBrfG2.split('\f').length;
   const emLines = embossBrfG2.split(/\r?\n/).filter(l => l.trim().length > 0).length;
 
-  const bb = bbMap.get(book);
-  if (!bb || !(bb.bb_lines > 0)) {
-    skippedBooks.push(`${book} (no BrailleBlaster line count in bb_broad_corpus_audit.jsonl)`);
-    results.push({ book: book.padEnd(28, ' '), 'BB Pages (G2)': 0, 'EM Pages (G2)': emPages, 'BB Lines (G2)': 0, 'EM Lines (G2)': emLines, 'Diff %': 'N/A', 'Within ±15%': 'SKIPPED' });
+  const ref = refMap.get(book);
+  if (!ref || !(ref.ref_lines > 0)) {
+    skippedBooks.push(`${book} (no Reference line count in reference_broad_corpus_audit.jsonl)`);
+    results.push({ book: book.padEnd(28, ' '), 'Reference Pages (G2)': 0, 'EM Pages (G2)': emPages, 'Reference Lines (G2)': 0, 'EM Lines (G2)': emLines, 'Diff %': 'N/A', 'Within ±15%': 'SKIPPED' });
     continue;
   }
-  const diffNum = ((emLines - bb.bb_lines) / bb.bb_lines) * 100;
+  const diffNum = ((emLines - ref.ref_lines) / ref.ref_lines) * 100;
   const diffPct = diffNum.toFixed(1);
   const withinTolerance = Math.abs(diffNum) <= TOLERANCE_PCT;
-  if (!withinTolerance) failures.push(`${book}: Emboss ${emLines} vs BB ${bb.bb_lines} lines (${diffNum > 0 ? '+' : ''}${diffPct}%)`);
+  if (!withinTolerance) failures.push(`${book}: Emboss ${emLines} vs Reference ${ref.ref_lines} lines (${diffNum > 0 ? '+' : ''}${diffPct}%)`);
 
   results.push({
     book: book.padEnd(28, ' '),
-    'BB Pages (G2)': bb.bb_pages,
+    'Reference Pages (G2)': ref.ref_pages,
     'EM Pages (G2)': emPages,
-    'BB Lines (G2)': bb.bb_lines,
+    'Reference Lines (G2)': ref.ref_lines,
     'EM Lines (G2)': emLines,
     'Diff %': (diffNum > 0 ? '+' : '') + diffPct + '%',
     'Within ±15%': withinTolerance ? 'yes' : 'NO'
@@ -118,9 +118,9 @@ console.table(results);
 for (const s of skippedBooks) console.log(`SKIPPED: ${s}`);
 const gated = results.filter((r) => r['Within ±15%'] !== 'SKIPPED');
 if (failures.length > 0) {
-  console.error(`FAIL: ${failures.length}/${gated.length} EPUB(s) outside ±${TOLERANCE_PCT}% of BrailleBlaster line count:`);
+  console.error(`FAIL: ${failures.length}/${gated.length} EPUB(s) outside ±${TOLERANCE_PCT}% of Reference line count:`);
   for (const f of failures) console.error(`  ${f}`);
   process.exitCode = 1;
 } else {
-  console.log(`OK: all ${gated.length} gated EPUB(s) within ±${TOLERANCE_PCT}% of BrailleBlaster line count.`);
+  console.log(`OK: all ${gated.length} gated EPUB(s) within ±${TOLERANCE_PCT}% of Reference line count.`);
 }

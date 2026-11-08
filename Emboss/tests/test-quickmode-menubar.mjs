@@ -252,7 +252,8 @@ try {
 
   // ---------------------------------------------------------------- a phone: nothing runs off the screen, every button is big enough
   {
-    const { ctx, page } = await newPage({ viewport: { width: 375, height: 812 } });
+    // a phone's SCREEN as well as its window: Emboss knows a phone by its screen (isPhoneScreen), and Playwright's Firefox otherwise keeps the monitor's
+    const { ctx, page } = await newPage({ viewport: { width: 375, height: 812 }, screen: { width: 375, height: 812 } });
     await page.goto(`${BASE}/web/index.html`, { waitUntil: 'load' });
     await ready(page);
     await load(page, 'sample.txt', 'Hello world.');

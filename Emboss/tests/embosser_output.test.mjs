@@ -15,7 +15,7 @@
 // today are the bytes captured below, and the filters are the ones listed
 // below). For Enabling Technologies, Braillo and ViewPlus, those bytes were
 // re-derived (23 Sep 2026) from APH's shipped `libembosser` driver classes
-// (BrailleBlaster), read with javap — not from a manufacturer manual, and
+// (read with javap — not from a manufacturer manual, and
 // NOT verified against real hardware. See the A12 row in EMBOSS-TASKS.md.
 // Do not read a passing test here as "confirmed correct against the manual".
 //
@@ -94,7 +94,7 @@ test('Index: a body that lands the stream on a 64-byte boundary gets a second SU
 });
 
 test('ViewPlus (Columbia / PixBlaster): no header, plain BRF with CR LF FF page ending', () => {
-  // BrailleBlaster's ViewPlusEmbosser (libembosser-viewplus-driver-1.4.3.jar) is a
+  // libembosser's ViewPlusEmbosser (libembosser-viewplus-driver-1.4.3.jar) is a
   // graphics/PCL embosser driver (extends BaseGraphicsEmbosser) and writes no raw
   // header or trailer bytes at all — `\x1b*t` was an invented, incomplete PCL
   // fragment and is gone. What's left is plain BRF with the CR LF / CR LF FF

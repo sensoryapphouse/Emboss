@@ -271,7 +271,8 @@ async function runBrowserTests(engine, browserName) {
     // TEST 9: Tactile Symbol Library Modal, Search & Target Display Matrix
     // -------------------------------------------------------------------------
     console.log(`\n--- [9] Testing Tactile Symbol Library Modal & Target Modes ---`);
-    await page.evaluate(() => document.body.classList.add('expert-hardware'));
+    // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P) — tactile graphics are a Transcriber tools feature (no hardware switch)
+    await page.evaluate(() => document.body.classList.add('transcriber-tools'));
     await page.click('#btnInsertMenu');
     await page.click('#btnGraphic');
     await page.waitForSelector('#graphicDialog[open], #tactile-symbol-modal', { timeout: 5000 });
@@ -396,6 +397,8 @@ async function runBrowserTests(engine, browserName) {
 
     // Switch to BANA standard
     await page.click('button[data-tab="tab-rules"]');
+    // Paul, 1 Nov 2026, X1 decision 1: the Layout Standard sits in Template > Template settings, a closed disclosure
+    await page.click('#tplSettings > summary');
     await page.selectOption('#set-mode', 'bana');
     await page.waitForTimeout(500);
 
@@ -409,59 +412,41 @@ async function runBrowserTests(engine, browserName) {
     await page.waitForTimeout(300);
 
     // -------------------------------------------------------------------------
-    // TEST 15: Embosser Hardware Presets & Connection Configuration
+    // TEST 15: Made for and the embosser model (Template settings)
+    // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P) — no writing to devices in this version: the hardware tab and the live
+    // Monarch connection are gone; "Made for" (Paper / Monarch / DotPad) and the embosser model are template settings for everyone.
     // -------------------------------------------------------------------------
-    console.log(`\n--- [15] Testing Embosser Hardware Presets & Settings ---`);
+    console.log(`\n--- [15] Testing Made for and the embosser model ---`);
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('button[data-tab="tab-hardware"]');
+    recordTest('No Embosser & Hardware tab', await page.$$eval('button[data-tab="tab-hardware"]', (bs) => bs.every((b) => !b.offsetParent)));
+    await page.click('button[data-tab="tab-rules"]');
+    await page.evaluate(() => { document.getElementById('tplSettings').open = true; });
     await page.waitForTimeout(300);
-
     const presetsCount = await page.$$eval('#set-embosser option', opts => opts.length);
-    recordTest('Embosser hardware model presets loaded (> 5)', presetsCount > 5, `${presetsCount} models`);
+    recordTest('Embosser models offered under Made for: Paper (> 5)', presetsCount > 5, `${presetsCount} models`);
 
     // -------------------------------------------------------------------------
-    // TEST 15b: APH Monarch Multi-Line Tactile Display Live Stream
+    // TEST 15b: Made for Monarch — 32 x 10 and the Monarch view beside the braille
     // -------------------------------------------------------------------------
-    console.log(`\n--- [15b] Testing APH Monarch Tactile Display Live Stream ---`);
-    await page.selectOption('#set-embosser', 'monarch');
-    await page.waitForTimeout(300);
-
+    console.log(`\n--- [15b] Testing Made for: APH Monarch ---`);
+    await page.selectOption('#set-madeFor', 'monarch');
+    await page.waitForTimeout(400);
     const monarchCells = await page.$eval('#set-cells', el => el.value);
     const monarchLines = await page.$eval('#set-lines', el => el.value);
-    recordTest('Monarch preset configured 32x10 tactile geometry', monarchCells === '32' && monarchLines === '10', `${monarchCells}x${monarchLines}`);
-
-    await page.click('#btnSimulateTactile');
-    await page.waitForTimeout(300);
-
-    const connText = await page.$eval('#tactileConnStatus', el => el.textContent);
-    recordTest('Tactile display simulation connected', connText.includes('Connected: APH Monarch'), connText);
-
+    recordTest('Made for Monarch sets 32x10', monarchCells === '32' && monarchLines === '10', `${monarchCells}x${monarchLines}`);
     await page.click('#settingsDialog button[value="close"]');
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(600);
+    const monarchTab = await page.$eval('#tabViewMonarch', el => getComputedStyle(el).display !== 'none');
+    recordTest('The Monarch view tab shows beside the braille', monarchTab);
 
-    const badgeVisible = await page.$eval('#tactileDisplayBadge', el => el.style.display !== 'none');
-    recordTest('Tactile display status badge active in status bar', badgeVisible);
-
-    // Test tactile page navigation
-    await page.click('#tactileNextBtn');
-    await page.waitForTimeout(200);
-    const badgeTextAfterNext = await page.$eval('#tactileDisplayLbl', el => el.textContent);
-    recordTest('Tactile display advances to next 10-line page', badgeTextAfterNext.includes('11-20'), badgeTextAfterNext);
-
-    await page.click('#tactilePrevBtn');
-    await page.waitForTimeout(200);
-    const badgeTextAfterPrev = await page.$eval('#tactileDisplayLbl', el => el.textContent);
-    recordTest('Tactile display returns to first 10-line page', badgeTextAfterPrev.includes('1-10'), badgeTextAfterPrev);
-
-    // Disconnect simulated display and restore standard generic embosser
+    // back to paper
     await page.click('#settingsBtn');
     await page.waitForSelector('#settingsDialog[open]');
-    await page.click('button[data-tab="tab-hardware"]');
-    await page.waitForTimeout(200);
-    await page.click('#btnDisconnectTactile');
-    await page.selectOption('#set-embosser', 'generic');
-    await page.waitForTimeout(200);
+    await page.click('button[data-tab="tab-rules"]');
+    await page.evaluate(() => { document.getElementById('tplSettings').open = true; });
+    await page.selectOption('#set-madeFor', 'paper');
+    await page.waitForTimeout(300);
     await page.click('#settingsDialog button[value="close"]');
     await page.waitForTimeout(300);
 
@@ -504,7 +489,7 @@ async function runBrowserTests(engine, browserName) {
     recordTest('Settings dialog closes cleanly on Escape key', !settingsOpen);
 
     // Tactile Symbol modal Escape
-    await page.evaluate(() => document.body.classList.add('expert-hardware'));
+    await page.evaluate(() => document.body.classList.add('transcriber-tools'));   // Paul, 4 Nov 2026: graphics are a Transcriber tools feature
     await page.click('#btnInsertMenu');
     await page.click('#btnGraphic');
     await page.waitForSelector('#tactile-symbol-modal', { timeout: 5000 });

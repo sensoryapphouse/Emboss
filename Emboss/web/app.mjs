@@ -1,13 +1,15 @@
 // First, so it records any error from the moment the page starts (A89 step 2, Report a problem).
 import { openProblemDialog } from '/web/problem-report.mjs';
+import { initContractionsUI, refreshContractionsLine } from '/web/contractions-ui.mjs';   // relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the Contractions line in Settings; hidden unless ?relaxed=1
 import * as louis from '/engine/louis-browser.mjs';
 import { formatDocument } from '/format/document.mjs';
 import { parseFile, BINARY_EXTS } from '/input/parse.mjs';
 import * as maths from '/engine/maths.mjs';
 import { initMaths, isMathsReady } from '/engine/maths.mjs';
 import { styledTranslate } from '/format/text-style.mjs';
-import { loadSettings, saveSettings, effectiveMathCode, isPhoneScreen, betaLocked, keepNumbersInRange, largeFileWarning, largeFileQuestion, stayInQuickMode, clearStayInQuick } from '/web/settings.mjs';
+import { loadSettings, saveSettings, effectiveMathCode, isPhoneScreen, hardwareEnabled, keepNumbersInRange, largeFileWarning, largeFileQuestion, stayInQuickMode, clearStayInQuick, activeRelaxedProfile, relaxedProfileKey } from '/web/settings.mjs';
 import { mountSettingsDialog, bindSettingsDialog } from '/web/settings-panes.mjs';
+import { adoptDocumentTemplate, settingsPatch, adoptReaderProfiles } from '/web/templates.mjs';
 import { renderBraille } from '/web/braille-render.mjs';
 import { resolveTable, makeTranslators, UEB_TABLES, registryName, codeLanguage, settingsForTable } from '/web/braille-table.mjs';
 import '/web/icons.mjs';   // adds the page's icon symbols (feedback 30 Sep, item 18)
@@ -21,6 +23,9 @@ import { initI18n, t, setLocale, getLocale, getOrderedLocales, translateDOM } fr
 import { getBuildInfo } from '/web/build-info.mjs';
 import { makeZip } from '/web/zip.mjs';
 import { watchOfflineReady } from '/web/offline-ready.mjs';
+
+// The reader profiles of the earlier relaxed-braille preview become templates, once, before any page reads the settings (Paul, 2 Nov 2026; web/templates.mjs).
+adoptReaderProfiles();
 
 // "Start in Quick Mode" (Settings) decides only where Emboss OPENS: the site address goes to the editor when the user has turned it off.
 // It is not "where am I now": a click on "Quick Mode" in the editor, or a reload of this page after it, stays here (stayInQuickMode, settings.mjs:
@@ -59,6 +64,7 @@ let settingsUi = null;
 function onSettingsChange(info = {}) {
   if (info.code && info.code.table) louis.ensureTables(info.code.table).catch(console.error);
   updateSummary();
+  refreshContractionsLine();                        // the Contractions line follows the code (UEB contracted only)
   if (info.locale) return;                          // the words changed, not the braille
   transcribe();
 }
@@ -68,6 +74,7 @@ function onSettingsChange(info = {}) {
   // Feedback item 6 (Paul, 1 Oct): the header and the preset list describe the settings just loaded (the header was worked out before they were).
   settingsUi = bindSettingsDialog(el.settingsDialog, { onChange: onSettingsChange });
   updateSummary();
+  refreshContractionsLine();
 })();
 
 // kind 'loading' (F9 item I, Paul 9 Oct 2026): the engine-loading message gets a small spinner and words in the page's own font. The status
@@ -141,7 +148,7 @@ getBuildInfo().then((info) => {
   const carried = handoff.braille;
   const s = loadSettings();
   if (carried && typeof carried.brf === 'string' && carried.brf && carried.key) {
-    const key = await brailleKey(doc, brailleFlags(s, { titleInBraille: document.body.classList.contains('transcriber-tools'), toc: false, suppressHeader: false, mathsReady: true }));
+    const key = await brailleKey(doc, brailleFlags(s, { titleInBraille: document.body.classList.contains('transcriber-tools'), toc: false, suppressHeader: false, mathsReady: true, relaxed: relaxedProfileKey() }));
     carriedOk = !!key && key === carried.key && !currentDoc && !selectionPending;
   }
   currentDoc = doc;
@@ -156,6 +163,23 @@ getBuildInfo().then((info) => {
 window.addEventListener('beforeunload', (e) => {
   if (unsavedFromEditor && currentDoc) { e.preventDefault(); e.returnValue = ''; }
 });
+
+// X1 (Templates; Paul, 1 Nov 2026, decision 3): a document Emboss saved remembers the template it was made under and reopens with it. The settings it
+// carries are put in force (the template of that name becomes the active one, shown "(modified)" if the values differ; none of that name: "NAME (from
+// document)" with Save as). A file with no template, an import, leaves the settings as they are. The braille is made after this, in acceptFile.
+function adoptTemplateOf(doc) {
+  try {
+    const r = doc && doc.template ? adoptDocumentTemplate(doc.template, undefined, loadSettings()) : null;
+    if (!r || !r.settings) return;
+    const cur = loadSettings();
+    const patch = settingsPatch({ settings: r.settings, contractions: r.contractions }, cur);
+    patch.recentCodes = [patch.brailleCode, ...(Array.isArray(cur.recentCodes) ? cur.recentCodes : []).filter((id) => id !== patch.brailleCode)].slice(0, 5);
+    saveSettings(patch);
+    settingsUi?.apply();
+    settingsUi?.templates?.refresh();
+    updateSummary();
+  } catch (e) { console.warn('the document\'s template could not be applied:', e); }
+}
 
 // ---- file intake ----
 // S2a #1 (audit 15 Oct 2026): a file chosen while an earlier one is still being read must not be replaced by it. Every selection
@@ -198,6 +222,7 @@ async function acceptFile(file) {
     const doc = await parseFile(file.name, payload);
     if (gen !== loadGen) return;                                   // a newer file was chosen meanwhile: this one is dropped
     currentDoc = doc;
+    adoptTemplateOf(doc);                                          // X1: a document saved under a template reopens with its settings
     currentName = file.name.replace(/\.[^.]+$/, '') || 'document';   // set the download name only after a good parse
     el.fileName.textContent = file.name;
     unsavedFromEditor = false;
@@ -243,6 +268,41 @@ function updateSummary() {
 }
 updateSummary();
 
+// The words of a document, without its maths, for the Choose contractions dialog's "left out in this document" (relaxed braille, Stage 4). Quick Mode
+// has no read-aloud code (feedback 17 Oct, 8b), so its own small walk: a block's text is its segments' text when it has segments, else its text field.
+function documentText(doc) {
+  const out = [];
+  const walk = (v) => {
+    if (!v || typeof v !== 'object') return;
+    if (Array.isArray(v)) { v.forEach(walk); return; }
+    if (v.type === 'math') return;
+    if (Array.isArray(v.segments)) { const t = v.segments.filter((g) => g && g.type !== 'math').map((g) => g.text || '').join(''); if (t.trim()) out.push(t); }
+    else if (typeof v.text === 'string' && v.text.trim()) out.push(v.text);
+    for (const [k, c] of Object.entries(v)) if (k !== 'segments' && k !== 'resources' && c && typeof c === 'object') walk(c);
+  };
+  walk(doc.blocks);
+  return out.join('\n');
+}
+
+// Relaxed braille (A91; Paul, 2 Nov 2026: part of the template): the Contractions line under Braille code (shown only with ?relaxed=1 and a UEB contracted code).
+// Done in the Choose contractions dialog saves the ticks and brailles the loaded document again at once, and the template picker shows "(modified)" if they
+// differ from the template's; with no document loaded transcribe() does nothing and the next document is made with the ticks in force. A second tab (editor or
+// Quick Mode) reads the ticks afresh at its next render, and web/contractions-ui.mjs also listens for the storage event, so it is made again at once too.
+initContractionsUI({
+  field: $('contractionsField'), button: $('contractionsBtn'), line: $('contractionsLine'), label: $('contractionsLabel'), codeSelect: document.getElementById('set-language'), t,
+  onChange: () => { settingsUi?.templates?.refresh(); transcribe(); },
+  getCurrent: () => ({ settings: loadSettings() }),
+  // Stage 4 (decision H): the dialog's sample sentence and "left out in this document" use this page's own engine and table, and the loaded document's text
+  getEngine: async () => {
+    for (let i = 0; i < 600 && !engineReady; i++) await new Promise((r) => setTimeout(r, 100));       // the engine may still be loading (up to a minute)
+    if (!engineReady) return null;
+    const table = resolveTable(loadSettings());
+    await louis.ensureTables(table);
+    return { louis, table };
+  },
+  getDocumentText: () => (currentDoc ? documentText(currentDoc) : ''),
+});   // label: "Template: <name>" in the header, beside the page size, when the template relaxes something
+
 // Automatic hardware embosser USB hotplug detection
 initEmbosserAutoDetect((profile) => {
   saveSettings(profile.presets);
@@ -271,7 +331,10 @@ async function goEditor() {
 
 // On a phone there is no editor (Paul, 18 Oct 2026: Quick Mode only): the button is hidden (html.is-phone) and does nothing there.
 if (el.advancedBtn) el.advancedBtn.addEventListener('click', () => { if (!isPhoneScreen()) goEditor(); });
-el.settingsBtn.addEventListener('click', () => el.settingsDialog.showModal());
+// The class is set before paint (index.html); keep it in step if the screen changes while the page is open (a browser's device mode, a window moved to
+// another screen), so a shown button always works and a hidden one stays hidden (4 Nov 2026: random-action testing found the button shown but doing nothing).
+window.addEventListener('resize', () => document.documentElement.classList.toggle('is-phone', isPhoneScreen()));
+el.settingsBtn.addEventListener('click', () => { settingsUi?.templates?.refresh(); el.settingsDialog.showModal(); });   // the template picker shows what is in force now (X1)
 el.helpBtn.addEventListener('click', () => el.helpDialog.showModal());
 el.helpClose.addEventListener('click', () => el.helpDialog.close());
 // Report a problem (A89 step 2): one file for the tester to email — the file they loaded, its braille, the settings, the errors.
@@ -304,7 +367,9 @@ async function buildOpts(s = loadSettings()) {
   // The code's own table list, fetched on demand (most of the 142 codes are not in the engine's filesystem until first use). The translators
   // normalise to BRF ASCII — the codes are listed with unicode.dis, and a .brf must never carry Unicode.
   await louis.ensureTables(table);
-  const tr = makeTranslators(louis, table);
+  // Relaxed braille (A91, off unless ?relaxed=1; settings.mjs): the profile's contractions only, UEB grade 2 only. The grade 1 translator below
+  // (translateG1) is never relaxed. The braille shown, the BRF/PEF/eBraille downloads and the embosser all come from these options.
+  const tr = makeTranslators(louis, table, { relaxed: activeRelaxedProfile() });
   const translateG1 = /en-ueb/.test(table) ? (t, tf) => makeTranslators(louis, UEB_TABLES.g1).translate(t, tf) : undefined;
   // tf: bold/italic/underline typeform; in contracted UEB a sub/superscript run longer than one item puts its word in grade 1 (text-style.mjs)
   const translate = styledTranslate((t, tf) => tr.translate(t, tf), s.quoteStyle || 'faithful', /en-ueb-g2/.test(table) ? translateG1 : null);
@@ -579,16 +644,16 @@ wireToolbar($('headRight'), '#advancedBtn, #downloadBtn, #helpBtn, #settingsBtn'
 // (settings.expertHardware), the same setting the editor uses.
 try { localStorage.removeItem('emboss_expert_hardware'); } catch {}   // the old, never-persisted key
 // A beta build (feedback item 15): the hardware controls are not offered unless unlocked with ?tools=1.
-const BETA_LOCKED = betaLocked();
-if (BETA_LOCKED) document.body.classList.add('beta-locked');
-let expertHardwareMode = loadSettings().expertHardware === true && !BETA_LOCKED;
+// One Emboss (Paul, 4 Nov 2026, section P): no beta lock. Writing to devices is put aside (P-HW): the hardware controls and Ctrl/Cmd+Shift+\ are available
+// only where a test switches them on (hardwareEnabled, settings.mjs); the code below stays.
+let expertHardwareMode = hardwareEnabled() && loadSettings().expertHardware === true;
 document.body.classList.toggle('expert-hardware', expertHardwareMode);
-// Settings shown only to transcribers (Paul, 7 Oct 2026: paragraph style and quotation marks): Transcriber tools is switched on in the editor's
-// Settings and shared through the saved settings; a beta build keeps it off, as the editor does.
-document.body.classList.toggle('transcriber-tools', loadSettings().transcriberTools === true && !BETA_LOCKED);
+// Settings shown only to transcribers (Paul, 7 Oct 2026: paragraph style and quotation marks): Transcriber tools is switched on in Settings > User Interface
+// (either page) and shared through the saved settings.
+document.body.classList.toggle('transcriber-tools', loadSettings().transcriberTools === true);
 
 function toggleHardwareExpertMode() {
-  if (BETA_LOCKED) return;
+  if (!hardwareEnabled()) return;
   expertHardwareMode = !expertHardwareMode;
   document.body.classList.toggle('expert-hardware', expertHardwareMode);
   saveSettings({ expertHardware: expertHardwareMode });
@@ -607,6 +672,7 @@ function toggleHardwareExpertMode() {
 
 window.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === '\\' || e.code === 'Backslash' || e.key === '|')) {
+    if (!hardwareEnabled()) return;   // Ctrl/Cmd+Shift+\ does nothing in this version (P-HW)
     e.preventDefault();
     toggleHardwareExpertMode();
   }

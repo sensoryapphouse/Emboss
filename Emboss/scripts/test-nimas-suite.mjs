@@ -1,4 +1,4 @@
-// Comprehensive NIMAS / DTBook test suite running official BrailleBlaster / NIMAC samples.
+// Comprehensive NIMAS / DTBook test suite running official NIMAS / NIMAC samples.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,7 +15,7 @@ const SAMPLES_DIR = path.join(__dirname, '../tests/nimas_samples');
 const files = fs.readdirSync(SAMPLES_DIR).filter((f) => f.endsWith('.xml'));
 
 console.log('='.repeat(70));
-console.log(`RUNNING NIMAS / DTBOOK TEST SUITE ON ${files.length} OFFICIAL BRAILLEBLASTER SAMPLES`);
+console.log(`RUNNING NIMAS / DTBOOK TEST SUITE ON ${files.length} OFFICIAL NIMAS / NIMAC SAMPLES`);
 console.log('='.repeat(70));
 
 const results = [];

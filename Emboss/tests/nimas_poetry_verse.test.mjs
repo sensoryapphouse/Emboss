@@ -214,7 +214,7 @@ test('Poetry with Inline Formatting & Math: <em>, <strong>, <u>, and <math> insi
   // Verify roundtrip serialization to NIMAS DTBook XML.
   // A19/A21 (D5): this poem was read from a real <poem>/<linegroup>/<line> source, so it is
   // tagged fromPoem and must save back the same way, not flattened to <p class="bai-verse">
-  // (that shape is now reserved for BrailleBlaster's bai-verse, verse *drama*, per D5).
+  // (that shape is now reserved for the bai-verse, verse *drama*, per D5).
   const exportedXml = exportToNimas(doc);
   assert.ok(exportedXml.includes('<poem>') && exportedXml.includes('<linegroup>'), 'Exported XML should contain <poem>/<linegroup>');
   assert.equal(exportedXml.includes('<p class="bai-verse">'), false, 'A genuine poem should no longer flatten to <p class="bai-verse"> paragraphs');

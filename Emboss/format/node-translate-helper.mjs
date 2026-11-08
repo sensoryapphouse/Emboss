@@ -23,11 +23,13 @@ import { styledTranslate, styledTranslatePos } from './text-style.mjs';
 
 // louis: the initialised Node engine (engine/louis.mjs). table: 'g2' | 'g1' (the UEB lists the app uses by default) or
 // any liblouis table list string (what resolveTable returns for another braille code).
+// relaxed (A91 relaxed braille): a Set of the contraction keys a reader holds, or null / omitted = All (the braille is then exactly
+// what it always was). As in the app, only the UEB grade 2 table is relaxed; translateG1 never is.
 // Returns { translate, translatePos, translateG1, table }; spread the first three into the formatter options
 // (leave translatePos out for the classic, no-position path that gold-run and the headless tests use).
-export function editorTranslators(louis, { table = 'g2', quoteStyle = 'faithful' } = {}) {
+export function editorTranslators(louis, { table = 'g2', quoteStyle = 'faithful', relaxed = null } = {}) {
   const tableList = UEB_TABLES[table] || table;
-  const tr = makeTranslators(louis, tableList);
+  const tr = makeTranslators(louis, tableList, { relaxed });
   const translateG1 = /en-ueb/.test(tableList)
     ? (s, tf) => makeTranslators(louis, UEB_TABLES.g1).translate(s, tf)
     : undefined;

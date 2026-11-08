@@ -39,7 +39,7 @@ export function version() { return M.ccall('lou_version', 'string', [], []); }
 // compiled table (scratchpad probe, 25 Sep 2026): typeform bit 32 on "hello" translates
 // to "⠈⠼⠂⠓⠑⠇⠇⠕" (BRF "@#1hello"), matching 9.5's own heading example exactly. Emboss's
 // strikethrough feature always uses trans1 (script/transnote and trans2-5 are reserved
-// for BrailleBlaster's own <bai-trans1>-<bai-trans5> import, parse.mjs A24).
+// for the <bai-trans1>-<bai-trans5> import, parse.mjs A24).
 export const TYPEFORM = { plain: 0, italic: 1, underline: 2, bold: 4, script: 8, transnote: 16, trans1: 32, trans2: 64, trans3: 128, trans4: 256, trans5: 512 };
 
 // ---- Non-BMP input (audit E-4, A78; kept identical to louis-browser.mjs) ----

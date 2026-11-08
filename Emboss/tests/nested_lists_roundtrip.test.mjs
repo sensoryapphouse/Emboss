@@ -224,3 +224,15 @@ test('file_0043 corpus file: every list survives a save/reload round trip', () =
   }
   assert.equal(mismatches, 0, `${mismatches} of ${lists1.length} list blocks lost items/levels/markers on reload`);
 });
+
+// 4 Nov 2026 (random-action testing): a nested list of another type than its parent keeps its type, enum and start
+// through parse -> export -> parse. (The editor lost it for an unmarked parent: web/editor/editor.mjs, tested in test-list-markers.mjs.)
+test('a numbered or lettered list inside an unmarked list keeps its numbering', () => {
+  for (const [label, attrs, markers] of [['numbered', 'enum="1"', ['1.', '2.']], ['lettered from c', 'enum="a" start="3"', ['c.', 'd.']]]) {
+    const xml = wrap(`<list type="pl"><li>Outer one<list type="ol" ${attrs}><li>Inner alpha</li><li>Inner beta</li></list></li><li>Outer two</li></list>`);
+    const { doc1, xml2 } = assertListsRoundTrip(xml, `pl-with-ol ${label}`);
+    assert.deepEqual(getListBlocks(doc1)[0].items.filter((it) => it.level === 1).map((it) => it.marker), markers, label);
+    assert.match(xml2, /<list type="pl">[\s\S]*<list type="ol"[^>]*>[\s\S]*Inner alpha/, label);
+    assert.ok(!xml2.includes('level-1'), `${label}: no flat class="level-1" fallback`);
+  }
+});

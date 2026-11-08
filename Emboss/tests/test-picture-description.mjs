@@ -3,8 +3,8 @@
 //  - the picture card has an editable "Description for the braille reader" (the picture's alt text); what is typed becomes the
 //    transcriber's note in the braille (BANA 6.2.2) and is saved as the alt text; undo puts it back;
 //  - the "Picture type" menu (the note's label word) is a transcriber tool, hidden while Transcriber tools is off;
-//  - the braille pane's tactile-graphic hardware preview (embosser badge, the note in large print) shows only with the expert
-//    hardware features on (Ctrl/Cmd+Shift+\); otherwise the picture is its braille lines.
+//  - the braille pane's tactile-graphic hardware preview (embosser badge, the note in large print) shows only with Transcriber
+//    tools on (Paul, 4 Nov 2026: one Emboss; it was Ctrl/Cmd+Shift+\); otherwise the picture is its braille lines.
 //
 // Usage: node Emboss/scripts/serve.mjs 8258 &   then   node Emboss/tests/test-picture-description.mjs [port]
 // run-all-tests.mjs lists this as "browser (not run)" (it imports 'playwright').
@@ -44,7 +44,7 @@ try {
   ok('the picture card has an editable description box, labelled for the braille reader', c.box && c.value === 'A small grey square' && /braille reader/i.test(c.label || ''), c);
   ok('... and no separate fixed "Alt:" line', !c.staticAlt.some((t) => /^Alt:/.test(t)), c.staticAlt);
   ok('the Picture type menu is hidden while Transcriber tools is off', !c.typeShown, c);
-  ok('no tactile-graphic hardware preview in the braille pane (expert hardware off)', await page.evaluate(() => !document.querySelector('#braille .hardware-badge, #braille .brl-tactile-graphic-view')));
+  ok('no tactile-graphic hardware preview in the braille pane (Transcriber tools off)', await page.evaluate(() => !document.querySelector('#braille .hardware-badge, #braille .brl-tactile-graphic-view')));
   // edit the description
   await page.click('#editor .doc-image-block textarea.doc-image-alt');
   await page.keyboard.press(process.platform === 'darwin' ? 'Meta+a' : 'Control+a');
@@ -66,12 +66,21 @@ try {
   await wait(400);
   c = await card();
   ok('with Transcriber tools on, the Picture type menu is shown', c.typeShown, c);
-  // expert hardware on: the preview appears
-  await page.evaluate(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: '\\', code: 'Backslash', ctrlKey: true, metaKey: false, shiftKey: true, bubbles: true })));
+  // Paul, 4 Nov 2026: one Emboss (EMBOSS-TASKS section P item 8): the tactile-graphic hardware preview is a Transcriber tool now (it was behind Ctrl/Cmd+Shift+\)
   await settle();
   await wait(600);
-  const expert = await page.evaluate(() => ({ on: document.body.classList.contains('expert-hardware'), preview: !!document.querySelector('#braille .brl-tactile-graphic-view') }));
-  ok('with the expert hardware features on, the tactile-graphic preview is shown', expert.on && expert.preview, expert);
+  const expert = await page.evaluate(() => ({ on: document.body.classList.contains('transcriber-tools'), preview: !!document.querySelector('#braille .brl-tactile-graphic-view') }));
+  ok('with Transcriber tools on, the tactile-graphic preview is shown', expert.on && expert.preview, expert);
+  // 4 Nov 2026 (dark-mode check of one Emboss): the preview's "[Transcriber's Note: …]" box took the braille row's white-space:pre, so a long
+  // description ran off the right of the pane. It wraps.
+  await page.evaluate(() => { const t = document.querySelector('#editor .doc-image-block textarea.doc-image-alt'); t.focus(); });
+  await page.keyboard.press(process.platform === 'darwin' ? 'Meta+A' : 'Control+A');
+  await page.keyboard.type('A long description of a map of the British Isles showing the major rivers, the mountain ranges and the capital cities, with a key');
+  await page.evaluate(() => document.activeElement.blur());
+  await settle();
+  await wait(800);
+  const note = await page.evaluate(() => { const n = [...document.querySelectorAll('#braille div')].find((d) => d.children.length === 0 && /Transcriber's Note: Tactile/.test(d.textContent)); return n ? { found: true, text: n.textContent.slice(0, 200), overflows: n.scrollWidth > n.clientWidth + 1 } : { found: false }; });
+  ok('the preview\'s transcriber\'s note box wraps a long description inside the pane', note.found && !note.overflows && /British Isles/.test(note.text), note);
   ok('no page errors', errors.length === 0, errors);
 } finally {
   await browser.close();

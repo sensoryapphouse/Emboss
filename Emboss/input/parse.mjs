@@ -16,6 +16,7 @@ import { mathmlToLatex } from '../engine/mathml-to-latex.mjs';
 import { cellFromSegments, cellIsBlank, cellSegments } from '../format/cell-markup.mjs';
 import { classifyTable } from './table-kind.mjs';
 import { loadWarnings, hasClassWord, isLinenumClass } from './load-audit.mjs';
+import { printFromAttr } from './sixkey-runs.mjs';   // X9 / W16: six-key braille runs and the print they replaced
 import { docxLangContext, docxRunLang, odtLangContext, odtTextLang, primaryLang, lcidLang, scriptSlot, foreignLangOf, setMarkupMainLang, markupForeignLang, markupHasForeignLang, keepLangOn, langAttrOf, markdownInlineLang, finishLanguages } from './lang.mjs';
 import { NUMBER_PREFIX_RE, synthesizeOrderedMarker, readBanaFlags, isNonDotBulletMarker, isBulletMarker, isCustomBulletMarker, bulletName, BULLET_NAMES, BANA_DOC_OPTIONS, docOptionValue, classifyOrderedMarkerGroup } from './nimas-export.mjs';
 // Class names and ids are matched as WHOLE WORDS (Paul, 23 Oct 2026) with hasClassWord (defined, with the rule, in
@@ -1002,7 +1003,7 @@ function htmlParagraphSegments(p, opts) {
     }
   };
   const element = (child, tag, tf, ttf, up) => {
-    // BrailleBlaster test fixtures (TablesTestXml.xml): a <brl> child holds pre-supplied
+    // braille-editor test fixtures (TablesTestXml.xml): a <brl> child holds pre-supplied
     // braille for the print text beside it, not print text of its own (see
     // textExcludingBrl/brlTextOf, used by parseHtml's own table-cell reader) — matches
     // parseDtbook's own inlineSegments, which excludes <brl> the same way.
@@ -1185,7 +1186,7 @@ function createSpanReader() {
   // ODT table:number-columns-spanned/table:number-rows-spanned).
   // `tableColCount` (optional, 0 = unknown/no clamp): the table's real column count — see
   // mostCommonRowWidth below. Only an EXTREME colspan (more than double the table's typical
-  // width — a BrailleBlaster test fixture uses colspan="20" on a table whose other rows are
+  // width — a braille-editor test fixture uses colspan="20" on a table whose other rows are
   // 4 columns wide, to exercise exactly this) is clamped to whatever columns are actually
   // left in its row; a modest colspan that simply runs a column or two past the rest of the
   // table (real, intentional padding) is left exactly as before.
@@ -1284,7 +1285,7 @@ function mostCommonRowWidth(widths) {
   return best;
 }
 
-// BrailleBlaster's own table-test-fixture convention (e.g. Emboss/tests/nimas_samples/
+// The reference translator's own table-test-fixture convention (e.g. Emboss/tests/nimas_samples/
 // TablesTestXml.xml): a <brl>…</brl> inside a table cell holds pre-supplied braille for
 // the print text beside it, not print text of its own — excluded from any plain-text read
 // the same way parseDtbook's own getCleanText/inlineSegments already exclude it (see the
@@ -1821,7 +1822,7 @@ function parseHtmlDoc(str, opts) {
             if (marked.replace(/[\uE000-\uE002]/g, '') === flat) return marked;
           }
           if (flat) return flat;
-          // BrailleBlaster test fixtures (TablesTestXml.xml): a cell whose only content is
+          // braille-editor test fixtures (TablesTestXml.xml): a cell whose only content is
           // a <brl> (no print text at all) holds LITERAL braille — modelled the same way
           // document.mjs's {type:'brl'} segment already does elsewhere (F-187/F-188/F-222),
           // not silently dropped (an empty <brl></brl>, i.e. genuinely no braille either,
@@ -11087,6 +11088,7 @@ export function parseDtbook(xmlStr) {
   let title = (doctitle && textOf(doctitle)) || null;
   let placeholderTitle = false;   // the exporter's 'Emboss Document' stand-in for a title the source never had
   const docOptions = [];
+  let templateName = null, templateSettingsText = null, templateContractionsText = null;   // X1 (Templates): see the three metas below
   if (doc.getElementsByTagName) {
     const metaTags = [...doc.getElementsByTagName('meta')];
     for (const m of metaTags) {
@@ -11107,6 +11109,9 @@ export function parseDtbook(xmlStr) {
       else if (lname === 'dc:rights') metadata.rights = content;
       else if (lname === 'dc:format') metadata.format = content;
       else if (lname === 'dc:subject') metadata.subject = content;
+      else if (lname === 'emboss-template') templateName = content;                       // X1: the template the document was made under (web/templates.mjs)
+      else if (lname === 'emboss-template-settings') templateSettingsText = content;      // ... and the settings that shaped its braille (JSON)
+      else if (lname === 'emboss-template-contractions') templateContractionsText = content;   // ... and, for relaxed braille, the contractions its reader has learned (JSON list; none = All)
       else if (BANA_DOC_OPTIONS.some((o) => o.meta === lname)) { const o = BANA_DOC_OPTIONS.find((x) => x.meta === lname), v = docOptionValue(o, content); if (v !== undefined) docOptions.push([o.field, v]); }   // formatter options (spacedEllipsis …)
       else if (lname.startsWith('nimas-')) {
         if (!metadata.nimas) metadata.nimas = {};
@@ -11397,7 +11402,7 @@ export function parseDtbook(xmlStr) {
     if (!Array.isArray(segs) || segs.length < 2) return segs;
     const sameFormat = (a, b) => a.type === 'text' && b.type === 'text' && (a.tf || 0) === (b.tf || 0)
       && !!a.uncontracted === !!b.uncontracted && (a.href || null) === (b.href || null)
-      && !!a.cite === !!b.cite && !!a.hyperlink === !!b.hyperlink && !!a.ignoreFont === !!b.ignoreFont && (a.lang || null) === (b.lang || null);
+      && !!a.cite === !!b.cite && !a.sixkey && !b.sixkey && !!a.hyperlink === !!b.hyperlink && !!a.ignoreFont === !!b.ignoreFont && (a.lang || null) === (b.lang || null);
     const out = [];
     for (const s of segs) {
       const prev = out[out.length - 1];
@@ -11422,7 +11427,7 @@ export function parseDtbook(xmlStr) {
     // above) — without this, a block with no other formatting would fall back to plain text
     // and the record of which run lost its typeform would disappear before any caller sees it.
     // 30 Sep: <sub>/<sup> read back as the script markers (walkInline) — a block holding them keeps them too.
-    return segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'brl' || (s.type === 'imgnote' && (s.prodnote || s.uncontracted)) || s.href || s.cite || s.ignoreFont || s.hyperlink || s.transcriberTypeform || s.lang || (s.text && (s.text.includes('\n') || /[\ue000\ue001]/.test(s.text))));
+    return segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'brl' || (s.type === 'imgnote' && (s.prodnote || s.uncontracted)) || s.href || s.cite || s.sixkey || s.ignoreFont || s.hyperlink || s.transcriberTypeform || s.lang || (s.text && (s.text.includes('\n') || /[\ue000\ue001]/.test(s.text))));
   }
 
   function segsText(segs) {
@@ -11804,7 +11809,7 @@ export function parseDtbook(xmlStr) {
       // Only genuine content ends with a paragraph break. A run of pure whitespace in `text`
       // (or the last flushed segment) is not a paragraph's own trailing text — it is an
       // insignificant text node between sibling tags in the source markup (e.g. the newline
-      // DTBook/BrailleBlaster puts between <p>, <pagenum> and <p> siblings for readability) —
+      // DTBook files put between <p>, <pagenum> and <p> siblings for readability) —
       // so it is left exactly as breakWord() would leave it (a single joining space, or
       // untouched if it already ends in whitespace), never turned into a break of its own.
       // paragraphBreaks === 'blocks' (list items, see ITEM_PARA_SEP): the break is a paragraph separator the caller
@@ -11923,6 +11928,15 @@ export function parseDtbook(xmlStr) {
             for (let k = before; k < segments.length; k++) if (segments[k] && segments[k].type === 'text') segments[k].ignoreFont = true;
             continue;
           }
+          if (tag === 'span' && /(^|\s)bana-sixkey(\s|$)/.test(cls)) {              // X9 / W16: braille typed with the six keys, with the print it replaced (JSON in the title)
+            flush();
+            const before = segments.length;
+            walkInline(child, nextTf, nextUnc);
+            flush();
+            const print = printFromAttr(child.getAttribute && child.getAttribute('title'));
+            for (let k = before; k < segments.length; k++) if (segments[k] && segments[k].type === 'text') segments[k].sixkey = print ? { print } : {};
+            continue;
+          }
           if (tag === 'span' && /(^|\s)bana-hyperlink(\s|$)/.test(cls)) {            // F-233: braille hyperlink indicator (exporter's seg.hyperlink)
             flush();
             const before = segments.length;
@@ -11981,7 +11995,7 @@ export function parseDtbook(xmlStr) {
             // A note reference keeps its mark and target (A5): braille superscripts it
             // (BANA Formats §16.2.2) and the save writes it back as <noteref>.
             const mark = (child.textContent || '').replace(/\s+/g, ' ').trim();
-            // BrailleBlaster's own files put the target in @id; DTBook uses @idref="#…".
+            // Some braille editors' own files put the target in @id; DTBook uses @idref="#…".
             const idref = String((child.getAttribute && (child.getAttribute('idref') || child.getAttribute('id'))) || '').replace(/^#/, '');
             if (mark) {
               flush();
@@ -12023,15 +12037,15 @@ export function parseDtbook(xmlStr) {
             }
             continue;
           }
-          // A24: BrailleBlaster's own <bai-trans1>…<bai-trans5> elements. A `<span
+          // A24: the <bai-trans1>…<bai-trans5> elements. A `<span
           // class="bai-transN">` is read the same leniently, though nimas-export.mjs (below)
           // deliberately never writes one back — like the rest of A24, the PRINT MEANING of
           // bai-trans1-5 is unknown to Emboss (Emboss's own strikethrough is a separate value,
           // 'strike', never one of these bai-transN tag names), so a save
           // keeps the run's plain text and lets the typeform tag go rather than round-trip a
           // label whose meaning Emboss cannot vouch for a second time
-          // (braille_blaster_import.test.mjs, "keeps its text and records the loss"; a save
-          // must also never contain the literal BrailleBlaster element, assertNoBaiElements).
+          // (bai_elements_import.test.mjs, "keeps its text and records the loss"; a save
+          // must also never contain the literal bai-* element, assertNoBaiElements).
           const baiTransSpan = tag === 'span' ? /(^|\s)(bai-trans[1-5])(\s|$)/.exec(cls) : null;
           const baiTransTag = /^bai-trans[1-5]$/.test(tag) ? tag : (baiTransSpan ? baiTransSpan[2] : null);
           if (baiTransTag) {
@@ -12341,6 +12355,7 @@ export function parseDtbook(xmlStr) {
       const c = ((li.getAttribute && li.getAttribute('class')) || '').toLowerCase();
       if (/(^|\s)bana-example(\s|$)/.test(c)) item.example = true;
       if (/(^|\s)bana-ignore-font(\s|$)/.test(c)) item.ignoreFont = true;
+      if (/(^|\s)bana-division-break(\s|$)/.test(c)) item.divisionBreak = true;   // BANA 21.2.3g
       if (/(^|\s)bana-no-marker(\s|$)/.test(c)) delete item.marker;   // an unnumbered item inside a numbered list
       for (let k = li.firstChild; k; k = k.nextSibling) {
         if (k.nodeType !== 1 || (k.localName || k.tagName || '').toLowerCase() !== 'span' || !/(^|\s)bana-label(\s|$)/.test(((k.getAttribute && k.getAttribute('class')) || '').toLowerCase())) continue;
@@ -12590,10 +12605,11 @@ export function parseDtbook(xmlStr) {
             }
           }
         }
-        const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.href || s.cite || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')));
+        const hasEmphOrMath = segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.href || s.cite || s.sixkey || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')));
         const item = { text: itemText };
         if (pageVal) item.page = pageVal;
         if (pageVal && pageHrefVal) item.pageHref = pageHrefVal;   // A36
+        if (hasClassWord(liClass, 'bana-division-break')) item.divisionBreak = true;   // BANA 21.2.3g
         if (effLevel > 0) item.level = effLevel;
         if (segs.length && hasEmphOrMath) item.segments = segs;
         if (guessed) guessedPages.set(item, guessed);
@@ -12623,7 +12639,7 @@ export function parseDtbook(xmlStr) {
         const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_AND_TABLE_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'imgnote' || s.type === 'brl' || s.href || s.cite || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'imgnote' || s.type === 'brl' || s.href || s.cite || s.sixkey || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')))) item.segments = segs;
         // BANA §10.4: an exercise item's own printed number/letter is usually baked
         // directly into its text ("1. Which…" — kept verbatim, no separate marker field,
         // matching the real bai-exercise convention this schema otherwise preserves
@@ -12678,7 +12694,8 @@ export function parseDtbook(xmlStr) {
         const t = segs.map(s => s.text || '').join('').replace(/\s+/g, ' ').trim() || getCleanText(li, LIST_AND_TABLE_TAGS);
         const item = { text: t };
         if (effLevel > 0) item.level = effLevel;
-        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.href || s.cite || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')))) item.segments = segs;
+        if (hasClassWord(liClass, 'bana-division-break')) item.divisionBreak = true;   // BANA 21.2.3g
+        if (segs.length && segs.some(s => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.href || s.cite || s.sixkey || s.ignoreFont || s.transcriberTypeform || (s.text && s.text.includes('\n')))) item.segments = segs;
         if (ixRest.length) { const ib = liItemBlocks(ixRest, []); if (ib.length) item.blocks = ib; }
         items.push(item);
         lastTopItem = item;
@@ -12752,7 +12769,7 @@ export function parseDtbook(xmlStr) {
         }
       }
 
-      const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'brl' || s.href || s.cite || s.ignoreFont || s.transcriberTypeform || s.lang || (s.text && (s.text.includes('\n') || /[\ue000\ue001]/.test(s.text))));   // sub/superscript markers too (30 Sep)
+      const hasEmphOrMath = segs.some((s) => s.tf || s.uncontracted || s.type === 'math' || s.type === 'noteref' || s.type === 'linenum' || s.type === 'brl' || s.href || s.cite || s.sixkey || s.ignoreFont || s.transcriberTypeform || s.lang || (s.text && (s.text.includes('\n') || /[\ue000\ue001]/.test(s.text))));   // sub/superscript markers too (30 Sep)
       if (directText || emptyKept || (itemMarker && hasEmptyMark(li) && !directText)) {   // A89: <li class="bana-empty">iii.</li>, an empty item with its printed number
         // segs already excludes nested lists (inlineSegments(li, true, …)), so an item that has
         // a sub-list keeps its own emphasis and maths too (they were dropped before).
@@ -12961,7 +12978,7 @@ export function parseDtbook(xmlStr) {
           // that broke the parse → export → reparse round trip (nimas_roundtrip.test.mjs).
           const sameFormat = (a, b) => a.type === 'text' && b.type === 'text' && (a.tf || 0) === (b.tf || 0)
             && !!a.uncontracted === !!b.uncontracted && (a.href || null) === (b.href || null)
-            && !!a.cite === !!b.cite && !!a.hyperlink === !!b.hyperlink && !!a.ignoreFont === !!b.ignoreFont && (a.lang || null) === (b.lang || null);
+            && !!a.cite === !!b.cite && !a.sixkey && !b.sixkey && !!a.hyperlink === !!b.hyperlink && !!a.ignoreFont === !!b.ignoreFont && (a.lang || null) === (b.lang || null);
           const kept = [];
           let i = 0;
           while (i < defSegs.length) {
@@ -13072,7 +13089,7 @@ export function parseDtbook(xmlStr) {
   function parsePoem(poemEl, targetBlocks = blocks, poemOpts = {}) {
     // A19/A21/D5: everything this call pushes that is actually poem *verse* (a line, a
     // stanza-break indicator, or a pagenum inside one) is tagged fromPoem so nimas-export.mjs
-    // can tell a genuine poem apart from BrailleBlaster's bai-verse (verse *drama*, which has
+    // can tell a genuine poem apart from the bai-verse (verse *drama*, which has
     // no <poem> source and must keep saving as <p class="bai-verse">, per D5) and write it back
     // as <poem>/<linegroup>/<line> instead of flattening it to paragraphs. Marked by scanning
     // the range this call (including any nested parsePoem recursion into the same array) pushes,
@@ -13625,11 +13642,11 @@ export function parseDtbook(xmlStr) {
         // step must not swallow a link/cite segment into its plain-text neighbour (that would
         // either drop the href/cite — when the neighbour merged in has none — or wrongly widen
         // it over text that was never part of the link/cite).
-        if (g.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (g.tf || 0) && !!last.uncontracted === !!g.uncontracted && !last.href && !last.cite && !g.href && !g.cite && (last.transcriberTypeform || null) === (g.transcriberTypeform || null)) {
+        if (g.type === 'text' && last && last.type === 'text' && (last.tf || 0) === (g.tf || 0) && !!last.uncontracted === !!g.uncontracted && !last.href && !last.cite && !last.sixkey && !g.href && !g.cite && !g.sixkey && (last.transcriberTypeform || null) === (g.transcriberTypeform || null)) {
           kept[kept.length - 1] = { ...last, text: (last.text + g.text).replace(/\s+/g, ' ') };
         } else kept.push(g);
       }
-      // BrailleBlaster test fixtures (TablesTestXml.xml): inlineSegments/getCleanText both
+      // braille-editor test fixtures (TablesTestXml.xml): inlineSegments/getCleanText both
       // exclude <brl> from a cell's print text (above, and getCleanText's own tag==='brl'
       // exclusion) — right when the cell ALSO has real print text (the pre-supplied braille
       // is simply discarded; Emboss translates the print text itself). But a cell whose
@@ -13659,7 +13676,7 @@ export function parseDtbook(xmlStr) {
         // them — a cell whose only richness is a level is a plain string carrying the markers. getCleanText reads the digits only,
         // so without this a saved "x²" in a cell was a plain "x2" when the file was opened again (save -> reopen braille test).
         const withMarkers = kept.some((g) => g.type === 'text' && /[\uE000-\uE002]/.test(g.text || ''));
-        return cellFromSegments(withMarkers ? kept.map((g) => g.text || '').join('') : plain, kept.some((g) => g.tf || g.uncontracted || g.type === 'noteref' || g.type === 'brl' || g.href || g.cite || g.transcriberTypeform || g.lang) ? kept : null);
+        return cellFromSegments(withMarkers ? kept.map((g) => g.text || '').join('') : plain, kept.some((g) => g.tf || g.uncontracted || g.type === 'noteref' || g.type === 'brl' || g.href || g.cite || g.sixkey || g.transcriberTypeform || g.lang) ? kept : null);
       }
       const plain = kept.map((g) => (g.type === 'math' ? (g.latex || '') : g.text)).join('');
       return cellFromSegments(plain, kept);
@@ -13698,7 +13715,7 @@ export function parseDtbook(xmlStr) {
     const headers = [];
     const rows = [];
 
-    // F-1 companion (BrailleBlaster test fixtures use colspan="20" on a table whose other
+    // F-1 companion (braille-editor test fixtures use colspan="20" on a table whose other
     // rows are 4 columns wide, to exercise exactly this): the table's real column count —
     // mostCommonRowWidth (shared with the HTML table reader's own colspan clamp, above) —
     // used below to clamp an over-wide colspan to whatever columns are actually left in
@@ -13715,7 +13732,7 @@ export function parseDtbook(xmlStr) {
     };
     const tableColCount = mostCommonRowWidth(trs.map(trColspanSum));
     // Only an EXTREME overflow (more than double the table's typical width — the
-    // BrailleBlaster fixture's colspan="20" on a 4-column table is 5x) is clamped. A modest
+    // braille-editor fixture's colspan="20" on a 4-column table is 5x) is clamped. A modest
     // colspan that simply runs a column or two past the header (parse-regressions.test.mjs
     // #12: a plain colspan="2" cell widens a 2-column table to 4 — real, intentional
     // padding, not a bug) is left exactly as before; only a colspan so large it can only be
@@ -14414,7 +14431,7 @@ export function parseDtbook(xmlStr) {
           // line (%inline; | linenum)*>) and must round-trip as <line>, not collapse to D5's
           // bare-verse-drama <p class="bai-verse">. `tag === 'ln'` is NOT a DTBook element at
           // all (no <!ELEMENT ln> in the DTD) — it only reaches here from a non-DTBook input
-          // (BrailleBlaster's own shorthand poem markup, e.g. bb_firstline_input.xml's
+          // (a braille editor's own shorthand poem markup, e.g. ref_firstline_input.xml's
           // <verse role="poem"><lngroup><ln>) that F-180/D5 already treats as verse drama on
           // purpose, so it is deliberately left untagged here, unchanged from before this fix.
           // Tagged separately from playVerse so the exporter can tell a real <line> apart from
@@ -14433,11 +14450,11 @@ export function parseDtbook(xmlStr) {
         if (svg) graphic.svg = svg;
         blocks.push(graphic);
       } else if (tag === 'p' || tag === 'bai-play' || tag === 'bai-verse' || tag === 'bai-stage') {
-        // A24: BrailleBlaster writes its own <bai-play level="N">/<bai-verse level="N">/
+        // A24: some braille editors write their own <bai-play level="N">/<bai-verse level="N">/
         // <bai-stage level="N"> elements where Emboss (D5, nimas-style-mapping.md "Class
         // names — Decided (D5)") writes valid DTBook <p class="bai-play|bai-verse|bai-stage">:
-        // "BrailleBlaster ... expects its own elements ... those are not DTBook elements, so a
-        // file using them fails NIMAS validation ... never write BrailleBlaster's custom
+        // "Some braille editors ... expect their own elements ... those are not DTBook elements, so a
+        // file using them fails NIMAS validation ... never write the custom
         // elements; read them on import." Folding the element name into the same `cls` string
         // the ordinary <p class="bai-*"> path already matches on below means one makeP() keeps
         // producing the same play/verse/stage block for both spellings; level comes from the
@@ -14654,6 +14671,14 @@ export function parseDtbook(xmlStr) {
   const result = { title, blocks };
   if (Object.keys(metadata).length > 0) result.metadata = metadata;
   for (const [f, v] of docOptions) result[f] = v;            // document-level formatter options, read by document.mjs as doc.<name>
+  if (templateName) {                                        // X1: the template the document was saved under; web/templates.mjs cleans what is read here
+    let settings = {};
+    try { const j = JSON.parse(templateSettingsText || '{}'); if (j && typeof j === 'object' && !Array.isArray(j)) settings = j; } catch { /* unreadable: read as none */ }
+    result.template = { name: templateName, settings };
+    if (templateContractionsText) {                          // relaxed braille (A91; Paul, 2 Nov 2026: part of the template): a list of catalogue keys; web/templates.mjs cleans it
+      try { const j = JSON.parse(templateContractionsText); if (Array.isArray(j)) result.template.contractions = j; } catch { /* unreadable: read as none (All) */ }
+    }
+  }
   finishLanguages(result);                                   // foreign-language passages: noise dropped (input/lang.mjs)
   // Nothing is dropped silently (A2): anything the model lacks is reported to the user.
   if (rootTag === 'dtbook') {
